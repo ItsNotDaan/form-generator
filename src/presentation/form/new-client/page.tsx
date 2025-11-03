@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { BaseLayout } from '@/presentation/base/baseLayout';
-import { Flex, Text, FormControl, FormLabel, Checkbox, Button } from '@chakra-ui/react';
+import { Box, Flex, Text, FormControl, FormLabel, Checkbox, Button, Divider } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
@@ -10,6 +10,7 @@ import { DropdownField, DropdownType } from '@/presentation/base/input/dropdownF
 // using Chakra Checkbox directly for location toggles
 import { RadioField } from '@/presentation/base/input/radioField';
 import { RightArrowIcon } from '@/presentation/base/icon/rightArrow';
+import { DEV_CLIENT_MIDDLEWARE_MANIFEST } from 'next/dist/shared/lib/constants';
 
 export const FormNewClientPage = () => {
   const router = useRouter();
@@ -37,17 +38,18 @@ export const FormNewClientPage = () => {
   const [email, setEmail] = useState('');
   const [insurance, setInsurance] = useState('');
   const [bsn, setBsn] = useState('');
+  const [practitionerId, setPractitionerId] = useState<string | undefined>(undefined);
+  const [phoneOne, setPhoneOne] = useState('');
+  const [phoneTwo, setPhoneTwo] = useState('');
+  const [specialist, setSpecialist] = useState('');
+  const [familyDoctor, setFamilyDoctor] = useState('');
+
   // temporary practitioner list (move to global store if needed)
   const practitioners = [
     { label: 'Dr. Jan de Vries', value: 'p1' },
     { label: 'Dr. Anna Jansen', value: 'p2' },
     { label: 'Dr. Piet van Dijk', value: 'p3' },
   ];
-  const [practitionerId, setPractitionerId] = useState<string | undefined>(undefined);
-  const [landlinePhone, setLandlinePhone] = useState('');
-  const [mobilePhone, setMobilePhone] = useState('');
-  const [specialist, setSpecialist] = useState('');
-  const [familyDoctor, setFamilyDoctor] = useState('');
 
   return (
     <BaseLayout
@@ -67,7 +69,6 @@ export const FormNewClientPage = () => {
       >
         <Flex direction="column" gap={4}>
           <FormControl as={Flex} direction="column" gap={4}>
-
             {/* Behandelaar selector */}
             <Flex gap={4} alignItems="center">
               <FormControl>
@@ -83,6 +84,15 @@ export const FormNewClientPage = () => {
               </FormControl>
             </Flex>
 
+            <FormControl>
+              <FormLabel mb={2}>Aanmeetdatum:</FormLabel>
+              <DatePickerField
+                date={date ? new Date(date) : undefined}
+                onDateChanged={d => d && setDate(d.toISOString())}
+                isSmallVariant
+              />
+            </FormControl>
+
             {/* Eerste rij */}
             <Flex gap={4} alignItems="center">
               {/* OSA/VLOS Checkboxen */}
@@ -95,6 +105,7 @@ export const FormNewClientPage = () => {
                   stackProps={{ spacing: '4' }}
                 />
               </FormControl>
+
               {/* Locatie checkboxes */}
               <FormControl>
                 <FormLabel mb={2}>Locatie:</FormLabel>
@@ -119,21 +130,10 @@ export const FormNewClientPage = () => {
               </FormControl>
             </Flex>
 
-            {/* Eerste rij */}
-            <Flex gap={4} alignItems="center">
-              <TextField label="Leestnummer:" value={fileNumber} onTextChanged={setFileNumber} isSmallVariant />
-              <FormControl>
-                <FormLabel mb={2}>Datum:</FormLabel>
-                <DatePickerField
-                  date={date ? new Date(date) : undefined}
-                  onDateChanged={d => d && setDate(d.toISOString())}
-                  isSmallVariant
-                />
-              </FormControl>
-            </Flex>
+            <Divider />
 
-            {/* Aanhef, Voorletters, Achternaam */}
             <Flex gap={4} alignItems="center">
+              {/* Aanhef, Voorletters, Achternaam */}
               <FormControl>
                 <FormLabel mb={2}>Aanhef:</FormLabel>
                 <RadioField
@@ -142,14 +142,12 @@ export const FormNewClientPage = () => {
                   onItemSelected={(item: any) => setSalutation(item?.value)}
                   stackProps={{ direction: 'row', spacing: '4' }}
                 />
+                <TextField label="Voorletters:" value={initials} onTextChanged={setInitials} isSmallVariant />
+                <TextField label="Achternaam:" value={clientName} onTextChanged={setClientName} isSmallVariant />
               </FormControl>
-              <TextField label="Voorletters:" value={initials} onTextChanged={setInitials} isSmallVariant />
-              <TextField label="Achternaam:" value={clientName} onTextChanged={setClientName} isSmallVariant />
-            </Flex>
 
-            {/* Geboortedatum en BSN */}
-            <Flex gap={4}>
-              <TextField label="BSN (nr):" value={bsn} onTextChanged={setBsn} isSmallVariant />
+              <Divider orientation="vertical" />
+
               <FormControl>
                 <FormLabel mb={2}>Geboortedatum:</FormLabel>
                 <DatePickerField
@@ -159,6 +157,8 @@ export const FormNewClientPage = () => {
                 />
               </FormControl>
             </Flex>
+
+            <Divider />
 
             {/* Huisnummer, Huisadres, Postcode/woonplaats */}
             <Flex gap={4}>
@@ -170,8 +170,11 @@ export const FormNewClientPage = () => {
 
             {/* Telefoon + Email */}
             <Flex gap={4}>
-              <TextField label="Tel mobiel:" value={mobilePhone} onTextChanged={setMobilePhone} isSmallVariant type="tel" />
-              <TextField label="Tel vast:" value={landlinePhone} onTextChanged={setLandlinePhone} isSmallVariant type="tel" />
+              <TextField label="Tel 1:" value={phoneOne} onTextChanged={setPhoneOne} isSmallVariant type="tel" />
+              <TextField label="Tel 2:" value={phoneTwo} onTextChanged={setPhoneTwo} isSmallVariant type="tel" />
+            </Flex>
+
+            <Flex gap={4}>
               <TextField label="Emailadres:" value={email} onTextChanged={setEmail} isSmallVariant type="email" />
             </Flex>
 

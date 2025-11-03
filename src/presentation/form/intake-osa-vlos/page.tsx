@@ -15,7 +15,9 @@ import {
   Input,
   Box,
   Divider,
+  Textarea,
 } from '@chakra-ui/react';
+
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 
@@ -24,10 +26,9 @@ interface BasiscodeProps {
   label: string;
 }
 
-interface LRCheckboxProps {
+interface BasiscodeLRCheckboxProps {
+  code: string;
   label: string;
-  hasLateraalMediaal?: boolean;
-  hasCmField?: boolean;
 }
 
 const BasiscodeCheckbox: React.FC<BasiscodeProps> = ({ code, label }) => (
@@ -38,22 +39,15 @@ const BasiscodeCheckbox: React.FC<BasiscodeProps> = ({ code, label }) => (
   </Flex>
 );
 
-const LRCheckbox: React.FC<LRCheckboxProps> = ({ label, hasLateraalMediaal, hasCmField }) => (
-  <FormControl>
-    <Flex gap={4} alignItems="center">
-      <Text flex="1">{label}</Text>
-      <Checkbox>L</Checkbox>
-      <Checkbox>R</Checkbox>
-      {hasLateraalMediaal && (
-        <>
-          <Text ml={4}>Lateraal / Mediaal</Text>
-        </>
-      )}
-      {hasCmField && (
-        <Input placeholder="...cm" size="sm" width="100px" ml={4} />
-      )}
-    </Flex>
-  </FormControl>
+const BasiscodeLRCheckbox: React.FC<BasiscodeLRCheckboxProps> = ({ code, label }) => (
+  <Flex gap={2} alignItems="center">
+    <Text minW="8">{code}</Text>
+    <Text flex="1">{label}</Text>
+    <Text> Links </Text>
+    <Checkbox size="sm" aria-label="Links" />
+    <Text> Rechts </Text>
+    <Checkbox size="sm" aria-label="Rechts" />
+  </Flex>
 );
 
 export const FormIntakeOSAVLOSPage = () => {
@@ -78,8 +72,8 @@ export const FormIntakeOSAVLOSPage = () => {
       >
         {/* Basiscodes */}
         <Box>
-          <Text fontWeight="bold" mb={4}>{t('basiscodes')}</Text>
-          <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+          <Text fontWeight="bold" mb={4}>{t('Basiscodes')}</Text>
+          <Grid templateColumns="repeat(8, 1fr)" gap={2}>
             {['01', '02', '03', '04', '05', '06', '07', '08'].map(code => (
               <GridItem key={code}>
                 <Checkbox>{code}</Checkbox>
@@ -90,37 +84,39 @@ export const FormIntakeOSAVLOSPage = () => {
 
         <Divider />
 
-        {/* Omschrijving */}
-        <Box>
-          <Text fontWeight="bold" mb={4}>{t('omschrijving')}</Text>
-          <Stack spacing={3}>
-            <BasiscodeCheckbox code="09" label={t('proefschoen')} />
-            <BasiscodeCheckbox code="10" label={t('verhoging13')} />
-            <BasiscodeCheckbox code="11" label={t('verhoging3plus')} />
-            <BasiscodeCheckbox code="14" label={t('aanvullingLengteBreedte')} />
-            <BasiscodeCheckbox code="15" label={t('zoolverstijving')} />
-            <BasiscodeCheckbox code="16" label={t('medLateraalZoolspoor')} />
-            <BasiscodeCheckbox code="16a" label={t('kokerAanSpup')} />
-            <BasiscodeCheckbox code="17" label={t('kokerTussenVoering')} />
-            <BasiscodeCheckbox code="21" label={t('correctieUren')} />
-            <BasiscodeCheckbox code="22" label={t('overigen')} />
-          </Stack>
-        </Box>
-
-        <Divider />
-
-        {/* Indien OSA */}
-        <Box>
-          <Text fontWeight="bold" mb={4}>{t('indienOsa')}</Text>
-          <RadioGroup onChange={setPaarType} value={paarType}>
-            <Stack direction="column" spacing={2}>
-              <Radio value="eerste">{t('eerstePaar')}</Radio>
-              <Radio value="herhalingspaar">{t('herhalingsPaar')}</Radio>
-              <Radio value="reservepaar">{t('reservePaar')}</Radio>
-              <Radio value="privepaar">{t('privéPaar')}</Radio>
+        <Flex gap={8} alignItems="center-top">
+          {/* Omschrijvingen */}
+          <FormControl>
+            <Text fontWeight="bold" mb={4}>{t('Omschrijving')}</Text>
+            <Stack spacing={2}>
+              <BasiscodeLRCheckbox code="09" label={t('Proefschoen:')} />
+              <BasiscodeLRCheckbox code="10" label={t('Verhoging 1 t/m 8:')} />
+              <BasiscodeLRCheckbox code="11" label={t('Verhoging 6 cm of meer:')} />
+              <BasiscodeLRCheckbox code="14" label={t('Aanvulling lengte/breedte:')} />
+              <BasiscodeLRCheckbox code="15" label={t('Zoolverstijving:')} />
+              <BasiscodeLRCheckbox code="16" label={t('Med/Lateraal Ezelsoor:')} />
+              <BasiscodeLRCheckbox code="16a" label={t('Koker aan supplement:')} />
+              <BasiscodeLRCheckbox code="17" label={t('Koker tussen voering:')} />
+              <BasiscodeLRCheckbox code="21" label={t('Correctie (Uren)')} />
+              <BasiscodeLRCheckbox code="22" label={t('Overigen:')} />
             </Stack>
-          </RadioGroup>
-        </Box>
+          </FormControl>
+
+          <Divider orientation="vertical" />
+
+          {/* Indien OSA */}
+          <FormControl>
+            <Text fontWeight="bold" mb={4}>{t('Indien een OSA:')}</Text>
+            <RadioGroup onChange={setPaarType} value={paarType}>
+              <Stack direction="column" spacing={2}>
+                <Radio value="eerstePaar">{t('Eerste Paar')}</Radio>
+                <Radio value="herhalingsPaar">{t('Herhalings Paar')}</Radio>
+                <Radio value="reservePaar">{t('Reserve Paar')}</Radio>
+                <Radio value="privePaar">{t('Privé Paar')}</Radio>
+              </Stack>
+            </RadioGroup>
+          </FormControl>
+        </Flex>
 
         <Divider />
 
@@ -128,13 +124,13 @@ export const FormIntakeOSAVLOSPage = () => {
         <Box>
           <Text fontWeight="bold" mb={4}>{t('supplementen')}</Text>
           <Stack spacing={3}>
-            <LRCheckbox label={t('keerwand')} hasLateraalMediaal />
-            <LRCheckbox label={t('verkorting')} hasCmField />
-            <LRCheckbox label={t('schoring')} hasLateraalMediaal />
+            <BasiscodeLRCheckbox code="" label={t('keerwand')} />
+            <BasiscodeLRCheckbox code="0" label={t('verkorting')} />
+            <BasiscodeLRCheckbox code="0" label={t('schoring')} />
           </Stack>
         </Box>
 
-        {/* Voeringschoen */}
+        {/* Voeringschoen
         <Box>
           <Text fontWeight="bold" mb={4}>{t('voeringschoen')}</Text>
           <Stack spacing={3}>
@@ -148,109 +144,13 @@ export const FormIntakeOSAVLOSPage = () => {
             <LRCheckbox label={t('ercoflexveer')} />
             <LRCheckbox label={t('zoolverstijfing')} />
           </Stack>
-        </Box>
-
-        {/* Afwikkeling */}
-        <Box>
-          <Text fontWeight="bold" mb={4}>{t('afwikkeling')}</Text>
-          <Stack spacing={4}>
-            <Flex gap={4}>
-              <RadioGroup defaultValue="goed">
-                <Stack direction="row" spacing={4}>
-                  <Radio value="goed">{t('goed')}</Radio>
-                  <Radio value="aanpassen">{t('aanpassen')}</Radio>
-                </Stack>
-              </RadioGroup>
-            </Flex>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text>{t('meerMinderTeensprong')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-                <Text ml={4}>{t('mediaalMeerMinderSteun')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-              </Flex>
-            </FormControl>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text>{t('vervroegen')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-                <Text ml={4}>{t('voorvoetsteunMeerMinder')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-              </Flex>
-            </FormControl>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text>{t('vertragen')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-              </Flex>
-            </FormControl>
-          </Stack>
-        </Box>
-
-        {/* Stand */}
-        <Box>
-          <Text fontWeight="bold" mb={4}>{t('stand')}</Text>
-          <Stack spacing={4}>
-            <Flex gap={4}>
-              <RadioGroup defaultValue="goed">
-                <Stack direction="row" spacing={4}>
-                  <Radio value="goed">{t('goed')}</Radio>
-                  <Radio value="aanpassen">{t('aanpassen')}</Radio>
-                </Stack>
-              </RadioGroup>
-            </Flex>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text>{t('verhogenLinksRechts')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-                <Text ml={4}>{t('spits')}</Text>
-              </Flex>
-            </FormControl>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text>{t('pronerenLinksRechts')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-                <Text ml={4}>{t('rond')}</Text>
-              </Flex>
-            </FormControl>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text>{t('supinerenLinksRechts')}</Text>
-                <Input placeholder="mm" size="sm" width="100px" />
-                <Text ml={4}>{t('carre')}</Text>
-              </Flex>
-            </FormControl>
-          </Stack>
-        </Box>
-
-        {/* Aanpassingen na uitleesten */}
-        <Box>
-          <Text fontWeight="bold" mb={4}>{t('aanpassingenNaUitleesten')}</Text>
-          <Stack spacing={3}>
-            <FormControl>
-              <Flex gap={4} alignItems="center">
-                <Text flex="1">{t('supplementBekleden')}</Text>
-                <RadioGroup defaultValue="plastazote">
-                  <Stack direction="row" spacing={4}>
-                    <Radio value="plastazote">{t('plastazote')}</Radio>
-                    <Radio value="on_steam">{t('onSteam')}</Radio>
-                  </Stack>
-                </RadioGroup>
-              </Flex>
-            </FormControl>
-            <LRCheckbox label={t('belpartijPolsteren')} />
-            <LRCheckbox label={t('basis5Polsteren')} />
-            <LRCheckbox label={t('hielenPolsteren')} />
-            <LRCheckbox label={t('polsterTRuit')} />
-          </Stack>
-        </Box>
+        </Box> */}
 
         {/* Bijzonderheden */}
         <Box>
           <Text fontWeight="bold" mb={4}>{t('bijzonderheden')}</Text>
           <FormControl>
-            <Input
-              as="textarea"
+            <Textarea
               placeholder={t('bijzonderhedenPlaceholder')}
               size="lg"
               minH="120px"
