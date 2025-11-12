@@ -51,6 +51,7 @@
     "react-redux": "^8.0.5",
     "react-select": "^5.7.0",
     "react-to-print": "^2.14.12",
+    "redux-persist": "^6.0.0",
     "styled-jsx": "^5.1.1",
     "use-debounce": "^9.0.2"
   },

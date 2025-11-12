@@ -7,14 +7,15 @@ import { Routes } from '../../routes';
 import { TextField } from '@/presentation/base/input/textField';
 import { DatePickerField } from '@/presentation/base/input/datePickerField';
 import { DropdownField, DropdownType } from '@/presentation/base/input/dropdownField';
-// using Chakra Checkbox directly for location toggles
 import { RadioField } from '@/presentation/base/input/radioField';
 import { RightArrowIcon } from '@/presentation/base/icon/rightArrow';
-import { DEV_CLIENT_MIDDLEWARE_MANIFEST } from 'next/dist/shared/lib/constants';
+import { useAppDispatch } from '@/domain/store/hooks';
+import { setClientData } from '@/domain/store/slices/formData';
 
 export const FormNewClientPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
+  const dispatch = useAppDispatch();
 
   const [fileNumber, setFileNumber] = useState('');
   const [date, setDate] = useState('');
@@ -194,7 +195,37 @@ export const FormNewClientPage = () => {
               p={4}
               onClick={event => {
                 event.preventDefault();
-                router.push(Routes.form_intake_osa_vlos);
+                
+                // Dispatch client data naar Redux store
+                const selectedLocation = Object.keys(locations).find(key => locations[key]);
+                dispatch(setClientData({
+                  practitionerId,
+                  date,
+                  osaVlos: osaVlos as 'OSA' | 'VLOS' | undefined,
+                  location: selectedLocation as 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | undefined,
+                  salutation: salutation as 'Mw.' | 'Dhr.' | 'Mej.' | undefined,
+                  initials,
+                  clientName,
+                  birthDate,
+                  address,
+                  postalCode,
+                  houseNumber,
+                  city,
+                  phoneOne,
+                  phoneTwo,
+                  email,
+                  bsn,
+                  insurance,
+                  specialist,
+                  familyDoctor,
+                }));
+                
+                // Navigeer naar juiste intake form
+                if (osaVlos === 'VLOS') {
+                  router.push(Routes.form_intake_vlos);
+                } else {
+                  router.push(Routes.form_intake_osa_vlos);
+                }
               }}
             >
               {t('OSA/VLOS')}

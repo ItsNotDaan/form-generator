@@ -15,5 +15,6 @@ module.exports = {
     // Forms
     '/new-client': ['form'],
     '/old-client': ['form'],
+    '/intake-vlos': ['form'],
   },
 };
