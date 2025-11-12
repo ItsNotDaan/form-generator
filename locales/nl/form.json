@@ -3,6 +3,21 @@
   "new-client": "Nieuwe klant",
   "old-client": "Oude klant"
   ,
+  "intakeVlos": "Intakeformulier VLOS",
+  "side": "Zijde",
+  "beide": "Beide",
+  "links": "Links",
+  "rechts": "Rechts",
+  "schachthoogte": "Schachthoogte",
+  "omsluiting": "Omsluiting",
+  "ja": "Ja",
+  "nee": "Nee",
+  "type": "Type",
+  "selectType": "Selecteer type",
+  "lateraal": "Lateraal",
+  "mediaal": "Mediaal",
+  "bijzonderheden": "Bijzonderheden",
+  "bijzonderhedenPlaceholder": "Bijzonderheden...",
   "intakeOsavlos": "Intakeformulier OSA/VLOS",
   "basiscodes": "Basiscodes",
   "omschrijving": "Omschrijving",
@@ -58,6 +73,5 @@
   "basis5Polsteren": "Basis 5 polsteren ptt/mouse",
   "hielenPolsteren": "Hielen polsteren ptt/mouse",
   "polsterTRuit": "Polster T/Ruit",
-  "bijzonderheden": "Bijzonderheden",
-  "bijzonderhedenPlaceholder": "Bijzonderheden..."
+  "bijzonderheden_osavlos_placeholder": "Bijzonderheden..."
 }
