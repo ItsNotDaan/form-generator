@@ -25,85 +25,180 @@ export const PageHeader = memo(
 
     return (
       <>
-        <Center w={'full'} bg={'brand.700'} alignItems={'center'}>
-          <Flex 
-            direction={'row'} 
-            w={'full'} 
-            p={{base: 3, md: 5}} 
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            {/* Left: Page title with back button */}
-            <Box flex={{base: '1', md: '1'}} minW={0}>
-              {!title ? <Box /> : showBackButton ? (
-                <Button
-                  aria-label={t('common:back')}
-                  px={'2'}
-                  variant={'tertiaryLight'}
-                  _hover={{bg: 'gray.600'}}
-                  onClick={() => onBackButtonClicked?.()}
-                >
-                  <HStack py={'2'} spacing={{base: 1, md: 2}}>
-                    <LeftArrowIcon boxSize={{base: '4', md: '5'}} color={'white'} />
+        <Box w={'full'} bg={'brand.700'} boxShadow={'md'}>
+          {/* Desktop & Tablet Layout */}
+          <Box display={{base: 'none', md: 'block'}}>
+            <Flex 
+              maxW={'1400px'}
+              mx={'auto'}
+              px={6}
+              py={4}
+              alignItems={'center'}
+              gap={8}
+            >
+              {/* Left: Back button + Title */}
+              <Flex alignItems={'center'} gap={3} flex={'1'} minW={0}>
+                {showBackButton && title && (
+                  <Button
+                    aria-label={t('common:back')}
+                    variant={'tertiaryLight'}
+                    _hover={{bg: 'whiteAlpha.200'}}
+                    onClick={() => onBackButtonClicked?.()}
+                    size={'sm'}
+                    leftIcon={<LeftArrowIcon boxSize={'4'} color={'white'} />}
+                  >
                     <Text 
-                      variant={'pageTitle'} 
-                      ml={'1'} 
+                      color={'white'}
+                      fontSize={'md'}
+                      fontWeight={'500'}
                       noOfLines={1}
-                      fontSize={{base: 'sm', md: 'md', lg: 'lg'}}
                     >
-                      {title}
+                      {t('back')}
                     </Text>
-                  </HStack>
-                </Button>
-              ) : (
-                <Text
-                  variant={'pageTitle'}
-                  noOfLines={1}
-                  fontSize={{base: 'sm', md: 'md', lg: 'lg'}}
-                  pl={{base: '2', md: '4'}}
-                >
-                  {title}
-                </Text>
-              )}
-            </Box>
+                  </Button>
+                )}
+                {!showBackButton && title && (
+                  <Text
+                    color={'white'}
+                    fontSize={'lg'}
+                    fontWeight={'600'}
+                    noOfLines={1}
+                  >
+                    {title}
+                  </Text>
+                )}
+              </Flex>
 
-            {/* Center: Eemland logo */}
-            <Box 
-              flex={{base: '0 0 auto', md: '0 0 auto'}} 
-              textAlign={'center'}
-              px={{base: 2, md: 4}}
+              {/* Center: Eemland Logo */}
+              <Link href={Routes.overview}>
+                <Flex 
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  px={8}
+                  py={2}
+                  borderRadius={'md'}
+                  transition={'all 0.2s'}
+                  _hover={{bg: 'whiteAlpha.200'}}
+                >
+                  <Text 
+                    color={'white'}
+                    fontSize={'2xl'}
+                    fontWeight={'bold'}
+                    letterSpacing={'wider'}
+                  >
+                    EEMLAND
+                  </Text>
+                </Flex>
+              </Link>
+
+              {/* Right: Help button */}
+              <Flex justifyContent={'flex-end'} flex={'1'} minW={0}>
+                <Link href={Routes.help}>
+                  <Button 
+                    variant={'tertiaryLight'} 
+                    as={'div'}
+                    size={'sm'}
+                    _hover={{bg: 'whiteAlpha.200'}}
+                  >
+                    <Text 
+                      fontWeight={'500'} 
+                      color={'white'}
+                      fontSize={'md'}
+                    >
+                      {t('help')}
+                    </Text>
+                  </Button>
+                </Link>
+              </Flex>
+            </Flex>
+          </Box>
+
+          {/* Mobile Layout */}
+          <Box display={{base: 'block', md: 'none'}}>
+            {/* Top row: Eemland centered */}
+            <Flex 
+              justifyContent={'center'}
+              alignItems={'center'}
+              py={3}
+              borderBottom={'1px solid'}
+              borderColor={'whiteAlpha.300'}
             >
               <Link href={Routes.overview}>
                 <Text 
-                  variant={'pageTitle'} 
-                  noOfLines={1}
-                  fontSize={{base: 'lg', md: 'xl'}}
+                  color={'white'}
+                  fontSize={'xl'}
                   fontWeight={'bold'}
+                  letterSpacing={'wide'}
                 >
                   Eemland
                 </Text>
               </Link>
-            </Box>
+            </Flex>
 
-            {/* Right: Help button */}
-            <Box flex={{base: '1', md: '1'}} textAlign={'right'} minW={0}>
+            {/* Bottom row: Back/Title + Help */}
+            <Flex 
+              px={3}
+              py={2}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+              gap={2}
+            >
+              {/* Left: Back or Title */}
+              <Box flex={'1'} minW={0}>
+                {showBackButton && title ? (
+                  <Button
+                    aria-label={t('common:back')}
+                    variant={'tertiaryLight'}
+                    _hover={{bg: 'whiteAlpha.200'}}
+                    onClick={() => onBackButtonClicked?.()}
+                    size={'sm'}
+                    px={2}
+                  >
+                    <HStack spacing={1}>
+                      <LeftArrowIcon boxSize={'3'} color={'white'} />
+                      <Text 
+                        color={'white'}
+                        fontSize={'sm'}
+                        fontWeight={'500'}
+                        noOfLines={1}
+                      >
+                        {title}
+                      </Text>
+                    </HStack>
+                  </Button>
+                ) : title ? (
+                  <Text
+                    color={'white'}
+                    fontSize={'sm'}
+                    fontWeight={'600'}
+                    noOfLines={1}
+                    pl={2}
+                  >
+                    {title}
+                  </Text>
+                ) : null}
+              </Box>
+
+              {/* Right: Help */}
               <Link href={Routes.help}>
-                {/* Cast button as div, so the focus will only be on Link parent component */}
-                <Button variant={'tertiaryLight'} as={'div'}>
-                  <HStack py={'2'} spacing={{base: 1, md: 2}}>
-                    <Text 
-                      fontWeight={'500'} 
-                      color={'white'}
-                      fontSize={{base: 'sm', md: 'md', lg: 'lg'}}
-                    >
-                      {t('help')}
-                    </Text>
-                  </HStack>
+                <Button 
+                  variant={'tertiaryLight'} 
+                  as={'div'}
+                  size={'sm'}
+                  _hover={{bg: 'whiteAlpha.200'}}
+                >
+                  <Text 
+                    fontWeight={'500'} 
+                    color={'white'}
+                    fontSize={'sm'}
+                  >
+                    {t('help')}
+                  </Text>
                 </Button>
               </Link>
-            </Box>
-          </Flex>
-        </Center>
+            </Flex>
+          </Box>
+        </Box>
       </>
     );
   }
