@@ -322,7 +322,7 @@ export const FormIntakeVLOSPage = () => {
                 flex={1}
                 borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
                 borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
-                borderColor="gray.200"
+                borderColor="inherit"
                 pl={{ base: 0, md: showLinks ? 6 : 0 }}
                 pt={{ base: showLinks ? 4 : 0, md: 0 }}
               >
@@ -416,7 +416,7 @@ export const FormIntakeVLOSPage = () => {
                 flex={1}
                 borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
                 borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
-                borderColor="gray.200"
+                borderColor="inherit"
                 pl={{ base: 0, md: showLinks ? 6 : 0 }}
                 pt={{ base: showLinks ? 4 : 0, md: 0 }}
               >
@@ -514,8 +514,55 @@ export const FormIntakeVLOSPage = () => {
           </Flex>
         </Box>
 
+        <Divider />
 
+        {/* Inschotpunt */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Inschotpunt</Text>
+          <Flex
+            gap={4}
+            alignItems="flex-start"
+            direction={{ base: 'column-reverse', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <Box w={{ base: '100%', md: '50%' }}>
+              <FormControl>
+                <FormLabel fontSize="sm">Inschotpunt (cm)</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="Bijv. 15"
+                  value={inschotpunt}
+                  onChange={(e) => setInschotpunt(e.target.value)}
+                  size="sm"
+                  maxW={{ base: 'full', md: '200px' }}
+                />
+              </FormControl>
+            </Box>
+            <Box
+              w={{ base: '100%', md: '50%' }}
+              height={{ base: '250px', md: '300px' }}
+              border="1px solid"
+              borderColor="inherit"
+              borderRadius="md"
+              overflow="hidden"
+              bg="white"
+            >
+              <Image
+                src="/images/intake-vlos/inschotpunt.png"
+                alt="Inschotpunt"
+                objectFit="contain"
+                w="100%"
+                h="100%"
+              />
+            </Box>
+          </Flex>
+        </Box>
 
+        <Divider />
 
         {/* Tongpolster */}
         <Box>
@@ -671,7 +718,7 @@ export const FormIntakeVLOSPage = () => {
             gap={{ base: 4, md: 6 }}
             direction={{ base: 'column', md: 'row' }}
             border="1px solid"
-            borderColor="gray.200"
+            borderColor="inherit"
             borderRadius="md"
             p={4}
             mt={2}
@@ -703,7 +750,7 @@ export const FormIntakeVLOSPage = () => {
                 flex={1}
                 borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
                 borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
-                borderColor="gray.200"
+                borderColor="inherit"
                 pl={{ base: 0, md: showLinks ? 6 : 0 }}
                 pt={{ base: showLinks ? 4 : 0, md: 0 }}
               >
@@ -740,7 +787,7 @@ export const FormIntakeVLOSPage = () => {
             alignItems="flex-start"
             direction={{ base: 'column-reverse', md: 'row' }}
             border="1px solid"
-            borderColor="gray.200"
+            borderColor="inherit"
             borderRadius="md"
             p={4}
             mt={2}
@@ -819,7 +866,7 @@ export const FormIntakeVLOSPage = () => {
               w={{ base: '100%', md: '50%' }}
               height={{ base: '250px', md: '300px' }}
               border="1px solid"
-              borderColor="gray.300"
+              borderColor="inherit"
               borderRadius="md"
               overflow="hidden"
               bg="white"
