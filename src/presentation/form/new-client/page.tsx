@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
-import { 
-  Box, 
-  Flex, 
-  Text, 
-  FormControl, 
-  FormLabel, 
-  Button, 
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
+import {
+  Box,
+  Flex,
+  Text,
+  FormControl,
+  FormLabel,
+  Button,
   Divider,
   Input,
   Stack,
@@ -14,16 +14,19 @@ import {
   RadioGroup,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
-import { DatePickerField } from '@/presentation/base/input/datePickerField';
-import { DropdownField, DropdownType } from '@/presentation/base/input/dropdownField';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setClientData } from '@/domain/store/slices/formData';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
+import {DatePickerField} from '@/presentation/base/input/datePickerField';
+import {
+  DropdownField,
+  DropdownType,
+} from '@/presentation/base/input/dropdownField';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {setClientData} from '@/domain/store/slices/formData';
 
 export const FormNewClientPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
 
   // State voor client data
@@ -39,41 +42,45 @@ export const FormNewClientPage = () => {
   const [birthDate, setBirthDate] = useState('');
   const [email, setEmail] = useState('');
   const [insurance, setInsurance] = useState('');
-  const [practitionerId, setPractitionerId] = useState<string | undefined>(undefined);
+  const [practitionerId, setPractitionerId] = useState<string | undefined>(
+    undefined
+  );
   const [phoneOne, setPhoneOne] = useState('');
   const [phoneTwo, setPhoneTwo] = useState('');
   const [specialist, setSpecialist] = useState('');
 
   // Practitioner list
   const practitioners = [
-    { label: 'Dr. Jan de Vries', value: 'p1' },
-    { label: 'Dr. Anna Jansen', value: 'p2' },
-    { label: 'Dr. Piet van Dijk', value: 'p3' },
+    {label: 'Dr. Jan de Vries', value: 'p1'},
+    {label: 'Dr. Anna Jansen', value: 'p2'},
+    {label: 'Dr. Piet van Dijk', value: 'p3'},
   ];
 
   const handleSubmit = () => {
     // Dispatch client data naar Redux store
-    dispatch(setClientData({
-      practitionerId,
-      date,
-      osaVlos: 'VLOS' as 'VLOS', // Alleen VLOS
-      location: location as 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | undefined,
-      salutation: salutation as 'Mw.' | 'Dhr.' | 'Mej.' | undefined,
-      initials,
-      clientName,
-      birthDate,
-      address,
-      postalCode,
-      houseNumber,
-      city,
-      phoneOne,
-      phoneTwo,
-      email,
-      bsn: '', // Verwijderd uit formulier
-      insurance,
-      specialist, // Bevat nu Specialist/Huisarts
-      familyDoctor: '', // Verwijderd uit formulier
-    }));
+    dispatch(
+      setClientData({
+        practitionerId,
+        date,
+        osaVlos: 'VLOS', // Alleen VLOS
+        location: location as 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | undefined,
+        salutation: salutation as 'Mw.' | 'Dhr.' | 'Mej.' | undefined,
+        initials,
+        clientName,
+        birthDate,
+        address,
+        postalCode,
+        houseNumber,
+        city,
+        phoneOne,
+        phoneTwo,
+        email,
+        bsn: '', // Verwijderd uit formulier
+        insurance,
+        specialist, // Bevat nu Specialist/Huisarts
+        familyDoctor: '', // Verwijderd uit formulier
+      })
+    );
 
     // Navigeer naar intake VLOS
     router.push(Routes.form_intake_vlos);
@@ -89,16 +96,18 @@ export const FormNewClientPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         {/* Behandelaar en Aanmeetdatum */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Behandelaar en Datum</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Behandelaar en Datum
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -118,7 +127,7 @@ export const FormNewClientPage = () => {
             </FormControl>
             <FormControl flex={1}>
               <FormLabel fontSize="sm">Aanmeetdatum</FormLabel>
-              <Box maxW={{ base: 'full', md: '300px' }}>
+              <Box maxW={{base: 'full', md: '300px'}}>
                 <DatePickerField
                   date={date ? new Date(date) : undefined}
                   onDateChanged={d => d && setDate(d.toISOString())}
@@ -133,10 +142,12 @@ export const FormNewClientPage = () => {
 
         {/* Locatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Locatie</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Locatie
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -145,7 +156,10 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             <RadioGroup value={location} onChange={setLocation}>
-              <Stack direction={{ base: 'column', sm: 'row' }} spacing={{ base: 2, sm: 6 }}>
+              <Stack
+                direction={{base: 'column', sm: 'row'}}
+                spacing={{base: 2, sm: 6}}
+              >
                 <Radio value="FZ">FZ</Radio>
                 <Radio value="FM">FM</Radio>
                 <Radio value="NN">NN</Radio>
@@ -160,9 +174,11 @@ export const FormNewClientPage = () => {
 
         {/* Persoonlijke gegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Persoonlijke gegevens</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Persoonlijke gegevens
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -183,12 +199,15 @@ export const FormNewClientPage = () => {
             </FormControl>
 
             {/* Voorletters en Achternaam */}
-            <Flex gap={{ base: 4, md: 6 }} direction={{ base: 'column', md: 'row' }}>
+            <Flex
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
+            >
               <FormControl flex={1}>
                 <FormLabel fontSize="sm">Voorletters</FormLabel>
                 <Input
                   value={initials}
-                  onChange={(e) => setInitials(e.target.value)}
+                  onChange={e => setInitials(e.target.value)}
                   size="sm"
                   placeholder="Bijv. J.A."
                 />
@@ -197,7 +216,7 @@ export const FormNewClientPage = () => {
                 <FormLabel fontSize="sm">Achternaam</FormLabel>
                 <Input
                   value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
+                  onChange={e => setClientName(e.target.value)}
                   size="sm"
                   placeholder="Bijv. van der Berg"
                 />
@@ -207,10 +226,12 @@ export const FormNewClientPage = () => {
             {/* Geboortedatum */}
             <FormControl>
               <FormLabel fontSize="sm">Geboortedatum</FormLabel>
-              <Box >
+              <Box>
                 <DatePickerField
                   date={birthDate ? new Date(birthDate) : undefined}
-                  onDateChanged={(date) => date && setBirthDate(date.toISOString())}
+                  onDateChanged={date =>
+                    date && setBirthDate(date.toISOString())
+                  }
                   isSmallVariant
                 />
               </Box>
@@ -222,9 +243,11 @@ export const FormNewClientPage = () => {
 
         {/* Adresgegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Adresgegevens</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Adresgegevens
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -233,12 +256,15 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             {/* Postcode en Huisnummer */}
-            <Flex gap={{ base: 4, md: 6 }} direction={{ base: 'column', sm: 'row' }}>
+            <Flex
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', sm: 'row'}}
+            >
               <FormControl flex={1}>
                 <FormLabel fontSize="sm">Postcode</FormLabel>
                 <Input
                   value={postalCode}
-                  onChange={(e) => setPostalCode(e.target.value)}
+                  onChange={e => setPostalCode(e.target.value)}
                   size="sm"
                   placeholder="1234AB"
                 />
@@ -247,7 +273,7 @@ export const FormNewClientPage = () => {
                 <FormLabel fontSize="sm">Huisnummer</FormLabel>
                 <Input
                   value={houseNumber}
-                  onChange={(e) => setHouseNumber(e.target.value)}
+                  onChange={e => setHouseNumber(e.target.value)}
                   size="sm"
                   placeholder="123"
                 />
@@ -255,12 +281,15 @@ export const FormNewClientPage = () => {
             </Flex>
 
             {/* Straatnaam en Stad */}
-            <Flex gap={{ base: 4, md: 6 }} direction={{ base: 'column', md: 'row' }}>
+            <Flex
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
+            >
               <FormControl flex={1}>
                 <FormLabel fontSize="sm">Straatnaam</FormLabel>
                 <Input
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={e => setAddress(e.target.value)}
                   size="sm"
                   placeholder="Hoofdstraat"
                 />
@@ -269,7 +298,7 @@ export const FormNewClientPage = () => {
                 <FormLabel fontSize="sm">Stad</FormLabel>
                 <Input
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  onChange={e => setCity(e.target.value)}
                   size="sm"
                   placeholder="Amsterdam"
                 />
@@ -282,9 +311,11 @@ export const FormNewClientPage = () => {
 
         {/* Contactgegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Contactgegevens</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Contactgegevens
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -293,13 +324,16 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             {/* Telefoon nummers */}
-            <Flex gap={{ base: 4, md: 6 }} direction={{ base: 'column', md: 'row' }}>
+            <Flex
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
+            >
               <FormControl flex={1}>
                 <FormLabel fontSize="sm">Telefoon 1</FormLabel>
                 <Input
                   type="tel"
                   value={phoneOne}
-                  onChange={(e) => setPhoneOne(e.target.value)}
+                  onChange={e => setPhoneOne(e.target.value)}
                   size="sm"
                   placeholder="06-12345678"
                 />
@@ -309,7 +343,7 @@ export const FormNewClientPage = () => {
                 <Input
                   type="tel"
                   value={phoneTwo}
-                  onChange={(e) => setPhoneTwo(e.target.value)}
+                  onChange={e => setPhoneTwo(e.target.value)}
                   size="sm"
                   placeholder="020-1234567"
                 />
@@ -322,7 +356,7 @@ export const FormNewClientPage = () => {
               <Input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 size="sm"
                 placeholder="naam@voorbeeld.nl"
               />
@@ -334,9 +368,11 @@ export const FormNewClientPage = () => {
 
         {/* Verzekering en Medische info */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Verzekering en Medische informatie</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Verzekering en Medische informatie
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -344,12 +380,15 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <Flex gap={{ base: 4, md: 6 }} direction={{ base: 'column', md: 'row' }}>
+            <Flex
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
+            >
               <FormControl flex={1}>
                 <FormLabel fontSize="sm">Verzekeringsmaatschappij</FormLabel>
                 <Input
                   value={insurance}
-                  onChange={(e) => setInsurance(e.target.value)}
+                  onChange={e => setInsurance(e.target.value)}
                   size="sm"
                   placeholder="Bijv. Zilveren Kruis"
                 />
@@ -358,7 +397,7 @@ export const FormNewClientPage = () => {
                 <FormLabel fontSize="sm">Specialist/Huisarts</FormLabel>
                 <Input
                   value={specialist}
-                  onChange={(e) => setSpecialist(e.target.value)}
+                  onChange={e => setSpecialist(e.target.value)}
                   size="sm"
                   placeholder="Dr. Jansen"
                 />
@@ -368,8 +407,12 @@ export const FormNewClientPage = () => {
         </Box>
 
         {/* Submit button */}
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
-          <Button variant="primary" onClick={handleSubmit} w={{ base: 'full', sm: 'auto' }}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            w={{base: 'full', sm: 'auto'}}
+          >
             Doorgaan naar VLOS intake
           </Button>
         </Flex>

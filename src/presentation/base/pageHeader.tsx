@@ -1,13 +1,5 @@
 import React, {memo} from 'react';
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  HStack,
-  Spacer,
-  Text,
-} from '@chakra-ui/react';
+import {Box, Button, Flex, HStack, Text} from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import {LeftArrowIcon} from '@/presentation/base/icon/leftArrow';
 import {Link} from '@/presentation/base/link';
@@ -28,7 +20,7 @@ export const PageHeader = memo(
         <Box w={'full'} bg={'brand.700'} boxShadow={'md'}>
           {/* Desktop & Tablet Layout */}
           <Box display={{base: 'none', md: 'block'}}>
-            <Flex 
+            <Flex
               maxW={'1400px'}
               mx={'auto'}
               px={6}
@@ -47,7 +39,7 @@ export const PageHeader = memo(
                     size={'sm'}
                     leftIcon={<LeftArrowIcon boxSize={'4'} color={'white'} />}
                   >
-                    <Text 
+                    <Text
                       color={'white'}
                       fontSize={'md'}
                       fontWeight={'500'}
@@ -71,7 +63,7 @@ export const PageHeader = memo(
 
               {/* Center: Eemland Logo */}
               <Link href={Routes.overview}>
-                <Flex 
+                <Flex
                   alignItems={'center'}
                   justifyContent={'center'}
                   px={8}
@@ -80,7 +72,7 @@ export const PageHeader = memo(
                   transition={'all 0.2s'}
                   _hover={{bg: 'whiteAlpha.200'}}
                 >
-                  <Text 
+                  <Text
                     color={'white'}
                     fontSize={'2xl'}
                     fontWeight={'bold'}
@@ -94,17 +86,13 @@ export const PageHeader = memo(
               {/* Right: Help button */}
               <Flex justifyContent={'flex-end'} flex={'1'} minW={0}>
                 <Link href={Routes.help}>
-                  <Button 
-                    variant={'tertiaryLight'} 
+                  <Button
+                    variant={'tertiaryLight'}
                     as={'div'}
                     size={'sm'}
                     _hover={{bg: 'whiteAlpha.200'}}
                   >
-                    <Text 
-                      fontWeight={'500'} 
-                      color={'white'}
-                      fontSize={'md'}
-                    >
+                    <Text fontWeight={'500'} color={'white'} fontSize={'md'}>
                       {t('help')}
                     </Text>
                   </Button>
@@ -116,7 +104,7 @@ export const PageHeader = memo(
           {/* Mobile Layout */}
           <Box display={{base: 'block', md: 'none'}}>
             {/* Top row: Eemland centered */}
-            <Flex 
+            <Flex
               justifyContent={'center'}
               alignItems={'center'}
               py={3}
@@ -124,7 +112,7 @@ export const PageHeader = memo(
               borderColor={'whiteAlpha.300'}
             >
               <Link href={Routes.overview}>
-                <Text 
+                <Text
                   color={'white'}
                   fontSize={'xl'}
                   fontWeight={'bold'}
@@ -136,7 +124,7 @@ export const PageHeader = memo(
             </Flex>
 
             {/* Bottom row: Back/Title + Help */}
-            <Flex 
+            <Flex
               px={3}
               py={2}
               alignItems={'center'}
@@ -156,7 +144,7 @@ export const PageHeader = memo(
                   >
                     <HStack spacing={1}>
                       <LeftArrowIcon boxSize={'3'} color={'white'} />
-                      <Text 
+                      <Text
                         color={'white'}
                         fontSize={'sm'}
                         fontWeight={'500'}
@@ -181,17 +169,13 @@ export const PageHeader = memo(
 
               {/* Right: Help */}
               <Link href={Routes.help}>
-                <Button 
-                  variant={'tertiaryLight'} 
+                <Button
+                  variant={'tertiaryLight'}
                   as={'div'}
                   size={'sm'}
                   _hover={{bg: 'whiteAlpha.200'}}
                 >
-                  <Text 
-                    fontWeight={'500'} 
-                    color={'white'}
-                    fontSize={'sm'}
-                  >
+                  <Text fontWeight={'500'} color={'white'} fontSize={'sm'}>
                     {t('help')}
                   </Text>
                 </Button>

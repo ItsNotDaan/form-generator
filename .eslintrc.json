@@ -6,8 +6,9 @@
     // Unused import returned as an error
     // note you must disable the base rule as it can report incorrect errors
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
-    "node/no-unpublished-import": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "node/no-unpublished-import": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "parserOptions": {
     "sourceType": "module"

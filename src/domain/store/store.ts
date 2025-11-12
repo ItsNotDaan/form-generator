@@ -1,13 +1,12 @@
 import {
   Action,
   AnyAction,
-  CombinedState,
   combineReducers,
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit';
 import {createWrapper, HYDRATE} from 'next-redux-wrapper';
-import {persistStore, persistReducer} from 'redux-persist';
+import {persistReducer} from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import overviewReducer, {OverviewState} from './slices/overview';
 import formDataReducer, {FormDataState} from './slices/formData';
@@ -27,7 +26,10 @@ const createNoopStorage = () => {
   };
 };
 
-const storage = typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage();
+const storage =
+  typeof window !== 'undefined'
+    ? createWebStorage('local')
+    : createNoopStorage();
 
 export interface InitialState {
   overview: OverviewState;
@@ -48,10 +50,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 
-const masterReducer = (
-  state: any,
-  action: AnyAction
-) => {
+const masterReducer = (state: any, action: AnyAction) => {
   if (action.type === HYDRATE) {
     const nextState = {
       ...state,
@@ -69,7 +68,7 @@ const masterReducer = (
 
 const makeStore = () => {
   const isServer = typeof window === 'undefined';
-  
+
   if (isServer) {
     // Server-side: geen persistentie
     return configureStore({
@@ -78,7 +77,11 @@ const makeStore = () => {
         getDefaultMiddleware({
           serializableCheck: {
             ignoredActionPaths: ['payload', 'register', 'rehydrate'],
-            ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/REGISTER'],
+            ignoredActions: [
+              'persist/PERSIST',
+              'persist/REHYDRATE',
+              'persist/REGISTER',
+            ],
           },
         }),
     });
@@ -90,7 +93,11 @@ const makeStore = () => {
         getDefaultMiddleware({
           serializableCheck: {
             ignoredActionPaths: ['payload', 'register', 'rehydrate'],
-            ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/REGISTER'],
+            ignoredActions: [
+              'persist/PERSIST',
+              'persist/REHYDRATE',
+              'persist/REGISTER',
+            ],
           },
         }),
     });

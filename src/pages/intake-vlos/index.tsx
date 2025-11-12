@@ -1,1 +1,1 @@
-export { FormIntakeVLOSPage as default } from '@/presentation/form/intake-vlos/page';
+export {FormIntakeVLOSPage as default} from '@/presentation/form/intake-vlos/page';

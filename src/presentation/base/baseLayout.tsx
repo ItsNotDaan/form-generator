@@ -1,7 +1,6 @@
 import {Flex, FlexProps} from '@chakra-ui/react';
 import React, {memo} from 'react';
 import {PageHeader, PageHeaderProps} from '@/presentation/base/pageHeader';
-import useTranslation from 'next-translate/useTranslation';
 
 interface Props extends PageHeaderProps {
   children: JSX.Element[] | JSX.Element;
@@ -16,8 +15,6 @@ export const BaseLayout = memo(
     onBackButtonClicked,
     parentStyles,
   }: Props) => {
-    const {t} = useTranslation('common');
-
     return (
       <Flex direction={'column'} w={'full'} minH={'100vh'} h={'full'}>
         <PageHeader

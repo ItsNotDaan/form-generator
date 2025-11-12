@@ -2,6 +2,7 @@
   "name": "web-nextjs-template",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://bramheetkamp.github.io/form-generator",
   "engines": {
     "node": ">=22.0.0 <23",
     "npm": ">=10.0.0 <12"
@@ -19,7 +20,10 @@
     "clean": "gts clean",
     "compile": "tsc",
     "pretest": "npm run compile",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "build": "env-cmd -e prod --use-shell 'NEXT_PUBLIC_APP_BUILD_SHA=$(git rev-parse HEAD) next build'",
+    "export": "next export",
+    "deploy": "npm run build && npm run export && gh-pages -d out"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
@@ -68,6 +72,7 @@
     "env-cmd": "^10.1.0",
     "eslint": "^8.29.0",
     "eslint-config-next": "^14.2.23",
+    "gh-pages": "^6.3.0",
     "gts": "^3.1.1",
     "husky": "^8.0.0",
     "next-translate-plugin": "^2.6.2",
