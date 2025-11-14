@@ -1,9 +1,9 @@
 import React from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
-import { Button, Divider, Flex, SimpleGrid, Text } from '@chakra-ui/react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
+import {Button, Divider, Flex, SimpleGrid, Text} from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../routes';
+import {useRouter} from 'next/router';
+import {Routes} from '../routes';
 
 export const OverviewPage = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ export const OverviewPage = () => {
           {'forms'}
         </Text>
 
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+        <SimpleGrid columns={{base: 1, md: 2, lg: 3}} spacing={4}>
           <Button
             variant={'primary'}
             p={4}
@@ -51,11 +51,19 @@ export const OverviewPage = () => {
       <Divider />
 
       <Flex
+<<<<<<< HEAD
         w={'full'}
         h={'full'}
         bg={'white'}
         borderRadius={'2'}
         flex={'1'}
+=======
+        gap={{base: 4, md: 6}}
+        direction="column"
+        border="1px solid"
+        borderColor="inherit"
+        borderRadius="md"
+>>>>>>> origin/main
         p={4}
         direction="column"
         gap={6}

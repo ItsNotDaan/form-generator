@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+<<<<<<< HEAD
 import {
   ClientData,
   IntakeVLOSData,
@@ -7,6 +8,9 @@ import {
   IntakeOVACData,
   IntakeSteunzolenData,
 } from '@/presentation/form/types/formData';
+=======
+import {ClientData, IntakeVLOSData} from '@/presentation/form/types/formData';
+>>>>>>> origin/main
 
 export interface FormDataState {
   client: ClientData | null;
@@ -36,6 +40,7 @@ const formDataSlice = createSlice({
     setIntakeVLOSData: (state, action: PayloadAction<IntakeVLOSData>) => {
       state.intakeVLOS = action.payload;
     },
+<<<<<<< HEAD
     setIntakePulmanData: (state, action: PayloadAction<IntakePulmanData>) => {
       state.intakePulman = action.payload;
     },
@@ -51,6 +56,8 @@ const formDataSlice = createSlice({
     ) => {
       state.intakeSteunzolen = action.payload;
     },
+=======
+>>>>>>> origin/main
     clearFormData: state => {
       state.client = null;
       state.intakeVLOS = null;
@@ -62,6 +69,7 @@ const formDataSlice = createSlice({
   },
 });
 
+<<<<<<< HEAD
 export const {
   setClientData,
   setIntakeVLOSData,
@@ -71,4 +79,8 @@ export const {
   setIntakeSteunzolenData,
   clearFormData,
 } = formDataSlice.actions;
+=======
+export const {setClientData, setIntakeVLOSData, clearFormData} =
+  formDataSlice.actions;
+>>>>>>> origin/main
 export default formDataSlice.reducer;
