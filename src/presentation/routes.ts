@@ -10,4 +10,11 @@ export const Routes = {
   form_old_client: '/old-client',
   form_intake_vlos: '/intake-vlos',
   form_intake_osa_vlos: '/intake-osa-vlos',
+<<<<<<< HEAD
+  form_intake_pulman: '/intake-pulman',
+  form_intake_osb: '/intake-osb',
+  form_intake_ovac: '/intake-ovac',
+  form_intake_steunzolen: '/intake-steunzolen',
+=======
+>>>>>>> origin/main
 };

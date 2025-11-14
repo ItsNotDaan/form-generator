@@ -1,22 +1,32 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+<<<<<<< HEAD
+import {
+  ClientData,
+  IntakeVLOSData,
+  IntakePulmanData,
+  IntakeOSBData,
+  IntakeOVACData,
+  IntakeSteunzolenData,
+} from '@/presentation/form/types/formData';
+=======
 import {ClientData, IntakeVLOSData} from '@/presentation/form/types/formData';
+>>>>>>> origin/main
 
 export interface FormDataState {
   client: ClientData | null;
   intakeVLOS: IntakeVLOSData | null;
-  // Voor toekomstige intake forms
-  intakeOSA: any | null;
-  intakeOSB: any | null;
-  intakeSteunsolen: any | null;
-  intakeOVAC: any | null;
+  intakePulman: IntakePulmanData | null;
+  intakeOSB: IntakeOSBData | null;
+  intakeSteunzolen: IntakeSteunzolenData | null;
+  intakeOVAC: IntakeOVACData | null;
 }
 
 const initialState: FormDataState = {
   client: null,
   intakeVLOS: null,
-  intakeOSA: null,
+  intakePulman: null,
   intakeOSB: null,
-  intakeSteunsolen: null,
+  intakeSteunzolen: null,
   intakeOVAC: null,
 };
 
@@ -30,17 +40,47 @@ const formDataSlice = createSlice({
     setIntakeVLOSData: (state, action: PayloadAction<IntakeVLOSData>) => {
       state.intakeVLOS = action.payload;
     },
+<<<<<<< HEAD
+    setIntakePulmanData: (state, action: PayloadAction<IntakePulmanData>) => {
+      state.intakePulman = action.payload;
+    },
+    setIntakeOSBData: (state, action: PayloadAction<IntakeOSBData>) => {
+      state.intakeOSB = action.payload;
+    },
+    setIntakeOVACData: (state, action: PayloadAction<IntakeOVACData>) => {
+      state.intakeOVAC = action.payload;
+    },
+    setIntakeSteunzolenData: (
+      state,
+      action: PayloadAction<IntakeSteunzolenData>
+    ) => {
+      state.intakeSteunzolen = action.payload;
+    },
+=======
+>>>>>>> origin/main
     clearFormData: state => {
       state.client = null;
       state.intakeVLOS = null;
-      state.intakeOSA = null;
+      state.intakePulman = null;
       state.intakeOSB = null;
-      state.intakeSteunsolen = null;
+      state.intakeSteunzolen = null;
       state.intakeOVAC = null;
     },
   },
 });
 
+<<<<<<< HEAD
+export const {
+  setClientData,
+  setIntakeVLOSData,
+  setIntakePulmanData,
+  setIntakeOSBData,
+  setIntakeOVACData,
+  setIntakeSteunzolenData,
+  clearFormData,
+} = formDataSlice.actions;
+=======
 export const {setClientData, setIntakeVLOSData, clearFormData} =
   formDataSlice.actions;
+>>>>>>> origin/main
 export default formDataSlice.reducer;
