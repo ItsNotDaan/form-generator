@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -17,13 +17,13 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakePulmanData } from '@/domain/store/slices/formData';
+import {useRouter} from 'next/router';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {setIntakePulmanData} from '@/domain/store/slices/formData';
 
 export const FormIntakePulmanPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
@@ -49,24 +49,26 @@ export const FormIntakePulmanPage = () => {
   const showRechts = side === 'rechts' || side === 'beide';
 
   const handleSubmit = () => {
-    dispatch(setIntakePulmanData({
-      side: side as 'beide' | 'links' | 'rechts',
-      omsluitingLinksType,
-      omsluitingRechtsType,
-      omsluitingLinksMm,
-      omsluitingRechtsMm,
-      proefschoen,
-      hielLinks,
-      hielRechts,
-      bijzonderheden,
-    }));
+    dispatch(
+      setIntakePulmanData({
+        side: side as 'beide' | 'links' | 'rechts',
+        omsluitingLinksType,
+        omsluitingRechtsType,
+        omsluitingLinksMm,
+        omsluitingRechtsMm,
+        proefschoen,
+        hielLinks,
+        hielRechts,
+        bijzonderheden,
+      })
+    );
 
     console.log('Intake Pulman data opgeslagen in Redux store');
   };
 
   return (
     <BaseLayout
-      title="Intakeformulier Pulman"
+      title={t('intakePulman')}
       showBackButton={true}
       onBackButtonClicked={() => router.back()}
     >
@@ -74,20 +76,22 @@ export const FormIntakePulmanPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         {/* Links/Rechts/Beide selectie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>{t('side')}</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('side')}
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
-            align={"center"}
+            align={'center'}
             p={4}
             mt={2}
             color="inherit"
@@ -106,10 +110,12 @@ export const FormIntakePulmanPage = () => {
 
         {/* Omsluiting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>{t('omsluiting')}</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('omsluiting')}
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -118,14 +124,16 @@ export const FormIntakePulmanPage = () => {
           >
             {showLinks && (
               <Box flex={1}>
-                <FormLabel fontSize="sm" mb={3}>{t('links')}</FormLabel>
+                <FormLabel fontSize="sm" mb={3}>
+                  {t('links')}
+                </FormLabel>
                 <Stack spacing={3}>
                   <FormControl>
                     <FormLabel fontSize="sm">Type</FormLabel>
                     <Input
                       placeholder="Type omsluiting"
                       value={omsluitingLinksType}
-                      onChange={(e) => setOmsluitingLinksType(e.target.value)}
+                      onChange={e => setOmsluitingLinksType(e.target.value)}
                       size="sm"
                     />
                   </FormControl>
@@ -135,7 +143,7 @@ export const FormIntakePulmanPage = () => {
                       type="number"
                       placeholder="mm"
                       value={omsluitingLinksMm}
-                      onChange={(e) => setOmsluitingLinksMm(e.target.value)}
+                      onChange={e => setOmsluitingLinksMm(e.target.value)}
                       size="sm"
                     />
                   </FormControl>
@@ -145,20 +153,22 @@ export const FormIntakePulmanPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
-                <FormLabel fontSize="sm" mb={3}>{t('rechts')}</FormLabel>
+                <FormLabel fontSize="sm" mb={3}>
+                  {t('rechts')}
+                </FormLabel>
                 <Stack spacing={3}>
                   <FormControl>
                     <FormLabel fontSize="sm">Type</FormLabel>
                     <Input
                       placeholder="Type omsluiting"
                       value={omsluitingRechtsType}
-                      onChange={(e) => setOmsluitingRechtsType(e.target.value)}
+                      onChange={e => setOmsluitingRechtsType(e.target.value)}
                       size="sm"
                     />
                   </FormControl>
@@ -168,7 +178,7 @@ export const FormIntakePulmanPage = () => {
                       type="number"
                       placeholder="mm"
                       value={omsluitingRechtsMm}
-                      onChange={(e) => setOmsluitingRechtsMm(e.target.value)}
+                      onChange={e => setOmsluitingRechtsMm(e.target.value)}
                       size="sm"
                     />
                   </FormControl>
@@ -182,12 +192,14 @@ export const FormIntakePulmanPage = () => {
 
         {/* Proefschoen */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>{t('proefschoen')}</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('proefschoen')}
+          </Text>
           <FormControl>
             <Input
               placeholder="Proefschoen details"
               value={proefschoen}
-              onChange={(e) => setProefschoen(e.target.value)}
+              onChange={e => setProefschoen(e.target.value)}
               size="sm"
             />
           </FormControl>
@@ -197,14 +209,16 @@ export const FormIntakePulmanPage = () => {
 
         {/* Hiel */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Hiel</Text>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Hiel
+          </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
-            align={"center"}
+            align={'center'}
             p={4}
             mt={2}
           >
@@ -214,7 +228,7 @@ export const FormIntakePulmanPage = () => {
                 <Input
                   placeholder="Hiel links"
                   value={hielLinks}
-                  onChange={(e) => setHielLinks(e.target.value)}
+                  onChange={e => setHielLinks(e.target.value)}
                   size="sm"
                 />
               </FormControl>
@@ -225,7 +239,7 @@ export const FormIntakePulmanPage = () => {
                 <Input
                   placeholder="Hiel rechts"
                   value={hielRechts}
-                  onChange={(e) => setHielRechts(e.target.value)}
+                  onChange={e => setHielRechts(e.target.value)}
                   size="sm"
                 />
               </FormControl>
@@ -237,22 +251,27 @@ export const FormIntakePulmanPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>{t('bijzonderheden')}</Text>
+          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+            {t('bijzonderheden')}
+          </Text>
           <Textarea
             placeholder={t('bijzonderhedenPlaceholder')}
             value={bijzonderheden}
-            onChange={(e) => setBijzonderheden(e.target.value)}
-            minH={{ base: '100px', md: '120px' }}
+            onChange={e => setBijzonderheden(e.target.value)}
+            minH={{base: '100px', md: '120px'}}
           />
         </Box>
 
         {/* Submit button */}
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
-          <Button variant="primary" onClick={handleSubmit} w={{ base: 'full', sm: 'auto' }}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            w={{base: 'full', sm: 'auto'}}
+          >
             Opslaan en doorgaan
           </Button>
         </Flex>
-
       </Flex>
     </BaseLayout>
   );

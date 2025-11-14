@@ -1,1 +1,1 @@
-export { FormIntakeSteunzolenPage as default } from '@/presentation/form/intake-steunzolen/page';
+export {FormIntakeSteunzolenPage as default} from '@/presentation/form/intake-steunzolen/page';

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -19,18 +19,18 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import {
   OMSLUITING_OPTIONS,
   OmsluitingKey,
   OmsluitingOption,
 } from '@/presentation/form/constants/omsluiting';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakeVLOSData } from '@/domain/store/slices/formData';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {setIntakeVLOSData} from '@/domain/store/slices/formData';
 
 export const FormIntakeVLOSPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
@@ -191,18 +191,18 @@ export const FormIntakeVLOSPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         {/* Links/Rechts/Beide selectie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('side')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -225,12 +225,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Schachthoogte */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('schachthoogte')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -269,12 +269,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Openstand Schacht */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('openstandSchacht')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -284,8 +284,8 @@ export const FormIntakeVLOSPage = () => {
           >
             <RadioGroup value={openstandSchacht} onChange={setOpenstandSchacht}>
               <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 2, sm: 4 }}
+                direction={{base: 'column', sm: 'row'}}
+                spacing={{base: 2, sm: 4}}
               >
                 <Radio value="0.5">0,5 cm</Radio>
                 <Radio value="0.8">0,8 cm</Radio>
@@ -301,12 +301,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Omsluiting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('omsluiting')}
           </Text>
           <Flex
             gap={6}
-            direction={{ base: 'column', md: 'row' }}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -340,7 +340,7 @@ export const FormIntakeVLOSPage = () => {
                               setOmsluitingLinks(
                                 omsluitingLinks.filter(o => o !== optie.key)
                               );
-                              const next = { ...omsluitingLinksMm };
+                              const next = {...omsluitingLinksMm};
                               delete (next as any)[optie.key];
                               setOmsluitingLinksMm(next);
                             }
@@ -373,11 +373,11 @@ export const FormIntakeVLOSPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <FormLabel fontSize="sm" mb={3}>
                   {t('rechts')}
@@ -404,7 +404,7 @@ export const FormIntakeVLOSPage = () => {
                               setOmsluitingRechts(
                                 omsluitingRechts.filter(o => o !== optie.key)
                               );
-                              const next = { ...omsluitingRechtsMm };
+                              const next = {...omsluitingRechtsMm};
                               delete (next as any)[optie.key];
                               setOmsluitingRechtsMm(next);
                             }
@@ -442,12 +442,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Supplementschoring */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('supplementSchoring')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -489,11 +489,11 @@ export const FormIntakeVLOSPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <Text fontSize="sm" fontWeight="semibold" mb={2}>
                   {t('rechts')}
@@ -532,12 +532,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Zoolverstijving */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('zoolverstijving')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -557,8 +557,8 @@ export const FormIntakeVLOSPage = () => {
 
             {zoolverstijvingEnabled === 'ja' && (
               <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 3, sm: 6 }}
+                direction={{base: 'column', sm: 'row'}}
+                spacing={{base: 3, sm: 6}}
               >
                 {showLinks && (
                   <Checkbox
@@ -584,12 +584,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Sluiting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('sluiting')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -610,20 +610,20 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Inschotpunt */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('inschotpunt')}
           </Text>
           <Flex
             gap={4}
             alignItems="flex-start"
-            direction={{ base: 'column-reverse', md: 'row' }}
+            direction={{base: 'column-reverse', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
             p={4}
             mt={2}
           >
-            <Box w={{ base: '100%', md: '50%' }}>
+            <Box w={{base: '100%', md: '50%'}}>
               <FormControl>
                 <FormLabel fontSize="sm">{t('inschotpuntCm')}</FormLabel>
                 <Input
@@ -632,13 +632,13 @@ export const FormIntakeVLOSPage = () => {
                   value={inschotpunt}
                   onChange={e => setInschotpunt(e.target.value)}
                   size="sm"
-                  maxW={{ base: 'full', md: '200px' }}
+                  maxW={{base: 'full', md: '200px'}}
                 />
               </FormControl>
             </Box>
             <Box
-              w={{ base: '100%', md: '50%' }}
-              height={{ base: '250px', md: '300px' }}
+              w={{base: '100%', md: '50%'}}
+              height={{base: '250px', md: '300px'}}
               border="1px solid"
               borderColor="inherit"
               borderRadius="md"
@@ -660,12 +660,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Tongpolster */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('tongpolster')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -677,7 +677,7 @@ export const FormIntakeVLOSPage = () => {
               value={tongpolsterEnabled}
               onChange={setTongpolsterEnabled}
             >
-              <Stack direction={{ base: 'column', sm: 'row' }} spacing={6}>
+              <Stack direction={{base: 'column', sm: 'row'}} spacing={6}>
                 <Radio value="ja">{t('tongpolsterJa')}</Radio>
                 <Radio value="nee">{t('nee')}</Radio>
               </Stack>
@@ -689,12 +689,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Tong vaststikken */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('tongVaststikken')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -718,12 +718,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Haksoort */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('haksoort')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -774,12 +774,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Hakhoogte */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('hakhoogte')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -818,12 +818,12 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Hakschoring */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('hakschoring')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -860,11 +860,11 @@ export const FormIntakeVLOSPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <Text fontSize="sm" fontWeight="semibold" mb={2}>
                   {t('rechts')}
@@ -898,20 +898,20 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Hakafronding */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('hakafronding')}
           </Text>
           <Flex
             gap={4}
             alignItems="flex-start"
-            direction={{ base: 'column-reverse', md: 'row' }}
+            direction={{base: 'column-reverse', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
             p={4}
             mt={2}
           >
-            <Box w={{ base: '100%', md: '50%' }}>
+            <Box w={{base: '100%', md: '50%'}}>
               <Stack spacing={4}>
                 {showLinks && (
                   <Box>
@@ -928,7 +928,7 @@ export const FormIntakeVLOSPage = () => {
                       </Stack>
                     </RadioGroup>
                     {hakafrondingLinksEnabled === 'ja' && (
-                      <Flex gap={2} direction={{ base: 'column', sm: 'row' }}>
+                      <Flex gap={2} direction={{base: 'column', sm: 'row'}}>
                         <FormControl>
                           <FormLabel fontSize="sm">{t('hoogteMm')}</FormLabel>
                           <Input
@@ -970,7 +970,7 @@ export const FormIntakeVLOSPage = () => {
                       </Stack>
                     </RadioGroup>
                     {hakafrondingRechtsEnabled === 'ja' && (
-                      <Flex gap={2} direction={{ base: 'column', sm: 'row' }}>
+                      <Flex gap={2} direction={{base: 'column', sm: 'row'}}>
                         <FormControl>
                           <FormLabel fontSize="sm">{t('hoogteMm')}</FormLabel>
                           <Input
@@ -1000,8 +1000,8 @@ export const FormIntakeVLOSPage = () => {
               </Stack>
             </Box>
             <Box
-              w={{ base: '100%', md: '50%' }}
-              height={{ base: '250px', md: '300px' }}
+              w={{base: '100%', md: '50%'}}
+              height={{base: '250px', md: '300px'}}
               border="1px solid"
               borderColor="inherit"
               borderRadius="md"
@@ -1023,7 +1023,7 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Loopzool */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('loopzool')}
           </Text>
           <FormControl>
@@ -1044,23 +1044,23 @@ export const FormIntakeVLOSPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
             {t('bijzonderheden')}
           </Text>
           <Textarea
             placeholder={t('bijzonderhedenPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{ base: '100px', md: '120px' }}
+            minH={{base: '100px', md: '120px'}}
           />
         </Box>
 
         {/* Submit button */}
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{ base: 'full', sm: 'auto' }}
+            w={{base: 'full', sm: 'auto'}}
           >
             {t('opslaanEnDoorgaan')}
           </Button>

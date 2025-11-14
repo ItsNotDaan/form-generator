@@ -105,16 +105,16 @@ export interface IntakeVLOSData {
 
 export interface IntakePulmanData {
   side: 'beide' | 'links' | 'rechts';
-  
+
   // Omsluiting
   omsluitingLinksType?: string;
   omsluitingRechtsType?: string;
   omsluitingLinksMm?: string;
   omsluitingRechtsMm?: string;
-  
+
   // Proefschoen details
   proefschoen?: string;
-  
+
   // Details
   hielLinks?: string;
   hielRechts?: string;
@@ -124,19 +124,19 @@ export interface IntakePulmanData {
 export interface IntakeOSBData {
   // Proefschoen
   proefschoen?: 'ja' | 'nee';
-  
+
   // Datum
   datum?: string;
-  
+
   // Diktes
   diktes?: string;
-  
+
   // Maatverdeling
   maatverdeling?: string;
-  
+
   // Schoen sizes (24-32)
   schoenSizes?: Record<string, boolean>;
-  
+
   // Procedures
   procedures?: {
     vrijstaandSchoentje?: boolean;
@@ -147,26 +147,26 @@ export interface IntakeOSBData {
     enkelvolschoen?: boolean;
     enkelvolkastel?: boolean;
   };
-  
+
   bijzonderheden?: string;
 }
 
 export interface IntakeOVACData {
   // Similar structure to OSB
   proefschoen?: 'ja' | 'nee';
-  
+
   // Datum
   datum?: string;
-  
+
   // Diktes
   diktes?: string;
-  
+
   // Maatverdeling
   maatverdeling?: string;
-  
+
   // Schoen sizes (24-32)
   schoenSizes?: Record<string, boolean>;
-  
+
   // Procedures
   procedures?: {
     vrijstaandSchoentje?: boolean;
@@ -177,14 +177,14 @@ export interface IntakeOVACData {
     enkelvolschoen?: boolean;
     enkelvolkastel?: boolean;
   };
-  
+
   bijzonderheden?: string;
 }
 
 export interface IntakeSteunzolenData {
   // Processes checkboxes
   processes?: string;
-  
+
   // Schoenteest
   schoenteest?: {
     berekteKloonzool?: boolean;
@@ -192,7 +192,7 @@ export interface IntakeSteunzolenData {
     berekteVlakten?: boolean;
     enkelvolZolen?: boolean;
   };
-  
+
   // Steunzolen options
   steunzolen?: {
     ts15cm?: boolean;
@@ -201,7 +201,7 @@ export interface IntakeSteunzolenData {
     bislangTussen?: boolean;
     bislang?: boolean;
   };
-  
+
   // Corrections
   corrections?: {
     vervolgC1Lang1UVlug?: boolean;
@@ -210,7 +210,7 @@ export interface IntakeSteunzolenData {
     uithollingC1Krag3Kleine?: boolean;
     haktVerlengdC1Krag3?: boolean;
   };
-  
+
   // Pads
   pads?: {
     csm?: boolean;
@@ -218,22 +218,22 @@ export interface IntakeSteunzolenData {
     e425?: boolean;
     cushlin?: boolean;
   };
-  
+
   // Corr
   corr?: string;
-  
+
   // Montage
   montage?: string;
-  
+
   // Controle
   controle?: string;
-  
+
   // Belasting
   belasting?: string;
-  
+
   // Pref
   pref?: string;
-  
+
   bijzonderheden?: string;
 }
 

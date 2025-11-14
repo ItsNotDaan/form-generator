@@ -26,7 +26,7 @@ export const PageHeader = memo(
               alignItems={'center'}
               gap={8}
             >
-              {/* Left: Back button + Title */}
+              {/* Left: Back button or Title */}
               <Flex alignItems={'center'} gap={3} flex={'1'} minW={0}>
                 {showBackButton && title && (
                   <Button
@@ -47,7 +47,7 @@ export const PageHeader = memo(
                     </Text>
                   </Button>
                 )}
-                {!showBackButton && title && (
+                {title && (
                   <Text
                     color={'white'}
                     fontSize={'lg'}
@@ -59,41 +59,27 @@ export const PageHeader = memo(
                 )}
               </Flex>
 
-              {/* Center: Eemland Logo */}
-              <Link href={Routes.overview}>
-                <Flex
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  px={8}
-                  py={2}
-                  borderRadius={'md'}
-                  transition={'all 0.2s'}
-                  _hover={{bg: 'whiteAlpha.200'}}
-                >
-                  <Text
-                    color={'white'}
-                    fontSize={'2xl'}
-                    fontWeight={'bold'}
-                    letterSpacing={'wider'}
-                  >
-                    EEMLAND
-                  </Text>
-                </Flex>
-              </Link>
-
-              {/* Right: Help button */}
+              {/* Right: Eemland Logo */}
               <Flex justifyContent={'flex-end'} flex={'1'} minW={0}>
-                <Link href={Routes.help}>
-                  <Button
-                    variant={'tertiaryLight'}
-                    as={'div'}
-                    size={'sm'}
+                <Link href={Routes.overview}>
+                  <Flex
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    px={8}
+                    py={2}
+                    borderRadius={'md'}
+                    transition={'all 0.2s'}
                     _hover={{bg: 'whiteAlpha.200'}}
                   >
-                    <Text fontWeight={'500'} color={'white'} fontSize={'md'}>
-                      {'help'}
+                    <Text
+                      color={'white'}
+                      fontSize={'2xl'}
+                      fontWeight={'bold'}
+                      letterSpacing={'wider'}
+                    >
+                      EEMLAND
                     </Text>
-                  </Button>
+                  </Flex>
                 </Link>
               </Flex>
             </Flex>
@@ -121,12 +107,12 @@ export const PageHeader = memo(
               </Link>
             </Flex>
 
-            {/* Bottom row: Back/Title + Help */}
+            {/* Bottom row: Back/Title */}
             <Flex
               px={3}
               py={2}
               alignItems={'center'}
-              justifyContent={'space-between'}
+              justifyContent={'flex-start'}
               gap={2}
             >
               {/* Left: Back or Title */}
@@ -164,20 +150,6 @@ export const PageHeader = memo(
                   </Text>
                 ) : null}
               </Box>
-
-              {/* Right: Help */}
-              <Link href={Routes.help}>
-                <Button
-                  variant={'tertiaryLight'}
-                  as={'div'}
-                  size={'sm'}
-                  _hover={{bg: 'whiteAlpha.200'}}
-                >
-                  <Text fontWeight={'500'} color={'white'} fontSize={'sm'}>
-                    {'help'}
-                  </Text>
-                </Button>
-              </Link>
             </Flex>
           </Box>
         </Box>
