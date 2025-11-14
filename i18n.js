@@ -10,11 +10,15 @@ module.exports = {
     '*': ['common'],
 
     // Overview
-    // '/': ['overview'],
+    '/': ['form'],
 
     // Forms
     '/new-client': ['form'],
     '/old-client': ['form'],
     '/intake-vlos': ['form'],
+    '/intake-pulman': ['form'],
+    '/intake-osb': ['form'],
+    '/intake-ovac': ['form'],
+    '/intake-steunzolen': ['form'],
   },
 };

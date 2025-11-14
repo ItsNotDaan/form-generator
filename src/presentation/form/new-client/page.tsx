@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -14,18 +14,19 @@ import {
   RadioGroup,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {DatePickerField} from '@/presentation/base/input/datePickerField';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { DatePickerField } from '@/presentation/base/input/datePickerField';
 import {
   DropdownField,
   DropdownType,
 } from '@/presentation/base/input/dropdownField';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {setClientData} from '@/domain/store/slices/formData';
+import { useAppDispatch } from '@/domain/store/hooks';
+import { setClientData } from '@/domain/store/slices/formData';
 
 export const FormNewClientPage = () => {
   const router = useRouter();
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
 
   // State voor client data
@@ -50,9 +51,9 @@ export const FormNewClientPage = () => {
 
   // Practitioner list
   const practitioners = [
-    {label: 'Dr. Jan de Vries', value: 'p1'},
-    {label: 'Dr. Anna Jansen', value: 'p2'},
-    {label: 'Dr. Piet van Dijk', value: 'p3'},
+    { label: 'Dr. Jan de Vries', value: 'p1' },
+    { label: 'Dr. Anna Jansen', value: 'p2' },
+    { label: 'Dr. Piet van Dijk', value: 'p3' },
   ];
 
   const handleSubmit = () => {
@@ -87,7 +88,7 @@ export const FormNewClientPage = () => {
 
   return (
     <BaseLayout
-      title={'new-client'}
+      title={t('new-client')}
       showBackButton={true}
       onBackButtonClicked={() => router.back()}
     >
@@ -95,18 +96,18 @@ export const FormNewClientPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         {/* Behandelaar en Aanmeetdatum */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Behandelaar en Datum
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('behandelaarEnDatum')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -114,19 +115,19 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             <FormControl flex={1}>
-              <FormLabel fontSize="sm">Behandelaar</FormLabel>
+              <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
               <DropdownField
                 type={DropdownType.SINGLE_NON_CREATABLE}
                 items={practitioners}
                 item={practitionerId}
                 onItemSelected={item => setPractitionerId(item?.value)}
-                placeholder={'choosePractitioner'}
+                placeholder={t('choosePractitioner')}
                 isSmallVariant
               />
             </FormControl>
             <FormControl flex={1}>
-              <FormLabel fontSize="sm">Aanmeetdatum</FormLabel>
-              <Box maxW={{base: 'full', md: '300px'}}>
+              <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
+              <Box maxW={{ base: 'full', md: '300px' }}>
                 <DatePickerField
                   date={date ? new Date(date) : undefined}
                   onDateChanged={d => d && setDate(d.toISOString())}
@@ -141,12 +142,12 @@ export const FormNewClientPage = () => {
 
         {/* Locatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Locatie
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('locatie')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -156,8 +157,8 @@ export const FormNewClientPage = () => {
           >
             <RadioGroup value={location} onChange={setLocation}>
               <Stack
-                direction={{base: 'column', sm: 'row'}}
-                spacing={{base: 2, sm: 6}}
+                direction={{ base: 'column', sm: 'row' }}
+                spacing={{ base: 2, sm: 6 }}
               >
                 <Radio value="FZ">FZ</Radio>
                 <Radio value="FM">FM</Radio>
@@ -173,11 +174,11 @@ export const FormNewClientPage = () => {
 
         {/* Persoonlijke gegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Persoonlijke gegevens
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('persoonlijkeGegevens')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -187,7 +188,7 @@ export const FormNewClientPage = () => {
           >
             {/* Aanhef */}
             <FormControl>
-              <FormLabel fontSize="sm">Aanhef</FormLabel>
+              <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
               <RadioGroup value={salutation} onChange={setSalutation}>
                 <Stack direction="row" spacing={6}>
                   <Radio value="Mw.">Mw.</Radio>
@@ -199,32 +200,32 @@ export const FormNewClientPage = () => {
 
             {/* Voorletters en Achternaam */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Voorletters</FormLabel>
+                <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
                 <Input
                   value={initials}
                   onChange={e => setInitials(e.target.value)}
                   size="sm"
-                  placeholder="Bijv. J.A."
+                  placeholder={t('voorllettersPlaceholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Achternaam</FormLabel>
+                <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
                 <Input
                   value={clientName}
                   onChange={e => setClientName(e.target.value)}
                   size="sm"
-                  placeholder="Bijv. van der Berg"
+                  placeholder={t('achternaamPlaceholder')}
                 />
               </FormControl>
             </Flex>
 
             {/* Geboortedatum */}
             <FormControl>
-              <FormLabel fontSize="sm">Geboortedatum</FormLabel>
+              <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
               <Box>
                 <DatePickerField
                   date={birthDate ? new Date(birthDate) : undefined}
@@ -242,11 +243,11 @@ export const FormNewClientPage = () => {
 
         {/* Adresgegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Adresgegevens
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('adresgegevens')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -256,50 +257,50 @@ export const FormNewClientPage = () => {
           >
             {/* Postcode en Huisnummer */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', sm: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', sm: 'row' }}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Postcode</FormLabel>
+                <FormLabel fontSize="sm">{t('postcode')}</FormLabel>
                 <Input
                   value={postalCode}
                   onChange={e => setPostalCode(e.target.value)}
                   size="sm"
-                  placeholder="1234AB"
+                  placeholder={t('postcodePlaceholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Huisnummer</FormLabel>
+                <FormLabel fontSize="sm">{t('huisnummer')}</FormLabel>
                 <Input
                   value={houseNumber}
                   onChange={e => setHouseNumber(e.target.value)}
                   size="sm"
-                  placeholder="123"
+                  placeholder={t('huisnummerPlaceholder')}
                 />
               </FormControl>
             </Flex>
 
             {/* Straatnaam en Stad */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Straatnaam</FormLabel>
+                <FormLabel fontSize="sm">{t('straatnaam')}</FormLabel>
                 <Input
                   value={address}
                   onChange={e => setAddress(e.target.value)}
                   size="sm"
-                  placeholder="Hoofdstraat"
+                  placeholder={t('straatnaamPlaceholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Stad</FormLabel>
+                <FormLabel fontSize="sm">{t('stad')}</FormLabel>
                 <Input
                   value={city}
                   onChange={e => setCity(e.target.value)}
                   size="sm"
-                  placeholder="Amsterdam"
+                  placeholder={t('stadPlaceholder')}
                 />
               </FormControl>
             </Flex>
@@ -310,11 +311,11 @@ export const FormNewClientPage = () => {
 
         {/* Contactgegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Contactgegevens
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('contactgegevens')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -324,40 +325,40 @@ export const FormNewClientPage = () => {
           >
             {/* Telefoon nummers */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Telefoon 1</FormLabel>
+                <FormLabel fontSize="sm">{t('telefoon1')}</FormLabel>
                 <Input
                   type="tel"
                   value={phoneOne}
                   onChange={e => setPhoneOne(e.target.value)}
                   size="sm"
-                  placeholder="06-12345678"
+                  placeholder={t('telefoon1Placeholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Telefoon 2</FormLabel>
+                <FormLabel fontSize="sm">{t('telefoon2')}</FormLabel>
                 <Input
                   type="tel"
                   value={phoneTwo}
                   onChange={e => setPhoneTwo(e.target.value)}
                   size="sm"
-                  placeholder="020-1234567"
+                  placeholder={t('telefoon2Placeholder')}
                 />
               </FormControl>
             </Flex>
 
             {/* Email */}
             <FormControl>
-              <FormLabel fontSize="sm">Emailadres</FormLabel>
+              <FormLabel fontSize="sm">{t('emailadres')}</FormLabel>
               <Input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 size="sm"
-                placeholder="naam@voorbeeld.nl"
+                placeholder={t('emailadresPlaceholder')}
               />
             </FormControl>
           </Flex>
@@ -367,11 +368,11 @@ export const FormNewClientPage = () => {
 
         {/* Verzekering en Medische info */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Verzekering en Medische informatie
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('verzekeringEnMedischeInformatie')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -380,25 +381,25 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Verzekeringsmaatschappij</FormLabel>
+                <FormLabel fontSize="sm">{t('verzekeringsmaatschappij')}</FormLabel>
                 <Input
                   value={insurance}
                   onChange={e => setInsurance(e.target.value)}
                   size="sm"
-                  placeholder="Bijv. Zilveren Kruis"
+                  placeholder={t('verzekeringsmaatschappijPlaceholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">Specialist/Huisarts</FormLabel>
+                <FormLabel fontSize="sm">{t('specialistHuisarts')}</FormLabel>
                 <Input
                   value={specialist}
                   onChange={e => setSpecialist(e.target.value)}
                   size="sm"
-                  placeholder="Dr. Jansen"
+                  placeholder={t('specialistHuisartsPlaceholder')}
                 />
               </FormControl>
             </Flex>
@@ -406,13 +407,13 @@ export const FormNewClientPage = () => {
         </Box>
 
         {/* Submit button */}
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
-            Doorgaan naar VLOS intake
+            {t('doorgaanNaarVlosIntake')}
           </Button>
         </Flex>
       </Flex>

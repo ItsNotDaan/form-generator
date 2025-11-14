@@ -1,15 +1,16 @@
 import React from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
-import {Flex, Text} from '@chakra-ui/react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
+import { Flex, Text } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 export const FormOldClientPage = () => {
   const router = useRouter();
+  const { t } = useTranslation('form');
 
   return (
     <BaseLayout
-      title={'old-client'}
+      title={t('old-client')}
       showBackButton={true}
       onBackButtonClicked={() => router.back()}
     >
