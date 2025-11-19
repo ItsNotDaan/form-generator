@@ -101,7 +101,7 @@ export const FormResultsPage = () => {
 
     let displayValue = value;
     if (typeof value === 'boolean') {
-      displayValue = value ? 'Ja' : 'Nee';
+      displayValue = value ? t('ja') : t('nee');
     } else if (typeof value === 'object') {
       displayValue = JSON.stringify(value);
     }
@@ -173,47 +173,45 @@ export const FormResultsPage = () => {
 
           {renderSection(t('clientData'), formData.client)}
 
-          <Divider my={4} />
-
           {formData.intakeVLOS && (
             <>
-              {renderSection(t('intakeVlos'), formData.intakeVLOS)}
               <Divider my={4} />
+              {renderSection(t('intakeVlos'), formData.intakeVLOS)}
             </>
           )}
 
           {formData.intakePulman && (
             <>
-              {renderSection(t('intakePulman'), formData.intakePulman)}
               <Divider my={4} />
+              {renderSection(t('intakePulman'), formData.intakePulman)}
             </>
           )}
 
           {formData.intakeRebacare && (
             <>
-              {renderSection(t('intakeRebacare'), formData.intakeRebacare)}
               <Divider my={4} />
+              {renderSection(t('intakeRebacare'), formData.intakeRebacare)}
             </>
           )}
 
           {formData.intakeOSB && (
             <>
-              {renderSection(t('intakeOsb'), formData.intakeOSB)}
               <Divider my={4} />
+              {renderSection(t('intakeOsb'), formData.intakeOSB)}
             </>
           )}
 
           {formData.intakeOVAC && (
             <>
-              {renderSection(t('intakeOvac'), formData.intakeOVAC)}
               <Divider my={4} />
+              {renderSection(t('intakeOvac'), formData.intakeOVAC)}
             </>
           )}
 
           {formData.intakeSteunzolen && (
             <>
-              {renderSection(t('intakeSteunzolen'), formData.intakeSteunzolen)}
               <Divider my={4} />
+              {renderSection(t('intakeSteunzolen'), formData.intakeSteunzolen)}
             </>
           )}
         </Box>
