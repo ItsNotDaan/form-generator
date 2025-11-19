@@ -492,7 +492,7 @@ export const FormNewClientPage = () => {
             isDisabled={!areAllFieldsValid}
           >
             {areAllFieldsValid
-              ? t('doorgaanNaarVlosIntake')
+              ? t('saveAndSelectForm')
               : 'Vul verplichte velden in'}
           </Button>
         </Flex>
