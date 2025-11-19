@@ -12,11 +12,13 @@ import {
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '../../routes';
-import {useAppSelector} from '@/domain/store/hooks';
+import {useAppSelector, useAppDispatch} from '@/domain/store/hooks';
+import {clearIntakeForms} from '@/domain/store/slices/formData';
 
 export const FormSelectionPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
+  const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
   // If no client data exists, redirect to new client page
@@ -25,6 +27,11 @@ export const FormSelectionPage = () => {
       router.push(Routes.form_new_client);
     }
   }, [clientData, router]);
+
+  // Clear all intake forms when entering form selection
+  React.useEffect(() => {
+    dispatch(clearIntakeForms());
+  }, [dispatch]);
 
   if (!clientData) {
     return null;

@@ -15,6 +15,8 @@ module.exports = {
     // Forms
     '/new-client': ['form'],
     '/old-client': ['form'],
+    '/form-selection': ['form'],
+    '/form-results': ['form'],
     '/intake-vlos': ['form'],
     '/intake-pulman': ['form'],
     '/intake-rebacare': ['form'],

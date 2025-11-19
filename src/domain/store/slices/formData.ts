@@ -69,6 +69,14 @@ const formDataSlice = createSlice({
       state.intakeSteunzolen = null;
       state.intakeOVAC = null;
     },
+    clearIntakeForms: state => {
+      state.intakeVLOS = null;
+      state.intakePulman = null;
+      state.intakeRebacare = null;
+      state.intakeOSB = null;
+      state.intakeSteunzolen = null;
+      state.intakeOVAC = null;
+    },
   },
 });
 
@@ -81,5 +89,6 @@ export const {
   setIntakeOVACData,
   setIntakeSteunzolenData,
   clearFormData,
+  clearIntakeForms,
 } = formDataSlice.actions;
 export default formDataSlice.reducer;
