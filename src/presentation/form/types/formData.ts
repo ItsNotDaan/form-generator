@@ -1,5 +1,9 @@
 // Type definitions for client and intake form data
-import type { Location, Salutation, Side } from '@/presentation/form/constants/formConstants';
+import type {
+  Location,
+  Salutation,
+  Side,
+} from '@/presentation/form/constants/formConstants';
 export interface ClientData {
   // Behandelaar en datum
   practitionerId?: string;
@@ -146,30 +150,68 @@ export interface IntakeRebacareData {
 }
 
 export interface IntakeOSBData {
-  // Proefschoen
-  proefschoen?: 'ja' | 'nee';
+  // Header & Omschrijving
+  ordernummer?: string;
+  omschrijving?: string[]; // Array of selected paartype options
 
-  // Datum
-  datum?: string;
+  // Medische Indicatie
+  medischeIndicatie?: string;
 
-  // Diktes
-  diktes?: string;
+  // Doel (checkboxes zonder L/R)
+  doel?: string[]; // Array of selected doel options
 
-  // Maatverdeling
-  maatverdeling?: string;
+  // Loopfunctie
+  loopfunctie?: string[]; // Array of selected loopfunctie options
 
-  // Schoen sizes (24-32)
-  schoenSizes?: Record<string, boolean>;
+  // Leverancier & Bestel Datum
+  leverancier?: string[]; // Array of selected leverancier options
+  bestelDatum?: string;
 
-  // Procedures
-  procedures?: {
-    vrijstaandSchoentje?: boolean;
-    voetAfdrukkleusKast?: boolean;
-    bevolktenSchottel?: boolean;
-    proefschoeneenGecombineerd?: boolean;
-    bevolktenSchoen?: boolean;
-    enkelvolschoen?: boolean;
-    enkelvolkastel?: boolean;
+  // Product Specificaties
+  productSpecificaties?: {
+    artCode?: string;
+    lengteMaat?: string;
+    wijdte?: string;
+    kleur?: string;
+    sluiting?: string;
+  };
+
+  // Modules - Hallux valgus
+  halluxValgusEnabled?: boolean;
+  halluxValgusLinks?: boolean;
+  halluxValgusRechts?: boolean;
+  halluxValgusLinksMm?: string; // '3mm' or '8mm'
+  halluxValgusRechtsMm?: string; // '3mm' or '8mm'
+
+  // Modules - Verdiepingen voorvoet
+  verdiepingenVoorvoetLinks?: boolean;
+  verdiepingenVoorvoetRechts?: boolean;
+  verdiepingenVoorvoetLinksMm?: string; // '3mm' or '5mm'
+  verdiepingenVoorvoetRechtsMm?: string; // '3mm' or '5mm'
+  verdiepingenVoorvoetExtraLinks?: boolean;
+  verdiepingenVoorvoetExtraRechts?: boolean;
+
+  // Basiscode SOS & Omschrijving (tabel met L/R)
+  basiscodeSOS?: string[]; // Array of selected basiscodes
+  supplements?: Record<string, {links: boolean; rechts: boolean; code: number}>;
+
+  // Steunzolen component (reusable)
+  steunzoolLinks?: {
+    type?: string[]; // Array of selected steunzool types
+    typeAnders?: string; // Text input for 'Anders'
+    correctieMiddenvoet?: string;
+    correctieVoorvoet?: string;
+    vvPellote?: string;
+    hakVerhogingCm?: string;
+  };
+
+  steunzoolRechts?: {
+    type?: string[]; // Array of selected steunzool types
+    typeAnders?: string; // Text input for 'Anders'
+    correctieMiddenvoet?: string;
+    correctieVoorvoet?: string;
+    vvPellote?: string;
+    hakVerhogingCm?: string;
   };
 
   bijzonderheden?: string;
