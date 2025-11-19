@@ -105,3 +105,12 @@ export const OMSLUITING_OPTIONS: OmsluitingOption[] = [
     { key: 'plastazote', label: 'Plastazote', needsMm: true, defaultMm: '3' },
     { key: 'orca', label: 'Orca omsluiting', needsMm: false },
 ];
+
+// Pulman types
+export const PULMAN_TYPES = ['New Harlem', 'Harlem Extra'] as const;
+export type PulmanType = typeof PULMAN_TYPES[number];
+export const PULMAN_TYPE_OPTIONS = PULMAN_TYPES.map(v => ({ label: v, value: v }));
+
+// Shoe sizes (37-48)
+export const SHOE_SIZES = Array.from({ length: 12 }, (_, i) => (37 + i).toString());
+export type ShoeSize = typeof SHOE_SIZES[number];

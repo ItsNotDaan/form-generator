@@ -1,8 +1,9 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ClientData,
   IntakeVLOSData,
   IntakePulmanData,
+  IntakeRebacareData,
   IntakeOSBData,
   IntakeOVACData,
   IntakeSteunzolenData,
@@ -12,6 +13,7 @@ export interface FormDataState {
   client: ClientData | null;
   intakeVLOS: IntakeVLOSData | null;
   intakePulman: IntakePulmanData | null;
+  intakeRebacare: IntakeRebacareData | null;
   intakeOSB: IntakeOSBData | null;
   intakeSteunzolen: IntakeSteunzolenData | null;
   intakeOVAC: IntakeOVACData | null;
@@ -21,6 +23,7 @@ const initialState: FormDataState = {
   client: null,
   intakeVLOS: null,
   intakePulman: null,
+  intakeRebacare: null,
   intakeOSB: null,
   intakeSteunzolen: null,
   intakeOVAC: null,
@@ -39,6 +42,9 @@ const formDataSlice = createSlice({
     setIntakePulmanData: (state, action: PayloadAction<IntakePulmanData>) => {
       state.intakePulman = action.payload;
     },
+    setIntakeRebacareData: (state, action: PayloadAction<IntakeRebacareData>) => {
+      state.intakeRebacare = action.payload;
+    },
     setIntakeOSBData: (state, action: PayloadAction<IntakeOSBData>) => {
       state.intakeOSB = action.payload;
     },
@@ -55,6 +61,7 @@ const formDataSlice = createSlice({
       state.client = null;
       state.intakeVLOS = null;
       state.intakePulman = null;
+      state.intakeRebacare = null;
       state.intakeOSB = null;
       state.intakeSteunzolen = null;
       state.intakeOVAC = null;
@@ -66,6 +73,7 @@ export const {
   setClientData,
   setIntakeVLOSData,
   setIntakePulmanData,
+  setIntakeRebacareData,
   setIntakeOSBData,
   setIntakeOVACData,
   setIntakeSteunzolenData,

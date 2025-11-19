@@ -20,7 +20,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/domain/store/hooks';
 import { setIntakePulmanData } from '@/domain/store/slices/formData';
-import { Side } from '@/presentation/form/constants/formConstants';
+import { Side, PULMAN_TYPE_OPTIONS, SHOE_SIZES } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakePulmanPage = () => {
   const router = useRouter();
@@ -29,6 +29,19 @@ export const FormIntakePulmanPage = () => {
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
   const [side, setSide] = useState<Side>('beide');
+
+  // State voor medische indicatie
+  const [medischeIndicatie, setMedischeIndicatie] = useState('');
+
+  // State voor gezwachteld
+  const [gezwachteld, setGezwachteld] = useState<'ja' | 'nee'>('nee');
+
+  // State voor type Pulman
+  const [typePulman, setTypePulman] = useState('');
+
+  // State voor schoenmaten
+  const [schoenmaat, setSchoenmaat] = useState('');
+  const [afgegevenMaat, setAfgegevenMaat] = useState('');
 
   // State voor omsluiting
   const [omsluitingLinksType, setOmsluitingLinksType] = useState('');
@@ -53,6 +66,11 @@ export const FormIntakePulmanPage = () => {
     dispatch(
       setIntakePulmanData({
         side,
+        medischeIndicatie,
+        gezwachteld,
+        typePulman,
+        schoenmaat,
+        afgegevenMaat,
         omsluitingLinksType,
         omsluitingRechtsType,
         omsluitingLinksMm,
@@ -109,109 +127,25 @@ export const FormIntakePulmanPage = () => {
 
         <Divider />
 
-        {/* Omsluiting */}
+        {/* Medische Indicatie */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('omsluiting')}
+            Medische Indicatie
           </Text>
-          <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
-            border="1px solid"
-            borderColor="inherit"
-            borderRadius="md"
-            p={4}
-            mt={2}
-          >
-            {showLinks && (
-              <Box flex={1}>
-                <FormLabel fontSize="sm" mb={3}>
-                  {t('links')}
-                </FormLabel>
-                <Stack spacing={3}>
-                  <FormControl>
-                    <FormLabel fontSize="sm">Type</FormLabel>
-                    <Input
-                      placeholder="Type omsluiting"
-                      value={omsluitingLinksType}
-                      onChange={e => setOmsluitingLinksType(e.target.value)}
-                      size="sm"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel fontSize="sm">mm</FormLabel>
-                    <Input
-                      type="number"
-                      placeholder="mm"
-                      value={omsluitingLinksMm}
-                      onChange={e => setOmsluitingLinksMm(e.target.value)}
-                      size="sm"
-                    />
-                  </FormControl>
-                </Stack>
-              </Box>
-            )}
-            {showRechts && (
-              <Box
-                flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
-                borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
-              >
-                <FormLabel fontSize="sm" mb={3}>
-                  {t('rechts')}
-                </FormLabel>
-                <Stack spacing={3}>
-                  <FormControl>
-                    <FormLabel fontSize="sm">Type</FormLabel>
-                    <Input
-                      placeholder="Type omsluiting"
-                      value={omsluitingRechtsType}
-                      onChange={e => setOmsluitingRechtsType(e.target.value)}
-                      size="sm"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel fontSize="sm">mm</FormLabel>
-                    <Input
-                      type="number"
-                      placeholder="mm"
-                      value={omsluitingRechtsMm}
-                      onChange={e => setOmsluitingRechtsMm(e.target.value)}
-                      size="sm"
-                    />
-                  </FormControl>
-                </Stack>
-              </Box>
-            )}
-          </Flex>
+          <Textarea
+            placeholder="Medische indicatie"
+            value={medischeIndicatie}
+            onChange={e => setMedischeIndicatie(e.target.value)}
+            minH={{ base: '80px', md: '100px' }}
+          />
         </Box>
 
         <Divider />
 
-        {/* Proefschoen */}
+        {/* Gezwachteld */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('proefschoen')}
-          </Text>
-          <FormControl>
-            <Input
-              placeholder="Proefschoen details"
-              value={proefschoen}
-              onChange={e => setProefschoen(e.target.value)}
-              size="sm"
-            />
-          </FormControl>
-        </Box>
-
-        <Divider />
-
-        {/* Hiel */}
-        <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Hiel
+            Gezwachteld?
           </Text>
           <Flex
             gap={{ base: 4, md: 6 }}
@@ -222,29 +156,95 @@ export const FormIntakePulmanPage = () => {
             align={'center'}
             p={4}
             mt={2}
+            color="inherit"
           >
-            {showLinks && (
-              <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('links')}</FormLabel>
-                <Input
-                  placeholder="Hiel links"
-                  value={hielLinks}
-                  onChange={e => setHielLinks(e.target.value)}
-                  size="sm"
-                />
-              </FormControl>
-            )}
-            {showRechts && (
-              <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('rechts')}</FormLabel>
-                <Input
-                  placeholder="Hiel rechts"
-                  value={hielRechts}
-                  onChange={e => setHielRechts(e.target.value)}
-                  size="sm"
-                />
-              </FormControl>
-            )}
+            <RadioGroup value={gezwachteld} onChange={v => setGezwachteld(v as 'ja' | 'nee')}>
+              <Stack direction="row" spacing={6}>
+                <Radio value="ja">Ja</Radio>
+                <Radio value="nee">Nee</Radio>
+              </Stack>
+            </RadioGroup>
+          </Flex>
+        </Box>
+
+        <Divider />
+
+        {/* Type Pulman */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            Type Pulman
+          </Text>
+          <FormControl>
+            <Select
+              placeholder="Selecteer type"
+              value={typePulman}
+              onChange={e => setTypePulman(e.target.value)}
+              size="md"
+            >
+              {PULMAN_TYPE_OPTIONS.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Divider />
+
+        {/* Schoenmaat klant */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            Schoenmaat klant
+          </Text>
+          <Flex
+            gap={{ base: 2, md: 3 }}
+            direction="row"
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+            flexWrap="wrap"
+          >
+            <RadioGroup value={schoenmaat} onChange={setSchoenmaat}>
+              <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
+                {SHOE_SIZES.map(size => (
+                  <Radio key={size} value={size}>
+                    {size}
+                  </Radio>
+                ))}
+              </Stack>
+            </RadioGroup>
+          </Flex>
+        </Box>
+
+        <Divider />
+
+        {/* Afgegeven maat */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            Afgegeven maat
+          </Text>
+          <Flex
+            gap={{ base: 2, md: 3 }}
+            direction="row"
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+            flexWrap="wrap"
+          >
+            <RadioGroup value={afgegevenMaat} onChange={setAfgegevenMaat}>
+              <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
+                {SHOE_SIZES.map(size => (
+                  <Radio key={size} value={size}>
+                    {size}
+                  </Radio>
+                ))}
+              </Stack>
+            </RadioGroup>
           </Flex>
         </Box>
 

@@ -107,18 +107,41 @@ export interface IntakeVLOSData {
 export interface IntakePulmanData {
   side: Side;
 
-  // Omsluiting
-  omsluitingLinksType?: string;
-  omsluitingRechtsType?: string;
-  omsluitingLinksMm?: string;
-  omsluitingRechtsMm?: string;
+  // Medische Indicatie
+  medischeIndicatie?: string;
 
-  // Proefschoen details
-  proefschoen?: string;
+  // Gezwachteld
+  gezwachteld?: 'ja' | 'nee';
 
-  // Details
-  hielLinks?: string;
-  hielRechts?: string;
+  // Type Pulman
+  typePulman?: string; // New Harlem, Harlem Extra
+
+  // Schoenmaat
+  schoenmaat?: string; // 37-48
+
+  // Afgegeven maat
+  afgegevenMaat?: string; // 37-48
+
+  // Bijzonderheden
+  bijzonderheden?: string;
+}
+
+export interface IntakeRebacareData {
+  side: Side;
+
+  // Medische Indicatie
+  medischeIndicatie?: string;
+
+  // Gezwachteld
+  gezwachteld?: 'ja' | 'nee';
+
+  // Schoenmaat
+  schoenmaat?: string; // 37-48
+
+  // Afgegeven maat
+  afgegevenMaat?: string; // 37-48
+
+  // Bijzonderheden
   bijzonderheden?: string;
 }
 
@@ -242,6 +265,7 @@ export interface FormSubmissionData {
   client: ClientData;
   intakeVLOS?: IntakeVLOSData;
   intakePulman?: IntakePulmanData;
+  intakeRebacare?: IntakeRebacareData;
   intakeOSB?: IntakeOSBData;
   intakeOVAC?: IntakeOVACData;
   intakeSteunzolen?: IntakeSteunzolenData;
