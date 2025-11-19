@@ -12,6 +12,8 @@ import {
   Stack,
   Radio,
   RadioGroup,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -56,7 +58,26 @@ export const FormNewClientPage = () => {
   const [phoneTwo, setPhoneTwo] = useState('');
   const [specialist, setSpecialist] = useState('');
 
+  // All fields are required for new client
+  const areAllFieldsValid =
+    !!practitionerId &&
+    !!date &&
+    !!location &&
+    !!salutation &&
+    initials.trim().length > 0 &&
+    clientName.trim().length > 0 &&
+    birthDate.length > 0 &&
+    address.trim().length > 0 &&
+    postalCode.trim().length > 0 &&
+    houseNumber.trim().length > 0 &&
+    city.trim().length > 0 &&
+    phoneOne.trim().length > 0 &&
+    email.trim().length > 0 &&
+    insurance.trim().length > 0 &&
+    specialist.trim().length > 0;
+
   const handleSubmit = () => {
+    if (!areAllFieldsValid) return;
     // Dispatch client data naar Redux store
     dispatch(
       setClientData({
@@ -114,7 +135,7 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl flex={1}>
+            <FormControl flex={1} isRequired isInvalid={!practitionerId}>
               <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
               <DropdownField
                 type={DropdownType.SINGLE_NON_CREATABLE}
@@ -125,7 +146,7 @@ export const FormNewClientPage = () => {
                 isSmallVariant
               />
             </FormControl>
-            <FormControl flex={1}>
+            <FormControl flex={1} isRequired isInvalid={!date}>
               <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
               <Box maxW={{ base: 'full', md: '300px' }}>
                 <DatePickerField
@@ -155,21 +176,23 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <RadioGroup
-              value={location}
-              onChange={v => setLocation(v as Location)}
-            >
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 2, sm: 6 }}
+            <FormControl isRequired isInvalid={!location}>
+              <RadioGroup
+                value={location}
+                onChange={v => setLocation(v as Location)}
               >
-                {LOCATION_OPTIONS.map(o => (
-                  <Radio key={o.value} value={o.value}>
-                    {o.label}
-                  </Radio>
-                ))}
-              </Stack>
-            </RadioGroup>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  spacing={{ base: 2, sm: 6 }}
+                >
+                  {LOCATION_OPTIONS.map(o => (
+                    <Radio key={o.value} value={o.value}>
+                      {o.label}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </FormControl>
           </Flex>
         </Box>
 
@@ -190,7 +213,7 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             {/* Aanhef */}
-            <FormControl>
+            <FormControl isRequired isInvalid={!salutation}>
               <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
               <RadioGroup
                 value={salutation}
@@ -211,7 +234,7 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={initials.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
                 <Input
                   value={initials}
@@ -220,7 +243,7 @@ export const FormNewClientPage = () => {
                   placeholder={t('voorllettersPlaceholder')}
                 />
               </FormControl>
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={clientName.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
                 <Input
                   value={clientName}
@@ -232,7 +255,7 @@ export const FormNewClientPage = () => {
             </Flex>
 
             {/* Geboortedatum */}
-            <FormControl>
+            <FormControl isRequired isInvalid={birthDate.length === 0}>
               <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
               <Box>
                 <DatePickerField
@@ -268,7 +291,7 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', sm: 'row' }}
             >
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={postalCode.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('postcode')}</FormLabel>
                 <Input
                   value={postalCode}
@@ -277,7 +300,7 @@ export const FormNewClientPage = () => {
                   placeholder={t('postcodePlaceholder')}
                 />
               </FormControl>
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={houseNumber.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('huisnummer')}</FormLabel>
                 <Input
                   value={houseNumber}
@@ -293,7 +316,7 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={address.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('straatnaam')}</FormLabel>
                 <Input
                   value={address}
@@ -302,7 +325,7 @@ export const FormNewClientPage = () => {
                   placeholder={t('straatnaamPlaceholder')}
                 />
               </FormControl>
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={city.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('stad')}</FormLabel>
                 <Input
                   value={city}
@@ -336,7 +359,7 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={phoneOne.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('telefoon1')}</FormLabel>
                 <Input
                   type="tel"
@@ -359,7 +382,7 @@ export const FormNewClientPage = () => {
             </Flex>
 
             {/* Email */}
-            <FormControl>
+            <FormControl isRequired isInvalid={email.trim().length === 0}>
               <FormLabel fontSize="sm">{t('emailadres')}</FormLabel>
               <Input
                 type="email"
@@ -392,7 +415,7 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={insurance.trim().length === 0}>
                 <FormLabel fontSize="sm">
                   {t('verzekeringsmaatschappij')}
                 </FormLabel>
@@ -403,7 +426,7 @@ export const FormNewClientPage = () => {
                   placeholder={t('verzekeringsmaatschappijPlaceholder')}
                 />
               </FormControl>
-              <FormControl flex={1}>
+              <FormControl flex={1} isRequired isInvalid={specialist.trim().length === 0}>
                 <FormLabel fontSize="sm">{t('specialistHuisarts')}</FormLabel>
                 <Input
                   value={specialist}
@@ -414,6 +437,11 @@ export const FormNewClientPage = () => {
               </FormControl>
             </Flex>
           </Flex>
+          {!areAllFieldsValid && (
+            <Alert status="warning" mt={4}>
+              <AlertIcon />Vul alle verplichte velden in om verder te gaan.
+            </Alert>
+          )}
         </Box>
 
         {/* Submit button */}
@@ -422,10 +450,12 @@ export const FormNewClientPage = () => {
             variant="primary"
             onClick={handleSubmit}
             w={{ base: 'full', sm: 'auto' }}
+            isDisabled={!areAllFieldsValid}
           >
-            {t('doorgaanNaarVlosIntake')}
+            {areAllFieldsValid ? t('doorgaanNaarVlosIntake') : 'Vul verplichte velden in'}
           </Button>
         </Flex>
+
       </Flex>
     </BaseLayout>
   );
