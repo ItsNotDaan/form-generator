@@ -17,6 +17,7 @@ module.exports = {
     '/old-client': ['form'],
     '/intake-vlos': ['form'],
     '/intake-pulman': ['form'],
+    '/intake-rebacare': ['form'],
     '/intake-osb': ['form'],
     '/intake-ovac': ['form'],
     '/intake-steunzolen': ['form'],

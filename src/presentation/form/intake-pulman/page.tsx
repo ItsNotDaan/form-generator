@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
@@ -13,7 +13,6 @@ import {
   Radio,
   RadioGroup,
   Button,
-  Select,
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
@@ -43,24 +42,18 @@ export const FormIntakePulmanPage = () => {
   const [schoenmaat, setSchoenmaat] = useState('');
   const [afgegevenMaat, setAfgegevenMaat] = useState('');
 
-  // State voor omsluiting
-  const [omsluitingLinksType, setOmsluitingLinksType] = useState('');
-  const [omsluitingRechtsType, setOmsluitingRechtsType] = useState('');
-  const [omsluitingLinksMm, setOmsluitingLinksMm] = useState('');
-  const [omsluitingRechtsMm, setOmsluitingRechtsMm] = useState('');
-
-  // State voor proefschoen
-  const [proefschoen, setProefschoen] = useState('');
-
-  // State voor hiel
-  const [hielLinks, setHielLinks] = useState('');
-  const [hielRechts, setHielRechts] = useState('');
-
   // State voor bijzonderheden
   const [bijzonderheden, setBijzonderheden] = useState('');
 
   const showLinks = side === 'links' || side === 'beide';
   const showRechts = side === 'rechts' || side === 'beide';
+
+  // Automatisch switchen naar Harlem Extra als gezwachteld 'ja' is
+  useEffect(() => {
+    if (gezwachteld === 'ja') {
+      setTypePulman('Harlem Extra');
+    }
+  }, [gezwachteld]);
 
   const handleSubmit = () => {
     dispatch(
@@ -71,13 +64,6 @@ export const FormIntakePulmanPage = () => {
         typePulman,
         schoenmaat,
         afgegevenMaat,
-        omsluitingLinksType,
-        omsluitingRechtsType,
-        omsluitingLinksMm,
-        omsluitingRechtsMm,
-        proefschoen,
-        hielLinks,
-        hielRechts,
         bijzonderheden,
       })
     );
@@ -130,10 +116,10 @@ export const FormIntakePulmanPage = () => {
         {/* Medische Indicatie */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Medische Indicatie
+            {t('medischeIndicatie')}
           </Text>
           <Textarea
-            placeholder="Medische indicatie"
+            placeholder={t('medischeIndicatiePlaceholder')}
             value={medischeIndicatie}
             onChange={e => setMedischeIndicatie(e.target.value)}
             minH={{ base: '80px', md: '100px' }}
@@ -145,7 +131,7 @@ export const FormIntakePulmanPage = () => {
         {/* Gezwachteld */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Gezwachteld?
+            {t('gezwachteld')}
           </Text>
           <Flex
             gap={{ base: 4, md: 6 }}
@@ -160,11 +146,25 @@ export const FormIntakePulmanPage = () => {
           >
             <RadioGroup value={gezwachteld} onChange={v => setGezwachteld(v as 'ja' | 'nee')}>
               <Stack direction="row" spacing={6}>
-                <Radio value="ja">Ja</Radio>
-                <Radio value="nee">Nee</Radio>
+                <Radio value="ja">{t('ja')}</Radio>
+                <Radio value="nee">{t('nee')}</Radio>
               </Stack>
             </RadioGroup>
           </Flex>
+          {gezwachteld === 'ja' && (
+            <Box
+              mt={4}
+              p={3}
+              bg="blue.50"
+              borderRadius="md"
+              borderLeft="4px solid"
+              borderColor="blue.400"
+            >
+              <Text fontSize="sm" color="blue.800" whiteSpace="pre-line">
+                {t('gezwachteldInformationPulman')}
+              </Text>
+            </Box>
+          )}
         </Box>
 
         <Divider />
@@ -172,22 +172,29 @@ export const FormIntakePulmanPage = () => {
         {/* Type Pulman */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Type Pulman
+            {t('typePulman')}
           </Text>
-          <FormControl>
-            <Select
-              placeholder="Selecteer type"
-              value={typePulman}
-              onChange={e => setTypePulman(e.target.value)}
-              size="md"
-            >
-              {PULMAN_TYPE_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            align={'center'}
+            p={4}
+            mt={2}
+            color="inherit"
+          >
+            <RadioGroup value={typePulman} onChange={setTypePulman}>
+              <Stack direction="row" spacing={6}>
+                {PULMAN_TYPE_OPTIONS.map(option => (
+                  <Radio key={option.value} value={option.value}>
+                    {option.label}
+                  </Radio>
+                ))}
+              </Stack>
+            </RadioGroup>
+          </Flex>
         </Box>
 
         <Divider />
@@ -195,7 +202,7 @@ export const FormIntakePulmanPage = () => {
         {/* Schoenmaat klant */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Schoenmaat klant
+            {t('schoenmaat')}
           </Text>
           <Flex
             gap={{ base: 2, md: 3 }}
@@ -224,7 +231,7 @@ export const FormIntakePulmanPage = () => {
         {/* Afgegeven maat */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Afgegeven maat
+            {t('afgegevenMaat')}
           </Text>
           <Flex
             gap={{ base: 2, md: 3 }}
@@ -270,7 +277,7 @@ export const FormIntakePulmanPage = () => {
             onClick={handleSubmit}
             w={{ base: 'full', sm: 'auto' }}
           >
-            Opslaan en doorgaan
+            {t('opslaanEnDoorgaan')}
           </Button>
         </Flex>
       </Flex>

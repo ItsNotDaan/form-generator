@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
     Flex,
-    FormControl,
     Text,
     Box,
     Divider,
@@ -17,7 +16,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/domain/store/hooks';
 import { setIntakeRebacareData } from '@/domain/store/slices/formData';
-import { Side, SHOE_SIZES } from '@/presentation/form/constants/formConstants';
+import { Side } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeRebacarePage = () => {
     const router = useRouter();
@@ -33,10 +32,6 @@ export const FormIntakeRebacarePage = () => {
     // State voor gezwachteld
     const [gezwachteld, setGezwachteld] = useState<'ja' | 'nee'>('nee');
 
-    // State voor schoenmaten
-    const [schoenmaat, setSchoenmaat] = useState('');
-    const [afgegevenMaat, setAfgegevenMaat] = useState('');
-
     // State voor bijzonderheden
     const [bijzonderheden, setBijzonderheden] = useState('');
 
@@ -46,8 +41,6 @@ export const FormIntakeRebacarePage = () => {
                 side,
                 medischeIndicatie,
                 gezwachteld,
-                schoenmaat,
-                afgegevenMaat,
                 bijzonderheden,
             })
         );
@@ -100,10 +93,10 @@ export const FormIntakeRebacarePage = () => {
                 {/* Medische Indicatie */}
                 <Box>
                     <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-                        Medische Indicatie
+                        {t('medischeIndicatie')}
                     </Text>
                     <Textarea
-                        placeholder="Medische indicatie"
+                        placeholder={t('medischeIndicatiePlaceholder')}
                         value={medischeIndicatie}
                         onChange={e => setMedischeIndicatie(e.target.value)}
                         minH={{ base: '80px', md: '100px' }}
@@ -115,7 +108,7 @@ export const FormIntakeRebacarePage = () => {
                 {/* Gezwachteld */}
                 <Box>
                     <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-                        Gezwachteld?
+                        {t('gezwachteld')}
                     </Text>
                     <Flex
                         gap={{ base: 4, md: 6 }}
@@ -130,66 +123,8 @@ export const FormIntakeRebacarePage = () => {
                     >
                         <RadioGroup value={gezwachteld} onChange={v => setGezwachteld(v as 'ja' | 'nee')}>
                             <Stack direction="row" spacing={6}>
-                                <Radio value="ja">Ja</Radio>
-                                <Radio value="nee">Nee</Radio>
-                            </Stack>
-                        </RadioGroup>
-                    </Flex>
-                </Box>
-
-                <Divider />
-
-                {/* Schoenmaat klant */}
-                <Box>
-                    <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-                        Schoenmaat klant
-                    </Text>
-                    <Flex
-                        gap={{ base: 2, md: 3 }}
-                        direction="row"
-                        border="1px solid"
-                        borderColor="inherit"
-                        borderRadius="md"
-                        p={4}
-                        mt={2}
-                        flexWrap="wrap"
-                    >
-                        <RadioGroup value={schoenmaat} onChange={setSchoenmaat}>
-                            <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
-                                {SHOE_SIZES.map(size => (
-                                    <Radio key={size} value={size}>
-                                        {size}
-                                    </Radio>
-                                ))}
-                            </Stack>
-                        </RadioGroup>
-                    </Flex>
-                </Box>
-
-                <Divider />
-
-                {/* Afgegeven maat */}
-                <Box>
-                    <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-                        Afgegeven maat
-                    </Text>
-                    <Flex
-                        gap={{ base: 2, md: 3 }}
-                        direction="row"
-                        border="1px solid"
-                        borderColor="inherit"
-                        borderRadius="md"
-                        p={4}
-                        mt={2}
-                        flexWrap="wrap"
-                    >
-                        <RadioGroup value={afgegevenMaat} onChange={setAfgegevenMaat}>
-                            <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
-                                {SHOE_SIZES.map(size => (
-                                    <Radio key={size} value={size}>
-                                        {size}
-                                    </Radio>
-                                ))}
+                                <Radio value="ja">{t('ja')}</Radio>
+                                <Radio value="nee">{t('nee')}</Radio>
                             </Stack>
                         </RadioGroup>
                     </Flex>
@@ -217,7 +152,7 @@ export const FormIntakeRebacarePage = () => {
                         onClick={handleSubmit}
                         w={{ base: 'full', sm: 'auto' }}
                     >
-                        Opslaan en doorgaan
+                        {t('opslaanEnDoorgaan')}
                     </Button>
                 </Flex>
             </Flex>
@@ -226,3 +161,4 @@ export const FormIntakeRebacarePage = () => {
 };
 
 export default FormIntakeRebacarePage;
+
