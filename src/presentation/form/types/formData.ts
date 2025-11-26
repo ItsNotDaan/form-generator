@@ -10,7 +10,7 @@ export interface ClientData {
   date: string;
 
   // Intake form type
-  intakeType?: 'VLOS' | 'Pulman' | 'Rebacare' | 'OSB' | 'OVAC' | 'Steunzolen';
+  intakeType?: 'VLOS' | 'OSA' | 'Pulman' | 'Rebacare' | 'OSB' | 'OVAC' | 'Steunzolen';
 
   // Location
   location?: Locatie;
@@ -38,6 +38,9 @@ export interface ClientData {
 }
 
 export interface IntakeVLOSData {
+  // Description/pair type
+  omschrijving?: string;
+
   // Side selection (both/left/right)
   side: Zijde;
 
@@ -99,6 +102,12 @@ export interface IntakeVLOSData {
   hakafrondingRechtsHoogte?: string;
   hakafrondingRechtsLengte?: string;
 
+  // Ezelsoor (donkey ear)
+  ezelsoorLinksEnabled: boolean;
+  ezelsoorRechtsEnabled: boolean;
+  ezelsoorLinksType?: string; // Medial/Lateral
+  ezelsoorRechtsType?: string;
+
   // Walking sole type
   loopzoolType?: string;
 
@@ -106,7 +115,13 @@ export interface IntakeVLOSData {
   bijzonderheden?: string;
 }
 
+// OSA intake data mirrors VLOS structure
+export type IntakeOSAData = IntakeVLOSData;
+
 export interface IntakePulmanData {
+  // Description/pair type
+  omschrijving?: string;
+
   // Side selection
   side: Zijde;
 
@@ -130,6 +145,9 @@ export interface IntakePulmanData {
 }
 
 export interface IntakeRebacareData {
+  // Description/pair type
+  omschrijving?: string;
+
   // Side selection
   side: Zijde;
 
@@ -220,6 +238,9 @@ export interface IntakeOSBData {
 }
 
 export interface IntakeOVACData {
+  // Description/pair type
+  omschrijving?: string;
+
   // Medical indication
   medischeIndicatie?: string;
 
@@ -254,6 +275,9 @@ export interface IntakeOVACData {
 }
 
 export interface IntakeSteunzolenData {
+  // Description/pair type
+  omschrijving?: string;
+
   // Process selection
   processes?: string;
 
@@ -313,6 +337,7 @@ export interface IntakeSteunzolenData {
 export interface FormSubmissionData {
   client: ClientData;
   intakeVLOS?: IntakeVLOSData;
+  intakeOSA?: IntakeOSAData;
   intakePulman?: IntakePulmanData;
   intakeRebacare?: IntakeRebacareData;
   intakeOSB?: IntakeOSBData;

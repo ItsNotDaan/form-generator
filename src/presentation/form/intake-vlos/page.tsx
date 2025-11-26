@@ -31,7 +31,9 @@ import {
   LOOPZOOL_OPTIES,
   SLUITING_OPTIES,
   HAKSCHORING_TYPE_OPTIES,
+  EZELSOOR_TYPE_OPTIES,
   JA_NEE_OPTIES,
+  PAARTYPE_OPTIES,
   Zijde,
 } from '@/presentation/form/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
@@ -42,6 +44,9 @@ export const FormIntakeVLOSPage = () => {
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
+
+  // State voor omschrijving/paartype
+  const [omschrijving, setOmschrijving] = useState<string>('');
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
   const [side, setSide] = useState<Zijde>('beide');
@@ -121,6 +126,14 @@ export const FormIntakeVLOSPage = () => {
   const [hakschoringLinksType, setHakschoringLinksType] = useState(''); // mediaal/lateraal
   const [hakschoringRechtsType, setHakschoringRechtsType] = useState('');
 
+  // State voor ezelsoor
+  const [ezelsoorLinksEnabled, setEzelsoorLinksEnabled] =
+    useState<boolean>(false);
+  const [ezelsoorRechtsEnabled, setEzelsoorRechtsEnabled] =
+    useState<boolean>(false);
+  const [ezelsoorLinksType, setEzelsoorLinksType] = useState(''); // mediaal/lateraal
+  const [ezelsoorRechtsType, setEzelsoorRechtsType] = useState('');
+
   // State voor hakafronding
   const [hakafrondingLinksEnabled, setHakafrondingLinksEnabled] =
     useState<boolean>(true); // standaard true
@@ -156,6 +169,7 @@ export const FormIntakeVLOSPage = () => {
     // Dispatch intake VLOS data naar Redux store
     dispatch(
       setIntakeVLOSData({
+        omschrijving,
         side,
         schachthoogteLinks,
         schachthoogteRechts,
@@ -183,6 +197,10 @@ export const FormIntakeVLOSPage = () => {
         hakschoringRechtsEnabled,
         hakschoringLinksType,
         hakschoringRechtsType,
+        ezelsoorLinksEnabled,
+        ezelsoorRechtsEnabled,
+        ezelsoorLinksType,
+        ezelsoorRechtsType,
         hakafrondingLinksEnabled,
         hakafrondingRechtsEnabled,
         hakafrondingLinksHoogte,
@@ -212,6 +230,43 @@ export const FormIntakeVLOSPage = () => {
         borderRadius="md"
         gap={{ base: 4, md: 6 }}
       >
+        {/* Omschrijving/Paartype */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('omschrijving')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <Box flex={1}>
+              <RadioGroup value={omschrijving} onChange={setOmschrijving}>
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  spacing={4}
+                  flexWrap="wrap"
+                >
+                  {PAARTYPE_OPTIES.map(option => (
+                    <Radio
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {t(option.value.toLowerCase().replace(/ /g, ''))}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </Box>
+          </Flex>
+        </Box>
+
+        <Divider />
+
         {/* Links/Rechts/Beide selectie */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
@@ -915,6 +970,98 @@ export const FormIntakeVLOSPage = () => {
                     size="sm"
                   >
                     {HAKSCHORING_TYPE_OPTIES.map(opt => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </Box>
+            )}
+          </Flex>
+        </Box>
+
+        <Divider />
+
+        {/* Ezelsoor */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('ezelsoor')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            {showLinks && (
+              <Box flex={1}>
+                <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                  {t('links')}
+                </Text>
+                <RadioGroup
+                  value={boolToString(ezelsoorLinksEnabled)}
+                  onChange={(v) => setEzelsoorLinksEnabled(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4} mb={3}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.value)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+                {ezelsoorLinksEnabled && (
+                  <Select
+                    placeholder="Mediaal / Lateraal"
+                    value={ezelsoorLinksType}
+                    onChange={e => setEzelsoorLinksType(e.target.value)}
+                    size="sm"
+                  >
+                    {EZELSOOR_TYPE_OPTIES.map(opt => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </Box>
+            )}
+            {showRechts && (
+              <Box
+                flex={1}
+                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
+                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderColor="inherit"
+                pl={{ base: 0, md: showLinks ? 6 : 0 }}
+                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+              >
+                <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                  {t('rechts')}
+                </Text>
+                <RadioGroup
+                  value={boolToString(ezelsoorRechtsEnabled)}
+                  onChange={(v) => setEzelsoorRechtsEnabled(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4} mb={3}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.value)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+                {ezelsoorRechtsEnabled && (
+                  <Select
+                    placeholder="Mediaal / Lateraal"
+                    value={ezelsoorRechtsType}
+                    onChange={e => setEzelsoorRechtsType(e.target.value)}
+                    size="sm"
+                  >
+                    {EZELSOOR_TYPE_OPTIES.map(opt => (
                       <option key={opt.value} value={opt.value}>
                         {opt.label}
                       </option>

@@ -11,6 +11,7 @@ export const Routes = {
   form_selection: '/form-selection',
   form_results: '/form-results',
   form_intake_vlos: '/intake-vlos',
+  form_intake_osa: '/intake-osa',
   form_intake_pulman: '/intake-pulman',
   form_intake_rebacare: '/intake-rebacare',
   form_intake_osb: '/intake-osb',

@@ -17,13 +17,16 @@ import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeRebacareData, setClientData } from '@/domain/store/slices/formData';
-import { Zijde } from '@/presentation/form/constants/formConstants';
+import { Zijde, PAARTYPE_OPTIES } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeRebacarePage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
+
+  // State voor omschrijving/paartype
+  const [omschrijving, setOmschrijving] = useState<string>('');
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
   const [side, setSide] = useState<Zijde>('beide');
@@ -49,6 +52,7 @@ export const FormIntakeRebacarePage = () => {
 
     dispatch(
       setIntakeRebacareData({
+        omschrijving,
         side,
         medischeIndicatie,
         gezwachteld,
@@ -76,6 +80,43 @@ export const FormIntakeRebacarePage = () => {
         borderRadius="md"
         gap={{ base: 4, md: 6 }}
       >
+        {/* Omschrijving/Paartype */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('omschrijving')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <Box flex={1}>
+              <RadioGroup value={omschrijving} onChange={setOmschrijving}>
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  spacing={4}
+                  flexWrap="wrap"
+                >
+                  {PAARTYPE_OPTIES.map(option => (
+                    <Radio
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {t(option.value.toLowerCase().replace(/ /g, ''))}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </Box>
+          </Flex>
+        </Box>
+
+        <Divider />
+
         {/* Links/Rechts/Beide selectie */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>

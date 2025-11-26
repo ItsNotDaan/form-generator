@@ -99,6 +99,13 @@ export const HAKSCHORING_TYPE_OPTIES = [
   { label: 'Lateraal', value: 'Lateraal' },
 ];
 
+// Ezelsoor types
+export type EzelsoorType = 'Mediaal' | 'Lateraal';
+export const EZELSOOR_TYPE_OPTIES = [
+  { label: 'Mediaal', value: 'Mediaal' },
+  { label: 'Lateraal', value: 'Lateraal' },
+];
+
 // Omsluiting
 export type OmsluitingKey =
   | 'hoge'

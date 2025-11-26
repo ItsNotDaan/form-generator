@@ -12,6 +12,8 @@ import {
   Textarea,
   Stack,
   Button,
+  Radio,
+  RadioGroup,
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
@@ -19,12 +21,16 @@ import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeSteunzolenData, setClientData } from '@/domain/store/slices/formData';
+import { PAARTYPE_OPTIES } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
+
+  // State voor omschrijving/paartype
+  const [omschrijving, setOmschrijving] = useState<string>('');
 
   // State voor processes
   const [processes, setProcesses] = useState('');
@@ -73,6 +79,7 @@ export const FormIntakeSteunzolenPage = () => {
 
     dispatch(
       setIntakeSteunzolenData({
+        omschrijving,
         processes,
         schoenteest: {
           berekteKloonzool,
@@ -129,6 +136,43 @@ export const FormIntakeSteunzolenPage = () => {
         borderRadius="md"
         gap={{ base: 4, md: 6 }}
       >
+        {/* Omschrijving/Paartype */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('omschrijving')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <Box flex={1}>
+              <RadioGroup value={omschrijving} onChange={setOmschrijving}>
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  spacing={4}
+                  flexWrap="wrap"
+                >
+                  {PAARTYPE_OPTIES.map(option => (
+                    <Radio
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {t(option.value.toLowerCase().replace(/ /g, ''))}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </Box>
+          </Flex>
+        </Box>
+
+        <Divider />
+
         {/* Processes */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>

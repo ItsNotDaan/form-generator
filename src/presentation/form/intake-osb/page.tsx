@@ -359,15 +359,6 @@ export const FormIntakeOSBPage = () => {
                 </Stack>
               </RadioGroup>
             </Box>
-            <FormControl flex={1} maxW={{ base: 'full', md: '300px' }}>
-              <FormLabel fontSize="sm">{t('bestelDatum')}</FormLabel>
-              <DatePickerField
-                date={bestelDatum}
-                onDateChanged={setBestelDatum}
-                maxDate={null}
-                isSmallVariant
-              />
-            </FormControl>
           </Flex>
         </Box>
 
@@ -432,6 +423,14 @@ export const FormIntakeOSBPage = () => {
                   value={sluiting}
                   onChange={e => setSluiting(e.target.value)}
                   size="sm"
+                />
+              </FormControl>
+              <FormControl >
+                <FormLabel fontSize="sm">{t('bestelDatum')}</FormLabel>
+                <DatePickerField
+                  date={bestelDatum}
+                  onDateChanged={setBestelDatum}
+                  maxDate={null}
                 />
               </FormControl>
             </SimpleGrid>
@@ -512,7 +511,7 @@ export const FormIntakeOSBPage = () => {
               </HStack>
             </Box>
 
-            <Divider my={4} />
+            <Divider />
 
             {/* Verdiepingen voorvoet */}
             <Box>

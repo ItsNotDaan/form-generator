@@ -18,6 +18,7 @@
     "new-client": "Nieuwe Cliënt",
     "old-client": "Bestaande Cliënt",
     "intakeVlos": "Intakeformulier VLOS",
+    "intakeOsa": "Intakeformulier OSA",
     "intakePulman": "Intakeformulier Pulman",
     "intakeRebacare": "Intakeformulier Rebacare",
     "intakeOsb": "Intakeformulier OSB (SOS)",
@@ -93,6 +94,7 @@
     "hakhoogtePlaceholder": "2",
     "hakschoring": "Hakschoring",
     "hakschoringMediaalLateraal": "Mediaal / Lateraal",
+    "ezelsoor": "Ezelsoor",
     "hakafronding": "Hakafronding",
     "hoogteMm": "Hoogte (mm)",
     "lengteMm": "Lengte (mm)",
@@ -201,5 +203,6 @@
     "jsonCopiedDescription": "De JSON is succesvol naar het klembord gekopieerd.",
     "jsonOutputDescription": "Dit is de volledige JSON met alle ingevoerde gegevens en constanten. Klik op de knop hierboven om deze te kopiëren.",
     "fillAnotherForm": "Nog een formulier invullen",
-    "backToOverview": "Terug naar overzicht"
+    "backToOverview": "Terug naar overzicht",
+    "codeWarnings": "Code generatie waarschuwingen"
 }

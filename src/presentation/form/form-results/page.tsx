@@ -14,12 +14,15 @@ import {
   VStack,
   HStack,
   Badge,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
 import { useAppSelector } from '@/domain/store/hooks';
 import { BEHANDELAARS } from '@/presentation/form/constants/formConstants';
+import { generateCodes } from '@/utils/codeGenerator';
 
 export const FormResultsPage = () => {
   const router = useRouter();
@@ -90,6 +93,9 @@ export const FormResultsPage = () => {
     if (formData.intakeVLOS) {
       result.intakeVLOS = normalizeObject(formData.intakeVLOS);
     }
+    if (formData.intakeOSA) {
+      result.intakeOSA = normalizeObject(formData.intakeOSA);
+    }
     if (formData.intakePulman) {
       result.intakePulman = normalizeObject(formData.intakePulman);
     }
@@ -106,6 +112,20 @@ export const FormResultsPage = () => {
       result.intakeSteunzolen = normalizeObject(formData.intakeSteunzolen);
     }
 
+    // Generate medical codes if applicable
+    if (formData.client && (formData.intakeVLOS || formData.intakeOSA)) {
+      const intakeData = formData.intakeVLOS || formData.intakeOSA;
+      const { codes, warnings } = generateCodes(formData.client, intakeData);
+
+      // Spread individual code boolean keys into result for Word compatibility
+      Object.assign(result, codes);
+
+      // Add warnings if any
+      if (warnings.length > 0) {
+        result.codeWarnings = warnings;
+      }
+    }
+
     result.generatedAt = new Date().toISOString();
 
     return result;
@@ -113,6 +133,7 @@ export const FormResultsPage = () => {
 
   const jsonData = generateCompleteJSON();
   const jsonString = JSON.stringify(jsonData, null, 2);
+  const codeWarnings = jsonData.codeWarnings as string[] | undefined;
 
   const handleCopyJSON = () => {
     navigator.clipboard.writeText(jsonString).then(() => {
@@ -197,6 +218,23 @@ export const FormResultsPage = () => {
           {t('formDataComplete')}
         </Alert>
 
+        {/* Display code generation warnings if any */}
+        {codeWarnings && codeWarnings.length > 0 && (
+          <Alert status="warning">
+            <AlertIcon />
+            <Box>
+              <Text fontWeight="bold" mb={1}>
+                {t('codeWarnings')}:
+              </Text>
+              <UnorderedList>
+                {codeWarnings.map((warning, idx) => (
+                  <ListItem key={idx}>{warning}</ListItem>
+                ))}
+              </UnorderedList>
+            </Box>
+          </Alert>
+        )}
+
         {/* Display all form data */}
         <Box>
           <Heading size="md" mb={4}>
@@ -209,6 +247,13 @@ export const FormResultsPage = () => {
             <>
               <Divider my={4} />
               {renderSection(t('intakeVlos'), formData.intakeVLOS)}
+            </>
+          )}
+
+          {formData.intakeOSA && (
+            <>
+              <Divider my={4} />
+              {renderSection(t('intakeOsa'), formData.intakeOSA)}
             </>
           )}
 
