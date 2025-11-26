@@ -51,24 +51,21 @@ export const FormIntakeVLOSPage = () => {
   const [schachthoogteRechts, setSchachthoogteRechts] = useState('14');
 
   // State voor omsluiting (multi-select) - Multivorm standaard geselecteerd
-  const [omsluitingLinks, setOmsluitingLinks] = useState<OmsluitingKey[]>([
-    'multivorm',
-  ]);
-  const [omsluitingRechts, setOmsluitingRechts] = useState<OmsluitingKey[]>([
-    'multivorm',
-  ]);
+  // Now using Record<string, boolean> for Word document compatibility
+  const [omsluitingLinks, setOmsluitingLinks] = useState<Record<string, boolean>>({
+    omsluitingLinksMultivorm: true,
+  });
+  const [omsluitingRechts, setOmsluitingRechts] = useState<Record<string, boolean>>({
+    omsluitingRechtsMultivorm: true,
+  });
 
-  // State voor omsluiting mm waardes
-  const [omsluitingLinksMm, setOmsluitingLinksMm] = useState<
-    Record<OmsluitingKey, string>
-  >({
-    multivorm: '3',
-  } as Record<OmsluitingKey, string>);
-  const [omsluitingRechtsMm, setOmsluitingRechtsMm] = useState<
-    Record<OmsluitingKey, string>
-  >({
-    multivorm: '3',
-  } as Record<OmsluitingKey, string>);
+  // State voor omsluiting mm waardes with descriptive keys
+  const [omsluitingLinksMm, setOmsluitingLinksMm] = useState<Record<string, string>>({
+    omsluitingMmLinksMultivorm: '3',
+  });
+  const [omsluitingRechtsMm, setOmsluitingRechtsMm] = useState<Record<string, string>>({
+    omsluitingMmRechtsMultivorm: '3',
+  });
 
   // State voor supplementschoring
   const [supplementschoringLinksEnabled, setSupplementschoringLinksEnabled] =
@@ -346,25 +343,20 @@ export const FormIntakeVLOSPage = () => {
                     <Flex key={optie.key} alignItems="center" gap={3}>
                       <Box flex={1}>
                         <Checkbox
-                          isChecked={omsluitingLinks.includes(optie.key)}
+                          isChecked={omsluitingLinks[optie.fullKeyLinks] || false}
                           onChange={e => {
-                            if (e.target.checked) {
-                              setOmsluitingLinks([
-                                ...omsluitingLinks,
-                                optie.key,
-                              ]);
-                              if (optie.needsMm && optie.defaultMm) {
-                                setOmsluitingLinksMm({
-                                  ...omsluitingLinksMm,
-                                  [optie.key]: optie.defaultMm,
-                                });
-                              }
-                            } else {
-                              setOmsluitingLinks(
-                                omsluitingLinks.filter(o => o !== optie.key)
-                              );
+                            setOmsluitingLinks({
+                              ...omsluitingLinks,
+                              [optie.fullKeyLinks]: e.target.checked,
+                            });
+                            if (e.target.checked && optie.needsMm && optie.defaultMm) {
+                              setOmsluitingLinksMm({
+                                ...omsluitingLinksMm,
+                                [optie.mmKeyLinks]: optie.defaultMm,
+                              });
+                            } else if (!e.target.checked) {
                               const next = { ...omsluitingLinksMm };
-                              delete (next as any)[optie.key];
+                              delete next[optie.mmKeyLinks];
                               setOmsluitingLinksMm(next);
                             }
                           }}
@@ -373,15 +365,15 @@ export const FormIntakeVLOSPage = () => {
                           {optie.label}
                         </Checkbox>
                       </Box>
-                      {optie.needsMm && omsluitingLinks.includes(optie.key) && (
+                      {optie.needsMm && omsluitingLinks[optie.fullKeyLinks] && (
                         <Input
                           type="number"
                           placeholder="mm"
-                          value={omsluitingLinksMm[optie.key] || ''}
+                          value={omsluitingLinksMm[optie.mmKeyLinks] || ''}
                           onChange={e =>
                             setOmsluitingLinksMm({
                               ...omsluitingLinksMm,
-                              [optie.key]: e.target.value,
+                              [optie.mmKeyLinks]: e.target.value,
                             })
                           }
                           size="sm"
@@ -410,25 +402,20 @@ export const FormIntakeVLOSPage = () => {
                     <Flex key={optie.key} alignItems="center" gap={3}>
                       <Box flex={1}>
                         <Checkbox
-                          isChecked={omsluitingRechts.includes(optie.key)}
+                          isChecked={omsluitingRechts[optie.fullKeyRechts] || false}
                           onChange={e => {
-                            if (e.target.checked) {
-                              setOmsluitingRechts([
-                                ...omsluitingRechts,
-                                optie.key,
-                              ]);
-                              if (optie.needsMm && optie.defaultMm) {
-                                setOmsluitingRechtsMm({
-                                  ...omsluitingRechtsMm,
-                                  [optie.key]: optie.defaultMm,
-                                });
-                              }
-                            } else {
-                              setOmsluitingRechts(
-                                omsluitingRechts.filter(o => o !== optie.key)
-                              );
+                            setOmsluitingRechts({
+                              ...omsluitingRechts,
+                              [optie.fullKeyRechts]: e.target.checked,
+                            });
+                            if (e.target.checked && optie.needsMm && optie.defaultMm) {
+                              setOmsluitingRechtsMm({
+                                ...omsluitingRechtsMm,
+                                [optie.mmKeyRechts]: optie.defaultMm,
+                              });
+                            } else if (!e.target.checked) {
                               const next = { ...omsluitingRechtsMm };
-                              delete (next as any)[optie.key];
+                              delete next[optie.mmKeyRechts];
                               setOmsluitingRechtsMm(next);
                             }
                           }}
@@ -437,22 +424,21 @@ export const FormIntakeVLOSPage = () => {
                           {optie.label}
                         </Checkbox>
                       </Box>
-                      {optie.needsMm &&
-                        omsluitingRechts.includes(optie.key) && (
-                          <Input
-                            type="number"
-                            placeholder="mm"
-                            value={omsluitingRechtsMm[optie.key] || ''}
-                            onChange={e =>
-                              setOmsluitingRechtsMm({
-                                ...omsluitingRechtsMm,
-                                [optie.key]: e.target.value,
-                              })
-                            }
-                            size="sm"
-                            width="80px"
-                          />
-                        )}
+                      {optie.needsMm && omsluitingRechts[optie.fullKeyRechts] && (
+                        <Input
+                          type="number"
+                          placeholder="mm"
+                          value={omsluitingRechtsMm[optie.mmKeyRechts] || ''}
+                          onChange={e =>
+                            setOmsluitingRechtsMm({
+                              ...omsluitingRechtsMm,
+                              [optie.mmKeyRechts]: e.target.value,
+                            })
+                          }
+                          size="sm"
+                          width="80px"
+                        />
+                      )}
                     </Flex>
                   ))}
                 </Stack>

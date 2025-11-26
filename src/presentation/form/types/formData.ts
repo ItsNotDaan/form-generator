@@ -45,11 +45,11 @@ export interface IntakeVLOSData {
   schachthoogteLinks?: string;
   schachthoogteRechts?: string;
 
-  // Enclosure/padding
-  omsluitingLinks: string[]; // Array of enclosure types
-  omsluitingRechts: string[];
-  omsluitingLinksMm: Record<string, string>; // Thickness in mm per type
-  omsluitingRechtsMm: Record<string, string>;
+  // Enclosure/padding - now key-value pairs for Word document generation
+  omsluitingLinks: Record<string, boolean>; // Keys like omsluitingLinksMultivorm
+  omsluitingRechts: Record<string, boolean>; // Keys like omsluitingRechtsLavero
+  omsluitingLinksMm: Record<string, string>; // Keys like omsluitingMmLinksMultivorm
+  omsluitingRechtsMm: Record<string, string>; // Keys like omsluitingMmRechtsLavero
 
   // Supplement shoring/support
   supplementschoringLinksEnabled: boolean;
@@ -157,11 +157,11 @@ export interface IntakeOSBData {
   // Medical indication
   medischeIndicatie?: string;
 
-  // Goals/objectives (no left/right)
-  doel?: string[]; // Array of goal options
+  // Goals/objectives (no left/right) - now key-value pairs for Word document generation
+  doel?: Record<string, boolean>; // Keys like doelPasvorm, doelStabiliteit
 
-  // Walking functions
-  loopfunctie?: string[]; // Array of walking function options
+  // Walking functions - now key-value pairs for Word document generation
+  loopfunctie?: Record<string, boolean>; // Keys like loopfunctiePassief, loopfunctieActief
 
   // Supplier and order date
   leverancier?: string; // Supplier (single select)
@@ -204,8 +204,8 @@ export interface IntakeOSBData {
   zoolverstijvingLinks?: boolean;
   zoolverstijvingRechts?: boolean;
 
-  // Insole component - gedeelde velden
-  steunzoolType?: string[]; // Array of insole types
+  // Insole component - gedeelde velden - now key-value pairs for Word document generation
+  steunzoolType?: Record<string, boolean>; // Keys like steunzoolTypeBerksteunzoolMet
   steunzoolTypeAnders?: string; // Other type (text input)
   steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
   steunzoolCorrectieVoorvoet?: string; // Forefoot correction

@@ -39,12 +39,13 @@ export const FormResultsPage = () => {
   }
 
   // Normalize values: false/"nee" -> "", true/"ja" -> "Ja"
+  // Keep all keys for Word document generation (no exclusion)
   const normalizeValue = (value: any): any => {
     if (value === null || value === undefined) {
       return '';
     }
     if (typeof value === 'boolean') {
-      return value ? 'Ja' : '';
+      return value ? 'Ja' : ''; // false becomes empty string, not excluded
     }
     if (typeof value === 'string') {
       if (value.toLowerCase() === 'ja') return 'Ja';

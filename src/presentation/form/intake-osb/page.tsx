@@ -58,11 +58,11 @@ export const FormIntakeOSBPage = () => {
   // Sectie 2: Medische Indicatie
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
 
-  // Sectie 3: Doel (checkboxes zonder L/R)
-  const [doel, setDoel] = useState<string[]>([]);
+  // Sectie 3: Doel (checkboxes zonder L/R) - now Record for Word document
+  const [doel, setDoel] = useState<Record<string, boolean>>({});
 
-  // Sectie 4: Loopfunctie
-  const [loopfunctie, setLoopfunctie] = useState<string[]>([]);
+  // Sectie 4: Loopfunctie - now Record for Word document
+  const [loopfunctie, setLoopfunctie] = useState<Record<string, boolean>>({});
 
   // Sectie 5: Leverancier & Bestel Datum
   const [leverancier, setLeverancier] = useState<string>('');
@@ -104,8 +104,8 @@ export const FormIntakeOSBPage = () => {
   const [zoolverstijvingLinks, setZoolverstijvingLinks] = useState(false);
   const [zoolverstijvingRechts, setZoolverstijvingRechts] = useState(false);
 
-  // Sectie 9: Steunzolen (gecombineerd voor beide voeten)
-  const [steunzoolType, setSteunzoolType] = useState<string[]>([]);
+  // Sectie 9: Steunzolen (gecombineerd voor beide voeten) - now Record for Word document
+  const [steunzoolType, setSteunzoolType] = useState<Record<string, boolean>>({});
   const [steunzoolTypeAnders, setSteunzoolTypeAnders] = useState('');
   const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] =
     useState('');
@@ -120,13 +120,7 @@ export const FormIntakeOSBPage = () => {
   // Bijzonderheden
   const [bijzonderheden, setBijzonderheden] = useState('');
 
-  // Helper functions
-  const toggleArrayItem = (array: string[], item: string) => {
-    if (array.includes(item)) {
-      return array.filter(i => i !== item);
-    }
-    return [...array, item];
-  };
+  // Helper functions - toggleArrayItem removed, now using Record<string, boolean>
 
   // Helper functie om de juiste state getter/setter te krijgen voor een supplement en zijde
   const getSupplementState = (key: string, side: 'links' | 'rechts'): [boolean, (value: boolean) => void] => {
@@ -294,8 +288,8 @@ export const FormIntakeOSBPage = () => {
               {DOEL_OPTIES.map(option => (
                 <Checkbox
                   key={option.value}
-                  isChecked={doel.includes(option.value)}
-                  onChange={() => setDoel(toggleArrayItem(doel, option.value))}
+                  isChecked={doel[option.fullKey] || false}
+                  onChange={(e) => setDoel({ ...doel, [option.fullKey]: e.target.checked })}
                   size="sm"
                 >
                   {option.label}
@@ -325,9 +319,9 @@ export const FormIntakeOSBPage = () => {
               {LOOPFUNCTIE_OPTIES.map(option => (
                 <Checkbox
                   key={option.value}
-                  isChecked={loopfunctie.includes(option.value)}
-                  onChange={() =>
-                    setLoopfunctie(toggleArrayItem(loopfunctie, option.value))
+                  isChecked={loopfunctie[option.fullKey] || false}
+                  onChange={(e) =>
+                    setLoopfunctie({ ...loopfunctie, [option.fullKey]: e.target.checked })
                   }
                   size="sm"
                 >
@@ -689,15 +683,15 @@ export const FormIntakeOSBPage = () => {
                 {STEUNZOOL_TYPE_OPTIES.map(option => (
                   <Box key={option.value}>
                     <Checkbox
-                      isChecked={steunzoolType.includes(option.value)}
-                      onChange={() =>
-                        setSteunzoolType(toggleArrayItem(steunzoolType, option.value))
+                      isChecked={steunzoolType[option.fullKey] || false}
+                      onChange={(e) =>
+                        setSteunzoolType({ ...steunzoolType, [option.fullKey]: e.target.checked })
                       }
                       size="sm"
                     >
                       {option.label}
                     </Checkbox>
-                    {option.value === 'Anders' && steunzoolType.includes(option.value) && (
+                    {option.value === 'Anders' && steunzoolType[option.fullKey] && (
                       <Input
                         placeholder={t('andersSpecificeer')}
                         value={steunzoolTypeAnders}

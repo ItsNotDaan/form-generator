@@ -112,19 +112,61 @@ export type OmsluitingOptie = {
   label: string;
   needsMm: boolean;
   defaultMm?: string; // standaard wanneer geselecteerd
+  fullKeyLinks: string; // Full key name for left side: omsluitingLinksMultivorm
+  fullKeyRechts: string; // Full key name for right side: omsluitingRechtsMultivorm
+  mmKeyLinks: string; // MM key for left side: omsluitingMmLinksMultivorm
+  mmKeyRechts: string; // MM key for right side: omsluitingMmRechtsMultivorm
 };
 
 export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
-  { key: 'hoge', label: 'Hoge omsluiting', needsMm: true },
-  { key: 'lavero', label: 'Lavero omsluiting', needsMm: true, defaultMm: '4' },
+  {
+    key: 'hoge',
+    label: 'Hoge omsluiting',
+    needsMm: true,
+    fullKeyLinks: 'omsluitingLinksHoge',
+    fullKeyRechts: 'omsluitingRechtsHoge',
+    mmKeyLinks: 'omsluitingMmLinksHoge',
+    mmKeyRechts: 'omsluitingMmRechtsHoge'
+  },
+  {
+    key: 'lavero',
+    label: 'Lavero omsluiting',
+    needsMm: true,
+    defaultMm: '4',
+    fullKeyLinks: 'omsluitingLinksLavero',
+    fullKeyRechts: 'omsluitingRechtsLavero',
+    mmKeyLinks: 'omsluitingMmLinksLavero',
+    mmKeyRechts: 'omsluitingMmRechtsLavero'
+  },
   {
     key: 'multivorm',
     label: 'Multivorm omsluiting',
     needsMm: true,
     defaultMm: '3',
+    fullKeyLinks: 'omsluitingLinksMultivorm',
+    fullKeyRechts: 'omsluitingRechtsMultivorm',
+    mmKeyLinks: 'omsluitingMmLinksMultivorm',
+    mmKeyRechts: 'omsluitingMmRechtsMultivorm'
   },
-  { key: 'plastazote', label: 'Plastazote', needsMm: true, defaultMm: '3' },
-  { key: 'orca', label: 'Orca omsluiting', needsMm: false },
+  {
+    key: 'plastazote',
+    label: 'Plastazote',
+    needsMm: true,
+    defaultMm: '3',
+    fullKeyLinks: 'omsluitingLinksPlastazote',
+    fullKeyRechts: 'omsluitingRechtsPlastazote',
+    mmKeyLinks: 'omsluitingMmLinksPlastazote',
+    mmKeyRechts: 'omsluitingMmRechtsPlastazote'
+  },
+  {
+    key: 'orca',
+    label: 'Orca omsluiting',
+    needsMm: false,
+    fullKeyLinks: 'omsluitingLinksOrca',
+    fullKeyRechts: 'omsluitingRechtsOrca',
+    mmKeyLinks: 'omsluitingMmLinksOrca',
+    mmKeyRechts: 'omsluitingMmRechtsOrca'
+  },
 ];
 
 // Pulman types
@@ -153,18 +195,18 @@ export const PAARTYPE_OPTIES = [
 // Doel opties (GEEN L/R)
 export type DoelOptie = 'Pasvorm' | 'Stabiliteit' | 'Loop afstand vergroten' | 'Ondersteuning gewelf';
 export const DOEL_OPTIES = [
-  { label: 'Pasvorm', value: 'Pasvorm' },
-  { label: 'Stabiliteit', value: 'Stabiliteit' },
-  { label: 'Loop afstand vergroten', value: 'Loop afstand vergroten' },
-  { label: 'Ondersteuning gewelf', value: 'Ondersteuning gewelf' },
+  { label: 'Pasvorm', value: 'Pasvorm', fullKey: 'doelPasvorm' },
+  { label: 'Stabiliteit', value: 'Stabiliteit', fullKey: 'doelStabiliteit' },
+  { label: 'Loop afstand vergroten', value: 'Loop afstand vergroten', fullKey: 'doelLoopAfstandVergroten' },
+  { label: 'Ondersteuning gewelf', value: 'Ondersteuning gewelf', fullKey: 'doelOndersteuningGewelf' },
 ];
 
 // Loopfunctie opties
 export type LoopfunctieOptie = 'Passief' | 'Actief' | 'Korte transfers';
 export const LOOPFUNCTIE_OPTIES = [
-  { label: 'Passief', value: 'Passief' },
-  { label: 'Actief', value: 'Actief' },
-  { label: 'Korte transfers', value: 'Korte transfers' },
+  { label: 'Passief', value: 'Passief', fullKey: 'loopfunctiePassief' },
+  { label: 'Actief', value: 'Actief', fullKey: 'loopfunctieActief' },
+  { label: 'Korte transfers', value: 'Korte transfers', fullKey: 'loopfunctieKorteTransfers' },
 ];
 
 // Leveranciers
@@ -215,12 +257,12 @@ export const VERDIEPING_MM_OPTIES = [
 // Steunzool types
 export type SteunzoolType = 'Berksteunzool met' | 'Berksteunzool zonder' | 'Kinderkniksteun' | 'Ergopad redux heel' | 'Birco' | 'Anders';
 export const STEUNZOOL_TYPE_OPTIES = [
-  { label: 'Berksteunzool met', value: 'Berksteunzool met' },
-  { label: 'Berksteunzool zonder', value: 'Berksteunzool zonder' },
-  { label: 'Kinderkniksteun', value: 'Kinderkniksteun' },
-  { label: 'Ergopad redux heel', value: 'Ergopad redux heel' },
-  { label: 'Birco', value: 'Birco' },
-  { label: 'Anders', value: 'Anders' },
+  { label: 'Berksteunzool met', value: 'Berksteunzool met', fullKey: 'steunzoolTypeBerksteunzoolMet' },
+  { label: 'Berksteunzool zonder', value: 'Berksteunzool zonder', fullKey: 'steunzoolTypeBerksteunzoolZonder' },
+  { label: 'Kinderkniksteun', value: 'Kinderkniksteun', fullKey: 'steunzoolTypeKinderkniksteun' },
+  { label: 'Ergopad redux heel', value: 'Ergopad redux heel', fullKey: 'steunzoolTypeErgopadReduxHeel' },
+  { label: 'Birco', value: 'Birco', fullKey: 'steunzoolTypeBirco' },
+  { label: 'Anders', value: 'Anders', fullKey: 'steunzoolTypeAnders' },
 ];
 
 // Correctie middenvoet
