@@ -46,9 +46,7 @@ export const FormIntakeOSAPage = () => {
     const clientData = useAppSelector(state => state.formData.client);
 
     // State voor omschrijving/paartype
-    const [omschrijving, setOmschrijving] = useState<string>('');
-
-    // State voor Links/Rechts/Beide selectie (default: Beide)
+    const [omschrijving, setOmschrijving] = useState<string>('Eerste paar');    // State voor Links/Rechts/Beide selectie (default: Beide)
     const [side, setSide] = useState<Zijde>('beide');
 
     // State voor schachthoogte

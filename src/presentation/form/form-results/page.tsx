@@ -124,9 +124,8 @@ export const FormResultsPage = () => {
         intakeSteunzolen: formData.intakeSteunzolen,
       });
 
-      // Normalize and spread individual code boolean keys into result for Word compatibility
-      const normalizedCodes = normalizeObject(codes);
-      Object.assign(result, normalizedCodes);
+      // Group normalized codes under medicalCodes object
+      result.medicalCodes = normalizeObject(codes);
 
       // Add warnings if any
       if (warnings.length > 0) {

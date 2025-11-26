@@ -37,7 +37,7 @@ export const FormIntakeOVACPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   // State voor omschrijving/paartype
-  const [omschrijving, setOmschrijving] = useState<string>('');
+  const [omschrijving, setOmschrijving] = useState<string>('Eerste paar');
 
   // State voor medische indicatie
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
@@ -175,7 +175,7 @@ export const FormIntakeOVACPage = () => {
         {/* Omschrijving/Paartype */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('omschrijving')}
+            {t('welkPaar')}
           </Text>
           <Flex
             gap={{ base: 4, md: 6 }}

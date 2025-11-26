@@ -325,3 +325,12 @@ export const OVAC_OMSCHRIJVING_ITEMS: OvacOmschrijvingItem[] = [
   { key: 'zoolverstijving', label: 'Zoolverstijving', postNr: '85' },
   { key: 'nieuweWreefsluiting', label: 'Nieuwe wreefsluiting', postNr: '88' },
 ];
+
+// Steunzolen pricing options
+export type SteunzolenPrijs = 'tot15jaar' | 'steunzolen225' | 'binnen3maanden' | 'talonette';
+export const STEUNZOLEN_PRIJS_OPTIES = [
+  { label: 'prijsTot15Jaar', value: 'tot15jaar' },
+  { label: 'prijsSteunzolen225', value: 'steunzolen225' },
+  { label: 'prijsBinnen3Maanden', value: 'binnen3maanden' },
+  { label: 'prijsTalonette', value: 'talonette' },
+];

@@ -224,7 +224,8 @@ export interface IntakeOSBData {
 
   // Insole component - gedeelde velden - now key-value pairs for Word document generation
   steunzoolType?: Record<string, boolean>; // Keys like steunzoolTypeBerksteunzoolMet
-  steunzoolTypeAnders?: string; // Other type (text input)
+  steunzoolAnders?: boolean; // Anders checkbox
+  steunzoolAndersText?: string; // Anders text input
   steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
   steunzoolCorrectieVoorvoet?: string; // Forefoot correction
   steunzoolVvPellote?: string; // Forefoot pad
@@ -276,59 +277,32 @@ export interface IntakeOVACData {
 
 export interface IntakeSteunzolenData {
   // Description/pair type
-  omschrijving?: string;
+  welkPaar?: string;
 
-  // Process selection
-  processes?: string;
+  // Medical indication
+  medischeIndicatie?: string;
 
-  // Shoe last measurements (orthopedic technical term)
-  schoenteest?: {
-    berekteKloonzool?: boolean; // Calculated clone sole
-    berekteKustvlakte?: boolean; // Calculated coastal plane
-    berekteVlakten?: boolean; // Calculated planes
-    enkelvolZolen?: boolean; // Ankle-full soles
-  };
+  // Shoe size (required)
+  schoenmaat?: string;
 
-  // Insole options
-  steunzolen?: {
-    ts15cm?: boolean; // TS 15cm type
-    tussenlegd?: boolean; // Intermediate layer
-    steunzolen?: boolean; // Support soles
-    bislangTussen?: boolean; // Bislang intermediate
-    bislang?: boolean; // Bislang type
-  };
+  // Insole types - now key-value pairs for Word document generation
+  steunzoolType?: Record<string, boolean>; // Keys like steunzoolTypeBerksteunzoolMet
 
-  // Orthopedic corrections
-  corrections?: {
-    vervolgC1Lang1UVlug?: boolean; // Follow-up C1 long 1U wing
-    vervolgC1Kort?: boolean; // Follow-up C1 short
-    uithollingC1Krag3Grote?: boolean; // Hollow C1 collar 3 large
-    uithollingC1Krag3Kleine?: boolean; // Hollow C1 collar 3 small
-    haktVerlengdC1Krag3?: boolean; // Heel extended C1 collar 3
-  };
+  // Anders option
+  steunzoolAnders?: boolean;
+  steunzoolAndersText?: string;
 
-  // Padding materials
-  pads?: {
-    csm?: boolean; // CSM material
-    e625?: boolean; // E625 material
-    e425?: boolean; // E425 material
-    cushlin?: boolean; // Cushlin material
-  };
+  // Corrections
+  steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
+  steunzoolCorrectieVoorvoet?: string; // Forefoot correction
+  steunzoolVvPellote?: string; // Forefoot pad
 
-  // Correction notes
-  corr?: string;
+  // Heel raises (split by side)
+  steunzoolHakVerhogingLinks?: string; // Heel raise in cm
+  steunzoolHakVerhogingRechts?: string;
 
-  // Assembly notes
-  montage?: string;
-
-  // Control/inspection notes
-  controle?: string;
-
-  // Load/pressure notes
-  belasting?: string;
-
-  // Preference notes
-  pref?: string;
+  // Price (required)
+  prijs?: string;
 
   // Special notes
   bijzonderheden?: string;

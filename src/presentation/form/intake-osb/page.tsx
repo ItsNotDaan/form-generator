@@ -53,7 +53,7 @@ export const FormIntakeOSBPage = () => {
 
   // Sectie 1: Header & Omschrijving
   const [ordernummer, setOrdernummer] = useState('');
-  const [omschrijving, setOmschrijving] = useState<string>('');
+  const [omschrijving, setOmschrijving] = useState<string>('Eerste paar');
 
   // Sectie 2: Medische Indicatie
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
@@ -106,7 +106,8 @@ export const FormIntakeOSBPage = () => {
 
   // Sectie 9: Steunzolen (gecombineerd voor beide voeten) - now Record for Word document
   const [steunzoolType, setSteunzoolType] = useState<Record<string, boolean>>({});
-  const [steunzoolTypeAnders, setSteunzoolTypeAnders] = useState('');
+  const [steunzoolAnders, setSteunzoolAnders] = useState(false);
+  const [steunzoolAndersText, setSteunzoolAndersText] = useState('');
   const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] =
     useState('');
   const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] =
@@ -185,7 +186,8 @@ export const FormIntakeOSBPage = () => {
         zoolverstijvingLinks,
         zoolverstijvingRechts,
         steunzoolType,
-        steunzoolTypeAnders,
+        steunzoolAnders,
+        steunzoolAndersText,
         steunzoolCorrectieMiddenvoet,
         steunzoolCorrectieVoorvoet,
         steunzoolVvPellote,
@@ -218,7 +220,7 @@ export const FormIntakeOSBPage = () => {
         {/* Sectie 1: Header & Omschrijving */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('omschrijving')}
+            {t('welkPaar')}
           </Text>
           <Flex
             gap={{ base: 4, md: 6 }}
@@ -679,30 +681,38 @@ export const FormIntakeOSBPage = () => {
                 flexWrap="wrap"
                 direction={{ base: 'column', md: 'row' }}
               >
-                {STEUNZOOL_TYPE_OPTIES.map(option => (
-                  <Box key={option.value}>
-                    <Checkbox
-                      isChecked={steunzoolType[option.fullKey] || false}
-                      onChange={(e) =>
-                        setSteunzoolType({ ...steunzoolType, [option.fullKey]: e.target.checked })
-                      }
-                      size="sm"
-                    >
-                      {option.label}
-                    </Checkbox>
-                    {option.value === 'Anders' && steunzoolType[option.fullKey] && (
-                      <Input
-                        placeholder={t('andersSpecificeer')}
-                        value={steunzoolTypeAnders}
-                        onChange={e => setSteunzoolTypeAnders(e.target.value)}
-                        size="sm"
-                        mt={2}
-                        maxW="300px"
-                      />
-                    )}
-                  </Box>
+                {STEUNZOOL_TYPE_OPTIES.filter(option => option.value !== 'Anders').map(option => (
+                  <Checkbox
+                    key={option.value}
+                    isChecked={steunzoolType[option.fullKey] || false}
+                    onChange={(e) =>
+                      setSteunzoolType({ ...steunzoolType, [option.fullKey]: e.target.checked })
+                    }
+                    size="sm"
+                  >
+                    {option.label}
+                  </Checkbox>
                 ))}
               </Flex>
+              <Box mt={3}>
+                <Checkbox
+                  isChecked={steunzoolAnders}
+                  onChange={(e) => setSteunzoolAnders(e.target.checked)}
+                  size="sm"
+                >
+                  {t('anders')}
+                </Checkbox>
+                {steunzoolAnders && (
+                  <Input
+                    placeholder={t('andersSpecificatiePlaceholder')}
+                    value={steunzoolAndersText}
+                    onChange={e => setSteunzoolAndersText(e.target.value)}
+                    size="sm"
+                    mt={2}
+                    maxW="300px"
+                  />
+                )}
+              </Box>
             </Box>
 
             <Divider />

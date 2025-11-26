@@ -46,7 +46,7 @@ export const FormIntakeVLOSPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   // State voor omschrijving/paartype
-  const [omschrijving, setOmschrijving] = useState<string>('');
+  const [omschrijving, setOmschrijving] = useState<string>('Eerste paar');
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
   const [side, setSide] = useState<Zijde>('beide');
@@ -233,7 +233,7 @@ export const FormIntakeVLOSPage = () => {
         {/* Omschrijving/Paartype */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('omschrijving')}
+            {t('welkPaar')}
           </Text>
           <Flex
             gap={{ base: 4, md: 6 }}

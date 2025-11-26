@@ -11,9 +11,14 @@ import {
   Divider,
   Textarea,
   Stack,
-  Button,
   Radio,
   RadioGroup,
+  Button,
+  SimpleGrid,
+  Alert,
+  AlertIcon,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
@@ -21,7 +26,14 @@ import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeSteunzolenData, setClientData } from '@/domain/store/slices/formData';
-import { PAARTYPE_OPTIES } from '@/presentation/form/constants/formConstants';
+import {
+  PAARTYPE_OPTIES,
+  STEUNZOOL_TYPE_OPTIES,
+  CORRECTIE_MIDDENVOET_OPTIES,
+  CORRECTIE_VOORVOET_OPTIES,
+  PELLOTE_OPTIES,
+  STEUNZOLEN_PRIJS_OPTIES,
+} from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
@@ -29,49 +41,64 @@ export const FormIntakeSteunzolenPage = () => {
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
-  // State voor omschrijving/paartype
-  const [omschrijving, setOmschrijving] = useState<string>('');
+  // State voor welk paar
+  const [welkPaar, setWelkPaar] = useState<string>('Eerste paar');
 
-  // State voor processes
-  const [processes, setProcesses] = useState('');
+  // State voor medische indicatie
+  const [medischeIndicatie, setMedischeIndicatie] = useState<string>('');
 
-  // State voor Schoenteest checkboxes
-  const [berekteKloonzool, setBerekteKloonzool] = useState(false);
-  const [berekteKustvlakte, setBerekteKustvlakte] = useState(false);
-  const [berekteVlakten, setBerekteVlakten] = useState(false);
-  const [enkelvolZolen, setEnkelvolZolen] = useState(false);
+  // State voor schoenmaat (required)
+  const [schoenmaat, setSchoenmaat] = useState<string>('');
 
-  // State voor Steunzolen checkboxes
-  const [ts15cm, setTs15cm] = useState(false);
-  const [tussenlegd, setTussenlegd] = useState(false);
-  const [steunzolen, setSteunzolen] = useState(false);
-  const [bislangTussen, setBislangTussen] = useState(false);
-  const [bislang, setBislang] = useState(false);
+  // State voor steunzool types (checkboxes)
+  const [steunzoolType, setSteunzoolType] = useState<Record<string, boolean>>({});
 
-  // State voor Corrections
-  const [vervolgC1Lang1UVlug, setVervolgC1Lang1UVlug] = useState(false);
-  const [vervolgC1Kort, setVervolgC1Kort] = useState(false);
-  const [uithollingC1Krag3Grote, setUithollingC1Krag3Grote] = useState(false);
-  const [uithollingC1Krag3Kleine, setUithollingC1Krag3Kleine] = useState(false);
-  const [haktVerlengdC1Krag3, setHaktVerlengdC1Krag3] = useState(false);
+  // State voor Anders option
+  const [steunzoolAnders, setSteunzoolAnders] = useState<boolean>(false);
+  const [steunzoolAndersText, setSteunzoolAndersText] = useState<string>('');
 
-  // State voor Pads
-  const [csm, setCsm] = useState(false);
-  const [e625, setE625] = useState(false);
-  const [e425, setE425] = useState(false);
-  const [cushlin, setCushlin] = useState(false);
+  // State voor correcties
+  const [correctieMiddenvoet, setCorrectieMiddenvoet] = useState<string>('');
+  const [correctieVoorvoet, setCorrectieVoorvoet] = useState<string>('');
+  const [pellote, setPellote] = useState<string>('');
+  const [hakverhoging, setHakverhoging] = useState<string>('');
 
-  // State voor fields
-  const [corr, setCorr] = useState('');
-  const [montage, setMontage] = useState('');
-  const [controle, setControle] = useState('');
-  const [belasting, setBelasting] = useState('');
-  const [pref, setPref] = useState('');
+  // State voor prijs (required)
+  const [prijs, setPrijs] = useState<string>('steunzolen225');
 
   // State voor bijzonderheden
-  const [bijzonderheden, setBijzonderheden] = useState('');
+  const [bijzonderheden, setBijzonderheden] = useState<string>('');
+
+  // Validation: check which required fields are missing
+  const getMissingFields = (): string[] => {
+    const missing: string[] = [];
+
+    if (!schoenmaat.trim()) {
+      missing.push(t('schoenmaat'));
+    }
+
+    // Check if at least one steunzool type is selected OR Anders is filled
+    const hasAtLeastOneSteunzoolType = Object.values(steunzoolType).some(value => value === true);
+    const hasAndersWithText = steunzoolAnders && steunzoolAndersText.trim();
+
+    if (!hasAtLeastOneSteunzoolType && !hasAndersWithText) {
+      missing.push(t('steunzoolTypeOfAnders'));
+    }
+
+    if (!prijs) {
+      missing.push(t('prijs'));
+    }
+
+    return missing;
+  };
+
+  const areAllFieldsValid = getMissingFields().length === 0;
 
   const handleSubmit = () => {
+    if (!areAllFieldsValid) {
+      return; // Validation alert will show the missing fields
+    }
+
     // Update client data with intake type
     if (clientData) {
       dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
@@ -79,39 +106,17 @@ export const FormIntakeSteunzolenPage = () => {
 
     dispatch(
       setIntakeSteunzolenData({
-        omschrijving,
-        processes,
-        schoenteest: {
-          berekteKloonzool,
-          berekteKustvlakte,
-          berekteVlakten,
-          enkelvolZolen,
-        },
-        steunzolen: {
-          ts15cm,
-          tussenlegd,
-          steunzolen,
-          bislangTussen,
-          bislang,
-        },
-        corrections: {
-          vervolgC1Lang1UVlug,
-          vervolgC1Kort,
-          uithollingC1Krag3Grote,
-          uithollingC1Krag3Kleine,
-          haktVerlengdC1Krag3,
-        },
-        pads: {
-          csm,
-          e625,
-          e425,
-          cushlin,
-        },
-        corr,
-        montage,
-        controle,
-        belasting,
-        pref,
+        welkPaar,
+        medischeIndicatie,
+        schoenmaat,
+        steunzoolType,
+        steunzoolAnders,
+        steunzoolAndersText,
+        correctieMiddenvoet,
+        correctieVoorvoet,
+        pellote,
+        hakverhoging,
+        prijs,
         bijzonderheden,
       })
     );
@@ -136,10 +141,23 @@ export const FormIntakeSteunzolenPage = () => {
         borderRadius="md"
         gap={{ base: 4, md: 6 }}
       >
-        {/* Omschrijving/Paartype */}
+        {!areAllFieldsValid && (
+          <Alert status="warning" borderRadius="md">
+            <AlertIcon />
+            <Box>
+              <Text fontWeight="bold" mb={2}>{t('vulVerplichteVeldenIn')}</Text>
+              <UnorderedList>
+                {getMissingFields().map((field, index) => (
+                  <ListItem key={index}>{field}</ListItem>
+                ))}
+              </UnorderedList>
+            </Box>
+          </Alert>
+        )}
+
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('omschrijving')}
+            {t('welkPaar')}
           </Text>
           <Flex
             gap={{ base: 4, md: 6 }}
@@ -151,7 +169,7 @@ export const FormIntakeSteunzolenPage = () => {
             mt={2}
           >
             <Box flex={1}>
-              <RadioGroup value={omschrijving} onChange={setOmschrijving}>
+              <RadioGroup value={welkPaar} onChange={setWelkPaar}>
                 <Stack
                   direction={{ base: "column", md: "row" }}
                   spacing={4}
@@ -173,27 +191,41 @@ export const FormIntakeSteunzolenPage = () => {
 
         <Divider />
 
-        {/* Processes */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Processes
+            {t('medischeIndicatie')}
           </Text>
           <FormControl>
-            <Input
-              placeholder="Processes"
-              value={processes}
-              onChange={e => setProcesses(e.target.value)}
-              size="sm"
+            <Textarea
+              placeholder={t('medischeIndicatiePlaceholder')}
+              value={medischeIndicatie}
+              onChange={e => setMedischeIndicatie(e.target.value)}
+              minH={{ base: '80px', md: '100px' }}
             />
           </FormControl>
         </Box>
 
         <Divider />
 
-        {/* Schoenteest */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Schoenteest
+            {t('schoenmaat')} *
+          </Text>
+          <FormControl isRequired>
+            <Input
+              placeholder={t('schoenmaarPlaceholder')}
+              value={schoenmaat}
+              onChange={e => setSchoenmaat(e.target.value)}
+              size="md"
+            />
+          </FormControl>
+        </Box>
+
+        <Divider />
+
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('steunzolen')} *
           </Text>
           <Box
             border="1px solid"
@@ -202,45 +234,121 @@ export const FormIntakeSteunzolenPage = () => {
             p={4}
             mt={2}
           >
-            <Stack spacing={3}>
-              <Checkbox
-                isChecked={berekteKloonzool}
-                onChange={e => setBerekteKloonzool(e.target.checked)}
-                size="sm"
-              >
-                Berekte kloonzool met
-              </Checkbox>
-              <Checkbox
-                isChecked={berekteKustvlakte}
-                onChange={e => setBerekteKustvlakte(e.target.checked)}
-                size="sm"
-              >
-                Berekte kustvlakte scatter
-              </Checkbox>
-              <Checkbox
-                isChecked={berekteVlakten}
-                onChange={e => setBerekteVlakten(e.target.checked)}
-                size="sm"
-              >
-                Berekte vlakten/klosse scatter
-              </Checkbox>
-              <Checkbox
-                isChecked={enkelvolZolen}
-                onChange={e => setEnkelvolZolen(e.target.checked)}
-                size="sm"
-              >
-                Enkelvol zolen retel
-              </Checkbox>
+            <Stack spacing={4}>
+              <Box>
+                <Text fontWeight="semibold" mb={2} fontSize="sm">
+                  {t('typeSteunzolen')}
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
+                  {STEUNZOOL_TYPE_OPTIES.filter(option => option.value !== 'Anders').map(option => (
+                    <Checkbox
+                      key={option.value}
+                      isChecked={steunzoolType[option.value] || false}
+                      onChange={e =>
+                        setSteunzoolType({
+                          ...steunzoolType,
+                          [option.value]: e.target.checked,
+                        })
+                      }
+                      size="sm"
+                    >
+                      {t(option.label)}
+                    </Checkbox>
+                  ))}
+                </SimpleGrid>
+                <Box mt={3}>
+                  <Checkbox
+                    isChecked={steunzoolAnders}
+                    onChange={e => setSteunzoolAnders(e.target.checked)}
+                    size="sm"
+                  >
+                    {t('anders')}
+                  </Checkbox>
+                  {steunzoolAnders && (
+                    <Input
+                      placeholder={t('andersSpecificatiePlaceholder')}
+                      value={steunzoolAndersText}
+                      onChange={e => setSteunzoolAndersText(e.target.value)}
+                      size="sm"
+                      mt={2}
+                    />
+                  )}
+                </Box>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                <Text fontWeight="semibold" mb={2} fontSize="sm">
+                  {t('correctieMiddenvoet')}
+                </Text>
+                <RadioGroup value={correctieMiddenvoet} onChange={setCorrectieMiddenvoet}>
+                  <Stack spacing={2}>
+                    {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                      <Radio key={option.value} value={option.value} size="sm">
+                        {t(option.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                <Text fontWeight="semibold" mb={2} fontSize="sm">
+                  {t('correctieVoorvoet')}
+                </Text>
+                <RadioGroup value={correctieVoorvoet} onChange={setCorrectieVoorvoet}>
+                  <Stack spacing={2}>
+                    {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                      <Radio key={option.value} value={option.value} size="sm">
+                        {t(option.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                <Text fontWeight="semibold" mb={2} fontSize="sm">
+                  {t('pellote')}
+                </Text>
+                <RadioGroup value={pellote} onChange={setPellote}>
+                  <Stack spacing={2}>
+                    {PELLOTE_OPTIES.map(option => (
+                      <Radio key={option.value} value={option.value} size="sm">
+                        {t(option.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                <Text fontWeight="semibold" mb={2} fontSize="sm">
+                  {t('hakverhoging')}
+                </Text>
+                <Input
+                  placeholder={t('hakverhogingPlaceholder')}
+                  value={hakverhoging}
+                  onChange={e => setHakverhoging(e.target.value)}
+                  size="sm"
+                />
+              </Box>
             </Stack>
           </Box>
         </Box>
 
         <Divider />
 
-        {/* Steunzolen */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Steunzolen
+            {t('prijs')} *
           </Text>
           <Box
             border="1px solid"
@@ -249,206 +357,20 @@ export const FormIntakeSteunzolenPage = () => {
             p={4}
             mt={2}
           >
-            <Stack spacing={3}>
-              <Checkbox
-                isChecked={ts15cm}
-                onChange={e => setTs15cm(e.target.checked)}
-                size="sm"
-              >
-                T.s 1,5 cm
-              </Checkbox>
-              <Checkbox
-                isChecked={tussenlegd}
-                onChange={e => setTussenlegd(e.target.checked)}
-                size="sm"
-              >
-                Tussenlegd
-              </Checkbox>
-              <Checkbox
-                isChecked={steunzolen}
-                onChange={e => setSteunzolen(e.target.checked)}
-                size="sm"
-              >
-                Steunzolen
-              </Checkbox>
-              <Checkbox
-                isChecked={bislangTussen}
-                onChange={e => setBislangTussen(e.target.checked)}
-                size="sm"
-              >
-                Bislang tussen
-              </Checkbox>
-              <Checkbox
-                isChecked={bislang}
-                onChange={e => setBislang(e.target.checked)}
-                size="sm"
-              >
-                Bislang
-              </Checkbox>
-            </Stack>
+            <RadioGroup value={prijs} onChange={setPrijs}>
+              <Stack spacing={3}>
+                {STEUNZOLEN_PRIJS_OPTIES.map(option => (
+                  <Radio key={option.value} value={option.value} size="sm">
+                    {t(option.label)}
+                  </Radio>
+                ))}
+              </Stack>
+            </RadioGroup>
           </Box>
         </Box>
 
         <Divider />
 
-        {/* Corrections */}
-        <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Correcties
-          </Text>
-          <Box
-            border="1px solid"
-            borderColor="inherit"
-            borderRadius="md"
-            p={4}
-            mt={2}
-          >
-            <Stack spacing={3}>
-              <Checkbox
-                isChecked={vervolgC1Lang1UVlug}
-                onChange={e => setVervolgC1Lang1UVlug(e.target.checked)}
-                size="sm"
-              >
-                Vervolg C 1 lang 1 U vlug
-              </Checkbox>
-              <Checkbox
-                isChecked={vervolgC1Kort}
-                onChange={e => setVervolgC1Kort(e.target.checked)}
-                size="sm"
-              >
-                Vervolg C 1 kort
-              </Checkbox>
-              <Checkbox
-                isChecked={uithollingC1Krag3Grote}
-                onChange={e => setUithollingC1Krag3Grote(e.target.checked)}
-                size="sm"
-              >
-                Uitholling C 1 krag 3 grote
-              </Checkbox>
-              <Checkbox
-                isChecked={uithollingC1Krag3Kleine}
-                onChange={e => setUithollingC1Krag3Kleine(e.target.checked)}
-                size="sm"
-              >
-                Uitholling C 1 krag 3 kleine D base
-              </Checkbox>
-              <Checkbox
-                isChecked={haktVerlengdC1Krag3}
-                onChange={e => setHaktVerlengdC1Krag3(e.target.checked)}
-                size="sm"
-              >
-                Hakt verlengd C 1 krag 3 Grote
-              </Checkbox>
-            </Stack>
-          </Box>
-        </Box>
-
-        <Divider />
-
-        {/* Pads */}
-        <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Pads
-          </Text>
-          <Box
-            border="1px solid"
-            borderColor="inherit"
-            borderRadius="md"
-            p={4}
-            mt={2}
-          >
-            <Stack spacing={3}>
-              <Checkbox
-                isChecked={csm}
-                onChange={e => setCsm(e.target.checked)}
-                size="sm"
-              >
-                € 6-25.00
-              </Checkbox>
-              <Checkbox
-                isChecked={e625}
-                onChange={e => setE625(e.target.checked)}
-                size="sm"
-              >
-                € 6-25.00
-              </Checkbox>
-              <Checkbox
-                isChecked={e425}
-                onChange={e => setE425(e.target.checked)}
-                size="sm"
-              >
-                € 4-25.00
-              </Checkbox>
-              <Checkbox
-                isChecked={cushlin}
-                onChange={e => setCushlin(e.target.checked)}
-                size="sm"
-              >
-                Cushlin
-              </Checkbox>
-            </Stack>
-          </Box>
-        </Box>
-
-        <Divider />
-
-        {/* Other Fields */}
-        <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            Details
-          </Text>
-          <Stack spacing={3}>
-            <FormControl>
-              <FormLabel fontSize="sm">Corr</FormLabel>
-              <Input
-                placeholder="Corr"
-                value={corr}
-                onChange={e => setCorr(e.target.value)}
-                size="sm"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel fontSize="sm">Montage</FormLabel>
-              <Input
-                placeholder="Montage"
-                value={montage}
-                onChange={e => setMontage(e.target.value)}
-                size="sm"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel fontSize="sm">Controle</FormLabel>
-              <Input
-                placeholder="Controle"
-                value={controle}
-                onChange={e => setControle(e.target.value)}
-                size="sm"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel fontSize="sm">Belasting</FormLabel>
-              <Input
-                placeholder="Belasting"
-                value={belasting}
-                onChange={e => setBelasting(e.target.value)}
-                size="sm"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel fontSize="sm">Pref</FormLabel>
-              <Input
-                placeholder="Pref"
-                value={pref}
-                onChange={e => setPref(e.target.value)}
-                size="sm"
-              />
-            </FormControl>
-          </Stack>
-        </Box>
-
-        <Divider />
-
-        {/* Bijzonderheden */}
         <Box>
           <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
             {t('bijzonderheden')}
@@ -461,7 +383,6 @@ export const FormIntakeSteunzolenPage = () => {
           />
         </Box>
 
-        {/* Submit button */}
         <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
