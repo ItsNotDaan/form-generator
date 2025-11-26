@@ -1,22 +1,22 @@
-// Type definitions for client and intake form data
+// Type definities voor cliënt en intake formulier data
 import type {
-  Location,
-  Salutation,
-  Side,
+  Locatie,
+  Aanhef,
+  Zijde,
 } from '@/presentation/form/constants/formConstants';
 export interface ClientData {
   // Practitioner and date
   practitionerId?: string;
   date: string;
 
-  // OSA/VLOS selection
-  osaVlos?: 'OSA' | 'VLOS';
+  // Intake form type
+  intakeType?: 'VLOS' | 'Pulman' | 'Rebacare' | 'OSB' | 'OVAC' | 'Steunzolen';
 
   // Location
-  location?: Location;
+  location?: Locatie;
 
   // Personal information
-  salutation?: Salutation;
+  salutation?: Aanhef;
   initials: string;
   clientName: string;
   birthDate: string;
@@ -34,14 +34,12 @@ export interface ClientData {
 
   // Medical information
   insurance: string;
-  bsn?: string;
   specialist?: string;
-  familyDoctor?: string;
 }
 
 export interface IntakeVLOSData {
   // Side selection (both/left/right)
-  side: Side;
+  side: Zijde;
 
   // Shaft height in cm
   schachthoogteLinks?: string;
@@ -54,13 +52,13 @@ export interface IntakeVLOSData {
   omsluitingRechtsMm: Record<string, string>;
 
   // Supplement shoring/support
-  supplementschoringLinksEnabled: 'ja' | 'nee';
-  supplementschoringRechtsEnabled: 'ja' | 'nee';
+  supplementschoringLinksEnabled: boolean;
+  supplementschoringRechtsEnabled: boolean;
   supplementschoringLinksType?: string; // Lateral/Medial/Both
   supplementschoringRechtsType?: string;
 
   // Sole stiffening
-  zoolverstijvingEnabled: 'ja' | 'nee';
+  zoolverstijvingEnabled: boolean;
   zoolverstijvingLinks?: boolean;
   zoolverstijvingRechts?: boolean;
 
@@ -74,10 +72,10 @@ export interface IntakeVLOSData {
   openstandSchacht?: string;
 
   // Tongue padding
-  tongpolsterEnabled: 'ja' | 'nee';
+  tongpolsterEnabled: boolean;
 
   // Fixed tongue
-  tongVaststikkenEnabled: 'ja' | 'nee';
+  tongVaststikkenEnabled: boolean;
 
   // Heel type
   haksoortLinks?: string;
@@ -88,14 +86,14 @@ export interface IntakeVLOSData {
   hakhoogteRechts?: string;
 
   // Heel shoring/wedge
-  hakschoringLinksEnabled: 'ja' | 'nee';
-  hakschoringRechtsEnabled: 'ja' | 'nee';
+  hakschoringLinksEnabled: boolean;
+  hakschoringRechtsEnabled: boolean;
   hakschoringLinksType?: string; // Medial/Lateral
   hakschoringRechtsType?: string;
 
   // Heel rounding
-  hakafrondingLinksEnabled: 'ja' | 'nee';
-  hakafrondingRechtsEnabled: 'ja' | 'nee';
+  hakafrondingLinksEnabled: boolean;
+  hakafrondingRechtsEnabled: boolean;
   hakafrondingLinksHoogte?: string; // Height in mm
   hakafrondingLinksLengte?: string; // Length in mm
   hakafrondingRechtsHoogte?: string;
@@ -110,13 +108,13 @@ export interface IntakeVLOSData {
 
 export interface IntakePulmanData {
   // Side selection
-  side: Side;
+  side: Zijde;
 
   // Medical indication
   medischeIndicatie?: string;
 
   // Bandaged foot
-  gezwachteld?: 'ja' | 'nee';
+  gezwachteld?: boolean;
 
   // Pulman type (New Harlem, Harlem Extra)
   typePulman?: string;
@@ -133,13 +131,13 @@ export interface IntakePulmanData {
 
 export interface IntakeRebacareData {
   // Side selection
-  side: Side;
+  side: Zijde;
 
   // Medical indication
   medischeIndicatie?: string;
 
   // Bandaged foot
-  gezwachteld?: 'ja' | 'nee';
+  gezwachteld?: boolean;
 
   // Shoe size (client's size)
   schoenmaat?: string; // 37-48
@@ -154,7 +152,7 @@ export interface IntakeRebacareData {
 export interface IntakeOSBData {
   // Order information
   ordernummer?: string; // Order number
-  omschrijving?: string[]; // Description/pair type options
+  omschrijving?: string; // Description/pair type (single select)
 
   // Medical indication
   medischeIndicatie?: string;
@@ -162,11 +160,11 @@ export interface IntakeOSBData {
   // Goals/objectives (no left/right)
   doel?: string[]; // Array of goal options
 
-  // Walking function
+  // Walking functions
   loopfunctie?: string[]; // Array of walking function options
 
   // Supplier and order date
-  leverancier?: string[]; // Array of supplier options
+  leverancier?: string; // Supplier (single select)
   bestelDatum?: string;
 
   // Product specifications
@@ -194,59 +192,62 @@ export interface IntakeOSBData {
   verdiepingenVoorvoetExtraRechts?: boolean;
 
   // Basic SOS codes with left/right
-  basiscodeSOS?: string[]; // Array of selected basic codes
-  supplements?: Record<string, {links: boolean; rechts: boolean; code: number}>;
+  basiscodeSOS?: string; // Selected basic code (single select)
 
-  // Insole component (left)
-  steunzoolLinks?: {
-    type?: string[]; // Array of insole types
-    typeAnders?: string; // Other type (text input)
-    correctieMiddenvoet?: string; // Midfoot correction
-    correctieVoorvoet?: string; // Forefoot correction
-    vvPellote?: string; // Forefoot pad
-    hakVerhogingCm?: string; // Heel raise in cm
-  };
+  // Supplements - vlakke structuur (4 supplements × 2 zijdes = 8 velden)
+  supplementIndividueelLinks?: boolean;
+  supplementIndividueelRechts?: boolean;
+  afwikkelrolEenvoudigLinks?: boolean;
+  afwikkelrolEenvoudigRechts?: boolean;
+  afwikkelrolGecompliceerdLinks?: boolean;
+  afwikkelrolGecompliceerdRechts?: boolean;
+  zoolverstijvingLinks?: boolean;
+  zoolverstijvingRechts?: boolean;
 
-  // Insole component (right)
-  steunzoolRechts?: {
-    type?: string[];
-    typeAnders?: string;
-    correctieMiddenvoet?: string;
-    correctieVoorvoet?: string;
-    vvPellote?: string;
-    hakVerhogingCm?: string;
-  };
+  // Insole component - gedeelde velden
+  steunzoolType?: string[]; // Array of insole types
+  steunzoolTypeAnders?: string; // Other type (text input)
+  steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
+  steunzoolCorrectieVoorvoet?: string; // Forefoot correction
+  steunzoolVvPellote?: string; // Forefoot pad
+
+  // Insole component - alleen hak verhoging is gesplitst
+  steunzoolHakVerhogingLinks?: string; // Heel raise in cm
+  steunzoolHakVerhogingRechts?: string;
 
   // Special notes
   bijzonderheden?: string;
 }
 
 export interface IntakeOVACData {
-  // Trial shoe
-  proefschoen?: 'ja' | 'nee';
+  // Medical indication
+  medischeIndicatie?: string;
 
-  // Date
-  datum?: string;
+  // Omschrijving items - vlakke structuur (9 items × 2 zijdes = 18 velden)
+  supplementIndividueelLinks?: boolean;
+  supplementIndividueelRechts?: boolean;
+  eenvoudigeAfwikkelrolLinks?: boolean;
+  eenvoudigeAfwikkelrolRechts?: boolean;
+  gecompliceerdeAfwikkelrolLinks?: boolean;
+  gecompliceerdeAfwikkelrolRechts?: boolean;
+  hakAanpassing2cmLinks?: boolean;
+  hakAanpassing2cmRechts?: boolean;
+  hakZoolVerhoging3cmLinks?: boolean;
+  hakZoolVerhoging3cmRechts?: boolean;
+  hakZoolVerhoging7cmLinks?: boolean;
+  hakZoolVerhoging7cmRechts?: boolean;
+  aangepastehakkenLinks?: boolean;
+  aangepastehakkenRechts?: boolean;
+  zoolverstijvingLinks?: boolean;
+  zoolverstijvingRechts?: boolean;
+  nieuweWreefsluitingLinks?: boolean;
+  nieuweWreefsluitingRechts?: boolean;
 
-  // Thickness measurements
-  diktes?: string;
-
-  // Size distribution
-  maatverdeling?: string;
-
-  // Shoe sizes (24-32)
-  schoenSizes?: Record<string, boolean>;
-
-  // Procedures checklist
-  procedures?: {
-    vrijstaandSchoentje?: boolean; // Freestanding shoe
-    voetAfdrukkleusKast?: boolean; // Foot impression in box
-    bevolktenSchottel?: boolean; // Populated last
-    proefschoeneenGecombineerd?: boolean; // Trial shoes combined
-    bevolktenSchoen?: boolean; // Populated shoe
-    enkelvolschoen?: boolean; // Ankle full shoe
-    enkelvolkastel?: boolean; // Ankle full last
-  };
+  // Verkorting
+  verkortingLinks?: boolean;
+  verkortingRechts?: boolean;
+  voorvoetCm?: string;
+  hielCm?: string;
 
   // Special notes
   bijzonderheden?: string;

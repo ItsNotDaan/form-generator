@@ -28,27 +28,28 @@ import { DatePickerField } from '@/presentation/base/input/datePickerField';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakeOSBData } from '@/domain/store/slices/formData';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeOSBData, setClientData } from '@/domain/store/slices/formData';
 import {
-  PAARTYPE_OPTIONS,
-  DOEL_OPTIONS,
-  LOOPFUNCTIE_OPTIONS,
-  LEVERANCIER_OPTIONS,
-  BASISCODE_OPTIONS,
-  SUPPLEMENT_OPTIONS,
-  HALLUX_MM_OPTIONS,
-  VERDIEPING_MM_OPTIONS,
-  STEUNZOOL_TYPES,
-  CORRECTIE_MIDDENVOET,
-  CORRECTIE_VOORVOET,
-  PELLOTE_OPTIONS,
+  PAARTYPE_OPTIES,
+  DOEL_OPTIES,
+  LOOPFUNCTIE_OPTIES,
+  LEVERANCIER_OPTIES,
+  BASISCODE_OPTIES,
+  SUPPLEMENT_OPTIES,
+  HALLUX_MM_OPTIES,
+  VERDIEPING_MM_OPTIES,
+  STEUNZOOL_TYPE_OPTIES,
+  CORRECTIE_MIDDENVOET_OPTIES,
+  CORRECTIE_VOORVOET_OPTIES,
+  PELLOTE_OPTIES,
 } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeOSBPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
+  const clientData = useAppSelector(state => state.formData.client);
 
   // Sectie 1: Header & Omschrijving
   const [ordernummer, setOrdernummer] = useState('');
@@ -92,9 +93,16 @@ export const FormIntakeOSBPage = () => {
 
   // Sectie 8: Basiscode SOS & Omschrijving
   const [basiscodeSOS, setBasiscodeSOS] = useState<string>('');
-  const [supplements, setSupplements] = useState<
-    Record<string, { links: boolean; rechts: boolean; code: number }>
-  >({});
+
+  // Supplements - individuele state variabelen (4 supplements × 2 zijdes = 8 velden)
+  const [supplementIndividueelLinks, setSupplementIndividueelLinks] = useState(false);
+  const [supplementIndividueelRechts, setSupplementIndividueelRechts] = useState(false);
+  const [afwikkelrolEenvoudigLinks, setAfwikkelrolEenvoudigLinks] = useState(false);
+  const [afwikkelrolEenvoudigRechts, setAfwikkelrolEenvoudigRechts] = useState(false);
+  const [afwikkelrolGecompliceerdLinks, setAfwikkelrolGecompliceerdLinks] = useState(false);
+  const [afwikkelrolGecompliceerdRechts, setAfwikkelrolGecompliceerdRechts] = useState(false);
+  const [zoolverstijvingLinks, setZoolverstijvingLinks] = useState(false);
+  const [zoolverstijvingRechts, setZoolverstijvingRechts] = useState(false);
 
   // Sectie 9: Steunzolen (gecombineerd voor beide voeten)
   const [steunzoolType, setSteunzoolType] = useState<string[]>([]);
@@ -120,29 +128,35 @@ export const FormIntakeOSBPage = () => {
     return [...array, item];
   };
 
-  const toggleSupplement = (key: string, side: 'links' | 'rechts') => {
-    const supplement = SUPPLEMENT_OPTIONS.find(s => s.key === key);
-    if (!supplement) {
-      return;
-    }
-
-    setSupplements(prev => {
-      const current = prev[key] || {
-        links: false,
-        rechts: false,
-        code: supplement.code,
-      };
-      return {
-        ...prev,
-        [key]: {
-          ...current,
-          [side]: !current[side],
-        },
-      };
-    });
+  // Helper functie om de juiste state getter/setter te krijgen voor een supplement en zijde
+  const getSupplementState = (key: string, side: 'links' | 'rechts'): [boolean, (value: boolean) => void] => {
+    const stateMap: Record<string, { links: [boolean, (v: boolean) => void]; rechts: [boolean, (v: boolean) => void] }> = {
+      individueel: {
+        links: [supplementIndividueelLinks, setSupplementIndividueelLinks],
+        rechts: [supplementIndividueelRechts, setSupplementIndividueelRechts],
+      },
+      afwikkelrol_eenvoudig: {
+        links: [afwikkelrolEenvoudigLinks, setAfwikkelrolEenvoudigLinks],
+        rechts: [afwikkelrolEenvoudigRechts, setAfwikkelrolEenvoudigRechts],
+      },
+      afwikkelrol_gecompliceerd: {
+        links: [afwikkelrolGecompliceerdLinks, setAfwikkelrolGecompliceerdLinks],
+        rechts: [afwikkelrolGecompliceerdRechts, setAfwikkelrolGecompliceerdRechts],
+      },
+      zoolverstijving: {
+        links: [zoolverstijvingLinks, setZoolverstijvingLinks],
+        rechts: [zoolverstijvingRechts, setZoolverstijvingRechts],
+      },
+    };
+    return stateMap[key][side];
   };
 
   const handleSubmit = () => {
+    // Update client data with intake type
+    if (clientData) {
+      dispatch(setClientData({ ...clientData, intakeType: 'OSB' }));
+    }
+
     dispatch(
       setIntakeOSBData({
         ordernummer,
@@ -168,16 +182,21 @@ export const FormIntakeOSBPage = () => {
         verdiepingenVoorvoetLinksMm,
         verdiepingenVoorvoetRechtsMm,
         basiscodeSOS,
-        supplements,
-        steunzool: {
-          type: steunzoolType,
-          typeAnders: steunzoolTypeAnders,
-          correctieMiddenvoet: steunzoolCorrectieMiddenvoet,
-          correctieVoorvoet: steunzoolCorrectieVoorvoet,
-          vvPellote: steunzoolVvPellote,
-          hakVerhogingLinks: steunzoolHakVerhogingLinks,
-          hakVerhogingRechts: steunzoolHakVerhogingRechts,
-        },
+        supplementIndividueelLinks,
+        supplementIndividueelRechts,
+        afwikkelrolEenvoudigLinks,
+        afwikkelrolEenvoudigRechts,
+        afwikkelrolGecompliceerdLinks,
+        afwikkelrolGecompliceerdRechts,
+        zoolverstijvingLinks,
+        zoolverstijvingRechts,
+        steunzoolType,
+        steunzoolTypeAnders,
+        steunzoolCorrectieMiddenvoet,
+        steunzoolCorrectieVoorvoet,
+        steunzoolVvPellote,
+        steunzoolHakVerhogingLinks,
+        steunzoolHakVerhogingRechts,
         bijzonderheden,
       })
     );
@@ -218,24 +237,22 @@ export const FormIntakeOSBPage = () => {
           >
             <Box flex={1}>
               <RadioGroup value={omschrijving} onChange={setOmschrijving}>
-                <Stack spacing={3}>
-                  {PAARTYPE_OPTIONS.map(option => (
-                    <Radio key={option} value={option}>
-                      {t(option.toLowerCase().replace(/ /g, ''))}
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  spacing={4}
+                  flexWrap="wrap"
+                >
+                  {PAARTYPE_OPTIES.map(option => (
+                    <Radio
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {t(option.value.toLowerCase().replace(/ /g, ''))}
                     </Radio>
                   ))}
                 </Stack>
               </RadioGroup>
             </Box>
-            <FormControl flex={1} maxW={{ base: 'full', md: '300px' }}>
-              <FormLabel fontSize="sm">{t('ordernummer')}</FormLabel>
-              <Input
-                placeholder={t('ordernummerPlaceholder')}
-                value={ordernummer}
-                onChange={e => setOrdernummer(e.target.value)}
-                size="sm"
-              />
-            </FormControl>
           </Flex>
         </Box>
 
@@ -246,20 +263,12 @@ export const FormIntakeOSBPage = () => {
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('medischeIndicatie')}
           </Text>
-          <Box
-            border="1px solid"
-            borderColor="inherit"
-            borderRadius="md"
-            p={4}
-            mt={2}
-          >
-            <Textarea
-              placeholder={t('medischeIndicatiePlaceholder')}
-              value={medischeIndicatie}
-              onChange={e => setMedischeIndicatie(e.target.value)}
-              minH={{ base: '80px', md: '100px' }}
-            />
-          </Box>
+          <Textarea
+            placeholder={t('medischeIndicatiePlaceholder')}
+            value={medischeIndicatie}
+            onChange={e => setMedischeIndicatie(e.target.value)}
+            minH={{ base: '80px', md: '100px' }}
+          />
         </Box>
 
         <Divider />
@@ -278,15 +287,18 @@ export const FormIntakeOSBPage = () => {
             p={4}
             mt={2}
           >
-            <Stack spacing={3}>
-              {DOEL_OPTIONS.map(option => (
+            <Stack
+              spacing={3}
+              direction={{ base: 'column', md: 'row' }}
+            >
+              {DOEL_OPTIES.map(option => (
                 <Checkbox
-                  key={option}
-                  isChecked={doel.includes(option)}
-                  onChange={() => setDoel(toggleArrayItem(doel, option))}
+                  key={option.value}
+                  isChecked={doel.includes(option.value)}
+                  onChange={() => setDoel(toggleArrayItem(doel, option.value))}
                   size="sm"
                 >
-                  {option}
+                  {option.label}
                 </Checkbox>
               ))}
             </Stack>
@@ -310,16 +322,16 @@ export const FormIntakeOSBPage = () => {
             mt={2}
           >
             <Stack spacing={3}>
-              {LOOPFUNCTIE_OPTIONS.map(option => (
+              {LOOPFUNCTIE_OPTIES.map(option => (
                 <Checkbox
-                  key={option}
-                  isChecked={loopfunctie.includes(option)}
+                  key={option.value}
+                  isChecked={loopfunctie.includes(option.value)}
                   onChange={() =>
-                    setLoopfunctie(toggleArrayItem(loopfunctie, option))
+                    setLoopfunctie(toggleArrayItem(loopfunctie, option.value))
                   }
                   size="sm"
                 >
-                  {option}
+                  {option.label}
                 </Checkbox>
               ))}
             </Stack>
@@ -345,9 +357,9 @@ export const FormIntakeOSBPage = () => {
             <Box flex={1}>
               <RadioGroup value={leverancier} onChange={setLeverancier}>
                 <Stack spacing={3}>
-                  {LEVERANCIER_OPTIONS.map(option => (
-                    <Radio key={option} value={option}>
-                      {option}
+                  {LEVERANCIER_OPTIES.map(option => (
+                    <Radio key={option.value} value={option.value}>
+                      {option.label}
                     </Radio>
                   ))}
                 </Stack>
@@ -465,14 +477,14 @@ export const FormIntakeOSBPage = () => {
                   </Checkbox>
                   {halluxValgusLinks && (
                     <Stack spacing={2} ml={6}>
-                      {HALLUX_MM_OPTIONS.map(option => (
+                      {HALLUX_MM_OPTIES.map(option => (
                         <Checkbox
-                          key={option}
-                          isChecked={halluxValgusLinksMm === option}
-                          onChange={() => setHalluxValgusLinksMm(option)}
+                          key={option.value}
+                          isChecked={halluxValgusLinksMm === option.value}
+                          onChange={() => setHalluxValgusLinksMm(option.value)}
                           size="sm"
                         >
-                          {option}
+                          {option.label}
                         </Checkbox>
                       ))}
                     </Stack>
@@ -490,14 +502,14 @@ export const FormIntakeOSBPage = () => {
                   </Checkbox>
                   {halluxValgusRechts && (
                     <Stack spacing={2} ml={6}>
-                      {HALLUX_MM_OPTIONS.map(option => (
+                      {HALLUX_MM_OPTIES.map(option => (
                         <Checkbox
-                          key={option}
-                          isChecked={halluxValgusRechtsMm === option}
-                          onChange={() => setHalluxValgusRechtsMm(option)}
+                          key={option.value}
+                          isChecked={halluxValgusRechtsMm === option.value}
+                          onChange={() => setHalluxValgusRechtsMm(option.value)}
                           size="sm"
                         >
-                          {option}
+                          {option.label}
                         </Checkbox>
                       ))}
                     </Stack>
@@ -527,16 +539,16 @@ export const FormIntakeOSBPage = () => {
                   </Checkbox>
                   {verdiepingenVoorvoetLinks && (
                     <Stack spacing={2} ml={6}>
-                      {VERDIEPING_MM_OPTIONS.map(option => (
+                      {VERDIEPING_MM_OPTIES.map(option => (
                         <Checkbox
-                          key={option}
-                          isChecked={verdiepingenVoorvoetLinksMm === option}
+                          key={option.value}
+                          isChecked={verdiepingenVoorvoetLinksMm === option.value}
                           onChange={() =>
-                            setVerdiepingenVoorvoetLinksMm(option)
+                            setVerdiepingenVoorvoetLinksMm(option.value)
                           }
                           size="sm"
                         >
-                          {option}
+                          {option.label}
                         </Checkbox>
                       ))}
                     </Stack>
@@ -556,16 +568,16 @@ export const FormIntakeOSBPage = () => {
                   </Checkbox>
                   {verdiepingenVoorvoetRechts && (
                     <Stack spacing={2} ml={6}>
-                      {VERDIEPING_MM_OPTIONS.map(option => (
+                      {VERDIEPING_MM_OPTIES.map(option => (
                         <Checkbox
-                          key={option}
-                          isChecked={verdiepingenVoorvoetRechtsMm === option}
+                          key={option.value}
+                          isChecked={verdiepingenVoorvoetRechtsMm === option.value}
                           onChange={() =>
-                            setVerdiepingenVoorvoetRechtsMm(option)
+                            setVerdiepingenVoorvoetRechtsMm(option.value)
                           }
                           size="sm"
                         >
-                          {option}
+                          {option.label}
                         </Checkbox>
                       ))}
                     </Stack>
@@ -598,9 +610,9 @@ export const FormIntakeOSBPage = () => {
               </Text>
               <RadioGroup value={basiscodeSOS} onChange={setBasiscodeSOS}>
                 <Stack direction="row" spacing={4} flexWrap="wrap">
-                  {BASISCODE_OPTIONS.map(option => (
-                    <Radio key={option} value={option}>
-                      {option}
+                  {BASISCODE_OPTIES.map(option => (
+                    <Radio key={option.value} value={option.value}>
+                      {option.label}
                     </Radio>
                   ))}
                 </Stack>
@@ -617,35 +629,32 @@ export const FormIntakeOSBPage = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {SUPPLEMENT_OPTIONS.map(supplement => (
-                    <Tr key={supplement.key}>
-                      <Td>
-                        {supplement.label} ({supplement.code})
-                      </Td>
-                      <Td textAlign="center">
-                        <Checkbox
-                          isChecked={
-                            supplements[supplement.key]?.links || false
-                          }
-                          onChange={() =>
-                            toggleSupplement(supplement.key, 'links')
-                          }
-                          size="sm"
-                        />
-                      </Td>
-                      <Td textAlign="center">
-                        <Checkbox
-                          isChecked={
-                            supplements[supplement.key]?.rechts || false
-                          }
-                          onChange={() =>
-                            toggleSupplement(supplement.key, 'rechts')
-                          }
-                          size="sm"
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
+                  {SUPPLEMENT_OPTIES.map(supplement => {
+                    const [linksValue, setLinksValue] = getSupplementState(supplement.key, 'links');
+                    const [rechtsValue, setRechtsValue] = getSupplementState(supplement.key, 'rechts');
+
+                    return (
+                      <Tr key={supplement.key}>
+                        <Td>
+                          {supplement.label} ({supplement.code})
+                        </Td>
+                        <Td textAlign="center">
+                          <Checkbox
+                            isChecked={linksValue}
+                            onChange={(e) => setLinksValue(e.target.checked)}
+                            size="sm"
+                          />
+                        </Td>
+                        <Td textAlign="center">
+                          <Checkbox
+                            isChecked={rechtsValue}
+                            onChange={(e) => setRechtsValue(e.target.checked)}
+                            size="sm"
+                          />
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
             </Box>
@@ -660,7 +669,7 @@ export const FormIntakeOSBPage = () => {
             {t('steunzolen')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{ base: 2, md: 3 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -672,73 +681,85 @@ export const FormIntakeOSBPage = () => {
               <Text fontSize="sm" fontWeight="medium" mb={2}>
                 {t('steunzoolType')}
               </Text>
-              <Stack spacing={2} mb={4}>
-                {STEUNZOOL_TYPES.map(option => (
-                  <Box key={option}>
+              <Flex
+                gap={{ base: 2, md: 3 }}
+                flexWrap="wrap"
+                direction={{ base: 'column', md: 'row' }}
+              >
+                {STEUNZOOL_TYPE_OPTIES.map(option => (
+                  <Box key={option.value}>
                     <Checkbox
-                      isChecked={steunzoolType.includes(option)}
+                      isChecked={steunzoolType.includes(option.value)}
                       onChange={() =>
-                        setSteunzoolType(toggleArrayItem(steunzoolType, option))
+                        setSteunzoolType(toggleArrayItem(steunzoolType, option.value))
                       }
                       size="sm"
                     >
-                      {option}
+                      {option.label}
                     </Checkbox>
-                    {option === 'Anders' && steunzoolType.includes(option) && (
+                    {option.value === 'Anders' && steunzoolType.includes(option.value) && (
                       <Input
                         placeholder={t('andersSpecificeer')}
                         value={steunzoolTypeAnders}
                         onChange={e => setSteunzoolTypeAnders(e.target.value)}
                         size="sm"
-                        ml={6}
                         mt={2}
                         maxW="300px"
                       />
                     )}
                   </Box>
                 ))}
-              </Stack>
+              </Flex>
             </Box>
 
             <Divider />
 
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-              <Box>
-                <Text fontSize="sm" fontWeight="medium" mb={2}>
-                  {t('correctieMiddenvoet')}
-                </Text>
-                <Stack spacing={2}>
-                  {CORRECTIE_MIDDENVOET.map(option => (
-                    <Checkbox
-                      key={option}
-                      isChecked={steunzoolCorrectieMiddenvoet === option}
-                      onChange={() => setSteunzoolCorrectieMiddenvoet(option)}
-                      size="sm"
-                    >
-                      {option}
-                    </Checkbox>
-                  ))}
-                </Stack>
-              </Box>
+            <Box>
+              <Text fontSize="sm" fontWeight="medium" mb={2}>
+                {t('correctieMiddenvoet')}
+              </Text>
+              <Flex
+                gap={{ base: 2, md: 3 }}
+                flexWrap="wrap">
+                {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                  <Checkbox
+                    key={option.value}
+                    isChecked={steunzoolCorrectieMiddenvoet === option.value}
+                    onChange={() => setSteunzoolCorrectieMiddenvoet(
+                      steunzoolCorrectieMiddenvoet === option.value ? '' : option.value
+                    )}
+                    size="sm"
+                  >
+                    {option.label}
+                  </Checkbox>
+                ))}
+              </Flex>
+            </Box>
 
-              <Box>
-                <Text fontSize="sm" fontWeight="medium" mb={2}>
-                  {t('correctieVoorvoet')}
-                </Text>
-                <Stack spacing={2}>
-                  {CORRECTIE_VOORVOET.map(option => (
-                    <Checkbox
-                      key={option}
-                      isChecked={steunzoolCorrectieVoorvoet === option}
-                      onChange={() => setSteunzoolCorrectieVoorvoet(option)}
-                      size="sm"
-                    >
-                      {option}
-                    </Checkbox>
-                  ))}
-                </Stack>
-              </Box>
-            </SimpleGrid>
+            <Divider />
+
+            <Box>
+              <Text fontSize="sm" fontWeight="medium" mb={2}>
+                {t('correctieVoorvoet')}
+              </Text>
+              <Flex
+                gap={{ base: 2, md: 3 }}
+                flexWrap="wrap"
+              >
+                {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                  <Checkbox
+                    key={option.value}
+                    isChecked={steunzoolCorrectieVoorvoet === option.value}
+                    onChange={() => setSteunzoolCorrectieVoorvoet(
+                      steunzoolCorrectieVoorvoet === option.value ? '' : option.value
+                    )}
+                    size="sm"
+                  >
+                    {option.label}
+                  </Checkbox>
+                ))}
+              </Flex>
+            </Box>
 
             <Divider />
 
@@ -746,18 +767,23 @@ export const FormIntakeOSBPage = () => {
               <Text fontSize="sm" fontWeight="medium" mb={2}>
                 {t('vvPellote')}
               </Text>
-              <Stack spacing={2}>
-                {PELLOTE_OPTIONS.map(option => (
+              <Flex
+                gap={{ base: 2, md: 3 }}
+                flexWrap="wrap"
+              >
+                {PELLOTE_OPTIES.map(option => (
                   <Checkbox
-                    key={option}
-                    isChecked={steunzoolVvPellote === option}
-                    onChange={() => setSteunzoolVvPellote(option)}
+                    key={option.value}
+                    isChecked={steunzoolVvPellote === option.value}
+                    onChange={() => setSteunzoolVvPellote(
+                      steunzoolVvPellote === option.value ? '' : option.value
+                    )}
                     size="sm"
                   >
-                    {option}
+                    {option.label}
                   </Checkbox>
                 ))}
-              </Stack>
+              </Flex>
             </Box>
 
             <Divider />
@@ -821,8 +847,8 @@ export const FormIntakeOSBPage = () => {
             {t('opslaanEnDoorgaan')}
           </Button>
         </Flex>
-      </Flex>
-    </BaseLayout>
+      </Flex >
+    </BaseLayout >
   );
 };
 

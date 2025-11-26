@@ -20,11 +20,11 @@ import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
 import { DatePickerField } from '@/presentation/base/input/datePickerField';
 import {
-  LOCATION_OPTIONS,
-  SALUTATION_OPTIONS,
-  PRACTITIONERS,
-  Location,
-  Salutation,
+  LOCATIE_OPTIES,
+  AANHEF_OPTIES,
+  BEHANDELAARS,
+  Locatie,
+  Aanhef,
 } from '@/presentation/form/constants/formConstants';
 import {
   DropdownField,
@@ -45,10 +45,10 @@ export const FormOldClientPage = () => {
   const [date, setDate] = useState(
     existingClient?.date ? existingClient.date : ''
   );
-  const [location, setLocation] = useState<Location | ''>(
+  const [location, setLocation] = useState<Locatie | ''>(
     existingClient?.location || ''
   );
-  const [salutation, setSalutation] = useState<Salutation | ''>(
+  const [salutation, setSalutation] = useState<Aanhef | ''>(
     existingClient?.salutation || ''
   );
   const [initials, setInitials] = useState(existingClient?.initials || '');
@@ -89,7 +89,6 @@ export const FormOldClientPage = () => {
       setClientData({
         practitionerId,
         date,
-        osaVlos: existingClient?.osaVlos,
         location: location || undefined,
         salutation: salutation || undefined,
         initials,
@@ -102,10 +101,8 @@ export const FormOldClientPage = () => {
         phoneOne,
         phoneTwo,
         email,
-        bsn: existingClient?.bsn,
         insurance,
         specialist,
-        familyDoctor: existingClient?.familyDoctor,
       })
     );
 
@@ -144,7 +141,7 @@ export const FormOldClientPage = () => {
               <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
               <DropdownField
                 type={DropdownType.SINGLE_NON_CREATABLE}
-                items={PRACTITIONERS}
+                items={BEHANDELAARS}
                 item={practitionerId}
                 onItemSelected={item => setPractitionerId(item?.value)}
                 placeholder={t('choosePractitioner')}
@@ -186,7 +183,7 @@ export const FormOldClientPage = () => {
                 direction={{ base: 'column', sm: 'row' }}
                 spacing={{ base: 2, sm: 6 }}
               >
-                {LOCATION_OPTIONS.map(o => (
+                {LOCATIE_OPTIES.map(o => (
                   <Radio key={o.value} value={o.value}>
                     {o.label}
                   </Radio>
@@ -216,7 +213,7 @@ export const FormOldClientPage = () => {
                 onChange={v => setSalutation(v as Salutation)}
               >
                 <Stack direction="row" spacing={6}>
-                  {SALUTATION_OPTIONS.map(o => (
+                  {AANHEF_OPTIES.map(o => (
                     <Radio key={o.value} value={o.value}>
                       {o.label}
                     </Radio>

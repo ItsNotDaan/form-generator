@@ -15,28 +15,38 @@ import {
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakeRebacareData } from '@/domain/store/slices/formData';
-import { Side } from '@/presentation/form/constants/formConstants';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeRebacareData, setClientData } from '@/domain/store/slices/formData';
+import { Zijde } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeRebacarePage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
+  const clientData = useAppSelector(state => state.formData.client);
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
-  const [side, setSide] = useState<Side>('beide');
+  const [side, setSide] = useState<Zijde>('beide');
 
   // State voor medische indicatie
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
 
   // State voor gezwachteld
-  const [gezwachteld, setGezwachteld] = useState<'ja' | 'nee'>('nee');
+  const [gezwachteld, setGezwachteld] = useState<boolean>(false);
+
+  // Helper functions for boolean <-> string conversion for UI
+  const boolToString = (value: boolean): string => value ? 'ja' : 'nee';
+  const stringToBool = (value: string): boolean => value === 'ja';
 
   // State voor bijzonderheden
   const [bijzonderheden, setBijzonderheden] = useState('');
 
   const handleSubmit = () => {
+    // Update client data with intake type
+    if (clientData) {
+      dispatch(setClientData({ ...clientData, intakeType: 'Rebacare' }));
+    }
+
     dispatch(
       setIntakeRebacareData({
         side,
@@ -82,7 +92,7 @@ export const FormIntakeRebacarePage = () => {
             mt={2}
             color="inherit"
           >
-            <RadioGroup value={side} onChange={v => setSide(v as Side)}>
+            <RadioGroup value={side} onChange={v => setSide(v as Zijde)}>
               <Stack direction="row" spacing={6}>
                 <Radio value="beide">{t('beide')}</Radio>
                 <Radio value="links">{t('links')}</Radio>
@@ -126,8 +136,8 @@ export const FormIntakeRebacarePage = () => {
             color="inherit"
           >
             <RadioGroup
-              value={gezwachteld}
-              onChange={v => setGezwachteld(v as 'ja' | 'nee')}
+              value={boolToString(gezwachteld)}
+              onChange={v => setGezwachteld(stringToBool(v))}
             >
               <Stack direction="row" spacing={6}>
                 <Radio value="ja">{t('ja')}</Radio>

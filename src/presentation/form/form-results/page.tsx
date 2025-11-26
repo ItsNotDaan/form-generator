@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -16,26 +16,14 @@ import {
   Badge,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {useAppSelector} from '@/domain/store/hooks';
-import {
-  PRACTITIONERS,
-  LOCATION_OPTIONS,
-  SALUTATION_OPTIONS,
-  OMSLUITING_OPTIONS,
-  SUPPLEMENT_TYPES,
-  HAKSOORT_OPTIONS,
-  LOOPZOOL_OPTIONS,
-  SLUITING_OPTIONS,
-  HAKSCHORING_TYPES,
-  YES_NO,
-  OPENSTAND_OPTIONS,
-} from '@/presentation/form/constants/formConstants';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { useAppSelector } from '@/domain/store/hooks';
+import { BEHANDELAARS } from '@/presentation/form/constants/formConstants';
 
 export const FormResultsPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const toast = useToast();
   const formData = useAppSelector(state => state.formData);
 
@@ -50,16 +38,46 @@ export const FormResultsPage = () => {
     return null;
   }
 
+  // Normalize values: false/"nee" -> "", true/"ja" -> "Ja"
+  const normalizeValue = (value: any): any => {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    if (typeof value === 'boolean') {
+      return value ? 'Ja' : '';
+    }
+    if (typeof value === 'string') {
+      if (value.toLowerCase() === 'ja') return 'Ja';
+      if (value.toLowerCase() === 'nee') return '';
+      return value;
+    }
+    if (Array.isArray(value)) {
+      return value.map(normalizeValue);
+    }
+    if (typeof value === 'object') {
+      return normalizeObject(value);
+    }
+    return value;
+  };
+
+  const normalizeObject = (obj: any): any => {
+    const normalized: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      normalized[key] = normalizeValue(value);
+    }
+    return normalized;
+  };
+
   // Generate complete JSON with all data and constants
   const generateCompleteJSON = () => {
     // Resolve practitioner ID to name
     const resolvedClientData = formData.client
-      ? {
-          ...formData.client,
-          practitionerName:
-            PRACTITIONERS.find(p => p.value === formData.client?.practitionerId)
-              ?.label || formData.client?.practitionerId,
-        }
+      ? normalizeObject({
+        ...formData.client,
+        practitionerName:
+          BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+            ?.label || formData.client?.practitionerId,
+      })
       : null;
 
     // Build result object with only non-null intake forms
@@ -67,49 +85,26 @@ export const FormResultsPage = () => {
       clientData: resolvedClientData,
     };
 
-    // Only include intake forms that have data
+    // Only include intake forms that have data (normalized)
     if (formData.intakeVLOS) {
-      result.intakeVLOS = formData.intakeVLOS;
+      result.intakeVLOS = normalizeObject(formData.intakeVLOS);
     }
     if (formData.intakePulman) {
-      result.intakePulman = formData.intakePulman;
+      result.intakePulman = normalizeObject(formData.intakePulman);
     }
     if (formData.intakeRebacare) {
-      result.intakeRebacare = formData.intakeRebacare;
+      result.intakeRebacare = normalizeObject(formData.intakeRebacare);
     }
     if (formData.intakeOSB) {
-      result.intakeOSB = formData.intakeOSB;
+      result.intakeOSB = normalizeObject(formData.intakeOSB);
     }
     if (formData.intakeOVAC) {
-      result.intakeOVAC = formData.intakeOVAC;
+      result.intakeOVAC = normalizeObject(formData.intakeOVAC);
     }
     if (formData.intakeSteunzolen) {
-      result.intakeSteunzolen = formData.intakeSteunzolen;
+      result.intakeSteunzolen = normalizeObject(formData.intakeSteunzolen);
     }
 
-    // Only include constants that are used in the filled forms
-    const constants: any = {};
-
-    // Always include practitioner info if we have client data
-    if (formData.client) {
-      constants.practitioners = PRACTITIONERS;
-      constants.locationOptions = LOCATION_OPTIONS;
-      constants.salutationOptions = SALUTATION_OPTIONS;
-    }
-
-    // Include VLOS-specific constants if VLOS form is filled
-    if (formData.intakeVLOS) {
-      constants.omsluitingOptions = OMSLUITING_OPTIONS;
-      constants.supplementTypes = SUPPLEMENT_TYPES;
-      constants.haksoortOptions = HAKSOORT_OPTIONS;
-      constants.loopzoolOptions = LOOPZOOL_OPTIONS;
-      constants.sluitingOptions = SLUITING_OPTIONS;
-      constants.hakschoringTypes = HAKSCHORING_TYPES;
-      constants.yesNoOptions = YES_NO;
-      constants.openstandOptions = OPENSTAND_OPTIONS;
-    }
-
-    result.constants = constants;
     result.generatedAt = new Date().toISOString();
 
     return result;
@@ -183,9 +178,9 @@ export const FormResultsPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         <Box>
           <Heading size="lg" mb={2}>

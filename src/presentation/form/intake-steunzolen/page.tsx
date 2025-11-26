@@ -17,13 +17,14 @@ import {
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakeSteunzolenData } from '@/domain/store/slices/formData';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeSteunzolenData, setClientData } from '@/domain/store/slices/formData';
 
 export const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
+  const clientData = useAppSelector(state => state.formData.client);
 
   // State voor processes
   const [processes, setProcesses] = useState('');
@@ -65,6 +66,11 @@ export const FormIntakeSteunzolenPage = () => {
   const [bijzonderheden, setBijzonderheden] = useState('');
 
   const handleSubmit = () => {
+    // Update client data with intake type
+    if (clientData) {
+      dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
+    }
+
     dispatch(
       setIntakeSteunzolenData({
         processes,

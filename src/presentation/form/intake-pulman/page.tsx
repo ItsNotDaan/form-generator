@@ -18,27 +18,32 @@ import {
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakePulmanData } from '@/domain/store/slices/formData';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakePulmanData, setClientData } from '@/domain/store/slices/formData';
 import {
-  Side,
-  PULMAN_TYPE_OPTIONS,
-  SHOE_SIZES,
+  Zijde,
+  PULMAN_TYPE_OPTIES,
+  SCHOENMATEN,
 } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakePulmanPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
+  const clientData = useAppSelector(state => state.formData.client);
 
   // State voor Links/Rechts/Beide selectie (default: Beide)
-  const [side, setSide] = useState<Side>('beide');
+  const [side, setSide] = useState<Zijde>('beide');
 
   // State voor medische indicatie
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
 
   // State voor gezwachteld
-  const [gezwachteld, setGezwachteld] = useState<'ja' | 'nee'>('nee');
+  const [gezwachteld, setGezwachteld] = useState<boolean>(false);
+
+  // Helper functions for boolean <-> string conversion for UI
+  const boolToString = (value: boolean): string => value ? 'ja' : 'nee';
+  const stringToBool = (value: string): boolean => value === 'ja';
 
   // State voor type Pulman
   const [typePulman, setTypePulman] = useState('');
@@ -53,14 +58,19 @@ export const FormIntakePulmanPage = () => {
   const showLinks = side === 'links' || side === 'beide';
   const showRechts = side === 'rechts' || side === 'beide';
 
-  // Automatisch switchen naar Harlem Extra als gezwachteld 'ja' is
+  // Automatisch switchen naar Harlem Extra als gezwachteld true is
   useEffect(() => {
-    if (gezwachteld === 'ja') {
+    if (gezwachteld) {
       setTypePulman('Harlem Extra');
     }
   }, [gezwachteld]);
 
   const handleSubmit = () => {
+    // Update client data with intake type
+    if (clientData) {
+      dispatch(setClientData({ ...clientData, intakeType: 'Pulman' }));
+    }
+
     dispatch(
       setIntakePulmanData({
         side,
@@ -109,7 +119,7 @@ export const FormIntakePulmanPage = () => {
             mt={2}
             color="inherit"
           >
-            <RadioGroup value={side} onChange={v => setSide(v as Side)}>
+            <RadioGroup value={side} onChange={v => setSide(v as Zijde)}>
               <Stack direction="row" spacing={6}>
                 <Radio value="beide">{t('beide')}</Radio>
                 <Radio value="links">{t('links')}</Radio>
@@ -153,8 +163,8 @@ export const FormIntakePulmanPage = () => {
             color="inherit"
           >
             <RadioGroup
-              value={gezwachteld}
-              onChange={v => setGezwachteld(v as 'ja' | 'nee')}
+              value={boolToString(gezwachteld)}
+              onChange={v => setGezwachteld(stringToBool(v))}
             >
               <Stack direction="row" spacing={6}>
                 <Radio value="ja">{t('ja')}</Radio>
@@ -162,7 +172,7 @@ export const FormIntakePulmanPage = () => {
               </Stack>
             </RadioGroup>
           </Flex>
-          {gezwachteld === 'ja' && (
+          {gezwachteld && (
             <Box
               mt={4}
               p={3}
@@ -198,7 +208,7 @@ export const FormIntakePulmanPage = () => {
           >
             <RadioGroup value={typePulman} onChange={setTypePulman}>
               <Stack direction="row" spacing={6}>
-                {PULMAN_TYPE_OPTIONS.map(option => (
+                {PULMAN_TYPE_OPTIES.map(option => (
                   <Radio key={option.value} value={option.value}>
                     {option.label}
                   </Radio>
@@ -227,7 +237,7 @@ export const FormIntakePulmanPage = () => {
           >
             <RadioGroup value={schoenmaat} onChange={setSchoenmaat}>
               <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
-                {SHOE_SIZES.map(size => (
+                {SCHOENMATEN.map(size => (
                   <Radio key={size} value={size}>
                     {size}
                   </Radio>
@@ -256,7 +266,7 @@ export const FormIntakePulmanPage = () => {
           >
             <RadioGroup value={afgegevenMaat} onChange={setAfgegevenMaat}>
               <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
-                {SHOE_SIZES.map(size => (
+                {SCHOENMATEN.map(size => (
                   <Radio key={size} value={size}>
                     {size}
                   </Radio>

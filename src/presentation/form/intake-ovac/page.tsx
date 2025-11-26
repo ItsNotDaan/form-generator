@@ -26,30 +26,38 @@ import {
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Routes } from '../../routes';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakeOVACData } from '@/domain/store/slices/formData';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeOVACData, setClientData } from '@/domain/store/slices/formData';
 import { OVAC_OMSCHRIJVING_ITEMS } from '@/presentation/form/constants/formConstants';
 
 export const FormIntakeOVACPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
+  const clientData = useAppSelector(state => state.formData.client);
 
   // State voor medische indicatie
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
 
-  // State voor omschrijving items met L/R
-  const [omschrijvingItems, setOmschrijvingItems] = useState<
-    Record<string, { links: boolean; rechts: boolean }>
-  >(
-    OVAC_OMSCHRIJVING_ITEMS.reduce(
-      (acc, item) => ({
-        ...acc,
-        [item.key]: { links: false, rechts: false },
-      }),
-      {}
-    )
-  );
+  // State voor omschrijving items - individuele velden per item en zijde
+  const [supplementIndividueelLinks, setSupplementIndividueelLinks] = useState(false);
+  const [supplementIndividueelRechts, setSupplementIndividueelRechts] = useState(false);
+  const [eenvoudigeAfwikkelrolLinks, setEenvoudigeAfwikkelrolLinks] = useState(false);
+  const [eenvoudigeAfwikkelrolRechts, setEenvoudigeAfwikkelrolRechts] = useState(false);
+  const [gecompliceerdeAfwikkelrolLinks, setGecompliceerdeAfwikkelrolLinks] = useState(false);
+  const [gecompliceerdeAfwikkelrolRechts, setGecompliceerdeAfwikkelrolRechts] = useState(false);
+  const [hakAanpassing2cmLinks, setHakAanpassing2cmLinks] = useState(false);
+  const [hakAanpassing2cmRechts, setHakAanpassing2cmRechts] = useState(false);
+  const [hakZoolVerhoging3cmLinks, setHakZoolVerhoging3cmLinks] = useState(false);
+  const [hakZoolVerhoging3cmRechts, setHakZoolVerhoging3cmRechts] = useState(false);
+  const [hakZoolVerhoging7cmLinks, setHakZoolVerhoging7cmLinks] = useState(false);
+  const [hakZoolVerhoging7cmRechts, setHakZoolVerhoging7cmRechts] = useState(false);
+  const [aangepastehakkenLinks, setAangepastehakkenLinks] = useState(false);
+  const [aangepastehakkenRechts, setAangepastehakkenRechts] = useState(false);
+  const [zoolverstijvingLinks, setZoolverstijvingLinks] = useState(false);
+  const [zoolverstijvingRechts, setZoolverstijvingRechts] = useState(false);
+  const [nieuweWreefsluitingLinks, setNieuweWreefsluitingLinks] = useState(false);
+  const [nieuweWreefsluitingRechts, setNieuweWreefsluitingRechts] = useState(false);
 
   // State voor verkorting
   const [verkortingLinks, setVerkortingLinks] = useState(false);
@@ -62,21 +70,76 @@ export const FormIntakeOVACPage = () => {
   // State voor bijzonderheden
   const [bijzonderheden, setBijzonderheden] = useState('');
 
-  const toggleOmschrijvingItem = (key: string, side: 'links' | 'rechts') => {
-    setOmschrijvingItems(prev => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        [side]: !prev[key][side],
+  // Helper functie om de juiste state getter/setter te krijgen voor een item en zijde
+  const getStateForItem = (key: string, side: 'links' | 'rechts'): [boolean, (value: boolean) => void] => {
+    const stateMap: Record<string, { links: [boolean, (v: boolean) => void]; rechts: [boolean, (v: boolean) => void] }> = {
+      supplementIndividueel: {
+        links: [supplementIndividueelLinks, setSupplementIndividueelLinks],
+        rechts: [supplementIndividueelRechts, setSupplementIndividueelRechts],
       },
-    }));
+      eenvoudigeAfwikkelrol: {
+        links: [eenvoudigeAfwikkelrolLinks, setEenvoudigeAfwikkelrolLinks],
+        rechts: [eenvoudigeAfwikkelrolRechts, setEenvoudigeAfwikkelrolRechts],
+      },
+      gecompliceerdeAfwikkelrol: {
+        links: [gecompliceerdeAfwikkelrolLinks, setGecompliceerdeAfwikkelrolLinks],
+        rechts: [gecompliceerdeAfwikkelrolRechts, setGecompliceerdeAfwikkelrolRechts],
+      },
+      hakAanpassing2cm: {
+        links: [hakAanpassing2cmLinks, setHakAanpassing2cmLinks],
+        rechts: [hakAanpassing2cmRechts, setHakAanpassing2cmRechts],
+      },
+      hakZoolVerhoging3cm: {
+        links: [hakZoolVerhoging3cmLinks, setHakZoolVerhoging3cmLinks],
+        rechts: [hakZoolVerhoging3cmRechts, setHakZoolVerhoging3cmRechts],
+      },
+      hakZoolVerhoging7cm: {
+        links: [hakZoolVerhoging7cmLinks, setHakZoolVerhoging7cmLinks],
+        rechts: [hakZoolVerhoging7cmRechts, setHakZoolVerhoging7cmRechts],
+      },
+      aangepastehakken: {
+        links: [aangepastehakkenLinks, setAangepastehakkenLinks],
+        rechts: [aangepastehakkenRechts, setAangepastehakkenRechts],
+      },
+      zoolverstijving: {
+        links: [zoolverstijvingLinks, setZoolverstijvingLinks],
+        rechts: [zoolverstijvingRechts, setZoolverstijvingRechts],
+      },
+      nieuweWreefsluiting: {
+        links: [nieuweWreefsluitingLinks, setNieuweWreefsluitingLinks],
+        rechts: [nieuweWreefsluitingRechts, setNieuweWreefsluitingRechts],
+      },
+    };
+    return stateMap[key][side];
   };
 
   const handleSubmit = () => {
+    // Update client data with intake type
+    if (clientData) {
+      dispatch(setClientData({ ...clientData, intakeType: 'OVAC' }));
+    }
+
     dispatch(
       setIntakeOVACData({
         medischeIndicatie,
-        omschrijvingItems,
+        supplementIndividueelLinks,
+        supplementIndividueelRechts,
+        eenvoudigeAfwikkelrolLinks,
+        eenvoudigeAfwikkelrolRechts,
+        gecompliceerdeAfwikkelrolLinks,
+        gecompliceerdeAfwikkelrolRechts,
+        hakAanpassing2cmLinks,
+        hakAanpassing2cmRechts,
+        hakZoolVerhoging3cmLinks,
+        hakZoolVerhoging3cmRechts,
+        hakZoolVerhoging7cmLinks,
+        hakZoolVerhoging7cmRechts,
+        aangepastehakkenLinks,
+        aangepastehakkenRechts,
+        zoolverstijvingLinks,
+        zoolverstijvingRechts,
+        nieuweWreefsluitingLinks,
+        nieuweWreefsluitingRechts,
         verkortingLinks,
         verkortingRechts,
         voorvoetCm,
@@ -155,34 +218,31 @@ export const FormIntakeOVACPage = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {OVAC_OMSCHRIJVING_ITEMS.map(item => (
-                    <Tr key={item.key}>
-                      <Td>{item.label}</Td>
-                      <Td textAlign="center">{item.postNr}</Td>
-                      <Td textAlign="center">
-                        <Checkbox
-                          isChecked={
-                            omschrijvingItems[item.key]?.rechts || false
-                          }
-                          onChange={() =>
-                            toggleOmschrijvingItem(item.key, 'rechts')
-                          }
-                          size="sm"
-                        />
-                      </Td>
-                      <Td textAlign="center">
-                        <Checkbox
-                          isChecked={
-                            omschrijvingItems[item.key]?.links || false
-                          }
-                          onChange={() =>
-                            toggleOmschrijvingItem(item.key, 'links')
-                          }
-                          size="sm"
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
+                  {OVAC_OMSCHRIJVING_ITEMS.map(item => {
+                    const [rechtsValue, setRechtsValue] = getStateForItem(item.key, 'rechts');
+                    const [linksValue, setLinksValue] = getStateForItem(item.key, 'links');
+
+                    return (
+                      <Tr key={item.key}>
+                        <Td>{item.label}</Td>
+                        <Td textAlign="center">{item.postNr}</Td>
+                        <Td textAlign="center">
+                          <Checkbox
+                            isChecked={rechtsValue}
+                            onChange={(e) => setRechtsValue(e.target.checked)}
+                            size="sm"
+                          />
+                        </Td>
+                        <Td textAlign="center">
+                          <Checkbox
+                            isChecked={linksValue}
+                            onChange={(e) => setLinksValue(e.target.checked)}
+                            size="sm"
+                          />
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
             </Box>
