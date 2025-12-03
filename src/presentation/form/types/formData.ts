@@ -39,7 +39,7 @@ export interface ClientData {
 
 export interface IntakeVLOSData {
   // Description/pair type
-  omschrijving?: string;
+  welkPaar?: string;
 
   // Side selection (both/left/right)
   side: Zijde;
@@ -123,7 +123,7 @@ export type IntakeOSAData = IntakeVLOSData;
 
 export interface IntakePulmanData {
   // Description/pair type
-  omschrijving?: string;
+  welkPaar?: string;
 
   // Side selection
   side: Zijde;
@@ -149,7 +149,7 @@ export interface IntakePulmanData {
 
 export interface IntakeRebacareData {
   // Description/pair type
-  omschrijving?: string;
+  welkPaar?: string;
 
   // Side selection
   side: Zijde;
@@ -173,7 +173,7 @@ export interface IntakeRebacareData {
 export interface IntakeOSBData {
   // Order information
   ordernummer?: string; // Order number
-  omschrijving?: string; // Description/pair type (single select)
+  welkPaar?: string; // Description/pair type (single select)
 
   // Medical indication
   medischeIndicatie?: string;
@@ -246,7 +246,7 @@ export interface IntakeOSBData {
 
 export interface IntakeOVACData {
   // Description/pair type
-  omschrijving?: string;
+  welkPaar?: string;
 
   // Medical indication
   medischeIndicatie?: string;

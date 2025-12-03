@@ -186,7 +186,7 @@ export const FormIntakeVLOSPage = () => {
     // Dispatch intake VLOS data naar Redux store
     dispatch(
       setIntakeVLOSData({
-        omschrijving,
+        welkPaar: omschrijving,
         side,
         schachthoogteLinks,
         schachthoogteRechts,
@@ -514,6 +514,98 @@ export const FormIntakeVLOSPage = () => {
                     </Flex>
                   ))}
                 </Stack>
+              </Box>
+            )}
+          </Flex>
+        </Box>
+
+        <Divider />
+
+        {/* Ezelsoor */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('ezelsoor')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            {showLinks && (
+              <Box flex={1}>
+                <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                  {t('links')}
+                </Text>
+                <RadioGroup
+                  value={boolToString(ezelsoorLinksEnabled)}
+                  onChange={(v) => setEzelsoorLinksEnabled(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4} mb={3}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.value)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+                {ezelsoorLinksEnabled && (
+                  <Select
+                    placeholder="Mediaal / Lateraal"
+                    value={ezelsoorLinksType}
+                    onChange={e => setEzelsoorLinksType(e.target.value)}
+                    size="sm"
+                  >
+                    {EZELSOOR_TYPE_OPTIES.map(opt => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </Box>
+            )}
+            {showRechts && (
+              <Box
+                flex={1}
+                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
+                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderColor="inherit"
+                pl={{ base: 0, md: showLinks ? 6 : 0 }}
+                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+              >
+                <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                  {t('rechts')}
+                </Text>
+                <RadioGroup
+                  value={boolToString(ezelsoorRechtsEnabled)}
+                  onChange={(v) => setEzelsoorRechtsEnabled(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4} mb={3}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.value)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+                {ezelsoorRechtsEnabled && (
+                  <Select
+                    placeholder="Mediaal / Lateraal"
+                    value={ezelsoorRechtsType}
+                    onChange={e => setEzelsoorRechtsType(e.target.value)}
+                    size="sm"
+                  >
+                    {EZELSOOR_TYPE_OPTIES.map(opt => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </Select>
+                )}
               </Box>
             )}
           </Flex>
@@ -987,98 +1079,6 @@ export const FormIntakeVLOSPage = () => {
                     size="sm"
                   >
                     {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-              </Box>
-            )}
-          </Flex>
-        </Box>
-
-        <Divider />
-
-        {/* Ezelsoor */}
-        <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('ezelsoor')}
-          </Text>
-          <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
-            border="1px solid"
-            borderColor="inherit"
-            borderRadius="md"
-            p={4}
-            mt={2}
-          >
-            {showLinks && (
-              <Box flex={1}>
-                <Text fontSize="sm" fontWeight="semibold" mb={2}>
-                  {t('links')}
-                </Text>
-                <RadioGroup
-                  value={boolToString(ezelsoorLinksEnabled)}
-                  onChange={(v) => setEzelsoorLinksEnabled(stringToBool(v))}
-                >
-                  <Stack direction="row" spacing={4} mb={3}>
-                    {JA_NEE_OPTIES.map(opt => (
-                      <Radio key={opt.value} value={opt.value}>
-                        {t(opt.value)}
-                      </Radio>
-                    ))}
-                  </Stack>
-                </RadioGroup>
-                {ezelsoorLinksEnabled && (
-                  <Select
-                    placeholder="Mediaal / Lateraal"
-                    value={ezelsoorLinksType}
-                    onChange={e => setEzelsoorLinksType(e.target.value)}
-                    size="sm"
-                  >
-                    {EZELSOOR_TYPE_OPTIES.map(opt => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-              </Box>
-            )}
-            {showRechts && (
-              <Box
-                flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
-                borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
-              >
-                <Text fontSize="sm" fontWeight="semibold" mb={2}>
-                  {t('rechts')}
-                </Text>
-                <RadioGroup
-                  value={boolToString(ezelsoorRechtsEnabled)}
-                  onChange={(v) => setEzelsoorRechtsEnabled(stringToBool(v))}
-                >
-                  <Stack direction="row" spacing={4} mb={3}>
-                    {JA_NEE_OPTIES.map(opt => (
-                      <Radio key={opt.value} value={opt.value}>
-                        {t(opt.value)}
-                      </Radio>
-                    ))}
-                  </Stack>
-                </RadioGroup>
-                {ezelsoorRechtsEnabled && (
-                  <Select
-                    placeholder="Mediaal / Lateraal"
-                    value={ezelsoorRechtsType}
-                    onChange={e => setEzelsoorRechtsType(e.target.value)}
-                    size="sm"
-                  >
-                    {EZELSOOR_TYPE_OPTIES.map(opt => (
                       <option key={opt.value} value={opt.value}>
                         {opt.label}
                       </option>

@@ -69,7 +69,7 @@ export const FormIntakeRebacarePage = () => {
 
     dispatch(
       setIntakeRebacareData({
-        omschrijving,
+        welkPaar: omschrijving,
         side,
         medischeIndicatie,
         gezwachteld,

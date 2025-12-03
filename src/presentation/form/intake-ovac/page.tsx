@@ -196,7 +196,7 @@ export const FormIntakeOVACPage = () => {
 
     dispatch(
       setIntakeOVACData({
-        omschrijving,
+        welkPaar: omschrijving,
         medischeIndicatie,
         supplementIndividueelLinks,
         supplementIndividueelRechts,

@@ -210,7 +210,7 @@ export const FormIntakeOSBPage = () => {
     dispatch(
       setIntakeOSBData({
         ordernummer,
-        omschrijving,
+        welkPaar: omschrijving,
         medischeIndicatie,
         doel,
         loopfunctie,

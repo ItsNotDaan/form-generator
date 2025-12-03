@@ -50,7 +50,7 @@ export const FormIntakeOSAPage = () => {
     const clientData = useAppSelector(state => state.formData.client);
 
     // State voor omschrijving/paartype
-    const [omschrijving, setOmschrijving] = useState<string>('Eerste paar');    // State voor Links/Rechts/Beide selectie (default: Beide)
+    const [welkPaar, setWelkPaar] = useState<string>('Eerste paar');    // State voor Links/Rechts/Beide selectie (default: Beide)
     const [side, setSide] = useState<Zijde>('beide');
 
     // State voor schachthoogte
@@ -184,7 +184,7 @@ export const FormIntakeOSAPage = () => {
         // Dispatch intake OSA data naar Redux store
         dispatch(
             setIntakeOSAData({
-                omschrijving,
+                welkPaar,
                 side,
                 schachthoogteLinks,
                 schachthoogteRechts,
@@ -248,7 +248,7 @@ export const FormIntakeOSAPage = () => {
                 {/* Omschrijving/Paartype */}
                 <Box>
                     <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-                        {t('omschrijving')}
+                        {t('welkPaar')}
                     </Text>
                     <Flex
                         gap={{ base: 4, md: 6 }}
@@ -260,7 +260,7 @@ export const FormIntakeOSAPage = () => {
                         mt={2}
                     >
                         <Box flex={1}>
-                            <RadioGroup value={omschrijving} onChange={setOmschrijving}>
+                            <RadioGroup value={welkPaar} onChange={setWelkPaar}>
                                 <Stack
                                     direction={{ base: "column", md: "row" }}
                                     spacing={4}

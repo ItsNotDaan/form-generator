@@ -94,7 +94,7 @@ export const FormIntakePulmanPage = () => {
 
     dispatch(
       setIntakePulmanData({
-        omschrijving,
+        welkPaar: omschrijving,
         side,
         medischeIndicatie,
         gezwachteld,

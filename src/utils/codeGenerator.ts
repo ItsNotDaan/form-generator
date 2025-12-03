@@ -110,8 +110,8 @@ function hasOmsluiting(omsluitingRecord: Record<string, boolean> | undefined): b
 /**
  * Determine if this is "eerste paar" (odd codes) or "herhaling/reserve paar" (even codes)
  */
-function isEerstePaar(omschrijving: string): boolean {
-    return omschrijving === 'Eerste paar';
+function isEerstePaar(welkPaar: string): boolean {
+    return welkPaar === 'Eerste paar';
 }
 
 /**
@@ -122,8 +122,8 @@ function generateVLOSCodes(
     codes: GeneratedCodes,
     warnings: string[]
 ): void {
-    const { side, omschrijving } = vlos;
-    const isEerste = isEerstePaar(omschrijving || '');
+    const { side, welkPaar } = vlos;
+    const isEerste = isEerstePaar(welkPaar || '');
 
     // Determine which sides are active
     const hasLinks = side === 'links' || side === 'beide';
@@ -179,8 +179,8 @@ function generateVLOSCodes(
     }
 
     // Validation warnings
-    if (!omschrijving) {
-        warnings.push('VLOS omschrijving (paartype) is niet ingevuld');
+    if (!welkPaar) {
+        warnings.push('VLOS welk paar (paartype) is niet ingevuld');
     }
 }
 
@@ -192,8 +192,8 @@ function generateOSACodes(
     codes: GeneratedCodes,
     warnings: string[]
 ): void {
-    const { side, omschrijving, schachthoogteLinks, schachthoogteRechts } = osa;
-    const isEerste = isEerstePaar(omschrijving || '');
+    const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
+    const isEerste = isEerstePaar(welkPaar || '');
 
     // Determine which sides are active
     const hasLinks = side === 'links' || side === 'beide';
@@ -269,8 +269,8 @@ function generateOSACodes(
     }
 
     // Validation warnings
-    if (!omschrijving) {
-        warnings.push('OSA omschrijving (paartype) is niet ingevuld');
+    if (!welkPaar) {
+        warnings.push('OSA welk paar (paartype) is niet ingevuld');
     }
 }
 
