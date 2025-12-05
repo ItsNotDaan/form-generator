@@ -1,16 +1,19 @@
 # Implementation Notes: Form Flow
 
 ## Overview
+
 This document describes the implementation of the complete form flow from new client creation to JSON output.
 
 ## Flow Description
 
 ### 1. New Client Form (`/new-client`)
+
 - User fills in all required client information
 - Data is saved to Redux store (`formData.client`)
 - Upon clicking "Save & Continue", user is redirected to `/form-selection`
 
 ### 2. Form Selection (`/form-selection`)
+
 - Displays all available intake forms:
   - VLOS
   - Pulman
@@ -22,11 +25,13 @@ This document describes the implementation of the complete form flow from new cl
 - Redirects to `/new-client` if no client data exists
 
 ### 3. Intake Forms (e.g., `/intake-vlos`)
+
 - User fills in the selected intake form
 - Data is saved to Redux store (e.g., `formData.intakeVLOS`)
 - Upon clicking "Save & Continue", user is redirected to `/form-results`
 
 ### 4. Results Page (`/form-results`)
+
 - Displays all submitted data in readable format
 - Shows JSON output with:
   - All client data
@@ -42,6 +47,7 @@ This document describes the implementation of the complete form flow from new cl
 ## Technical Implementation
 
 ### State Management
+
 - All form data is stored in Redux using `@reduxjs/toolkit`
 - Store structure:
   ```typescript
@@ -59,7 +65,9 @@ This document describes the implementation of the complete form flow from new cl
   ```
 
 ### JSON Generation
+
 The JSON output includes:
+
 1. All client data
 2. All filled intake form data
 3. All constants from `formConstants.ts` (practitioners, options, etc.)
@@ -68,12 +76,14 @@ The JSON output includes:
 ### Files Modified/Created
 
 #### New Files:
+
 - `src/pages/form-selection/index.tsx` - Page route for form selection
 - `src/presentation/form/form-selection/page.tsx` - Form selection component
 - `src/pages/form-results/index.tsx` - Page route for results
 - `src/presentation/form/form-results/page.tsx` - Results page component
 
 #### Modified Files:
+
 - `src/presentation/form/new-client/page.tsx` - Changed navigation to form-selection
 - `src/presentation/form/intake-vlos/page.tsx` - Changed navigation to form-results
 - `src/presentation/routes.ts` - Added new routes
@@ -82,6 +92,7 @@ The JSON output includes:
 ## Testing
 
 ### Manual Testing Steps:
+
 1. Navigate to `/new-client`
 2. Fill in all required fields
 3. Click "Save & Continue" → Should redirect to `/form-selection`
@@ -94,16 +105,19 @@ The JSON output includes:
 10. Paste clipboard content → Should contain complete JSON
 
 ### Dev Server Testing:
+
 The dev server runs successfully with all new pages compiling without errors.
 
 ## Notes
 
 ### Pre-existing Issues:
+
 - `intake-osb/page.tsx` has type errors (not related to this PR)
 - `intake-ovac/page.tsx` has type errors (not related to this PR)
 - These prevent the production build from succeeding but do not affect the functionality of the new pages
 
 ### Future Improvements:
+
 - Add validation for all intake forms before allowing navigation to results
 - Add ability to edit forms after viewing results
 - Add PDF generation from JSON data

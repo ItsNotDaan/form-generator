@@ -10,7 +10,14 @@ export interface ClientData {
   date: string;
 
   // Intake form type
-  intakeType?: 'VLOS' | 'OSA' | 'Pulman' | 'Rebacare' | 'OSB' | 'OVAC' | 'Steunzolen';
+  intakeType?:
+    | 'VLOS'
+    | 'OSA'
+    | 'Pulman'
+    | 'Rebacare'
+    | 'OSB'
+    | 'OVAC'
+    | 'Steunzolen';
 
   // Location
   location?: Locatie;

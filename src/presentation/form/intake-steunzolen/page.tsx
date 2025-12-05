@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -22,10 +22,13 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setIntakeSteunzolenData, setClientData } from '@/domain/store/slices/formData';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {
+  setIntakeSteunzolenData,
+  setClientData,
+} from '@/domain/store/slices/formData';
 import {
   PAARTYPE_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
@@ -37,7 +40,7 @@ import {
 
 export const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -57,11 +60,15 @@ export const FormIntakeSteunzolenPage = () => {
   const [steunzoolAndersText, setSteunzoolAndersText] = useState<string>('');
 
   // State voor correcties
-  const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] = useState<string>('');
-  const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] = useState<string>('');
+  const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] =
+    useState<string>('');
+  const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] =
+    useState<string>('');
   const [steunzoolVvPellote, setSteunzoolVvPellote] = useState<string>('');
-  const [steunzoolHakVerhogingLinks, setSteunzoolHakVerhogingLinks] = useState<string>('');
-  const [steunzoolHakVerhogingRechts, setSteunzoolHakVerhogingRechts] = useState<string>('');
+  const [steunzoolHakVerhogingLinks, setSteunzoolHakVerhogingLinks] =
+    useState<string>('');
+  const [steunzoolHakVerhogingRechts, setSteunzoolHakVerhogingRechts] =
+    useState<string>('');
 
   // State voor prijs (required) - numeric
   const [prijs, setPrijs] = useState<number>(225);
@@ -71,7 +78,9 @@ export const FormIntakeSteunzolenPage = () => {
   const [bijzonderheden, setBijzonderheden] = useState<string>('');
 
   // Check if Talonette is selected by checking if the selected price matches the Talonette option
-  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(opt => opt.label === 'prijsTalonette');
+  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(
+    opt => opt.label === 'prijsTalonette'
+  );
   const isTalonette = talonetteOption && prijs === talonetteOption.value;
 
   // Validation: check which required fields are missing
@@ -96,7 +105,10 @@ export const FormIntakeSteunzolenPage = () => {
 
     //If is Talonette, check the Hak Verhoging fields
     if (isTalonette) {
-      if (!steunzoolHakVerhogingLinks.trim() && !steunzoolHakVerhogingRechts.trim()) {
+      if (
+        !steunzoolHakVerhogingLinks.trim() &&
+        !steunzoolHakVerhogingRechts.trim()
+      ) {
         missing.push(t('steunzoolHakVerhogingCm'));
       }
     }
@@ -117,7 +129,7 @@ export const FormIntakeSteunzolenPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
+      dispatch(setClientData({...clientData, intakeType: 'Steunzolen'}));
     }
 
     dispatch(
@@ -125,7 +137,10 @@ export const FormIntakeSteunzolenPage = () => {
         welkPaar,
         medischeIndicatie,
         schoenmaat,
-        steunzoolTypeGeneral: steunzoolTypeGeneral === 'Anders' ? steunzoolAndersText : steunzoolTypeGeneral,
+        steunzoolTypeGeneral:
+          steunzoolTypeGeneral === 'Anders'
+            ? steunzoolAndersText
+            : steunzoolTypeGeneral,
         steunzoolCorrectieMiddenvoet,
         steunzoolCorrectieVoorvoet,
         steunzoolVvPellote,
@@ -153,17 +168,17 @@ export const FormIntakeSteunzolenPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('welkPaar')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -173,15 +188,12 @@ export const FormIntakeSteunzolenPage = () => {
             <Box flex={1}>
               <RadioGroup value={welkPaar} onChange={setWelkPaar}>
                 <Stack
-                  direction={{ base: "column", md: "row" }}
+                  direction={{base: 'column', md: 'row'}}
                   spacing={4}
                   flexWrap="wrap"
                 >
                   {PAARTYPE_OPTIES.map(option => (
-                    <Radio
-                      key={option.value}
-                      value={option.value}
-                    >
+                    <Radio key={option.value} value={option.value}>
                       {t(option.value.toLowerCase().replace(/ /g, ''))}
                     </Radio>
                   ))}
@@ -194,7 +206,7 @@ export const FormIntakeSteunzolenPage = () => {
         <Divider />
 
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('medischeIndicatie')}
           </Text>
           <FormControl>
@@ -202,7 +214,7 @@ export const FormIntakeSteunzolenPage = () => {
               placeholder={t('medischeIndicatiePlaceholder')}
               value={medischeIndicatie}
               onChange={e => setMedischeIndicatie(e.target.value)}
-              minH={{ base: '80px', md: '100px' }}
+              minH={{base: '80px', md: '100px'}}
             />
           </FormControl>
         </Box>
@@ -210,7 +222,7 @@ export const FormIntakeSteunzolenPage = () => {
         <Divider />
 
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('schoenmaat')} *
           </Text>
           <FormControl isRequired>
@@ -227,7 +239,7 @@ export const FormIntakeSteunzolenPage = () => {
 
         {/* Prijs moet eerst komen */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('steunzoolPrijs')} *
           </Text>
           <Box
@@ -237,14 +249,23 @@ export const FormIntakeSteunzolenPage = () => {
             p={4}
             mt={2}
           >
-            <RadioGroup value={prijs.toString()} onChange={(val) => {
-              setPrijs(Number(val));
-              const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(opt => opt.value === Number(val));
-              if (selectedOption) setPrijsNaam(t(selectedOption.label));
-            }}>
+            <RadioGroup
+              value={prijs.toString()}
+              onChange={val => {
+                setPrijs(Number(val));
+                const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(
+                  opt => opt.value === Number(val)
+                );
+                if (selectedOption) setPrijsNaam(t(selectedOption.label));
+              }}
+            >
               <Stack spacing={3}>
                 {STEUNZOLEN_PRIJS_OPTIES.map(option => (
-                  <Radio key={option.value} value={option.value.toString()} size="sm">
+                  <Radio
+                    key={option.value}
+                    value={option.value.toString()}
+                    size="sm"
+                  >
                     {t(option.label)}
                   </Radio>
                 ))}
@@ -258,7 +279,7 @@ export const FormIntakeSteunzolenPage = () => {
             <Divider />
 
             <Box>
-              <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+              <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
                 {t('steunzolen')} *
               </Text>
               <Box
@@ -273,10 +294,17 @@ export const FormIntakeSteunzolenPage = () => {
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
                       {t('steunzoolTypeGeneral')}
                     </Text>
-                    <RadioGroup value={steunzoolTypeGeneral} onChange={setSteunzoolTypeGeneral}>
+                    <RadioGroup
+                      value={steunzoolTypeGeneral}
+                      onChange={setSteunzoolTypeGeneral}
+                    >
                       <Stack spacing={2}>
                         {STEUNZOOL_TYPE_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -299,10 +327,17 @@ export const FormIntakeSteunzolenPage = () => {
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
                       {t('steunzoolCorrectieMiddenvoet')}
                     </Text>
-                    <RadioGroup value={steunzoolCorrectieMiddenvoet} onChange={setSteunzoolCorrectieMiddenvoet}>
+                    <RadioGroup
+                      value={steunzoolCorrectieMiddenvoet}
+                      onChange={setSteunzoolCorrectieMiddenvoet}
+                    >
                       <Stack spacing={2}>
                         {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -316,10 +351,17 @@ export const FormIntakeSteunzolenPage = () => {
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
                       {t('steunzoolCorrectieVoorvoet')}
                     </Text>
-                    <RadioGroup value={steunzoolCorrectieVoorvoet} onChange={setSteunzoolCorrectieVoorvoet}>
+                    <RadioGroup
+                      value={steunzoolCorrectieVoorvoet}
+                      onChange={setSteunzoolCorrectieVoorvoet}
+                    >
                       <Stack spacing={2}>
                         {CORRECTIE_VOORVOET_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -333,10 +375,17 @@ export const FormIntakeSteunzolenPage = () => {
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
                       {t('steunzoolVvPellote')}
                     </Text>
-                    <RadioGroup value={steunzoolVvPellote} onChange={setSteunzoolVvPellote}>
+                    <RadioGroup
+                      value={steunzoolVvPellote}
+                      onChange={setSteunzoolVvPellote}
+                    >
                       <Stack spacing={2}>
                         {PELLOTE_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -350,14 +399,16 @@ export const FormIntakeSteunzolenPage = () => {
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
                       {t('steunzoolHakVerhogingCm')}
                     </Text>
-                    <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
+                    <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
                       <FormControl>
                         <FormLabel fontSize="sm">{t('links')}</FormLabel>
                         <Input
                           type="number"
                           placeholder={t('hakVerhogingPlaceholder')}
                           value={steunzoolHakVerhogingLinks}
-                          onChange={e => setSteunzoolHakVerhogingLinks(e.target.value)}
+                          onChange={e =>
+                            setSteunzoolHakVerhogingLinks(e.target.value)
+                          }
                           size="sm"
                         />
                       </FormControl>
@@ -367,7 +418,9 @@ export const FormIntakeSteunzolenPage = () => {
                           type="number"
                           placeholder={t('hakVerhogingPlaceholder')}
                           value={steunzoolHakVerhogingRechts}
-                          onChange={e => setSteunzoolHakVerhogingRechts(e.target.value)}
+                          onChange={e =>
+                            setSteunzoolHakVerhogingRechts(e.target.value)
+                          }
                           size="sm"
                         />
                       </FormControl>
@@ -384,7 +437,7 @@ export const FormIntakeSteunzolenPage = () => {
             <Divider />
 
             <Box>
-              <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+              <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
                 {t('steunzoolHakVerhogingCm')}
               </Text>
               <Box
@@ -394,14 +447,16 @@ export const FormIntakeSteunzolenPage = () => {
                 p={4}
                 mt={2}
               >
-                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
+                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
                   <FormControl>
                     <FormLabel fontSize="sm">{t('links')}</FormLabel>
                     <Input
                       type="number"
                       placeholder={t('hakVerhogingPlaceholder')}
                       value={steunzoolHakVerhogingLinks}
-                      onChange={e => setSteunzoolHakVerhogingLinks(e.target.value)}
+                      onChange={e =>
+                        setSteunzoolHakVerhogingLinks(e.target.value)
+                      }
                       size="sm"
                     />
                   </FormControl>
@@ -411,7 +466,9 @@ export const FormIntakeSteunzolenPage = () => {
                       type="number"
                       placeholder={t('hakVerhogingPlaceholder')}
                       value={steunzoolHakVerhogingRechts}
-                      onChange={e => setSteunzoolHakVerhogingRechts(e.target.value)}
+                      onChange={e =>
+                        setSteunzoolHakVerhogingRechts(e.target.value)
+                      }
                       size="sm"
                     />
                   </FormControl>
@@ -424,14 +481,14 @@ export const FormIntakeSteunzolenPage = () => {
         <Divider />
 
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
             {t('bijzonderheden')}
           </Text>
           <Textarea
             placeholder={t('bijzonderhedenPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{ base: '100px', md: '120px' }}
+            minH={{base: '100px', md: '120px'}}
           />
         </Box>
 
@@ -439,7 +496,9 @@ export const FormIntakeSteunzolenPage = () => {
           <Alert status="warning" borderRadius="md">
             <AlertIcon />
             <Box>
-              <Text fontWeight="bold" mb={2}>{t('vulVerplichteVeldenIn')}</Text>
+              <Text fontWeight="bold" mb={2}>
+                {t('vulVerplichteVeldenIn')}
+              </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
                   <ListItem key={index}>{field}</ListItem>
@@ -449,11 +508,11 @@ export const FormIntakeSteunzolenPage = () => {
           </Alert>
         )}
 
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{ base: 'full', sm: 'auto' }}
+            w={{base: 'full', sm: 'auto'}}
           >
             Opslaan en doorgaan
           </Button>

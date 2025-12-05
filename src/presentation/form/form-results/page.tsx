@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -18,15 +18,15 @@ import {
   ListItem,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
-import { useAppSelector } from '@/domain/store/hooks';
-import { BEHANDELAARS } from '@/presentation/form/constants/formConstants';
-import { generateCodes } from '@/utils/codeGenerator';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
+import {useAppSelector} from '@/domain/store/hooks';
+import {BEHANDELAARS} from '@/presentation/form/constants/formConstants';
+import {generateCodes} from '@/utils/codeGenerator';
 
 export const FormResultsPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const toast = useToast();
   const formData = useAppSelector(state => state.formData);
 
@@ -77,11 +77,11 @@ export const FormResultsPage = () => {
     // Resolve practitioner ID to name
     const resolvedClientData = formData.client
       ? normalizeObject({
-        ...formData.client,
-        practitionerName:
-          BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-            ?.label || formData.client?.practitionerId,
-      })
+          ...formData.client,
+          practitionerName:
+            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+              ?.label || formData.client?.practitionerId,
+        })
       : null;
 
     // Build result object with only non-null intake forms
@@ -114,15 +114,18 @@ export const FormResultsPage = () => {
 
     // Generate medical codes if applicable
     if (formData.client && (formData.intakeVLOS || formData.intakeOSA)) {
-      const { codes, warnings, generalBasiscode } = generateCodes(formData.client, {
-        intakeVLOS: formData.intakeVLOS,
-        intakeOSA: formData.intakeOSA,
-        intakePulman: formData.intakePulman,
-        intakeRebacare: formData.intakeRebacare,
-        intakeOSB: formData.intakeOSB,
-        intakeOVAC: formData.intakeOVAC,
-        intakeSteunzolen: formData.intakeSteunzolen,
-      });
+      const {codes, warnings, generalBasiscode} = generateCodes(
+        formData.client,
+        {
+          intakeVLOS: formData.intakeVLOS,
+          intakeOSA: formData.intakeOSA,
+          intakePulman: formData.intakePulman,
+          intakeRebacare: formData.intakeRebacare,
+          intakeOSB: formData.intakeOSB,
+          intakeOVAC: formData.intakeOVAC,
+          intakeSteunzolen: formData.intakeSteunzolen,
+        }
+      );
 
       // Group normalized codes under medicalCodes object
       result.medicalCodes = normalizeObject(codes);
@@ -217,9 +220,9 @@ export const FormResultsPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         <Box>
           <Heading size="lg" mb={2}>

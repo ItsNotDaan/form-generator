@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -28,10 +28,10 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setIntakeOVACData, setClientData } from '@/domain/store/slices/formData';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setIntakeOVACData, setClientData} from '@/domain/store/slices/formData';
 import {
   OVAC_OMSCHRIJVING_ITEMS,
   PAARTYPE_OPTIES,
@@ -44,7 +44,7 @@ import {
 
 export const FormIntakeOVACPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -55,24 +55,36 @@ export const FormIntakeOVACPage = () => {
   const [medischeIndicatie, setMedischeIndicatie] = useState('');
 
   // State voor omschrijving items - individuele velden per item en zijde
-  const [supplementIndividueelLinks, setSupplementIndividueelLinks] = useState(false);
-  const [supplementIndividueelRechts, setSupplementIndividueelRechts] = useState(false);
-  const [eenvoudigeAfwikkelrolLinks, setEenvoudigeAfwikkelrolLinks] = useState(false);
-  const [eenvoudigeAfwikkelrolRechts, setEenvoudigeAfwikkelrolRechts] = useState(false);
-  const [gecompliceerdeAfwikkelrolLinks, setGecompliceerdeAfwikkelrolLinks] = useState(false);
-  const [gecompliceerdeAfwikkelrolRechts, setGecompliceerdeAfwikkelrolRechts] = useState(false);
+  const [supplementIndividueelLinks, setSupplementIndividueelLinks] =
+    useState(false);
+  const [supplementIndividueelRechts, setSupplementIndividueelRechts] =
+    useState(false);
+  const [eenvoudigeAfwikkelrolLinks, setEenvoudigeAfwikkelrolLinks] =
+    useState(false);
+  const [eenvoudigeAfwikkelrolRechts, setEenvoudigeAfwikkelrolRechts] =
+    useState(false);
+  const [gecompliceerdeAfwikkelrolLinks, setGecompliceerdeAfwikkelrolLinks] =
+    useState(false);
+  const [gecompliceerdeAfwikkelrolRechts, setGecompliceerdeAfwikkelrolRechts] =
+    useState(false);
   const [hakAanpassing2cmLinks, setHakAanpassing2cmLinks] = useState(false);
   const [hakAanpassing2cmRechts, setHakAanpassing2cmRechts] = useState(false);
-  const [hakZoolVerhoging3cmLinks, setHakZoolVerhoging3cmLinks] = useState(false);
-  const [hakZoolVerhoging3cmRechts, setHakZoolVerhoging3cmRechts] = useState(false);
-  const [hakZoolVerhoging7cmLinks, setHakZoolVerhoging7cmLinks] = useState(false);
-  const [hakZoolVerhoging7cmRechts, setHakZoolVerhoging7cmRechts] = useState(false);
+  const [hakZoolVerhoging3cmLinks, setHakZoolVerhoging3cmLinks] =
+    useState(false);
+  const [hakZoolVerhoging3cmRechts, setHakZoolVerhoging3cmRechts] =
+    useState(false);
+  const [hakZoolVerhoging7cmLinks, setHakZoolVerhoging7cmLinks] =
+    useState(false);
+  const [hakZoolVerhoging7cmRechts, setHakZoolVerhoging7cmRechts] =
+    useState(false);
   const [aangepastehakkenLinks, setAangepastehakkenLinks] = useState(false);
   const [aangepastehakkenRechts, setAangepastehakkenRechts] = useState(false);
   const [zoolverstijvingLinks, setZoolverstijvingLinks] = useState(false);
   const [zoolverstijvingRechts, setZoolverstijvingRechts] = useState(false);
-  const [nieuweWreefsluitingLinks, setNieuweWreefsluitingLinks] = useState(false);
-  const [nieuweWreefsluitingRechts, setNieuweWreefsluitingRechts] = useState(false);
+  const [nieuweWreefsluitingLinks, setNieuweWreefsluitingLinks] =
+    useState(false);
+  const [nieuweWreefsluitingRechts, setNieuweWreefsluitingRechts] =
+    useState(false);
 
   // State voor verkorting
   const [verkortingLinks, setVerkortingLinks] = useState(false);
@@ -90,21 +102,39 @@ export const FormIntakeOVACPage = () => {
   const [schoenmaat, setSchoenmaat] = useState('');
   const [steunzoolTypeGeneral, setSteunzoolTypeGeneral] = useState('');
   const [steunzoolAndersText, setSteunzoolAndersText] = useState('');
-  const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] = useState('');
-  const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] = useState('');
+  const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] =
+    useState('');
+  const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] =
+    useState('');
   const [steunzoolVvPellote, setSteunzoolVvPellote] = useState('');
-  const [steunzoolHakVerhogingLinks, setSteunzoolHakVerhogingLinks] = useState('');
-  const [steunzoolHakVerhogingRechts, setSteunzoolHakVerhogingRechts] = useState('');
+  const [steunzoolHakVerhogingLinks, setSteunzoolHakVerhogingLinks] =
+    useState('');
+  const [steunzoolHakVerhogingRechts, setSteunzoolHakVerhogingRechts] =
+    useState('');
   const [steunzoolPrijs, setSteunzoolPrijs] = useState<number>(225);
-  const [steunzoolPrijsNaam, setSteunzoolPrijsNaam] = useState<string>(t('prijsSteunzolen225'));
+  const [steunzoolPrijsNaam, setSteunzoolPrijsNaam] = useState<string>(
+    t('prijsSteunzolen225')
+  );
 
   // Check if Talonette is selected by checking if the selected price matches the Talonette option
-  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(opt => opt.label === 'prijsTalonette');
-  const isSteunzolenTalonette = talonetteOption && steunzoolPrijs === talonetteOption.value;
+  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(
+    opt => opt.label === 'prijsTalonette'
+  );
+  const isSteunzolenTalonette =
+    talonetteOption && steunzoolPrijs === talonetteOption.value;
 
   // Helper functie om de juiste state getter/setter te krijgen voor een item en zijde
-  const getStateForItem = (key: string, side: 'links' | 'rechts'): [boolean, (value: boolean) => void] => {
-    const stateMap: Record<string, { links: [boolean, (v: boolean) => void]; rechts: [boolean, (v: boolean) => void] }> = {
+  const getStateForItem = (
+    key: string,
+    side: 'links' | 'rechts'
+  ): [boolean, (value: boolean) => void] => {
+    const stateMap: Record<
+      string,
+      {
+        links: [boolean, (v: boolean) => void];
+        rechts: [boolean, (v: boolean) => void];
+      }
+    > = {
       supplementIndividueel: {
         links: [supplementIndividueelLinks, setSupplementIndividueelLinks],
         rechts: [supplementIndividueelRechts, setSupplementIndividueelRechts],
@@ -114,8 +144,14 @@ export const FormIntakeOVACPage = () => {
         rechts: [eenvoudigeAfwikkelrolRechts, setEenvoudigeAfwikkelrolRechts],
       },
       gecompliceerdeAfwikkelrol: {
-        links: [gecompliceerdeAfwikkelrolLinks, setGecompliceerdeAfwikkelrolLinks],
-        rechts: [gecompliceerdeAfwikkelrolRechts, setGecompliceerdeAfwikkelrolRechts],
+        links: [
+          gecompliceerdeAfwikkelrolLinks,
+          setGecompliceerdeAfwikkelrolLinks,
+        ],
+        rechts: [
+          gecompliceerdeAfwikkelrolRechts,
+          setGecompliceerdeAfwikkelrolRechts,
+        ],
       },
       hakAanpassing2cm: {
         links: [hakAanpassing2cmLinks, setHakAanpassing2cmLinks],
@@ -169,7 +205,10 @@ export const FormIntakeOVACPage = () => {
 
       // If is Talonette, check the Hak Verhoging fields
       if (isSteunzolenTalonette) {
-        if (!steunzoolHakVerhogingLinks.trim() && !steunzoolHakVerhogingRechts.trim()) {
+        if (
+          !steunzoolHakVerhogingLinks.trim() &&
+          !steunzoolHakVerhogingRechts.trim()
+        ) {
           missing.push(t('steunzoolHakVerhogingCm'));
         }
       }
@@ -191,7 +230,7 @@ export const FormIntakeOVACPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'OVAC' }));
+      dispatch(setClientData({...clientData, intakeType: 'OVAC'}));
     }
 
     dispatch(
@@ -220,7 +259,10 @@ export const FormIntakeOVACPage = () => {
         verkortingRechts,
         voorvoetCm,
         hielCm,
-        steunzoolTypeGeneral: steunzoolTypeGeneral === 'Anders' ? steunzoolAndersText : steunzoolTypeGeneral,
+        steunzoolTypeGeneral:
+          steunzoolTypeGeneral === 'Anders'
+            ? steunzoolAndersText
+            : steunzoolTypeGeneral,
         steunzoolCorrectieMiddenvoet,
         steunzoolCorrectieVoorvoet,
         steunzoolVvPellote,
@@ -248,18 +290,18 @@ export const FormIntakeOVACPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         {/* Omschrijving/Paartype */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('welkPaar')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -269,15 +311,12 @@ export const FormIntakeOVACPage = () => {
             <Box flex={1}>
               <RadioGroup value={omschrijving} onChange={setOmschrijving}>
                 <Stack
-                  direction={{ base: "column", md: "row" }}
+                  direction={{base: 'column', md: 'row'}}
                   spacing={4}
                   flexWrap="wrap"
                 >
                   {PAARTYPE_OPTIES.map(option => (
-                    <Radio
-                      key={option.value}
-                      value={option.value}
-                    >
+                    <Radio key={option.value} value={option.value}>
                       {t(option.value.toLowerCase().replace(/ /g, ''))}
                     </Radio>
                   ))}
@@ -291,11 +330,11 @@ export const FormIntakeOVACPage = () => {
 
         {/* Medische Indicatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('medischeIndicatie')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -307,7 +346,7 @@ export const FormIntakeOVACPage = () => {
               placeholder={t('medischeIndicatiePlaceholder')}
               value={medischeIndicatie}
               onChange={e => setMedischeIndicatie(e.target.value)}
-              minH={{ base: '80px', md: '100px' }}
+              minH={{base: '80px', md: '100px'}}
             />
           </Flex>
         </Box>
@@ -316,11 +355,11 @@ export const FormIntakeOVACPage = () => {
 
         {/* Omschrijving Tabel */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             Omschrijving
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -340,8 +379,14 @@ export const FormIntakeOVACPage = () => {
                 </Thead>
                 <Tbody>
                   {OVAC_OMSCHRIJVING_ITEMS.map(item => {
-                    const [rechtsValue, setRechtsValue] = getStateForItem(item.key, 'rechts');
-                    const [linksValue, setLinksValue] = getStateForItem(item.key, 'links');
+                    const [rechtsValue, setRechtsValue] = getStateForItem(
+                      item.key,
+                      'rechts'
+                    );
+                    const [linksValue, setLinksValue] = getStateForItem(
+                      item.key,
+                      'links'
+                    );
 
                     return (
                       <Tr key={item.key}>
@@ -350,14 +395,14 @@ export const FormIntakeOVACPage = () => {
                         <Td textAlign="center">
                           <Checkbox
                             isChecked={rechtsValue}
-                            onChange={(e) => setRechtsValue(e.target.checked)}
+                            onChange={e => setRechtsValue(e.target.checked)}
                             size="sm"
                           />
                         </Td>
                         <Td textAlign="center">
                           <Checkbox
                             isChecked={linksValue}
-                            onChange={(e) => setLinksValue(e.target.checked)}
+                            onChange={e => setLinksValue(e.target.checked)}
                             size="sm"
                           />
                         </Td>
@@ -374,12 +419,12 @@ export const FormIntakeOVACPage = () => {
 
         {/* Verkorting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             Verkorting
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -401,7 +446,7 @@ export const FormIntakeOVACPage = () => {
                 L
               </Checkbox>
             </Stack>
-            <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} flex={1}>
+            <SimpleGrid columns={{base: 1, sm: 2}} spacing={4} flex={1}>
               <FormControl>
                 <FormLabel fontSize="sm">Voorvoet (cm)</FormLabel>
                 <Input
@@ -430,12 +475,12 @@ export const FormIntakeOVACPage = () => {
 
         {/* Steunzolen (Optional) */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('steunzolenSection')}
           </Text>
           <RadioGroup
             value={steunzolenEnabled ? 'yes' : 'no'}
-            onChange={(val) => setSteunzolenEnabled(val === 'yes')}
+            onChange={val => setSteunzolenEnabled(val === 'yes')}
             mb={4}
           >
             <Stack direction="row" spacing={4}>
@@ -446,7 +491,7 @@ export const FormIntakeOVACPage = () => {
 
           {steunzolenEnabled && (
             <Flex
-              gap={{ base: 4, md: 6 }}
+              gap={{base: 4, md: 6}}
               direction="column"
               border="1px solid"
               borderColor="inherit"
@@ -472,14 +517,24 @@ export const FormIntakeOVACPage = () => {
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolPrijs')} *
                 </Text>
-                <RadioGroup value={steunzoolPrijs.toString()} onChange={(val) => {
-                  setSteunzoolPrijs(Number(val));
-                  const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(opt => opt.value === Number(val));
-                  if (selectedOption) setSteunzoolPrijsNaam(t(selectedOption.label));
-                }}>
+                <RadioGroup
+                  value={steunzoolPrijs.toString()}
+                  onChange={val => {
+                    setSteunzoolPrijs(Number(val));
+                    const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(
+                      opt => opt.value === Number(val)
+                    );
+                    if (selectedOption)
+                      setSteunzoolPrijsNaam(t(selectedOption.label));
+                  }}
+                >
                   <Stack spacing={2}>
                     {STEUNZOLEN_PRIJS_OPTIES.map(option => (
-                      <Radio key={option.value} value={option.value.toString()} size="sm">
+                      <Radio
+                        key={option.value}
+                        value={option.value.toString()}
+                        size="sm"
+                      >
                         {t(option.label)}
                       </Radio>
                     ))}
@@ -495,10 +550,17 @@ export const FormIntakeOVACPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('steunzoolTypeGeneral')}
                     </Text>
-                    <RadioGroup value={steunzoolTypeGeneral} onChange={setSteunzoolTypeGeneral}>
+                    <RadioGroup
+                      value={steunzoolTypeGeneral}
+                      onChange={setSteunzoolTypeGeneral}
+                    >
                       <Stack spacing={2}>
                         {STEUNZOOL_TYPE_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -521,10 +583,17 @@ export const FormIntakeOVACPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('steunzoolCorrectieMiddenvoet')}
                     </Text>
-                    <RadioGroup value={steunzoolCorrectieMiddenvoet} onChange={setSteunzoolCorrectieMiddenvoet}>
+                    <RadioGroup
+                      value={steunzoolCorrectieMiddenvoet}
+                      onChange={setSteunzoolCorrectieMiddenvoet}
+                    >
                       <Stack spacing={2}>
                         {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -538,10 +607,17 @@ export const FormIntakeOVACPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('steunzoolCorrectieVoorvoet')}
                     </Text>
-                    <RadioGroup value={steunzoolCorrectieVoorvoet} onChange={setSteunzoolCorrectieVoorvoet}>
+                    <RadioGroup
+                      value={steunzoolCorrectieVoorvoet}
+                      onChange={setSteunzoolCorrectieVoorvoet}
+                    >
                       <Stack spacing={2}>
                         {CORRECTIE_VOORVOET_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -555,10 +631,17 @@ export const FormIntakeOVACPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('steunzoolVvPellote')}
                     </Text>
-                    <RadioGroup value={steunzoolVvPellote} onChange={setSteunzoolVvPellote}>
+                    <RadioGroup
+                      value={steunzoolVvPellote}
+                      onChange={setSteunzoolVvPellote}
+                    >
                       <Stack spacing={2}>
                         {PELLOTE_OPTIES.map(option => (
-                          <Radio key={option.value} value={option.value} size="sm">
+                          <Radio
+                            key={option.value}
+                            value={option.value}
+                            size="sm"
+                          >
                             {option.label}
                           </Radio>
                         ))}
@@ -574,14 +657,16 @@ export const FormIntakeOVACPage = () => {
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolHakVerhogingCm')}
                 </Text>
-                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
+                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
                   <FormControl>
                     <FormLabel fontSize="sm">{t('links')}</FormLabel>
                     <Input
                       type="number"
                       placeholder={t('hakVerhogingPlaceholder')}
                       value={steunzoolHakVerhogingLinks}
-                      onChange={e => setSteunzoolHakVerhogingLinks(e.target.value)}
+                      onChange={e =>
+                        setSteunzoolHakVerhogingLinks(e.target.value)
+                      }
                       size="sm"
                     />
                   </FormControl>
@@ -591,7 +676,9 @@ export const FormIntakeOVACPage = () => {
                       type="number"
                       placeholder={t('hakVerhogingPlaceholder')}
                       value={steunzoolHakVerhogingRechts}
-                      onChange={e => setSteunzoolHakVerhogingRechts(e.target.value)}
+                      onChange={e =>
+                        setSteunzoolHakVerhogingRechts(e.target.value)
+                      }
                       size="sm"
                     />
                   </FormControl>
@@ -605,14 +692,14 @@ export const FormIntakeOVACPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
             {t('bijzonderheden')}
           </Text>
           <Textarea
             placeholder={t('bijzonderhedenPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{ base: '100px', md: '120px' }}
+            minH={{base: '100px', md: '120px'}}
           />
         </Box>
 
@@ -620,7 +707,9 @@ export const FormIntakeOVACPage = () => {
           <Alert status="warning" borderRadius="md">
             <AlertIcon />
             <Box>
-              <Text fontWeight="bold" mb={2}>{t('vulVerplichteVeldenIn')}</Text>
+              <Text fontWeight="bold" mb={2}>
+                {t('vulVerplichteVeldenIn')}
+              </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
                   <ListItem key={index}>{field}</ListItem>
@@ -631,11 +720,11 @@ export const FormIntakeOVACPage = () => {
         )}
 
         {/* Submit button */}
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{ base: 'full', sm: 'auto' }}
+            w={{base: 'full', sm: 'auto'}}
           >
             Opslaan en doorgaan
           </Button>
