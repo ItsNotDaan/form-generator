@@ -3,7 +3,6 @@
 const nextTranslate = require('next-translate-plugin');
 
 const baseConfigs = {
-  output: 'export',
   reactStrictMode: true,
   env: {
     NEXT_PUBLIC_CROSS_SITE_COOKIES: process.env.NEXT_PUBLIC_CROSS_SITE_COOKIES,
@@ -11,4 +10,4 @@ const baseConfigs = {
   },
 };
 
-module.exports = nextTranslate(baseConfigs);
+module.exports = baseConfigs;
