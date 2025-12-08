@@ -18,6 +18,7 @@ module.exports = {
     '/form-selection': ['form'],
     '/form-results': ['form'],
     '/intake-vlos': ['form'],
+    '/intake-osa': ['form'],
     '/intake-pulman': ['form'],
     '/intake-rebacare': ['form'],
     '/intake-osb': ['form'],

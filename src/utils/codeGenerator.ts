@@ -4,15 +4,18 @@
  * Generates boolean keys for medical codes for Word document mail merge.
  *
  * Code definitions:
- * - 1: VLOS voor één kant (links OF rechts)
- * - 2: VLOS voor beide kanten
- * - 3: Laag OSA (<12cm schachthoogte) voor één kant
- * - 4: Laag OSA (<12cm schachthoogte) voor beide kanten
- * - 5: Half-hoog OSA (12-18cm schachthoogte) voor één kant
- * - 6: Half-hoog OSA (12-18cm schachthoogte) voor beide kanten
- * - 7: Hoog OSA (>18cm schachthoogte) voor één kant
- * - 8: Hoog OSA (>18cm schachthoogte) voor beide kanten
- * - 9: Proefschoen (auto-generated with VLOS/OSA) per side
+ * ---MAIN CODES---
+ * - 1: VLOS eerste paar
+ * - 2: VLOS herhaling/reservepaar
+ * - 3: Laag OSA (<12cm schachthoogte) eerste paar
+ * - 4: Laag OSA (<12cm schachthoogte) herhaling/reservepaar
+ * - 5: Half-hoog OSA (12-18cm schachthoogte) eerste paar
+ * - 6: Half-hoog OSA (12-18cm schachthoogte) herhaling/reservepaar
+ * - 7: Hoog OSA (>18cm schachthoogte) eerste paar
+ * - 8: Hoog OSA (>18cm schachthoogte) herhaling/reservepaar
+ * 
+ * --ADDITIONAL CODES---
+ * - 9: Proefschoen (only for high OSA code 07 + code 17 for Achmea, DSW, ASR) per side
  * - 10: (placeholder - not implemented)
  * - 11: (placeholder - not implemented)
  * - 14: Aanvulling lengte/breedte (placeholder - not implemented)
@@ -37,6 +40,7 @@ export interface GeneratedCodes {
   code06: boolean;
   code07: boolean;
   code08: boolean;
+
   code09Links: boolean;
   code09Rechts: boolean;
   code10Links: boolean;
@@ -105,6 +109,8 @@ function initializeCodes(): GeneratedCodes {
 
 /**
  * Check if any omsluiting option is checked for a side
+ * If omsluitingRecord is undefined or null, return false
+ * Else return true if any value in the record is true
  */
 function hasOmsluiting(
   omsluitingRecord: Record<string, boolean> | undefined
@@ -115,10 +121,21 @@ function hasOmsluiting(
 
 /**
  * Determine if this is "eerste paar" (odd codes) or "herhaling/reserve paar" (even codes)
+ * Privepaar will also give eerste paar
  */
 function isEerstePaar(welkPaar: string): boolean {
-  return welkPaar === 'Eerste paar';
+  return welkPaar === 'Eerste paar' || welkPaar === 'Privepaar';
 }
+
+/**
+ * Check if insurance company should get proefschoen code (Code 9)
+ * Code 9 is only generated for Achmea, DSW, and ASR when code 07 + 17 are present
+ */
+function shouldGenerateProefschoen(insurance: string): boolean {
+  const eligibleInsurers = ['Achmea', 'DSW', 'ASR'];
+  return eligibleInsurers.includes(insurance);
+}
+
 
 /**
  * Generate codes for VLOS intake
@@ -126,9 +143,12 @@ function isEerstePaar(welkPaar: string): boolean {
 function generateVLOSCodes(
   vlos: IntakeVLOSData,
   codes: GeneratedCodes,
-  warnings: string[]
+  warnings: string[],
+  insurance: string
 ): void {
-  const {side, welkPaar} = vlos;
+  const { side, welkPaar } = vlos;
+
+  // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -136,20 +156,12 @@ function generateVLOSCodes(
   const hasRechts = side === 'rechts' || side === 'beide';
 
   // Code 1/2: VLOS base codes
-  // Code 1 = één VLOS (links OF rechts)
-  // Code 2 = VLOS voor beide kanten
-  if (side === 'beide') {
-    codes.code02 = true;
-  } else {
+  // Code 1 = VLOS eerste paar
+  // Code 2 = VLOS herhaling/reservepaar
+  if (isEerste) {
     codes.code01 = true;
-  }
-
-  // Code 9: Proefschoen (auto-generated with VLOS)
-  if (hasLinks) {
-    codes.code09Links = true;
-  }
-  if (hasRechts) {
-    codes.code09Rechts = true;
+  } else {
+    codes.code02 = true;
   }
 
   // Code 15: Zoolverstijving
@@ -200,9 +212,10 @@ function generateVLOSCodes(
 function generateOSACodes(
   osa: IntakeOSAData,
   codes: GeneratedCodes,
-  warnings: string[]
+  warnings: string[],
+  insurance: string
 ): void {
-  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
+  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -217,38 +230,28 @@ function generateOSACodes(
   // < 12cm = laag (codes 3/4)
   // 12-18cm = half-hoog (codes 5/6)
   // > 18cm = hoog (codes 7/8)
-  // Odd code (3/5/7) = één kant, Even code (4/6/8) = beide kanten
+  // Odd code (3/5/7) = eerste paar, Even code (4/6/8) = herhaling/reservepaar
 
   const maxHeight =
     side === 'beide'
       ? Math.max(heightLinks, heightRechts)
       : side === 'links'
-      ? heightLinks
-      : heightRechts;
+        ? heightLinks
+        : heightRechts;
 
   if (maxHeight === 0) {
     warnings.push('OSA schachthoogte is niet ingevuld');
   } else {
-    const isOneSide = side !== 'beide';
-
     if (maxHeight < 12) {
       // Laag OSA
-      codes[isOneSide ? 'code03' : 'code04'] = true;
+      codes[isEerste ? 'code03' : 'code04'] = true;
     } else if (maxHeight <= 18) {
       // Half-hoog OSA
-      codes[isOneSide ? 'code05' : 'code06'] = true;
+      codes[isEerste ? 'code05' : 'code06'] = true;
     } else {
       // Hoog OSA
-      codes[isOneSide ? 'code07' : 'code08'] = true;
+      codes[isEerste ? 'code07' : 'code08'] = true;
     }
-  }
-
-  // Code 9: Proefschoen (OSA also gets proefschoen codes)
-  if (hasLinks) {
-    codes.code09Links = true;
-  }
-  if (hasRechts) {
-    codes.code09Rechts = true;
   }
 
   // Code 15: Zoolverstijving
@@ -287,6 +290,20 @@ function generateOSACodes(
     codes.code17Rechts = true;
   }
 
+  // Code 9: Proefschoen
+  // Dit krijg je alleen als 07 met 17 wordt gedaan bij de volgende verzekeraars:
+  // Achmea, DSW en ASR.
+  // Only generate for high OSA (code 07) combined with koker tussen voering (code 17)
+  if (codes.code07 && shouldGenerateProefschoen(insurance)) {
+    // Check if code 17 is present on either side
+    if (hasLinks && codes.code17Links) {
+      codes.code09Links = true;
+    }
+    if (hasRechts && codes.code17Rechts) {
+      codes.code09Rechts = true;
+    }
+  }
+
   // Validation warnings
   if (!welkPaar) {
     warnings.push('OSA welk paar (paartype) is niet ingevuld');
@@ -306,21 +323,21 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return {codes, warnings, generalBasiscode};
+    return { codes, warnings, generalBasiscode };
   }
 
-  const {intakeType} = clientData;
+  const { intakeType, insurance } = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return {codes, warnings, generalBasiscode};
+    return { codes, warnings, generalBasiscode };
   }
 
   // Generate codes based on intake type
   switch (intakeType) {
     case 'VLOS':
       if (intakeData.intakeVLOS) {
-        generateVLOSCodes(intakeData.intakeVLOS, codes, warnings);
+        generateVLOSCodes(intakeData.intakeVLOS, codes, warnings, insurance || '');
       } else {
         warnings.push('VLOS intake data is niet beschikbaar');
       }
@@ -328,7 +345,7 @@ export function generateCodes(
 
     case 'OSA':
       if (intakeData.intakeOSA) {
-        generateOSACodes(intakeData.intakeOSA, codes, warnings);
+        generateOSACodes(intakeData.intakeOSA, codes, warnings, insurance || '');
       } else {
         warnings.push('OSA intake data is niet beschikbaar');
       }
@@ -361,5 +378,5 @@ export function generateCodes(
   else if (codes.code07) generalBasiscode = '7';
   else if (codes.code08) generalBasiscode = '8';
 
-  return {codes, warnings, generalBasiscode};
+  return { codes, warnings, generalBasiscode };
 }

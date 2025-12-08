@@ -226,6 +226,7 @@
   "fillAnotherForm": "Nog een formulier invullen",
   "backToOverview": "Terug naar overzicht",
   "codeWarnings": "Code generatie waarschuwingen",
+  "goToField": "Naar {{fieldLabel}}",
   "_comment_validation": "=== VALIDATION ===",
   "vulVerplichteVeldenIn": "Vul de volgende verplichte velden in:",
   "steunzoolTypeOfAnders": "Selecteer minimaal één steunzool type of vul Anders in"
