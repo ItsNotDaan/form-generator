@@ -1,13 +1,13 @@
 import React from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
-import {Button, Divider, Flex, SimpleGrid, Text} from '@chakra-ui/react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
+import { Button, Divider, Flex, SimpleGrid, Text } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../routes';
+import { useRouter } from 'next/router';
+import { Routes } from '../routes';
 
 export const OverviewPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
 
   return (
     <BaseLayout title={t('title')}>
@@ -25,7 +25,7 @@ export const OverviewPage = () => {
           {t('forms')}
         </Text>
 
-        <SimpleGrid columns={{base: 1, md: 2, lg: 3}} spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
           <Button
             variant={'primary'}
             p={4}
@@ -65,7 +65,18 @@ export const OverviewPage = () => {
           {t('intakeFormulieren')}
         </Text>
 
-        <SimpleGrid columns={{base: 1, md: 2, lg: 3}} spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+          <Button
+            variant={'secondary'}
+            p={4}
+            onClick={event => {
+              event.preventDefault();
+              router.push(Routes.form_intake_osa);
+            }}
+          >
+            {t('intakeOsa')}
+          </Button>
+
           <Button
             variant={'secondary'}
             p={4}
