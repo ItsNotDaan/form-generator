@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -23,8 +23,8 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
 import {
   OMSLUITING_OPTIES,
   OmsluitingKey,
@@ -40,12 +40,12 @@ import {
   PAARTYPE_OPTIES,
   Zijde,
 } from '@/presentation/form/constants/formConstants';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setIntakeOSAData, setClientData } from '@/domain/store/slices/formData';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
 
 export const FormIntakeOSAPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -190,7 +190,7 @@ export const FormIntakeOSAPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'OSA' }));
+      dispatch(setClientData({...clientData, intakeType: 'OSA'}));
     }
 
     // Dispatch intake OSA data naar Redux store
@@ -253,18 +253,18 @@ export const FormIntakeOSAPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         {/* Omschrijving/Paartype */}
         <Box id="osa-welk-paar">
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('welkPaar')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -274,7 +274,7 @@ export const FormIntakeOSAPage = () => {
             <Box flex={1}>
               <RadioGroup value={welkPaar} onChange={setWelkPaar}>
                 <Stack
-                  direction={{ base: 'column', md: 'row' }}
+                  direction={{base: 'column', md: 'row'}}
                   spacing={4}
                   flexWrap="wrap"
                 >
@@ -293,12 +293,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Links/Rechts/Beide selectie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('side')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -321,12 +321,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Schachthoogte */}
         <Box id="osa-schachthoogte">
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('schachthoogte')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -365,12 +365,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Openstand Schacht */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('openstandSchacht')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -383,8 +383,8 @@ export const FormIntakeOSAPage = () => {
               onChange={v => setOpenstandSchacht(v)}
             >
               <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 2, sm: 4 }}
+                direction={{base: 'column', sm: 'row'}}
+                spacing={{base: 2, sm: 4}}
               >
                 {OPENSTAND_OPTIES.map(opt => (
                   <Radio key={opt.value} value={opt.value}>
@@ -400,12 +400,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Omsluiting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('omsluiting')}
           </Text>
           <Flex
             gap={6}
-            direction={{ base: 'column', md: 'row' }}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -440,7 +440,7 @@ export const FormIntakeOSAPage = () => {
                                 [optie.mmKeyLinks]: optie.defaultMm,
                               });
                             } else if (!e.target.checked) {
-                              const next = { ...omsluitingLinksMm };
+                              const next = {...omsluitingLinksMm};
                               delete next[optie.mmKeyLinks];
                               setOmsluitingLinksMm(next);
                             }
@@ -473,11 +473,11 @@ export const FormIntakeOSAPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <FormLabel fontSize="sm" mb={3}>
                   {t('rechts')}
@@ -505,7 +505,7 @@ export const FormIntakeOSAPage = () => {
                                 [optie.mmKeyRechts]: optie.defaultMm,
                               });
                             } else if (!e.target.checked) {
-                              const next = { ...omsluitingRechtsMm };
+                              const next = {...omsluitingRechtsMm};
                               delete next[optie.mmKeyRechts];
                               setOmsluitingRechtsMm(next);
                             }
@@ -543,12 +543,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Supplementschoring */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('supplementSchoring')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -595,11 +595,11 @@ export const FormIntakeOSAPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <Text fontSize="sm" fontWeight="semibold" mb={2}>
                   {t('rechts')}
@@ -643,12 +643,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Zoolverstijving */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('zoolverstijving')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -671,8 +671,8 @@ export const FormIntakeOSAPage = () => {
 
             {zoolverstijvingEnabled && (
               <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 3, sm: 6 }}
+                direction={{base: 'column', sm: 'row'}}
+                spacing={{base: 3, sm: 6}}
               >
                 {showLinks && (
                   <Checkbox
@@ -698,12 +698,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Sluiting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('sluiting')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -727,20 +727,20 @@ export const FormIntakeOSAPage = () => {
 
         {/* Inschotpunt */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('inschotpunt')}
           </Text>
           <Flex
             gap={4}
             alignItems="flex-start"
-            direction={{ base: 'column-reverse', md: 'row' }}
+            direction={{base: 'column-reverse', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
             p={4}
             mt={2}
           >
-            <Box w={{ base: '100%', md: '50%' }}>
+            <Box w={{base: '100%', md: '50%'}}>
               <FormControl>
                 <FormLabel fontSize="sm">{t('inschotpuntCm')}</FormLabel>
                 <Input
@@ -749,13 +749,13 @@ export const FormIntakeOSAPage = () => {
                   value={inschotpunt}
                   onChange={e => setInschotpunt(e.target.value)}
                   size="sm"
-                  maxW={{ base: 'full', md: '200px' }}
+                  maxW={{base: 'full', md: '200px'}}
                 />
               </FormControl>
             </Box>
             <Box
-              w={{ base: '100%', md: '50%' }}
-              height={{ base: '250px', md: '300px' }}
+              w={{base: '100%', md: '50%'}}
+              height={{base: '250px', md: '300px'}}
               border="1px solid"
               borderColor="inherit"
               borderRadius="md"
@@ -777,12 +777,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Tongpolster */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('tongpolster')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -794,7 +794,7 @@ export const FormIntakeOSAPage = () => {
               value={boolToString(tongpolsterEnabled)}
               onChange={v => setTongpolsterEnabled(stringToBool(v))}
             >
-              <Stack direction={{ base: 'column', sm: 'row' }} spacing={6}>
+              <Stack direction={{base: 'column', sm: 'row'}} spacing={6}>
                 <Radio value="ja">{t('tongpolsterJa')}</Radio>
                 <Radio value="nee">{t('nee')}</Radio>
               </Stack>
@@ -806,12 +806,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Tong vaststikken */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('tongVaststikken')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -838,12 +838,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Haksoort */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('haksoort')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -890,12 +890,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Hakhoogte */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('hakhoogte')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -934,12 +934,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Hakschoring */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('hakschoring')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -982,11 +982,11 @@ export const FormIntakeOSAPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <Text fontSize="sm" fontWeight="semibold" mb={2}>
                   {t('rechts')}
@@ -1026,12 +1026,12 @@ export const FormIntakeOSAPage = () => {
 
         {/* Ezelsoor */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('ezelsoor')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -1074,11 +1074,11 @@ export const FormIntakeOSAPage = () => {
             {showRechts && (
               <Box
                 flex={1}
-                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
-                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderLeft={{base: 'none', md: showLinks ? '1px' : 'none'}}
+                borderTop={{base: showLinks ? '1px' : 'none', md: 'none'}}
                 borderColor="inherit"
-                pl={{ base: 0, md: showLinks ? 6 : 0 }}
-                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+                pl={{base: 0, md: showLinks ? 6 : 0}}
+                pt={{base: showLinks ? 4 : 0, md: 0}}
               >
                 <Text fontSize="sm" fontWeight="semibold" mb={2}>
                   {t('rechts')}
@@ -1118,20 +1118,20 @@ export const FormIntakeOSAPage = () => {
 
         {/* Hakafronding */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('hakafronding')}
           </Text>
           <Flex
             gap={4}
             alignItems="flex-start"
-            direction={{ base: 'column-reverse', md: 'row' }}
+            direction={{base: 'column-reverse', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
             p={4}
             mt={2}
           >
-            <Box w={{ base: '100%', md: '50%' }}>
+            <Box w={{base: '100%', md: '50%'}}>
               <Stack spacing={4}>
                 {showLinks && (
                   <Box>
@@ -1153,7 +1153,7 @@ export const FormIntakeOSAPage = () => {
                       </Stack>
                     </RadioGroup>
                     {hakafrondingLinksEnabled && (
-                      <Flex gap={2} direction={{ base: 'column', sm: 'row' }}>
+                      <Flex gap={2} direction={{base: 'column', sm: 'row'}}>
                         <FormControl>
                           <FormLabel fontSize="sm">{t('hoogteMm')}</FormLabel>
                           <Input
@@ -1200,7 +1200,7 @@ export const FormIntakeOSAPage = () => {
                       </Stack>
                     </RadioGroup>
                     {hakafrondingRechtsEnabled && (
-                      <Flex gap={2} direction={{ base: 'column', sm: 'row' }}>
+                      <Flex gap={2} direction={{base: 'column', sm: 'row'}}>
                         <FormControl>
                           <FormLabel fontSize="sm">{t('hoogteMm')}</FormLabel>
                           <Input
@@ -1230,8 +1230,8 @@ export const FormIntakeOSAPage = () => {
               </Stack>
             </Box>
             <Box
-              w={{ base: '100%', md: '50%' }}
-              height={{ base: '250px', md: '300px' }}
+              w={{base: '100%', md: '50%'}}
+              height={{base: '250px', md: '300px'}}
               border="1px solid"
               borderColor="inherit"
               borderRadius="md"
@@ -1253,7 +1253,7 @@ export const FormIntakeOSAPage = () => {
 
         {/* Loopzool */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('loopzool')}
           </Text>
           <FormControl>
@@ -1275,14 +1275,14 @@ export const FormIntakeOSAPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
+          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
             {t('bijzonderheden')}
           </Text>
           <Textarea
             placeholder={t('bijzonderhedenPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{ base: '100px', md: '120px' }}
+            minH={{base: '100px', md: '120px'}}
           />
         </Box>
 
@@ -1303,11 +1303,11 @@ export const FormIntakeOSAPage = () => {
         )}
 
         {/* Submit button */}
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{ base: 'full', sm: 'auto' }}
+            w={{base: 'full', sm: 'auto'}}
             isDisabled={!areAllFieldsValid}
             size="lg"
           >

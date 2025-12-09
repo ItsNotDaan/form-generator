@@ -256,7 +256,9 @@ export const FormIntakeSteunzolenPage = () => {
                 const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(
                   opt => opt.value === Number(val)
                 );
-                if (selectedOption) setPrijsNaam(t(selectedOption.label));
+                if (selectedOption) {
+                  setPrijsNaam(t(selectedOption.label));
+                }
               }}
             >
               <Stack spacing={3}>

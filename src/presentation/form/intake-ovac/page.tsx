@@ -524,8 +524,9 @@ export const FormIntakeOVACPage = () => {
                     const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(
                       opt => opt.value === Number(val)
                     );
-                    if (selectedOption)
+                    if (selectedOption) {
                       setSteunzoolPrijsNaam(t(selectedOption.label));
+                    }
                   }}
                 >
                   <Stack spacing={2}>

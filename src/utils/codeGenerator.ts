@@ -13,7 +13,7 @@
  * - 6: Half-hoog OSA (12-18cm schachthoogte) herhaling/reservepaar
  * - 7: Hoog OSA (>18cm schachthoogte) eerste paar
  * - 8: Hoog OSA (>18cm schachthoogte) herhaling/reservepaar
- * 
+ *
  * --ADDITIONAL CODES---
  * - 9: Proefschoen (only for high OSA code 07 + code 17 for Achmea, DSW, ASR) per side
  * - 10: (placeholder - not implemented)
@@ -115,7 +115,9 @@ function initializeCodes(): GeneratedCodes {
 function hasOmsluiting(
   omsluitingRecord: Record<string, boolean> | undefined
 ): boolean {
-  if (!omsluitingRecord) return false;
+  if (!omsluitingRecord) {
+    return false;
+  }
   return Object.values(omsluitingRecord).some(value => value === true);
 }
 
@@ -136,7 +138,6 @@ function shouldGenerateProefschoen(insurance: string): boolean {
   return eligibleInsurers.includes(insurance);
 }
 
-
 /**
  * Generate codes for VLOS intake
  */
@@ -146,7 +147,7 @@ function generateVLOSCodes(
   warnings: string[],
   insurance: string
 ): void {
-  const { side, welkPaar } = vlos;
+  const {side, welkPaar} = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
@@ -215,7 +216,7 @@ function generateOSACodes(
   warnings: string[],
   insurance: string
 ): void {
-  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
+  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -236,8 +237,8 @@ function generateOSACodes(
     side === 'beide'
       ? Math.max(heightLinks, heightRechts)
       : side === 'links'
-        ? heightLinks
-        : heightRechts;
+      ? heightLinks
+      : heightRechts;
 
   if (maxHeight === 0) {
     warnings.push('OSA schachthoogte is niet ingevuld');
@@ -323,21 +324,26 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
-  const { intakeType, insurance } = clientData;
+  const {intakeType, insurance} = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
   // Generate codes based on intake type
   switch (intakeType) {
     case 'VLOS':
       if (intakeData.intakeVLOS) {
-        generateVLOSCodes(intakeData.intakeVLOS, codes, warnings, insurance || '');
+        generateVLOSCodes(
+          intakeData.intakeVLOS,
+          codes,
+          warnings,
+          insurance || ''
+        );
       } else {
         warnings.push('VLOS intake data is niet beschikbaar');
       }
@@ -345,7 +351,12 @@ export function generateCodes(
 
     case 'OSA':
       if (intakeData.intakeOSA) {
-        generateOSACodes(intakeData.intakeOSA, codes, warnings, insurance || '');
+        generateOSACodes(
+          intakeData.intakeOSA,
+          codes,
+          warnings,
+          insurance || ''
+        );
       } else {
         warnings.push('OSA intake data is niet beschikbaar');
       }
@@ -369,14 +380,23 @@ export function generateCodes(
   }
 
   // Determine generalBasiscode (codes 1-8 for VLOS/OSA)
-  if (codes.code01) generalBasiscode = '1';
-  else if (codes.code02) generalBasiscode = '2';
-  else if (codes.code03) generalBasiscode = '3';
-  else if (codes.code04) generalBasiscode = '4';
-  else if (codes.code05) generalBasiscode = '5';
-  else if (codes.code06) generalBasiscode = '6';
-  else if (codes.code07) generalBasiscode = '7';
-  else if (codes.code08) generalBasiscode = '8';
+  if (codes.code01) {
+    generalBasiscode = '1';
+  } else if (codes.code02) {
+    generalBasiscode = '2';
+  } else if (codes.code03) {
+    generalBasiscode = '3';
+  } else if (codes.code04) {
+    generalBasiscode = '4';
+  } else if (codes.code05) {
+    generalBasiscode = '5';
+  } else if (codes.code06) {
+    generalBasiscode = '6';
+  } else if (codes.code07) {
+    generalBasiscode = '7';
+  } else if (codes.code08) {
+    generalBasiscode = '8';
+  }
 
-  return { codes, warnings, generalBasiscode };
+  return {codes, warnings, generalBasiscode};
 }
