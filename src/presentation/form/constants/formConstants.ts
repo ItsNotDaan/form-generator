@@ -152,7 +152,7 @@ export type OmsluitingOptie = {
 export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   {
     key: 'hoge',
-    label: 'Hoge omsluiting',
+    label: 'Hoge van omsluiting (cm)',
     needsMm: true,
     fullKeyLinks: 'omsluitingLinksHoge',
     fullKeyRechts: 'omsluitingRechtsHoge',
@@ -161,7 +161,7 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   },
   {
     key: 'lavero',
-    label: 'Lavero omsluiting',
+    label: 'Lavero omsluiting (mm)',
     needsMm: true,
     defaultMm: '4',
     fullKeyLinks: 'omsluitingLinksLavero',
@@ -171,7 +171,7 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   },
   {
     key: 'multivorm',
-    label: 'Multivorm omsluiting',
+    label: 'Multivorm omsluiting (mm)',
     needsMm: true,
     defaultMm: '3',
     fullKeyLinks: 'omsluitingLinksMultivorm',
@@ -181,7 +181,7 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   },
   {
     key: 'plastazote',
-    label: 'Plastazote',
+    label: 'Plastazote (mm)',
     needsMm: true,
     defaultMm: '3',
     fullKeyLinks: 'omsluitingLinksPlastazote',
