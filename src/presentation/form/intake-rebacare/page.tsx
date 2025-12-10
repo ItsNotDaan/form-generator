@@ -24,6 +24,7 @@ import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
+import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
 import {
   Zijde,
   PAARTYPE_OPTIES,
@@ -55,8 +56,8 @@ export const FormIntakeRebacarePage = () => {
   const [bijzonderheden, setBijzonderheden] = useState('');
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): string[] => {
-    const missing: string[] = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
     // No required fields for Rebacare
     return missing;
   };
@@ -65,6 +66,8 @@ export const FormIntakeRebacarePage = () => {
 
   const handleSubmit = () => {
     if (!areAllFieldsValid) {
+      const missingFields = getMissingFields();
+      focusAndHighlightInvalidFields(missingFields.map(f => f.fieldId));
       return; // Validation alert will show the missing fields
     }
 
@@ -232,7 +235,7 @@ export const FormIntakeRebacarePage = () => {
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
-                  <ListItem key={index}>{field}</ListItem>
+                  <ListItem key={index}>{field.fieldName}</ListItem>
                 ))}
               </UnorderedList>
             </Box>

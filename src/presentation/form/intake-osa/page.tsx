@@ -42,6 +42,7 @@ import {
 } from '@/presentation/form/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeOSAData, setClientData } from '@/domain/store/slices/formData';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 
 export const FormIntakeOSAPage = () => {
   const router = useRouter();
@@ -175,8 +176,8 @@ export const FormIntakeOSAPage = () => {
 
   // Handler om terug te gaan (optioneel: data opslaan in localStorage/sessionStorage)
   // Validation: check which required fields are missing
-  const getMissingFields = (): string[] => {
-    const missing: string[] = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
     // No required fields for OSA
     return missing;
   };
@@ -185,6 +186,8 @@ export const FormIntakeOSAPage = () => {
 
   const handleSubmit = () => {
     if (!areAllFieldsValid) {
+      const missingFields = getMissingFields();
+      focusAndHighlightInvalidFields(missingFields.map(f => f.fieldId));
       return; // Validation alert will show the missing fields
     }
 
@@ -1295,7 +1298,7 @@ export const FormIntakeOSAPage = () => {
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
-                  <ListItem key={index}>{field}</ListItem>
+                  <ListItem key={index}>{field.fieldName}</ListItem>
                 ))}
               </UnorderedList>
             </Box>
@@ -1308,7 +1311,6 @@ export const FormIntakeOSAPage = () => {
             variant="primary"
             onClick={handleSubmit}
             w={{ base: 'full', sm: 'auto' }}
-            isDisabled={!areAllFieldsValid}
             size="lg"
           >
             {t('opslaanEnDoorgaan')}
