@@ -194,10 +194,11 @@ export interface IntakeOSBData {
   doel?: Record<string, boolean>;
 
   // Walking functions
-  loopfunctie?: Record<string, boolean>;
+  loopfunctieIndicatie?: string;
+  loopfunctieAndersText?: string;
 
   // Supplier and order date
-  leverancier?: string;
+  leverancierNaam?: string;
   bestelDatum?: string;
 
   // Product specifications
@@ -211,6 +212,7 @@ export interface IntakeOSBData {
 
   // Nieuw: Basiscode blok
   basiscode?: string;
+  generalBasiscode?: string;
 
   // Nieuw: Aanpassingen blok
   aanpassingen?: {

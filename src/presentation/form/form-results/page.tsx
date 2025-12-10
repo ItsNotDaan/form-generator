@@ -118,7 +118,7 @@ export const FormResultsPage = () => {
     }
 
     // Generate medical codes if applicable
-    if (formData.client && (formData.intakeVLOS || formData.intakeOSA)) {
+    if (formData.client && (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)) {
       const { codes, warnings, generalBasiscode } = generateCodes(
         formData.client,
         {
@@ -142,6 +142,9 @@ export const FormResultsPage = () => {
         }
         if (formData.intakeOSA && result.intakeOSA) {
           result.intakeOSA.generalBasiscode = generalBasiscode;
+        }
+        if (formData.intakeOSB && result.intakeOSB) {
+          result.intakeOSB.generalBasiscode = generalBasiscode;
         }
       }
 

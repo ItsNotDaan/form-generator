@@ -132,7 +132,7 @@ function initializeCodes(): GeneratedCodes {
 }
 /**
  * Generate codes for OSB intake
- * Codes: 43 (Zoolverstijving), 46 (Hallux Valgus), 47 (Verdieping voorvoet), 57 (Supplement Individueel), 58 (Afwikkelrol Eenvoudig), 59 (Afwikkelrol gecompliceerd)
+ * Codes: 43 (Supplement Individueel), 46 (Afwikkelrol Eenvoudig), 47 (Afwikkelrol Gecompliceerd), 57 (Zoolverstijving)
  * Per zijde (Links/Rechts)
  */
 function generateOSBCodes(
@@ -141,29 +141,24 @@ function generateOSBCodes(
   warnings: string[],
   insurance: string
 ): void {
-  // Zoolverstijving (code 43)
-  if (osb.aanpassingen?.zoolverstijvingLinks) codes.code43Links = true;
-  if (osb.aanpassingen?.zoolverstijvingRechts) codes.code43Rechts = true;
+  // Supplement Individueel (code 43)
+  if (osb.aanpassingen?.supplementIndividueelLinks) codes.code43Links = true;
+  if (osb.aanpassingen?.supplementIndividueelRechts) codes.code43Rechts = true;
 
-  // Hallux Valgus (code 46)
-  if (osb.aanpassingen?.halluxValgusLinks) codes.code46Links = true;
-  if (osb.aanpassingen?.halluxValgusRechts) codes.code46Rechts = true;
+  // Afwikkelrol Eenvoudig (code 46)
+  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) codes.code46Links = true;
+  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) codes.code46Rechts = true;
 
-  // Verdieping voorvoet (code 47)
-  if (osb.aanpassingen?.verdiepingVoorvoetLinks) codes.code47Links = true;
-  if (osb.aanpassingen?.verdiepingVoorvoetRechts) codes.code47Rechts = true;
+  // Afwikkelrol Gecompliceerd (code 47)
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) codes.code47Links = true;
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) codes.code47Rechts = true;
 
-  // Supplement Individueel (code 57)
-  if (osb.aanpassingen?.supplementIndividueelLinks) codes.code57Links = true;
-  if (osb.aanpassingen?.supplementIndividueelRechts) codes.code57Rechts = true;
+  // Zoolverstijving (code 57)
+  if (osb.aanpassingen?.zoolverstijvingLinks) codes.code57Links = true;
+  if (osb.aanpassingen?.zoolverstijvingRechts) codes.code57Rechts = true;
 
-  // Afwikkelrol Eenvoudig (code 58)
-  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) codes.code58Links = true;
-  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) codes.code58Rechts = true;
-
-  // Afwikkelrol gecompliceerd (code 59)
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) codes.code59Links = true;
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) codes.code59Rechts = true;
+  // Note: Hallux Valgus and Verdieping voorvoet do not generate codes in OSB
+  // They are part of the form but don't map to the code generation system
 
   // Basiscode (optioneel, voor rapportage)
   // if (osb.basiscode) ...
@@ -461,6 +456,12 @@ export function generateCodes(
   else if (codes.code06) generalBasiscode = '6';
   else if (codes.code07) generalBasiscode = '7';
   else if (codes.code08) generalBasiscode = '8';
+
+  // Determine generalBasiscode for OSB (42 or 40)
+  if (intakeData.intakeOSB?.basiscode) {
+    if (intakeData.intakeOSB.basiscode === '42') generalBasiscode = '42';
+    else if (intakeData.intakeOSB.basiscode === '40') generalBasiscode = '40';
+  }
 
   return { codes, warnings, generalBasiscode };
 }

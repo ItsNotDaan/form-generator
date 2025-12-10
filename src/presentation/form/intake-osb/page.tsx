@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -22,30 +22,50 @@ import {
   Select,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {setIntakeOSBData} from '@/domain/store/slices/formData';
+import { useRouter } from 'next/router';
+import { useAppDispatch } from '@/domain/store/hooks';
+import { setIntakeOSBData } from '@/domain/store/slices/formData';
 import {
   STEUNZOLEN_PRIJS_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
   CORRECTIE_MIDDENVOET_OPTIES,
   CORRECTIE_VOORVOET_OPTIES,
   PELLOTE_OPTIES,
+  BASISCODE_OPTIES,
+  JA_NEE_OPTIES,
+  LEVERANCIER_OPTIES,
+  LOOPFUNCTIE_INDICATIE_OPTIES,
 } from '@/presentation/form/constants/formConstants';
+import { DatePickerField } from '@/presentation/base/input/datePickerField';
 
 const FormIntakeOSBPage = () => {
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   // State
   const [welkPaar, setWelkPaar] = useState('Eerste paar');
-  const [loopfunctie, setLoopfunctie] = useState<Record<string, boolean>>({});
-  const [leverancier, setLeverancier] = useState('');
-  const [artCode, setArtCode] = useState('');
+
+  // Doel states
+  const [doelPasvorm, setDoelPasvorm] = useState(false);
+  const [doelLoopafstandVergroten, setDoelLoopafstandVergroten] = useState(false);
+  const [doelStabiliteit, setDoelStabiliteit] = useState(false);
+  const [doelOndersteuningGewelf, setDoelOndersteuningGewelf] = useState(false);
+
+  // Loopfunctie states
+  const [loopfunctieIndicatie, setLoopfunctieIndicatie] = useState('');
+  const [loopfunctieAndersText, setLoopfunctieAndersText] = useState('');
+
+  // Bestel Informatie states
+  const [leverancierNaam, setLeverancierNaam] = useState('');
+  const [bestelDatum, setBestelDatum] = useState<Date | undefined>(undefined);
+  const [artikelCode, setArtikelCode] = useState('');
   const [lengteMaat, setLengteMaat] = useState('');
-  const [wijdte, setWijdte] = useState('');
-  const [basiscode, setBasiscode] = useState('');
+  const [wijdteMaat, setWijdteMaat] = useState('');
+  const [schoenKleur, setSchoenKleur] = useState('');
+  const [schoenSluiting, setSchoenSluiting] = useState('');
+
+  const [basiscode, setBasiscode] = useState('42');
   const [aanpassingen, setAanpassingen] = useState<any>({});
   const [steunzolenEnabled, setSteunzolenEnabled] = useState(false);
   const [schoenmaat, setSchoenmaat] = useState('');
@@ -64,6 +84,10 @@ const FormIntakeOSBPage = () => {
     useState('');
   const [bijzonderheden, setBijzonderheden] = useState('');
 
+  // Helper functions for boolean to string conversion
+  const boolToString = (b: boolean) => (b ? 'ja' : 'nee');
+  const stringToBool = (s: string) => s === 'ja';
+
   // Check if Talonette is selected
   const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(
     opt => opt.label === 'prijsTalonette'
@@ -72,9 +96,17 @@ const FormIntakeOSBPage = () => {
     talonetteOption && steunzoolPrijs === talonetteOption.value;
 
   // Validation helpers
-  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
-    const missing: Array<{fieldName: string; fieldId: string}> = [];
-    // No required fields for OSB
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
+
+    // Loopfunctie Anders validation
+    if (loopfunctieIndicatie === 'Anders' && !loopfunctieAndersText.trim()) {
+      missing.push({
+        fieldName: t('loopfunctieAndersText'),
+        fieldId: 'field-loopfunctie-anders-osb'
+      });
+    }
+
     return missing;
   };
   const areAllFieldsValid = getMissingFields().length === 0;
@@ -87,9 +119,23 @@ const FormIntakeOSBPage = () => {
     dispatch(
       setIntakeOSBData({
         welkPaar,
-        loopfunctie,
-        leverancier,
-        productSpecificaties: {artCode, lengteMaat, wijdte},
+        doel: {
+          doelPasvorm,
+          doelLoopafstandVergroten,
+          doelStabiliteit,
+          doelOndersteuningGewelf,
+        },
+        loopfunctieIndicatie,
+        loopfunctieAndersText,
+        leverancierNaam,
+        bestelDatum: bestelDatum?.toISOString(),
+        productSpecificaties: {
+          artCode: artikelCode,
+          lengteMaat,
+          wijdte: wijdteMaat,
+          kleur: schoenKleur,
+          sluiting: schoenSluiting,
+        },
         basiscode,
         aanpassingen,
         steunzoolTypeGeneral,
@@ -118,261 +164,546 @@ const FormIntakeOSBPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         {/* Basiscode */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            Basiscode
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('basiscode')}
           </Text>
-          <Input
-            placeholder="Vul basiscode in"
-            value={basiscode}
-            onChange={e => setBasiscode(e.target.value)}
-            size="sm"
-          />
+          <RadioGroup value={basiscode} onChange={setBasiscode}>
+            <Stack direction="row" spacing={4}>
+              {BASISCODE_OPTIES.map(option => (
+                <Radio key={option.value} value={option.value}>
+                  {t(`basiscode${option.value}`)}
+                </Radio>
+              ))}
+            </Stack>
+          </RadioGroup>
+        </Box>
+
+        <Divider />
+
+        {/* Doel Section */}
+        <Box id="section-doel">
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('doel')}
+          </Text>
+          <Box
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+              <FormControl id="field-doel-pasvorm">
+                <FormLabel fontSize="sm" fontWeight="medium" mb={2}>
+                  {t('doelPasvorm')}
+                </FormLabel>
+                <RadioGroup
+                  value={boolToString(doelPasvorm)}
+                  onChange={v => setDoelPasvorm(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl id="field-doel-loopafstand">
+                <FormLabel fontSize="sm" fontWeight="medium" mb={2}>
+                  {t('doelLoopafstandVergroten')}
+                </FormLabel>
+                <RadioGroup
+                  value={boolToString(doelLoopafstandVergroten)}
+                  onChange={v => setDoelLoopafstandVergroten(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl id="field-doel-stabiliteit">
+                <FormLabel fontSize="sm" fontWeight="medium" mb={2}>
+                  {t('doelStabiliteit')}
+                </FormLabel>
+                <RadioGroup
+                  value={boolToString(doelStabiliteit)}
+                  onChange={v => setDoelStabiliteit(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl id="field-doel-gewelf">
+                <FormLabel fontSize="sm" fontWeight="medium" mb={2}>
+                  {t('doelOndersteuningGewelf')}
+                </FormLabel>
+                <RadioGroup
+                  value={boolToString(doelOndersteuningGewelf)}
+                  onChange={v => setDoelOndersteuningGewelf(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.label)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+            </SimpleGrid>
+          </Box>
+        </Box>
+
+        <Divider />
+
+        {/* Loopfunctie Section */}
+        <Box id="section-loopfunctie">
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('loopfunctie')}
+          </Text>
+          <Box
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <FormControl id="field-loopfunctie-indicatie">
+              <RadioGroup
+                value={loopfunctieIndicatie}
+                onChange={setLoopfunctieIndicatie}
+              >
+                <Stack direction="row" spacing={6}>
+                  {LOOPFUNCTIE_INDICATIE_OPTIES.map(option => (
+                    <Radio key={option.value} value={option.value}>
+                      {t(option.label)}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </FormControl>
+          </Box>
+        </Box>
+
+        <Divider />
+
+        {/* Bestel Informatie Section */}
+        <Box id="section-bestel-informatie">
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('bestelInformatie')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction="column"
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+              <FormControl id="field-leverancier-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('leverancierNaam')}
+                </FormLabel>
+                <Select
+                  placeholder={t('leverancierNaam')}
+                  value={leverancierNaam}
+                  onChange={e => setLeverancierNaam(e.target.value)}
+                  size="sm"
+                >
+                  {LEVERANCIER_OPTIES.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl id="field-besteldatum-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('bestelDatum')}
+                </FormLabel>
+                <DatePickerField
+                  date={bestelDatum}
+                  onDateChanged={setBestelDatum}
+                  placeholder={t('bestelDatum')}
+                  isSmallVariant
+                />
+              </FormControl>
+            </SimpleGrid>
+
+            <Divider />
+
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 5 }} spacing={4}>
+              <FormControl id="field-artikelcode-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('artikelCode')}
+                </FormLabel>
+                <Input
+                  placeholder={t('artikelCode')}
+                  value={artikelCode}
+                  onChange={e => setArtikelCode(e.target.value)}
+                  size="sm"
+                />
+              </FormControl>
+
+              <FormControl id="field-lengtemaat-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('lengteMaat')}
+                </FormLabel>
+                <Input
+                  placeholder={t('lengteMaat')}
+                  value={lengteMaat}
+                  onChange={e => setLengteMaat(e.target.value)}
+                  size="sm"
+                />
+              </FormControl>
+
+              <FormControl id="field-wijdtemaat-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('wijdteMaat')}
+                </FormLabel>
+                <Input
+                  placeholder={t('wijdteMaat')}
+                  value={wijdteMaat}
+                  onChange={e => setWijdteMaat(e.target.value)}
+                  size="sm"
+                />
+              </FormControl>
+
+              <FormControl id="field-schoenkleur-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('schoenKleur')}
+                </FormLabel>
+                <Input
+                  placeholder={t('schoenKleur')}
+                  value={schoenKleur}
+                  onChange={e => setSchoenKleur(e.target.value)}
+                  size="sm"
+                />
+              </FormControl>
+
+              <FormControl id="field-schoensluiting-osb">
+                <FormLabel fontSize="sm" fontWeight="medium">
+                  {t('schoenSluiting')}
+                </FormLabel>
+                <Input
+                  placeholder={t('schoenSluiting')}
+                  value={schoenSluiting}
+                  onChange={e => setSchoenSluiting(e.target.value)}
+                  size="sm"
+                />
+              </FormControl>
+            </SimpleGrid>
+          </Flex>
         </Box>
 
         <Divider />
 
         {/* Aanpassingen Section */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             Aanpassingen
           </Text>
-          <Flex gap={{base: 3, md: 4}} flexWrap="wrap">
-            {/* Hallux Valgus */}
-            <Box flex={1} minW="220px">
-              <Text fontWeight="semibold" mb={2}>
-                Hallux Valgus
-              </Text>
-              <Stack direction="row" spacing={4} align="center">
-                <Checkbox
-                  isChecked={aanpassingen.halluxValgusLinks}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      halluxValgusLinks: e.target.checked,
-                    }))
-                  }
-                >
-                  Links
-                </Checkbox>
-                {aanpassingen.halluxValgusLinks && (
-                  <Select
-                    value={aanpassingen.halluxValgusLinksMm || ''}
+          <Box
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+              {/* Hallux Valgus */}
+              <Box>
+                <Text fontWeight="semibold" mb={3} fontSize="sm">
+                  Hallux Valgus
+                </Text>
+                <Stack spacing={3}>
+                  <Flex align="center" gap={3}>
+                    <Checkbox
+                      isChecked={aanpassingen.halluxValgusLinks}
+                      onChange={e =>
+                        setAanpassingen((a: any) => ({
+                          ...a,
+                          halluxValgusLinks: e.target.checked,
+                        }))
+                      }
+                    >
+                      <Text fontSize="sm">Links</Text>
+                    </Checkbox>
+                    {aanpassingen.halluxValgusLinks && (
+                      <Select
+                        value={aanpassingen.halluxValgusLinksMm || ''}
+                        onChange={e =>
+                          setAanpassingen((a: any) => ({
+                            ...a,
+                            halluxValgusLinksMm: e.target.value,
+                          }))
+                        }
+                        size="sm"
+                        maxW="100px"
+                        placeholder="mm"
+                      >
+                        <option value="3">3mm</option>
+                        <option value="8">8mm</option>
+                      </Select>
+                    )}
+                  </Flex>
+                  <Flex align="center" gap={3}>
+                    <Checkbox
+                      isChecked={aanpassingen.halluxValgusRechts}
+                      onChange={e =>
+                        setAanpassingen((a: any) => ({
+                          ...a,
+                          halluxValgusRechts: e.target.checked,
+                        }))
+                      }
+                    >
+                      <Text fontSize="sm">Rechts</Text>
+                    </Checkbox>
+                    {aanpassingen.halluxValgusRechts && (
+                      <Select
+                        value={aanpassingen.halluxValgusRechtsMm || ''}
+                        onChange={e =>
+                          setAanpassingen((a: any) => ({
+                            ...a,
+                            halluxValgusRechtsMm: e.target.value,
+                          }))
+                        }
+                        size="sm"
+                        maxW="100px"
+                        placeholder="mm"
+                      >
+                        <option value="3">3mm</option>
+                        <option value="8">8mm</option>
+                      </Select>
+                    )}
+                  </Flex>
+                </Stack>
+              </Box>
+
+              {/* Verdieping voorvoet */}
+              <Box>
+                <Text fontWeight="semibold" mb={3} fontSize="sm">
+                  Verdieping voorvoet
+                </Text>
+                <Stack spacing={3}>
+                  <Flex align="center" gap={3}>
+                    <Checkbox
+                      isChecked={aanpassingen.verdiepingVoorvoetLinks}
+                      onChange={e =>
+                        setAanpassingen((a: any) => ({
+                          ...a,
+                          verdiepingVoorvoetLinks: e.target.checked,
+                        }))
+                      }
+                    >
+                      <Text fontSize="sm">Links</Text>
+                    </Checkbox>
+                    {aanpassingen.verdiepingVoorvoetLinks && (
+                      <Select
+                        value={aanpassingen.verdiepingVoorvoetLinksMm || ''}
+                        onChange={e =>
+                          setAanpassingen((a: any) => ({
+                            ...a,
+                            verdiepingVoorvoetLinksMm: e.target.value,
+                          }))
+                        }
+                        size="sm"
+                        maxW="100px"
+                        placeholder="mm"
+                      >
+                        <option value="3">3mm</option>
+                        <option value="8">8mm</option>
+                      </Select>
+                    )}
+                  </Flex>
+                  <Flex align="center" gap={3}>
+                    <Checkbox
+                      isChecked={aanpassingen.verdiepingVoorvoetRechts}
+                      onChange={e =>
+                        setAanpassingen((a: any) => ({
+                          ...a,
+                          verdiepingVoorvoetRechts: e.target.checked,
+                        }))
+                      }
+                    >
+                      <Text fontSize="sm">Rechts</Text>
+                    </Checkbox>
+                    {aanpassingen.verdiepingVoorvoetRechts && (
+                      <Select
+                        value={aanpassingen.verdiepingVoorvoetRechtsMm || ''}
+                        onChange={e =>
+                          setAanpassingen((a: any) => ({
+                            ...a,
+                            verdiepingVoorvoetRechtsMm: e.target.value,
+                          }))
+                        }
+                        size="sm"
+                        maxW="100px"
+                        placeholder="mm"
+                      >
+                        <option value="3">3mm</option>
+                        <option value="8">8mm</option>
+                      </Select>
+                    )}
+                  </Flex>
+                </Stack>
+              </Box>
+
+              {/* Supplement Individueel */}
+              <Box>
+                <Text fontWeight="semibold" mb={3} fontSize="sm">
+                  Supplement Individueel
+                </Text>
+                <Stack direction="row" spacing={6}>
+                  <Checkbox
+                    isChecked={aanpassingen.supplementIndividueelLinks}
                     onChange={e =>
-                      setAanpassingen(a => ({
+                      setAanpassingen((a: any) => ({
                         ...a,
-                        halluxValgusLinksMm: e.target.value,
+                        supplementIndividueelLinks: e.target.checked,
                       }))
                     }
-                    size="sm"
-                    maxW="100px"
-                    placeholder="mm"
                   >
-                    <option value="3">3mm</option>
-                    <option value="8">8mm</option>
-                  </Select>
-                )}
-                <Checkbox
-                  isChecked={aanpassingen.halluxValgusRechts}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      halluxValgusRechts: e.target.checked,
-                    }))
-                  }
-                >
-                  Rechts
-                </Checkbox>
-                {aanpassingen.halluxValgusRechts && (
-                  <Select
-                    value={aanpassingen.halluxValgusRechtsMm || ''}
+                    <Text fontSize="sm">Links</Text>
+                  </Checkbox>
+                  <Checkbox
+                    isChecked={aanpassingen.supplementIndividueelRechts}
                     onChange={e =>
-                      setAanpassingen(a => ({
+                      setAanpassingen((a: any) => ({
                         ...a,
-                        halluxValgusRechtsMm: e.target.value,
+                        supplementIndividueelRechts: e.target.checked,
                       }))
                     }
-                    size="sm"
-                    maxW="100px"
-                    placeholder="mm"
                   >
-                    <option value="3">3mm</option>
-                    <option value="8">8mm</option>
-                  </Select>
-                )}
-              </Stack>
-            </Box>
+                    <Text fontSize="sm">Rechts</Text>
+                  </Checkbox>
+                </Stack>
+              </Box>
 
-            {/* Verdieping voorvoet */}
-            <Box flex={1} minW="220px">
-              <Text fontWeight="semibold" mb={2}>
-                Verdieping voorvoet
-              </Text>
-              <Stack direction="row" spacing={4} align="center">
-                <Checkbox
-                  isChecked={aanpassingen.verdiepingVoorvoetLinks}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      verdiepingVoorvoetLinks: e.target.checked,
-                    }))
-                  }
-                >
-                  Links
-                </Checkbox>
-                {aanpassingen.verdiepingVoorvoetLinks && (
-                  <Select
-                    value={aanpassingen.verdiepingVoorvoetLinksMm || ''}
+              {/* Afwikkelrol Eenvoudig */}
+              <Box>
+                <Text fontWeight="semibold" mb={3} fontSize="sm">
+                  Afwikkelrol Eenvoudig
+                </Text>
+                <Stack direction="row" spacing={6}>
+                  <Checkbox
+                    isChecked={aanpassingen.afwikkelrolEenvoudigLinks}
                     onChange={e =>
-                      setAanpassingen(a => ({
+                      setAanpassingen((a: any) => ({
                         ...a,
-                        verdiepingVoorvoetLinksMm: e.target.value,
+                        afwikkelrolEenvoudigLinks: e.target.checked,
                       }))
                     }
-                    size="sm"
-                    maxW="100px"
-                    placeholder="mm"
                   >
-                    <option value="3">3mm</option>
-                    <option value="8">8mm</option>
-                  </Select>
-                )}
-                <Checkbox
-                  isChecked={aanpassingen.verdiepingVoorvoetRechts}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      verdiepingVoorvoetRechts: e.target.checked,
-                    }))
-                  }
-                >
-                  Rechts
-                </Checkbox>
-                {aanpassingen.verdiepingVoorvoetRechts && (
-                  <Select
-                    value={aanpassingen.verdiepingVoorvoetRechtsMm || ''}
+                    <Text fontSize="sm">Links</Text>
+                  </Checkbox>
+                  <Checkbox
+                    isChecked={aanpassingen.afwikkelrolEenvoudigRechts}
                     onChange={e =>
-                      setAanpassingen(a => ({
+                      setAanpassingen((a: any) => ({
                         ...a,
-                        verdiepingVoorvoetRechtsMm: e.target.value,
+                        afwikkelrolEenvoudigRechts: e.target.checked,
                       }))
                     }
-                    size="sm"
-                    maxW="100px"
-                    placeholder="mm"
                   >
-                    <option value="3">3mm</option>
-                    <option value="8">8mm</option>
-                  </Select>
-                )}
-              </Stack>
-            </Box>
+                    <Text fontSize="sm">Rechts</Text>
+                  </Checkbox>
+                </Stack>
+              </Box>
 
-            {/* Supplement Individueel */}
-            <Box flex={1} minW="220px">
-              <Text fontWeight="semibold" mb={2}>
-                Supplement Individueel
-              </Text>
-              <Stack direction="row" spacing={4}>
-                <Checkbox
-                  isChecked={aanpassingen.supplementIndividueelLinks}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      supplementIndividueelLinks: e.target.checked,
-                    }))
-                  }
-                >
-                  Links
-                </Checkbox>
-                <Checkbox
-                  isChecked={aanpassingen.supplementIndividueelRechts}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      supplementIndividueelRechts: e.target.checked,
-                    }))
-                  }
-                >
-                  Rechts
-                </Checkbox>
-              </Stack>
-            </Box>
+              {/* Afwikkelrol gecompliceerd */}
+              <Box>
+                <Text fontWeight="semibold" mb={3} fontSize="sm">
+                  Afwikkelrol gecompliceerd
+                </Text>
+                <Stack direction="row" spacing={6}>
+                  <Checkbox
+                    isChecked={aanpassingen.afwikkelrolGecompliceerdLinks}
+                    onChange={e =>
+                      setAanpassingen((a: any) => ({
+                        ...a,
+                        afwikkelrolGecompliceerdLinks: e.target.checked,
+                      }))
+                    }
+                  >
+                    <Text fontSize="sm">Links</Text>
+                  </Checkbox>
+                  <Checkbox
+                    isChecked={aanpassingen.afwikkelrolGecompliceerdRechts}
+                    onChange={e =>
+                      setAanpassingen((a: any) => ({
+                        ...a,
+                        afwikkelrolGecompliceerdRechts: e.target.checked,
+                      }))
+                    }
+                  >
+                    <Text fontSize="sm">Rechts</Text>
+                  </Checkbox>
+                </Stack>
+              </Box>
 
-            {/* Afwikkelrol Eenvoudig */}
-            <Box flex={1} minW="220px">
-              <Text fontWeight="semibold" mb={2}>
-                Afwikkelrol Eenvoudig
-              </Text>
-              <Stack direction="row" spacing={4}>
-                <Checkbox
-                  isChecked={aanpassingen.afwikkelrolEenvoudigLinks}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      afwikkelrolEenvoudigLinks: e.target.checked,
-                    }))
-                  }
-                >
-                  Links
-                </Checkbox>
-                <Checkbox
-                  isChecked={aanpassingen.afwikkelrolEenvoudigRechts}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      afwikkelrolEenvoudigRechts: e.target.checked,
-                    }))
-                  }
-                >
-                  Rechts
-                </Checkbox>
-              </Stack>
-            </Box>
-
-            {/* Afwikkelrol gecompliceerd */}
-            <Box flex={1} minW="220px">
-              <Text fontWeight="semibold" mb={2}>
-                Afwikkelrol gecompliceerd
-              </Text>
-              <Stack direction="row" spacing={4}>
-                <Checkbox
-                  isChecked={aanpassingen.afwikkelrolGecompliceerdLinks}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      afwikkelrolGecompliceerdLinks: e.target.checked,
-                    }))
-                  }
-                >
-                  Links
-                </Checkbox>
-                <Checkbox
-                  isChecked={aanpassingen.afwikkelrolGecompliceerdRechts}
-                  onChange={e =>
-                    setAanpassingen(a => ({
-                      ...a,
-                      afwikkelrolGecompliceerdRechts: e.target.checked,
-                    }))
-                  }
-                >
-                  Rechts
-                </Checkbox>
-              </Stack>
-            </Box>
-          </Flex>
+              {/* Zoolverstijving */}
+              <Box>
+                <Text fontWeight="semibold" mb={3} fontSize="sm">
+                  {t('zoolverstijving')}
+                </Text>
+                <Stack direction="row" spacing={6}>
+                  <Checkbox
+                    isChecked={aanpassingen.zoolverstijvingLinks}
+                    onChange={e =>
+                      setAanpassingen((a: any) => ({
+                        ...a,
+                        zoolverstijvingLinks: e.target.checked,
+                      }))
+                    }
+                  >
+                    <Text fontSize="sm">Links</Text>
+                  </Checkbox>
+                  <Checkbox
+                    isChecked={aanpassingen.zoolverstijvingRechts}
+                    onChange={e =>
+                      setAanpassingen((a: any) => ({
+                        ...a,
+                        zoolverstijvingRechts: e.target.checked,
+                      }))
+                    }
+                  >
+                    <Text fontSize="sm">Rechts</Text>
+                  </Checkbox>
+                </Stack>
+              </Box>
+            </SimpleGrid>
+          </Box>
         </Box>
 
         <Divider />
 
         {/* Steunzolen Section */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('steunzolen')}
           </Text>
           <RadioGroup
@@ -388,7 +719,7 @@ const FormIntakeOSBPage = () => {
 
           {steunzolenEnabled && (
             <Flex
-              gap={{base: 2, md: 3}}
+              gap={{ base: 2, md: 3 }}
               direction="column"
               border="1px solid"
               borderColor="inherit"
@@ -483,7 +814,7 @@ const FormIntakeOSBPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('correctieMiddenvoet')}
                     </Text>
-                    <Flex gap={{base: 2, md: 3}} flexWrap="wrap">
+                    <Flex gap={{ base: 2, md: 3 }} flexWrap="wrap">
                       {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
                         <Checkbox
                           key={option.value}
@@ -511,7 +842,7 @@ const FormIntakeOSBPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('correctieVoorvoet')}
                     </Text>
-                    <Flex gap={{base: 2, md: 3}} flexWrap="wrap">
+                    <Flex gap={{ base: 2, md: 3 }} flexWrap="wrap">
                       {CORRECTIE_VOORVOET_OPTIES.map(option => (
                         <Checkbox
                           key={option.value}
@@ -539,7 +870,7 @@ const FormIntakeOSBPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('vvPellote')}
                     </Text>
-                    <Flex gap={{base: 2, md: 3}} flexWrap="wrap">
+                    <Flex gap={{ base: 2, md: 3 }} flexWrap="wrap">
                       {PELLOTE_OPTIES.map(option => (
                         <Checkbox
                           key={option.value}
@@ -567,7 +898,7 @@ const FormIntakeOSBPage = () => {
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolHakVerhogingCm')}
                 </Text>
-                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
                   <FormControl>
                     <FormLabel fontSize="sm">{t('links')}</FormLabel>
                     <Input
@@ -602,14 +933,14 @@ const FormIntakeOSBPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
             {t('bijzonderheden')}
           </Text>
           <Textarea
             placeholder={t('bijzonderhedenPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{base: '100px', md: '120px'}}
+            minH={{ base: '100px', md: '120px' }}
           />
         </Box>
 
@@ -629,11 +960,11 @@ const FormIntakeOSBPage = () => {
           </Alert>
         )}
 
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             {t('opslaanEnDoorgaan')}
           </Button>

@@ -260,6 +260,14 @@ export const LOOPFUNCTIE_OPTIES = [
   },
 ];
 
+// Loopfunctie indicatie opties (OSB specific)
+export type LoopfunctieIndicatieOptie = 'Passief' | 'Korte Transfers' | 'Actief';
+export const LOOPFUNCTIE_INDICATIE_OPTIES = [
+  { label: 'Passief', value: 'Passief', fullKey: 'loopfunctiePassief' },
+  { label: 'Korte Transfers', value: 'Korte Transfers', fullKey: 'loopfunctieKorteTransfers' },
+  { label: 'Actief', value: 'Actief', fullKey: 'loopfunctieActief' },
+];
+
 // Leveranciers
 export type LeverancierOptie = 'Neskrid' | 'Tom' | 'Myfoot' | 'Durea';
 export const LEVERANCIER_OPTIES = [
@@ -270,12 +278,10 @@ export const LEVERANCIER_OPTIES = [
 ];
 
 // Basiscode SOS
-export type BasiscodeOptie = '42' | '40' | '25' | 'MCO';
+export type BasiscodeOptie = '42' | '40';
 export const BASISCODE_OPTIES = [
   { label: '42', value: '42' },
   { label: '40', value: '40' },
-  { label: '25', value: '25' },
-  { label: 'MCO', value: 'MCO' },
 ];
 
 // Supplement opties met codes (in tabel met L/R)
