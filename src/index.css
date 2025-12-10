@@ -15,19 +15,19 @@ code {
 /* Highlight field animation for warning navigation */
 .highlight-field {
   animation: highlightAnimation 0.5s ease-in-out;
-  box-shadow: 0 0 10px rgba(237, 137, 54, 0.5) !important;
-  border-color: #ed8936 !important;
+  box-shadow: 0 0 10px rgba(245, 101, 101, 0.5) !important;
+  border-color: #C53030 !important;
 }
 
 @keyframes highlightAnimation {
   0% {
-    box-shadow: 0 0 10px rgba(237, 137, 54, 0.8);
+    box-shadow: 0 0 10px rgba(245, 101, 101, 0.8);
   }
   50% {
-    box-shadow: 0 0 20px rgba(237, 137, 54, 1);
+    box-shadow: 0 0 20px rgba(245, 101, 101, 1);
   }
   100% {
-    box-shadow: 0 0 10px rgba(237, 137, 54, 0.5);
+    box-shadow: 0 0 10px rgba(245, 101, 101, 0.5);
   }
 }
 

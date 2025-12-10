@@ -35,6 +35,7 @@ import {
 } from '@/presentation/form/constants/formConstants';
 import { useAppDispatch } from '@/domain/store/hooks';
 import { setClientData } from '@/domain/store/slices/formData';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 
 export const FormNewClientPage = () => {
   const router = useRouter();
@@ -62,53 +63,53 @@ export const FormNewClientPage = () => {
   const [specialist, setSpecialist] = useState('');
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): string[] => {
-    const missing: string[] = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     if (!practitionerId) {
-      missing.push(t('behandelaar'));
+      missing.push({ fieldName: t('behandelaar'), fieldId: 'field-behandelaar' });
     }
     if (!date) {
-      missing.push(t('aanmeetdatum'));
+      missing.push({ fieldName: t('aanmeetdatum'), fieldId: 'field-aanmeetdatum' });
     }
     if (!location) {
-      missing.push(t('locatie'));
+      missing.push({ fieldName: t('locatie'), fieldId: 'field-locatie' });
     }
     if (!salutation) {
-      missing.push(t('aanhef'));
+      missing.push({ fieldName: t('aanhef'), fieldId: 'field-aanhef' });
     }
     if (!initials.trim()) {
-      missing.push(t('voorletters'));
+      missing.push({ fieldName: t('voorletters'), fieldId: 'field-voorletters' });
     }
     if (!clientName.trim()) {
-      missing.push(t('achternaam'));
+      missing.push({ fieldName: t('achternaam'), fieldId: 'field-achternaam' });
     }
     if (!birthDate) {
-      missing.push(t('geboortedatum'));
+      missing.push({ fieldName: t('geboortedatum'), fieldId: 'field-geboortedatum' });
     }
     if (!address.trim()) {
-      missing.push(t('straatnaam'));
+      missing.push({ fieldName: t('straatnaam'), fieldId: 'field-straatnaam' });
     }
     if (!postalCode.trim()) {
-      missing.push(t('postcode'));
+      missing.push({ fieldName: t('postcode'), fieldId: 'field-postcode' });
     }
     if (!houseNumber.trim()) {
-      missing.push(t('huisnummer'));
+      missing.push({ fieldName: t('huisnummer'), fieldId: 'field-huisnummer' });
     }
     if (!city.trim()) {
-      missing.push(t('stad'));
+      missing.push({ fieldName: t('stad'), fieldId: 'field-stad' });
     }
     if (!phoneOne.trim()) {
-      missing.push(t('telefoon1'));
+      missing.push({ fieldName: t('telefoon1'), fieldId: 'field-telefoon1' });
     }
     if (!email.trim()) {
-      missing.push(t('emailadres'));
+      missing.push({ fieldName: t('emailadres'), fieldId: 'field-emailadres' });
     }
     if (!insurance.trim()) {
-      missing.push(t('verzekeringsmaatschappij'));
+      missing.push({ fieldName: t('verzekeringsmaatschappij'), fieldId: 'field-verzekeringsmaatschappij' });
     }
     if (!specialist.trim()) {
-      missing.push(t('specialistHuisarts'));
+      missing.push({ fieldName: t('specialistHuisarts'), fieldId: 'field-specialisthuisarts' });
     }
 
     return missing;
@@ -118,6 +119,8 @@ export const FormNewClientPage = () => {
 
   const handleSubmit = () => {
     if (!areAllFieldsValid) {
+      const missingFields = getMissingFields();
+      focusAndHighlightInvalidFields(missingFields.map(f => f.fieldId));
       return; // Validation alert will show the missing fields
     }
     // Dispatch client data naar Redux store
@@ -175,7 +178,7 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl flex={1} isRequired isInvalid={!practitionerId}>
+            <FormControl flex={1} isRequired isInvalid={!practitionerId} id="field-behandelaar">
               <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
               <DropdownField
                 type={DropdownType.SINGLE_NON_CREATABLE}
@@ -186,7 +189,7 @@ export const FormNewClientPage = () => {
                 isSmallVariant
               />
             </FormControl>
-            <FormControl flex={1} isRequired isInvalid={!date}>
+            <FormControl flex={1} isRequired isInvalid={!date} id="field-aanmeetdatum">
               <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
               <Box maxW={{ base: 'full', md: '300px' }}>
                 <DatePickerField
@@ -216,7 +219,7 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl isRequired isInvalid={!location}>
+            <FormControl isRequired isInvalid={!location} id="field-locatie">
               <RadioGroup
                 value={location}
                 onChange={v => setLocation(v as Location)}
@@ -253,7 +256,7 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             {/* Aanhef */}
-            <FormControl isRequired isInvalid={!salutation}>
+            <FormControl isRequired isInvalid={!salutation} id="field-aanhef">
               <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
               <RadioGroup
                 value={salutation}
@@ -278,6 +281,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={initials.trim().length === 0}
+                id="field-voorletters"
               >
                 <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
                 <Input
@@ -291,6 +295,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={clientName.trim().length === 0}
+                id="field-achternaam"
               >
                 <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
                 <Input
@@ -303,7 +308,7 @@ export const FormNewClientPage = () => {
             </Flex>
 
             {/* Geboortedatum */}
-            <FormControl isRequired isInvalid={birthDate.length === 0}>
+            <FormControl isRequired isInvalid={birthDate.length === 0} id="field-geboortedatum">
               <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
               <Box>
                 <DatePickerField
@@ -343,6 +348,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={postalCode.trim().length === 0}
+                id="field-postcode"
               >
                 <FormLabel fontSize="sm">{t('postcode')}</FormLabel>
                 <Input
@@ -356,6 +362,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={houseNumber.trim().length === 0}
+                id="field-huisnummer"
               >
                 <FormLabel fontSize="sm">{t('huisnummer')}</FormLabel>
                 <Input
@@ -376,6 +383,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={address.trim().length === 0}
+                id="field-straatnaam"
               >
                 <FormLabel fontSize="sm">{t('straatnaam')}</FormLabel>
                 <Input
@@ -389,6 +397,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={city.trim().length === 0}
+                id="field-stad"
               >
                 <FormLabel fontSize="sm">{t('stad')}</FormLabel>
                 <Input
@@ -427,6 +436,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={phoneOne.trim().length === 0}
+                id="field-telefoon1"
               >
                 <FormLabel fontSize="sm">{t('telefoon1')}</FormLabel>
                 <Input
@@ -450,7 +460,7 @@ export const FormNewClientPage = () => {
             </Flex>
 
             {/* Email */}
-            <FormControl isRequired isInvalid={email.trim().length === 0}>
+            <FormControl isRequired isInvalid={email.trim().length === 0} id="field-emailadres">
               <FormLabel fontSize="sm">{t('emailadres')}</FormLabel>
               <Input
                 type="email"
@@ -487,6 +497,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={insurance.trim().length === 0}
+                id="field-verzekeringsmaatschappij"
               >
                 <FormLabel fontSize="sm">
                   {t('verzekeringsmaatschappij')}
@@ -504,6 +515,7 @@ export const FormNewClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={specialist.trim().length === 0}
+                id="field-specialisthuisarts"
               >
                 <FormLabel fontSize="sm">{t('specialistHuisarts')}</FormLabel>
                 <Input
@@ -526,7 +538,7 @@ export const FormNewClientPage = () => {
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
-                  <ListItem key={index}>{field}</ListItem>
+                  <ListItem key={index}>{field.fieldName}</ListItem>
                 ))}
               </UnorderedList>
             </Box>
@@ -539,11 +551,8 @@ export const FormNewClientPage = () => {
             variant="primary"
             onClick={handleSubmit}
             w={{ base: 'full', sm: 'auto' }}
-            isDisabled={!areAllFieldsValid}
           >
-            {areAllFieldsValid
-              ? t('saveAndSelectForm')
-              : 'Vul verplichte velden in'}
+            {t('saveAndSelectForm')}
           </Button>
         </Flex>
       </Flex>
