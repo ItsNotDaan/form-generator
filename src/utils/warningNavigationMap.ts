@@ -153,8 +153,8 @@ export function focusAndHighlightInvalidFields(fieldIds: string[]): void {
                     focusableElement = firstElement.querySelector('input[type="radio"]');
                 }
                 
-                if (focusableElement) {
-                    (focusableElement as HTMLElement).focus();
+                if (focusableElement && focusableElement instanceof HTMLElement) {
+                    focusableElement.focus();
                 }
             }
         }, 500); // Wait for scroll animation to complete
