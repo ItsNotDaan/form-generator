@@ -21,8 +21,8 @@
  * - 14: Aanvulling lengte/breedte (placeholder - not implemented)
  * - 15: Zoolverstijving per side
  * - 16: Ezelsoor (mediaal/lateraal) per side
- * - 16a: Koker aan supplement (placeholder - not implemented)
  * - 17: Koker tussen voering (any omsluiting option checked) per side
+ * - 50: Diverse Amputaties per side
  */
 
 import {
@@ -53,10 +53,22 @@ export interface GeneratedCodes {
   code15Rechts: boolean;
   code16Links: boolean;
   code16Rechts: boolean;
-  code16aLinks: boolean;
-  code16aRechts: boolean;
   code17Links: boolean;
   code17Rechts: boolean;
+  code43Links?: boolean;
+  code43Rechts?: boolean;
+  code46Links?: boolean;
+  code46Rechts?: boolean;
+  code47Links?: boolean;
+  code47Rechts?: boolean;
+  code57Links?: boolean;
+  code57Rechts?: boolean;
+  code58Links?: boolean;
+  code58Rechts?: boolean;
+  code59Links?: boolean;
+  code59Rechts?: boolean;
+  code50Links: boolean;
+  code50Rechts: boolean;
 }
 
 export interface CodeGenerationResult {
@@ -100,11 +112,61 @@ function initializeCodes(): GeneratedCodes {
     code15Rechts: false,
     code16Links: false,
     code16Rechts: false,
-    code16aLinks: false,
-    code16aRechts: false,
     code17Links: false,
     code17Rechts: false,
+    code43Links: false,
+    code43Rechts: false,
+    code46Links: false,
+    code46Rechts: false,
+    code47Links: false,
+    code47Rechts: false,
+    code57Links: false,
+    code57Rechts: false,
+    code58Links: false,
+    code58Rechts: false,
+    code59Links: false,
+    code59Rechts: false,
+    code50Links: false,
+    code50Rechts: false,
   };
+}
+/**
+ * Generate codes for OSB intake
+ * Codes: 43 (Zoolverstijving), 46 (Hallux Valgus), 47 (Verdieping voorvoet), 57 (Supplement Individueel), 58 (Afwikkelrol Eenvoudig), 59 (Afwikkelrol gecompliceerd)
+ * Per zijde (Links/Rechts)
+ */
+function generateOSBCodes(
+  osb: any,
+  codes: GeneratedCodes,
+  warnings: string[],
+  insurance: string
+): void {
+  // Zoolverstijving (code 43)
+  if (osb.aanpassingen?.zoolverstijvingLinks) codes.code43Links = true;
+  if (osb.aanpassingen?.zoolverstijvingRechts) codes.code43Rechts = true;
+
+  // Hallux Valgus (code 46)
+  if (osb.aanpassingen?.halluxValgusLinks) codes.code46Links = true;
+  if (osb.aanpassingen?.halluxValgusRechts) codes.code46Rechts = true;
+
+  // Verdieping voorvoet (code 47)
+  if (osb.aanpassingen?.verdiepingVoorvoetLinks) codes.code47Links = true;
+  if (osb.aanpassingen?.verdiepingVoorvoetRechts) codes.code47Rechts = true;
+
+  // Supplement Individueel (code 57)
+  if (osb.aanpassingen?.supplementIndividueelLinks) codes.code57Links = true;
+  if (osb.aanpassingen?.supplementIndividueelRechts) codes.code57Rechts = true;
+
+  // Afwikkelrol Eenvoudig (code 58)
+  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) codes.code58Links = true;
+  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) codes.code58Rechts = true;
+
+  // Afwikkelrol gecompliceerd (code 59)
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) codes.code59Links = true;
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) codes.code59Rechts = true;
+
+  // Basiscode (optioneel, voor rapportage)
+  // if (osb.basiscode) ...
 }
 
 /**
@@ -200,6 +262,14 @@ function generateVLOSCodes(
     codes.code17Rechts = true;
   }
 
+  // Code 50: Diverse Amputaties
+  if (vlos.amputatieLinksEnabled) {
+    codes.code50Links = true;
+  }
+  if (vlos.amputatieRechtsEnabled) {
+    codes.code50Rechts = true;
+  }
+
   // Validation warnings
   if (!welkPaar) {
     warnings.push('VLOS welk paar (paartype) is niet ingevuld');
@@ -290,6 +360,14 @@ function generateOSACodes(
     codes.code17Rechts = true;
   }
 
+  // Code 50: Diverse Amputaties
+  if (osa.amputatieLinksEnabled) {
+    codes.code50Links = true;
+  }
+  if (osa.amputatieRechtsEnabled) {
+    codes.code50Rechts = true;
+  }
+
   // Code 9: Proefschoen
   // Dit krijg je alleen als 07 met 17 wordt gedaan bij de volgende verzekeraars:
   // Achmea, DSW en ASR.
@@ -352,6 +430,12 @@ export function generateCodes(
       break;
 
     case 'OSB':
+      if (intakeData.intakeOSB) {
+        generateOSBCodes(intakeData.intakeOSB, codes, warnings, insurance || '');
+      } else {
+        warnings.push('OSB intake data is niet beschikbaar');
+      }
+      break;
     case 'OVAC':
       warnings.push(
         `Code generatie voor ${intakeType} wordt in een latere fase geïmplementeerd`

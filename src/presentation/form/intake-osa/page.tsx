@@ -147,6 +147,12 @@ export const FormIntakeOSAPage = () => {
   const [ezelsoorLinksType, setEzelsoorLinksType] = useState(''); // mediaal/lateraal
   const [ezelsoorRechtsType, setEzelsoorRechtsType] = useState('');
 
+  // State voor amputatie (code 50)
+  const [amputatieLinksEnabled, setAmputatieLinksEnabled] =
+    useState<boolean>(false);
+  const [amputatieRechtsEnabled, setAmputatieRechtsEnabled] =
+    useState<boolean>(false);
+
   // State voor hakafronding
   const [hakafrondingLinksEnabled, setHakafrondingLinksEnabled] =
     useState<boolean>(true); // standaard true
@@ -231,6 +237,8 @@ export const FormIntakeOSAPage = () => {
         ezelsoorRechtsEnabled,
         ezelsoorLinksType,
         ezelsoorRechtsType,
+        amputatieLinksEnabled,
+        amputatieRechtsEnabled,
         hakafrondingLinksEnabled,
         hakafrondingRechtsEnabled,
         hakafrondingLinksHoogte,
@@ -1112,6 +1120,70 @@ export const FormIntakeOSAPage = () => {
                     ))}
                   </Select>
                 )}
+              </Box>
+            )}
+          </Flex>
+        </Box>
+
+        <Divider />
+
+        {/* Amputatie (Code 50) */}
+        <Box id="amputatie-section">
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('amputatie')}
+          </Text>
+          <Flex
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            border="1px solid"
+            borderColor="inherit"
+            borderRadius="md"
+            p={4}
+            mt={2}
+          >
+            {showLinks && (
+              <Box flex={1}>
+                <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                  {t('links')}
+                </Text>
+                <RadioGroup
+                  value={boolToString(amputatieLinksEnabled)}
+                  onChange={v => setAmputatieLinksEnabled(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.value)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Box>
+            )}
+            {showRechts && (
+              <Box
+                flex={1}
+                borderLeft={{ base: 'none', md: showLinks ? '1px' : 'none' }}
+                borderTop={{ base: showLinks ? '1px' : 'none', md: 'none' }}
+                borderColor="inherit"
+                pl={{ base: 0, md: showLinks ? 6 : 0 }}
+                pt={{ base: showLinks ? 4 : 0, md: 0 }}
+              >
+                <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                  {t('rechts')}
+                </Text>
+                <RadioGroup
+                  value={boolToString(amputatieRechtsEnabled)}
+                  onChange={v => setAmputatieRechtsEnabled(stringToBool(v))}
+                >
+                  <Stack direction="row" spacing={4}>
+                    {JA_NEE_OPTIES.map(opt => (
+                      <Radio key={opt.value} value={opt.value}>
+                        {t(opt.value)}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
               </Box>
             )}
           </Flex>

@@ -16,6 +16,7 @@ import {
   AlertIcon,
   UnorderedList,
   ListItem,
+  Textarea,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -55,6 +56,7 @@ export const FormNewClientPage = () => {
   const [birthDate, setBirthDate] = useState('');
   const [email, setEmail] = useState('');
   const [insurance, setInsurance] = useState('');
+  const [medischeIndicatie, setMedischeIndicatie] = useState('');
   const [practitionerId, setPractitionerId] = useState<string | undefined>(
     undefined
   );
@@ -140,6 +142,7 @@ export const FormNewClientPage = () => {
         phoneOne,
         phoneTwo,
         email,
+        medischeIndicatie,
         insurance,
         specialist, // Bevat nu Specialist/Huisarts
       })
@@ -227,7 +230,7 @@ export const FormNewClientPage = () => {
               <FormControl isRequired isInvalid={!location}>
                 <RadioGroup
                   value={location}
-                  onChange={v => setLocation(v as Location)}
+                  onChange={v => setLocation(v as Locatie)}
                 >
                   <Stack
                     direction={{ base: 'column', sm: 'row' }}
@@ -267,7 +270,7 @@ export const FormNewClientPage = () => {
                 <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
                 <RadioGroup
                   value={salutation}
-                  onChange={v => setSalutation(v as Salutation)}
+                  onChange={v => setSalutation(v as Aanhef)}
                 >
                   <Stack direction="row" spacing={6}>
                     {AANHEF_OPTIES.map(o => (
@@ -516,6 +519,8 @@ export const FormNewClientPage = () => {
                     items={ZORGVERZEKERAARS}
                     item={insurance}
                     onItemSelected={item => setInsurance(item?.value || '')}
+                    onCreateOption={value => setInsurance(value)}
+                    isLoading={false}
                     placeholder={t('verzekeringsmaatschappijPlaceholder')}
                     isSmallVariant
                   />
@@ -536,6 +541,20 @@ export const FormNewClientPage = () => {
                 </FormControl>
               </Box>
             </Flex>
+
+            {/* Medische Indicatie */}
+            <Box>
+              <FormControl>
+                <FormLabel fontSize="sm">{t('medischeIndicatie')}</FormLabel>
+                <Textarea
+                  value={medischeIndicatie}
+                  onChange={e => setMedischeIndicatie(e.target.value)}
+                  placeholder={t('medischeIndicatiePlaceholder')}
+                  minH={{ base: '80px', md: '100px' }}
+                  size="sm"
+                />
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
 

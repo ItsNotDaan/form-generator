@@ -11,13 +11,13 @@ export interface ClientData {
 
   // Intake form type
   intakeType?:
-    | 'VLOS'
-    | 'OSA'
-    | 'Pulman'
-    | 'Rebacare'
-    | 'OSB'
-    | 'OVAC'
-    | 'Steunzolen';
+  | 'VLOS'
+  | 'OSA'
+  | 'Pulman'
+  | 'Rebacare'
+  | 'OSB'
+  | 'OVAC'
+  | 'Steunzolen';
 
   // Location
   location?: Locatie;
@@ -40,6 +40,7 @@ export interface ClientData {
   email: string;
 
   // Medical information
+  medischeIndicatie?: string;
   insurance: string;
   specialist?: string;
 }
@@ -115,6 +116,10 @@ export interface IntakeVLOSData {
   ezelsoorLinksType?: string; // Medial/Lateral
   ezelsoorRechtsType?: string;
 
+  // Amputatie (code 50)
+  amputatieLinksEnabled: boolean;
+  amputatieRechtsEnabled: boolean;
+
   // Walking sole type
   loopzoolType?: string;
 
@@ -179,73 +184,64 @@ export interface IntakeRebacareData {
 
 export interface IntakeOSBData {
   // Order information
-  ordernummer?: string; // Order number
-  welkPaar?: string; // Description/pair type (single select)
+  ordernummer?: string;
+  welkPaar?: string;
 
   // Medical indication
   medischeIndicatie?: string;
 
-  // Goals/objectives (no left/right) - now key-value pairs for Word document generation
-  doel?: Record<string, boolean>; // Keys like doelPasvorm, doelStabiliteit
+  // Goals/objectives (no left/right)
+  doel?: Record<string, boolean>;
 
-  // Walking functions - now key-value pairs for Word document generation
-  loopfunctie?: Record<string, boolean>; // Keys like loopfunctiePassief, loopfunctieActief
+  // Walking functions
+  loopfunctie?: Record<string, boolean>;
 
   // Supplier and order date
-  leverancier?: string; // Supplier (single select)
+  leverancier?: string;
   bestelDatum?: string;
 
   // Product specifications
   productSpecificaties?: {
-    artCode?: string; // Article code
-    lengteMaat?: string; // Length measurement
-    wijdte?: string; // Width
-    kleur?: string; // Color
-    sluiting?: string; // Closure type
+    artCode?: string;
+    lengteMaat?: string;
+    wijdte?: string;
+    kleur?: string;
+    sluiting?: string;
   };
 
-  // Modules - Hallux valgus correction
-  halluxValgusEnabled?: boolean;
-  halluxValgusLinks?: boolean;
-  halluxValgusRechts?: boolean;
-  halluxValgusLinksMm?: string; // 3mm or 8mm
-  halluxValgusRechtsMm?: string;
+  // Nieuw: Basiscode blok
+  basiscode?: string;
 
-  // Modules - Forefoot deepenings
-  verdiepingenVoorvoetLinks?: boolean;
-  verdiepingenVoorvoetRechts?: boolean;
-  verdiepingenVoorvoetLinksMm?: string; // 3mm or 5mm
-  verdiepingenVoorvoetRechtsMm?: string;
-  verdiepingenVoorvoetExtraLinks?: boolean; // Extra deepening
-  verdiepingenVoorvoetExtraRechts?: boolean;
-
-  // Basic SOS codes with left/right
-  basiscodeSOS?: string; // Selected basic code (single select)
-
-  // Supplements - vlakke structuur (4 supplements × 2 zijdes = 8 velden)
-  supplementIndividueelLinks?: boolean;
-  supplementIndividueelRechts?: boolean;
-  afwikkelrolEenvoudigLinks?: boolean;
-  afwikkelrolEenvoudigRechts?: boolean;
-  afwikkelrolGecompliceerdLinks?: boolean;
-  afwikkelrolGecompliceerdRechts?: boolean;
-  zoolverstijvingLinks?: boolean;
-  zoolverstijvingRechts?: boolean;
+  // Nieuw: Aanpassingen blok
+  aanpassingen?: {
+    zoolverstijvingLinks?: boolean;
+    zoolverstijvingRechts?: boolean;
+    halluxValgusLinks?: boolean;
+    halluxValgusRechts?: boolean;
+    verdiepingVoorvoetLinks?: boolean;
+    verdiepingVoorvoetRechts?: boolean;
+    supplementIndividueelLinks?: boolean;
+    supplementIndividueelRechts?: boolean;
+    afwikkelrolEenvoudigLinks?: boolean;
+    afwikkelrolEenvoudigRechts?: boolean;
+    afwikkelrolGecompliceerdLinks?: boolean;
+    afwikkelrolGecompliceerdRechts?: boolean;
+  };
 
   // Insole component - single select steunzooltype
-  steunzoolTypeGeneral?: string; // Single selected type
-  steunzoolAndersText?: string; // Anders text input
-  steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
-  steunzoolCorrectieVoorvoet?: string; // Forefoot correction
-  steunzoolVvPellote?: string; // Forefoot pad
+  steunzoolTypeGeneral?: string;
+  steunzoolAndersText?: string;
+  steunzoolCorrectieMiddenvoet?: string;
+  steunzoolCorrectieVoorvoet?: string;
+  steunzoolVvPellote?: string;
 
   // Insole component - hak verhoging is gesplitst
-  steunzoolHakVerhogingLinks?: string; // Heel raise in cm
+  steunzoolHakVerhogingLinks?: string;
   steunzoolHakVerhogingRechts?: string;
 
   // Insole price
-  steunzoolPrijs?: number; // Price numeric value
-  steunzoolPrijsNaam?: string; // Price label name
+  steunzoolPrijs?: number;
+  steunzoolPrijsNaam?: string;
 
   // Special notes
   bijzonderheden?: string;

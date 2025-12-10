@@ -16,6 +16,7 @@ import {
   AlertIcon,
   UnorderedList,
   ListItem,
+  Textarea,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -75,8 +76,9 @@ export const FormOldClientPage = () => {
   );
   const [phoneOne, setPhoneOne] = useState(existingClient?.phoneOne || '');
   const [phoneTwo, setPhoneTwo] = useState(existingClient?.phoneTwo || '');
-
-  // Validation: check which required fields are missing
+  const [medischeIndicatie, setMedischeIndicatie] = useState(
+    existingClient?.medischeIndicatie || ''
+  );
   const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
     const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
@@ -126,6 +128,7 @@ export const FormOldClientPage = () => {
         phoneOne,
         phoneTwo,
         email,
+        medischeIndicatie,
         insurance,
         specialist,
       })
@@ -209,7 +212,7 @@ export const FormOldClientPage = () => {
               <FormControl isRequired isInvalid={!location}>
                 <RadioGroup
                   value={location}
-                  onChange={v => setLocation(v as Location)}
+                  onChange={v => setLocation(v as Locatie)}
                 >
                   <Stack
                     direction={{ base: 'column', sm: 'row' }}
@@ -244,7 +247,7 @@ export const FormOldClientPage = () => {
               <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
               <RadioGroup
                 value={salutation}
-                onChange={v => setSalutation(v as Salutation)}
+                onChange={v => setSalutation(v as Aanhef)}
               >
                 <Stack direction="row" spacing={6}>
                   {AANHEF_OPTIES.map(o => (
@@ -442,6 +445,8 @@ export const FormOldClientPage = () => {
                   items={ZORGVERZEKERAARS}
                   item={insurance}
                   onItemSelected={item => setInsurance(item?.value || '')}
+                  onCreateOption={value => setInsurance(value)}
+                  isLoading={false}
                   placeholder={t('verzekeringsmaatschappijPlaceholder')}
                   isSmallVariant
                 />
@@ -456,6 +461,20 @@ export const FormOldClientPage = () => {
                 />
               </FormControl>
             </Flex>
+
+            {/* Medische Indicatie */}
+            <Box>
+              <FormControl>
+                <FormLabel fontSize="sm">{t('medischeIndicatie')}</FormLabel>
+                <Textarea
+                  value={medischeIndicatie}
+                  onChange={e => setMedischeIndicatie(e.target.value)}
+                  placeholder={t('medischeIndicatiePlaceholder')}
+                  minH={{ base: '80px', md: '100px' }}
+                  size="sm"
+                />
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
 
