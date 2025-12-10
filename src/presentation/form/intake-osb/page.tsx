@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -22,9 +22,9 @@ import {
   Select,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {setIntakeOSBData} from '@/domain/store/slices/formData';
+import { useRouter } from 'next/router';
+import { useAppDispatch } from '@/domain/store/hooks';
+import { setIntakeOSBData } from '@/domain/store/slices/formData';
 import {
   STEUNZOLEN_PRIJS_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
@@ -36,10 +36,10 @@ import {
   LEVERANCIER_OPTIES,
   LOOPFUNCTIE_INDICATIE_OPTIES,
 } from '@/presentation/form/constants/formConstants';
-import {DatePickerField} from '@/presentation/base/input/datePickerField';
+import { DatePickerField } from '@/presentation/base/input/datePickerField';
 
 const FormIntakeOSBPage = () => {
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -97,8 +97,8 @@ const FormIntakeOSBPage = () => {
     talonetteOption && steunzoolPrijs === talonetteOption.value;
 
   // Validation helpers
-  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
-    const missing: Array<{fieldName: string; fieldId: string}> = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     // Loopfunctie Anders validation
     if (loopfunctieIndicatie === 'Anders' && !loopfunctieAndersText.trim()) {
@@ -165,20 +165,20 @@ const FormIntakeOSBPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         {/* Basiscode */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('basicCode')}
           </Text>
           <RadioGroup value={basiscode} onChange={setBasiscode}>
             <Stack direction="row" spacing={4}>
               {BASISCODE_OPTIES.map(option => (
                 <Radio key={option.value} value={option.value}>
-                  {t(`basiscode${option.value}`)}
+                  {t(`basicCode${option.value}`)}
                 </Radio>
               ))}
             </Stack>
@@ -189,7 +189,7 @@ const FormIntakeOSBPage = () => {
 
         {/* Doel Section */}
         <Box id="section-doel">
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('goal')}
           </Text>
           <Box
@@ -199,7 +199,7 @@ const FormIntakeOSBPage = () => {
             p={4}
             mt={2}
           >
-            <SimpleGrid columns={{base: 1, md: 2}} spacing={6}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
               <FormControl id="field-doel-pasvorm">
                 <FormLabel fontSize="sm" fontWeight="medium" mb={2}>
                   {t('goalFit')}
@@ -279,7 +279,7 @@ const FormIntakeOSBPage = () => {
 
         {/* Loopfunctie Section */}
         <Box id="section-loopfunctie">
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('walkingFunction')}
           </Text>
           <Box
@@ -310,11 +310,11 @@ const FormIntakeOSBPage = () => {
 
         {/* Bestel Informatie Section */}
         <Box id="section-bestel-informatie">
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('orderInformation')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -322,13 +322,13 @@ const FormIntakeOSBPage = () => {
             p={4}
             mt={2}
           >
-            <SimpleGrid columns={{base: 1, md: 2}} spacing={4}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
               <FormControl id="field-leverancier-osb">
                 <FormLabel fontSize="sm" fontWeight="medium">
-                  {t('leverancierNaam')}
+                  {t('supplier')}
                 </FormLabel>
                 <Select
-                  placeholder={t('leverancierNaam')}
+                  placeholder={t('supplier')}
                   value={leverancierNaam}
                   onChange={e => setLeverancierNaam(e.target.value)}
                   size="sm"
@@ -356,13 +356,13 @@ const FormIntakeOSBPage = () => {
 
             <Divider />
 
-            <SimpleGrid columns={{base: 1, sm: 2, md: 5}} spacing={4}>
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 5 }} spacing={4}>
               <FormControl id="field-artikelcode-osb">
                 <FormLabel fontSize="sm" fontWeight="medium">
-                  {t('artikelCode')}
+                  {t('artCode')}
                 </FormLabel>
                 <Input
-                  placeholder={t('artikelCode')}
+                  placeholder={t('artCode')}
                   value={artikelCode}
                   onChange={e => setArtikelCode(e.target.value)}
                   size="sm"
@@ -383,10 +383,10 @@ const FormIntakeOSBPage = () => {
 
               <FormControl id="field-wijdtemaat-osb">
                 <FormLabel fontSize="sm" fontWeight="medium">
-                  {t('wijdteMaat')}
+                  {t('widthSize')}
                 </FormLabel>
                 <Input
-                  placeholder={t('wijdteMaat')}
+                  placeholder={t('widthSize')}
                   value={wijdteMaat}
                   onChange={e => setWijdteMaat(e.target.value)}
                   size="sm"
@@ -395,10 +395,10 @@ const FormIntakeOSBPage = () => {
 
               <FormControl id="field-schoenkleur-osb">
                 <FormLabel fontSize="sm" fontWeight="medium">
-                  {t('schoenKleur')}
+                  {t('color')}
                 </FormLabel>
                 <Input
-                  placeholder={t('schoenKleur')}
+                  placeholder={t('color')}
                   value={schoenKleur}
                   onChange={e => setSchoenKleur(e.target.value)}
                   size="sm"
@@ -424,7 +424,7 @@ const FormIntakeOSBPage = () => {
 
         {/* Aanpassingen Section */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             Aanpassingen
           </Text>
           <Box
@@ -434,7 +434,7 @@ const FormIntakeOSBPage = () => {
             p={4}
             mt={2}
           >
-            <SimpleGrid columns={{base: 1, md: 2}} spacing={6}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
               {/* Hallux Valgus */}
               <Box>
                 <Text fontWeight="semibold" mb={3} fontSize="sm">
@@ -704,23 +704,23 @@ const FormIntakeOSBPage = () => {
 
         {/* Steunzolen Section */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('insoles')}
           </Text>
           <RadioGroup
-            value={steunzolenEnabled ? 'yes' : 'no'}
-            onChange={val => setSteunzolenEnabled(val === 'yes')}
+            value={steunzolenEnabled ? 'ja' : 'nee'}
+            onChange={val => setSteunzolenEnabled(val === 'ja')}
             mb={4}
           >
             <Stack direction="row" spacing={4}>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
+              <Radio value="ja">{t('yes')}</Radio>
+              <Radio value="nee">{t('no')}</Radio>
             </Stack>
           </RadioGroup>
 
           {steunzolenEnabled && (
             <Flex
-              gap={{base: 2, md: 3}}
+              gap={{ base: 2, md: 3 }}
               direction="column"
               border="1px solid"
               borderColor="inherit"
@@ -815,7 +815,7 @@ const FormIntakeOSBPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('midfootCorrection')}
                     </Text>
-                    <Flex gap={{base: 2, md: 3}} flexWrap="wrap">
+                    <Flex gap={{ base: 2, md: 3 }} flexWrap="wrap">
                       {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
                         <Checkbox
                           key={option.value}
@@ -843,7 +843,7 @@ const FormIntakeOSBPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('forefootCorrection')}
                     </Text>
-                    <Flex gap={{base: 2, md: 3}} flexWrap="wrap">
+                    <Flex gap={{ base: 2, md: 3 }} flexWrap="wrap">
                       {CORRECTIE_VOORVOET_OPTIES.map(option => (
                         <Checkbox
                           key={option.value}
@@ -871,7 +871,7 @@ const FormIntakeOSBPage = () => {
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('forefootPad')}
                     </Text>
-                    <Flex gap={{base: 2, md: 3}} flexWrap="wrap">
+                    <Flex gap={{ base: 2, md: 3 }} flexWrap="wrap">
                       {PELLOTE_OPTIES.map(option => (
                         <Checkbox
                           key={option.value}
@@ -899,7 +899,7 @@ const FormIntakeOSBPage = () => {
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('insoleHeelRaiseCm')}
                 </Text>
-                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
                   <FormControl>
                     <FormLabel fontSize="sm">{t('left')}</FormLabel>
                     <Input
@@ -934,14 +934,14 @@ const FormIntakeOSBPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
             {t('specialNotes')}
           </Text>
           <Textarea
             placeholder={t('specialNotesPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{base: '100px', md: '120px'}}
+            minH={{ base: '100px', md: '120px' }}
           />
         </Box>
 
@@ -961,11 +961,11 @@ const FormIntakeOSBPage = () => {
           </Alert>
         )}
 
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             {t('saveAndContinue')}
           </Button>

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -28,11 +28,11 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setIntakeOVACData, setClientData} from '@/domain/store/slices/formData';
-import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeOVACData, setClientData } from '@/domain/store/slices/formData';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import {
   OVAC_OMSCHRIJVING_ITEMS,
   PAARTYPE_OPTIES,
@@ -45,7 +45,7 @@ import {
 
 export const FormIntakeOVACPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -183,8 +183,8 @@ export const FormIntakeOVACPage = () => {
   };
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
-    const missing: Array<{fieldName: string; fieldId: string}> = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     // Steunzolen validation if enabled
     if (steunzolenEnabled) {
@@ -248,7 +248,7 @@ export const FormIntakeOVACPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'OVAC'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'OVAC' }));
     }
 
     dispatch(
@@ -308,18 +308,18 @@ export const FormIntakeOVACPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         {/* Omschrijving/Paartype */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('whichPair')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -329,7 +329,7 @@ export const FormIntakeOVACPage = () => {
             <Box flex={1}>
               <RadioGroup value={omschrijving} onChange={setOmschrijving}>
                 <Stack
-                  direction={{base: 'column', md: 'row'}}
+                  direction={{ base: 'column', md: 'row' }}
                   spacing={4}
                   flexWrap="wrap"
                 >
@@ -348,11 +348,11 @@ export const FormIntakeOVACPage = () => {
 
         {/* Medische Indicatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('medicalIndication')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -364,7 +364,7 @@ export const FormIntakeOVACPage = () => {
               placeholder={t('medicalIndicationPlaceholder')}
               value={medischeIndicatie}
               onChange={e => setMedischeIndicatie(e.target.value)}
-              minH={{base: '80px', md: '100px'}}
+              minH={{ base: '80px', md: '100px' }}
             />
           </Flex>
         </Box>
@@ -373,11 +373,11 @@ export const FormIntakeOVACPage = () => {
 
         {/* Omschrijving Tabel */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             Omschrijving
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -437,12 +437,12 @@ export const FormIntakeOVACPage = () => {
 
         {/* Verkorting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             Verkorting
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -464,7 +464,7 @@ export const FormIntakeOVACPage = () => {
                 L
               </Checkbox>
             </Stack>
-            <SimpleGrid columns={{base: 1, sm: 2}} spacing={4} flex={1}>
+            <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} flex={1}>
               <FormControl>
                 <FormLabel fontSize="sm">Voorvoet (cm)</FormLabel>
                 <Input
@@ -493,23 +493,23 @@ export const FormIntakeOVACPage = () => {
 
         {/* Steunzolen (Optional) */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('insolesSection')}
           </Text>
           <RadioGroup
-            value={steunzolenEnabled ? 'yes' : 'no'}
-            onChange={val => setSteunzolenEnabled(val === 'yes')}
+            value={steunzolenEnabled ? 'ja' : 'nee'}
+            onChange={val => setSteunzolenEnabled(val === 'ja')}
             mb={4}
           >
             <Stack direction="row" spacing={4}>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
+              <Radio value="ja">{t('ja')}</Radio>
+              <Radio value="nee">{t('nee')}</Radio>
             </Stack>
           </RadioGroup>
 
           {steunzolenEnabled && (
             <Flex
-              gap={{base: 4, md: 6}}
+              gap={{ base: 4, md: 6 }}
               direction="column"
               border="1px solid"
               borderColor="inherit"
@@ -676,7 +676,7 @@ export const FormIntakeOVACPage = () => {
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('insoleHeelRaiseCm')}
                 </Text>
-                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
                   <FormControl>
                     <FormLabel fontSize="sm">{t('left')}</FormLabel>
                     <Input
@@ -711,14 +711,14 @@ export const FormIntakeOVACPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
             {t('specialNotes')}
           </Text>
           <Textarea
             placeholder={t('specialNotesPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{base: '100px', md: '120px'}}
+            minH={{ base: '100px', md: '120px' }}
           />
         </Box>
 
@@ -739,11 +739,11 @@ export const FormIntakeOVACPage = () => {
         )}
 
         {/* Submit button */}
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Opslaan en doorgaan
           </Button>
