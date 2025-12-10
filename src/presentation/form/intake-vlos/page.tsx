@@ -338,7 +338,7 @@ export const FormIntakeVLOSPage = () => {
           >
             {showLinks && (
               <FormControl>
-                <FormLabel fontSize="sm">{t('hakhoogteLinksCm')}</FormLabel>
+                <FormLabel fontSize="sm">{t('linksCm')}</FormLabel>
                 <Input
                   type="number"
                   placeholder="cm"
@@ -350,7 +350,7 @@ export const FormIntakeVLOSPage = () => {
             )}
             {showRechts && (
               <FormControl>
-                <FormLabel fontSize="sm">{t('hakhoogteRechtsCm')}</FormLabel>
+                <FormLabel fontSize="sm">{t('rechtsCm')}</FormLabel>
                 <Input
                   type="number"
                   placeholder="cm"
@@ -842,7 +842,7 @@ export const FormIntakeVLOSPage = () => {
                 <FormLabel fontSize="sm">{t('inschotpuntCm')}</FormLabel>
                 <Input
                   type="number"
-                  placeholder={t('inschotpuntPlaceholder')}
+                  placeholder={t('inschotpuntPlaceholderCm')}
                   value={inschotpunt}
                   onChange={e => setInschotpunt(e.target.value)}
                   size="sm"
@@ -1002,7 +1002,7 @@ export const FormIntakeVLOSPage = () => {
           >
             {showLinks && (
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('hakhoogteLinksCm')}</FormLabel>
+                <FormLabel fontSize="sm">{t('linksCm')}</FormLabel>
                 <Input
                   type="number"
                   placeholder={t('hakhoogtePlaceholder')}
@@ -1014,7 +1014,7 @@ export const FormIntakeVLOSPage = () => {
             )}
             {showRechts && (
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('hakhoogteRechtsCm')}</FormLabel>
+                <FormLabel fontSize="sm">{t('rechtsCm')}</FormLabel>
                 <Input
                   type="number"
                   placeholder={t('hakhoogtePlaceholder')}

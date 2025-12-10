@@ -110,10 +110,10 @@ export const LOOPZOOL_OPTIES = [
 ];
 
 // Sluiting opties
-export type Sluiting = 'haken/ringen' | 'klittenband';
+export type Sluiting = 'Haken/Ringen' | 'Klittenband';
 export const SLUITING_OPTIES = [
-  { label: 'haken/ringen', value: 'haken/ringen' },
-  { label: 'klittenband', value: 'klittenband' },
+  { label: 'Haken/Ringen', value: 'Haken/Ringen' },
+  { label: 'Klittenband', value: 'Klittenband' },
 ];
 
 // Hakschoring types
