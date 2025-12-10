@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState, useEffect } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -20,14 +20,14 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
   setIntakePulmanData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import {
   Zijde,
   PULMAN_TYPE_OPTIES,
@@ -37,7 +37,7 @@ import {
 
 export const FormIntakePulmanPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -78,8 +78,8 @@ export const FormIntakePulmanPage = () => {
   }, [gezwachteld]);
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
-    const missing: Array<{fieldName: string; fieldId: string}> = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
     // No required fields for Pulman
     return missing;
   };
@@ -95,7 +95,7 @@ export const FormIntakePulmanPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'Pulman'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'Pulman' }));
     }
 
     dispatch(
@@ -127,18 +127,18 @@ export const FormIntakePulmanPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         {/* Omschrijving/Paartype */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('whichPair')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -148,7 +148,7 @@ export const FormIntakePulmanPage = () => {
             <Box flex={1}>
               <RadioGroup value={omschrijving} onChange={setOmschrijving}>
                 <Stack
-                  direction={{base: 'column', md: 'row'}}
+                  direction={{ base: 'column', md: 'row' }}
                   spacing={4}
                   flexWrap="wrap"
                 >
@@ -167,12 +167,12 @@ export const FormIntakePulmanPage = () => {
 
         {/* Links/Rechts/Beide selectie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('side')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -195,14 +195,14 @@ export const FormIntakePulmanPage = () => {
 
         {/* Medische Indicatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('medicalIndication')}
           </Text>
           <Textarea
             placeholder={t('medicalIndicationPlaceholder')}
             value={medischeIndicatie}
             onChange={e => setMedischeIndicatie(e.target.value)}
-            minH={{base: '80px', md: '100px'}}
+            minH={{ base: '80px', md: '100px' }}
           />
         </Box>
 
@@ -210,12 +210,12 @@ export const FormIntakePulmanPage = () => {
 
         {/* Gezwachteld */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('bandaged')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -254,12 +254,12 @@ export const FormIntakePulmanPage = () => {
 
         {/* Type Pulman */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('pulmanType')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -284,11 +284,11 @@ export const FormIntakePulmanPage = () => {
 
         {/* Schoenmaat klant */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('shoeSize')}
           </Text>
           <Flex
-            gap={{base: 2, md: 3}}
+            gap={{ base: 2, md: 3 }}
             direction="row"
             border="1px solid"
             borderColor="inherit"
@@ -298,7 +298,7 @@ export const FormIntakePulmanPage = () => {
             flexWrap="wrap"
           >
             <RadioGroup value={schoenmaat} onChange={setSchoenmaat}>
-              <Stack direction="row" spacing={{base: 3, md: 4}} flexWrap="wrap">
+              <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
                 {SCHOENMATEN.map(size => (
                   <Radio key={size} value={size}>
                     {size}
@@ -313,11 +313,11 @@ export const FormIntakePulmanPage = () => {
 
         {/* Afgegeven maat */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('providedSize')}
           </Text>
           <Flex
-            gap={{base: 2, md: 3}}
+            gap={{ base: 2, md: 3 }}
             direction="row"
             border="1px solid"
             borderColor="inherit"
@@ -327,7 +327,7 @@ export const FormIntakePulmanPage = () => {
             flexWrap="wrap"
           >
             <RadioGroup value={afgegevenMaat} onChange={setAfgegevenMaat}>
-              <Stack direction="row" spacing={{base: 3, md: 4}} flexWrap="wrap">
+              <Stack direction="row" spacing={{ base: 3, md: 4 }} flexWrap="wrap">
                 {SCHOENMATEN.map(size => (
                   <Radio key={size} value={size}>
                     {size}
@@ -342,14 +342,14 @@ export const FormIntakePulmanPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
             {t('specialNotes')}
           </Text>
           <Textarea
             placeholder={t('specialNotesPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{base: '100px', md: '120px'}}
+            minH={{ base: '100px', md: '120px' }}
           />
         </Box>
 
@@ -370,11 +370,11 @@ export const FormIntakePulmanPage = () => {
         )}
 
         {/* Submit button */}
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             {t('saveAndContinue')}
           </Button>

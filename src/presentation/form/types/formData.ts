@@ -11,13 +11,13 @@ export interface ClientData {
 
   // Intake form type
   intakeType?:
-    | 'VLOS'
-    | 'OSA'
-    | 'Pulman'
-    | 'Rebacare'
-    | 'OSB'
-    | 'OVAC'
-    | 'Steunzolen';
+  | 'VLOS'
+  | 'OSA'
+  | 'Pulman'
+  | 'Rebacare'
+  | 'OSB'
+  | 'OVAC'
+  | 'Steunzolen';
 
   // Location
   location?: Locatie;

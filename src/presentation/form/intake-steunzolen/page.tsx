@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -22,14 +22,14 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
   setIntakeSteunzolenData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import {
   PAARTYPE_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
@@ -41,7 +41,7 @@ import {
 
 export const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -85,11 +85,11 @@ export const FormIntakeSteunzolenPage = () => {
   const isTalonette = talonetteOption && prijs === talonetteOption.value;
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
-    const missing: Array<{fieldName: string; fieldId: string}> = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     if (!schoenmaat.trim()) {
-      missing.push({fieldName: t('shoeSize'), fieldId: 'field-schoenmaat'});
+      missing.push({ fieldName: t('shoeSize'), fieldId: 'field-schoenmaat' });
     }
 
     // Only check steunzool type if NOT Talonette
@@ -124,7 +124,7 @@ export const FormIntakeSteunzolenPage = () => {
     }
 
     if (!prijs) {
-      missing.push({fieldName: t('insolePrice'), fieldId: 'field-prijs'});
+      missing.push({ fieldName: t('insolePrice'), fieldId: 'field-prijs' });
     }
 
     return missing;
@@ -141,7 +141,7 @@ export const FormIntakeSteunzolenPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'Steunzolen'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
     }
 
     dispatch(
@@ -180,17 +180,17 @@ export const FormIntakeSteunzolenPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('whichPair')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -200,7 +200,7 @@ export const FormIntakeSteunzolenPage = () => {
             <Box flex={1}>
               <RadioGroup value={welkPaar} onChange={setWelkPaar}>
                 <Stack
-                  direction={{base: 'column', md: 'row'}}
+                  direction={{ base: 'column', md: 'row' }}
                   spacing={4}
                   flexWrap="wrap"
                 >
@@ -218,7 +218,7 @@ export const FormIntakeSteunzolenPage = () => {
         <Divider />
 
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('medicalIndication')}
           </Text>
           <FormControl>
@@ -226,7 +226,7 @@ export const FormIntakeSteunzolenPage = () => {
               placeholder={t('medicalIndicationPlaceholder')}
               value={medischeIndicatie}
               onChange={e => setMedischeIndicatie(e.target.value)}
-              minH={{base: '80px', md: '100px'}}
+              minH={{ base: '80px', md: '100px' }}
             />
           </FormControl>
         </Box>
@@ -234,7 +234,7 @@ export const FormIntakeSteunzolenPage = () => {
         <Divider />
 
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('shoeSize')} *
           </Text>
           <FormControl isRequired id="field-schoenmaat">
@@ -251,7 +251,7 @@ export const FormIntakeSteunzolenPage = () => {
 
         {/* Prijs moet eerst komen */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('insolePrice')} *
           </Text>
           <FormControl
@@ -293,7 +293,7 @@ export const FormIntakeSteunzolenPage = () => {
             <Divider />
 
             <Box>
-              <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+              <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
                 {t('insoles')} *
               </Text>
               <Box
@@ -414,7 +414,7 @@ export const FormIntakeSteunzolenPage = () => {
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
                       {t('insoleHeelRaiseCm')}
                     </Text>
-                    <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
+                    <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
                       <FormControl>
                         <FormLabel fontSize="sm">{t('left')}</FormLabel>
                         <Input
@@ -452,7 +452,7 @@ export const FormIntakeSteunzolenPage = () => {
             <Divider />
 
             <Box>
-              <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+              <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
                 {t('insoleHeelRaiseCm')}
               </Text>
               <Box
@@ -462,7 +462,7 @@ export const FormIntakeSteunzolenPage = () => {
                 p={4}
                 mt={2}
               >
-                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
                   <FormControl>
                     <FormLabel fontSize="sm">{t('left')}</FormLabel>
                     <Input
@@ -496,14 +496,14 @@ export const FormIntakeSteunzolenPage = () => {
         <Divider />
 
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
             {t('specialNotes')}
           </Text>
           <Textarea
             placeholder={t('specialNotesPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{base: '100px', md: '120px'}}
+            minH={{ base: '100px', md: '120px' }}
           />
         </Box>
 
@@ -523,11 +523,11 @@ export const FormIntakeSteunzolenPage = () => {
           </Alert>
         )}
 
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Opslaan en doorgaan
           </Button>

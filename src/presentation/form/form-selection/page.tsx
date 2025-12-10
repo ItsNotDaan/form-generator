@@ -1,5 +1,5 @@
 import React from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -10,14 +10,14 @@ import {
   AlertIcon,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {useAppSelector, useAppDispatch} from '@/domain/store/hooks';
-import {clearIntakeForms} from '@/domain/store/slices/formData';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { useAppSelector, useAppDispatch } from '@/domain/store/hooks';
+import { clearIntakeForms } from '@/domain/store/slices/formData';
 
 export const FormSelectionPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -47,9 +47,9 @@ export const FormSelectionPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         <Box>
           <Text fontWeight="bold" fontSize="xl" mb={2}>
@@ -69,7 +69,7 @@ export const FormSelectionPage = () => {
           <Text fontWeight="bold" mb={3} fontSize="lg">
             {t('availableIntakeForms')}
           </Text>
-          <SimpleGrid columns={{base: 1, md: 2}} spacing={4}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <Button
               variant="primary"
               size="lg"

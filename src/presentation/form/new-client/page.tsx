@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -19,9 +19,9 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {DatePickerField} from '@/presentation/base/input/datePickerField';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { DatePickerField } from '@/presentation/base/input/datePickerField';
 import {
   DropdownField,
   DropdownType,
@@ -34,13 +34,13 @@ import {
   Locatie,
   Aanhef,
 } from '@/presentation/form/constants/formConstants';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {setClientData} from '@/domain/store/slices/formData';
-import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
+import { useAppDispatch } from '@/domain/store/hooks';
+import { setClientData } from '@/domain/store/slices/formData';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 
 export const FormNewClientPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
 
   // State voor client data
@@ -65,8 +65,8 @@ export const FormNewClientPage = () => {
   const [specialist, setSpecialist] = useState('');
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
-    const missing: Array<{fieldName: string; fieldId: string}> = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     if (!practitionerId) {
       missing.push({
@@ -81,37 +81,37 @@ export const FormNewClientPage = () => {
       });
     }
     if (!location) {
-      missing.push({fieldName: t('location'), fieldId: 'field-locatie'});
+      missing.push({ fieldName: t('location'), fieldId: 'field-locatie' });
     }
     if (!salutation) {
-      missing.push({fieldName: t('salutation'), fieldId: 'field-aanhef'});
+      missing.push({ fieldName: t('salutation'), fieldId: 'field-aanhef' });
     }
     if (!initials.trim()) {
-      missing.push({fieldName: t('initials'), fieldId: 'field-voorletters'});
+      missing.push({ fieldName: t('initials'), fieldId: 'field-voorletters' });
     }
     if (!clientName.trim()) {
-      missing.push({fieldName: t('lastName'), fieldId: 'field-achternaam'});
+      missing.push({ fieldName: t('lastName'), fieldId: 'field-achternaam' });
     }
     if (!birthDate) {
-      missing.push({fieldName: t('birthDate'), fieldId: 'field-geboortedatum'});
+      missing.push({ fieldName: t('birthDate'), fieldId: 'field-geboortedatum' });
     }
     if (!address.trim()) {
-      missing.push({fieldName: t('streetName'), fieldId: 'field-straatnaam'});
+      missing.push({ fieldName: t('streetName'), fieldId: 'field-straatnaam' });
     }
     if (!postalCode.trim()) {
-      missing.push({fieldName: t('postalCode'), fieldId: 'field-postcode'});
+      missing.push({ fieldName: t('postalCode'), fieldId: 'field-postcode' });
     }
     if (!houseNumber.trim()) {
-      missing.push({fieldName: t('houseNumber'), fieldId: 'field-huisnummer'});
+      missing.push({ fieldName: t('houseNumber'), fieldId: 'field-huisnummer' });
     }
     if (!city.trim()) {
-      missing.push({fieldName: t('city'), fieldId: 'field-stad'});
+      missing.push({ fieldName: t('city'), fieldId: 'field-stad' });
     }
     if (!phoneOne.trim()) {
-      missing.push({fieldName: t('phone1'), fieldId: 'field-telefoon1'});
+      missing.push({ fieldName: t('phone1'), fieldId: 'field-telefoon1' });
     }
     if (!email.trim()) {
-      missing.push({fieldName: t('email'), fieldId: 'field-emailadres'});
+      missing.push({ fieldName: t('email'), fieldId: 'field-emailadres' });
     }
     if (!insurance.trim()) {
       missing.push({
@@ -166,7 +166,7 @@ export const FormNewClientPage = () => {
 
   return (
     <BaseLayout
-      title={t('new-client')}
+      title={t('newClientForm')}
       showBackButton={true}
       onBackButtonClicked={() => router.back()}
     >
@@ -174,19 +174,19 @@ export const FormNewClientPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
         id="client-data-section"
       >
         {/* Behandelaar en Aanmeetdatum */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('practitionerAndDate')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -209,7 +209,7 @@ export const FormNewClientPage = () => {
             <Box id="field-aanmeetdatum">
               <FormControl flex={1} isRequired isInvalid={!date}>
                 <FormLabel fontSize="sm">{t('measurementDate')}</FormLabel>
-                <Box maxW={{base: 'full', md: '300px'}}>
+                <Box maxW={{ base: 'full', md: '300px' }}>
                   <DatePickerField
                     date={date ? new Date(date) : undefined}
                     onDateChanged={d => d && setDate(d.toISOString())}
@@ -223,12 +223,12 @@ export const FormNewClientPage = () => {
         <Divider />
         {/* Locatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('location')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -243,8 +243,8 @@ export const FormNewClientPage = () => {
                   onChange={v => setLocation(v as Locatie)}
                 >
                   <Stack
-                    direction={{base: 'column', sm: 'row'}}
-                    spacing={{base: 2, sm: 6}}
+                    direction={{ base: 'column', sm: 'row' }}
+                    spacing={{ base: 2, sm: 6 }}
                   >
                     {LOCATIE_OPTIES.map(o => (
                       <Radio key={o.value} value={o.value}>
@@ -260,11 +260,11 @@ export const FormNewClientPage = () => {
         <Divider />
         {/* Persoonlijke gegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('personalInformation')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -293,8 +293,8 @@ export const FormNewClientPage = () => {
 
             {/* Voorletters en Achternaam */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <Box id="field-voorletters" flex={1}>
                 <FormControl
@@ -346,11 +346,11 @@ export const FormNewClientPage = () => {
         <Divider />
         {/* Adresgegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('addressInformation')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -360,8 +360,8 @@ export const FormNewClientPage = () => {
           >
             {/* Postcode en Huisnummer */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', sm: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', sm: 'row' }}
             >
               <Box id="field-postcode" flex={1}>
                 <FormControl
@@ -395,8 +395,8 @@ export const FormNewClientPage = () => {
 
             {/* Straatnaam en Stad */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <Box id="field-straatnaam" flex={1}>
                 <FormControl isRequired isInvalid={address.trim().length === 0}>
@@ -426,11 +426,11 @@ export const FormNewClientPage = () => {
         <Divider />
         {/* Contactgegevens */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('contactInformation')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -440,8 +440,8 @@ export const FormNewClientPage = () => {
           >
             {/* Telefoon nummers */}
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <Box id="field-telefoon1" flex={1}>
                 <FormControl
@@ -487,11 +487,11 @@ export const FormNewClientPage = () => {
         </Box>
         <Divider /> {/* Verzekering en Medische info */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('insuranceAndMedicalInformation')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -500,8 +500,8 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             <Flex
-              gap={{base: 4, md: 6}}
-              direction={{base: 'column', md: 'row'}}
+              gap={{ base: 4, md: 6 }}
+              direction={{ base: 'column', md: 'row' }}
             >
               <Box id="field-verzekeringsmaatschappij" flex={1}>
                 <FormControl
@@ -545,7 +545,7 @@ export const FormNewClientPage = () => {
                   value={medischeIndicatie}
                   onChange={e => setMedischeIndicatie(e.target.value)}
                   placeholder={t('medicalIndicationPlaceholder')}
-                  minH={{base: '80px', md: '100px'}}
+                  minH={{ base: '80px', md: '100px' }}
                   size="sm"
                 />
               </FormControl>
@@ -568,11 +568,11 @@ export const FormNewClientPage = () => {
           </Alert>
         )}
         {/* Submit button */}
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             {t('saveAndSelectForm')}
           </Button>
