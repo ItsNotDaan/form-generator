@@ -73,7 +73,7 @@ export const FormIntakeSteunzolenPage = () => {
 
   // State voor prijs (required) - numeric
   const [prijs, setPrijs] = useState<number>(225);
-  const [prijsNaam, setPrijsNaam] = useState<string>(t('prijsSteunzolen225'));
+  const [prijsNaam, setPrijsNaam] = useState<string>(t('insolesPrice225'));
 
   // State voor bijzonderheden
   const [bijzonderheden, setBijzonderheden] = useState<string>('');
@@ -85,22 +85,28 @@ export const FormIntakeSteunzolenPage = () => {
   const isTalonette = talonetteOption && prijs === talonetteOption.value;
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
-    const missing: Array<{ fieldName: string; fieldId: string }> = [];
+  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
+    const missing: Array<{fieldName: string; fieldId: string}> = [];
 
     if (!schoenmaat.trim()) {
-      missing.push({ fieldName: t('schoenmaat'), fieldId: 'field-schoenmaat' });
+      missing.push({fieldName: t('shoeSize'), fieldId: 'field-schoenmaat'});
     }
 
     // Only check steunzool type if NOT Talonette
     if (!isTalonette) {
       if (!steunzoolTypeGeneral.trim()) {
-        missing.push({ fieldName: t('steunzoolTypeGeneral'), fieldId: 'field-steunzooltype' });
+        missing.push({
+          fieldName: t('insoleTypeGeneral'),
+          fieldId: 'field-steunzooltype',
+        });
       }
 
       // If Anders is selected, check if text is provided
       if (steunzoolTypeGeneral === 'Anders' && !steunzoolAndersText.trim()) {
-        missing.push({ fieldName: t('steunzoolAndersText'), fieldId: 'field-steunzoolanders' });
+        missing.push({
+          fieldName: t('insoleOtherText'),
+          fieldId: 'field-steunzoolanders',
+        });
       }
     }
 
@@ -110,12 +116,15 @@ export const FormIntakeSteunzolenPage = () => {
         !steunzoolHakVerhogingLinks.trim() &&
         !steunzoolHakVerhogingRechts.trim()
       ) {
-        missing.push({ fieldName: t('steunzoolHakVerhogingCm'), fieldId: 'field-hakverhoging' });
+        missing.push({
+          fieldName: t('insoleHeelRaiseCm'),
+          fieldId: 'field-hakverhoging',
+        });
       }
     }
 
     if (!prijs) {
-      missing.push({ fieldName: t('steunzoolPrijs'), fieldId: 'field-prijs' });
+      missing.push({fieldName: t('insolePrice'), fieldId: 'field-prijs'});
     }
 
     return missing;
@@ -163,7 +172,7 @@ export const FormIntakeSteunzolenPage = () => {
 
   return (
     <BaseLayout
-      title={t('intakeSteunzolen')}
+      title={t('intakeInsoles')}
       showBackButton={true}
       onBackButtonClicked={() => router.back()}
     >
@@ -177,7 +186,7 @@ export const FormIntakeSteunzolenPage = () => {
       >
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('welkPaar')}
+            {t('whichPair')}
           </Text>
           <Flex
             gap={{base: 4, md: 6}}
@@ -210,11 +219,11 @@ export const FormIntakeSteunzolenPage = () => {
 
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('medischeIndicatie')}
+            {t('medicalIndication')}
           </Text>
           <FormControl>
             <Textarea
-              placeholder={t('medischeIndicatiePlaceholder')}
+              placeholder={t('medicalIndicationPlaceholder')}
               value={medischeIndicatie}
               onChange={e => setMedischeIndicatie(e.target.value)}
               minH={{base: '80px', md: '100px'}}
@@ -226,11 +235,11 @@ export const FormIntakeSteunzolenPage = () => {
 
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('schoenmaat')} *
+            {t('shoeSize')} *
           </Text>
           <FormControl isRequired id="field-schoenmaat">
             <Input
-              placeholder={t('schoenmaarPlaceholder')}
+              placeholder={t('shoeSizePlaceholder')}
               value={schoenmaat}
               onChange={e => setSchoenmaat(e.target.value)}
               size="md"
@@ -243,7 +252,7 @@ export const FormIntakeSteunzolenPage = () => {
         {/* Prijs moet eerst komen */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('steunzoolPrijs')} *
+            {t('insolePrice')} *
           </Text>
           <FormControl
             isRequired
@@ -285,7 +294,7 @@ export const FormIntakeSteunzolenPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-                {t('steunzolen')} *
+                {t('insoles')} *
               </Text>
               <Box
                 border="1px solid"
@@ -297,7 +306,7 @@ export const FormIntakeSteunzolenPage = () => {
                 <Stack spacing={4}>
                   <FormControl id="field-steunzooltype">
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
-                      {t('steunzoolTypeGeneral')}
+                      {t('insoleTypeGeneral')}
                     </Text>
                     <RadioGroup
                       value={steunzoolTypeGeneral}
@@ -318,7 +327,7 @@ export const FormIntakeSteunzolenPage = () => {
                     {steunzoolTypeGeneral === 'Anders' && (
                       <Input
                         id="field-steunzoolanders"
-                        placeholder={t('steunzoolAndersTextPlaceholder')}
+                        placeholder={t('insoleOtherTextPlaceholder')}
                         value={steunzoolAndersText}
                         onChange={e => setSteunzoolAndersText(e.target.value)}
                         size="sm"
@@ -331,7 +340,7 @@ export const FormIntakeSteunzolenPage = () => {
 
                   <Box>
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
-                      {t('steunzoolCorrectieMiddenvoet')}
+                      {t('insoleMiddfootCorrection')}
                     </Text>
                     <RadioGroup
                       value={steunzoolCorrectieMiddenvoet}
@@ -355,7 +364,7 @@ export const FormIntakeSteunzolenPage = () => {
 
                   <Box>
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
-                      {t('steunzoolCorrectieVoorvoet')}
+                      {t('insoleForefootCorrection')}
                     </Text>
                     <RadioGroup
                       value={steunzoolCorrectieVoorvoet}
@@ -379,7 +388,7 @@ export const FormIntakeSteunzolenPage = () => {
 
                   <Box>
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
-                      {t('steunzoolVvPellote')}
+                      {t('insoleForefootPad')}
                     </Text>
                     <RadioGroup
                       value={steunzoolVvPellote}
@@ -403,14 +412,14 @@ export const FormIntakeSteunzolenPage = () => {
 
                   <Box id="field-hakverhoging">
                     <Text fontWeight="semibold" mb={2} fontSize="sm">
-                      {t('steunzoolHakVerhogingCm')}
+                      {t('insoleHeelRaiseCm')}
                     </Text>
                     <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
                       <FormControl>
-                        <FormLabel fontSize="sm">{t('links')}</FormLabel>
+                        <FormLabel fontSize="sm">{t('left')}</FormLabel>
                         <Input
                           type="number"
-                          placeholder={t('hakVerhogingPlaceholder')}
+                          placeholder={t('heelRaisePlaceholder')}
                           value={steunzoolHakVerhogingLinks}
                           onChange={e =>
                             setSteunzoolHakVerhogingLinks(e.target.value)
@@ -419,10 +428,10 @@ export const FormIntakeSteunzolenPage = () => {
                         />
                       </FormControl>
                       <FormControl>
-                        <FormLabel fontSize="sm">{t('rechts')}</FormLabel>
+                        <FormLabel fontSize="sm">{t('right')}</FormLabel>
                         <Input
                           type="number"
-                          placeholder={t('hakVerhogingPlaceholder')}
+                          placeholder={t('heelRaisePlaceholder')}
                           value={steunzoolHakVerhogingRechts}
                           onChange={e =>
                             setSteunzoolHakVerhogingRechts(e.target.value)
@@ -444,7 +453,7 @@ export const FormIntakeSteunzolenPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-                {t('steunzoolHakVerhogingCm')}
+                {t('insoleHeelRaiseCm')}
               </Text>
               <Box
                 border="1px solid"
@@ -455,10 +464,10 @@ export const FormIntakeSteunzolenPage = () => {
               >
                 <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
                   <FormControl>
-                    <FormLabel fontSize="sm">{t('links')}</FormLabel>
+                    <FormLabel fontSize="sm">{t('left')}</FormLabel>
                     <Input
                       type="number"
-                      placeholder={t('hakVerhogingPlaceholder')}
+                      placeholder={t('heelRaisePlaceholder')}
                       value={steunzoolHakVerhogingLinks}
                       onChange={e =>
                         setSteunzoolHakVerhogingLinks(e.target.value)
@@ -467,10 +476,10 @@ export const FormIntakeSteunzolenPage = () => {
                     />
                   </FormControl>
                   <FormControl>
-                    <FormLabel fontSize="sm">{t('rechts')}</FormLabel>
+                    <FormLabel fontSize="sm">{t('right')}</FormLabel>
                     <Input
                       type="number"
-                      placeholder={t('hakVerhogingPlaceholder')}
+                      placeholder={t('heelRaisePlaceholder')}
                       value={steunzoolHakVerhogingRechts}
                       onChange={e =>
                         setSteunzoolHakVerhogingRechts(e.target.value)
@@ -488,10 +497,10 @@ export const FormIntakeSteunzolenPage = () => {
 
         <Box>
           <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
-            {t('bijzonderheden')}
+            {t('specialNotes')}
           </Text>
           <Textarea
-            placeholder={t('bijzonderhedenPlaceholder')}
+            placeholder={t('specialNotesPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
             minH={{base: '100px', md: '120px'}}
@@ -503,7 +512,7 @@ export const FormIntakeSteunzolenPage = () => {
             <AlertIcon />
             <Box>
               <Text fontWeight="bold" mb={2}>
-                {t('vulVerplichteVeldenIn')}
+                {t('fillRequiredFields')}
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (

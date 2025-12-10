@@ -123,7 +123,7 @@ export const FormSelectionPage = () => {
               size="lg"
               onClick={() => router.push(Routes.form_intake_steunzolen)}
             >
-              {t('intakeSteunzolen')}
+              {t('intakeInsoles')}
             </Button>
           </SimpleGrid>
         </Box>

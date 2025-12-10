@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -18,11 +18,11 @@ import {
   ListItem,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
-import { useAppSelector } from '@/domain/store/hooks';
-import { BEHANDELAARS } from '@/presentation/form/constants/formConstants';
-import { generateCodes } from '@/utils/codeGenerator';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
+import {useAppSelector} from '@/domain/store/hooks';
+import {BEHANDELAARS} from '@/presentation/form/constants/formConstants';
+import {generateCodes} from '@/utils/codeGenerator';
 import {
   findNavigationForWarning,
   getFormRoute,
@@ -31,7 +31,7 @@ import {
 
 export const FormResultsPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const toast = useToast();
   const formData = useAppSelector(state => state.formData);
 
@@ -82,11 +82,11 @@ export const FormResultsPage = () => {
     // Resolve practitioner ID to name
     const resolvedClientData = formData.client
       ? normalizeObject({
-        ...formData.client,
-        practitionerName:
-          BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-            ?.label || formData.client?.practitionerId,
-      })
+          ...formData.client,
+          practitionerName:
+            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+              ?.label || formData.client?.practitionerId,
+        })
       : null;
 
     // Build result object with only non-null intake forms
@@ -118,8 +118,11 @@ export const FormResultsPage = () => {
     }
 
     // Generate medical codes if applicable
-    if (formData.client && (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)) {
-      const { codes, warnings, generalBasiscode } = generateCodes(
+    if (
+      formData.client &&
+      (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)
+    ) {
+      const {codes, warnings, generalBasiscode} = generateCodes(
         formData.client,
         {
           intakeVLOS: formData.intakeVLOS,
@@ -182,7 +185,7 @@ export const FormResultsPage = () => {
 
     let displayValue = value;
     if (typeof value === 'boolean') {
-      displayValue = value ? t('ja') : t('nee');
+      displayValue = value ? t('yes') : t('no');
     } else if (typeof value === 'object') {
       displayValue = JSON.stringify(value);
     }
@@ -228,9 +231,9 @@ export const FormResultsPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
       >
         <Box>
           <Heading size="lg" mb={2}>
@@ -248,7 +251,11 @@ export const FormResultsPage = () => {
 
         {/* Display code generation warnings if any */}
         {codeWarnings && codeWarnings.length > 0 && (
-          <Alert status="warning" flexDirection="column" alignItems="flex-start">
+          <Alert
+            status="warning"
+            flexDirection="column"
+            alignItems="flex-start"
+          >
             <HStack mb={2}>
               <AlertIcon />
               <Text fontWeight="bold">{t('codeWarnings')}:</Text>
@@ -265,9 +272,13 @@ export const FormResultsPage = () => {
                         colorScheme="orange"
                         variant="outline"
                         onClick={() => {
-                          router.push(getFormRoute(navInfo.formType), undefined, {
-                            shallow: true,
-                          });
+                          router.push(
+                            getFormRoute(navInfo.formType),
+                            undefined,
+                            {
+                              shallow: true,
+                            }
+                          );
                           // Use setTimeout to ensure navigation completes before scrolling
                           setTimeout(() => {
                             scrollToField(navInfo.fieldId);
@@ -339,7 +350,7 @@ export const FormResultsPage = () => {
           {formData.intakeSteunzolen && (
             <>
               <Divider my={4} />
-              {renderSection(t('intakeSteunzolen'), formData.intakeSteunzolen)}
+              {renderSection(t('intakeInsoles'), formData.intakeSteunzolen)}
             </>
           )}
         </Box>

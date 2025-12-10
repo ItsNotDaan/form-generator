@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
   Box,
   Flex,
@@ -19,9 +19,9 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '../../routes';
-import { DatePickerField } from '@/presentation/base/input/datePickerField';
+import {useRouter} from 'next/router';
+import {Routes} from '../../routes';
+import {DatePickerField} from '@/presentation/base/input/datePickerField';
 import {
   LOCATIE_OPTIES,
   AANHEF_OPTIES,
@@ -34,13 +34,13 @@ import {
   DropdownField,
   DropdownType,
 } from '@/presentation/base/input/dropdownField';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setClientData } from '@/domain/store/slices/formData';
-import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setClientData} from '@/domain/store/slices/formData';
+import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
 
 export const FormOldClientPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const existingClient = useAppSelector(s => s.formData.client);
 
@@ -79,26 +79,32 @@ export const FormOldClientPage = () => {
   const [medischeIndicatie, setMedischeIndicatie] = useState(
     existingClient?.medischeIndicatie || ''
   );
-  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
-    const missing: Array<{ fieldName: string; fieldId: string }> = [];
+  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
+    const missing: Array<{fieldName: string; fieldId: string}> = [];
 
     if (!practitionerId) {
-      missing.push({ fieldName: t('behandelaar'), fieldId: 'field-behandelaar' });
+      missing.push({
+        fieldName: t('practitioner'),
+        fieldId: 'field-behandelaar',
+      });
     }
     if (!date) {
-      missing.push({ fieldName: t('aanmeetdatum'), fieldId: 'field-aanmeetdatum' });
+      missing.push({
+        fieldName: t('measurementDate'),
+        fieldId: 'field-aanmeetdatum',
+      });
     }
     if (!location) {
-      missing.push({ fieldName: t('locatie'), fieldId: 'field-locatie' });
+      missing.push({fieldName: t('location'), fieldId: 'field-locatie'});
     }
     if (!initials.trim()) {
-      missing.push({ fieldName: t('voorletters'), fieldId: 'field-voorletters' });
+      missing.push({fieldName: t('initials'), fieldId: 'field-voorletters'});
     }
     if (!clientName.trim()) {
-      missing.push({ fieldName: t('achternaam'), fieldId: 'field-achternaam' });
+      missing.push({fieldName: t('lastName'), fieldId: 'field-achternaam'});
     }
     if (!birthDate) {
-      missing.push({ fieldName: t('geboortedatum'), fieldId: 'field-geboortedatum' });
+      missing.push({fieldName: t('birthDate'), fieldId: 'field-geboortedatum'});
     }
 
     return missing;
@@ -148,18 +154,18 @@ export const FormOldClientPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{ base: 4, md: 6 }}
+        p={{base: 4, md: 6}}
         borderRadius="md"
-        gap={{ base: 4, md: 6 }}
+        gap={{base: 4, md: 6}}
         id="client-data-section"
       >
         <Box id="client-data-section">
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('behandelaarEnDatum')}
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('practitionerAndDate')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -168,7 +174,7 @@ export const FormOldClientPage = () => {
           >
             <Box id="field-behandelaar">
               <FormControl flex={1} isRequired isInvalid={!practitionerId}>
-                <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
+                <FormLabel fontSize="sm">{t('practitioner')}</FormLabel>
                 <DropdownField
                   type={DropdownType.SINGLE_NON_CREATABLE}
                   items={BEHANDELAARS}
@@ -181,8 +187,8 @@ export const FormOldClientPage = () => {
             </Box>
             <Box id="field-aanmeetdatum">
               <FormControl flex={1} isRequired isInvalid={!date}>
-                <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
-                <Box maxW={{ base: 'full', md: '300px' }}>
+                <FormLabel fontSize="sm">{t('measurementDate')}</FormLabel>
+                <Box maxW={{base: 'full', md: '300px'}}>
                   <DatePickerField
                     date={date ? new Date(date) : undefined}
                     onDateChanged={d => d && setDate(d.toISOString())}
@@ -195,12 +201,12 @@ export const FormOldClientPage = () => {
         </Box>
         <Divider />
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('locatie')}
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('location')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
-            direction={{ base: 'column', md: 'row' }}
+            gap={{base: 4, md: 6}}
+            direction={{base: 'column', md: 'row'}}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -215,8 +221,8 @@ export const FormOldClientPage = () => {
                   onChange={v => setLocation(v as Locatie)}
                 >
                   <Stack
-                    direction={{ base: 'column', sm: 'row' }}
-                    spacing={{ base: 2, sm: 6 }}
+                    direction={{base: 'column', sm: 'row'}}
+                    spacing={{base: 2, sm: 6}}
                   >
                     {LOCATIE_OPTIES.map(o => (
                       <Radio key={o.value} value={o.value}>
@@ -231,11 +237,11 @@ export const FormOldClientPage = () => {
         </Box>
         <Divider />
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('persoonlijkeGegevens')}
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('personalInformation')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -244,7 +250,7 @@ export const FormOldClientPage = () => {
             mt={2}
           >
             <FormControl>
-              <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
+              <FormLabel fontSize="sm">{t('salutation')}</FormLabel>
               <RadioGroup
                 value={salutation}
                 onChange={v => setSalutation(v as Aanhef)}
@@ -259,20 +265,20 @@ export const FormOldClientPage = () => {
               </RadioGroup>
             </FormControl>
             <Flex
-              gap={{ base: 4, md: 6 }}
-              direction={{ base: 'column', md: 'row' }}
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
             >
               <Box id="field-voorletters" flex={1}>
                 <FormControl
                   isRequired
                   isInvalid={initials.trim().length === 0}
                 >
-                  <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
+                  <FormLabel fontSize="sm">{t('initials')}</FormLabel>
                   <Input
                     value={initials}
                     onChange={e => setInitials(e.target.value)}
                     size="sm"
-                    placeholder={t('voorllettersPlaceholder')}
+                    placeholder={t('initialsPlaceholder')}
                   />
                 </FormControl>
               </Box>
@@ -281,19 +287,19 @@ export const FormOldClientPage = () => {
                   isRequired
                   isInvalid={clientName.trim().length === 0}
                 >
-                  <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
+                  <FormLabel fontSize="sm">{t('lastName')}</FormLabel>
                   <Input
                     value={clientName}
                     onChange={e => setClientName(e.target.value)}
                     size="sm"
-                    placeholder={t('achternaamPlaceholder')}
+                    placeholder={t('lastNamePlaceholder')}
                   />
                 </FormControl>
               </Box>
             </Flex>
             <Box id="field-geboortedatum">
               <FormControl isRequired isInvalid={birthDate.length === 0}>
-                <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
+                <FormLabel fontSize="sm">{t('birthDate')}</FormLabel>
                 <Box>
                   <DatePickerField
                     date={birthDate ? new Date(birthDate) : undefined}
@@ -307,11 +313,11 @@ export const FormOldClientPage = () => {
         </Box>
         <Divider />
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('adresgegevens')}
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('addressInformation')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -320,48 +326,48 @@ export const FormOldClientPage = () => {
             mt={2}
           >
             <Flex
-              gap={{ base: 4, md: 6 }}
-              direction={{ base: 'column', sm: 'row' }}
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', sm: 'row'}}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('postcode')}</FormLabel>
+                <FormLabel fontSize="sm">{t('postalCode')}</FormLabel>
                 <Input
                   value={postalCode}
                   onChange={e => setPostalCode(e.target.value)}
                   size="sm"
-                  placeholder={t('postcodePlaceholder')}
+                  placeholder={t('postalCodePlaceholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('huisnummer')}</FormLabel>
+                <FormLabel fontSize="sm">{t('houseNumber')}</FormLabel>
                 <Input
                   value={houseNumber}
                   onChange={e => setHouseNumber(e.target.value)}
                   size="sm"
-                  placeholder={t('huisnummerPlaceholder')}
+                  placeholder={t('houseNumberPlaceholder')}
                 />
               </FormControl>
             </Flex>
             <Flex
-              gap={{ base: 4, md: 6 }}
-              direction={{ base: 'column', md: 'row' }}
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('straatnaam')}</FormLabel>
+                <FormLabel fontSize="sm">{t('streetName')}</FormLabel>
                 <Input
                   value={address}
                   onChange={e => setAddress(e.target.value)}
                   size="sm"
-                  placeholder={t('straatnaamPlaceholder')}
+                  placeholder={t('streetNamePlaceholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('stad')}</FormLabel>
+                <FormLabel fontSize="sm">{t('city')}</FormLabel>
                 <Input
                   value={city}
                   onChange={e => setCity(e.target.value)}
                   size="sm"
-                  placeholder={t('stadPlaceholder')}
+                  placeholder={t('cityPlaceholder')}
                 />
               </FormControl>
             </Flex>
@@ -369,11 +375,11 @@ export const FormOldClientPage = () => {
         </Box>
         <Divider />
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('contactgegevens')}
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('contactInformation')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -382,49 +388,49 @@ export const FormOldClientPage = () => {
             mt={2}
           >
             <Flex
-              gap={{ base: 4, md: 6 }}
-              direction={{ base: 'column', md: 'row' }}
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('telefoon1')}</FormLabel>
+                <FormLabel fontSize="sm">{t('phone1')}</FormLabel>
                 <Input
                   type="tel"
                   value={phoneOne}
                   onChange={e => setPhoneOne(e.target.value)}
                   size="sm"
-                  placeholder={t('telefoon1Placeholder')}
+                  placeholder={t('phone1Placeholder')}
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('telefoon2')}</FormLabel>
+                <FormLabel fontSize="sm">{t('phone2')}</FormLabel>
                 <Input
                   type="tel"
                   value={phoneTwo}
                   onChange={e => setPhoneTwo(e.target.value)}
                   size="sm"
-                  placeholder={t('telefoon2Placeholder')}
+                  placeholder={t('phone2Placeholder')}
                 />
               </FormControl>
             </Flex>
             <FormControl>
-              <FormLabel fontSize="sm">{t('emailadres')}</FormLabel>
+              <FormLabel fontSize="sm">{t('email')}</FormLabel>
               <Input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 size="sm"
-                placeholder={t('emailadresPlaceholder')}
+                placeholder={t('emailPlaceholder')}
               />
             </FormControl>
           </Flex>
         </Box>
         <Divider />
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
-            {t('verzekeringEnMedischeInformatie')}
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            {t('insuranceAndMedicalInformation')}
           </Text>
           <Flex
-            gap={{ base: 4, md: 6 }}
+            gap={{base: 4, md: 6}}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -433,13 +439,11 @@ export const FormOldClientPage = () => {
             mt={2}
           >
             <Flex
-              gap={{ base: 4, md: 6 }}
-              direction={{ base: 'column', md: 'row' }}
+              gap={{base: 4, md: 6}}
+              direction={{base: 'column', md: 'row'}}
             >
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">
-                  {t('verzekeringsmaatschappij')}
-                </FormLabel>
+                <FormLabel fontSize="sm">{t('insuranceCompany')}</FormLabel>
                 <DropdownField
                   type={DropdownType.SINGLE_CREATABLE}
                   items={ZORGVERZEKERAARS}
@@ -447,17 +451,17 @@ export const FormOldClientPage = () => {
                   onItemSelected={item => setInsurance(item?.value || '')}
                   onCreateOption={value => setInsurance(value)}
                   isLoading={false}
-                  placeholder={t('verzekeringsmaatschappijPlaceholder')}
+                  placeholder={t('insuranceCompanyPlaceholder')}
                   isSmallVariant
                 />
               </FormControl>
               <FormControl flex={1}>
-                <FormLabel fontSize="sm">{t('specialistHuisarts')}</FormLabel>
+                <FormLabel fontSize="sm">{t('specialistGp')}</FormLabel>
                 <Input
                   value={specialist}
                   onChange={e => setSpecialist(e.target.value)}
                   size="sm"
-                  placeholder={t('specialistHuisartsPlaceholder')}
+                  placeholder={t('specialistGpPlaceholder')}
                 />
               </FormControl>
             </Flex>
@@ -465,12 +469,12 @@ export const FormOldClientPage = () => {
             {/* Medische Indicatie */}
             <Box>
               <FormControl>
-                <FormLabel fontSize="sm">{t('medischeIndicatie')}</FormLabel>
+                <FormLabel fontSize="sm">{t('medicalIndication')}</FormLabel>
                 <Textarea
                   value={medischeIndicatie}
                   onChange={e => setMedischeIndicatie(e.target.value)}
-                  placeholder={t('medischeIndicatiePlaceholder')}
-                  minH={{ base: '80px', md: '100px' }}
+                  placeholder={t('medicalIndicationPlaceholder')}
+                  minH={{base: '80px', md: '100px'}}
                   size="sm"
                 />
               </FormControl>
@@ -483,7 +487,7 @@ export const FormOldClientPage = () => {
             <AlertIcon />
             <Box>
               <Text fontWeight="bold" mb={2}>
-                {t('vulVerplichteVeldenIn')}
+                {t('fillRequiredFields')}
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
@@ -494,13 +498,13 @@ export const FormOldClientPage = () => {
           </Alert>
         )}
 
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{ base: 'full', sm: 'auto' }}
+            w={{base: 'full', sm: 'auto'}}
           >
-            {t('opslaanEnDoorgaan')}
+            {t('saveAndContinue')}
           </Button>
         </Flex>
       </Flex>
