@@ -8,6 +8,8 @@ import {css, Global} from '@emotion/react';
 import {wrapper} from '@/domain/store/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
+import appWithI18n from 'next-translate/appWithI18n';
+import i18nConfig from '../../i18n';
 
 // Use Next Font for automatic font optimization
 // https://nextjs.org/docs/basic-features/font-optimization
@@ -40,4 +42,4 @@ function App({Component, ...rest}: AppProps) {
   );
 }
 
-export default App;
+export default appWithI18n(App, i18nConfig);
