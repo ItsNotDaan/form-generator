@@ -46,18 +46,18 @@ export const AANHEF_OPTIES = [
 ];
 
 // Generieke zijdes gebruikt in intake formulieren
-export type Zijde = 'beide' | 'links' | 'rechts';
+export type Zijde = 'both' | 'left' | 'right';
 export const ZIJDE_OPTIES = [
-  { label: 'beide', value: 'beide' },
-  { label: 'links', value: 'links' },
-  { label: 'rechts', value: 'rechts' },
+  { label: 'both', value: 'both' },
+  { label: 'left', value: 'left' },
+  { label: 'right', value: 'right' },
 ];
 
 // Generieke ja/nee gebruikt in formulieren
 export type JaNee = 'ja' | 'nee';
 export const JA_NEE_OPTIES = [
-  { label: 'ja', value: 'ja' },
-  { label: 'nee', value: 'nee' },
+  { label: 'yes', value: 'ja' },
+  { label: 'no', value: 'nee' },
 ];
 
 // Openstand schacht opties (waarden in cm)
@@ -71,10 +71,10 @@ export const OPENSTAND_OPTIES = [
 ];
 
 // Supplement types
-export type SupplementType = 'Lateraal' | 'Mediaal';
+export type SupplementType = 'lateral' | 'medial';
 export const SUPPLEMENT_TYPE_OPTIES = [
-  { label: 'Lateraal', value: 'Lateraal' },
-  { label: 'Mediaal', value: 'Mediaal' },
+  { label: 'lateral', value: 'lateral' },
+  { label: 'medial', value: 'medial' },
 ];
 
 // Haksoort opties
@@ -117,17 +117,17 @@ export const SLUITING_OPTIES = [
 ];
 
 // Hakschoring types
-export type HakschoringType = 'Mediaal' | 'Lateraal';
+export type HakschoringType = 'medial' | 'lateral';
 export const HAKSCHORING_TYPE_OPTIES = [
-  { label: 'Mediaal', value: 'Mediaal' },
-  { label: 'Lateraal', value: 'Lateraal' },
+  { label: 'medial', value: 'medial' },
+  { label: 'lateral', value: 'lateral' },
 ];
 
 // Ezelsoor types
-export type EzelsoorType = 'Mediaal' | 'Lateraal';
+export type EzelsoorType = 'medial' | 'lateral';
 export const EZELSOOR_TYPE_OPTIES = [
-  { label: 'Mediaal', value: 'Mediaal' },
-  { label: 'Lateraal', value: 'Lateraal' },
+  { label: 'medial', value: 'medial' },
+  { label: 'lateral', value: 'lateral' },
 ];
 
 // Omsluiting
@@ -261,10 +261,17 @@ export const LOOPFUNCTIE_OPTIES = [
 ];
 
 // Loopfunctie indicatie opties (OSB specific)
-export type LoopfunctieIndicatieOptie = 'Passief' | 'Korte Transfers' | 'Actief';
+export type LoopfunctieIndicatieOptie =
+  | 'Passief'
+  | 'Korte Transfers'
+  | 'Actief';
 export const LOOPFUNCTIE_INDICATIE_OPTIES = [
   { label: 'Passief', value: 'Passief', fullKey: 'loopfunctiePassief' },
-  { label: 'Korte Transfers', value: 'Korte Transfers', fullKey: 'loopfunctieKorteTransfers' },
+  {
+    label: 'Korte Transfers',
+    value: 'Korte Transfers',
+    fullKey: 'loopfunctieKorteTransfers',
+  },
   { label: 'Actief', value: 'Actief', fullKey: 'loopfunctieActief' },
 ];
 
@@ -401,8 +408,8 @@ export const OVAC_OMSCHRIJVING_ITEMS: OvacOmschrijvingItem[] = [
 // Steunzolen pricing options - numeric values
 export type SteunzolenPrijs = 175 | 225 | 195 | 29;
 export const STEUNZOLEN_PRIJS_OPTIES = [
-  { label: 'prijsTot15Jaar', value: 175 },
-  { label: 'prijsSteunzolen225', value: 225 },
-  { label: 'prijsBinnen3Maanden', value: 195 },
-  { label: 'prijsTalonette', value: 29 },
+  { label: 'priceUpTo15Years', value: 175 },
+  { label: 'insolesPrice225', value: 225 },
+  { label: 'priceWithin3Months', value: 195 },
+  { label: 'priceTalonette', value: 29 },
 ];

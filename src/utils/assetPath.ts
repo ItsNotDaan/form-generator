@@ -4,11 +4,11 @@
  * @returns Full path with basePath included
  */
 export function getAssetPath(path: string): string {
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-    // Remove leading slash from path if present
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  // Remove leading slash from path if present
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
 
-    // Combine basePath with the asset path
-    return `${basePath}${cleanPath}`;
+  // Combine basePath with the asset path
+  return `${basePath}${cleanPath}`;
 }

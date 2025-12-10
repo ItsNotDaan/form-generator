@@ -13,7 +13,7 @@
  * - 6: Half-hoog OSA (12-18cm schachthoogte) herhaling/reservepaar
  * - 7: Hoog OSA (>18cm schachthoogte) eerste paar
  * - 8: Hoog OSA (>18cm schachthoogte) herhaling/reservepaar
- * 
+ *
  * --ADDITIONAL CODES---
  * - 9: Proefschoen (only for high OSA code 07 + code 17 for Achmea, DSW, ASR) per side
  * - 10: (placeholder - not implemented)
@@ -151,7 +151,8 @@ function generateOSBCodes(
 
   // Afwikkelrol Gecompliceerd (code 47)
   if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) codes.code47Links = true;
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) codes.code47Rechts = true;
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts)
+    codes.code47Rechts = true;
 
   // Zoolverstijving (code 57)
   if (osb.aanpassingen?.zoolverstijvingLinks) codes.code57Links = true;
@@ -193,7 +194,6 @@ function shouldGenerateProefschoen(insurance: string): boolean {
   return eligibleInsurers.includes(insurance);
 }
 
-
 /**
  * Generate codes for VLOS intake
  */
@@ -203,14 +203,14 @@ function generateVLOSCodes(
   warnings: string[],
   insurance: string
 ): void {
-  const { side, welkPaar } = vlos;
+  const {side, welkPaar} = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
-  const hasLinks = side === 'links' || side === 'beide';
-  const hasRechts = side === 'rechts' || side === 'beide';
+  const hasLinks = side === 'left' || side === 'both';
+  const hasRechts = side === 'right' || side === 'both';
 
   // Code 1/2: VLOS base codes
   // Code 1 = VLOS eerste paar
@@ -280,12 +280,12 @@ function generateOSACodes(
   warnings: string[],
   insurance: string
 ): void {
-  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
+  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
-  const hasLinks = side === 'links' || side === 'beide';
-  const hasRechts = side === 'rechts' || side === 'beide';
+  const hasLinks = side === 'left' || side === 'both';
+  const hasRechts = side === 'right' || side === 'both';
 
   // Parse schachthoogte values
   const heightLinks = parseFloat(schachthoogteLinks || '0') || 0;
@@ -298,11 +298,11 @@ function generateOSACodes(
   // Odd code (3/5/7) = eerste paar, Even code (4/6/8) = herhaling/reservepaar
 
   const maxHeight =
-    side === 'beide'
+    side === 'both'
       ? Math.max(heightLinks, heightRechts)
-      : side === 'links'
-        ? heightLinks
-        : heightRechts;
+      : side === 'left'
+      ? heightLinks
+      : heightRechts;
 
   if (maxHeight === 0) {
     warnings.push('OSA schachthoogte is niet ingevuld');
@@ -396,21 +396,26 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
-  const { intakeType, insurance } = clientData;
+  const {intakeType, insurance} = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
   // Generate codes based on intake type
   switch (intakeType) {
     case 'VLOS':
       if (intakeData.intakeVLOS) {
-        generateVLOSCodes(intakeData.intakeVLOS, codes, warnings, insurance || '');
+        generateVLOSCodes(
+          intakeData.intakeVLOS,
+          codes,
+          warnings,
+          insurance || ''
+        );
       } else {
         warnings.push('VLOS intake data is niet beschikbaar');
       }
@@ -418,7 +423,12 @@ export function generateCodes(
 
     case 'OSA':
       if (intakeData.intakeOSA) {
-        generateOSACodes(intakeData.intakeOSA, codes, warnings, insurance || '');
+        generateOSACodes(
+          intakeData.intakeOSA,
+          codes,
+          warnings,
+          insurance || ''
+        );
       } else {
         warnings.push('OSA intake data is niet beschikbaar');
       }
@@ -426,7 +436,12 @@ export function generateCodes(
 
     case 'OSB':
       if (intakeData.intakeOSB) {
-        generateOSBCodes(intakeData.intakeOSB, codes, warnings, insurance || '');
+        generateOSBCodes(
+          intakeData.intakeOSB,
+          codes,
+          warnings,
+          insurance || ''
+        );
       } else {
         warnings.push('OSB intake data is niet beschikbaar');
       }
@@ -463,5 +478,5 @@ export function generateCodes(
     else if (intakeData.intakeOSB.basiscode === '40') generalBasiscode = '40';
   }
 
-  return { codes, warnings, generalBasiscode };
+  return {codes, warnings, generalBasiscode};
 }

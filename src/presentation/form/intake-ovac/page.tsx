@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {BaseLayout} from '@/presentation/base/baseLayout';
+import React, { useState } from 'react';
+import { BaseLayout } from '@/presentation/base/baseLayout';
 import {
   Flex,
   FormControl,
@@ -28,11 +28,11 @@ import {
 } from '@chakra-ui/react';
 
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '../../routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setIntakeOVACData, setClientData} from '@/domain/store/slices/formData';
-import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
+import { useRouter } from 'next/router';
+import { Routes } from '../../routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeOVACData, setClientData } from '@/domain/store/slices/formData';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import {
   OVAC_OMSCHRIJVING_ITEMS,
   PAARTYPE_OPTIES,
@@ -45,7 +45,7 @@ import {
 
 export const FormIntakeOVACPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -114,7 +114,7 @@ export const FormIntakeOVACPage = () => {
     useState('');
   const [steunzoolPrijs, setSteunzoolPrijs] = useState<number>(225);
   const [steunzoolPrijsNaam, setSteunzoolPrijsNaam] = useState<string>(
-    t('prijsSteunzolen225')
+    t('insolesPrice225')
   );
 
   // Check if Talonette is selected by checking if the selected price matches the Talonette option
@@ -189,18 +189,27 @@ export const FormIntakeOVACPage = () => {
     // Steunzolen validation if enabled
     if (steunzolenEnabled) {
       if (!schoenmaat.trim()) {
-        missing.push({ fieldName: t('schoenmaat'), fieldId: 'field-schoenmaat-ovac' });
+        missing.push({
+          fieldName: t('shoeSize'),
+          fieldId: 'field-schoenmaat-ovac',
+        });
       }
 
       // Only check steunzool type if NOT Talonette
       if (!isSteunzolenTalonette) {
         if (!steunzoolTypeGeneral.trim()) {
-          missing.push({ fieldName: t('steunzoolTypeGeneral'), fieldId: 'field-steunzooltype-ovac' });
+          missing.push({
+            fieldName: t('insoleTypeGeneral'),
+            fieldId: 'field-steunzooltype-ovac',
+          });
         }
 
         // If Anders is selected, check if text is provided
         if (steunzoolTypeGeneral === 'Anders' && !steunzoolAndersText.trim()) {
-          missing.push({ fieldName: t('steunzoolAndersText'), fieldId: 'field-steunzoolanders-ovac' });
+          missing.push({
+            fieldName: t('insoleOtherText'),
+            fieldId: 'field-steunzoolanders-ovac',
+          });
         }
       }
 
@@ -210,12 +219,18 @@ export const FormIntakeOVACPage = () => {
           !steunzoolHakVerhogingLinks.trim() &&
           !steunzoolHakVerhogingRechts.trim()
         ) {
-          missing.push({ fieldName: t('steunzoolHakVerhogingCm'), fieldId: 'field-hakverhoging-ovac' });
+          missing.push({
+            fieldName: t('insoleHeelRaiseCm'),
+            fieldId: 'field-hakverhoging-ovac',
+          });
         }
       }
 
       if (!steunzoolPrijs) {
-        missing.push({ fieldName: t('steunzoolPrijs'), fieldId: 'field-prijs-ovac' });
+        missing.push({
+          fieldName: t('insolePrice'),
+          fieldId: 'field-prijs-ovac',
+        });
       }
     }
 
@@ -233,7 +248,7 @@ export const FormIntakeOVACPage = () => {
 
     // Update client data with intake type
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'OVAC'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'OVAC' }));
     }
 
     dispatch(
@@ -293,18 +308,18 @@ export const FormIntakeOVACPage = () => {
         w="full"
         direction="column"
         bg="white"
-        p={{base: 4, md: 6}}
+        p={{ base: 4, md: 6 }}
         borderRadius="md"
-        gap={{base: 4, md: 6}}
+        gap={{ base: 4, md: 6 }}
       >
         {/* Omschrijving/Paartype */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('welkPaar')}
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('whichPair')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -314,7 +329,7 @@ export const FormIntakeOVACPage = () => {
             <Box flex={1}>
               <RadioGroup value={omschrijving} onChange={setOmschrijving}>
                 <Stack
-                  direction={{base: 'column', md: 'row'}}
+                  direction={{ base: 'column', md: 'row' }}
                   spacing={4}
                   flexWrap="wrap"
                 >
@@ -333,11 +348,11 @@ export const FormIntakeOVACPage = () => {
 
         {/* Medische Indicatie */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('medischeIndicatie')}
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('medicalIndication')}
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -346,10 +361,10 @@ export const FormIntakeOVACPage = () => {
             mt={2}
           >
             <Textarea
-              placeholder={t('medischeIndicatiePlaceholder')}
+              placeholder={t('medicalIndicationPlaceholder')}
               value={medischeIndicatie}
               onChange={e => setMedischeIndicatie(e.target.value)}
-              minH={{base: '80px', md: '100px'}}
+              minH={{ base: '80px', md: '100px' }}
             />
           </Flex>
         </Box>
@@ -358,11 +373,11 @@ export const FormIntakeOVACPage = () => {
 
         {/* Omschrijving Tabel */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             Omschrijving
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
+            gap={{ base: 4, md: 6 }}
             direction="column"
             border="1px solid"
             borderColor="inherit"
@@ -422,12 +437,12 @@ export const FormIntakeOVACPage = () => {
 
         {/* Verkorting */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             Verkorting
           </Text>
           <Flex
-            gap={{base: 4, md: 6}}
-            direction={{base: 'column', md: 'row'}}
+            gap={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
@@ -449,7 +464,7 @@ export const FormIntakeOVACPage = () => {
                 L
               </Checkbox>
             </Stack>
-            <SimpleGrid columns={{base: 1, sm: 2}} spacing={4} flex={1}>
+            <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} flex={1}>
               <FormControl>
                 <FormLabel fontSize="sm">Voorvoet (cm)</FormLabel>
                 <Input
@@ -478,23 +493,23 @@ export const FormIntakeOVACPage = () => {
 
         {/* Steunzolen (Optional) */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
-            {t('steunzolenSection')}
+          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('insolesSection')}
           </Text>
           <RadioGroup
-            value={steunzolenEnabled ? 'yes' : 'no'}
-            onChange={val => setSteunzolenEnabled(val === 'yes')}
+            value={steunzolenEnabled ? 'ja' : 'nee'}
+            onChange={val => setSteunzolenEnabled(val === 'ja')}
             mb={4}
           >
             <Stack direction="row" spacing={4}>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
+              <Radio value="ja">{t('ja')}</Radio>
+              <Radio value="nee">{t('nee')}</Radio>
             </Stack>
           </RadioGroup>
 
           {steunzolenEnabled && (
             <Flex
-              gap={{base: 4, md: 6}}
+              gap={{ base: 4, md: 6 }}
               direction="column"
               border="1px solid"
               borderColor="inherit"
@@ -504,10 +519,10 @@ export const FormIntakeOVACPage = () => {
             >
               <FormControl id="field-schoenmaat-ovac">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
-                  {t('schoenmaat')} *
+                  {t('shoeSize')} *
                 </Text>
                 <Input
-                  placeholder={t('schoenmaarPlaceholder')}
+                  placeholder={t('shoeSizePlaceholder')}
                   value={schoenmaat}
                   onChange={e => setSchoenmaat(e.target.value)}
                   size="sm"
@@ -518,7 +533,7 @@ export const FormIntakeOVACPage = () => {
 
               <FormControl id="field-prijs-ovac">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
-                  {t('steunzoolPrijs')} *
+                  {t('insolePrice')} *
                 </Text>
                 <RadioGroup
                   value={steunzoolPrijs.toString()}
@@ -551,7 +566,7 @@ export const FormIntakeOVACPage = () => {
 
                   <FormControl id="field-steunzooltype-ovac">
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
-                      {t('steunzoolTypeGeneral')}
+                      {t('insoleTypeGeneral')}
                     </Text>
                     <RadioGroup
                       value={steunzoolTypeGeneral}
@@ -572,7 +587,7 @@ export const FormIntakeOVACPage = () => {
                     {steunzoolTypeGeneral === 'Anders' && (
                       <Input
                         id="field-steunzoolanders-ovac"
-                        placeholder={t('steunzoolAndersTextPlaceholder')}
+                        placeholder={t('insoleOtherTextPlaceholder')}
                         value={steunzoolAndersText}
                         onChange={e => setSteunzoolAndersText(e.target.value)}
                         size="sm"
@@ -585,7 +600,7 @@ export const FormIntakeOVACPage = () => {
 
                   <Box>
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
-                      {t('steunzoolCorrectieMiddenvoet')}
+                      {t('insoleMiddfootCorrection')}
                     </Text>
                     <RadioGroup
                       value={steunzoolCorrectieMiddenvoet}
@@ -609,7 +624,7 @@ export const FormIntakeOVACPage = () => {
 
                   <Box>
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
-                      {t('steunzoolCorrectieVoorvoet')}
+                      {t('insoleForefootCorrection')}
                     </Text>
                     <RadioGroup
                       value={steunzoolCorrectieVoorvoet}
@@ -633,7 +648,7 @@ export const FormIntakeOVACPage = () => {
 
                   <Box>
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
-                      {t('steunzoolVvPellote')}
+                      {t('insoleForefootPad')}
                     </Text>
                     <RadioGroup
                       value={steunzoolVvPellote}
@@ -659,14 +674,14 @@ export const FormIntakeOVACPage = () => {
 
               <Box id="field-hakverhoging-ovac">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
-                  {t('steunzoolHakVerhogingCm')}
+                  {t('insoleHeelRaiseCm')}
                 </Text>
-                <SimpleGrid columns={{base: 1, sm: 2}} spacing={4}>
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
                   <FormControl>
-                    <FormLabel fontSize="sm">{t('links')}</FormLabel>
+                    <FormLabel fontSize="sm">{t('left')}</FormLabel>
                     <Input
                       type="number"
-                      placeholder={t('hakVerhogingPlaceholder')}
+                      placeholder={t('heelRaisePlaceholder')}
                       value={steunzoolHakVerhogingLinks}
                       onChange={e =>
                         setSteunzoolHakVerhogingLinks(e.target.value)
@@ -675,10 +690,10 @@ export const FormIntakeOVACPage = () => {
                     />
                   </FormControl>
                   <FormControl>
-                    <FormLabel fontSize="sm">{t('rechts')}</FormLabel>
+                    <FormLabel fontSize="sm">{t('right')}</FormLabel>
                     <Input
                       type="number"
-                      placeholder={t('hakVerhogingPlaceholder')}
+                      placeholder={t('heelRaisePlaceholder')}
                       value={steunzoolHakVerhogingRechts}
                       onChange={e =>
                         setSteunzoolHakVerhogingRechts(e.target.value)
@@ -696,14 +711,14 @@ export const FormIntakeOVACPage = () => {
 
         {/* Bijzonderheden */}
         <Box>
-          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
-            {t('bijzonderheden')}
+          <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
+            {t('specialNotes')}
           </Text>
           <Textarea
-            placeholder={t('bijzonderhedenPlaceholder')}
+            placeholder={t('specialNotesPlaceholder')}
             value={bijzonderheden}
             onChange={e => setBijzonderheden(e.target.value)}
-            minH={{base: '100px', md: '120px'}}
+            minH={{ base: '100px', md: '120px' }}
           />
         </Box>
 
@@ -712,7 +727,7 @@ export const FormIntakeOVACPage = () => {
             <AlertIcon />
             <Box>
               <Text fontWeight="bold" mb={2}>
-                {t('vulVerplichteVeldenIn')}
+                {t('fillRequiredFields')}
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
@@ -724,11 +739,11 @@ export const FormIntakeOVACPage = () => {
         )}
 
         {/* Submit button */}
-        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
           <Button
             variant="primary"
             onClick={handleSubmit}
-            w={{base: 'full', sm: 'auto'}}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Opslaan en doorgaan
           </Button>
