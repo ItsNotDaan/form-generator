@@ -88,9 +88,9 @@ export const FormIntakeOSAPage = () => {
   const [supplementschoringRechtsEnabled, setSupplementschoringRechtsEnabled] =
     useState<boolean>(false);
   const [supplementschoringLinksType, setSupplementschoringLinksType] =
-    useState(''); // lateraal/mediaal/lateraal of mediaal
+    useState('Lateraal'); // lateraal/mediaal
   const [supplementschoringRechtsType, setSupplementschoringRechtsType] =
-    useState('');
+    useState('Lateraal');
 
   // State voor zoolverstijving (gecorrigeerd van zoolverslijving)
   const [zoolverstijvingEnabled, setZoolverstijvingEnabled] =
@@ -576,7 +576,7 @@ export const FormIntakeOSAPage = () => {
                 </RadioGroup>
                 {supplementschoringLinksEnabled && (
                   <Select
-                    placeholder="Lateraal / Mediaal / Lateraal of Mediaal"
+                    placeholder="Lateraal / Mediaal"
                     value={supplementschoringLinksType}
                     onChange={e =>
                       setSupplementschoringLinksType(e.target.value)
@@ -620,7 +620,7 @@ export const FormIntakeOSAPage = () => {
                 </RadioGroup>
                 {supplementschoringRechtsEnabled && (
                   <Select
-                    placeholder="Lateraal / Mediaal / Lateraal of Mediaal"
+                    placeholder="Lateraal / Mediaal"
                     value={supplementschoringRechtsType}
                     onChange={e =>
                       setSupplementschoringRechtsType(e.target.value)
