@@ -24,12 +24,8 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {useAppDispatch} from '@/domain/store/hooks';
 import {setIntakeOSBData} from '@/domain/store/slices/formData';
-import {
-  PAARTYPE_OPTIES,
-  DOEL_OPTIES,
-  LOOPFUNCTIE_OPTIES,
-  LEVERANCIER_OPTIES,
-} from '@/presentation/form/constants/formConstants';
+// Form constants can be imported here as needed
+// import { ... } from '@/presentation/form/constants/formConstants';
 
 const FormIntakeOSBPage = () => {
   const {t} = useTranslation('form');
