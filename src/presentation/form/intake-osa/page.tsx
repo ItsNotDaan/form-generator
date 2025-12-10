@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BaseLayout } from '@/presentation/base/baseLayout';
+import { getAssetPath } from '@/utils/assetPath';
 import {
   Flex,
   FormControl,
@@ -774,7 +775,7 @@ export const FormIntakeOSAPage = () => {
               bg="white"
             >
               <Image
-                src="/images/intake-vlos/inschotpunt.png"
+                src={getAssetPath('/images/intake-vlos/inschotpunt.png')}
                 alt="Inschotpunt"
                 objectFit="contain"
                 w="100%"
@@ -1314,7 +1315,7 @@ export const FormIntakeOSAPage = () => {
               bg="white"
             >
               <Image
-                src="/images/intake-vlos/hakafronding.png"
+                src={getAssetPath('/images/intake-vlos/hakafronding.png')}
                 alt="Hakafronding"
                 objectFit="contain"
                 w="100%"
