@@ -35,6 +35,7 @@ import {
 } from '@/presentation/base/input/dropdownField';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setClientData } from '@/domain/store/slices/formData';
+import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 
 export const FormOldClientPage = () => {
   const router = useRouter();
@@ -76,26 +77,26 @@ export const FormOldClientPage = () => {
   const [phoneTwo, setPhoneTwo] = useState(existingClient?.phoneTwo || '');
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): string[] => {
-    const missing: string[] = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     if (!practitionerId) {
-      missing.push(t('behandelaar'));
+      missing.push({ fieldName: t('behandelaar'), fieldId: 'field-behandelaar' });
     }
     if (!date) {
-      missing.push(t('aanmeetdatum'));
+      missing.push({ fieldName: t('aanmeetdatum'), fieldId: 'field-aanmeetdatum' });
     }
     if (!location) {
-      missing.push(t('locatie'));
+      missing.push({ fieldName: t('locatie'), fieldId: 'field-locatie' });
     }
     if (!initials.trim()) {
-      missing.push(t('voorletters'));
+      missing.push({ fieldName: t('voorletters'), fieldId: 'field-voorletters' });
     }
     if (!clientName.trim()) {
-      missing.push(t('achternaam'));
+      missing.push({ fieldName: t('achternaam'), fieldId: 'field-achternaam' });
     }
     if (!birthDate) {
-      missing.push(t('geboortedatum'));
+      missing.push({ fieldName: t('geboortedatum'), fieldId: 'field-geboortedatum' });
     }
 
     return missing;
@@ -105,6 +106,8 @@ export const FormOldClientPage = () => {
 
   const handleSubmit = () => {
     if (!areAllFieldsValid) {
+      const missingFields = getMissingFields();
+      focusAndHighlightInvalidFields(missingFields.map(f => f.fieldId));
       return; // Validation alert will show the missing fields
     }
     dispatch(
@@ -160,7 +163,7 @@ export const FormOldClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl flex={1} isRequired isInvalid={!practitionerId}>
+            <FormControl flex={1} isRequired isInvalid={!practitionerId} id="field-behandelaar">
               <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
               <DropdownField
                 type={DropdownType.SINGLE_NON_CREATABLE}
@@ -171,7 +174,7 @@ export const FormOldClientPage = () => {
                 isSmallVariant
               />
             </FormControl>
-            <FormControl flex={1} isRequired isInvalid={!date}>
+            <FormControl flex={1} isRequired isInvalid={!date} id="field-aanmeetdatum">
               <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
               <Box maxW={{ base: 'full', md: '300px' }}>
                 <DatePickerField
@@ -198,21 +201,23 @@ export const FormOldClientPage = () => {
             p={4}
             mt={2}
           >
-            <RadioGroup
-              value={location}
-              onChange={v => setLocation(v as Location)}
-            >
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 2, sm: 6 }}
+            <FormControl isRequired isInvalid={!location} id="field-locatie">
+              <RadioGroup
+                value={location}
+                onChange={v => setLocation(v as Location)}
               >
-                {LOCATIE_OPTIES.map(o => (
-                  <Radio key={o.value} value={o.value}>
-                    {o.label}
-                  </Radio>
-                ))}
-              </Stack>
-            </RadioGroup>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  spacing={{ base: 2, sm: 6 }}
+                >
+                  {LOCATIE_OPTIES.map(o => (
+                    <Radio key={o.value} value={o.value}>
+                      {o.label}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+            </FormControl>
           </Flex>
         </Box>
         <Divider />
@@ -252,6 +257,7 @@ export const FormOldClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={initials.trim().length === 0}
+                id="field-voorletters"
               >
                 <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
                 <Input
@@ -265,6 +271,7 @@ export const FormOldClientPage = () => {
                 flex={1}
                 isRequired
                 isInvalid={clientName.trim().length === 0}
+                id="field-achternaam"
               >
                 <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
                 <Input
@@ -275,7 +282,7 @@ export const FormOldClientPage = () => {
                 />
               </FormControl>
             </Flex>
-            <FormControl isRequired isInvalid={birthDate.length === 0}>
+            <FormControl isRequired isInvalid={birthDate.length === 0} id="field-geboortedatum">
               <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
               <Box>
                 <DatePickerField
@@ -286,12 +293,6 @@ export const FormOldClientPage = () => {
               </Box>
             </FormControl>
           </Flex>
-          {!areTopSectionsValid && (
-            <Alert status="warning" mt={4}>
-              <AlertIcon />
-              Vul alle verplichte velden hierboven in om verder te gaan.
-            </Alert>
-          )}
         </Box>
         <Divider />
         <Box>
@@ -459,7 +460,7 @@ export const FormOldClientPage = () => {
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
-                  <ListItem key={index}>{field}</ListItem>
+                  <ListItem key={index}>{field.fieldName}</ListItem>
                 ))}
               </UnorderedList>
             </Box>
