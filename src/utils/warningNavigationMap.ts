@@ -110,3 +110,63 @@ export function scrollToField(fieldId: string): void {
         }, 3000);
     }
 }
+
+/**
+ * Focus and highlight multiple invalid fields
+ * Scrolls to first field, focuses it based on field type, and highlights all invalid fields
+ */
+export function focusAndHighlightInvalidFields(fieldIds: string[]): void {
+    if (fieldIds.length === 0) return;
+
+    // Add highlight to all invalid fields
+    fieldIds.forEach(fieldId => {
+        const element = document.getElementById(fieldId);
+        if (element) {
+            element.classList.add('highlight-field');
+        }
+    });
+
+    // Scroll to and focus the first invalid field
+    const firstFieldId = fieldIds[0];
+    const firstElement = document.getElementById(firstFieldId);
+    
+    if (firstElement) {
+        firstElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Focus based on field type
+        setTimeout(() => {
+            // Check if it's a direct input or textarea
+            if (firstElement.tagName === 'INPUT' || firstElement.tagName === 'TEXTAREA') {
+                firstElement.focus();
+            } else {
+                // For container elements, find the focusable element inside
+                // Try DatePickerField (input inside)
+                let focusableElement = firstElement.querySelector('input');
+                
+                // Try DropdownField (react-select)
+                if (!focusableElement) {
+                    focusableElement = firstElement.querySelector('.react-select__input input');
+                }
+                
+                // Try RadioGroup (first radio button)
+                if (!focusableElement) {
+                    focusableElement = firstElement.querySelector('input[type="radio"]');
+                }
+                
+                if (focusableElement && focusableElement instanceof HTMLElement) {
+                    focusableElement.focus();
+                }
+            }
+        }, 500); // Wait for scroll animation to complete
+    }
+
+    // Remove all highlights after 3 seconds
+    setTimeout(() => {
+        fieldIds.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element) {
+                element.classList.remove('highlight-field');
+            }
+        });
+    }, 3000);
+}

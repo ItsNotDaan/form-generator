@@ -32,6 +32,7 @@ import {useRouter} from 'next/router';
 import {Routes} from '../../routes';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOVACData, setClientData} from '@/domain/store/slices/formData';
+import {focusAndHighlightInvalidFields} from '@/utils/warningNavigationMap';
 import {
   OVAC_OMSCHRIJVING_ITEMS,
   PAARTYPE_OPTIES,
@@ -182,24 +183,24 @@ export const FormIntakeOVACPage = () => {
   };
 
   // Validation: check which required fields are missing
-  const getMissingFields = (): string[] => {
-    const missing: string[] = [];
+  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
+    const missing: Array<{ fieldName: string; fieldId: string }> = [];
 
     // Steunzolen validation if enabled
     if (steunzolenEnabled) {
       if (!schoenmaat.trim()) {
-        missing.push(t('schoenmaat'));
+        missing.push({ fieldName: t('schoenmaat'), fieldId: 'field-schoenmaat-ovac' });
       }
 
       // Only check steunzool type if NOT Talonette
       if (!isSteunzolenTalonette) {
         if (!steunzoolTypeGeneral.trim()) {
-          missing.push(t('steunzoolTypeGeneral'));
+          missing.push({ fieldName: t('steunzoolTypeGeneral'), fieldId: 'field-steunzooltype-ovac' });
         }
 
         // If Anders is selected, check if text is provided
         if (steunzoolTypeGeneral === 'Anders' && !steunzoolAndersText.trim()) {
-          missing.push(t('steunzoolAndersText'));
+          missing.push({ fieldName: t('steunzoolAndersText'), fieldId: 'field-steunzoolanders-ovac' });
         }
       }
 
@@ -209,12 +210,12 @@ export const FormIntakeOVACPage = () => {
           !steunzoolHakVerhogingLinks.trim() &&
           !steunzoolHakVerhogingRechts.trim()
         ) {
-          missing.push(t('steunzoolHakVerhogingCm'));
+          missing.push({ fieldName: t('steunzoolHakVerhogingCm'), fieldId: 'field-hakverhoging-ovac' });
         }
       }
 
       if (!steunzoolPrijs) {
-        missing.push(t('steunzoolPrijs'));
+        missing.push({ fieldName: t('steunzoolPrijs'), fieldId: 'field-prijs-ovac' });
       }
     }
 
@@ -225,6 +226,8 @@ export const FormIntakeOVACPage = () => {
 
   const handleSubmit = () => {
     if (!areAllFieldsValid) {
+      const missingFields = getMissingFields();
+      focusAndHighlightInvalidFields(missingFields.map(f => f.fieldId));
       return; // Validation alert will show the missing fields
     }
 
@@ -499,7 +502,7 @@ export const FormIntakeOVACPage = () => {
               p={4}
               mt={2}
             >
-              <Box>
+              <FormControl id="field-schoenmaat-ovac">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('schoenmaat')} *
                 </Text>
@@ -509,11 +512,11 @@ export const FormIntakeOVACPage = () => {
                   onChange={e => setSchoenmaat(e.target.value)}
                   size="sm"
                 />
-              </Box>
+              </FormControl>
 
               <Divider />
 
-              <Box>
+              <FormControl id="field-prijs-ovac">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolPrijs')} *
                 </Text>
@@ -540,13 +543,13 @@ export const FormIntakeOVACPage = () => {
                     ))}
                   </Stack>
                 </RadioGroup>
-              </Box>
+              </FormControl>
 
               {!isSteunzolenTalonette && (
                 <>
                   <Divider />
 
-                  <Box>
+                  <FormControl id="field-steunzooltype-ovac">
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('steunzoolTypeGeneral')}
                     </Text>
@@ -568,6 +571,7 @@ export const FormIntakeOVACPage = () => {
                     </RadioGroup>
                     {steunzoolTypeGeneral === 'Anders' && (
                       <Input
+                        id="field-steunzoolanders-ovac"
                         placeholder={t('steunzoolAndersTextPlaceholder')}
                         value={steunzoolAndersText}
                         onChange={e => setSteunzoolAndersText(e.target.value)}
@@ -575,7 +579,7 @@ export const FormIntakeOVACPage = () => {
                         mt={3}
                       />
                     )}
-                  </Box>
+                  </FormControl>
 
                   <Divider />
 
@@ -653,7 +657,7 @@ export const FormIntakeOVACPage = () => {
 
               <Divider />
 
-              <Box>
+              <Box id="field-hakverhoging-ovac">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolHakVerhogingCm')}
                 </Text>
@@ -712,7 +716,7 @@ export const FormIntakeOVACPage = () => {
               </Text>
               <UnorderedList>
                 {getMissingFields().map((field, index) => (
-                  <ListItem key={index}>{field}</ListItem>
+                  <ListItem key={index}>{field.fieldName}</ListItem>
                 ))}
               </UnorderedList>
             </Box>
