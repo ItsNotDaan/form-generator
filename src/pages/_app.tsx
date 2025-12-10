@@ -1,22 +1,22 @@
-import type {AppProps} from 'next/app';
-import {ChakraProvider} from '@chakra-ui/react';
-import {theme} from '@/presentation/style/theme';
-import {Asap} from 'next/font/google';
-import {Provider} from 'react-redux';
+import type { AppProps } from 'next/app';
+import { ChakraProvider } from '@chakra-ui/react';
+import { theme } from '@/presentation/style/theme';
+import { Asap } from 'next/font/google';
+import { Provider } from 'react-redux';
 import React from 'react';
-import {css, Global} from '@emotion/react';
-import {wrapper} from '@/domain/store/store';
-import {PersistGate} from 'redux-persist/integration/react';
-import {persistStore} from 'redux-persist';
+import { css, Global } from '@emotion/react';
+import { wrapper } from '@/domain/store/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
 import appWithI18n from 'next-translate/appWithI18n';
 import i18nConfig from '../../i18n';
 
 // Use Next Font for automatic font optimization
 // https://nextjs.org/docs/basic-features/font-optimization
-const asap = Asap({subsets: ['latin'], display: 'swap'});
+const asap = Asap({ subsets: ['latin'], display: 'swap' });
 
-function App({Component, ...rest}: AppProps) {
-  const {store, props} = wrapper.useWrappedStore(rest);
+function App({ Component, ...rest }: AppProps) {
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   return (
     <main className={asap.className} suppressHydrationWarning>
@@ -42,4 +42,4 @@ function App({Component, ...rest}: AppProps) {
   );
 }
 
-export default appWithI18n(App, i18nConfig);
+export default appWithI18n(App as any, i18nConfig);
