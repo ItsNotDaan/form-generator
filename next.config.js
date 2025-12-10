@@ -10,8 +10,10 @@ const nextConfig = {
     unoptimized: true,
   },
   eslint: {
-    // Temporarily ignore ESLint errors during build to test configuration
-    // Warning: This allows production builds with ESLint errors
+    // NOTE: This setting bypasses ESLint errors during build.
+    // There are pre-existing linting issues in the codebase that need to be fixed separately.
+    // TODO: Remove this setting after fixing all ESLint errors in the codebase.
+    // Warning: This allows production builds with ESLint errors.
     ignoreDuringBuilds: true,
   },
   env: {
