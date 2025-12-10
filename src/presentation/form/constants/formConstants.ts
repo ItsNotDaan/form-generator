@@ -46,18 +46,18 @@ export const AANHEF_OPTIES = [
 ];
 
 // Generieke zijdes gebruikt in intake formulieren
-export type Zijde = 'beide' | 'links' | 'rechts';
+export type Zijde = 'both' | 'left' | 'right';
 export const ZIJDE_OPTIES = [
-  {label: 'beide', value: 'beide'},
-  {label: 'links', value: 'links'},
-  {label: 'rechts', value: 'rechts'},
+  {label: 'both', value: 'both'},
+  {label: 'left', value: 'left'},
+  {label: 'right', value: 'right'},
 ];
 
 // Generieke ja/nee gebruikt in formulieren
-export type JaNee = 'ja' | 'nee';
+export type JaNee = 'yes' | 'no';
 export const JA_NEE_OPTIES = [
-  {label: 'ja', value: 'ja'},
-  {label: 'nee', value: 'nee'},
+  {label: 'yes', value: 'yes'},
+  {label: 'no', value: 'no'},
 ];
 
 // Openstand schacht opties (waarden in cm)
@@ -71,10 +71,10 @@ export const OPENSTAND_OPTIES = [
 ];
 
 // Supplement types
-export type SupplementType = 'Lateraal' | 'Mediaal';
+export type SupplementType = 'lateral' | 'medial';
 export const SUPPLEMENT_TYPE_OPTIES = [
-  {label: 'Lateraal', value: 'Lateraal'},
-  {label: 'Mediaal', value: 'Mediaal'},
+  {label: 'lateral', value: 'lateral'},
+  {label: 'medial', value: 'medial'},
 ];
 
 // Haksoort opties
@@ -117,17 +117,17 @@ export const SLUITING_OPTIES = [
 ];
 
 // Hakschoring types
-export type HakschoringType = 'Mediaal' | 'Lateraal';
+export type HakschoringType = 'medial' | 'lateral';
 export const HAKSCHORING_TYPE_OPTIES = [
-  {label: 'Mediaal', value: 'Mediaal'},
-  {label: 'Lateraal', value: 'Lateraal'},
+  {label: 'medial', value: 'medial'},
+  {label: 'lateral', value: 'lateral'},
 ];
 
 // Ezelsoor types
-export type EzelsoorType = 'Mediaal' | 'Lateraal';
+export type EzelsoorType = 'medial' | 'lateral';
 export const EZELSOOR_TYPE_OPTIES = [
-  {label: 'Mediaal', value: 'Mediaal'},
-  {label: 'Lateraal', value: 'Lateraal'},
+  {label: 'medial', value: 'medial'},
+  {label: 'lateral', value: 'lateral'},
 ];
 
 // Omsluiting

@@ -53,7 +53,7 @@ export const FormIntakeOSAPage = () => {
 
   // State voor omschrijving/paartype
   const [welkPaar, setWelkPaar] = useState<string>('Eerste paar'); // State voor Links/Rechts/Beide selectie (default: Beide)
-  const [side, setSide] = useState<Zijde>('beide');
+  const [side, setSide] = useState<Zijde>('both');
 
   // State voor schachthoogte
   const [schachthoogteLinks, setSchachthoogteLinks] = useState('14');
@@ -174,12 +174,12 @@ export const FormIntakeOSAPage = () => {
   // State voor bijzonderheden
   const [bijzonderheden, setBijzonderheden] = useState('');
 
-  const showLinks = side === 'links' || side === 'beide';
-  const showRechts = side === 'rechts' || side === 'beide';
+  const showLinks = side === 'left' || side === 'both';
+  const showRechts = side === 'right' || side === 'both';
 
   // Helper functions for boolean <-> string conversion for UI
-  const boolToString = (value: boolean): string => (value ? 'ja' : 'nee');
-  const stringToBool = (value: string): boolean => value === 'ja';
+  const boolToString = (value: boolean): string => (value ? 'yes' : 'no');
+  const stringToBool = (value: string): boolean => value === 'yes';
 
   // Handler om terug te gaan (optioneel: data opslaan in localStorage/sessionStorage)
   // Validation: check which required fields are missing
@@ -321,9 +321,9 @@ export const FormIntakeOSAPage = () => {
           >
             <RadioGroup value={side} onChange={v => setSide(v as Zijde)}>
               <Stack direction="row" spacing={6}>
-                <Radio value="beide">{t('both')}</Radio>
-                <Radio value="links">{t('left')}</Radio>
-                <Radio value="rechts">{t('right')}</Radio>
+                <Radio value="both">{t('both')}</Radio>
+                <Radio value="left">{t('left')}</Radio>
+                <Radio value="right">{t('right')}</Radio>
               </Stack>
             </RadioGroup>
           </Flex>
@@ -807,8 +807,8 @@ export const FormIntakeOSAPage = () => {
               onChange={v => setTongpolsterEnabled(stringToBool(v))}
             >
               <Stack direction={{base: 'column', sm: 'row'}} spacing={6}>
-                <Radio value="ja">{t('tonguePaddingYes')}</Radio>
-                <Radio value="nee">{t('no')}</Radio>
+                <Radio value="yes">{t('tonguePaddingYes')}</Radio>
+                <Radio value="no">{t('no')}</Radio>
               </Stack>
             </RadioGroup>
           </Flex>

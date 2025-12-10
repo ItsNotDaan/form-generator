@@ -56,8 +56,8 @@ export const FormResultsPage = () => {
       return value ? 'Ja' : ''; // false becomes empty string, not excluded
     }
     if (typeof value === 'string') {
-      if (value.toLowerCase() === 'ja') return 'Ja';
-      if (value.toLowerCase() === 'nee') return '';
+      if (value.toLowerCase() === 'yes') return 'Ja';
+      if (value.toLowerCase() === 'no') return '';
       return value;
     }
     if (Array.isArray(value)) {

@@ -209,8 +209,8 @@ function generateVLOSCodes(
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
-  const hasLinks = side === 'links' || side === 'beide';
-  const hasRechts = side === 'rechts' || side === 'beide';
+  const hasLinks = side === 'left' || side === 'both';
+  const hasRechts = side === 'right' || side === 'both';
 
   // Code 1/2: VLOS base codes
   // Code 1 = VLOS eerste paar
@@ -284,8 +284,8 @@ function generateOSACodes(
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
-  const hasLinks = side === 'links' || side === 'beide';
-  const hasRechts = side === 'rechts' || side === 'beide';
+  const hasLinks = side === 'left' || side === 'both';
+  const hasRechts = side === 'right' || side === 'both';
 
   // Parse schachthoogte values
   const heightLinks = parseFloat(schachthoogteLinks || '0') || 0;
@@ -298,9 +298,9 @@ function generateOSACodes(
   // Odd code (3/5/7) = eerste paar, Even code (4/6/8) = herhaling/reservepaar
 
   const maxHeight =
-    side === 'beide'
+    side === 'both'
       ? Math.max(heightLinks, heightRechts)
-      : side === 'links'
+      : side === 'left'
       ? heightLinks
       : heightRechts;
 
