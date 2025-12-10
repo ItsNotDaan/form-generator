@@ -783,7 +783,7 @@ export const FormIntakeOSBPage = () => {
               p={4}
               mt={2}
             >
-              <Box>
+              <FormControl id="field-schoenmaat-osb">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('schoenmaat')} *
                 </Text>
@@ -793,11 +793,11 @@ export const FormIntakeOSBPage = () => {
                   onChange={e => setSchoenmaat(e.target.value)}
                   size="sm"
                 />
-              </Box>
+              </FormControl>
 
               <Divider />
 
-              <Box>
+              <FormControl id="field-prijs-osb">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolPrijs')} *
                 </Text>
@@ -824,13 +824,13 @@ export const FormIntakeOSBPage = () => {
                     ))}
                   </Stack>
                 </RadioGroup>
-              </Box>
+              </FormControl>
 
               {!isSteunzolenTalonette && (
                 <>
                   <Divider />
 
-                  <Box>
+                  <FormControl id="field-steunzooltype-osb">
                     <Text fontSize="sm" fontWeight="medium" mb={2}>
                       {t('steunzoolTypeGeneral')}
                     </Text>
@@ -852,6 +852,7 @@ export const FormIntakeOSBPage = () => {
                     </RadioGroup>
                     {steunzoolTypeGeneral === 'Anders' && (
                       <Input
+                        id="field-steunzoolanders-osb"
                         placeholder={t('steunzoolAndersTextPlaceholder')}
                         value={steunzoolAndersText}
                         onChange={e => setSteunzoolAndersText(e.target.value)}
@@ -860,7 +861,7 @@ export const FormIntakeOSBPage = () => {
                         maxW="300px"
                       />
                     )}
-                  </Box>
+                  </FormControl>
 
                   <Divider />
 
@@ -948,7 +949,7 @@ export const FormIntakeOSBPage = () => {
 
               <Divider />
 
-              <Box>
+              <Box id="field-hakverhoging-osb">
                 <Text fontSize="sm" fontWeight="medium" mb={2}>
                   {t('steunzoolHakVerhogingCm')}
                 </Text>
