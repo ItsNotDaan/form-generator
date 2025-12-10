@@ -64,7 +64,7 @@ export interface IntakeVLOSData {
   // Supplement shoring/support
   supplementschoringLinksEnabled: boolean;
   supplementschoringRechtsEnabled: boolean;
-  supplementschoringLinksType?: string; // Lateral/Medial/Both
+  supplementschoringLinksType?: string; // Lateral/Medial
   supplementschoringRechtsType?: string;
 
   // Sole stiffening

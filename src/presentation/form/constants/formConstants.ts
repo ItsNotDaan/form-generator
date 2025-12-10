@@ -71,11 +71,10 @@ export const OPENSTAND_OPTIES = [
 ];
 
 // Supplement types
-export type SupplementType = 'Lateraal' | 'Mediaal' | 'Lateraal of Mediaal';
+export type SupplementType = 'Lateraal' | 'Mediaal';
 export const SUPPLEMENT_TYPE_OPTIES = [
   { label: 'Lateraal', value: 'Lateraal' },
   { label: 'Mediaal', value: 'Mediaal' },
-  { label: 'Lateraal of Mediaal', value: 'Lateraal of Mediaal' },
 ];
 
 // Haksoort opties
