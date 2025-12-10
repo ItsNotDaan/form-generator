@@ -178,27 +178,31 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl flex={1} isRequired isInvalid={!practitionerId} id="field-behandelaar">
-              <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
-              <DropdownField
-                type={DropdownType.SINGLE_NON_CREATABLE}
-                items={BEHANDELAARS}
-                item={practitionerId}
-                onItemSelected={item => setPractitionerId(item?.value)}
-                placeholder={t('choosePractitioner')}
-                isSmallVariant
-              />
-            </FormControl>
-            <FormControl flex={1} isRequired isInvalid={!date} id="field-aanmeetdatum">
-              <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
-              <Box maxW={{ base: 'full', md: '300px' }}>
-                <DatePickerField
-                  date={date ? new Date(date) : undefined}
-                  onDateChanged={d => d && setDate(d.toISOString())}
+            <Box id="field-behandelaar">
+              <FormControl flex={1} isRequired isInvalid={!practitionerId}>
+                <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
+                <DropdownField
+                  type={DropdownType.SINGLE_NON_CREATABLE}
+                  items={BEHANDELAARS}
+                  item={practitionerId}
+                  onItemSelected={item => setPractitionerId(item?.value)}
+                  placeholder={t('choosePractitioner')}
                   isSmallVariant
                 />
-              </Box>
-            </FormControl>
+              </FormControl>
+            </Box>
+            <Box id="field-aanmeetdatum">
+              <FormControl flex={1} isRequired isInvalid={!date}>
+                <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
+                <Box maxW={{ base: 'full', md: '300px' }}>
+                  <DatePickerField
+                    date={date ? new Date(date) : undefined}
+                    onDateChanged={d => d && setDate(d.toISOString())}
+                    isSmallVariant
+                  />
+                </Box>
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
 
@@ -219,23 +223,25 @@ export const FormNewClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl isRequired isInvalid={!location} id="field-locatie">
-              <RadioGroup
-                value={location}
-                onChange={v => setLocation(v as Location)}
-              >
-                <Stack
-                  direction={{ base: 'column', sm: 'row' }}
-                  spacing={{ base: 2, sm: 6 }}
+            <Box id="field-locatie">
+              <FormControl isRequired isInvalid={!location}>
+                <RadioGroup
+                  value={location}
+                  onChange={v => setLocation(v as Location)}
                 >
-                  {LOCATIE_OPTIES.map(o => (
-                    <Radio key={o.value} value={o.value}>
-                      {o.label}
-                    </Radio>
-                  ))}
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row' }}
+                    spacing={{ base: 2, sm: 6 }}
+                  >
+                    {LOCATIE_OPTIES.map(o => (
+                      <Radio key={o.value} value={o.value}>
+                        {o.label}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
 
@@ -256,70 +262,74 @@ export const FormNewClientPage = () => {
             mt={2}
           >
             {/* Aanhef */}
-            <FormControl isRequired isInvalid={!salutation} id="field-aanhef">
-              <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
-              <RadioGroup
-                value={salutation}
-                onChange={v => setSalutation(v as Salutation)}
-              >
-                <Stack direction="row" spacing={6}>
-                  {AANHEF_OPTIES.map(o => (
-                    <Radio key={o.value} value={o.value}>
-                      {o.label}
-                    </Radio>
-                  ))}
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+            <Box id="field-aanhef">
+              <FormControl isRequired isInvalid={!salutation}>
+                <FormLabel fontSize="sm">{t('aanhef')}</FormLabel>
+                <RadioGroup
+                  value={salutation}
+                  onChange={v => setSalutation(v as Salutation)}
+                >
+                  <Stack direction="row" spacing={6}>
+                    {AANHEF_OPTIES.map(o => (
+                      <Radio key={o.value} value={o.value}>
+                        {o.label}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+            </Box>
 
             {/* Voorletters en Achternaam */}
             <Flex
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={initials.trim().length === 0}
-                id="field-voorletters"
-              >
-                <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
-                <Input
-                  value={initials}
-                  onChange={e => setInitials(e.target.value)}
-                  size="sm"
-                  placeholder={t('voorllettersPlaceholder')}
-                />
-              </FormControl>
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={clientName.trim().length === 0}
-                id="field-achternaam"
-              >
-                <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
-                <Input
-                  value={clientName}
-                  onChange={e => setClientName(e.target.value)}
-                  size="sm"
-                  placeholder={t('achternaamPlaceholder')}
-                />
-              </FormControl>
+              <Box id="field-voorletters" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={initials.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
+                  <Input
+                    value={initials}
+                    onChange={e => setInitials(e.target.value)}
+                    size="sm"
+                    placeholder={t('voorllettersPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
+              <Box id="field-achternaam" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={clientName.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
+                  <Input
+                    value={clientName}
+                    onChange={e => setClientName(e.target.value)}
+                    size="sm"
+                    placeholder={t('achternaamPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
             </Flex>
 
             {/* Geboortedatum */}
-            <FormControl isRequired isInvalid={birthDate.length === 0} id="field-geboortedatum">
-              <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
-              <Box>
-                <DatePickerField
-                  date={birthDate ? new Date(birthDate) : undefined}
-                  onDateChanged={date =>
-                    date && setBirthDate(date.toISOString())
-                  }
-                  isSmallVariant
-                />
-              </Box>
-            </FormControl>
+            <Box id="field-geboortedatum">
+              <FormControl isRequired isInvalid={birthDate.length === 0}>
+                <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
+                <Box>
+                  <DatePickerField
+                    date={birthDate ? new Date(birthDate) : undefined}
+                    onDateChanged={date =>
+                      date && setBirthDate(date.toISOString())
+                    }
+                    isSmallVariant
+                  />
+                </Box>
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
 
@@ -344,34 +354,34 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', sm: 'row' }}
             >
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={postalCode.trim().length === 0}
-                id="field-postcode"
-              >
-                <FormLabel fontSize="sm">{t('postcode')}</FormLabel>
-                <Input
-                  value={postalCode}
-                  onChange={e => setPostalCode(e.target.value)}
-                  size="sm"
-                  placeholder={t('postcodePlaceholder')}
-                />
-              </FormControl>
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={houseNumber.trim().length === 0}
-                id="field-huisnummer"
-              >
-                <FormLabel fontSize="sm">{t('huisnummer')}</FormLabel>
-                <Input
-                  value={houseNumber}
-                  onChange={e => setHouseNumber(e.target.value)}
-                  size="sm"
-                  placeholder={t('huisnummerPlaceholder')}
-                />
-              </FormControl>
+              <Box id="field-postcode" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={postalCode.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('postcode')}</FormLabel>
+                  <Input
+                    value={postalCode}
+                    onChange={e => setPostalCode(e.target.value)}
+                    size="sm"
+                    placeholder={t('postcodePlaceholder')}
+                  />
+                </FormControl>
+              </Box>
+              <Box id="field-huisnummer" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={houseNumber.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('huisnummer')}</FormLabel>
+                  <Input
+                    value={houseNumber}
+                    onChange={e => setHouseNumber(e.target.value)}
+                    size="sm"
+                    placeholder={t('huisnummerPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
             </Flex>
 
             {/* Straatnaam en Stad */}
@@ -379,34 +389,34 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={address.trim().length === 0}
-                id="field-straatnaam"
-              >
-                <FormLabel fontSize="sm">{t('straatnaam')}</FormLabel>
-                <Input
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                  size="sm"
-                  placeholder={t('straatnaamPlaceholder')}
-                />
-              </FormControl>
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={city.trim().length === 0}
-                id="field-stad"
-              >
-                <FormLabel fontSize="sm">{t('stad')}</FormLabel>
-                <Input
-                  value={city}
-                  onChange={e => setCity(e.target.value)}
-                  size="sm"
-                  placeholder={t('stadPlaceholder')}
-                />
-              </FormControl>
+              <Box id="field-straatnaam" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={address.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('straatnaam')}</FormLabel>
+                  <Input
+                    value={address}
+                    onChange={e => setAddress(e.target.value)}
+                    size="sm"
+                    placeholder={t('straatnaamPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
+              <Box id="field-stad" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={city.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('stad')}</FormLabel>
+                  <Input
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    size="sm"
+                    placeholder={t('stadPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
             </Flex>
           </Flex>
         </Box>
@@ -432,21 +442,21 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={phoneOne.trim().length === 0}
-                id="field-telefoon1"
-              >
-                <FormLabel fontSize="sm">{t('telefoon1')}</FormLabel>
-                <Input
-                  type="tel"
-                  value={phoneOne}
-                  onChange={e => setPhoneOne(e.target.value)}
-                  size="sm"
-                  placeholder={t('telefoon1Placeholder')}
-                />
-              </FormControl>
+              <Box id="field-telefoon1" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={phoneOne.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('telefoon1')}</FormLabel>
+                  <Input
+                    type="tel"
+                    value={phoneOne}
+                    onChange={e => setPhoneOne(e.target.value)}
+                    size="sm"
+                    placeholder={t('telefoon1Placeholder')}
+                  />
+                </FormControl>
+              </Box>
               <FormControl flex={1}>
                 <FormLabel fontSize="sm">{t('telefoon2')}</FormLabel>
                 <Input
@@ -460,22 +470,22 @@ export const FormNewClientPage = () => {
             </Flex>
 
             {/* Email */}
-            <FormControl isRequired isInvalid={email.trim().length === 0} id="field-emailadres">
-              <FormLabel fontSize="sm">{t('emailadres')}</FormLabel>
-              <Input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                size="sm"
-                placeholder={t('emailadresPlaceholder')}
-              />
-            </FormControl>
+            <Box id="field-emailadres">
+              <FormControl isRequired isInvalid={email.trim().length === 0}>
+                <FormLabel fontSize="sm">{t('emailadres')}</FormLabel>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  size="sm"
+                  placeholder={t('emailadresPlaceholder')}
+                />
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
 
-        <Divider />
-
-        {/* Verzekering en Medische info */}
+        <Divider />        {/* Verzekering en Medische info */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>
             {t('verzekeringEnMedischeInformatie')}
@@ -493,38 +503,38 @@ export const FormNewClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={insurance.trim().length === 0}
-                id="field-verzekeringsmaatschappij"
-              >
-                <FormLabel fontSize="sm">
-                  {t('verzekeringsmaatschappij')}
-                </FormLabel>
-                <DropdownField
-                  type={DropdownType.SINGLE_CREATABLE}
-                  items={ZORGVERZEKERAARS}
-                  item={insurance}
-                  onItemSelected={item => setInsurance(item?.value || '')}
-                  placeholder={t('verzekeringsmaatschappijPlaceholder')}
-                  isSmallVariant
-                />
-              </FormControl>
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={specialist.trim().length === 0}
-                id="field-specialisthuisarts"
-              >
-                <FormLabel fontSize="sm">{t('specialistHuisarts')}</FormLabel>
-                <Input
-                  value={specialist}
-                  onChange={e => setSpecialist(e.target.value)}
-                  size="sm"
-                  placeholder={t('specialistHuisartsPlaceholder')}
-                />
-              </FormControl>
+              <Box id="field-verzekeringsmaatschappij" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={insurance.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">
+                    {t('verzekeringsmaatschappij')}
+                  </FormLabel>
+                  <DropdownField
+                    type={DropdownType.SINGLE_CREATABLE}
+                    items={ZORGVERZEKERAARS}
+                    item={insurance}
+                    onItemSelected={item => setInsurance(item?.value || '')}
+                    placeholder={t('verzekeringsmaatschappijPlaceholder')}
+                    isSmallVariant
+                  />
+                </FormControl>
+              </Box>
+              <Box id="field-specialisthuisarts" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={specialist.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('specialistHuisarts')}</FormLabel>
+                  <Input
+                    value={specialist}
+                    onChange={e => setSpecialist(e.target.value)}
+                    size="sm"
+                    placeholder={t('specialistHuisartsPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
             </Flex>
           </Flex>
         </Box>

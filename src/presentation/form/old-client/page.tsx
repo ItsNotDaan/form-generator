@@ -163,27 +163,31 @@ export const FormOldClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl flex={1} isRequired isInvalid={!practitionerId} id="field-behandelaar">
-              <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
-              <DropdownField
-                type={DropdownType.SINGLE_NON_CREATABLE}
-                items={BEHANDELAARS}
-                item={practitionerId}
-                onItemSelected={item => setPractitionerId(item?.value)}
-                placeholder={t('choosePractitioner')}
-                isSmallVariant
-              />
-            </FormControl>
-            <FormControl flex={1} isRequired isInvalid={!date} id="field-aanmeetdatum">
-              <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
-              <Box maxW={{ base: 'full', md: '300px' }}>
-                <DatePickerField
-                  date={date ? new Date(date) : undefined}
-                  onDateChanged={d => d && setDate(d.toISOString())}
+            <Box id="field-behandelaar">
+              <FormControl flex={1} isRequired isInvalid={!practitionerId}>
+                <FormLabel fontSize="sm">{t('behandelaar')}</FormLabel>
+                <DropdownField
+                  type={DropdownType.SINGLE_NON_CREATABLE}
+                  items={BEHANDELAARS}
+                  item={practitionerId}
+                  onItemSelected={item => setPractitionerId(item?.value)}
+                  placeholder={t('choosePractitioner')}
                   isSmallVariant
                 />
-              </Box>
-            </FormControl>
+              </FormControl>
+            </Box>
+            <Box id="field-aanmeetdatum">
+              <FormControl flex={1} isRequired isInvalid={!date}>
+                <FormLabel fontSize="sm">{t('aanmeetdatum')}</FormLabel>
+                <Box maxW={{ base: 'full', md: '300px' }}>
+                  <DatePickerField
+                    date={date ? new Date(date) : undefined}
+                    onDateChanged={d => d && setDate(d.toISOString())}
+                    isSmallVariant
+                  />
+                </Box>
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
         <Divider />
@@ -201,23 +205,25 @@ export const FormOldClientPage = () => {
             p={4}
             mt={2}
           >
-            <FormControl isRequired isInvalid={!location} id="field-locatie">
-              <RadioGroup
-                value={location}
-                onChange={v => setLocation(v as Location)}
-              >
-                <Stack
-                  direction={{ base: 'column', sm: 'row' }}
-                  spacing={{ base: 2, sm: 6 }}
+            <Box id="field-locatie">
+              <FormControl isRequired isInvalid={!location}>
+                <RadioGroup
+                  value={location}
+                  onChange={v => setLocation(v as Location)}
                 >
-                  {LOCATIE_OPTIES.map(o => (
-                    <Radio key={o.value} value={o.value}>
-                      {o.label}
-                    </Radio>
-                  ))}
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row' }}
+                    spacing={{ base: 2, sm: 6 }}
+                  >
+                    {LOCATIE_OPTIES.map(o => (
+                      <Radio key={o.value} value={o.value}>
+                        {o.label}
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
         <Divider />
@@ -253,45 +259,47 @@ export const FormOldClientPage = () => {
               gap={{ base: 4, md: 6 }}
               direction={{ base: 'column', md: 'row' }}
             >
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={initials.trim().length === 0}
-                id="field-voorletters"
-              >
-                <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
-                <Input
-                  value={initials}
-                  onChange={e => setInitials(e.target.value)}
-                  size="sm"
-                  placeholder={t('voorllettersPlaceholder')}
-                />
-              </FormControl>
-              <FormControl
-                flex={1}
-                isRequired
-                isInvalid={clientName.trim().length === 0}
-                id="field-achternaam"
-              >
-                <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
-                <Input
-                  value={clientName}
-                  onChange={e => setClientName(e.target.value)}
-                  size="sm"
-                  placeholder={t('achternaamPlaceholder')}
-                />
-              </FormControl>
-            </Flex>
-            <FormControl isRequired isInvalid={birthDate.length === 0} id="field-geboortedatum">
-              <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
-              <Box>
-                <DatePickerField
-                  date={birthDate ? new Date(birthDate) : undefined}
-                  onDateChanged={d => d && setBirthDate(d.toISOString())}
-                  isSmallVariant
-                />
+              <Box id="field-voorletters" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={initials.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('voorletters')}</FormLabel>
+                  <Input
+                    value={initials}
+                    onChange={e => setInitials(e.target.value)}
+                    size="sm"
+                    placeholder={t('voorllettersPlaceholder')}
+                  />
+                </FormControl>
               </Box>
-            </FormControl>
+              <Box id="field-achternaam" flex={1}>
+                <FormControl
+                  isRequired
+                  isInvalid={clientName.trim().length === 0}
+                >
+                  <FormLabel fontSize="sm">{t('achternaam')}</FormLabel>
+                  <Input
+                    value={clientName}
+                    onChange={e => setClientName(e.target.value)}
+                    size="sm"
+                    placeholder={t('achternaamPlaceholder')}
+                  />
+                </FormControl>
+              </Box>
+            </Flex>
+            <Box id="field-geboortedatum">
+              <FormControl isRequired isInvalid={birthDate.length === 0}>
+                <FormLabel fontSize="sm">{t('geboortedatum')}</FormLabel>
+                <Box>
+                  <DatePickerField
+                    date={birthDate ? new Date(birthDate) : undefined}
+                    onDateChanged={d => d && setBirthDate(d.toISOString())}
+                    isSmallVariant
+                  />
+                </Box>
+              </FormControl>
+            </Box>
           </Flex>
         </Box>
         <Divider />

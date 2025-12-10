@@ -118,46 +118,49 @@ export function scrollToField(fieldId: string): void {
 export function focusAndHighlightInvalidFields(fieldIds: string[]): void {
     if (fieldIds.length === 0) return;
 
+    if (process.env.NODE_ENV === 'development') {
+        console.debug('focusAndHighlightInvalidFields called with fieldIds:', fieldIds);
+    }
+
     // Add highlight to all invalid fields
     fieldIds.forEach(fieldId => {
         const element = document.getElementById(fieldId);
         if (element) {
             element.classList.add('highlight-field');
+            if (process.env.NODE_ENV === 'development') {
+                console.debug(`Highlighted field: ${fieldId}`, element);
+            }
+        } else {
+            if (process.env.NODE_ENV === 'development') {
+                console.warn(`Field element not found: ${fieldId}`);
+            }
         }
     });
 
     // Scroll to and focus the first invalid field
     const firstFieldId = fieldIds[0];
     const firstElement = document.getElementById(firstFieldId);
-    
+
     if (firstElement) {
         firstElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Focus based on field type
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Scrolling to first field: ${firstFieldId}`);
+        }
+
+        // Use multiple timing strategies to ensure focus works
+        // First attempt after scroll animation (300ms)
         setTimeout(() => {
-            // Check if it's a direct input or textarea
-            if (firstElement.tagName === 'INPUT' || firstElement.tagName === 'TEXTAREA') {
-                firstElement.focus();
-            } else {
-                // For container elements, find the focusable element inside
-                // Try DatePickerField (input inside)
-                let focusableElement = firstElement.querySelector('input');
-                
-                // Try DropdownField (react-select)
-                if (!focusableElement) {
-                    focusableElement = firstElement.querySelector('.react-select__input input');
-                }
-                
-                // Try RadioGroup (first radio button)
-                if (!focusableElement) {
-                    focusableElement = firstElement.querySelector('input[type="radio"]');
-                }
-                
-                if (focusableElement && focusableElement instanceof HTMLElement) {
-                    focusableElement.focus();
-                }
-            }
-        }, 500); // Wait for scroll animation to complete
+            focusElement(firstElement);
+        }, 300);
+
+        // Fallback attempt in case component wasn't ready
+        setTimeout(() => {
+            focusElement(firstElement);
+        }, 600);
+    } else {
+        if (process.env.NODE_ENV === 'development') {
+            console.warn(`First field element not found: ${firstFieldId}`);
+        }
     }
 
     // Remove all highlights after 3 seconds
@@ -169,4 +172,112 @@ export function focusAndHighlightInvalidFields(fieldIds: string[]): void {
             }
         });
     }, 3000);
+}
+
+/**
+ * Helper function to focus an element, trying different strategies based on element type
+ */
+function focusElement(element: HTMLElement): void {
+    if (process.env.NODE_ENV === 'development') {
+        console.debug(`focusElement called on: ${element.id}`, element);
+        console.debug(`Element tag: ${element.tagName}`);
+        console.debug(`Element children:`, element.children);
+    }
+
+    // Check if it's a direct input or textarea
+    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+        (element as HTMLInputElement | HTMLTextAreaElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Direct focus on ${element.tagName}`);
+        }
+        return;
+    }
+
+    let focusableElement: HTMLElement | null = null;
+
+    // Strategy 1: Try input[role="combobox"] first (react-select standard)
+    focusableElement = element.querySelector('input[role="combobox"]') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via role=combobox`);
+        }
+        return;
+    }
+
+    // Strategy 2: Try react-select input with specific class path
+    focusableElement = element.querySelector('.react-select__input input') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via .react-select__input input`);
+        }
+        return;
+    }
+
+    // Strategy 3: Try input[class*="react-select"]
+    focusableElement = element.querySelector('input[class*="react-select"]') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via input[class*="react-select"]`);
+        }
+        return;
+    }
+
+    // Strategy 4: Try regular input (not radio/checkbox)
+    focusableElement = element.querySelector('input:not([type="radio"]):not([type="checkbox"])') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via regular input`);
+        }
+        return;
+    }
+
+    // Strategy 5: Try radio button (for RadioGroup)
+    focusableElement = element.querySelector('input[type="radio"]') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via radio button`);
+        }
+        return;
+    }
+
+    // Strategy 6: Try checkbox
+    focusableElement = element.querySelector('input[type="checkbox"]') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via checkbox`);
+        }
+        return;
+    }
+
+    // Strategy 7: Try textarea
+    focusableElement = element.querySelector('textarea') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLTextAreaElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via textarea`);
+        }
+        return;
+    }
+
+    // Strategy 8: Last resort - try any input
+    focusableElement = element.querySelector('input') as HTMLElement | null;
+    if (focusableElement) {
+        (focusableElement as HTMLInputElement).focus();
+        if (process.env.NODE_ENV === 'development') {
+            console.debug(`Focused via fallback input`);
+        }
+        return;
+    }
+
+    // No focusable element found
+    if (process.env.NODE_ENV === 'development') {
+        console.warn(`No focusable element found in ${element.id}`);
+        console.debug('Available inputs:', element.querySelectorAll('input, textarea'));
+    }
 }
