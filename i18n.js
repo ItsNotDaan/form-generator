@@ -1,4 +1,4 @@
-// We use sub-path routing. To change to domain routing, see https://nextjs.org/docs/advanced-features/i18n-routing#domain-routing
+// Configuration for next-translate without the plugin (compatible with static export)
 module.exports = {
   // These are all the locales you want to support in
   // your application
@@ -6,6 +6,11 @@ module.exports = {
   // This is the default locale you want to be used when visiting
   // a non-locale prefixed path e.g. `/hello`
   defaultLocale: 'nl',
+  // Disable loader to make it compatible with static export
+  loader: false,
+  // Load locale files manually for static export compatibility
+  loadLocaleFrom: (lang, ns) =>
+    import(`./locales/${lang}/${ns}.json`).then((m) => m.default),
   pages: {
     '*': ['common'],
 
