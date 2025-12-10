@@ -195,7 +195,7 @@ export const FormNewClientPage = () => {
           >
             <Box id="field-behandelaar">
               <FormControl flex={1} isRequired isInvalid={!practitionerId}>
-                <FormLabel htmlFor="input-behandelaar" fontSize="sm">
+                <FormLabel fontSize="sm">
                   {t('practitioner')}
                 </FormLabel>
                 <DropdownField
@@ -210,7 +210,7 @@ export const FormNewClientPage = () => {
             </Box>
             <Box id="field-aanmeetdatum">
               <FormControl flex={1} isRequired isInvalid={!date}>
-                <FormLabel htmlFor="input-aanmeetdatum" fontSize="sm">
+                <FormLabel fontSize="sm">
                   {t('measurementDate')}
                 </FormLabel>
                 <Box maxW={{base: 'full', md: '300px'}}>
@@ -350,7 +350,7 @@ export const FormNewClientPage = () => {
             {/* Geboortedatum */}
             <Box id="field-geboortedatum">
               <FormControl isRequired isInvalid={birthDate.length === 0}>
-                <FormLabel htmlFor="input-geboortedatum" fontSize="sm">
+                <FormLabel fontSize="sm">
                   {t('birthDate')}
                 </FormLabel>
                 <Box>
@@ -561,10 +561,7 @@ export const FormNewClientPage = () => {
                   isRequired
                   isInvalid={insurance.trim().length === 0}
                 >
-                  <FormLabel
-                    htmlFor="input-verzekeringsmaatschappij"
-                    fontSize="sm"
-                  >
+                  <FormLabel fontSize="sm">
                     {t('insuranceCompany')}
                   </FormLabel>
                   <DropdownField
