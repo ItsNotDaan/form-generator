@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/base/baseLayout';
+import React, {useState} from 'react';
+import {BaseLayout} from '@/presentation/base/baseLayout';
 import {
-  Flex, FormControl, FormLabel, Checkbox, Input, Text, Box, Divider, Textarea, Stack, Button, SimpleGrid, Radio, RadioGroup, Alert, AlertIcon, UnorderedList, ListItem
+  Flex,
+  FormControl,
+  FormLabel,
+  Checkbox,
+  Input,
+  Text,
+  Box,
+  Divider,
+  Textarea,
+  Stack,
+  Button,
+  SimpleGrid,
+  Radio,
+  RadioGroup,
+  Alert,
+  AlertIcon,
+  UnorderedList,
+  ListItem,
+  Select,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setIntakeOSBData } from '@/domain/store/slices/formData';
+import {useRouter} from 'next/router';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {setIntakeOSBData} from '@/domain/store/slices/formData';
 import {
-  PAARTYPE_OPTIES, DOEL_OPTIES, LOOPFUNCTIE_OPTIES, LEVERANCIER_OPTIES
+  STEUNZOLEN_PRIJS_OPTIES,
+  STEUNZOOL_TYPE_OPTIES,
+  CORRECTIE_MIDDENVOET_OPTIES,
+  CORRECTIE_VOORVOET_OPTIES,
+  PELLOTE_OPTIES,
 } from '@/presentation/form/constants/formConstants';
 
 const FormIntakeOSBPage = () => {
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -31,217 +53,324 @@ const FormIntakeOSBPage = () => {
   const [steunzoolPrijsNaam, setSteunzoolPrijsNaam] = useState('');
   const [steunzoolTypeGeneral, setSteunzoolTypeGeneral] = useState('');
   const [steunzoolAndersText, setSteunzoolAndersText] = useState('');
-  const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] = useState('');
-  const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] = useState('');
+  const [steunzoolCorrectieMiddenvoet, setSteunzoolCorrectieMiddenvoet] =
+    useState('');
+  const [steunzoolCorrectieVoorvoet, setSteunzoolCorrectieVoorvoet] =
+    useState('');
   const [steunzoolVvPellote, setSteunzoolVvPellote] = useState('');
-  const [steunzoolHakVerhogingLinks, setSteunzoolHakVerhogingLinks] = useState('');
-  const [steunzoolHakVerhogingRechts, setSteunzoolHakVerhogingRechts] = useState('');
+  const [steunzoolHakVerhogingLinks, setSteunzoolHakVerhogingLinks] =
+    useState('');
+  const [steunzoolHakVerhogingRechts, setSteunzoolHakVerhogingRechts] =
+    useState('');
   const [bijzonderheden, setBijzonderheden] = useState('');
 
+  // Check if Talonette is selected
+  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(
+    opt => opt.label === 'prijsTalonette'
+  );
+  const isSteunzolenTalonette =
+    talonetteOption && steunzoolPrijs === talonetteOption.value;
+
   // Validation helpers
-  const getMissingFields = () => [];
+  const getMissingFields = (): Array<{fieldName: string; fieldId: string}> => {
+    const missing: Array<{fieldName: string; fieldId: string}> = [];
+    // No required fields for OSB
+    return missing;
+  };
   const areAllFieldsValid = getMissingFields().length === 0;
 
   // Submit handler
   const handleSubmit = () => {
-    if (!areAllFieldsValid) return;
-    dispatch(setIntakeOSBData({
-      welkPaar,
-      loopfunctie,
-      leverancier,
-      productSpecificaties: { artCode, lengteMaat, wijdte },
-      basiscode,
-      aanpassingen,
-      steunzoolTypeGeneral,
-      steunzoolAndersText,
-      steunzoolCorrectieMiddenvoet,
-      steunzoolCorrectieVoorvoet,
-      steunzoolVvPellote,
-      steunzoolHakVerhogingLinks,
-      steunzoolHakVerhogingRechts,
-      steunzoolPrijs,
-      steunzoolPrijsNaam,
-      bijzonderheden,
-    }));
+    if (!areAllFieldsValid) {
+      return;
+    }
+    dispatch(
+      setIntakeOSBData({
+        welkPaar,
+        loopfunctie,
+        leverancier,
+        productSpecificaties: {artCode, lengteMaat, wijdte},
+        basiscode,
+        aanpassingen,
+        steunzoolTypeGeneral,
+        steunzoolAndersText,
+        steunzoolCorrectieMiddenvoet,
+        steunzoolCorrectieVoorvoet,
+        steunzoolVvPellote,
+        steunzoolHakVerhogingLinks,
+        steunzoolHakVerhogingRechts,
+        steunzoolPrijs,
+        steunzoolPrijsNaam,
+        bijzonderheden,
+      })
+    );
     router.push('/form-results');
   };
 
   // Render
   return (
-    <BaseLayout title={t('intakeOsb')} showBackButton={true} onBackButtonClicked={() => router.back()}>
-      <Flex w="full" direction="column" bg="white" p={{ base: 4, md: 6 }} borderRadius="md" gap={{ base: 4, md: 6 }}>
-        {/* Example: Basiscode block */}
+    <BaseLayout
+      title={t('intakeOsb')}
+      showBackButton={true}
+      onBackButtonClicked={() => router.back()}
+    >
+      <Flex
+        w="full"
+        direction="column"
+        bg="white"
+        p={{base: 4, md: 6}}
+        borderRadius="md"
+        gap={{base: 4, md: 6}}
+      >
+        {/* Basiscode */}
         <Box>
-          <Text fontWeight="bold" mb={3} fontSize={{ base: 'md', md: 'lg' }}>Basiscode</Text>
-          <Input placeholder="Vul basiscode in" value={basiscode} onChange={e => setBasiscode(e.target.value)} size="sm" />
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Basiscode
+          </Text>
+          <Input
+            placeholder="Vul basiscode in"
+            value={basiscode}
+            onChange={e => setBasiscode(e.target.value)}
+            size="sm"
+          />
         </Box>
+
         <Divider />
-        {/* ...rest of the form, similar to OSA, using the correct state and handlers... */}
-        {/* Show validation alert if needed */}
-        {!areAllFieldsValid && (
-          <Alert status="warning" borderRadius="md">
-            <AlertIcon />
-            <Box>
-              <Text fontWeight="bold" mb={2}>{t('vulVerplichteVeldenIn')}</Text>
-              <UnorderedList>
-                {getMissingFields().map((field, index) => (
-                  <ListItem key={index}>{field.fieldName}</ListItem>
-                ))}
-              </UnorderedList>
+
+        {/* Aanpassingen Section */}
+        <Box>
+          <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
+            Aanpassingen
+          </Text>
+          <Flex gap={{base: 3, md: 4}} flexWrap="wrap">
+            {/* Hallux Valgus */}
+            <Box flex={1} minW="220px">
+              <Text fontWeight="semibold" mb={2}>
+                Hallux Valgus
+              </Text>
+              <Stack direction="row" spacing={4} align="center">
+                <Checkbox
+                  isChecked={aanpassingen.halluxValgusLinks}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      halluxValgusLinks: e.target.checked,
+                    }))
+                  }
+                >
+                  Links
+                </Checkbox>
+                {aanpassingen.halluxValgusLinks && (
+                  <Select
+                    value={aanpassingen.halluxValgusLinksMm || ''}
+                    onChange={e =>
+                      setAanpassingen(a => ({
+                        ...a,
+                        halluxValgusLinksMm: e.target.value,
+                      }))
+                    }
+                    size="sm"
+                    maxW="100px"
+                    placeholder="mm"
+                  >
+                    <option value="3">3mm</option>
+                    <option value="8">8mm</option>
+                  </Select>
+                )}
+                <Checkbox
+                  isChecked={aanpassingen.halluxValgusRechts}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      halluxValgusRechts: e.target.checked,
+                    }))
+                  }
+                >
+                  Rechts
+                </Checkbox>
+                {aanpassingen.halluxValgusRechts && (
+                  <Select
+                    value={aanpassingen.halluxValgusRechtsMm || ''}
+                    onChange={e =>
+                      setAanpassingen(a => ({
+                        ...a,
+                        halluxValgusRechtsMm: e.target.value,
+                      }))
+                    }
+                    size="sm"
+                    maxW="100px"
+                    placeholder="mm"
+                  >
+                    <option value="3">3mm</option>
+                    <option value="8">8mm</option>
+                  </Select>
+                )}
+              </Stack>
             </Box>
-          </Alert>
-        )}
-        <Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
-          <Button variant="primary" onClick={handleSubmit} w={{ base: 'full', sm: 'auto' }}>{t('opslaanEnDoorgaan')}</Button>
-        </Flex>
-      </Flex>
-    </BaseLayout>
-  );
-};
 
-//
-onChange = { e => setAanpassingen(a => ({ ...a, halluxValgusLinks: e.target.checked }))}
-                >
-  Links
-                </Checkbox >
-{
-  aanpassingen.halluxValgusLinks && (
-    <select
-      value={aanpassingen.halluxValgusLinksMm}
-      onChange={e => setAanpassingen(a => ({ ...a, halluxValgusLinksMm: e.target.value }))}
-      style={{ marginLeft: 8 }}
-    >
-      <option value="">mm</option>
-      <option value="3">3mm</option>
-      <option value="8">8mm</option>
-    </select>
-  )
-}
-  < Checkbox
-isChecked = { aanpassingen.halluxValgusRechts }
-onChange = { e => setAanpassingen(a => ({ ...a, halluxValgusRechts: e.target.checked }))}
-                >
-  Rechts
-                </Checkbox >
-{
-  aanpassingen.halluxValgusRechts && (
-    <select
-      value={aanpassingen.halluxValgusRechtsMm}
-      onChange={e => setAanpassingen(a => ({ ...a, halluxValgusRechtsMm: e.target.value }))}
-      style={{ marginLeft: 8 }}
-    >
-      <option value="">mm</option>
-      <option value="3">3mm</option>
-      <option value="8">8mm</option>
-    </select>
-  )
-}
-              </Stack >
-            </Box >
-
-  {/* Verdieping voorvoet */ }
-  < Box flex = { 1} minW = "220px" >
-              <Text fontWeight="semibold" mb={2}>Verdieping voorvoet</Text>
+            {/* Verdieping voorvoet */}
+            <Box flex={1} minW="220px">
+              <Text fontWeight="semibold" mb={2}>
+                Verdieping voorvoet
+              </Text>
               <Stack direction="row" spacing={4} align="center">
                 <Checkbox
                   isChecked={aanpassingen.verdiepingVoorvoetLinks}
-                  onChange={e => setAanpassingen(a => ({ ...a, verdiepingVoorvoetLinks: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      verdiepingVoorvoetLinks: e.target.checked,
+                    }))
+                  }
                 >
                   Links
                 </Checkbox>
                 {aanpassingen.verdiepingVoorvoetLinks && (
-                  <select
-                    value={aanpassingen.verdiepingVoorvoetLinksMm}
-                    onChange={e => setAanpassingen(a => ({ ...a, verdiepingVoorvoetLinksMm: e.target.value }))}
-                    style={{ marginLeft: 8 }}
+                  <Select
+                    value={aanpassingen.verdiepingVoorvoetLinksMm || ''}
+                    onChange={e =>
+                      setAanpassingen(a => ({
+                        ...a,
+                        verdiepingVoorvoetLinksMm: e.target.value,
+                      }))
+                    }
+                    size="sm"
+                    maxW="100px"
+                    placeholder="mm"
                   >
-                    <option value="">mm</option>
                     <option value="3">3mm</option>
                     <option value="8">8mm</option>
-                  </select>
+                  </Select>
                 )}
                 <Checkbox
                   isChecked={aanpassingen.verdiepingVoorvoetRechts}
-                  onChange={e => setAanpassingen(a => ({ ...a, verdiepingVoorvoetRechts: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      verdiepingVoorvoetRechts: e.target.checked,
+                    }))
+                  }
                 >
                   Rechts
                 </Checkbox>
                 {aanpassingen.verdiepingVoorvoetRechts && (
-                  <select
-                    value={aanpassingen.verdiepingVoorvoetRechtsMm}
-                    onChange={e => setAanpassingen(a => ({ ...a, verdiepingVoorvoetRechtsMm: e.target.value }))}
-                    style={{ marginLeft: 8 }}
+                  <Select
+                    value={aanpassingen.verdiepingVoorvoetRechtsMm || ''}
+                    onChange={e =>
+                      setAanpassingen(a => ({
+                        ...a,
+                        verdiepingVoorvoetRechtsMm: e.target.value,
+                      }))
+                    }
+                    size="sm"
+                    maxW="100px"
+                    placeholder="mm"
                   >
-                    <option value="">mm</option>
                     <option value="3">3mm</option>
                     <option value="8">8mm</option>
-                  </select>
+                  </Select>
                 )}
               </Stack>
-            </Box >
+            </Box>
 
-  {/* Supplement Individueel */ }
-  < Box flex = { 1} minW = "220px" >
-              <Text fontWeight="semibold" mb={2}>Supplement Individueel</Text>
+            {/* Supplement Individueel */}
+            <Box flex={1} minW="220px">
+              <Text fontWeight="semibold" mb={2}>
+                Supplement Individueel
+              </Text>
               <Stack direction="row" spacing={4}>
                 <Checkbox
                   isChecked={aanpassingen.supplementIndividueelLinks}
-                  onChange={e => setAanpassingen(a => ({ ...a, supplementIndividueelLinks: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      supplementIndividueelLinks: e.target.checked,
+                    }))
+                  }
                 >
                   Links
                 </Checkbox>
                 <Checkbox
                   isChecked={aanpassingen.supplementIndividueelRechts}
-                  onChange={e => setAanpassingen(a => ({ ...a, supplementIndividueelRechts: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      supplementIndividueelRechts: e.target.checked,
+                    }))
+                  }
                 >
                   Rechts
                 </Checkbox>
               </Stack>
-            </Box >
+            </Box>
 
-  {/* Afwikkelrol Eenvoudig */ }
-  < Box flex = { 1} minW = "220px" >
-              <Text fontWeight="semibold" mb={2}>Afwikkelrol Eenvoudig</Text>
+            {/* Afwikkelrol Eenvoudig */}
+            <Box flex={1} minW="220px">
+              <Text fontWeight="semibold" mb={2}>
+                Afwikkelrol Eenvoudig
+              </Text>
               <Stack direction="row" spacing={4}>
                 <Checkbox
                   isChecked={aanpassingen.afwikkelrolEenvoudigLinks}
-                  onChange={e => setAanpassingen(a => ({ ...a, afwikkelrolEenvoudigLinks: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      afwikkelrolEenvoudigLinks: e.target.checked,
+                    }))
+                  }
                 >
                   Links
                 </Checkbox>
                 <Checkbox
                   isChecked={aanpassingen.afwikkelrolEenvoudigRechts}
-                  onChange={e => setAanpassingen(a => ({ ...a, afwikkelrolEenvoudigRechts: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      afwikkelrolEenvoudigRechts: e.target.checked,
+                    }))
+                  }
                 >
                   Rechts
                 </Checkbox>
               </Stack>
-            </Box >
+            </Box>
 
-  {/* Afwikkelrol gecompliceerd */ }
-  < Box flex = { 1} minW = "220px" >
-              <Text fontWeight="semibold" mb={2}>Afwikkelrol gecompliceerd</Text>
+            {/* Afwikkelrol gecompliceerd */}
+            <Box flex={1} minW="220px">
+              <Text fontWeight="semibold" mb={2}>
+                Afwikkelrol gecompliceerd
+              </Text>
               <Stack direction="row" spacing={4}>
                 <Checkbox
                   isChecked={aanpassingen.afwikkelrolGecompliceerdLinks}
-                  onChange={e => setAanpassingen(a => ({ ...a, afwikkelrolGecompliceerdLinks: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      afwikkelrolGecompliceerdLinks: e.target.checked,
+                    }))
+                  }
                 >
                   Links
                 </Checkbox>
                 <Checkbox
                   isChecked={aanpassingen.afwikkelrolGecompliceerdRechts}
-                  onChange={e => setAanpassingen(a => ({ ...a, afwikkelrolGecompliceerdRechts: e.target.checked }))}
+                  onChange={e =>
+                    setAanpassingen(a => ({
+                      ...a,
+                      afwikkelrolGecompliceerdRechts: e.target.checked,
+                    }))
+                  }
                 >
                   Rechts
                 </Checkbox>
               </Stack>
-            </Box >
-          </Flex >
-        </Box >
+            </Box>
+          </Flex>
+        </Box>
 
-  <Divider />
+        <Divider />
 
-{/* Sectie 9: Steunzolen */ }
+        {/* Steunzolen Section */}
         <Box>
           <Text fontWeight="bold" mb={3} fontSize={{base: 'md', md: 'lg'}}>
             {t('steunzolen')}
@@ -292,8 +421,9 @@ onChange = { e => setAanpassingen(a => ({ ...a, halluxValgusRechts: e.target.che
                     const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(
                       opt => opt.value === Number(val)
                     );
-                    if (selectedOption)
+                    if (selectedOption) {
                       setSteunzoolPrijsNaam(t(selectedOption.label));
+                    }
                   }}
                 >
                   <Stack spacing={2}>
@@ -470,49 +600,46 @@ onChange = { e => setAanpassingen(a => ({ ...a, halluxValgusRechts: e.target.che
 
         <Divider />
 
-{/* Bijzonderheden */ }
-<Box>
-  <Text fontWeight="bold" mb={4} fontSize={{ base: 'md', md: 'lg' }}>
-    {t('bijzonderheden')}
-  </Text>
-  <Textarea
-    placeholder={t('bijzonderhedenPlaceholder')}
-    value={bijzonderheden}
-    onChange={e => setBijzonderheden(e.target.value)}
-    minH={{ base: '100px', md: '120px' }}
-  />
-</Box>
+        {/* Bijzonderheden */}
+        <Box>
+          <Text fontWeight="bold" mb={4} fontSize={{base: 'md', md: 'lg'}}>
+            {t('bijzonderheden')}
+          </Text>
+          <Textarea
+            placeholder={t('bijzonderhedenPlaceholder')}
+            value={bijzonderheden}
+            onChange={e => setBijzonderheden(e.target.value)}
+            minH={{base: '100px', md: '120px'}}
+          />
+        </Box>
 
-{
-  !areAllFieldsValid && (
-    <Alert status="warning" borderRadius="md">
-      <AlertIcon />
-      <Box>
-        <Text fontWeight="bold" mb={2}>
-          {t('vulVerplichteVeldenIn')}
-        </Text>
-        <UnorderedList>
-          {getMissingFields().map((field, index) => (
-            <ListItem key={index}>{field.fieldName}</ListItem>
-          ))}
-        </UnorderedList>
-      </Box>
-    </Alert>
-  )
-}
+        {!areAllFieldsValid && (
+          <Alert status="warning" borderRadius="md">
+            <AlertIcon />
+            <Box>
+              <Text fontWeight="bold" mb={2}>
+                {t('vulVerplichteVeldenIn')}
+              </Text>
+              <UnorderedList>
+                {getMissingFields().map((field, index) => (
+                  <ListItem key={index}>{field.fieldName}</ListItem>
+                ))}
+              </UnorderedList>
+            </Box>
+          </Alert>
+        )}
 
-{/* Submit button */ }
-<Flex justifyContent={{ base: 'stretch', sm: 'flex-end' }} mt={4}>
-  <Button
-    variant="primary"
-    onClick={handleSubmit}
-    w={{ base: 'full', sm: 'auto' }}
-  >
-    {t('opslaanEnDoorgaan')}
-  </Button>
-</Flex>
-      </Flex >
-    </BaseLayout >
+        <Flex justifyContent={{base: 'stretch', sm: 'flex-end'}} mt={4}>
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            w={{base: 'full', sm: 'auto'}}
+          >
+            {t('opslaanEnDoorgaan')}
+          </Button>
+        </Flex>
+      </Flex>
+    </BaseLayout>
   );
 };
 

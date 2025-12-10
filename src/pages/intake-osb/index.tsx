@@ -1,1 +1,3 @@
-export {FormIntakeOSBPage as default} from '@/presentation/form/intake-osb/page';
+import FormIntakeOSBPage from '@/presentation/form/intake-osb/page';
+
+export default FormIntakeOSBPage;
