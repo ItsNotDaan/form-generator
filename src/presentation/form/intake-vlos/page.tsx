@@ -137,16 +137,16 @@ export const FormIntakeVLOSPage = () => {
     useState<boolean>(false);
   const [hakschoringRechtsEnabled, setHakschoringRechtsEnabled] =
     useState<boolean>(false);
-  const [hakschoringLinksType, setHakschoringLinksType] = useState(''); // mediaal/lateraal
-  const [hakschoringRechtsType, setHakschoringRechtsType] = useState('');
+  const [hakschoringLinksType, setHakschoringLinksType] = useState('Lateraal'); // mediaal/lateraal
+  const [hakschoringRechtsType, setHakschoringRechtsType] = useState('Lateraal');
 
   // State voor ezelsoor
   const [ezelsoorLinksEnabled, setEzelsoorLinksEnabled] =
     useState<boolean>(false);
   const [ezelsoorRechtsEnabled, setEzelsoorRechtsEnabled] =
     useState<boolean>(false);
-  const [ezelsoorLinksType, setEzelsoorLinksType] = useState(''); // mediaal/lateraal
-  const [ezelsoorRechtsType, setEzelsoorRechtsType] = useState('');
+  const [ezelsoorLinksType, setEzelsoorLinksType] = useState('Lateraal'); // mediaal/lateraal
+  const [ezelsoorRechtsType, setEzelsoorRechtsType] = useState('Lateraal');
 
   // State voor hakafronding
   const [hakafrondingLinksEnabled, setHakafrondingLinksEnabled] =
@@ -338,7 +338,7 @@ export const FormIntakeVLOSPage = () => {
           >
             {showLinks && (
               <FormControl>
-                <FormLabel fontSize="sm">{t('links')}</FormLabel>
+                <FormLabel fontSize="sm">{t('hakhoogteLinksCm')}</FormLabel>
                 <Input
                   type="number"
                   placeholder="cm"
@@ -350,7 +350,7 @@ export const FormIntakeVLOSPage = () => {
             )}
             {showRechts && (
               <FormControl>
-                <FormLabel fontSize="sm">{t('rechts')}</FormLabel>
+                <FormLabel fontSize="sm">{t('hakhoogteRechtsCm')}</FormLabel>
                 <Input
                   type="number"
                   placeholder="cm"
@@ -748,46 +748,47 @@ export const FormIntakeVLOSPage = () => {
             border="1px solid"
             borderColor="inherit"
             borderRadius="md"
-            align={'center'}
             p={4}
             mt={2}
           >
-            <RadioGroup
-              value={boolToString(zoolverstijvingEnabled)}
-              onChange={v => setZoolverstijvingEnabled(stringToBool(v))}
-            >
-              <Stack direction="row" spacing={4}>
-                {JA_NEE_OPTIES.map(opt => (
-                  <Radio key={opt.value} value={opt.value}>
-                    {t(opt.value)}
-                  </Radio>
-                ))}
-              </Stack>
-            </RadioGroup>
-
-            {zoolverstijvingEnabled && (
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                spacing={{ base: 3, sm: 6 }}
+            <Stack direction="column" spacing={4}>
+              <RadioGroup
+                value={boolToString(zoolverstijvingEnabled)}
+                onChange={v => setZoolverstijvingEnabled(stringToBool(v))}
               >
-                {showLinks && (
-                  <Checkbox
-                    isChecked={zoolverstijvingLinks}
-                    onChange={e => setZoolverstijvingLinks(e.target.checked)}
-                  >
-                    {t('links')}
-                  </Checkbox>
-                )}
-                {showRechts && (
-                  <Checkbox
-                    isChecked={zoolverstijvingRechts}
-                    onChange={e => setZoolverstijvingRechts(e.target.checked)}
-                  >
-                    {t('rechts')}
-                  </Checkbox>
-                )}
-              </Stack>
-            )}
+                <Stack direction="row" spacing={4}>
+                  {JA_NEE_OPTIES.map(opt => (
+                    <Radio key={opt.value} value={opt.value}>
+                      {t(opt.value)}
+                    </Radio>
+                  ))}
+                </Stack>
+              </RadioGroup>
+
+              {zoolverstijvingEnabled && (
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  spacing={{ base: 3, sm: 6 }}
+                >
+                  {showLinks && (
+                    <Checkbox
+                      isChecked={zoolverstijvingLinks}
+                      onChange={e => setZoolverstijvingLinks(e.target.checked)}
+                    >
+                      {t('links')}
+                    </Checkbox>
+                  )}
+                  {showRechts && (
+                    <Checkbox
+                      isChecked={zoolverstijvingRechts}
+                      onChange={e => setZoolverstijvingRechts(e.target.checked)}
+                    >
+                      {t('rechts')}
+                    </Checkbox>
+                  )}
+                </Stack>
+              )}
+            </Stack>
           </Flex>
         </Box>
         <Divider />
