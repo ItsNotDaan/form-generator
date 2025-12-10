@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# Form Generator (Next.js)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Een eenvoudige Next.js app voor intake- en formulierpagina's voor Eemland Schoentechniek. De site wordt als static export gedeployed naar GitHub Pages.
 
-## Available Scripts
+## Navigatie (pagina's)
+- `/` – overzicht/landing
+- `/form-selection` – kies welk formulier je wilt invullen
+- `/new-client` & `/old-client` – klantgegevens (nieuw/bestaand)
+- `/form-results` – overzicht van ingevoerde gegevens
+- `/help` – hulppagina
+- Intakeformulieren:
+	- `/intake-vlos`
+	- `/intake-osa`
+	- `/intake-pulman`
+	- `/intake-rebacare`
+	- `/intake-osb`
+	- `/intake-ovac`
+	- `/intake-steunzolen`
 
-In the project directory, you can run:
+## JSON output (templates)
+- Op `/form-results` kun je alle ingevulde data + medische codes als JSON kopiëren
+- Deze JSON wordt gebruikt om document/templates automatisch te vullen (mail-merge)
+- Waarden worden genormaliseerd (lege/"nee" waarden gefilterd, codes toegevoegd, timestamp `generatedAt`)
 
-### `npm start`
+## Tech
+- Next.js (static export, `output: 'export'`)
+- TypeScript, Chakra UI, Redux Toolkit, redux-persist
+- next-translate (i18n), gh-pages voor deploy
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Voorbereiding
+- Node 22+ en npm 10+
+- Installeer dependencies: `npm install`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Ontwikkelen
+- Start dev server: `npm run dev`
+	- draait op `http://localhost:3000`
 
-### `npm test`
+## Bouwen
+- Productiebouw: `npm run build`
+	- Output in `/out`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Deploy naar GitHub Pages
+- Run: `npm run deploy`
+	- bouwt en pusht `/out` naar de `gh-pages` branch
+- De site draait onder het base path `/form-generator` (zie `next.config.js`).
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Structuur
+- `src/pages` – Next.js pages (routes)
+- `src/presentation` – UI componenten en pagina-inhoud
+- `public/images` – statische assets (gebruik `getAssetPath()` voor correcte URLs met basePath)
