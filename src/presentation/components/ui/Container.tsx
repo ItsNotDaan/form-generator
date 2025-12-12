@@ -8,14 +8,14 @@ interface ContainerProps {
 
 /**
  * FormContainer - Main container for form pages
- * Provides consistent padding, background, and gap spacing
+ * Provides consistent padding, background, and gap spacing with modern card design
  */
 export const FormContainer = React.memo<ContainerProps>(
   ({children, className = '', id}) => {
     return (
       <div
         id={id}
-        className={`w-full flex flex-col bg-white p-4 md:p-6 rounded-md gap-4 md:gap-6 ${className}`}
+        className={`w-full flex flex-col bg-white rounded-2xl p-6 md:p-8 lg:p-10 gap-6 md:gap-8 shadow-lg border border-gray-100 ${className}`}
       >
         {children}
       </div>
@@ -37,7 +37,7 @@ interface PageContainerProps {
 export const PageContainer = React.memo<PageContainerProps>(
   ({children, className = ''}) => {
     return (
-      <div className={`flex flex-col gap-4 md:gap-6 ${className}`}>
+      <div className={`flex flex-col gap-6 md:gap-8 ${className}`}>
         {children}
       </div>
     );

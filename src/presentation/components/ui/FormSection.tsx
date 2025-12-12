@@ -6,23 +6,29 @@ interface FormSectionProps {
   children: React.ReactNode;
   className?: string;
   bordered?: boolean;
+  description?: string;
 }
 
 export const FormSection = React.memo<FormSectionProps>(
-  ({title, required, children, className = '', bordered = false}) => {
+  ({title, required, children, className = '', bordered = false, description}) => {
     return (
-      <div className={`flex flex-col ${className}`}>
+      <div className={`flex flex-col space-y-4 ${className}`}>
         {title && (
-          <p className="font-bold mb-3 text-base md:text-lg">
-            {title}
-            {required && <span className="text-red-500 ml-1">*</span>}
-          </p>
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {title}
+              {required && <span className="text-red-500 ml-1">*</span>}
+            </h3>
+            {description && (
+              <p className="text-sm text-gray-500">{description}</p>
+            )}
+          </div>
         )}
         <div
           className={
             bordered
-              ? 'border border-gray-200 rounded-md p-4 mt-2'
-              : undefined
+              ? 'border border-gray-200 rounded-xl p-6 bg-white shadow-sm'
+              : 'bg-white rounded-xl p-6 shadow-sm border border-gray-100'
           }
         >
           {children}
@@ -40,7 +46,7 @@ interface FormDividerProps {
 
 export const FormDivider = React.memo<FormDividerProps>(
   ({className = ''}) => {
-    return <div className={`border-t border-gray-200 ${className}`} />;
+    return <div className={`border-t border-gray-200 my-6 ${className}`} />;
   }
 );
 

@@ -3,15 +3,17 @@ import useTranslation from 'next-translate/useTranslation';
 import {LeftArrowIcon} from '@/presentation/components/icons/LeftArrowIcon';
 import {Link} from './Link';
 import {Routes} from '../../routes';
+import {StepIndicator} from './StepIndicator';
 
 export interface PageHeaderProps {
   title?: string;
   showBackButton?: boolean;
   onBackButtonClicked?: () => void;
+  currentStep?: number;
 }
 
 export const PageHeader = memo(
-  ({title, showBackButton, onBackButtonClicked}: PageHeaderProps) => {
+  ({title, showBackButton, onBackButtonClicked, currentStep}: PageHeaderProps) => {
     const {t} = useTranslation('common');
 
     return (
@@ -33,14 +35,16 @@ export const PageHeader = memo(
               )}
             </div>
 
-            {/* Center: Title (absolutely centered) */}
-            {title && (
-              <div className="absolute left-1/2 -translate-x-1/2 max-w-[33%]">
-                <p className="text-white text-lg font-semibold text-center truncate">
+            {/* Center: Title or Step Indicator */}
+            <div className="absolute left-1/2 -translate-x-1/2">
+              {currentStep ? (
+                <StepIndicator currentStep={currentStep} />
+              ) : title ? (
+                <p className="text-white text-lg font-semibold text-center truncate max-w-[300px]">
                   {title}
                 </p>
-              </div>
-            )}
+              ) : null}
+            </div>
 
             {/* Right: Eemland Logo */}
             <div className="flex justify-end flex-1 min-w-0 z-10">
