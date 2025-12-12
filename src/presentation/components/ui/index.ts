@@ -5,3 +5,5 @@ export {FormControl, FormLabel} from './FormControl';
 export {Radio, RadioGroup} from './Radio';
 export {Checkbox} from './Checkbox';
 export {Alert, AlertIcon} from './Alert';
+export {FormSection, FormDivider} from './FormSection';
+export {SimpleGrid} from './Grid';
