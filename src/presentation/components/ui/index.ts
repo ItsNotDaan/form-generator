@@ -7,3 +7,6 @@ export {Checkbox} from './Checkbox';
 export {Alert, AlertIcon} from './Alert';
 export {FormSection, FormDivider} from './FormSection';
 export {SimpleGrid} from './Grid';
+export {DatePicker} from './DatePicker';
+export {Select} from './Select';
+export type {SelectOption} from './Select';
