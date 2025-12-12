@@ -414,7 +414,7 @@ export const FormIntakeSteunzolenPageEnhanced = () => {
             onClick={handleSubmit}
             className="w-full sm:w-auto"
           >
-            Opslaan en doorgaan
+            {t('saveAndContinue')}
           </Button>
         </div>
       </div>

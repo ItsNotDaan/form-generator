@@ -23,8 +23,8 @@ export const Button = React.memo<ButtonProps>(
 
     const sizeStyles = {
       sm: 'text-sm px-4 py-2 h-9',
-      md: 'text-base px-6 py-3 h-11',
-      lg: 'text-lg px-8 py-4 h-13',
+      md: 'text-base px-6 py-3 h-12',
+      lg: 'text-lg px-8 py-4 h-14',
     };
 
     return (
