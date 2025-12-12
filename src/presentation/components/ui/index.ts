@@ -10,3 +10,5 @@ export {SimpleGrid} from './Grid';
 export {DatePicker} from './DatePicker';
 export {Select} from './Select';
 export type {SelectOption} from './Select';
+export {FormRow, FormFieldWrapper} from './FormRow';
+export {FormContainer, PageContainer} from './Container';

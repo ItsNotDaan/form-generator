@@ -20,6 +20,12 @@ All components are fully typed with TypeScript and follow the design system.
 | `FormSection` | **KEY COMPONENT** - Reusable form section wrapper | ✅ |
 | `FormDivider` | Divider line for separating form sections | ✅ |
 | `SimpleGrid` | Responsive grid layout | ✅ |
+| `DatePicker` | Date picker with Tailwind styling (react-datepicker wrapper) | ✅ |
+| `Select` | Dropdown select with Tailwind styling (react-select wrapper) | ✅ |
+| `FormRow` | **NEW** - Responsive row layout for form fields | ✅ |
+| `FormFieldWrapper` | **NEW** - Wrapper for fields in FormRow | ✅ |
+| `FormContainer` | **NEW** - Main container for form pages | ✅ |
+| `PageContainer` | **NEW** - Container for page content sections | ✅ |
 
 ### Layout Components (`/src/presentation/components/layout/`)
 | Component | Description | Status |
