@@ -11,6 +11,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import appWithI18n from 'next-translate/appWithI18n';
 import i18nConfig from '../../i18n';
+import {ThemeProvider} from '@/components/theme-provider';
 
 // Use Next Font for automatic font optimization
 // https://nextjs.org/docs/basic-features/font-optimization
@@ -20,20 +21,22 @@ function App({Component, ...rest}: AppProps) {
   const {store, props} = wrapper.useWrappedStore(rest);
 
   return (
-    <main className={asap.className} suppressHydrationWarning>
-      <style jsx global>{`
-        :root {
-          --font-asap: ${asap.style.fontFamily};
-        }
-      `}</style>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistStore(store)}>
-          {/* Don't pre-render on server because the component depends on redux state that's only available in client */}
-          {/* https://nextjs.org/docs/messages/react-hydration-error */}
-          <Component {...props.pageProps} />
-        </PersistGate>
-      </Provider>
-    </main>
+    <ThemeProvider defaultTheme="light" storageKey="form-generator-theme">
+      <main className={asap.className} suppressHydrationWarning>
+        <style jsx global>{`
+          :root {
+            --font-asap: ${asap.style.fontFamily};
+          }
+        `}</style>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistStore(store)}>
+            {/* Don't pre-render on server because the component depends on redux state that's only available in client */}
+            {/* https://nextjs.org/docs/messages/react-hydration-error */}
+            <Component {...props.pageProps} />
+          </PersistGate>
+        </Provider>
+      </main>
+    </ThemeProvider>
   );
 }
 
