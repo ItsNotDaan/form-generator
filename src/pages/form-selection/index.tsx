@@ -119,6 +119,7 @@ const FormSelectionPage = () => {
                 </Button>
               </div>
             </div>
+          </div>
         </FormSection>
       </div>
     </BaseLayout>

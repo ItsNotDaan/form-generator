@@ -492,9 +492,8 @@ const FormIntakeSteunzolenPage = () => {
             </Button>
           </FormFooter>
         </form>
-      </FormSection>
-    </div>
-    </BaseLayout >
+      </div>
+    </BaseLayout>
   );
 };
 

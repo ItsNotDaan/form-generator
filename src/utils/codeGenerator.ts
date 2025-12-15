@@ -29,7 +29,7 @@ import {
   ClientData,
   IntakeVLOSData,
   IntakeOSAData,
-} from '@/presentation/form/types/formData';
+} from '@/components/form/types/formData';
 
 export interface GeneratedCodes {
   code01: boolean;

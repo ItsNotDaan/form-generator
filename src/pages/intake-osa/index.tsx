@@ -975,9 +975,8 @@ const FormIntakeOSAPage = () => {
             </Button>
           </FormFooter>
         </form>
-      </FormSection>
-    </div>
-    </BaseLayout >
+      </div>
+    </BaseLayout>
   );
 };
 
