@@ -39,7 +39,7 @@ interface NaturalDatePickerProps {
 export function NaturalDatePicker({
   date: initialDate,
   onDateChanged,
-  placeholder = 'Tomorrow or next week',
+  placeholder = 'Morgen of volgende week',
   label,
   className = '',
   error = false,
