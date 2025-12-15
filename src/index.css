@@ -1,68 +1,216 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
+@theme {
+  /* Spacing scale */
+  --spacing-px: 1px;
+  --spacing-0: 0px;
+  --spacing-0\.5: 2px;
+  --spacing-0\.75: 3px;
+  --spacing-1: 4px;
+  --spacing-1\.25: 5px;
+  --spacing-1\.5: 6px;
+  --spacing-2: 8px;
+  --spacing-2\.5: 10px;
+  --spacing-3: 12px;
+  --spacing-3\.5: 14px;
+  --spacing-4: 16px;
+  --spacing-4\.5: 18px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-6\.5: 26px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-9: 36px;
+  --spacing-10: 40px;
+  --spacing-11: 44px;
+  --spacing-12: 48px;
+  --spacing-13: 52px;
+  --spacing-14: 56px;
+  --spacing-15: 60px;
+  --spacing-16: 64px;
+  --spacing-17: 68px;
+  --spacing-18: 72px;
+  --spacing-19: 76px;
+  --spacing-20: 80px;
+  --spacing-21: 84px;
+  --spacing-22: 88px;
+  --spacing--4: -16px;
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+  /* Border radius */
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-0\.5: 2px;
+  --radius-1: 4px;
+  --radius-1\.5: 6px;
+  --radius-2: 8px;
+  --radius-radio: 14px;
+
+  /* Font sizes */
+  --font-size-xxs: 11px;
+  --font-size-xs: 13px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+  --font-size-3xs: 10px;
+  --font-size-4xs: 9px;
+
+  /* Line heights */
+  --line-height-0\.5: 2px;
+  --line-height-1: 4px;
+  --line-height-1\.5: 6px;
+  --line-height-2: 8px;
+  --line-height-2\.5: 10px;
+  --line-height-3: 12px;
+  --line-height-3\.5: 14px;
+  --line-height-4: 16px;
+  --line-height-4\.5: 18px;
+  --line-height-5: 20px;
+  --line-height-5\.5: 22px;
+  --line-height-6: 24px;
+  --line-height-6\.5: 26px;
+  --line-height-6\.75: 27px;
+  --line-height-7: 28px;
+  --line-height-8: 32px;
+  --line-height-9: 36px;
+  --line-height-10: 40px;
+  --line-height-11: 44px;
+  --line-height-12: 48px;
+
+  /* Font family */
+  --font-family-asap: var(--font-asap), sans-serif;
+
+  /* Shadows */
+  --shadow-errorToast: 0px 2px 6px rgba(15, 48, 98, 0.25);
+  --shadow-centeredContainer: 0px 12px 24px rgba(0, 77, 148, 0.1);
+  --shadow-roleContainer: inset 0px -3px 0px rgba(197, 212, 231, 0.34);
+  --shadow-secondary: inset 0px -2px 0px rgba(104, 125, 160, 0.25);
+  --shadow-dialog: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  --shadow-popover: 0px 4px 16px rgba(0, 0, 0, 0.15);
+
+  /* Breakpoints */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1600px;
+
+  /* Colors */
+  --color-gray-50: #F7FAFE;
+  --color-gray-100: #EFF4FA;
+  --color-gray-200: #DCE7F6;
+  --color-gray-300: #C5D4E7;
+  --color-gray-400: #95ABCC;
+  --color-gray-500: #627BA6;
+  --color-gray-600: #224077;
+  --color-gray-700: #092253;
+  --color-gray-800: #02173F;
+  --color-gray-900: #0f172a;
+
+  --color-green-200: #C6F6D5;
+  --color-green-500: #48BB78;
+  --color-green-700: #276749;
+
+  --color-red-100: #FFF5F5;
+  --color-red-200: #FED7D7;
+  --color-red-500: #F56565;
+  --color-red-600: #C53030;
+  --color-red-700: #9B2C2C;
+
+  --color-blue-100: #BEE3F8;
+  --color-blue-400: #4299E1;
+  --color-blue-700: #2C5282;
+
+  --color-orange-200: #FEEBC8;
+  --color-orange-500: #ED8936;
+  --color-orange-700: #7B341E;
+
+  --color-purple-200: #E9D8FD;
+  --color-purple-500: #9F7AEA;
+  --color-purple-700: #553C9A;
+
+  --color-brand-100: #EDF5FD;
+  --color-brand-200: #CCE4FA;
+  --color-brand-300: #0077E41A;
+  --color-brand-500: #3D7014;
+  --color-brand-700: #3c7014;
+
+  /* Animation */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    margin: 0;
-    font-family: var(--font-asap), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  margin: 0;
+  font-family: var(--font-asap), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
