@@ -18,28 +18,28 @@ const OverviewPage = () => {
 
   return (
     <BaseLayout title={t('title')}>
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8">
         {/* Header Section */}
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+        <div className="flex flex-col items-center justify-center gap-3 mb-12">
+          <h1 className="text-4xl font-bold text-foreground">
             {t('forms')}
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-muted-foreground">
             Select an option below to get started
           </p>
         </div>
 
         {/* Client Forms Section */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
             <Users className="w-6 h-6" />
             Client Forms
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+          <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
             {/* New Client Card */}
-            <Card className="hover:shadow-lg transition-shadow duration-200 cursor-pointer group" onClick={() => handleNavigate(Routes.form_new_client)}>
+            <Card className="transition-shadow duration-200 cursor-pointer hover:shadow-lg group" onClick={() => handleNavigate(Routes.form_new_client)}>
               <CardHeader className="space-y-3">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <div className="flex items-center justify-center w-12 h-12 transition-colors rounded-full bg-primary/10 group-hover:bg-primary/20">
                   <UserPlus className="w-6 h-6 text-primary" />
                 </div>
                 <CardTitle className="text-2xl">{t('newClientForm')}</CardTitle>
@@ -48,8 +48,8 @@ const OverviewPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   size="lg"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -63,10 +63,10 @@ const OverviewPage = () => {
             </Card>
 
             {/* Existing Client Card */}
-            <Card className="hover:shadow-lg transition-shadow duration-200 cursor-pointer group" onClick={() => handleNavigate(Routes.form_old_client)}>
+            <Card className="transition-shadow duration-200 cursor-pointer hover:shadow-lg group" onClick={() => handleNavigate(Routes.form_old_client)}>
               <CardHeader className="space-y-3">
-                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                  <Users className="w-6 h-6 text-secondary-foreground" />
+                <div className="flex items-center justify-center w-12 h-12 transition-colors rounded-full bg-primary/10 group-hover:bg-primary/20">
+                  <Users className="w-6 h-6 text-primary" />
                 </div>
                 <CardTitle className="text-2xl">{t('existingClientForm')}</CardTitle>
                 <CardDescription className="text-base">
@@ -74,9 +74,8 @@ const OverviewPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="secondary"
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   size="lg"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -95,17 +94,17 @@ const OverviewPage = () => {
 
         {/* Intake Forms Section */}
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
             <ClipboardList className="w-6 h-6" />
             {t('intakeForms')}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_osa)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeOsa')}</span>
@@ -116,10 +115,10 @@ const OverviewPage = () => {
 
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_vlos)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeVlos')}</span>
@@ -130,10 +129,10 @@ const OverviewPage = () => {
 
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_pulman)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakePulman')}</span>
@@ -144,10 +143,10 @@ const OverviewPage = () => {
 
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_osb)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeOsb')}</span>
@@ -158,10 +157,10 @@ const OverviewPage = () => {
 
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_rebacare)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeRebacare')}</span>
@@ -172,10 +171,10 @@ const OverviewPage = () => {
 
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_ovac)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeOvac')}</span>
@@ -186,10 +185,10 @@ const OverviewPage = () => {
 
             <Button
               variant="outline"
-              className="h-auto py-6 px-6 justify-start text-left hover:bg-muted"
+              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
               onClick={() => handleNavigate(Routes.form_intake_steunzolen)}
             >
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className="flex flex-col items-start w-full gap-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeInsoles')}</span>
@@ -208,7 +207,7 @@ const OverviewPage = () => {
               <div>
                 <CardTitle className="text-lg">Getting Started</CardTitle>
                 <CardDescription className="mt-2">
-                  Choose whether you're creating a profile for a new client or continuing with an existing one. 
+                  Choose whether you're creating a profile for a new client or continuing with an existing one.
                   After client information is complete, you'll be able to select the appropriate intake form from the list above.
                 </CardDescription>
               </div>

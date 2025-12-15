@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BaseLayout } from '@/components/layout';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -174,7 +174,7 @@ const FormResultsPage = () => {
 
     return (
       <div key={label} className="mb-2">
-        <p className="text-sm font-semibold text-gray-600">
+        <p className="text-sm font-semibold text-muted-foreground">
           {label}:
         </p>
         <p className="text-md">
@@ -205,17 +205,14 @@ const FormResultsPage = () => {
 
   return (
     <BaseLayout title={t('formResults')}>
-      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col gap-6 bg-white p-6 rounded-md">
-          <div>
-            <h1 className="text-2xl font-bold mb-2">
-              {t('formResultsTitle')}
-            </h1>
-            <p className="text-md text-gray-600">
-              {t('formResultsDescription')}
-            </p>
-          </div>
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="flex flex-col items-center justify-center gap-3 mb-12">
+          <h1 className="text-4xl font-bold text-foreground">{t('formResultsTitle')}</h1>
+          <p className="text-lg text-muted-foreground">{t('formResultsDescription')}</p>
+        </div>
 
+        <FormSection>
           <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-md">
             <CheckCircle2 className="w-5 h-5 text-green-600" />
             <p className="text-sm">
@@ -333,7 +330,7 @@ const FormResultsPage = () => {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{t('jsonOutput')}</h2>
-              <Button 
+              <Button
                 onClick={handleCopyJSON}
                 className="flex items-center gap-2"
               >
@@ -351,7 +348,7 @@ const FormResultsPage = () => {
               </Button>
             </div>
 
-            <p className="text-sm text-gray-600 mb-3">
+            <p className="text-sm text-muted-foreground mb-3">
               {t('jsonOutputDescription')}
             </p>
 
@@ -363,7 +360,7 @@ const FormResultsPage = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-4 justify-end mt-4">
+          <FormFooter>
             <Button
               variant="outline"
               onClick={() => router.push(Routes.form_selection)}
@@ -375,8 +372,8 @@ const FormResultsPage = () => {
             >
               {t('backToOverview')}
             </Button>
-          </div>
-        </div>
+          </FormFooter>
+        </FormSection>
       </div>
     </BaseLayout>
   );

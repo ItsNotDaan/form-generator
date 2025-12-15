@@ -1,7 +1,8 @@
 import React, { memo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { LeftArrowIcon } from '@/components/icons/LeftArrowIcon';
+import { ArrowLeft } from 'lucide-react';
 import { Routes } from '@/lib/routes';
+import { getAssetPath } from '@/utils/assetPath';
 import { Link } from './Link';
 import { StepIndicator } from './StepIndicator';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -18,92 +19,47 @@ export const PageHeader = memo(
     const { t } = useTranslation('common');
 
     return (
-      <div className="w-full bg-primary shadow-md">
-        {/* Desktop & Tablet Layout */}
-        <div className="hidden md:block">
-          <div className="max-w-[1400px] mx-auto px-3 py-4 flex items-center relative">
-            {/* Left: Back button */}
-            <div className="flex justify-start flex-1 min-w-0 z-10 gap-3">
-              {showBackButton && (
-                <button
-                  aria-label={t('back')}
-                  onClick={() => onBackButtonClicked?.()}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-md text-primary-foreground hover:bg-primary-foreground/20 transition-all text-sm"
-                >
-                  <LeftArrowIcon className="w-6 h-6" color="currentColor" />
-                  <span className="text-lg font-semibold">{t('back')}</span>
-                </button>
-              )}
-            </div>
+      <nav className="fixed top-0 w-full border-b z-25 bg-primary start-0 border-primary-foreground/10">
+        <div className="grid items-center h-16 max-w-screen-xl grid-cols-3 grid-rows-1 gap-4 p-4 mx-auto">
+          {/* Left Column - Logo & Back Button */}
+          <div className="flex items-center gap-4">
+            <Link href={Routes.overview} className="flex items-center">
+              <img
+                src={getAssetPath('/images/global/eemland-logo-alleen-white.png')}
+                className="w-auto h-10"
+                alt="Eemland Logo"
+              />
+            </Link>
 
-            {/* Center: Title or Step Indicator */}
-            <div className="absolute left-1/2 -translate-x-1/2">
-              {currentStep ? (
-                <StepIndicator currentStep={currentStep} />
-              ) : title ? (
-                <p className="text-primary-foreground text-lg font-semibold text-center truncate max-w-[300px]">
-                  {title}
-                </p>
-              ) : null}
-            </div>
-
-            {/* Right: Theme Toggle & Eemland Logo */}
-            <div className="flex justify-end items-center gap-3 flex-1 min-w-0 z-10">
-              <ThemeToggle />
-              <Link
-                href={Routes.overview}
-                className="px-2 py-2 rounded-md hover:bg-primary-foreground/20 transition-all"
+            {showBackButton && (
+              <button
+                onClick={() => onBackButtonClicked?.()}
+                className="inline-flex items-center justify-center gap-2 px-3 text-sm font-medium rounded-md text-primary-foreground hover:bg-primary-foreground/15 h-9 cursor-pointer"
+                aria-label={t('back')}
               >
-                <span className="text-primary-foreground text-lg font-bold tracking-wider">
-                  EEMLAND
-                </span>
-              </Link>
-            </div>
+                <ArrowLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">{t('back')}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Center Column - Title or Step Indicator */}
+          <div className="flex justify-center">
+            {currentStep ? (
+              <StepIndicator currentStep={currentStep} onBackButtonClicked={onBackButtonClicked} />
+            ) : title ? (
+              <h1 className="text-base font-semibold text-center truncate md:text-lg text-primary-foreground">
+                {title}
+              </h1>
+            ) : null}
+          </div>
+
+          {/* Right Column - Actions */}
+          <div className="flex items-center justify-end gap-2">
+            <ThemeToggle className="w-8 h-8" />
           </div>
         </div>
-
-        {/* Mobile Layout */}
-        <div className="block md:hidden">
-          <div className="px-3 py-4 flex items-center">
-            {/* Left: Back arrow only */}
-            <div className="flex justify-start flex-1 min-w-0">
-              {showBackButton && (
-                <button
-                  aria-label={t('back')}
-                  onClick={() => onBackButtonClicked?.()}
-                  className="px-2 py-1 rounded-md hover:bg-primary-foreground/20 transition-all min-w-0"
-                >
-                  <LeftArrowIcon className="w-6 h-6" color="currentColor" />
-                </button>
-              )}
-            </div>
-
-            {/* Center: Title */}
-            <div className="flex justify-center flex-1 min-w-0">
-              {title && (
-                <p className="text-primary-foreground text-base font-semibold text-center truncate">
-                  {title}
-                </p>
-              )}
-            </div>
-
-            {/* Right: Theme Toggle & Eemland Logo */}
-            <div className="flex justify-end items-center gap-2 flex-1 min-w-0">
-              <div className="scale-90">
-                <ThemeToggle />
-              </div>
-              <Link
-                href={Routes.overview}
-                className="px-2 py-1 rounded-md hover:bg-primary-foreground/20 transition-all"
-              >
-                <span className="text-primary-foreground text-base font-bold tracking-wide">
-                  EEMLAND
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      </nav>
     );
   }
 );

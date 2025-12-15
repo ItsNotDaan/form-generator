@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BaseLayout } from '@/components/layout';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -206,8 +206,8 @@ const FormIntakeOSAPage = () => {
     <BaseLayout title={t('intakeOsa')} currentStep={2}>
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">{t('intakeOsa')}</h1>
-          <p className="text-lg text-gray-600">{t('osaDescription')}</p>
+          <h1 className="text-4xl font-bold text-foreground">{t('intakeOsa')}</h1>
+          <p className="text-lg text-muted-foreground">{t('osaDescription')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -965,7 +965,7 @@ const FormIntakeOSAPage = () => {
           </Card>
 
           {/* Submit Section */}
-          <div className="flex items-center justify-between pt-6 border-t">
+          <FormFooter>
             <Button type="button" variant="outline" onClick={() => router.back()}>
               Cancel
             </Button>
@@ -973,10 +973,11 @@ const FormIntakeOSAPage = () => {
               <span className="mr-2">Opslaan en doorgaan</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
-          </div>
+          </FormFooter>
         </form>
-      </div>
-    </BaseLayout>
+      </FormSection>
+    </div>
+    </BaseLayout >
   );
 };
 

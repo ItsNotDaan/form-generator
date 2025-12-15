@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseLayout } from '@/components/layout';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -34,96 +34,92 @@ const FormSelectionPage = () => {
 
   return (
     <BaseLayout title={t('selectIntakeForm')}>
-      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col gap-6 bg-white p-6 rounded-md">
-          <div>
-            <h1 className="text-xl font-bold mb-2">
-              {t('clientDataSaved')}
-            </h1>
-            <p className="text-md text-gray-600">
-              {t('selectIntakeFormDescription')}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-md">
-            <Info className="w-5 h-5 text-blue-600" />
-            <p className="text-sm">
-              {t('clientInfo')}: {clientData.initials} {clientData.clientName}
-            </p>
-          </div>
-
-          <Separator />
-
-          <div>
-            <h2 className="text-lg font-bold mb-3">
-              {t('availableIntakeForms')}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_vlos)}
-              >
-                {t('intakeVlos')}
-              </Button>
-
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_osa)}
-              >
-                {t('intakeOsa')}
-              </Button>
-
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_pulman)}
-              >
-                {t('intakePulman')}
-              </Button>
-
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_rebacare)}
-              >
-                {t('intakeRebacare')}
-              </Button>
-
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_osb)}
-              >
-                {t('intakeOsb')}
-              </Button>
-
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_ovac)}
-              >
-                {t('intakeOvac')}
-              </Button>
-
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full"
-                onClick={() => router.push(Routes.form_intake_steunzolen)}
-              >
-                {t('intakeInsoles')}
-              </Button>
-            </div>
-          </div>
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="flex flex-col items-center justify-center gap-3 mb-12">
+          <h1 className="text-4xl font-bold text-foreground">{t('selectIntakeForm')}</h1>
+          <p className="text-lg text-muted-foreground">{t('selectIntakeFormDescription')}</p>
         </div>
+
+        <FormSection>
+          <div>
+            <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-md mb-6">
+              <Info className="w-5 h-5 text-blue-600" />
+              <p className="text-sm">
+                {t('clientInfo')}: {clientData.initials} {clientData.clientName}
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-lg font-bold mb-3">
+                {t('availableIntakeForms')}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_vlos)}
+                >
+                  {t('intakeVlos')}
+                </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_osa)}
+                >
+                  {t('intakeOsa')}
+                </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_pulman)}
+                >
+                  {t('intakePulman')}
+                </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_rebacare)}
+                >
+                  {t('intakeRebacare')}
+                </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_osb)}
+                >
+                  {t('intakeOsb')}
+                </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_ovac)}
+                >
+                  {t('intakeOvac')}
+                </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_intake_steunzolen)}
+                >
+                  {t('intakeInsoles')}
+                </Button>
+              </div>
+            </div>
+        </FormSection>
       </div>
     </BaseLayout>
   );

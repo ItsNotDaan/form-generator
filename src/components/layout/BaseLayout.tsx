@@ -1,5 +1,5 @@
-import React, {memo} from 'react';
-import {PageHeader, PageHeaderProps} from './PageHeader';
+import React, { memo } from 'react';
+import { PageHeader, PageHeaderProps } from './PageHeader';
 
 interface Props extends PageHeaderProps {
   children: JSX.Element[] | JSX.Element;
@@ -16,7 +16,7 @@ export const BaseLayout = memo(
     parentClassName = '',
   }: Props) => {
     return (
-      <div className="flex flex-col w-full min-h-screen h-full bg-background">
+      <div className="flex flex-col w-full min-h-screen h-full bg-background pt-16">
         <PageHeader
           title={title}
           showBackButton={showBackButton}

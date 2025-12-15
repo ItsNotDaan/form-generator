@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BaseLayout } from '@/components/layout';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -153,11 +153,11 @@ const FormIntakeSteunzolenPage = () => {
 
   return (
     <BaseLayout title={t('intakeInsoles')} currentStep={2}>
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">{t('intakeInsoles')}</h1>
-          <p className="text-lg text-gray-600">{t('insolesDescription')}</p>
+        <div className="flex flex-col items-center justify-center gap-3 mb-12">
+          <h1 className="text-4xl font-bold text-foreground">{t('intakeInsoles')}</h1>
+          <p className="text-lg text-muted-foreground">{t('insolesDescription')}</p>
         </div>
 
         {/* Warning Alert */}
@@ -307,9 +307,9 @@ const FormIntakeSteunzolenPage = () => {
                       className={cn(
                         'mt-3',
                         steunzoolTypeGeneral === 'Anders' &&
-                          !steunzoolAndersText.trim() &&
-                          showWarnings &&
-                          'border-destructive'
+                        !steunzoolAndersText.trim() &&
+                        showWarnings &&
+                        'border-destructive'
                       )}
                     />
                   )}
@@ -434,10 +434,10 @@ const FormIntakeSteunzolenPage = () => {
                       onChange={e => setSteunzoolHakVerhogingLinks(e.target.value)}
                       className={cn(
                         isTalonette &&
-                          !steunzoolHakVerhogingLinks.trim() &&
-                          !steunzoolHakVerhogingRechts.trim() &&
-                          showWarnings &&
-                          'border-destructive'
+                        !steunzoolHakVerhogingLinks.trim() &&
+                        !steunzoolHakVerhogingRechts.trim() &&
+                        showWarnings &&
+                        'border-destructive'
                       )}
                     />
                   </div>
@@ -453,10 +453,10 @@ const FormIntakeSteunzolenPage = () => {
                       onChange={e => setSteunzoolHakVerhogingRechts(e.target.value)}
                       className={cn(
                         isTalonette &&
-                          !steunzoolHakVerhogingLinks.trim() &&
-                          !steunzoolHakVerhogingRechts.trim() &&
-                          showWarnings &&
-                          'border-destructive'
+                        !steunzoolHakVerhogingLinks.trim() &&
+                        !steunzoolHakVerhogingRechts.trim() &&
+                        showWarnings &&
+                        'border-destructive'
                       )}
                     />
                   </div>
@@ -482,7 +482,7 @@ const FormIntakeSteunzolenPage = () => {
           </Card>
 
           {/* Submit Section */}
-          <div className="flex items-center justify-between pt-6 border-t">
+          <FormFooter>
             <Button type="button" variant="outline" onClick={() => router.back()}>
               Cancel
             </Button>
@@ -490,10 +490,11 @@ const FormIntakeSteunzolenPage = () => {
               <span className="mr-2">Opslaan en doorgaan</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
-          </div>
+          </FormFooter>
         </form>
-      </div>
-    </BaseLayout>
+      </FormSection>
+    </div>
+    </BaseLayout >
   );
 };
 
