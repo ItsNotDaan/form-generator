@@ -203,7 +203,7 @@ function generateVLOSCodes(
   warnings: string[],
   insurance: string
 ): void {
-  const {side, welkPaar} = vlos;
+  const { side, welkPaar } = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
@@ -280,7 +280,7 @@ function generateOSACodes(
   warnings: string[],
   insurance: string
 ): void {
-  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
+  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -301,8 +301,8 @@ function generateOSACodes(
     side === 'both'
       ? Math.max(heightLinks, heightRechts)
       : side === 'left'
-      ? heightLinks
-      : heightRechts;
+        ? heightLinks
+        : heightRechts;
 
   if (maxHeight === 0) {
     warnings.push('OSA schachthoogte is niet ingevuld');
@@ -396,14 +396,14 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return {codes, warnings, generalBasiscode};
+    return { codes, warnings, generalBasiscode };
   }
 
-  const {intakeType, insurance} = clientData;
+  const { intakeType, insurance } = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return {codes, warnings, generalBasiscode};
+    return { codes, warnings, generalBasiscode };
   }
 
   // Generate codes based on intake type
@@ -478,5 +478,5 @@ export function generateCodes(
     else if (intakeData.intakeOSB.basiscode === '40') generalBasiscode = '40';
   }
 
-  return {codes, warnings, generalBasiscode};
+  return { codes, warnings, generalBasiscode };
 }
