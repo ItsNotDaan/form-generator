@@ -1,6 +1,7 @@
 import React from 'react';
 import { BaseLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
+import { NavigationCard } from '@/components/ui/navigation-card';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
@@ -36,57 +37,23 @@ const OverviewPage = () => {
             {t('clientFormsSection')}
           </h2>
           <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-            {/* New Client Card */}
-            <Card className="transition-shadow duration-200 cursor-pointer hover:shadow-lg group" onClick={() => handleNavigate(Routes.form_new_client)}>
-              <CardHeader className="space-y-3">
-                <div className="flex items-center justify-center w-12 h-12 transition-colors rounded-full bg-primary/10 group-hover:bg-primary/20">
-                  <UserPlus className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle className="text-2xl">{t('newClientForm')}</CardTitle>
-                <CardDescription className="text-base">
-                  {t('newClientFormDescription')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  className="w-full"
-                  size="lg"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNavigate(Routes.form_new_client);
-                  }}
-                >
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  {t('newClientButton')}
-                </Button>
-              </CardContent>
-            </Card>
+            <NavigationCard
+              icon={UserPlus}
+              title={t('newClientForm')}
+              description={t('newClientFormDescription')}
+              buttonText={t('newClientButton')}
+              buttonIcon={UserPlus}
+              onClick={() => handleNavigate(Routes.form_new_client)}
+            />
 
-            {/* Existing Client Card */}
-            <Card className="transition-shadow duration-200 cursor-pointer hover:shadow-lg group" onClick={() => handleNavigate(Routes.form_old_client)}>
-              <CardHeader className="space-y-3">
-                <div className="flex items-center justify-center w-12 h-12 transition-colors rounded-full bg-primary/10 group-hover:bg-primary/20">
-                  <Users className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle className="text-2xl">{t('existingClientForm')}</CardTitle>
-                <CardDescription className="text-base">
-                  {t('existingClientFormDescription')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  className="w-full"
-                  size="lg"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNavigate(Routes.form_old_client);
-                  }}
-                >
-                  <Users className="w-4 h-4 mr-2" />
-                  {t('existingClientButton')}
-                </Button>
-              </CardContent>
-            </Card>
+            <NavigationCard
+              icon={Users}
+              title={t('existingClientForm')}
+              description={t('existingClientFormDescription')}
+              buttonText={t('existingClientButton')}
+              buttonIcon={Users}
+              onClick={() => handleNavigate(Routes.form_old_client)}
+            />
           </div>
         </div>
 
@@ -99,101 +66,59 @@ const OverviewPage = () => {
             {t('intakeForms')}
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_osa)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakeOsa')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakeOsaDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_osa)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakeOsa')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakeOsaDescription')}</div>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_vlos)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakeVlos')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakeVlosDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_vlos)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakeVlos')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakeVlosDescription')}</div>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_pulman)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakePulman')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakePulmanDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_pulman)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakePulman')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakePulmanDescription')}</div>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_osb)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakeOsb')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakeOsbDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_osb)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakeOsb')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakeOsbDescription')}</div>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_rebacare)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakeRebacare')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakeRebacareDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_rebacare)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakeRebacare')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakeRebacareDescription')}</div>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_ovac)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakeOvac')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakeOvacDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_ovac)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakeOvac')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakeOvacDescription')}</div>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="justify-start h-auto px-6 py-6 text-left hover:bg-muted"
-              onClick={() => handleNavigate(Routes.form_intake_steunzolen)}
-            >
-              <div className="flex flex-col items-start w-full gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-semibold">{t('intakeInsoles')}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{t('intakeInsolesDescription')}</span>
+            <Button variant="outline" className="justify-start h-auto px-6 py-6" onClick={() => handleNavigate(Routes.form_intake_steunzolen)}>
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('intakeInsoles')}</div>
+                <div className="text-xs text-muted-foreground">{t('intakeInsolesDescription')}</div>
               </div>
             </Button>
           </div>

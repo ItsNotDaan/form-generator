@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
+import { FormField } from '@/components/ui/form-field';
+import { RadioGroupField } from '@/components/ui/radio-group-field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -213,30 +215,16 @@ const FormNewClientPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2" id="field-locatie">
-                  <Label>{t('location')} <span className="text-destructive">*</span></Label>
-                  <RadioGroup
-                    value={location}
-                    onValueChange={(value) => setLocation(value as Locatie)}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-4"
-                  >
-                    {LOCATIE_OPTIES.map((option) => (
-                      <div key={option.value} className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value={option.value}
-                          id={`location-${option.value}`}
-                          className={cn(!location && showWarnings && 'border-destructive')}
-                        />
-                        <Label
-                          htmlFor={`location-${option.value}`}
-                          className="font-normal cursor-pointer"
-                        >
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
+                <RadioGroupField
+                  id="locatie"
+                  label={t('location')}
+                  value={location}
+                  onChange={(value) => setLocation(value as Locatie)}
+                  options={LOCATIE_OPTIES}
+                  required
+                  error={!location && showWarnings}
+                  layout="grid-4"
+                />
               </CardContent>
             </Card>
 
@@ -250,56 +238,36 @@ const FormNewClientPage = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-2" id="field-aanhef">
-                    <Label>{t('salutation')} <span className="text-destructive">*</span></Label>
-                    <RadioGroup
-                      value={salutation}
-                      onValueChange={(value) => setSalutation(value as Aanhef)}
-                      className="flex flex-col space-y-2"
-                    >
-                      {AANHEF_OPTIES.map((option) => (
-                        <div key={option.value} className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value={option.value}
-                            id={`salutation-${option.value}`}
-                            className={cn(!salutation && showWarnings && 'border-destructive')}
-                          />
-                          <Label
-                            htmlFor={`salutation-${option.value}`}
-                            className="font-normal cursor-pointer"
-                          >
-                            {option.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
+                  <RadioGroupField
+                    id="aanhef"
+                    label={t('salutation')}
+                    value={salutation}
+                    onChange={(value) => setSalutation(value as Aanhef)}
+                    options={AANHEF_OPTIES}
+                    required
+                    error={!salutation && showWarnings}
+                    layout="vertical"
+                  />
 
-                  <div className="space-y-2" id="field-voorletters">
-                    <Label htmlFor="initials">
-                      {t('initials')} <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="initials"
-                      value={initials}
-                      onChange={(e) => setInitials(e.target.value)}
-                      placeholder={t('initialsPlaceholder')}
-                      className={cn(!initials.trim() && showWarnings && 'border-destructive')}
-                    />
-                  </div>
+                  <FormField
+                    id="voorletters"
+                    label={t('initials')}
+                    value={initials}
+                    onChange={setInitials}
+                    placeholder={t('initialsPlaceholder')}
+                    required
+                    error={!initials.trim() && showWarnings}
+                  />
 
-                  <div className="space-y-2" id="field-achternaam">
-                    <Label htmlFor="lastName">
-                      {t('lastName')} <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="lastName"
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      placeholder={t('lastNamePlaceholder')}
-                      className={cn(!clientName.trim() && showWarnings && 'border-destructive')}
-                    />
-                  </div>
+                  <FormField
+                    id="achternaam"
+                    label={t('lastName')}
+                    value={clientName}
+                    onChange={setClientName}
+                    placeholder={t('lastNamePlaceholder')}
+                    required
+                    error={!clientName.trim() && showWarnings}
+                  />
                 </div>
 
                 <div className="space-y-2" id="field-geboortedatum">
@@ -326,59 +294,48 @@ const FormNewClientPage = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="md:col-span-2 space-y-2" id="field-straatnaam">
-                    <Label htmlFor="address">
-                      {t('streetName')} <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder={t('streetNamePlaceholder')}
-                      className={cn(!address.trim() && showWarnings && 'border-destructive')}
-                    />
-                  </div>
+                  <FormField
+                    id="straatnaam"
+                    label={t('streetName')}
+                    value={address}
+                    onChange={setAddress}
+                    placeholder={t('streetNamePlaceholder')}
+                    required
+                    error={!address.trim() && showWarnings}
+                    className="md:col-span-2"
+                  />
 
-                  <div className="space-y-2" id="field-huisnummer">
-                    <Label htmlFor="houseNumber">
-                      {t('houseNumber')} <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="houseNumber"
-                      value={houseNumber}
-                      onChange={(e) => setHouseNumber(e.target.value)}
-                      placeholder={t('houseNumberPlaceholder')}
-                      className={cn(!houseNumber.trim() && showWarnings && 'border-destructive')}
-                    />
-                  </div>
+                  <FormField
+                    id="huisnummer"
+                    label={t('houseNumber')}
+                    value={houseNumber}
+                    onChange={setHouseNumber}
+                    placeholder={t('houseNumberPlaceholder')}
+                    required
+                    error={!houseNumber.trim() && showWarnings}
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2" id="field-postcode">
-                    <Label htmlFor="postalCode">
-                      {t('postalCode')} <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="postalCode"
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
-                      placeholder={t('postalCodePlaceholder')}
-                      className={cn(!postalCode.trim() && showWarnings && 'border-destructive')}
-                    />
-                  </div>
+                  <FormField
+                    id="postcode"
+                    label={t('postalCode')}
+                    value={postalCode}
+                    onChange={setPostalCode}
+                    placeholder={t('postalCodePlaceholder')}
+                    required
+                    error={!postalCode.trim() && showWarnings}
+                  />
 
-                  <div className="space-y-2" id="field-woonplaats">
-                    <Label htmlFor="city">
-                      {t('city')} <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="city"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder={t('cityPlaceholder')}
-                      className={cn(!city.trim() && showWarnings && 'border-destructive')}
-                    />
-                  </div>
+                  <FormField
+                    id="woonplaats"
+                    label={t('city')}
+                    value={city}
+                    onChange={setCity}
+                    placeholder={t('cityPlaceholder')}
+                    required
+                    error={!city.trim() && showWarnings}
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -393,42 +350,35 @@ const FormNewClientPage = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="phoneOne">{t('phoneOne')}</Label>
-                    <Input
-                      id="phoneOne"
-                      type="tel"
-                      value={phoneOne}
-                      onChange={(e) => setPhoneOne(e.target.value)}
-                      placeholder={t('phoneOnePlaceholder')}
-                    />
-                  </div>
+                  <FormField
+                    id="phoneOne"
+                    label={t('phoneOne')}
+                    value={phoneOne}
+                    onChange={setPhoneOne}
+                    type="tel"
+                    placeholder={t('phoneOnePlaceholder')}
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="phoneTwo">{t('phoneTwo')}</Label>
-                    <Input
-                      id="phoneTwo"
-                      type="tel"
-                      value={phoneTwo}
-                      onChange={(e) => setPhoneTwo(e.target.value)}
-                      placeholder={t('phoneTwoPlaceholder')}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2" id="field-email">
-                  <Label htmlFor="email">
-                    {t('email')} <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t('emailPlaceholder')}
-                    className={cn(!email.trim() && showWarnings && 'border-destructive')}
+                  <FormField
+                    id="phoneTwo"
+                    label={t('phoneTwo')}
+                    value={phoneTwo}
+                    onChange={setPhoneTwo}
+                    type="tel"
+                    placeholder={t('phoneTwoPlaceholder')}
                   />
                 </div>
+
+                <FormField
+                  id="email"
+                  label={t('email')}
+                  value={email}
+                  onChange={setEmail}
+                  type="email"
+                  placeholder={t('emailPlaceholder')}
+                  required
+                  error={!email.trim() && showWarnings}
+                />
               </CardContent>
             </Card>
 
