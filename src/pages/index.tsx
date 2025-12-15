@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Routes } from '@/presentation/routes';
+import { Routes } from '@/lib/routes';
 import { UserPlus, Users, FileText, ClipboardList } from 'lucide-react';
 
 const OverviewPage = () => {

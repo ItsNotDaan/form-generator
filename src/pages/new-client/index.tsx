@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Routes } from '@/presentation/routes';
+import { Routes } from '@/lib/routes';
 import {
   LOCATIE_OPTIES,
   AANHEF_OPTIES,
@@ -17,7 +17,7 @@ import {
   ZORGVERZEKERAARS,
   Locatie,
   Aanhef,
-} from '@/presentation/form/constants/formConstants';
+} from '@/lib/constants/formConstants';
 import { useAppDispatch } from '@/domain/store/hooks';
 import { setClientData } from '@/domain/store/slices/formData';
 import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
