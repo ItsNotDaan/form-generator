@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BaseLayout } from '@/presentation/components/layout';
+import { BaseLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

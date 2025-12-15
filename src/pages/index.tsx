@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseLayout } from '@/presentation/components/layout';
+import { BaseLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
