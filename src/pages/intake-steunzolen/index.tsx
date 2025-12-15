@@ -484,10 +484,10 @@ const FormIntakeSteunzolenPage = () => {
           {/* Submit Section */}
           <FormFooter>
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button type="submit" size="lg" className="min-w-[200px]">
-              <span className="mr-2">Opslaan en doorgaan</span>
+              <span className="mr-2">{t('saveAndContinue')}</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </FormFooter>
