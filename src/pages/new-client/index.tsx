@@ -23,8 +23,8 @@ import { setClientData } from '@/domain/store/slices/formData';
 import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import { AlertCircle, Check, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DatePicker } from '@/presentation/components/ui/DatePicker';
-import { Select } from '@/presentation/components/ui/Select';
+import { DatePicker } from '@/components/ui/date-picker';
+import { ReactSelect } from '@/components/ui/react-select';
 
 const FormNewClientPage = () => {
   const router = useRouter();
@@ -182,7 +182,7 @@ const FormNewClientPage = () => {
                   <Label htmlFor="practitioner">
                     {t('practitioner')} <span className="text-destructive">*</span>
                   </Label>
-                  <Select
+                  <ReactSelect
                     value={
                       practitionerId
                         ? { label: BEHANDELAARS.find((p) => p.value === practitionerId)?.label || '', value: practitionerId }
@@ -446,7 +446,7 @@ const FormNewClientPage = () => {
                 <Label htmlFor="insurance">
                   {t('insurance')} <span className="text-destructive">*</span>
                 </Label>
-                <Select
+                <ReactSelect
                   value={
                     insurance
                       ? { label: insurance, value: insurance }

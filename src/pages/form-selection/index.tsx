@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseLayout } from '@/presentation/components/layout';
+import { BaseLayout } from '@/components/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';

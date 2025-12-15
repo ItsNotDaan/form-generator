@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ClientData,
   IntakeVLOSData,
@@ -8,7 +8,7 @@ import {
   IntakeOSBData,
   IntakeOVACData,
   IntakeSteunzolenData,
-} from '@/presentation/form/types/formData';
+} from '@/components/form/types/formData';
 
 export interface FormDataState {
   client: ClientData | null;

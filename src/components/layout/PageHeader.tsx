@@ -1,9 +1,9 @@
-import React, {memo} from 'react';
+import React, { memo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import {LeftArrowIcon} from '@/presentation/components/icons/LeftArrowIcon';
-import {Link} from './Link';
-import {Routes} from '../../routes';
-import {StepIndicator} from './StepIndicator';
+import { LeftArrowIcon } from '@/components/icons/LeftArrowIcon';
+import { Routes } from '@/lib/routes';
+import { Link } from './Link';
+import { StepIndicator } from './StepIndicator';
 
 export interface PageHeaderProps {
   title?: string;
@@ -13,8 +13,8 @@ export interface PageHeaderProps {
 }
 
 export const PageHeader = memo(
-  ({title, showBackButton, onBackButtonClicked, currentStep}: PageHeaderProps) => {
-    const {t} = useTranslation('common');
+  ({ title, showBackButton, onBackButtonClicked, currentStep }: PageHeaderProps) => {
+    const { t } = useTranslation('common');
 
     return (
       <div className="w-full bg-brand-700 shadow-md">
