@@ -1,30 +1,30 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { parseDate } from "chrono-node"
-import { CalendarIcon } from "lucide-react"
+import * as React from 'react';
+import {parseDate} from 'chrono-node';
+import {CalendarIcon} from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {Button} from '@/components/ui/button';
+import {Calendar} from '@/components/ui/calendar';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/popover';
+import {cn} from '@/lib/utils';
 
 function formatDate(date: Date | undefined) {
   if (!date) {
-    return ""
+    return '';
   }
 
-  return date.toLocaleDateString("nl-NL", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  })
+  return date.toLocaleDateString('nl-NL', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
 }
 
 interface NaturalDatePickerProps {
@@ -39,53 +39,57 @@ interface NaturalDatePickerProps {
 export function NaturalDatePicker({
   date: initialDate,
   onDateChanged,
-  placeholder = "Tomorrow or next week",
+  placeholder = 'Tomorrow or next week',
   label,
-  className = "",
+  className = '',
   error = false,
 }: NaturalDatePickerProps) {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState(initialDate ? formatDate(initialDate) : "")
-  const [date, setDate] = React.useState<Date | undefined>(initialDate)
-  const [month, setMonth] = React.useState<Date | undefined>(initialDate || new Date())
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(
+    initialDate ? formatDate(initialDate) : ''
+  );
+  const [date, setDate] = React.useState<Date | undefined>(initialDate);
+  const [month, setMonth] = React.useState<Date | undefined>(
+    initialDate || new Date()
+  );
 
   // Sync with external date changes
   React.useEffect(() => {
     if (initialDate) {
-      setDate(initialDate)
-      setValue(formatDate(initialDate))
-      setMonth(initialDate)
+      setDate(initialDate);
+      setValue(formatDate(initialDate));
+      setMonth(initialDate);
     }
-  }, [initialDate])
+  }, [initialDate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value
-    setValue(inputValue)
-    
-    const parsedDate = parseDate(inputValue)
+    const inputValue = e.target.value;
+    setValue(inputValue);
+
+    const parsedDate = parseDate(inputValue);
     if (parsedDate) {
-      setDate(parsedDate)
-      setMonth(parsedDate)
-      onDateChanged?.(parsedDate)
-    } else if (inputValue === "") {
-      setDate(undefined)
-      onDateChanged?(undefined)
+      setDate(parsedDate);
+      setMonth(parsedDate);
+      onDateChanged?.(parsedDate);
+    } else if (inputValue === '') {
+      setDate(undefined);
+      onDateChanged?.(undefined);
     }
-  }
+  };
 
   const handleCalendarSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate)
-    setValue(formatDate(selectedDate))
-    setOpen(false)
-    onDateChanged?(selectedDate)
-  }
+    setDate(selectedDate);
+    setValue(formatDate(selectedDate));
+    setOpen(false);
+    onDateChanged?.(selectedDate);
+  };
 
   const errorStyles = error
     ? 'border-destructive focus:border-destructive focus:ring-destructive'
-    : 'border-input focus:border-ring focus:ring-ring'
+    : 'border-input focus:border-ring focus:ring-ring';
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn('flex flex-col gap-2', className)}>
       {label && (
         <Label htmlFor="date" className="px-1">
           {label}
@@ -96,12 +100,12 @@ export function NaturalDatePicker({
           id="date"
           value={value}
           placeholder={placeholder}
-          className={cn("bg-background pr-10", errorStyles)}
+          className={cn('bg-background pr-10', errorStyles)}
           onChange={handleInputChange}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowDown") {
-              e.preventDefault()
-              setOpen(true)
+          onKeyDown={e => {
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              setOpen(true);
             }
           }}
         />
@@ -132,5 +136,5 @@ export function NaturalDatePicker({
         </Popover>
       </div>
     </div>
-  )
+  );
 }

@@ -13,7 +13,7 @@ const HelpPage = () => {
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
           <h1 className="text-4xl font-bold text-foreground">{t('help')}</h1>
-          <p className="text-lg text-muted-foreground">Under Development</p>
+          <p className="text-lg text-muted-foreground">{t('underDevelopment')}</p>
         </div>
 
         <FormSection>
@@ -22,16 +22,16 @@ const HelpPage = () => {
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-6 h-6 text-amber-500" />
                 <div>
-                  <CardTitle className="text-2xl">Under Development</CardTitle>
+                  <CardTitle className="text-2xl">{t('underDevelopment')}</CardTitle>
                   <CardDescription className="mt-2">
-                    This page is currently being migrated to the new Tailwind CSS design system with shadcn/ui components.
+                    {t('underDevelopmentDescription')}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Page: HelpPage - Migration in progress
+                {t('pageInProgress', { page: 'HelpPage' })}
               </p>
             </CardContent>
           </Card>
