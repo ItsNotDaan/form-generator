@@ -4,6 +4,7 @@ import { LeftArrowIcon } from '@/components/icons/LeftArrowIcon';
 import { Routes } from '@/lib/routes';
 import { Link } from './Link';
 import { StepIndicator } from './StepIndicator';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export interface PageHeaderProps {
   title?: string;
@@ -17,19 +18,19 @@ export const PageHeader = memo(
     const { t } = useTranslation('common');
 
     return (
-      <div className="w-full bg-brand-700 shadow-md">
+      <div className="w-full bg-primary shadow-md">
         {/* Desktop & Tablet Layout */}
         <div className="hidden md:block">
           <div className="max-w-[1400px] mx-auto px-3 py-4 flex items-center relative">
             {/* Left: Back button */}
-            <div className="flex justify-start flex-1 min-w-0 z-10">
+            <div className="flex justify-start flex-1 min-w-0 z-10 gap-3">
               {showBackButton && (
                 <button
                   aria-label={t('back')}
                   onClick={() => onBackButtonClicked?.()}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-md text-white hover:bg-white/20 transition-all text-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-md text-primary-foreground hover:bg-primary-foreground/20 transition-all text-sm"
                 >
-                  <LeftArrowIcon className="w-6 h-6" color="white" />
+                  <LeftArrowIcon className="w-6 h-6" color="currentColor" />
                   <span className="text-lg font-semibold">{t('back')}</span>
                 </button>
               )}
@@ -40,19 +41,20 @@ export const PageHeader = memo(
               {currentStep ? (
                 <StepIndicator currentStep={currentStep} />
               ) : title ? (
-                <p className="text-white text-lg font-semibold text-center truncate max-w-[300px]">
+                <p className="text-primary-foreground text-lg font-semibold text-center truncate max-w-[300px]">
                   {title}
                 </p>
               ) : null}
             </div>
 
-            {/* Right: Eemland Logo */}
-            <div className="flex justify-end flex-1 min-w-0 z-10">
+            {/* Right: Theme Toggle & Eemland Logo */}
+            <div className="flex justify-end items-center gap-3 flex-1 min-w-0 z-10">
+              <ThemeToggle />
               <Link
                 href={Routes.overview}
-                className="px-2 py-2 rounded-md hover:bg-white/20 transition-all"
+                className="px-2 py-2 rounded-md hover:bg-primary-foreground/20 transition-all"
               >
-                <span className="text-white text-lg font-bold tracking-wider">
+                <span className="text-primary-foreground text-lg font-bold tracking-wider">
                   EEMLAND
                 </span>
               </Link>
@@ -69,9 +71,9 @@ export const PageHeader = memo(
                 <button
                   aria-label={t('back')}
                   onClick={() => onBackButtonClicked?.()}
-                  className="px-2 py-1 rounded-md hover:bg-white/20 transition-all min-w-0"
+                  className="px-2 py-1 rounded-md hover:bg-primary-foreground/20 transition-all min-w-0"
                 >
-                  <LeftArrowIcon className="w-6 h-6" color="white" />
+                  <LeftArrowIcon className="w-6 h-6" color="currentColor" />
                 </button>
               )}
             </div>
@@ -79,19 +81,22 @@ export const PageHeader = memo(
             {/* Center: Title */}
             <div className="flex justify-center flex-1 min-w-0">
               {title && (
-                <p className="text-white text-base font-semibold text-center truncate">
+                <p className="text-primary-foreground text-base font-semibold text-center truncate">
                   {title}
                 </p>
               )}
             </div>
 
-            {/* Right: Eemland Logo */}
-            <div className="flex justify-end flex-1 min-w-0">
+            {/* Right: Theme Toggle & Eemland Logo */}
+            <div className="flex justify-end items-center gap-2 flex-1 min-w-0">
+              <div className="scale-90">
+                <ThemeToggle />
+              </div>
               <Link
                 href={Routes.overview}
-                className="px-2 py-1 rounded-md hover:bg-white/20 transition-all"
+                className="px-2 py-1 rounded-md hover:bg-primary-foreground/20 transition-all"
               >
-                <span className="text-white text-base font-bold tracking-wide">
+                <span className="text-primary-foreground text-base font-bold tracking-wide">
                   EEMLAND
                 </span>
               </Link>

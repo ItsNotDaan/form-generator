@@ -16,7 +16,7 @@ export const BaseLayout = memo(
     parentClassName = '',
   }: Props) => {
     return (
-      <div className="flex flex-col w-full min-h-screen h-full bg-gray-50">
+      <div className="flex flex-col w-full min-h-screen h-full bg-background">
         <PageHeader
           title={title}
           showBackButton={showBackButton}
@@ -26,7 +26,7 @@ export const BaseLayout = memo(
 
         <div className="flex flex-row flex-1 w-full h-full items-stretch">
           {/* Main container */}
-          <div className="flex-1 bg-gray-50">
+          <div className="flex-1 bg-background">
             <div className={`p-4 md:p-6 lg:p-8 flex flex-col h-full w-full max-w-7xl mx-auto ${parentClassName}`}>
               {children}
             </div>
