@@ -23,7 +23,7 @@ import { setClientData } from '@/domain/store/slices/formData';
 import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import { AlertCircle, Check, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DatePicker } from '@/components/ui/date-picker';
+import { NaturalDatePicker } from '@/components/ui/natural-date-picker';
 import { ReactSelect } from '@/components/ui/react-select';
 
 const FormNewClientPage = () => {
@@ -174,7 +174,7 @@ const FormNewClientPage = () => {
               <CardHeader>
                 <CardTitle>{t('appointmentInformation')}</CardTitle>
                 <CardDescription>
-                  Information about the measurement appointment
+                  {t('appointmentInformationDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -204,11 +204,10 @@ const FormNewClientPage = () => {
                     <Label htmlFor="date">
                       {t('measurementDate')} <span className="text-destructive">*</span>
                     </Label>
-                    <DatePicker
+                    <NaturalDatePicker
                       date={date ? new Date(date) : undefined}
                       onDateChanged={(newDate) => setDate(newDate ? newDate.toISOString().split('T')[0] : '')}
                       placeholder={t('selectDate')}
-                      className={cn(!date && showWarnings && 'border-destructive')}
                       error={!date && showWarnings}
                     />
                   </div>
@@ -246,7 +245,7 @@ const FormNewClientPage = () => {
               <CardHeader>
                 <CardTitle>{t('personalInformation')}</CardTitle>
                 <CardDescription>
-                  Basic client identification information
+                  {t('personalInformationDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -307,11 +306,10 @@ const FormNewClientPage = () => {
                   <Label htmlFor="birthDate">
                     {t('birthDate')} <span className="text-destructive">*</span>
                   </Label>
-                  <DatePicker
+                  <NaturalDatePicker
                     date={birthDate ? new Date(birthDate) : undefined}
                     onDateChanged={(newDate) => setBirthDate(newDate ? newDate.toISOString().split('T')[0] : '')}
                     placeholder={t('selectBirthDate')}
-                    className={cn(!birthDate && showWarnings && 'border-destructive')}
                     error={!birthDate && showWarnings}
                   />
                 </div>
@@ -323,7 +321,7 @@ const FormNewClientPage = () => {
               <CardHeader>
                 <CardTitle>{t('addressInformation')}</CardTitle>
                 <CardDescription>
-                  Client's residential address details
+                  {t('addressInformationDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -390,7 +388,7 @@ const FormNewClientPage = () => {
               <CardHeader>
                 <CardTitle>{t('contactInformation')}</CardTitle>
                 <CardDescription>
-                  Phone numbers and email address
+                  {t('contactInformationDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -439,7 +437,7 @@ const FormNewClientPage = () => {
               <CardHeader>
                 <CardTitle>{t('insuranceAndMedical')}</CardTitle>
                 <CardDescription>
-                  Insurance provider and medical details
+                  {t('insuranceAndMedicalDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -495,10 +493,10 @@ const FormNewClientPage = () => {
                 variant="outline"
                 onClick={() => router.back()}
               >
-                Cancel
+                {t('cancel')}
               </Button>
               <Button type="submit" size="lg" className="min-w-[200px]">
-                <span className="mr-2">Continue to Form Selection</span>
+                <span className="mr-2">{t('continueToFormSelection')}</span>
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </FormFooter>

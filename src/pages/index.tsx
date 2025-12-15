@@ -25,7 +25,7 @@ const OverviewPage = () => {
             {t('forms')}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Select an option below to get started
+            {t('selectOptionToGetStarted')}
           </p>
         </div>
 
@@ -33,7 +33,7 @@ const OverviewPage = () => {
         <div className="mb-12">
           <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
             <Users className="w-6 h-6" />
-            Client Forms
+            {t('clientFormsSection')}
           </h2>
           <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
             {/* New Client Card */}
@@ -44,7 +44,7 @@ const OverviewPage = () => {
                 </div>
                 <CardTitle className="text-2xl">{t('newClientForm')}</CardTitle>
                 <CardDescription className="text-base">
-                  Create a new client profile and start the intake process
+                  {t('newClientFormDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -57,7 +57,7 @@ const OverviewPage = () => {
                   }}
                 >
                   <UserPlus className="w-4 h-4 mr-2" />
-                  New Client
+                  {t('newClientButton')}
                 </Button>
               </CardContent>
             </Card>
@@ -70,7 +70,7 @@ const OverviewPage = () => {
                 </div>
                 <CardTitle className="text-2xl">{t('existingClientForm')}</CardTitle>
                 <CardDescription className="text-base">
-                  Continue with an existing client profile
+                  {t('existingClientFormDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -83,7 +83,7 @@ const OverviewPage = () => {
                   }}
                 >
                   <Users className="w-4 h-4 mr-2" />
-                  Existing Client
+                  {t('existingClientButton')}
                 </Button>
               </CardContent>
             </Card>
@@ -109,7 +109,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeOsa')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">OSA intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakeOsaDescription')}</span>
               </div>
             </Button>
 
@@ -123,7 +123,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeVlos')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">VLOS intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakeVlosDescription')}</span>
               </div>
             </Button>
 
@@ -137,7 +137,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakePulman')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">Pulman intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakePulmanDescription')}</span>
               </div>
             </Button>
 
@@ -151,7 +151,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeOsb')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">OSB intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakeOsbDescription')}</span>
               </div>
             </Button>
 
@@ -165,7 +165,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeRebacare')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">Rebacare intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakeRebacareDescription')}</span>
               </div>
             </Button>
 
@@ -179,7 +179,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeOvac')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">OVAC intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakeOvacDescription')}</span>
               </div>
             </Button>
 
@@ -193,7 +193,7 @@ const OverviewPage = () => {
                   <FileText className="w-4 h-4" />
                   <span className="font-semibold">{t('intakeInsoles')}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">Steunzolen intake form</span>
+                <span className="text-xs text-muted-foreground">{t('intakeInsolesDescription')}</span>
               </div>
             </Button>
           </div>
@@ -205,10 +205,9 @@ const OverviewPage = () => {
             <div className="flex items-start gap-3">
               <FileText className="w-5 h-5 text-muted-foreground mt-0.5" />
               <div>
-                <CardTitle className="text-lg">Getting Started</CardTitle>
+                <CardTitle className="text-lg">{t('gettingStartedTitle')}</CardTitle>
                 <CardDescription className="mt-2">
-                  Choose whether you're creating a profile for a new client or continuing with an existing one.
-                  After client information is complete, you'll be able to select the appropriate intake form from the list above.
+                  {t('gettingStartedDescription')}
                 </CardDescription>
               </div>
             </div>
