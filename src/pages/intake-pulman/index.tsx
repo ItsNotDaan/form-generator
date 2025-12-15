@@ -331,7 +331,7 @@ const FormIntakePulmanPage = () => {
                 variant="outline"
                 onClick={() => router.back()}
               >
-                Cancel
+                {t('cancel')}
               </Button>
               <Button type="submit" size="lg" className="min-w-[200px]">
                 <span className="mr-2">{t('saveAndContinue')}</span>
