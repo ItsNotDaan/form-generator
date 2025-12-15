@@ -30,5 +30,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/new-client"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "old-pages"]
 }
