@@ -10,11 +10,6 @@ import { Routes } from '@/lib/routes';
 import { useAppSelector } from '@/domain/store/hooks';
 import { BEHANDELAARS } from '@/lib/constants/formConstants';
 import { generateCodes } from '@/utils/codeGenerator';
-import {
-  findNavigationForWarning,
-  getFormRoute,
-  scrollToField,
-} from '@/utils/warningNavigationMap';
 
 const FormResultsPage = () => {
   const router = useRouter();
@@ -228,38 +223,11 @@ const FormResultsPage = () => {
                 <p className="font-bold">{t('codeWarnings')}:</p>
               </div>
               <div className="flex flex-col gap-2 ml-6">
-                {codeWarnings.map((warning, idx) => {
-                  const navInfo = findNavigationForWarning(warning);
-                  return (
-                    <div key={idx} className="flex justify-between items-center gap-2">
-                      <p className="text-sm">{warning}</p>
-                      {navInfo && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="border-orange-300 text-orange-700 hover:bg-orange-100"
-                          onClick={() => {
-                            router.push(
-                              getFormRoute(navInfo.formType),
-                              undefined,
-                              {
-                                shallow: true,
-                              }
-                            );
-                            // Use setTimeout to ensure navigation completes before scrolling
-                            setTimeout(() => {
-                              scrollToField(navInfo.fieldId);
-                            }, 100);
-                          }}
-                        >
-                          {t('goToField', {
-                            fieldLabel: navInfo.fieldLabel,
-                          })}
-                        </Button>
-                      )}
-                    </div>
-                  );
-                })}
+                {codeWarnings.map((warning, idx) => (
+                  <div key={idx} className="flex justify-between items-center gap-2">
+                    <p className="text-sm">{warning}</p>
+                  </div>
+                ))}
               </div>
             </div>
           )}

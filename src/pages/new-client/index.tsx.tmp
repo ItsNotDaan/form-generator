@@ -21,30 +21,30 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { scrollToFirstError } from '@/utils/formHelpers';
 
-const FormOldClientPage = () => {
+const FormNewClientPage = () => {
   const router = useRouter();
   const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
-  const existingClient = useAppSelector(s => s.formData.client);
+  const  = useAppSelector(s => s.formData.client);
 
   const formSchema = z.object({
     practitionerId: z.string().min(1, { message: t('required') }),
     date: z.string().min(1, { message: t('required') }),
     location: z.string().min(1, { message: t('required') }),
-    salutation: z.string().optional(),
+    salutation: z.string().min(1, { message: t("required") }),
     initials: z.string().min(1, { message: t('required') }),
     clientName: z.string().min(1, { message: t('required') }),
     birthDate: z.string().min(1, { message: t('required') }),
-    address: z.string().optional(),
-    houseNumber: z.string().optional(),
-    postalCode: z.string().optional(),
-    city: z.string().optional(),
-    email: z.string().optional(),
-    insurance: z.string().optional(),
-    phoneOne: z.string().optional(),
-    phoneTwo: z.string().optional(),
-    specialist: z.string().optional(),
-    medischeIndicatie: z.string().optional(),
+    address: z.string().min(1, { message: t("required") }),
+    houseNumber: z.string().min(1, { message: t("required") }),
+    postalCode: z.string().min(1, { message: t("required") }),
+    city: z.string().min(1, { message: t("required") }),
+    email: z.string().min(1, { message: t("required") }),
+    insurance: z.string().min(1, { message: t("required") }),
+    phoneOne: z.string().min(1, { message: t("required") }),
+    phoneTwo: z.string().min(1, { message: t("required") }),
+    specialist: z.string().min(1, { message: t("required") }),
+    medischeIndicatie: z.string().min(1, { message: t("required") }),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -53,23 +53,22 @@ const FormOldClientPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      practitionerId: existingClient?.practitionerId || '',
-      date: existingClient?.date || new Date().toISOString().split('T')[0],
-      location: existingClient?.location || '',
-      salutation: existingClient?.salutation || '',
-      initials: existingClient?.initials || '',
-      clientName: existingClient?.clientName || '',
-      birthDate: existingClient?.birthDate || '',
-      address: existingClient?.address || '',
-      houseNumber: existingClient?.houseNumber || '',
-      postalCode: existingClient?.postalCode || '',
-      city: existingClient?.city || '',
-      email: existingClient?.email || '',
-      insurance: existingClient?.insurance || '',
-      phoneOne: existingClient?.phoneOne || '',
-      phoneTwo: existingClient?.phoneTwo || '',
-      specialist: existingClient?.specialist || '',
-      medischeIndicatie: existingClient?.medischeIndicatie || '',
+      date: ?.date || new Date().toISOString().split('T')[0],
+      location: ?.location || '',
+      salutation: ?.salutation || '',
+      initials: ?.initials || '',
+      clientName: ?.clientName || '',
+      birthDate: ?.birthDate || '',
+      address: ?.address || '',
+      houseNumber: ?.houseNumber || '',
+      postalCode: ?.postalCode || '',
+      city: ?.city || '',
+      email: ?.email || '',
+      insurance: ?.insurance || '',
+      phoneOne: ?.phoneOne || '',
+      phoneTwo: ?.phoneTwo || '',
+      specialist: ?.specialist || '',
+      medischeIndicatie: ?.medischeIndicatie || '',
     },
   });
 
@@ -97,11 +96,11 @@ const FormOldClientPage = () => {
   };
 
   return (
-    <BaseLayout title={t('existingClientForm')} currentStep={1}>
+    <BaseLayout title={t('Form')} currentStep={1}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
-          <h1 className="text-4xl font-bold text-foreground">{t('existingClientForm')}</h1>
-          <p className="text-lg text-muted-foreground">{t('updateClientDescription')}</p>
+          <h1 className="text-4xl font-bold text-foreground">{t('Form')}</h1>
+          <p className="text-lg text-muted-foreground">{t('newClientDescription')}</p>
         </div>
 
         <FormSection>
@@ -386,4 +385,4 @@ const FormOldClientPage = () => {
   );
 };
 
-export default FormOldClientPage;
+export default FormNewClientPage;
