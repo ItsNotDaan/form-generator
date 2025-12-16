@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { CheckCircle2, AlertTriangle, Copy, Check } from 'lucide-react';
+import React, {useState} from 'react';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {Separator} from '@/components/ui/separator';
+import {CheckCircle2, AlertTriangle, Copy, Check} from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { useAppSelector } from '@/domain/store/hooks';
-import { BEHANDELAARS } from '@/lib/constants/formConstants';
-import { generateCodes } from '@/utils/codeGenerator';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {useAppSelector} from '@/domain/store/hooks';
+import {BEHANDELAARS} from '@/lib/constants/formConstants';
+import {generateCodes} from '@/utils/codeGenerator';
 
 const FormResultsPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const formData = useAppSelector(state => state.formData);
   const [copied, setCopied] = useState(false);
 
@@ -38,8 +44,12 @@ const FormResultsPage = () => {
       return value ? 'Ja' : ''; // false becomes empty string, not excluded
     }
     if (typeof value === 'string') {
-      if (value.toLowerCase() === 'yes') return 'Ja';
-      if (value.toLowerCase() === 'no') return '';
+      if (value.toLowerCase() === 'yes') {
+        return 'Ja';
+      }
+      if (value.toLowerCase() === 'no') {
+        return '';
+      }
       return value;
     }
     if (Array.isArray(value)) {
@@ -64,11 +74,11 @@ const FormResultsPage = () => {
     // Resolve practitioner ID to name
     const resolvedClientData = formData.client
       ? normalizeObject({
-        ...formData.client,
-        practitionerName:
-          BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-            ?.label || formData.client?.practitionerId,
-      })
+          ...formData.client,
+          practitionerName:
+            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+              ?.label || formData.client?.practitionerId,
+        })
       : null;
 
     // Build result object with only non-null intake forms
@@ -104,7 +114,7 @@ const FormResultsPage = () => {
       formData.client &&
       (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)
     ) {
-      const { codes, warnings, generalBasiscode } = generateCodes(
+      const {codes, warnings, generalBasiscode} = generateCodes(
         formData.client,
         {
           intakeVLOS: formData.intakeVLOS,
@@ -169,12 +179,8 @@ const FormResultsPage = () => {
 
     return (
       <div key={label} className="mb-2">
-        <p className="text-sm font-semibold text-muted-foreground">
-          {label}:
-        </p>
-        <p className="text-md">
-          {displayValue}
-        </p>
+        <p className="text-sm font-semibold text-muted-foreground">{label}:</p>
+        <p className="text-md">{displayValue}</p>
       </div>
     );
   };
@@ -186,9 +192,7 @@ const FormResultsPage = () => {
 
     return (
       <div>
-        <h3 className="text-lg font-bold mb-3">
-          {title}
-        </h3>
+        <h3 className="text-lg font-bold mb-3">{title}</h3>
         <div className="flex flex-col gap-2">
           {Object.entries(data).map(([key, value]) =>
             renderFieldValue(key, value)
@@ -203,16 +207,18 @@ const FormResultsPage = () => {
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
-          <h1 className="text-4xl font-bold text-foreground">{t('formResultsTitle')}</h1>
-          <p className="text-lg text-muted-foreground">{t('formResultsDescription')}</p>
+          <h1 className="text-4xl font-bold text-foreground">
+            {t('formResultsTitle')}
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            {t('formResultsDescription')}
+          </p>
         </div>
 
         <FormSection>
           <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-md">
             <CheckCircle2 className="w-5 h-5 text-green-600" />
-            <p className="text-sm">
-              {t('formDataComplete')}
-            </p>
+            <p className="text-sm">{t('formDataComplete')}</p>
           </div>
 
           {/* Display code generation warnings if any */}
@@ -224,7 +230,10 @@ const FormResultsPage = () => {
               </div>
               <div className="flex flex-col gap-2 ml-6">
                 {codeWarnings.map((warning, idx) => (
-                  <div key={idx} className="flex justify-between items-center gap-2">
+                  <div
+                    key={idx}
+                    className="flex justify-between items-center gap-2"
+                  >
                     <p className="text-sm">{warning}</p>
                   </div>
                 ))}
@@ -236,9 +245,7 @@ const FormResultsPage = () => {
 
           {/* Display all form data */}
           <div>
-            <h2 className="text-xl font-bold mb-4">
-              {t('submittedData')}
-            </h2>
+            <h2 className="text-xl font-bold mb-4">{t('submittedData')}</h2>
 
             {renderSection(t('clientData'), formData.client)}
 
@@ -335,9 +342,7 @@ const FormResultsPage = () => {
             >
               {t('fillAnotherForm')}
             </Button>
-            <Button
-              onClick={() => router.push(Routes.overview)}
-            >
+            <Button onClick={() => router.push(Routes.overview)}>
               {t('backToOverview')}
             </Button>
           </FormFooter>

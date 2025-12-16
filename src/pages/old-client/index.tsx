@@ -1,40 +1,60 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {Label} from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { LOCATIE_OPTIES, AANHEF_OPTIES, BEHANDELAARS, ZORGVERZEKERAARS, Locatie, Aanhef } from '@/lib/constants/formConstants';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setClientData } from '@/domain/store/slices/formData';
-import { ChevronRight } from 'lucide-react';
-import { DatePicker } from '@/components/ui/date-picker';
-import { ReactSelect } from '@/components/ui/react-select';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {
+  LOCATIE_OPTIES,
+  AANHEF_OPTIES,
+  BEHANDELAARS,
+  ZORGVERZEKERAARS,
+  Locatie,
+  Aanhef,
+} from '@/lib/constants/formConstants';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setClientData} from '@/domain/store/slices/formData';
+import {ChevronRight} from 'lucide-react';
+import {DatePicker} from '@/components/ui/date-picker';
+import {ReactSelect} from '@/components/ui/react-select';
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {scrollToFirstError} from '@/utils/formHelpers';
 
 const FormOldClientPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const existingClient = useAppSelector(s => s.formData.client);
 
   const formSchema = z.object({
-    practitionerId: z.string().min(1, { message: t('required') }),
-    date: z.string().min(1, { message: t('required') }),
-    location: z.string().min(1, { message: t('required') }),
+    practitionerId: z.string().min(1, {message: t('required')}),
+    date: z.string().min(1, {message: t('required')}),
+    location: z.string().min(1, {message: t('required')}),
     salutation: z.string().optional(),
-    initials: z.string().min(1, { message: t('required') }),
-    clientName: z.string().min(1, { message: t('required') }),
-    birthDate: z.string().min(1, { message: t('required') }),
+    initials: z.string().min(1, {message: t('required')}),
+    clientName: z.string().min(1, {message: t('required')}),
+    birthDate: z.string().min(1, {message: t('required')}),
     address: z.string().optional(),
     houseNumber: z.string().optional(),
     postalCode: z.string().optional(),
@@ -74,25 +94,27 @@ const FormOldClientPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    dispatch(setClientData({
-      practitionerId: data.practitionerId,
-      date: data.date,
-      location: data.location as Locatie,
-      salutation: data.salutation as Aanhef || undefined,
-      initials: data.initials,
-      clientName: data.clientName,
-      birthDate: data.birthDate,
-      address: data.address || '',
-      houseNumber: data.houseNumber || '',
-      postalCode: data.postalCode || '',
-      city: data.city || '',
-      phoneOne: data.phoneOne || '',
-      phoneTwo: data.phoneTwo || '',
-      email: data.email || '',
-      insurance: data.insurance || '',
-      medischeIndicatie: data.medischeIndicatie || '',
-      specialist: data.specialist || '',
-    }));
+    dispatch(
+      setClientData({
+        practitionerId: data.practitionerId,
+        date: data.date,
+        location: data.location as Locatie,
+        salutation: (data.salutation as Aanhef) || undefined,
+        initials: data.initials,
+        clientName: data.clientName,
+        birthDate: data.birthDate,
+        address: data.address || '',
+        houseNumber: data.houseNumber || '',
+        postalCode: data.postalCode || '',
+        city: data.city || '',
+        phoneOne: data.phoneOne || '',
+        phoneTwo: data.phoneTwo || '',
+        email: data.email || '',
+        insurance: data.insurance || '',
+        medischeIndicatie: data.medischeIndicatie || '',
+        specialist: data.specialist || '',
+      })
+    );
     router.push(Routes.form_selection);
   };
 
@@ -100,93 +122,121 @@ const FormOldClientPage = () => {
     <BaseLayout title={t('existingClientForm')} currentStep={1}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
-          <h1 className="text-4xl font-bold text-foreground">{t('existingClientForm')}</h1>
-          <p className="text-lg text-muted-foreground">{t('updateClientDescription')}</p>
+          <h1 className="text-4xl font-bold text-foreground">
+            {t('existingClientForm')}
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            {t('updateClientDescription')}
+          </p>
         </div>
 
         <FormSection>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
+              className="space-y-6"
+            >
               <Card>
                 <CardHeader>
                   <CardTitle>{t('appointmentInformation')}</CardTitle>
-                  <CardDescription>{t('appointmentInformationDescription')}</CardDescription>
+                  <CardDescription>
+                    {t('appointmentInformationDescription')}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField control={form.control} name="practitionerId" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('practitioner')}</FormLabel>
-                        <Controller
-                          control={form.control}
-                          name="practitionerId"
-                          render={({ field }) => (
-                            <ReactSelect
-                              value={field.value ? BEHANDELAARS.find(p => p.value === field.value) : null}
-                              onChange={(option) => field.onChange(option?.value || '')}
-                              options={BEHANDELAARS}
-                              placeholder={t('selectPractitioner')}
-                            />
-                          )}
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-
-                    <FormField control={form.control} name="date" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('measurementDate')}</FormLabel>
-                        <FormControl>
-                          <DatePicker
-                            value={field.value ? new Date(field.value) : undefined}
-                            onChange={(date) => field.onChange(date?.toISOString().split('T')[0] || '')}
-                            placeholder={t('selectDate')}
-                            disabled={(d) => d > new Date()}
+                    <FormField
+                      control={form.control}
+                      name="practitionerId"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('practitioner')}</FormLabel>
+                          <Controller
+                            control={form.control}
+                            name="practitionerId"
+                            render={({field}) => (
+                              <ReactSelect
+                                value={
+                                  field.value
+                                    ? BEHANDELAARS.find(
+                                        p => p.value === field.value
+                                      )
+                                    : null
+                                }
+                                onChange={option => {
+                                  if (
+                                    option &&
+                                    'value' in option &&
+                                    !Array.isArray(option)
+                                  ) {
+                                    field.onChange(option.value || '');
+                                  } else {
+                                    field.onChange('');
+                                  }
+                                }}
+                                options={BEHANDELAARS}
+                                placeholder={t('selectPractitioner')}
+                              />
+                            )}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="date"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('measurementDate')}</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              value={
+                                field.value ? new Date(field.value) : undefined
+                              }
+                              onChange={date =>
+                                field.onChange(
+                                  date?.toISOString().split('T')[0] || ''
+                                )
+                              }
+                              placeholder={t('selectDate')}
+                              disabled={d => d > new Date()}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
-                  <FormField control={form.control} name="location" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('location')}</FormLabel>
-                      <FormControl>
-                        <RadioGroup onValueChange={field.onChange} value={field.value}>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {LOCATIE_OPTIES.map(option => (
-                              <div key={option.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={option.value} id={`location-${option.value}`} />
-                                <Label htmlFor={`location-${option.value}`} className="font-normal cursor-pointer">{option.label}</Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('personalInformation')}</CardTitle>
-                  <CardDescription>{t('personalInformationDescription')}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <FormField control={form.control} name="salutation" render={({ field }) => (
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({field}) => (
                       <FormItem>
-                        <FormLabel>{t('salutation')}</FormLabel>
+                        <FormLabel>{t('location')}</FormLabel>
                         <FormControl>
-                          <RadioGroup onValueChange={field.onChange} value={field.value}>
-                            <div className="flex flex-col space-y-2">
-                              {AANHEF_OPTIES.map(option => (
-                                <div key={option.value} className="flex items-center space-x-2">
-                                  <RadioGroupItem value={option.value} id={`salutation-${option.value}`} />
-                                  <Label htmlFor={`salutation-${option.value}`} className="font-normal cursor-pointer">{option.label}</Label>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              {LOCATIE_OPTIES.map(option => (
+                                <div
+                                  key={option.value}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <RadioGroupItem
+                                    value={option.value}
+                                    id={`location-${option.value}`}
+                                  />
+                                  <Label
+                                    htmlFor={`location-${option.value}`}
+                                    className="font-normal cursor-pointer"
+                                  >
+                                    {option.label}
+                                  </Label>
                                 </div>
                               ))}
                             </div>
@@ -194,92 +244,189 @@ const FormOldClientPage = () => {
                         </FormControl>
                         <FormMessage />
                       </FormItem>
-                    )} />
+                    )}
+                  />
+                </CardContent>
+              </Card>
 
-                    <FormField control={form.control} name="initials" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('initials')}</FormLabel>
-                        <FormControl>
-                          <Input placeholder={t('initialsPlaceholder')} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('personalInformation')}</CardTitle>
+                  <CardDescription>
+                    {t('personalInformationDescription')}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="salutation"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('salutation')}</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <div className="flex flex-col space-y-2">
+                                {AANHEF_OPTIES.map(option => (
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center space-x-2"
+                                  >
+                                    <RadioGroupItem
+                                      value={option.value}
+                                      id={`salutation-${option.value}`}
+                                    />
+                                    <Label
+                                      htmlFor={`salutation-${option.value}`}
+                                      className="font-normal cursor-pointer"
+                                    >
+                                      {option.label}
+                                    </Label>
+                                  </div>
+                                ))}
+                              </div>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                    <FormField control={form.control} name="clientName" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('lastName')}</FormLabel>
-                        <FormControl>
-                          <Input placeholder={t('lastNamePlaceholder')} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="initials"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('initials')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={t('initialsPlaceholder')}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="clientName"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('lastName')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={t('lastNamePlaceholder')}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
-                  <FormField control={form.control} name="birthDate" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('birthDate')}</FormLabel>
-                      <FormControl>
-                        <DatePicker
-                          value={field.value ? new Date(field.value) : undefined}
-                          onChange={(date) => field.onChange(date?.toISOString().split('T')[0] || '')}
-                          placeholder={t('selectBirthDate')}
-                          disabled={(d) => d > new Date()}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
+                  <FormField
+                    control={form.control}
+                    name="birthDate"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>{t('birthDate')}</FormLabel>
+                        <FormControl>
+                          <DatePicker
+                            value={
+                              field.value ? new Date(field.value) : undefined
+                            }
+                            onChange={date =>
+                              field.onChange(
+                                date?.toISOString().split('T')[0] || ''
+                              )
+                            }
+                            placeholder={t('selectBirthDate')}
+                            disabled={d => d > new Date()}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
                   <CardTitle>{t('addressInformation')}</CardTitle>
-                  <CardDescription>{t('addressInformationDescription')}</CardDescription>
+                  <CardDescription>
+                    {t('addressInformationDescription')}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField control={form.control} name="postalCode" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('postalCode')}</FormLabel>
-                        <FormControl>
-                          <Input placeholder="1234 AB" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="postalCode"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('postalCode')}</FormLabel>
+                          <FormControl>
+                            <Input placeholder="1234 AB" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                    <FormField control={form.control} name="houseNumber" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('houseNumber')}</FormLabel>
-                        <FormControl>
-                          <Input placeholder="123" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="houseNumber"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('houseNumber')}</FormLabel>
+                          <FormControl>
+                            <Input placeholder="123" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                    <FormField control={form.control} name="address" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('streetName')}</FormLabel>
-                        <FormControl>
-                          <Input placeholder={t('streetNamePlaceholder')} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('streetName')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={t('streetNamePlaceholder')}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                    <FormField control={form.control} name="city" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('city')}</FormLabel>
-                        <FormControl>
-                          <Input placeholder={t('cityPlaceholder')} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('city')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={t('cityPlaceholder')}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -287,92 +434,160 @@ const FormOldClientPage = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>{t('contactInformation')}</CardTitle>
-                  <CardDescription>{t('contactInformationDescription')}</CardDescription>
+                  <CardDescription>
+                    {t('contactInformationDescription')}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField control={form.control} name="phoneOne" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('phoneOne')}</FormLabel>
-                        <FormControl>
-                          <Input type="tel" placeholder={t('phoneOnePlaceholder')} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="phoneOne"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('phoneOne')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="tel"
+                              placeholder={t('phoneOnePlaceholder')}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                    <FormField control={form.control} name="phoneTwo" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('phoneTwo')}</FormLabel>
-                        <FormControl>
-                          <Input type="tel" placeholder={t('phoneTwoPlaceholder')} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="phoneTwo"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>{t('phoneTwo')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="tel"
+                              placeholder={t('phoneTwoPlaceholder')}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
-                  <FormField control={form.control} name="email" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('email')}</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder={t('emailPlaceholder')} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>{t('email')}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder={t('emailPlaceholder')}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
                   <CardTitle>{t('insuranceAndMedical')}</CardTitle>
-                  <CardDescription>{t('insuranceAndMedicalDescription')}</CardDescription>
+                  <CardDescription>
+                    {t('insuranceAndMedicalDescription')}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <FormField control={form.control} name="insurance" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('insurance')}</FormLabel>
-                      <Controller
-                        control={form.control}
-                        name="insurance"
-                        render={({ field }) => (
-                          <ReactSelect
-                            value={field.value ? { label: field.value, value: field.value } : null}
-                            onChange={(option) => field.onChange(option?.value || '')}
-                            options={ZORGVERZEKERAARS}
-                            placeholder={t('selectInsurance')}
+                  <FormField
+                    control={form.control}
+                    name="insurance"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>{t('insurance')}</FormLabel>
+                        <Controller
+                          control={form.control}
+                          name="insurance"
+                          render={({field}) => (
+                            <ReactSelect
+                              value={
+                                field.value
+                                  ? {label: field.value, value: field.value}
+                                  : null
+                              }
+                              onChange={option => {
+                                if (
+                                  option &&
+                                  'value' in option &&
+                                  !Array.isArray(option)
+                                ) {
+                                  field.onChange(option.value || '');
+                                } else {
+                                  field.onChange('');
+                                }
+                              }}
+                              options={ZORGVERZEKERAARS}
+                              placeholder={t('selectInsurance')}
+                            />
+                          )}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="specialist"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>{t('specialist')}</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={t('specialistPlaceholder')}
+                            {...field}
                           />
-                        )}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                  <FormField control={form.control} name="specialist" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('specialist')}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t('specialistPlaceholder')} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-
-                  <FormField control={form.control} name="medischeIndicatie" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('medicalIndication')}</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder={t('medicalIndicationPlaceholder')} rows={4} className="resize-none" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
+                  <FormField
+                    control={form.control}
+                    name="medischeIndicatie"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>{t('medicalIndication')}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder={t('medicalIndicationPlaceholder')}
+                            rows={4}
+                            className="resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </CardContent>
               </Card>
 
               <FormFooter>
-                <Button type="button" variant="outline" onClick={() => router.back()}>{t('cancel')}</Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                >
+                  {t('cancel')}
+                </Button>
                 <Button type="submit" size="lg" className="min-w-50">
                   <span className="mr-2">{t('continueToFormSelection')}</span>
                   <ChevronRight className="h-4 w-4" />

@@ -1,10 +1,7 @@
 // Configuration for next-translate without the plugin (compatible with static export)
 
 const ALLOWED_LOCALES = ['nl'];
-const ALLOWED_NAMESPACES = [
-  'common',
-  'form',
-];
+const ALLOWED_NAMESPACES = ['common', 'form'];
 
 module.exports = {
   // These are all the locales you want to support in
@@ -20,15 +17,19 @@ module.exports = {
     // Validate parameters to prevent path traversal attacks
     if (!ALLOWED_LOCALES.includes(lang)) {
       throw new Error(
-        `Invalid locale: "${lang}". Allowed locales are: ${ALLOWED_LOCALES.join(', ')}`
+        `Invalid locale: "${lang}". Allowed locales are: ${ALLOWED_LOCALES.join(
+          ', '
+        )}`
       );
     }
     if (!ALLOWED_NAMESPACES.includes(ns)) {
       throw new Error(
-        `Invalid namespace: "${ns}". Allowed namespaces are: ${ALLOWED_NAMESPACES.join(', ')}`
+        `Invalid namespace: "${ns}". Allowed namespaces are: ${ALLOWED_NAMESPACES.join(
+          ', '
+        )}`
       );
     }
-    return import(`./locales/${lang}/${ns}.json`).then((m) => m.default);
+    return import(`./locales/${lang}/${ns}.json`).then(m => m.default);
   },
   pages: {
     '*': ['common'],

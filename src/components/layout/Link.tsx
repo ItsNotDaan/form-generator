@@ -19,7 +19,7 @@ const createLink = ({
   if (!href) {
     return <>{children}</>;
   }
-  
+
   if (isExternal) {
     return (
       <a

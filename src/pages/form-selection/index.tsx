@@ -1,18 +1,24 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Info } from 'lucide-react';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {Separator} from '@/components/ui/separator';
+import {Info} from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { useAppSelector, useAppDispatch } from '@/domain/store/hooks';
-import { clearIntakeForms } from '@/domain/store/slices/formData';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {useAppSelector, useAppDispatch} from '@/domain/store/hooks';
+import {clearIntakeForms} from '@/domain/store/slices/formData';
 
 const FormSelectionPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -37,8 +43,12 @@ const FormSelectionPage = () => {
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
-          <h1 className="text-4xl font-bold text-foreground">{t('selectIntakeForm')}</h1>
-          <p className="text-lg text-muted-foreground">{t('selectIntakeFormDescription')}</p>
+          <h1 className="text-4xl font-bold text-foreground">
+            {t('selectIntakeForm')}
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            {t('selectIntakeFormDescription')}
+          </p>
         </div>
 
         <FormSection>
