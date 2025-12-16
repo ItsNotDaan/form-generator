@@ -32,20 +32,20 @@ export const RadioGroupField: React.FC<RadioGroupFieldProps> = ({
     className,
 }) => {
     const layoutClasses = {
-        vertical: 'flex flex-col space-y-2',
+        vertical: 'flex flex-col space-y-1',
         horizontal: 'flex gap-6',
         'grid-2': 'grid grid-cols-1 md:grid-cols-2 gap-4',
         'grid-4': 'grid grid-cols-2 md:grid-cols-4 gap-4',
     };
 
     return (
-        <div className={cn('space-y-2', className)} id={id ? `field-${id}` : undefined}>
+        <div className={cn('space-y-1', className)} id={id ? `field-${id}` : undefined}>
             {label && (
                 <Label>
                     {label} {required && <span className="text-destructive">*</span>}
                 </Label>
             )}
-            <RadioGroup value={value} onValueChange={onChange} className={layoutClasses[layout]}>
+            <RadioGroup value={value} onValueChange={onChange} className={cn('mt-2', layoutClasses[layout])}>
                 {options.map((option) => (
                     <div key={option.value} className="flex items-center space-x-2">
                         <RadioGroupItem

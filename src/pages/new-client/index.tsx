@@ -247,7 +247,8 @@ const FormNewClientPage = () => {
                     options={AANHEF_OPTIES}
                     required
                     error={!salutation && showWarnings}
-                    layout="vertical"
+                    layout="horizontal"
+                    className=''
                   />
 
                   <FormField

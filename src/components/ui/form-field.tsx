@@ -27,7 +27,7 @@ export const FormField: React.FC<FormFieldProps> = ({
     className,
 }) => {
     return (
-        <div className={cn('space-y-2', className)} id={`field-${id}`}>
+        <div className={cn('space-y-3', className)} id={`field-${id}`}>
             <Label htmlFor={id}>
                 {label} {required && <span className="text-destructive">*</span>}
             </Label>
