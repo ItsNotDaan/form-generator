@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,18 @@ import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeVLOSData, setClientData } from '@/domain/store/slices/formData';
 
 import { ChevronRight } from 'lucide-react';
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {scrollToFirstError} from '@/utils/formHelpers';
 
 const FormIntakeVLOSPage = () => {
   const router = useRouter();
@@ -38,95 +50,115 @@ const FormIntakeVLOSPage = () => {
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
-  // State voor omschrijving/paartype
-  const [omschrijving, setOmschrijving] = useState<string>('Eerste paar');
 
-  // State voor Links/Rechts/Beide selectie (default: Beide)
-  const [side, setSide] = useState<Zijde>('both');
-
-  // State voor schachthoogte
-  const [schachthoogteLinks, setSchachthoogteLinks] = useState('14');
-  const [schachthoogteRechts, setSchachthoogteRechts] = useState('14');
-
-  // State voor omsluiting (multi-select) - Multivorm standaard geselecteerd
-  const [omsluitingLinks, setOmsluitingLinks] = useState<Record<string, boolean>>({
-    omsluitingLinksMultivorm: true,
+  const formSchema = z.object({
+    welkPaar: z.string(),
+    side: z.enum(['left', 'right', 'both'] as const),
+    schachthoogteLinks: z.string().optional(),
+    schachthoogteRechts: z.string().optional(),
+    omsluitingLinks: z.record(z.boolean()),
+    omsluitingRechts: z.record(z.boolean()),
+    omsluitingLinksMm: z.record(z.string()),
+    omsluitingRechtsMm: z.record(z.string()),
+    supplementschoringLinksEnabled: z.boolean(),
+    supplementschoringRechtsEnabled: z.boolean(),
+    supplementschoringLinksType: z.string().optional(),
+    supplementschoringRechtsType: z.string().optional(),
+    zoolverstijvingEnabled: z.boolean(),
+    zoolverstijvingLinks: z.boolean().optional(),
+    zoolverstijvingRechts: z.boolean().optional(),
+    sluitingType: z.string().optional(),
+    inschotpunt: z.string().optional(),
+    openstandSchacht: z.string().optional(),
+    tongpolsterEnabled: z.boolean(),
+    tongVaststikkenEnabled: z.boolean(),
+    haksoortLinks: z.string().optional(),
+    haksoortRechts: z.string().optional(),
+    hakhoogteLinks: z.string().optional(),
+    hakhoogteRechts: z.string().optional(),
+    hakschoringLinksEnabled: z.boolean(),
+    hakschoringRechtsEnabled: z.boolean(),
+    hakschoringLinksType: z.string().optional(),
+    hakschoringRechtsType: z.string().optional(),
+    ezelsoorLinksEnabled: z.boolean(),
+    ezelsoorRechtsEnabled: z.boolean(),
+    ezelsoorLinksType: z.string().optional(),
+    ezelsoorRechtsType: z.string().optional(),
+    amputatieLinksEnabled: z.boolean(),
+    amputatieRechtsEnabled: z.boolean(),
+    hakafrondingLinksEnabled: z.boolean(),
+    hakafrondingRechtsEnabled: z.boolean(),
+    hakafrondingLinksHoogte: z.string().optional(),
+    hakafrondingLinksLengte: z.string().optional(),
+    hakafrondingRechtsHoogte: z.string().optional(),
+    hakafrondingRechtsLengte: z.string().optional(),
+    loopzoolType: z.string().optional(),
+    bijzonderheden: z.string().optional(),
   });
-  const [omsluitingRechts, setOmsluitingRechts] = useState<Record<string, boolean>>({
-    omsluitingRechtsMultivorm: true,
+
+  type FormData = z.infer<typeof formSchema>;
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    shouldFocusError: true,
+    defaultValues: {
+      welkPaar: 'Eerste paar',
+      side: 'both',
+      schachthoogteLinks: '14',
+      schachthoogteRechts: '14',
+      omsluitingLinks: {omsluitingLinksMultivorm: true},
+      omsluitingRechts: {omsluitingRechtsMultivorm: true},
+      omsluitingLinksMm: {omsluitingMmLinksMultivorm: '3'},
+      omsluitingRechtsMm: {omsluitingMmRechtsMultivorm: '3'},
+      supplementschoringLinksEnabled: false,
+      supplementschoringRechtsEnabled: false,
+      supplementschoringLinksType: 'Lateraal',
+      supplementschoringRechtsType: 'Lateraal',
+      zoolverstijvingEnabled: false,
+      zoolverstijvingLinks: false,
+      zoolverstijvingRechts: false,
+      sluitingType: SLUITING_OPTIES[0]?.value || '',
+      inschotpunt: '',
+      openstandSchacht: OPENSTAND_OPTIES[2]?.value || '',
+      tongpolsterEnabled: false,
+      tongVaststikkenEnabled: false,
+      haksoortLinks: HAKSOORT_OPTIES[0]?.value || '',
+      haksoortRechts: HAKSOORT_OPTIES[0]?.value || '',
+      hakhoogteLinks: '2',
+      hakhoogteRechts: '2',
+      hakschoringLinksEnabled: false,
+      hakschoringRechtsEnabled: false,
+      hakschoringLinksType: 'Lateraal',
+      hakschoringRechtsType: 'Lateraal',
+      ezelsoorLinksEnabled: false,
+      ezelsoorRechtsEnabled: false,
+      ezelsoorLinksType: 'Lateraal',
+      ezelsoorRechtsType: 'Lateraal',
+      amputatieLinksEnabled: false,
+      amputatieRechtsEnabled: false,
+      hakafrondingLinksEnabled: true,
+      hakafrondingRechtsEnabled: true,
+      hakafrondingLinksHoogte: '10',
+      hakafrondingLinksLengte: '50',
+      hakafrondingRechtsHoogte: '10',
+      hakafrondingRechtsLengte: '50',
+      loopzoolType: LOOPZOOL_OPTIES[0]?.value || '',
+      bijzonderheden: '',
+    },
   });
 
-  // State voor omsluiting mm waardes
-  const [omsluitingLinksMm, setOmsluitingLinksMm] = useState<Record<string, string>>({
-    omsluitingMmLinksMultivorm: '3',
-  });
-  const [omsluitingRechtsMm, setOmsluitingRechtsMm] = useState<Record<string, string>>({
-    omsluitingMmRechtsMultivorm: '3',
-  });
-
-  // State voor supplementschoring
-  const [supplementschoringLinksEnabled, setSupplementschoringLinksEnabled] = useState<boolean>(false);
-  const [supplementschoringRechtsEnabled, setSupplementschoringRechtsEnabled] = useState<boolean>(false);
-  const [supplementschoringLinksType, setSupplementschoringLinksType] = useState('Lateraal');
-  const [supplementschoringRechtsType, setSupplementschoringRechtsType] = useState('Lateraal');
-
-  // State voor zoolverstijving
-  const [zoolverstijvingEnabled, setZoolverstijvingEnabled] = useState<boolean>(false);
-  const [zoolverstijvingLinks, setZoolverstijvingLinks] = useState(false);
-  const [zoolverstijvingRechts, setZoolverstijvingRechts] = useState(false);
-
-  // State voor sluiting
-  const [sluitingType, setSluitingType] = useState<string>(SLUITING_OPTIES[0].value);
-
-  // State voor inschotpunt
-  const [inschotpunt, setInschotpunt] = useState('');
-
-  // State voor openstand schacht
-  const [openstandSchacht, setOpenstandSchacht] = useState<string>(OPENSTAND_OPTIES[2].value);
-
-  // State voor tongpolster
-  const [tongpolsterEnabled, setTongpolsterEnabled] = useState<boolean>(false);
-
-  // State voor tong vaststikken
-  const [tongVaststikkenEnabled, setTongVaststikkenEnabled] = useState<boolean>(false);
-
-  // State voor haksoort
-  const [haksoortLinks, setHaksoortLinks] = useState<string>(HAKSOORT_OPTIES[0].value);
-  const [haksoortRechts, setHaksoortRechts] = useState<string>(HAKSOORT_OPTIES[0].value);
-
-  // State voor hakhoogte
-  const [hakhoogteLinks, setHakhoogteLinks] = useState('2');
-  const [hakhoogteRechts, setHakhoogteRechts] = useState('2');
-
-  // State voor hakschoring
-  const [hakschoringLinksEnabled, setHakschoringLinksEnabled] = useState<boolean>(false);
-  const [hakschoringRechtsEnabled, setHakschoringRechtsEnabled] = useState<boolean>(false);
-  const [hakschoringLinksType, setHakschoringLinksType] = useState('Lateraal');
-  const [hakschoringRechtsType, setHakschoringRechtsType] = useState('Lateraal');
-
-  // State voor ezelsoor
-  const [ezelsoorLinksEnabled, setEzelsoorLinksEnabled] = useState<boolean>(false);
-  const [ezelsoorRechtsEnabled, setEzelsoorRechtsEnabled] = useState<boolean>(false);
-  const [ezelsoorLinksType, setEzelsoorLinksType] = useState('Lateraal');
-  const [ezelsoorRechtsType, setEzelsoorRechtsType] = useState('Lateraal');
-
-  // State voor amputatie (code 50)
-  const [amputatieLinksEnabled, setAmputatieLinksEnabled] = useState<boolean>(false);
-  const [amputatieRechtsEnabled, setAmputatieRechtsEnabled] = useState<boolean>(false);
-
-  // State voor hakafronding
-  const [hakafrondingLinksEnabled, setHakafrondingLinksEnabled] = useState<boolean>(true);
-  const [hakafrondingRechtsEnabled, setHakafrondingRechtsEnabled] = useState<boolean>(true);
-  const [hakafrondingLinksHoogte, setHakafrondingLinksHoogte] = useState('10');
-  const [hakafrondingLinksLengte, setHakafrondingLinksLengte] = useState('50');
-  const [hakafrondingRechtsHoogte, setHakafrondingRechtsHoogte] = useState('10');
-  const [hakafrondingRechtsLengte, setHakafrondingRechtsLengte] = useState('50');
-
-  // State voor loopzool
-  const [loopzoolType, setLoopzoolType] = useState<string>(LOOPZOOL_OPTIES[0].value);
-
-  // State voor bijzonderheden
-  const [bijzonderheden, setBijzonderheden] = useState('');
+  const side = form.watch('side');
+  const zoolverstijvingEnabled = form.watch('zoolverstijvingEnabled');
+  const supplementschoringLinksEnabled = form.watch('supplementschoringLinksEnabled');
+  const supplementschoringRechtsEnabled = form.watch('supplementschoringRechtsEnabled');
+  const hakschoringLinksEnabled = form.watch('hakschoringLinksEnabled');
+  const hakschoringRechtsEnabled = form.watch('hakschoringRechtsEnabled');
+  const ezelsoorLinksEnabled = form.watch('ezelsoorLinksEnabled');
+  const ezelsoorRechtsEnabled = form.watch('ezelsoorRechtsEnabled');
+  const hakafrondingLinksEnabled = form.watch('hakafrondingLinksEnabled');
+  const hakafrondingRechtsEnabled = form.watch('hakafrondingRechtsEnabled');
+  const omsluitingLinks = form.watch('omsluitingLinks');
+  const omsluitingRechts = form.watch('omsluitingRechts');
 
   const showLinks = side === 'left' || side === 'both';
   const showRechts = side === 'right' || side === 'both';
@@ -135,73 +167,55 @@ const FormIntakeVLOSPage = () => {
   const boolToString = (value: boolean): string => (value ? 'ja' : 'nee');
   const stringToBool = (value: string): boolean => value === 'ja';
 
-  const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
-    return []; // No required fields for VLOS
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    const missingFields = getMissingFields();
-    if (missingFields.length > 0) {
-      // Focus first missing field
-      const firstFieldId = missingFields[0]?.fieldId;
-      if (firstFieldId) {
-        const element = document.getElementById(firstFieldId);
-        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        element?.focus();
-      }
-      return;
-    }
-
+  const onSubmit = (data: FormData) => {
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'VLOS' }));
+      dispatch(setClientData({...clientData, intakeType: 'VLOS'}));
     }
 
     dispatch(
       setIntakeVLOSData({
-        welkPaar: omschrijving,
-        side,
-        schachthoogteLinks,
-        schachthoogteRechts,
-        omsluitingLinks,
-        omsluitingRechts,
-        omsluitingLinksMm,
-        omsluitingRechtsMm,
-        supplementschoringLinksEnabled,
-        supplementschoringRechtsEnabled,
-        supplementschoringLinksType,
-        supplementschoringRechtsType,
-        zoolverstijvingEnabled,
-        zoolverstijvingLinks,
-        zoolverstijvingRechts,
-        sluitingType,
-        inschotpunt,
-        openstandSchacht,
-        tongpolsterEnabled,
-        tongVaststikkenEnabled,
-        haksoortLinks,
-        haksoortRechts,
-        hakhoogteLinks,
-        hakhoogteRechts,
-        hakschoringLinksEnabled,
-        hakschoringRechtsEnabled,
-        hakschoringLinksType,
-        hakschoringRechtsType,
-        ezelsoorLinksEnabled,
-        ezelsoorRechtsEnabled,
-        ezelsoorLinksType,
-        ezelsoorRechtsType,
-        amputatieLinksEnabled,
-        amputatieRechtsEnabled,
-        hakafrondingLinksEnabled,
-        hakafrondingRechtsEnabled,
-        hakafrondingLinksHoogte,
-        hakafrondingLinksLengte,
-        hakafrondingRechtsHoogte,
-        hakafrondingRechtsLengte,
-        loopzoolType,
-        bijzonderheden,
+        welkPaar: data.welkPaar,
+        side: data.side,
+        schachthoogteLinks: data.schachthoogteLinks || '',
+        schachthoogteRechts: data.schachthoogteRechts || '',
+        omsluitingLinks: data.omsluitingLinks,
+        omsluitingRechts: data.omsluitingRechts,
+        omsluitingLinksMm: data.omsluitingLinksMm,
+        omsluitingRechtsMm: data.omsluitingRechtsMm,
+        supplementschoringLinksEnabled: data.supplementschoringLinksEnabled,
+        supplementschoringRechtsEnabled: data.supplementschoringRechtsEnabled,
+        supplementschoringLinksType: data.supplementschoringLinksType || '',
+        supplementschoringRechtsType: data.supplementschoringRechtsType || '',
+        zoolverstijvingEnabled: data.zoolverstijvingEnabled,
+        zoolverstijvingLinks: data.zoolverstijvingLinks,
+        zoolverstijvingRechts: data.zoolverstijvingRechts,
+        sluitingType: data.sluitingType || '',
+        inschotpunt: data.inschotpunt || '',
+        openstandSchacht: data.openstandSchacht || '',
+        tongpolsterEnabled: data.tongpolsterEnabled,
+        tongVaststikkenEnabled: data.tongVaststikkenEnabled,
+        haksoortLinks: data.haksoortLinks || '',
+        haksoortRechts: data.haksoortRechts || '',
+        hakhoogteLinks: data.hakhoogteLinks || '',
+        hakhoogteRechts: data.hakhoogteRechts || '',
+        hakschoringLinksEnabled: data.hakschoringLinksEnabled,
+        hakschoringRechtsEnabled: data.hakschoringRechtsEnabled,
+        hakschoringLinksType: data.hakschoringLinksType || '',
+        hakschoringRechtsType: data.hakschoringRechtsType || '',
+        ezelsoorLinksEnabled: data.ezelsoorLinksEnabled,
+        ezelsoorRechtsEnabled: data.ezelsoorRechtsEnabled,
+        ezelsoorLinksType: data.ezelsoorLinksType || '',
+        ezelsoorRechtsType: data.ezelsoorRechtsType || '',
+        amputatieLinksEnabled: data.amputatieLinksEnabled,
+        amputatieRechtsEnabled: data.amputatieRechtsEnabled,
+        hakafrondingLinksEnabled: data.hakafrondingLinksEnabled,
+        hakafrondingRechtsEnabled: data.hakafrondingRechtsEnabled,
+        hakafrondingLinksHoogte: data.hakafrondingLinksHoogte || '',
+        hakafrondingLinksLengte: data.hakafrondingLinksLengte || '',
+        hakafrondingRechtsHoogte: data.hakafrondingRechtsHoogte || '',
+        hakafrondingRechtsLengte: data.hakafrondingRechtsLengte || '',
+        loopzoolType: data.loopzoolType || '',
+        bijzonderheden: data.bijzonderheden || '',
       })
     );
 
@@ -218,14 +232,18 @@ const FormIntakeVLOSPage = () => {
         </div>
 
         <FormSection>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
+              className="space-y-6"
+            >
             {/* Which Pair */}
             <Card>
               <CardHeader>
                 <CardTitle>{t('whichPair')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={omschrijving} onValueChange={setOmschrijving}>
+                <RadioGroup value={form.watch("welkPaar")} onValueChange={setOmschrijving}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {PAARTYPE_OPTIES.map(option => (
                       <div key={option.value} className="flex items-center space-x-2">
@@ -279,8 +297,8 @@ const FormIntakeVLOSPage = () => {
                         id="shaft-left"
                         type="number"
                         placeholder="cm"
-                        value={schachthoogteLinks}
-                        onChange={(e) => setSchachthoogteLinks(e.target.value)}
+                        value={form.watch("schachthoogteLinks")}
+                        onChange={(e) => form.setValue("schachthoogteLinks", e.target.value)}
                       />
                     </div>
                   )}
@@ -291,8 +309,8 @@ const FormIntakeVLOSPage = () => {
                         id="shaft-right"
                         type="number"
                         placeholder="cm"
-                        value={schachthoogteRechts}
-                        onChange={(e) => setSchachthoogteRechts(e.target.value)}
+                        value={form.watch("schachthoogteRechts")}
+                        onChange={(e) => form.setValue("schachthoogteRechts", e.target.value)}
                       />
                     </div>
                   )}
@@ -306,7 +324,7 @@ const FormIntakeVLOSPage = () => {
                 <CardTitle>{t('shaftOpening')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={openstandSchacht} onValueChange={setOpenstandSchacht}>
+                <RadioGroup value={form.watch("openstandSchacht")} onValueChange={(v) => form.setValue("openstandSchacht", v)}>
                   <div className="flex flex-wrap gap-4">
                     {OPENSTAND_OPTIES.map(opt => (
                       <div key={opt.value} className="flex items-center space-x-2">
@@ -336,21 +354,14 @@ const FormIntakeVLOSPage = () => {
                           <div className="flex items-center space-x-2 flex-1">
                             <Checkbox
                               id={`encl-left-${optie.key}`}
-                              checked={omsluitingLinks[optie.fullKeyLinks] || false}
+                              checked={form.watch("omsluitingLinks")[optie.fullKeyLinks] || false}
                               onCheckedChange={(checked) => {
-                                setOmsluitingLinks({
-                                  ...omsluitingLinks,
-                                  [optie.fullKeyLinks]: !!checked,
-                                });
+                                form.setValue("omsluitingLinks", {...form.getValues("omsluitingLinks"), [optie.fullKeyLinks]: !!checked});
                                 if (checked && optie.needsMm && optie.defaultMm) {
-                                  setOmsluitingLinksMm({
-                                    ...omsluitingLinksMm,
-                                    [optie.mmKeyLinks]: optie.defaultMm,
+                                  form.setValue("omsluitingLinksMm", {...form.getValues("omsluitingLinksMm"), [optie.mmKeyLinks]: optie.defaultMm,
                                   });
                                 } else if (!checked) {
-                                  const next = { ...omsluitingLinksMm };
-                                  delete next[optie.mmKeyLinks];
-                                  setOmsluitingLinksMm(next);
+                                  const next = {...form.getValues("omsluitingLinksMm")}; delete next[optie.mmKeyLinks]; form.setValue("omsluitingLinksMm", next);
                                 }
                               }}
                             />
@@ -358,15 +369,13 @@ const FormIntakeVLOSPage = () => {
                               {optie.label}
                             </Label>
                           </div>
-                          {optie.needsMm && omsluitingLinks[optie.fullKeyLinks] && (
+                          {optie.needsMm && form.watch("omsluitingLinks")[optie.fullKeyLinks] && (
                             <Input
                               type="number"
                               placeholder="mm"
-                              value={omsluitingLinksMm[optie.mmKeyLinks] || ''}
+                              value={form.watch("omsluitingLinksMm")[optie.mmKeyLinks] || ''}
                               onChange={(e) =>
-                                setOmsluitingLinksMm({
-                                  ...omsluitingLinksMm,
-                                  [optie.mmKeyLinks]: e.target.value,
+                                form.setValue("omsluitingLinksMm", {...form.getValues("omsluitingLinksMm"), [optie.mmKeyLinks]: e.target.value,
                                 })
                               }
                               className="w-20"
@@ -384,21 +393,14 @@ const FormIntakeVLOSPage = () => {
                           <div className="flex items-center space-x-2 flex-1">
                             <Checkbox
                               id={`encl-right-${optie.key}`}
-                              checked={omsluitingRechts[optie.fullKeyRechts] || false}
+                              checked={form.watch("omsluitingRechts")[optie.fullKeyRechts] || false}
                               onCheckedChange={(checked) => {
-                                setOmsluitingRechts({
-                                  ...omsluitingRechts,
-                                  [optie.fullKeyRechts]: !!checked,
-                                });
+                                form.setValue("omsluitingRechts", {...form.getValues("omsluitingRechts"), [optie.fullKeyRechts]: !!checked});
                                 if (checked && optie.needsMm && optie.defaultMm) {
-                                  setOmsluitingRechtsMm({
-                                    ...omsluitingRechtsMm,
-                                    [optie.mmKeyRechts]: optie.defaultMm,
+                                  form.setValue("omsluitingRechtsMm", {...form.getValues("omsluitingRechtsMm"), [optie.mmKeyRechts]: optie.defaultMm,
                                   });
                                 } else if (!checked) {
-                                  const next = { ...omsluitingRechtsMm };
-                                  delete next[optie.mmKeyRechts];
-                                  setOmsluitingRechtsMm(next);
+                                  const next = {...form.getValues("omsluitingRechtsMm")}; delete next[optie.mmKeyRechts]; form.setValue("omsluitingRechtsMm", next);
                                 }
                               }}
                             />
@@ -406,15 +408,13 @@ const FormIntakeVLOSPage = () => {
                               {optie.label}
                             </Label>
                           </div>
-                          {optie.needsMm && omsluitingRechts[optie.fullKeyRechts] && (
+                          {optie.needsMm && form.watch("omsluitingRechts")[optie.fullKeyRechts] && (
                             <Input
                               type="number"
                               placeholder="mm"
-                              value={omsluitingRechtsMm[optie.mmKeyRechts] || ''}
+                              value={form.watch("omsluitingRechtsMm")[optie.mmKeyRechts] || ''}
                               onChange={(e) =>
-                                setOmsluitingRechtsMm({
-                                  ...omsluitingRechtsMm,
-                                  [optie.mmKeyRechts]: e.target.value,
+                                form.setValue("omsluitingRechtsMm", {...form.getValues("omsluitingRechtsMm"), [optie.mmKeyRechts]: e.target.value,
                                 })
                               }
                               className="w-20"
@@ -440,7 +440,7 @@ const FormIntakeVLOSPage = () => {
                       <Label className="text-sm font-semibold">{t('left')}</Label>
                       <RadioGroup
                         value={boolToString(supplementschoringLinksEnabled)}
-                        onValueChange={(v) => setSupplementschoringLinksEnabled(stringToBool(v))}
+                        onValueChange={(v) => form.setValue("supplementschoringLinksEnabled", stringToBool(v))}
                       >
                         <div className="flex gap-4 mb-3">
                           {JA_NEE_OPTIES.map(opt => (
@@ -454,7 +454,7 @@ const FormIntakeVLOSPage = () => {
                         </div>
                       </RadioGroup>
                       {supplementschoringLinksEnabled && (
-                        <Select value={supplementschoringLinksType} onValueChange={setSupplementschoringLinksType}>
+                        <Select value={form.watch("supplementschoringLinksType")} onValueChange={(v) => form.setValue("supplementschoringLinksType", v)}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
@@ -472,7 +472,7 @@ const FormIntakeVLOSPage = () => {
                       <Label className="text-sm font-semibold">{t('right')}</Label>
                       <RadioGroup
                         value={boolToString(supplementschoringRechtsEnabled)}
-                        onValueChange={(v) => setSupplementschoringRechtsEnabled(stringToBool(v))}
+                        onValueChange={(v) => form.setValue("supplementschoringRechtsEnabled", stringToBool(v))}
                       >
                         <div className="flex gap-4 mb-3">
                           {JA_NEE_OPTIES.map(opt => (
@@ -486,7 +486,7 @@ const FormIntakeVLOSPage = () => {
                         </div>
                       </RadioGroup>
                       {supplementschoringRechtsEnabled && (
-                        <Select value={supplementschoringRechtsType} onValueChange={setSupplementschoringRechtsType}>
+                        <Select value={form.watch("supplementschoringRechtsType")} onValueChange={(v) => form.setValue("supplementschoringRechtsType", v)}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
@@ -511,7 +511,7 @@ const FormIntakeVLOSPage = () => {
               <CardContent className="space-y-4">
                 <RadioGroup
                   value={boolToString(zoolverstijvingEnabled)}
-                  onValueChange={(v) => setZoolverstijvingEnabled(stringToBool(v))}
+                  onValueChange={(v) => form.setValue("zoolverstijvingEnabled", stringToBool(v))}
                 >
                   <div className="flex gap-6">
                     {JA_NEE_OPTIES.map(opt => (
@@ -530,8 +530,8 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="stiff-left"
-                          checked={zoolverstijvingLinks}
-                          onCheckedChange={(checked) => setZoolverstijvingLinks(!!checked)}
+                          checked={form.watch("zoolverstijvingLinks")}
+                          onCheckedChange={(checked) => form.setValue("zoolverstijvingLinks", !!checked)}
                         />
                         <Label htmlFor="stiff-left" className="font-normal cursor-pointer">{t('left')}</Label>
                       </div>
@@ -540,8 +540,8 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="stiff-right"
-                          checked={zoolverstijvingRechts}
-                          onCheckedChange={(checked) => setZoolverstijvingRechts(!!checked)}
+                          checked={form.watch("zoolverstijvingRechts")}
+                          onCheckedChange={(checked) => form.setValue("zoolverstijvingRechts", !!checked)}
                         />
                         <Label htmlFor="stiff-right" className="font-normal cursor-pointer">{t('right')}</Label>
                       </div>
@@ -559,7 +559,7 @@ const FormIntakeVLOSPage = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label>{t('closureType')}</Label>
-                  <RadioGroup value={sluitingType} onValueChange={setSluitingType}>
+                  <RadioGroup value={form.watch("sluitingType")} onValueChange={(v) => form.setValue("sluitingType", v)}>
                     <div className="grid grid-cols-2 gap-3">
                       {SLUITING_OPTIES.map(opt => (
                         <div key={opt.value} className="flex items-center space-x-2">
@@ -577,8 +577,8 @@ const FormIntakeVLOSPage = () => {
                   <Label htmlFor="insert-point">{t('insertPoint')}</Label>
                   <Input
                     id="insert-point"
-                    value={inschotpunt}
-                    onChange={(e) => setInschotpunt(e.target.value)}
+                    value={form.watch("inschotpunt")}
+                    onChange={(e) => form.setValue("inschotpunt", e.target.value)}
                     placeholder={t('insertPointPlaceholder')}
                   />
                 </div>
@@ -587,8 +587,8 @@ const FormIntakeVLOSPage = () => {
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="tongue-pad"
-                      checked={tongpolsterEnabled}
-                      onCheckedChange={(checked) => setTongpolsterEnabled(!!checked)}
+                      checked={form.watch("tongpolsterEnabled")}
+                      onCheckedChange={(checked) => form.setValue("tongpolsterEnabled", !!checked)}
                     />
                     <Label htmlFor="tongue-pad" className="font-normal cursor-pointer">{t('tonguePadding')}</Label>
                   </div>
@@ -596,8 +596,8 @@ const FormIntakeVLOSPage = () => {
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="tongue-stitch"
-                      checked={tongVaststikkenEnabled}
-                      onCheckedChange={(checked) => setTongVaststikkenEnabled(!!checked)}
+                      checked={form.watch("tongVaststikkenEnabled")}
+                      onCheckedChange={(checked) => form.setValue("tongVaststikkenEnabled", !!checked)}
                     />
                     <Label htmlFor="tongue-stitch" className="font-normal cursor-pointer">{t('tongueStitching')}</Label>
                   </div>
@@ -617,7 +617,7 @@ const FormIntakeVLOSPage = () => {
                       <Label className="text-sm font-semibold">{t('left')}</Label>
                       <div className="space-y-2">
                         <Label className="text-sm">{t('heelType')}</Label>
-                        <RadioGroup value={haksoortLinks} onValueChange={setHaksoortLinks}>
+                        <RadioGroup value={form.watch("haksoortLinks")} onValueChange={(v) => form.setValue("haksoortLinks", v)}>
                           <div className="space-y-2">
                             {HAKSOORT_OPTIES.map(opt => (
                               <div key={opt.value} className="flex items-center space-x-2">
@@ -635,8 +635,8 @@ const FormIntakeVLOSPage = () => {
                         <Input
                           id="heel-height-left"
                           type="number"
-                          value={hakhoogteLinks}
-                          onChange={(e) => setHakhoogteLinks(e.target.value)}
+                          value={form.watch("hakhoogteLinks")}
+                          onChange={(e) => form.setValue("hakhoogteLinks", e.target.value)}
                           placeholder="cm"
                         />
                       </div>
@@ -647,7 +647,7 @@ const FormIntakeVLOSPage = () => {
                       <Label className="text-sm font-semibold">{t('right')}</Label>
                       <div className="space-y-2">
                         <Label className="text-sm">{t('heelType')}</Label>
-                        <RadioGroup value={haksoortRechts} onValueChange={setHaksoortRechts}>
+                        <RadioGroup value={form.watch("haksoortRechts")} onValueChange={(v) => form.setValue("haksoortRechts", v)}>
                           <div className="space-y-2">
                             {HAKSOORT_OPTIES.map(opt => (
                               <div key={opt.value} className="flex items-center space-x-2">
@@ -665,8 +665,8 @@ const FormIntakeVLOSPage = () => {
                         <Input
                           id="heel-height-right"
                           type="number"
-                          value={hakhoogteRechts}
-                          onChange={(e) => setHakhoogteRechts(e.target.value)}
+                          value={form.watch("hakhoogteRechts")}
+                          onChange={(e) => form.setValue("hakhoogteRechts", e.target.value)}
                           placeholder="cm"
                         />
                       </div>
@@ -691,7 +691,7 @@ const FormIntakeVLOSPage = () => {
                         <Label className="text-sm">{t('left')}</Label>
                         <RadioGroup
                           value={boolToString(hakschoringLinksEnabled)}
-                          onValueChange={(v) => setHakschoringLinksEnabled(stringToBool(v))}
+                          onValueChange={(v) => form.setValue("hakschoringLinksEnabled", stringToBool(v))}
                         >
                           <div className="flex gap-4 mb-3">
                             {JA_NEE_OPTIES.map(opt => (
@@ -705,7 +705,7 @@ const FormIntakeVLOSPage = () => {
                           </div>
                         </RadioGroup>
                         {hakschoringLinksEnabled && (
-                          <Select value={hakschoringLinksType} onValueChange={setHakschoringLinksType}>
+                          <Select value={form.watch("hakschoringLinksType")} onValueChange={(v) => form.setValue("hakschoringLinksType", v)}>
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
@@ -723,7 +723,7 @@ const FormIntakeVLOSPage = () => {
                         <Label className="text-sm">{t('right')}</Label>
                         <RadioGroup
                           value={boolToString(hakschoringRechtsEnabled)}
-                          onValueChange={(v) => setHakschoringRechtsEnabled(stringToBool(v))}
+                          onValueChange={(v) => form.setValue("hakschoringRechtsEnabled", stringToBool(v))}
                         >
                           <div className="flex gap-4">
                             {JA_NEE_OPTIES.map(opt => (
@@ -737,7 +737,7 @@ const FormIntakeVLOSPage = () => {
                           </div>
                         </RadioGroup>
                         {hakschoringRechtsEnabled && (
-                          <Select value={hakschoringRechtsType} onValueChange={setHakschoringRechtsType}>
+                          <Select value={form.watch("hakschoringRechtsType")} onValueChange={(v) => form.setValue("hakschoringRechtsType", v)}>
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
@@ -764,7 +764,7 @@ const FormIntakeVLOSPage = () => {
                         <Label className="text-sm">{t('left')}</Label>
                         <RadioGroup
                           value={boolToString(ezelsoorLinksEnabled)}
-                          onValueChange={(v) => setEzelsoorLinksEnabled(stringToBool(v))}
+                          onValueChange={(v) => form.setValue("ezelsoorLinksEnabled", stringToBool(v))}
                         >
                           <div className="flex gap-4">
                             {JA_NEE_OPTIES.map(opt => (
@@ -778,7 +778,7 @@ const FormIntakeVLOSPage = () => {
                           </div>
                         </RadioGroup>
                         {ezelsoorLinksEnabled && (
-                          <Select value={ezelsoorLinksType} onValueChange={setEzelsoorLinksType}>
+                          <Select value={form.watch("ezelsoorLinksType")} onValueChange={(v) => form.setValue("ezelsoorLinksType", v)}>
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
@@ -796,7 +796,7 @@ const FormIntakeVLOSPage = () => {
                         <Label className="text-sm">{t('right')}</Label>
                         <RadioGroup
                           value={boolToString(ezelsoorRechtsEnabled)}
-                          onValueChange={(v) => setEzelsoorRechtsEnabled(stringToBool(v))}
+                          onValueChange={(v) => form.setValue("ezelsoorRechtsEnabled", stringToBool(v))}
                         >
                           <div className="flex gap-4">
                             {JA_NEE_OPTIES.map(opt => (
@@ -810,7 +810,7 @@ const FormIntakeVLOSPage = () => {
                           </div>
                         </RadioGroup>
                         {ezelsoorRechtsEnabled && (
-                          <Select value={ezelsoorRechtsType} onValueChange={setEzelsoorRechtsType}>
+                          <Select value={form.watch("ezelsoorRechtsType")} onValueChange={(v) => form.setValue("ezelsoorRechtsType", v)}>
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
@@ -836,8 +836,8 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-left"
-                          checked={amputatieLinksEnabled}
-                          onCheckedChange={(checked) => setAmputatieLinksEnabled(!!checked)}
+                          checked={form.watch("amputatieLinksEnabled")}
+                          onCheckedChange={(checked) => form.setValue("amputatieLinksEnabled", !!checked)}
                         />
                         <Label htmlFor="amp-left" className="font-normal cursor-pointer">{t('left')}</Label>
                       </div>
@@ -846,8 +846,8 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-right"
-                          checked={amputatieRechtsEnabled}
-                          onCheckedChange={(checked) => setAmputatieRechtsEnabled(!!checked)}
+                          checked={form.watch("amputatieRechtsEnabled")}
+                          onCheckedChange={(checked) => form.setValue("amputatieRechtsEnabled", !!checked)}
                         />
                         <Label htmlFor="amp-right" className="font-normal cursor-pointer">{t('right')}</Label>
                       </div>
@@ -869,8 +869,8 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="round-left"
-                          checked={hakafrondingLinksEnabled}
-                          onCheckedChange={(checked) => setHakafrondingLinksEnabled(!!checked)}
+                          checked={form.watch("hakafrondingLinksEnabled")}
+                          onCheckedChange={(checked) => form.setValue("hakafrondingLinksEnabled", !!checked)}
                         />
                         <Label htmlFor="round-left" className="font-normal cursor-pointer">{t('left')}</Label>
                       </div>
@@ -881,8 +881,8 @@ const FormIntakeVLOSPage = () => {
                             <Input
                               id="round-left-height"
                               type="number"
-                              value={hakafrondingLinksHoogte}
-                              onChange={(e) => setHakafrondingLinksHoogte(e.target.value)}
+                              value={form.watch("hakafrondingLinksHoogte")}
+                              onChange={(e) => form.setValue("hakafrondingLinksHoogte", e.target.value)}
                             />
                           </div>
                           <div className="space-y-2">
@@ -890,8 +890,8 @@ const FormIntakeVLOSPage = () => {
                             <Input
                               id="round-left-length"
                               type="number"
-                              value={hakafrondingLinksLengte}
-                              onChange={(e) => setHakafrondingLinksLengte(e.target.value)}
+                              value={form.watch("hakafrondingLinksLengte")}
+                              onChange={(e) => form.setValue("hakafrondingLinksLengte", e.target.value)}
                             />
                           </div>
                         </div>
@@ -903,8 +903,8 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="round-right"
-                          checked={hakafrondingRechtsEnabled}
-                          onCheckedChange={(checked) => setHakafrondingRechtsEnabled(!!checked)}
+                          checked={form.watch("hakafrondingRechtsEnabled")}
+                          onCheckedChange={(checked) => form.setValue("hakafrondingRechtsEnabled", !!checked)}
                         />
                         <Label htmlFor="round-right" className="font-normal cursor-pointer">{t('right')}</Label>
                       </div>
@@ -915,8 +915,8 @@ const FormIntakeVLOSPage = () => {
                             <Input
                               id="round-right-height"
                               type="number"
-                              value={hakafrondingRechtsHoogte}
-                              onChange={(e) => setHakafrondingRechtsHoogte(e.target.value)}
+                              value={form.watch("hakafrondingRechtsHoogte")}
+                              onChange={(e) => form.setValue("hakafrondingRechtsHoogte", e.target.value)}
                             />
                           </div>
                           <div className="space-y-2">
@@ -924,8 +924,8 @@ const FormIntakeVLOSPage = () => {
                             <Input
                               id="round-right-length"
                               type="number"
-                              value={hakafrondingRechtsLengte}
-                              onChange={(e) => setHakafrondingRechtsLengte(e.target.value)}
+                              value={form.watch("hakafrondingRechtsLengte")}
+                              onChange={(e) => form.setValue("hakafrondingRechtsLengte", e.target.value)}
                             />
                           </div>
                         </div>
@@ -942,7 +942,7 @@ const FormIntakeVLOSPage = () => {
                 <CardTitle>{t('walkingSole')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={loopzoolType} onValueChange={setLoopzoolType}>
+                <RadioGroup value={form.watch("loopzoolType")} onValueChange={(v) => form.setValue("loopzoolType", v)}>
                   <div className="grid grid-cols-2 gap-3">
                     {LOOPZOOL_OPTIES.map(opt => (
                       <div key={opt.value} className="flex items-center space-x-2">
@@ -965,8 +965,8 @@ const FormIntakeVLOSPage = () => {
               <CardContent>
                 <Textarea
                   placeholder={t('specialNotesPlaceholder')}
-                  value={bijzonderheden}
-                  onChange={(e) => setBijzonderheden(e.target.value)}
+                  value={form.watch("bijzonderheden")}
+                  onChange={(e) => form.setValue("bijzonderheden", e.target.value)}
                   rows={5}
                   className="resize-none"
                 />
@@ -983,7 +983,8 @@ const FormIntakeVLOSPage = () => {
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </FormFooter>
-          </form>
+            </form>
+          </Form>
         </FormSection>
       </div>
     </BaseLayout>
