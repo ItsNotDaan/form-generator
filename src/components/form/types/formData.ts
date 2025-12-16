@@ -127,8 +127,35 @@ export interface IntakeVLOSData {
   bijzonderheden?: string;
 }
 
-// OSA intake data mirrors VLOS structure
-export type IntakeOSAData = IntakeVLOSData;
+// OSA intake data extends VLOS structure with additional fields
+export interface IntakeOSAData extends IntakeVLOSData {
+  // Functieonderzoek - Ziektebeelden
+  ziektebeelden?: Record<string, boolean>;
+  
+  // Functieonderzoek - Loopafstand hulpmiddelen
+  loopafstandAids?: Record<string, boolean>;
+  
+  // Functieonderzoek - Pijnbeleving (0-10)
+  painPerception?: string;
+  
+  // Functieonderzoek - Inspectie voeten
+  footInspection?: Record<string, boolean>;
+  
+  // Functieonderzoek - Beenlengte verschil
+  legLengthDifferenceLeft?: string;
+  legLengthDifferenceRight?: string;
+  
+  // Digitaal section
+  digitalEnabled?: boolean;
+  heelLiftLeft?: string;
+  heelLiftRight?: string;
+  readingHeight?: string; // 15, 20, or 25 cm
+  mtp1DeepLeft?: string; // 4 or 8 cm
+  mtp1DeepRight?: string; // 4 or 8 cm
+  clawToesEnabled?: boolean;
+  scannedWithFoil?: boolean;
+  digitalInstructions?: string;
+}
 
 export interface IntakePulmanData {
   // Description/pair type
@@ -336,4 +363,17 @@ export interface FormSubmissionData {
   intakeOSB?: IntakeOSBData;
   intakeOVAC?: IntakeOVACData;
   intakeSteunzolen?: IntakeSteunzolenData;
+}
+
+// Check Foliepas data
+export interface CheckFoliepasData {
+  // Reading corrections
+  readingCorrectionAfterFoilFit?: string;
+  readingCorrectionAfterLiningShoe?: string;
+  
+  // Enclosure/padding - same structure as VLOS
+  omsluitingLinks?: Record<string, boolean>;
+  omsluitingRechts?: Record<string, boolean>;
+  omsluitingLinksMm?: Record<string, string>;
+  omsluitingRechtsMm?: Record<string, string>;
 }

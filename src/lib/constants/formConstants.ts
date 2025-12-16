@@ -413,3 +413,53 @@ export const STEUNZOLEN_PRIJS_OPTIES = [
   {label: 'priceWithin3Months', value: 195},
   {label: 'priceTalonette', value: 29},
 ];
+
+// OSA Functieonderzoek - Ziektebeelden (Medical Conditions)
+export const ZIEKTEBEELDEN_OPTIES = [
+  {key: 'diabetes', label: 'diabetes', translationKey: 'diabetes'},
+  {key: 'polyNeuropathie', label: 'polyNeuropathie', translationKey: 'polyNeuropathie'},
+  {key: 'reuma', label: 'reuma', translationKey: 'reuma'},
+  {key: 'ms', label: 'ms', translationKey: 'ms'},
+  {key: 'hmsn', label: 'hmsn', translationKey: 'hmsn'},
+  {key: 'degeneratie', label: 'degeneratie', translationKey: 'degeneratie'},
+  {key: 'artrose', label: 'artrose', translationKey: 'artrose'},
+];
+
+// OSA Functieonderzoek - Loopafstand hulpmiddelen (Walking Distance Aids)
+export const LOOPAFSTAND_OPTIES = [
+  {key: 'steunzolen', label: 'steunzolen', translationKey: 'supportSoles'},
+  {key: 'rollator', label: 'rollator', translationKey: 'rollator'},
+  {key: 'stok', label: 'stok', translationKey: 'cane'},
+  {key: 'elKousen', label: 'elKousen', translationKey: 'compressionStockings'},
+  {key: 'knieBrace', label: 'knieBrace', translationKey: 'kneeBrace'},
+  {key: 'fysio', label: 'fysio', translationKey: 'physiotherapy'},
+  {key: 'pedicure', label: 'pedicure', translationKey: 'pedicure'},
+];
+
+// OSA Functieonderzoek - Inspectie voeten (Foot Inspection)
+export const INSPECTIE_VOETEN_OPTIES = [
+  {key: 'oedeem', label: 'oedeem', translationKey: 'edema'},
+  {key: 'wisselend', label: 'wisselend', translationKey: 'variable'},
+  {key: 'structureel', label: 'structureel', translationKey: 'structural'},
+  {key: 'dunneKwetsbareHuid', label: 'dunneKwetsbareHuid', translationKey: 'thinFragileSkin'},
+  {key: 'drogeHuid', label: 'drogeHuid', translationKey: 'drySkin'},
+  {key: 'doorbloedingsstoornis', label: 'doorbloedingsstoornis', translationKey: 'circulationDisorder'},
+  {key: 'halluxValgus', label: 'halluxValgus', translationKey: 'halluxValgus'},
+  {key: 'bunion', label: 'bunion', translationKey: 'bunion'},
+  {key: 'pesPlanoValgus', label: 'pesPlanoValgus', translationKey: 'pesPlanoValgus'},
+  {key: 'pesCavo', label: 'pesCavo', translationKey: 'pesCavo'},
+  {key: 'klauwtenen', label: 'klauwtenen', translationKey: 'clawToes'},
+];
+
+// OSA Digitaal - Leesthoogte options
+export const LEESTHOOGTE_OPTIES = [
+  {label: '15cm', value: '15'},
+  {label: '20cm', value: '20'},
+  {label: '25cm', value: '25'},
+];
+
+// OSA Digitaal - MTP1 diep options
+export const MTP1_DIEP_OPTIES = [
+  {label: '4cm', value: '4'},
+  {label: '8cm', value: '8'},
+];

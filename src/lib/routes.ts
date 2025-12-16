@@ -17,4 +17,5 @@ export const Routes = {
   form_intake_osb: '/intake-osb',
   form_intake_ovac: '/intake-ovac',
   form_intake_steunzolen: '/intake-steunzolen',
+  form_check_foliepas: '/check-foliepas',
 };

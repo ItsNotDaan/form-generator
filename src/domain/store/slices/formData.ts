@@ -8,6 +8,7 @@ import {
   IntakeOSBData,
   IntakeOVACData,
   IntakeSteunzolenData,
+  CheckFoliepasData,
 } from '@/components/form/types/formData';
 
 export interface FormDataState {
@@ -19,6 +20,7 @@ export interface FormDataState {
   intakeOSB: IntakeOSBData | null;
   intakeSteunzolen: IntakeSteunzolenData | null;
   intakeOVAC: IntakeOVACData | null;
+  checkFoliepas: CheckFoliepasData | null;
 }
 
 const initialState: FormDataState = {
@@ -30,6 +32,7 @@ const initialState: FormDataState = {
   intakeOSB: null,
   intakeSteunzolen: null,
   intakeOVAC: null,
+  checkFoliepas: null,
 };
 
 const formDataSlice = createSlice({
@@ -66,6 +69,12 @@ const formDataSlice = createSlice({
     ) => {
       state.intakeSteunzolen = action.payload;
     },
+    setCheckFoliepasData: (
+      state,
+      action: PayloadAction<CheckFoliepasData>
+    ) => {
+      state.checkFoliepas = action.payload;
+    },
     clearFormData: state => {
       state.client = null;
       state.intakeVLOS = null;
@@ -75,6 +84,7 @@ const formDataSlice = createSlice({
       state.intakeOSB = null;
       state.intakeSteunzolen = null;
       state.intakeOVAC = null;
+      state.checkFoliepas = null;
     },
     clearIntakeForms: state => {
       state.intakeVLOS = null;
@@ -84,6 +94,7 @@ const formDataSlice = createSlice({
       state.intakeOSB = null;
       state.intakeSteunzolen = null;
       state.intakeOVAC = null;
+      state.checkFoliepas = null;
     },
   },
 });
@@ -97,6 +108,7 @@ export const {
   setIntakeOSBData,
   setIntakeOVACData,
   setIntakeSteunzolenData,
+  setCheckFoliepasData,
   clearFormData,
   clearIntakeForms,
 } = formDataSlice.actions;
