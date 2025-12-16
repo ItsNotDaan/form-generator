@@ -56,8 +56,8 @@ export const ZIJDE_OPTIES = [
 // Generieke ja/nee gebruikt in formulieren
 export type JaNee = 'ja' | 'nee';
 export const JA_NEE_OPTIES = [
-  { label: 'yes', value: 'ja' },
-  { label: 'no', value: 'nee' },
+  { label: 'yes', value: 'ja', translationKey: 'yes' },
+  { label: 'no', value: 'nee', translationKey: 'no' },
 ];
 
 // Openstand schacht opties (waarden in cm)
@@ -73,8 +73,8 @@ export const OPENSTAND_OPTIES = [
 // Supplement types
 export type SupplementType = 'lateral' | 'medial';
 export const SUPPLEMENT_TYPE_OPTIES = [
-  { label: 'lateral', value: 'lateral' },
-  { label: 'medial', value: 'medial' },
+  { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
+  { label: 'medial', value: 'medial', translationKey: 'medial' },
 ];
 
 // Haksoort opties
@@ -119,15 +119,15 @@ export const SLUITING_OPTIES = [
 // Hakschoring types
 export type HakschoringType = 'medial' | 'lateral';
 export const HAKSCHORING_TYPE_OPTIES = [
-  { label: 'medial', value: 'medial' },
-  { label: 'lateral', value: 'lateral' },
+  { label: 'medial', value: 'medial', translationKey: 'medial' },
+  { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
 ];
 
 // Ezelsoor types
 export type EzelsoorType = 'medial' | 'lateral';
 export const EZELSOOR_TYPE_OPTIES = [
-  { label: 'medial', value: 'medial' },
-  { label: 'lateral', value: 'lateral' },
+  { label: 'medial', value: 'medial', translationKey: 'medial' },
+  { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
 ];
 
 // Omsluiting
@@ -221,10 +221,10 @@ export type PaartypeOptie =
   | 'Reserve paar'
   | 'Privé paar';
 export const PAARTYPE_OPTIES = [
-  { label: 'Eerste paar', value: 'Eerste paar' },
-  { label: 'Herhalings paar', value: 'Herhalings paar' },
-  { label: 'Reserve paar', value: 'Reserve paar' },
-  { label: 'Privé paar', value: 'Privé paar' },
+  { label: 'firstPair', value: 'Eerste paar' },
+  { label: 'repeatPair', value: 'Herhalings paar' },
+  { label: 'sparePair', value: 'Reserve paar' },
+  { label: 'privatePair', value: 'Privé paar' },
 ];
 
 // Doel opties (GEEN L/R)

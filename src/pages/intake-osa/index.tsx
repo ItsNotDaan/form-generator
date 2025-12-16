@@ -132,8 +132,8 @@ const FormIntakeOSAPage = () => {
   const showRechts = side === 'right' || side === 'both';
 
   // Helper functions
-  const boolToString = (value: boolean): string => (value ? 'yes' : 'no');
-  const stringToBool = (value: string): boolean => value === 'yes';
+  const boolToString = (value: boolean): string => (value ? 'ja' : 'nee');
+  const stringToBool = (value: string): boolean => value === 'ja';
 
   const getMissingFields = (): Array<{ fieldName: string; fieldId: string }> => {
     return []; // No required fields for OSA
@@ -223,7 +223,7 @@ const FormIntakeOSAPage = () => {
                     <div key={option.value} className="flex items-center space-x-2">
                       <RadioGroupItem value={option.value} id={`paar-${option.value}`} />
                       <Label htmlFor={`paar-${option.value}`} className="font-normal cursor-pointer">
-                        {t(option.value.toLowerCase().replace(/ /g, ''))}
+                        {t(option.label)}
                       </Label>
                     </div>
                   ))}
@@ -319,7 +319,7 @@ const FormIntakeOSAPage = () => {
               <CardTitle>{t('enclosure')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className={`grid gap-6 ${showLinks && showRechts ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {showLinks && (
                   <div className="space-y-3">
                     <Label className="text-sm font-semibold">{t('left')}</Label>
@@ -369,7 +369,7 @@ const FormIntakeOSAPage = () => {
                   </div>
                 )}
                 {showRechts && (
-                  <div className={`space-y-3 ${showLinks ? 'md:border-l md:pl-6' : ''}`}>
+                  <div className="space-y-3">
                     <Label className="text-sm font-semibold">{t('right')}</Label>
                     {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                       <div key={optie.key} className="flex items-center gap-3">
@@ -426,7 +426,7 @@ const FormIntakeOSAPage = () => {
               <CardTitle>{t('supplementSupport')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className={`grid gap-6 ${showLinks && showRechts ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {showLinks && (
                   <div className="space-y-3">
                     <Label className="text-sm font-semibold">{t('left')}</Label>
@@ -439,7 +439,7 @@ const FormIntakeOSAPage = () => {
                           <div key={opt.value} className="flex items-center space-x-2">
                             <RadioGroupItem value={opt.value} id={`supp-left-${opt.value}`} />
                             <Label htmlFor={`supp-left-${opt.value}`} className="font-normal cursor-pointer">
-                              {t(opt.value)}
+                              {t(opt.label)}
                             </Label>
                           </div>
                         ))}
@@ -452,7 +452,7 @@ const FormIntakeOSAPage = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {SUPPLEMENT_TYPE_OPTIES.map(opt => (
-                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                            <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -460,7 +460,7 @@ const FormIntakeOSAPage = () => {
                   </div>
                 )}
                 {showRechts && (
-                  <div className={`space-y-3 ${showLinks ? 'md:border-l md:pl-6' : ''}`}>
+                  <div className="space-y-3">
                     <Label className="text-sm font-semibold">{t('right')}</Label>
                     <RadioGroup
                       value={boolToString(supplementschoringRechtsEnabled)}
@@ -471,7 +471,7 @@ const FormIntakeOSAPage = () => {
                           <div key={opt.value} className="flex items-center space-x-2">
                             <RadioGroupItem value={opt.value} id={`supp-right-${opt.value}`} />
                             <Label htmlFor={`supp-right-${opt.value}`} className="font-normal cursor-pointer">
-                              {t(opt.value)}
+                              {t(opt.label)}
                             </Label>
                           </div>
                         ))}
@@ -484,7 +484,7 @@ const FormIntakeOSAPage = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {SUPPLEMENT_TYPE_OPTIES.map(opt => (
-                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                            <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -510,7 +510,7 @@ const FormIntakeOSAPage = () => {
                     <div key={opt.value} className="flex items-center space-x-2">
                       <RadioGroupItem value={opt.value} id={`stiff-${opt.value}`} />
                       <Label htmlFor={`stiff-${opt.value}`} className="font-normal cursor-pointer">
-                        {t(opt.value)}
+                        {t(opt.label)}
                       </Label>
                     </div>
                   ))}
@@ -602,7 +602,7 @@ const FormIntakeOSAPage = () => {
               <CardTitle>{t('heelTypeAndHeight')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className={`grid gap-6 ${showLinks && showRechts ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {showLinks && (
                   <div className="space-y-4">
                     <Label className="text-sm font-semibold">{t('left')}</Label>
@@ -634,7 +634,7 @@ const FormIntakeOSAPage = () => {
                   </div>
                 )}
                 {showRechts && (
-                  <div className={`space-y-4 ${showLinks ? 'md:border-l md:pl-6' : ''}`}>
+                  <div className="space-y-4">
                     <Label className="text-sm font-semibold">{t('right')}</Label>
                     <div className="space-y-2">
                       <Label className="text-sm">{t('heelType')}</Label>
@@ -676,7 +676,7 @@ const FormIntakeOSAPage = () => {
               {/* Heel Slant */}
               <div>
                 <Label className="text-base font-semibold mb-3 block">{t('heelSlant')}</Label>
-                <div className={`grid gap-6 ${showLinks && showRechts ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {showLinks && (
                     <div className="space-y-3">
                       <Label className="text-sm">{t('left')}</Label>
@@ -689,7 +689,7 @@ const FormIntakeOSAPage = () => {
                             <div key={opt.value} className="flex items-center space-x-2">
                               <RadioGroupItem value={opt.value} id={`slant-left-${opt.value}`} />
                               <Label htmlFor={`slant-left-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.value)}
+                                {t(opt.label)}
                               </Label>
                             </div>
                           ))}
@@ -702,7 +702,7 @@ const FormIntakeOSAPage = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -710,7 +710,7 @@ const FormIntakeOSAPage = () => {
                     </div>
                   )}
                   {showRechts && (
-                    <div className={`space-y-3 ${showLinks ? 'md:border-l md:pl-6' : ''}`}>
+                    <div className="space-y-3">
                       <Label className="text-sm">{t('right')}</Label>
                       <RadioGroup
                         value={boolToString(hakschoringRechtsEnabled)}
@@ -721,7 +721,7 @@ const FormIntakeOSAPage = () => {
                             <div key={opt.value} className="flex items-center space-x-2">
                               <RadioGroupItem value={opt.value} id={`slant-right-${opt.value}`} />
                               <Label htmlFor={`slant-right-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.value)}
+                                {t(opt.label)}
                               </Label>
                             </div>
                           ))}
@@ -734,7 +734,7 @@ const FormIntakeOSAPage = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -749,7 +749,7 @@ const FormIntakeOSAPage = () => {
               {/* Donkey Ear */}
               <div>
                 <Label className="text-base font-semibold mb-3 block">{t('donkeyEar')}</Label>
-                <div className={`grid gap-6 ${showLinks && showRechts ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {showLinks && (
                     <div className="space-y-3">
                       <Label className="text-sm">{t('left')}</Label>
@@ -762,7 +762,7 @@ const FormIntakeOSAPage = () => {
                             <div key={opt.value} className="flex items-center space-x-2">
                               <RadioGroupItem value={opt.value} id={`donkey-left-${opt.value}`} />
                               <Label htmlFor={`donkey-left-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.value)}
+                                {t(opt.label)}
                               </Label>
                             </div>
                           ))}
@@ -775,7 +775,7 @@ const FormIntakeOSAPage = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {EZELSOOR_TYPE_OPTIES.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -783,7 +783,7 @@ const FormIntakeOSAPage = () => {
                     </div>
                   )}
                   {showRechts && (
-                    <div className={`space-y-3 ${showLinks ? 'md:border-l md:pl-6' : ''}`}>
+                    <div className="space-y-3">
                       <Label className="text-sm">{t('right')}</Label>
                       <RadioGroup
                         value={boolToString(ezelsoorRechtsEnabled)}
@@ -794,7 +794,7 @@ const FormIntakeOSAPage = () => {
                             <div key={opt.value} className="flex items-center space-x-2">
                               <RadioGroupItem value={opt.value} id={`donkey-right-${opt.value}`} />
                               <Label htmlFor={`donkey-right-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.value)}
+                                {t(opt.label)}
                               </Label>
                             </div>
                           ))}
@@ -807,7 +807,7 @@ const FormIntakeOSAPage = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {EZELSOOR_TYPE_OPTIES.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -854,7 +854,7 @@ const FormIntakeOSAPage = () => {
               <CardTitle>{t('heelRounding')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className={`grid gap-6 ${showLinks && showRechts ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {showLinks && (
                   <div className="space-y-4">
                     <div className="flex items-center space-x-2">
@@ -890,7 +890,7 @@ const FormIntakeOSAPage = () => {
                   </div>
                 )}
                 {showRechts && (
-                  <div className={`space-y-4 ${showLinks ? 'md:border-l md:pl-6' : ''}`}>
+                  <div className="space-y-4">
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="round-right"
@@ -969,7 +969,7 @@ const FormIntakeOSAPage = () => {
             <Button type="button" variant="outline" onClick={() => router.back()}>
               {t('cancel')}
             </Button>
-            <Button type="submit" size="lg" className="min-w-[200px]">
+            <Button type="submit" size="lg" className="min-w-50">
               <span className="mr-2">{t('saveAndContinue')}</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
