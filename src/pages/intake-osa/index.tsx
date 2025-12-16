@@ -29,7 +29,7 @@ import {
 } from '@/lib/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeOSAData, setClientData } from '@/domain/store/slices/formData';
-import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
+
 import { ChevronRight } from 'lucide-react';
 
 const FormIntakeOSAPage = () => {
@@ -144,7 +144,13 @@ const FormIntakeOSAPage = () => {
 
     const missingFields = getMissingFields();
     if (missingFields.length > 0) {
-      focusAndHighlightInvalidFields(missingFields.map(f => f.fieldId));
+      // Focus first missing field
+      const firstFieldId = missingFields[0]?.fieldId;
+      if (firstFieldId) {
+        const element = document.getElementById(firstFieldId);
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element?.focus();
+      }
       return;
     }
 
