@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
+import React, {memo} from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { ArrowLeft } from 'lucide-react';
-import { Routes } from '@/lib/routes';
-import { getAssetPath } from '@/utils/assetPath';
-import { Link } from './Link';
-import { StepIndicator } from './StepIndicator';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
+import {ArrowLeft} from 'lucide-react';
+import {Routes} from '@/lib/routes';
+import {getAssetPath} from '@/utils/assetPath';
+import {Link} from './Link';
+import {StepIndicator} from './StepIndicator';
+import {ThemeToggle} from '@/components/ui/theme-toggle';
 
 export interface PageHeaderProps {
   title?: string;
@@ -15,8 +15,13 @@ export interface PageHeaderProps {
 }
 
 export const PageHeader = memo(
-  ({ title, showBackButton, onBackButtonClicked, currentStep }: PageHeaderProps) => {
-    const { t } = useTranslation('common');
+  ({
+    title,
+    showBackButton,
+    onBackButtonClicked,
+    currentStep,
+  }: PageHeaderProps) => {
+    const {t} = useTranslation('common');
 
     return (
       <nav className="fixed top-0 w-full border-b z-25 bg-primary start-0 border-primary-foreground/10">
@@ -25,7 +30,9 @@ export const PageHeader = memo(
           <div className="flex items-center gap-4">
             <Link href={Routes.overview} className="flex items-center">
               <img
-                src={getAssetPath('/images/global/eemland-logo-alleen-white.png')}
+                src={getAssetPath(
+                  '/images/global/eemland-logo-alleen-white.png'
+                )}
                 className="w-auto h-10"
                 alt="Eemland Logo"
               />
@@ -46,7 +53,10 @@ export const PageHeader = memo(
           {/* Center Column - Title or Step Indicator */}
           <div className="flex justify-center">
             {currentStep ? (
-              <StepIndicator currentStep={currentStep} onBackButtonClicked={onBackButtonClicked} />
+              <StepIndicator
+                currentStep={currentStep}
+                onBackButtonClicked={onBackButtonClicked}
+              />
             ) : title ? (
               <h1 className="text-base font-semibold text-center truncate md:text-lg text-primary-foreground">
                 {title}
