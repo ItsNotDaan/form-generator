@@ -577,8 +577,8 @@ const FormIntakeVLOSPage = () => {
                   />
                 </div>
                 <Separator />
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
+                <div className="space-y-3 ">
+                  <div className="flex items-center space-y-2 space-x-2">
                     <Checkbox
                       id="tongue-pad"
                       checked={tongpolsterEnabled}
@@ -586,7 +586,8 @@ const FormIntakeVLOSPage = () => {
                     />
                     <Label htmlFor="tongue-pad" className="font-normal cursor-pointer">{t('tonguePadding')}</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <Separator />
+                  <div className="flex items-center space-y-2 space-x-2">
                     <Checkbox
                       id="tongue-stitch"
                       checked={tongVaststikkenEnabled}
@@ -686,7 +687,7 @@ const FormIntakeVLOSPage = () => {
                           value={boolToString(hakschoringLinksEnabled)}
                           onValueChange={(v) => setHakschoringLinksEnabled(stringToBool(v))}
                         >
-                          <div className="flex gap-4">
+                          <div className="flex gap-4 b-3">
                             {JA_NEE_OPTIES.map(opt => (
                               <div key={opt.value} className="flex items-center space-x-2">
                                 <RadioGroupItem value={opt.value} id={`slant-left-${opt.value}`} />

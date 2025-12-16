@@ -25,8 +25,9 @@ import { setClientData } from '@/domain/store/slices/formData';
 import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import { AlertCircle, Check, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { NaturalDatePicker } from '@/components/ui/natural-date-picker';
+import { DatePicker } from '@/components/ui/date-picker';
 import { ReactSelect } from '@/components/ui/react-select';
+import { DutchAddressInput } from '@/components/ui/dutch-address-input';
 
 const FormNewClientPage = () => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const FormNewClientPage = () => {
   const dispatch = useAppDispatch();
 
   // State voor client data
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [location, setLocation] = useState<Locatie | ''>('');
   const [clientName, setClientName] = useState('');
   const [address, setAddress] = useState('');
@@ -202,15 +203,15 @@ const FormNewClientPage = () => {
                     />
                   </div>
 
-                  <div className="space-y-2" id="field-aanmeetdatum">
-                    <Label htmlFor="date">
-                      {t('measurementDate')} <span className="text-destructive">*</span>
-                    </Label>
-                    <NaturalDatePicker
-                      date={date ? new Date(date) : undefined}
-                      onDateChanged={(newDate) => setDate(newDate ? newDate.toISOString().split('T')[0] : '')}
+                  <div id="field-aanmeetdatum">
+                    <DatePicker
+                      label={`${t('measurementDate')} *`}
+                      value={date ? new Date(date) : undefined}
+                      onChange={(selectedDate) => setDate(selectedDate ? selectedDate.toISOString().split('T')[0] : '')}
                       placeholder={t('selectDate')}
                       error={!date && showWarnings}
+                      disabled={(d) => d > new Date()}
+                      className="w-full"
                     />
                   </div>
                 </div>
@@ -270,15 +271,15 @@ const FormNewClientPage = () => {
                   />
                 </div>
 
-                <div className="space-y-2" id="field-geboortedatum">
-                  <Label htmlFor="birthDate">
-                    {t('birthDate')} <span className="text-destructive">*</span>
-                  </Label>
-                  <NaturalDatePicker
-                    date={birthDate ? new Date(birthDate) : undefined}
-                    onDateChanged={(newDate) => setBirthDate(newDate ? newDate.toISOString().split('T')[0] : '')}
+                <div id="field-geboortedatum">
+                  <DatePicker
+                    label={`${t('birthDate')} *`}
+                    value={birthDate ? new Date(birthDate) : undefined}
+                    onChange={(selectedDate) => setBirthDate(selectedDate ? selectedDate.toISOString().split('T')[0] : '')}
                     placeholder={t('selectBirthDate')}
                     error={!birthDate && showWarnings}
+                    disabled={(d) => d > new Date()}
+                    className="w-full"
                   />
                 </div>
               </CardContent>
@@ -293,50 +294,21 @@ const FormNewClientPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <FormField
-                    id="straatnaam"
-                    label={t('streetName')}
-                    value={address}
-                    onChange={setAddress}
-                    placeholder={t('streetNamePlaceholder')}
-                    required
-                    error={!address.trim() && showWarnings}
-                    className="md:col-span-2"
-                  />
-
-                  <FormField
-                    id="huisnummer"
-                    label={t('houseNumber')}
-                    value={houseNumber}
-                    onChange={setHouseNumber}
-                    placeholder={t('houseNumberPlaceholder')}
-                    required
-                    error={!houseNumber.trim() && showWarnings}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    id="postcode"
-                    label={t('postalCode')}
-                    value={postalCode}
-                    onChange={setPostalCode}
-                    placeholder={t('postalCodePlaceholder')}
-                    required
-                    error={!postalCode.trim() && showWarnings}
-                  />
-
-                  <FormField
-                    id="woonplaats"
-                    label={t('city')}
-                    value={city}
-                    onChange={setCity}
-                    placeholder={t('cityPlaceholder')}
-                    required
-                    error={!city.trim() && showWarnings}
-                  />
-                </div>
+                <DutchAddressInput
+                  postcode={postalCode}
+                  houseNumber={houseNumber}
+                  onPostcodeChange={setPostalCode}
+                  onHouseNumberChange={setHouseNumber}
+                  onStreetChange={setAddress}
+                  onCityChange={setCity}
+                  postcodeLabel={t('postalCode')}
+                  houseNumberLabel={t('houseNumber')}
+                  streetLabel={t('streetName')}
+                  cityLabel={t('city')}
+                  street={address}
+                  city={city}
+                  t={t}
+                />
               </CardContent>
             </Card>
 
@@ -445,7 +417,7 @@ const FormNewClientPage = () => {
               >
                 {t('cancel')}
               </Button>
-              <Button type="submit" size="lg" className="min-w-[200px]">
+              <Button type="submit" size="lg" className="min-w-50">
                 <span className="mr-2">{t('continueToFormSelection')}</span>
                 <ChevronRight className="h-4 w-4" />
               </Button>

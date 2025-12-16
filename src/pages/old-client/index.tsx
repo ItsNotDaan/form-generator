@@ -23,8 +23,9 @@ import { setClientData } from '@/domain/store/slices/formData';
 import { focusAndHighlightInvalidFields } from '@/utils/warningNavigationMap';
 import { AlertCircle, Check, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { NaturalDatePicker } from '@/components/ui/natural-date-picker';
+import { DatePicker } from '@/components/ui/date-picker';
 import { ReactSelect } from '@/components/ui/react-select';
+import { DutchAddressInput } from '@/components/ui/dutch-address-input';
 
 const FormOldClientPage = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const FormOldClientPage = () => {
   const existingClient = useAppSelector(s => s.formData.client);
 
   // State voor client data - pre-populated from existing client
-  const [date, setDate] = useState(existingClient?.date || '');
+  const [date, setDate] = useState(existingClient?.date || new Date().toISOString().split('T')[0]);
   const [location, setLocation] = useState<Locatie | ''>(existingClient?.location || '');
   const [clientName, setClientName] = useState(existingClient?.clientName || '');
   const [address, setAddress] = useState(existingClient?.address || '');
@@ -180,15 +181,15 @@ const FormOldClientPage = () => {
                     />
                   </div>
 
-                  <div className="space-y-2" id="field-aanmeetdatum">
-                    <Label htmlFor="date">
-                      {t('measurementDate')} <span className="text-destructive">*</span>
-                    </Label>
-                    <NaturalDatePicker
-                      date={date ? new Date(date) : undefined}
-                      onDateChanged={(newDate) => setDate(newDate ? newDate.toISOString().split('T')[0] : '')}
+                  <div id="field-aanmeetdatum">
+                    <DatePicker
+                      label={`${t('measurementDate')} *`}
+                      value={date ? new Date(date) : undefined}
+                      onChange={(selectedDate) => setDate(selectedDate ? selectedDate.toISOString().split('T')[0] : '')}
                       placeholder={t('selectDate')}
                       error={!date && showWarnings}
+                      disabled={(d) => d > new Date()}
+                      className="w-full"
                     />
                   </div>
                 </div>
@@ -281,15 +282,15 @@ const FormOldClientPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2" id="field-geboortedatum">
-                  <Label htmlFor="birthDate">
-                    {t('birthDate')} <span className="text-destructive">*</span>
-                  </Label>
-                  <NaturalDatePicker
-                    date={birthDate ? new Date(birthDate) : undefined}
-                    onDateChanged={(newDate) => setBirthDate(newDate ? newDate.toISOString().split('T')[0] : '')}
+                <div id="field-geboortedatum">
+                  <DatePicker
+                    label={`${t('birthDate')} *`}
+                    value={birthDate ? new Date(birthDate) : undefined}
+                    onChange={(selectedDate) => setBirthDate(selectedDate ? selectedDate.toISOString().split('T')[0] : '')}
                     placeholder={t('selectBirthDate')}
                     error={!birthDate && showWarnings}
+                    disabled={(d) => d > new Date()}
+                    className="w-full"
                   />
                 </div>
               </CardContent>
@@ -304,57 +305,21 @@ const FormOldClientPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="md:col-span-2 space-y-2" id="field-straatnaam">
-                    <Label htmlFor="address">
-                      {t('streetName')}
-                    </Label>
-                    <Input
-                      id="address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder={t('streetNamePlaceholder')}
-                    />
-                  </div>
-
-                  <div className="space-y-2" id="field-huisnummer">
-                    <Label htmlFor="houseNumber">
-                      {t('houseNumber')}
-                    </Label>
-                    <Input
-                      id="houseNumber"
-                      value={houseNumber}
-                      onChange={(e) => setHouseNumber(e.target.value)}
-                      placeholder={t('houseNumberPlaceholder')}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2" id="field-postcode">
-                    <Label htmlFor="postalCode">
-                      {t('postalCode')}
-                    </Label>
-                    <Input
-                      id="postalCode"
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
-                      placeholder={t('postalCodePlaceholder')}
-                    />
-                  </div>
-
-                  <div className="space-y-2" id="field-stad">
-                    <Label htmlFor="city">
-                      {t('city')}
-                    </Label>
-                    <Input
-                      id="city"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder={t('cityPlaceholder')}
-                    />
-                  </div>
-                </div>
+                <DutchAddressInput
+                  postcode={postalCode}
+                  houseNumber={houseNumber}
+                  onPostcodeChange={setPostalCode}
+                  onHouseNumberChange={setHouseNumber}
+                  onStreetChange={setAddress}
+                  onCityChange={setCity}
+                  postcodeLabel={t('postalCode')}
+                  houseNumberLabel={t('houseNumber')}
+                  streetLabel={t('streetName')}
+                  cityLabel={t('city')}
+                  street={address}
+                  city={city}
+                  t={t}
+                />
               </CardContent>
             </Card>
 
@@ -467,7 +432,7 @@ const FormOldClientPage = () => {
               >
                 {t('cancel')}
               </Button>
-              <Button type="submit" size="lg" className="min-w-[200px]">
+              <Button type="submit" size="lg" className="min-w-50">
                 <span className="mr-2">{t('saveAndContinue')}</span>
                 <ChevronRight className="h-4 w-4" />
               </Button>
@@ -475,7 +440,7 @@ const FormOldClientPage = () => {
           </form>
         </FormSection>
       </div>
-    </BaseLayout>
+    </BaseLayout >
   );
 };
 
