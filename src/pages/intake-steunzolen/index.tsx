@@ -657,7 +657,7 @@ const FormIntakeSteunzolenPage = () => {
                 >
                   {t('cancel')}
                 </Button>
-                <Button type="submit" size="lg" className="min-w-[200px]">
+                <Button type="submit" size="lg" className="min-w-50">
                   <span className="mr-2">{t('saveAndContinue')}</span>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
