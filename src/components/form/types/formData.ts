@@ -1,5 +1,5 @@
 // Type definities voor cliënt en intake formulier data
-import type { Locatie, Aanhef, Zijde } from '@/lib/constants/formConstants';
+import type {Locatie, Aanhef, Zijde} from '@/lib/constants/formConstants';
 
 export interface ClientData {
   // Practitioner and date
@@ -8,13 +8,13 @@ export interface ClientData {
 
   // Intake form type
   intakeType?:
-  | 'VLOS'
-  | 'OSA'
-  | 'Pulman'
-  | 'Rebacare'
-  | 'OSB'
-  | 'OVAC'
-  | 'Steunzolen';
+    | 'VLOS'
+    | 'OSA'
+    | 'Pulman'
+    | 'Rebacare'
+    | 'OSB'
+    | 'OVAC'
+    | 'Steunzolen';
 
   // Location
   location?: Locatie;
@@ -369,7 +369,7 @@ export interface FormSubmissionData {
 export interface CheckFoliepasData {
   // Side selection
   side?: Zijde;
-  
+
   // Reading corrections
   readingCorrectionAfterFoilFit?: string;
   readingCorrectionAfterLiningShoe?: string;
@@ -436,67 +436,67 @@ export interface CheckFoliepasData {
   modelType?: string;
   modelText?: string;
   colorOptions?: string[];
-  
+
   // Tong polsteren en polsterkraag
   tonguePaddingMm?: string;
   paddingCollarMm?: string;
-  
+
   // Sluiting
   closureType?: string;
   ringsNr?: string;
   ringsAmount?: string;
   hooksNr?: string;
   hooksAmount?: string;
-  
+
   // Rits
   zipperType?: string;
   zipperMedial?: boolean;
   zipperLateral?: boolean;
-  
+
   // Bijzonderheden
   specialMedialVelcro?: boolean;
   specialLaceLoop?: boolean;
   specialExtraLeather?: boolean;
   specialOther?: string;
-  
+
   // Randtype
   edgeType?: string;
   edgeColor?: string;
-  
+
   // Zooltype
   soleType?: string;
   gumliteNumber?: string;
-  
+
   // Koolstofverstijving
   carbonStiffeningType?: string;
   carbonStiffeningLeft?: boolean;
   carbonStiffeningRight?: boolean;
-  
+
   // Neusopties
   toeOptionsType?: string;
-  
+
   // Contrefort
   counterfortType?: string;
   counterfortOther?: string;
-  
+
   // Binnenzool
   insoleType?: string;
   insoleOther?: string;
-  
+
   // Zoolkantuitpoetsen
   soleEdgePolishType?: string;
   soleEdgePolishOther?: string;
-  
+
   // Maakwijze
   constructionMethodType?: string;
   constructionMethodOther?: string;
-  
+
   // Hakmodel
   heelModelType?: string;
   heelBuildUpMaterial?: string;
   heelWedgeType?: string;
   heelBlockCoreCoating?: boolean;
-  
+
   // Schoring
   shoringLeftType?: string;
   shoringLeftMm?: string;
