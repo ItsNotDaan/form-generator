@@ -43,6 +43,7 @@ const FormCheckFoliepasPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
+    side: z.enum(['left', 'right', 'both'] as const),
     readingCorrectionAfterFoilFit: z.string().optional(),
     readingCorrectionAfterLiningShoe: z.string().optional(),
     omsluitingLinks: z.record(z.string(), z.boolean()),
@@ -91,6 +92,7 @@ const FormCheckFoliepasPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
+      side: 'both',
       readingCorrectionAfterFoilFit: '',
       readingCorrectionAfterLiningShoe: '',
       omsluitingLinks: { omsluitingLinksMultivorm: true },
@@ -134,9 +136,14 @@ const FormCheckFoliepasPage = () => {
     },
   });
 
+  const side = form.watch('side');
+  const showLinks = side === 'left' || side === 'both';
+  const showRechts = side === 'right' || side === 'both';
+
   const onSubmit = (data: FormData) => {
     dispatch(
       setCheckFoliepasData({
+        side: data.side,
         readingCorrectionAfterFoilFit: data.readingCorrectionAfterFoilFit || '',
         readingCorrectionAfterLiningShoe: data.readingCorrectionAfterLiningShoe || '',
         omsluitingLinks: data.omsluitingLinks as Record<string, boolean>,
@@ -198,6 +205,32 @@ const FormCheckFoliepasPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
+              {/* Side Selection */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('side')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RadioGroup value={side} onValueChange={(v) => form.setValue("side", v as 'left' | 'right' | 'both')}>
+                    <div className="flex gap-6">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="both" id="side-both" />
+                        <Label htmlFor="side-both" className="font-normal cursor-pointer">{t('both')}</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="left" id="side-left" />
+                        <Label htmlFor="side-left" className="font-normal cursor-pointer">{t('left')}</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="right" id="side-right" />
+                        <Label htmlFor="side-right" className="font-normal cursor-pointer">{t('right')}</Label>
+                      </div>
+                    </div>
+                  </RadioGroup>
+                </CardContent>
+              </Card>
+
+
               {/* Reading Corrections after Foil Fit */}
               <Card>
                 <CardHeader>
@@ -230,107 +263,95 @@ const FormCheckFoliepasPage = () => {
                 </CardContent>
               </Card>
 
-              {/* Enclosure (Omsluiting) - Reused from VLOS */}
+              {/* Enclosure (Omsluiting) - Complex multi-select with mm values */}
               <Card>
                 <CardHeader>
                   <CardTitle>{t('enclosure')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Left */}
-                    <div className="space-y-3">
-                      <Label className="text-sm font-semibold">{t('left')}</Label>
-                      {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
-                        <div key={optie.key} className="flex items-center gap-3">
-                          <div className="flex items-center space-x-2 flex-1">
-                            <Checkbox
-                              id={`encl-left-${optie.key}`}
-                              checked={(form.watch("omsluitingLinks")[optie.fullKeyLinks] as boolean) || false}
-                              onCheckedChange={(checked) => {
-                                form.setValue("omsluitingLinks", {
-                                  ...form.getValues("omsluitingLinks"),
-                                  [optie.fullKeyLinks]: !!checked
-                                });
-                                if (checked && optie.needsMm && optie.defaultMm) {
+                    {showLinks && (
+                      <div className='flex flex-col gap-2'>
+                        <Label className="text-sm font-semibold">{t('left')}</Label>
+                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                          <div key={optie.key} className="flex items-center gap-3">
+                            <div className="flex items-center space-x-2 flex-1">
+                              <Checkbox
+                                id={`encl-left-${optie.key}`}
+                                checked={(form.watch("omsluitingLinks")[optie.fullKeyLinks] as boolean) || false}
+                                onCheckedChange={(checked) => {
+                                  form.setValue("omsluitingLinks", { ...form.getValues("omsluitingLinks"), [optie.fullKeyLinks]: !!checked });
+                                  if (checked && optie.needsMm && optie.defaultMm) {
+                                    form.setValue("omsluitingLinksMm", {
+                                      ...form.getValues("omsluitingLinksMm"), [optie.mmKeyLinks]: optie.defaultMm,
+                                    });
+                                  } else if (!checked) {
+                                    const next = { ...form.getValues("omsluitingLinksMm") }; delete next[optie.mmKeyLinks]; form.setValue("omsluitingLinksMm", next);
+                                  }
+                                }}
+                              />
+                              <Label htmlFor={`encl-left-${optie.key}`} className="font-normal cursor-pointer text-sm">
+                                {optie.label}
+                              </Label>
+                            </div>
+                            {optie.needsMm && (form.watch("omsluitingLinks")[optie.fullKeyLinks] as boolean) && (
+                              <Input
+                                type="number"
+                                placeholder="mm"
+                                value={(form.watch("omsluitingLinksMm")[optie.mmKeyLinks] as string) || ''}
+                                onChange={(e) =>
                                   form.setValue("omsluitingLinksMm", {
-                                    ...form.getValues("omsluitingLinksMm"),
-                                    [optie.mmKeyLinks]: optie.defaultMm,
-                                  });
-                                } else if (!checked) {
-                                  const next = { ...form.getValues("omsluitingLinksMm") };
-                                  delete next[optie.mmKeyLinks];
-                                  form.setValue("omsluitingLinksMm", next);
+                                    ...form.getValues("omsluitingLinksMm"), [optie.mmKeyLinks]: e.target.value,
+                                  })
                                 }
-                              }}
-                            />
-                            <Label htmlFor={`encl-left-${optie.key}`} className="font-normal cursor-pointer text-sm">
-                              {optie.label}
-                            </Label>
+                                className="w-20"
+                              />
+                            )}
                           </div>
-                          {optie.needsMm && (form.watch("omsluitingLinks")[optie.fullKeyLinks] as boolean) && (
-                            <Input
-                              type="number"
-                              placeholder="mm"
-                              value={(form.watch("omsluitingLinksMm")[optie.mmKeyLinks] as string) || ''}
-                              onChange={(e) =>
-                                form.setValue("omsluitingLinksMm", {
-                                  ...form.getValues("omsluitingLinksMm"),
-                                  [optie.mmKeyLinks]: e.target.value,
-                                })
-                              }
-                              className="w-20"
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    {/* Right */}
-                    <div className="space-y-3">
-                      <Label className="text-sm font-semibold">{t('right')}</Label>
-                      {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
-                        <div key={optie.key} className="flex items-center gap-3">
-                          <div className="flex items-center space-x-2 flex-1">
-                            <Checkbox
-                              id={`encl-right-${optie.key}`}
-                              checked={form.watch("omsluitingRechts")[optie.fullKeyRechts] || false}
-                              onCheckedChange={(checked) => {
-                                form.setValue("omsluitingRechts", {
-                                  ...form.getValues("omsluitingRechts"),
-                                  [optie.fullKeyRechts]: !!checked
-                                });
-                                if (checked && optie.needsMm && optie.defaultMm) {
+                        ))}
+                      </div>
+                    )}
+                    {showRechts && (
+                      <div className='flex flex-col gap-2'>
+                        <Label className="text-sm font-semibold">{t('right')}</Label>
+                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                          <div key={optie.key} className="flex items-center gap-3">
+                            <div className="flex items-center space-x-2 flex-1">
+                              <Checkbox
+                                id={`encl-right-${optie.key}`}
+                                checked={(form.watch("omsluitingRechts")[optie.fullKeyRechts] as boolean) || false}
+                                onCheckedChange={(checked) => {
+                                  form.setValue("omsluitingRechts", { ...form.getValues("omsluitingRechts"), [optie.fullKeyRechts]: !!checked });
+                                  if (checked && optie.needsMm && optie.defaultMm) {
+                                    form.setValue("omsluitingRechtsMm", {
+                                      ...form.getValues("omsluitingRechtsMm"), [optie.mmKeyRechts]: optie.defaultMm,
+                                    });
+                                  } else if (!checked) {
+                                    const next = { ...form.getValues("omsluitingRechtsMm") }; delete next[optie.mmKeyRechts]; form.setValue("omsluitingRechtsMm", next);
+                                  }
+                                }}
+                              />
+                              <Label htmlFor={`encl-right-${optie.key}`} className="font-normal cursor-pointer text-sm">
+                                {optie.label}
+                              </Label>
+                            </div>
+                            {optie.needsMm && (form.watch("omsluitingRechts")[optie.fullKeyRechts] as boolean) && (
+                              <Input
+                                type="number"
+                                placeholder="mm"
+                                value={(form.watch("omsluitingRechtsMm")[optie.mmKeyRechts] as string) || ''}
+                                onChange={(e) =>
                                   form.setValue("omsluitingRechtsMm", {
-                                    ...form.getValues("omsluitingRechtsMm"),
-                                    [optie.mmKeyRechts]: optie.defaultMm,
-                                  });
-                                } else if (!checked) {
-                                  const next = { ...form.getValues("omsluitingRechtsMm") };
-                                  delete next[optie.mmKeyRechts];
-                                  form.setValue("omsluitingRechtsMm", next);
+                                    ...form.getValues("omsluitingRechtsMm"), [optie.mmKeyRechts]: e.target.value,
+                                  })
                                 }
-                              }}
-                            />
-                            <Label htmlFor={`encl-right-${optie.key}`} className="font-normal cursor-pointer text-sm">
-                              {optie.label}
-                            </Label>
+                                className="w-20"
+                              />
+                            )}
                           </div>
-                          {optie.needsMm && (form.watch("omsluitingRechts")[optie.fullKeyRechts] as boolean) && (
-                            <Input
-                              type="number"
-                              placeholder="mm"
-                              value={(form.watch("omsluitingRechtsMm")[optie.mmKeyRechts] as string) || ''}
-                              onChange={(e) =>
-                                form.setValue("omsluitingRechtsMm", {
-                                  ...form.getValues("omsluitingRechtsMm"),
-                                  [optie.mmKeyRechts]: e.target.value,
-                                })
-                              }
-                              className="w-20"
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
