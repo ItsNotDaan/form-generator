@@ -376,4 +376,55 @@ export interface CheckFoliepasData {
   omsluitingRechts?: Record<string, boolean>;
   omsluitingLinksMm?: Record<string, string>;
   omsluitingRechtsMm?: Record<string, string>;
+
+  // Beenlengte verschil (functieonderzoek)
+  legLengthDifferenceLeft?: string;
+  legLengthDifferenceRight?: string;
+
+  // Openstand schacht
+  openstandSchacht?: string;
+
+  // Supplement schoring
+  supplementschoringLinksEnabled?: boolean;
+  supplementschoringRechtsEnabled?: boolean;
+  supplementschoringLinksType?: string;
+  supplementschoringRechtsType?: string;
+
+  // Zoolverstijving
+  zoolverstijvingEnabled?: boolean;
+  zoolverstijvingLinks?: boolean;
+  zoolverstijvingRechts?: boolean;
+
+  // Sluiting en tong
+  sluitingType?: string;
+  inschotpunt?: string;
+  tongpolsterEnabled?: boolean;
+  tongVaststikkenEnabled?: boolean;
+
+  // Haksoort en hoogte
+  haksoortLinks?: string;
+  haksoortRechts?: string;
+  hakhoogteLinks?: string;
+  hakhoogteRechts?: string;
+
+  // Hak aanpassingen (schoring) en ezelsoor
+  hakschoringLinksEnabled?: boolean;
+  hakschoringRechtsEnabled?: boolean;
+  hakschoringLinksType?: string;
+  hakschoringRechtsType?: string;
+  ezelsoorLinksEnabled?: boolean;
+  ezelsoorRechtsEnabled?: boolean;
+  ezelsoorLinksType?: string;
+  ezelsoorRechtsType?: string;
+
+  // Hakafrondingen
+  hakafrondingLinksEnabled?: boolean;
+  hakafrondingRechtsEnabled?: boolean;
+  hakafrondingLinksHoogte?: string;
+  hakafrondingLinksLengte?: string;
+  hakafrondingRechtsHoogte?: string;
+  hakafrondingRechtsLengte?: string;
+
+  // Loopzool
+  loopzoolType?: string;
 }
