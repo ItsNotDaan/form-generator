@@ -1,8 +1,8 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -10,10 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import {Label} from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
 import {
   LOCATIE_OPTIES,
   AANHEF_OPTIES,
@@ -22,14 +22,14 @@ import {
   Locatie,
   Aanhef,
 } from '@/lib/constants/formConstants';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setClientData } from '@/domain/store/slices/formData';
-import { ChevronRight } from 'lucide-react';
-import { DatePicker } from '@/components/ui/date-picker';
-import { ReactSelect } from '@/components/ui/react-select';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {setClientData} from '@/domain/store/slices/formData';
+import {ChevronRight} from 'lucide-react';
+import {DatePicker} from '@/components/ui/date-picker';
+import {ReactSelect} from '@/components/ui/react-select';
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
 import {
   Form,
   FormControl,
@@ -38,29 +38,29 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { DutchAddressInput } from '@/components/ui/dutch-address-input';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {DutchAddressInput} from '@/components/ui/dutch-address-input';
 
 const FormNewClientPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
 
   const formSchema = z.object({
-    practitionerId: z.string().min(1, { message: t('required') }),
-    date: z.string().min(1, { message: t('required') }),
-    location: z.string().min(1, { message: t('required') }),
-    salutation: z.string().min(1, { message: t('required') }),
-    initials: z.string().min(1, { message: t('required') }),
-    clientName: z.string().min(1, { message: t('required') }),
-    birthDate: z.string().min(1, { message: t('required') }),
-    address: z.string().min(1, { message: t('required') }),
-    houseNumber: z.string().min(1, { message: t('required') }),
-    postalCode: z.string().min(1, { message: t('required') }),
-    city: z.string().min(1, { message: t('required') }),
-    email: z.string().min(1, { message: t('required') }),
-    insurance: z.string().min(1, { message: t('required') }),
+    practitionerId: z.string().min(1, {message: t('required')}),
+    date: z.string().min(1, {message: t('required')}),
+    location: z.string().min(1, {message: t('required')}),
+    salutation: z.string().min(1, {message: t('required')}),
+    initials: z.string().min(1, {message: t('required')}),
+    clientName: z.string().min(1, {message: t('required')}),
+    birthDate: z.string().min(1, {message: t('required')}),
+    address: z.string().min(1, {message: t('required')}),
+    houseNumber: z.string().min(1, {message: t('required')}),
+    postalCode: z.string().min(1, {message: t('required')}),
+    city: z.string().min(1, {message: t('required')}),
+    email: z.string().min(1, {message: t('required')}),
+    insurance: z.string().min(1, {message: t('required')}),
     phoneOne: z.string().optional(),
     phoneTwo: z.string().optional(),
     specialist: z.string().optional(),
@@ -113,7 +113,7 @@ const FormNewClientPage = () => {
         insurance: data.insurance,
         medischeIndicatie: data.medischeIndicatie || '',
         specialist: data.specialist || '',
-      })
+      }),
     );
     router.push(Routes.form_selection);
   };
@@ -148,7 +148,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="practitionerId"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>
                             {t('practitioner')}{' '}
@@ -159,12 +159,12 @@ const FormNewClientPage = () => {
                               value={
                                 field.value
                                   ? {
-                                    label:
-                                      BEHANDELAARS.find(
-                                        p => p.value === field.value
-                                      )?.label || '',
-                                    value: field.value,
-                                  }
+                                      label:
+                                        BEHANDELAARS.find(
+                                          p => p.value === field.value,
+                                        )?.label || '',
+                                      value: field.value,
+                                    }
                                   : null
                               }
                               onChange={option => {
@@ -184,7 +184,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="date"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>
                             {t('measurementDate')}{' '}
@@ -199,7 +199,7 @@ const FormNewClientPage = () => {
                                 field.onChange(
                                   selectedDate
                                     ? selectedDate.toISOString().split('T')[0]
-                                    : ''
+                                    : '',
                                 )
                               }
                               placeholder={t('selectDate')}
@@ -216,7 +216,7 @@ const FormNewClientPage = () => {
                   <FormField
                     control={form.control}
                     name="location"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormLabel>
                           {t('location')}{' '}
@@ -266,7 +266,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="salutation"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>
                             {t('salutation')}{' '}
@@ -305,7 +305,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="initials"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>
                             {t('initials')}{' '}
@@ -325,7 +325,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="clientName"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>
                             {t('lastName')}{' '}
@@ -346,7 +346,7 @@ const FormNewClientPage = () => {
                   <FormField
                     control={form.control}
                     name="birthDate"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormLabel>
                           {t('birthDate')}{' '}
@@ -361,7 +361,7 @@ const FormNewClientPage = () => {
                               field.onChange(
                                 selectedDate
                                   ? selectedDate.toISOString().split('T')[0]
-                                  : ''
+                                  : '',
                               )
                             }
                             placeholder={t('selectBirthDate')}
@@ -387,19 +387,19 @@ const FormNewClientPage = () => {
                   <Controller
                     control={form.control}
                     name="postalCode"
-                    render={({ field: postalCodeField }) => (
+                    render={({field: postalCodeField}) => (
                       <Controller
                         control={form.control}
                         name="houseNumber"
-                        render={({ field: houseNumberField }) => (
+                        render={({field: houseNumberField}) => (
                           <Controller
                             control={form.control}
                             name="address"
-                            render={({ field: addressField }) => (
+                            render={({field: addressField}) => (
                               <Controller
                                 control={form.control}
                                 name="city"
-                                render={({ field: cityField }) => (
+                                render={({field: cityField}) => (
                                   <DutchAddressInput
                                     postcode={postalCodeField.value}
                                     houseNumber={houseNumberField.value}
@@ -440,7 +440,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="phoneOne"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>{t('phoneOne')}</FormLabel>
                           <FormControl>
@@ -458,7 +458,7 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="phoneTwo"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel>{t('phoneTwo')}</FormLabel>
                           <FormControl>
@@ -477,7 +477,7 @@ const FormNewClientPage = () => {
                   <FormField
                     control={form.control}
                     name="email"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormLabel>
                           {t('email')}{' '}
@@ -508,7 +508,7 @@ const FormNewClientPage = () => {
                   <FormField
                     control={form.control}
                     name="insurance"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormLabel>
                           {t('insurance')}{' '}
@@ -518,7 +518,7 @@ const FormNewClientPage = () => {
                           <ReactSelect
                             value={
                               field.value
-                                ? { label: field.value, value: field.value }
+                                ? {label: field.value, value: field.value}
                                 : null
                             }
                             onChange={option => {
@@ -538,7 +538,7 @@ const FormNewClientPage = () => {
                   <FormField
                     control={form.control}
                     name="specialist"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormLabel>{t('specialist')}</FormLabel>
                         <FormControl>
@@ -555,7 +555,7 @@ const FormNewClientPage = () => {
                   <FormField
                     control={form.control}
                     name="medischeIndicatie"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormLabel>{t('medicalIndication')}</FormLabel>
                         <FormControl>

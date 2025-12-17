@@ -1,7 +1,7 @@
 import React from 'react';
-import { BaseLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { NavigationCard } from '@/components/ui/navigation-card';
+import {BaseLayout} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {NavigationCard} from '@/components/ui/navigation-card';
 import {
   Card,
   CardContent,
@@ -9,15 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { UserPlus, Users, FileText, ClipboardList } from 'lucide-react';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
 
 const OverviewPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
 
   const handleNavigate = (route: string) => {
     router.push(route);
@@ -70,8 +70,6 @@ const OverviewPage = () => {
             {t('intakeForms')}
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-
             {/* Intake OSA */}
             <Button
               variant="outline"

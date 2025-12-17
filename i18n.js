@@ -18,15 +18,15 @@ module.exports = {
     if (!ALLOWED_LOCALES.includes(lang)) {
       throw new Error(
         `Invalid locale: "${lang}". Allowed locales are: ${ALLOWED_LOCALES.join(
-          ', '
-        )}`
+          ', ',
+        )}`,
       );
     }
     if (!ALLOWED_NAMESPACES.includes(ns)) {
       throw new Error(
         `Invalid namespace: "${ns}". Allowed namespaces are: ${ALLOWED_NAMESPACES.join(
-          ', '
-        )}`
+          ', ',
+        )}`,
       );
     }
     return import(`./locales/${lang}/${ns}.json`).then(m => m.default);

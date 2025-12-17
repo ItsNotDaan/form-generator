@@ -22,7 +22,7 @@ export const LeftArrowIcon = React.memo<IconProps>(
         />
       </svg>
     );
-  }
+  },
 );
 
 LeftArrowIcon.displayName = 'LeftArrowIcon';

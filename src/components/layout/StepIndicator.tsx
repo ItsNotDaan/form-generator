@@ -68,8 +68,8 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
                     step.number === currentStep
                       ? 'bg-white text-brand-700 ring-2 ring-white ring-offset-2 ring-offset-brand-700'
                       : step.number < currentStep
-                      ? 'bg-white/30 text-white hover:bg-white/40'
-                      : 'bg-brand-800 text-white/50'
+                        ? 'bg-white/30 text-white hover:bg-white/40'
+                        : 'bg-brand-800 text-white/50'
                   }`}
                 >
                   {step.number}
@@ -79,8 +79,8 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
                     step.number === currentStep
                       ? 'text-white'
                       : step.number < currentStep
-                      ? 'text-white/80'
-                      : 'text-white/50'
+                        ? 'text-white/80'
+                        : 'text-white/50'
                   }`}
                 >
                   {step.label}
@@ -98,7 +98,7 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 StepIndicator.displayName = 'StepIndicator';

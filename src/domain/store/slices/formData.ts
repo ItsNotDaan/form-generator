@@ -53,7 +53,7 @@ const formDataSlice = createSlice({
     },
     setIntakeRebacareData: (
       state,
-      action: PayloadAction<IntakeRebacareData>
+      action: PayloadAction<IntakeRebacareData>,
     ) => {
       state.intakeRebacare = action.payload;
     },
@@ -65,14 +65,11 @@ const formDataSlice = createSlice({
     },
     setIntakeSteunzolenData: (
       state,
-      action: PayloadAction<IntakeSteunzolenData>
+      action: PayloadAction<IntakeSteunzolenData>,
     ) => {
       state.intakeSteunzolen = action.payload;
     },
-    setCheckFoliepasData: (
-      state,
-      action: PayloadAction<CheckFoliepasData>
-    ) => {
+    setCheckFoliepasData: (state, action: PayloadAction<CheckFoliepasData>) => {
       state.checkFoliepas = action.payload;
     },
     clearFormData: state => {

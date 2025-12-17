@@ -56,41 +56,58 @@ const FormIntakeSteunzolenPage = () => {
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
-  const formSchema = z.object({
-    welkPaar: z.string(),
-    medischeIndicatie: z.string().optional(),
-    schoenmaat: z.string().min(1, t('shoeSizeRequired') || 'Shoe size is required'),
-    steunzoolTypeGeneral: z.string().optional(),
-    steunzoolAndersText: z.string().optional(),
-    steunzoolCorrectieMiddenvoet: z.string().optional(),
-    steunzoolCorrectieVoorvoet: z.string().optional(),
-    steunzoolVvPellote: z.string().optional(),
-    steunzoolHakVerhogingLinks: z.string().optional(),
-    steunzoolHakVerhogingRechts: z.string().optional(),
-    prijs: z.number(),
-    prijsNaam: z.string(),
-    bijzonderheden: z.string().optional(),
-  }).refine((data) => {
-    const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(opt => opt.label === 'prijsTalonette');
-    const isTalonette = talonetteOption && data.prijs === talonetteOption.value;
-    
-    if (!isTalonette && !data.steunzoolTypeGeneral) {
-      return false;
-    }
-    
-    if (data.steunzoolTypeGeneral === 'Anders' && !data.steunzoolAndersText) {
-      return false;
-    }
-    
-    if (isTalonette && !data.steunzoolHakVerhogingLinks && !data.steunzoolHakVerhogingRechts) {
-      return false;
-    }
-    
-    return true;
-  }, {
-    message: 'Please fill in all required fields',
-    path: ['steunzoolTypeGeneral'],
-  });
+  const formSchema = z
+    .object({
+      welkPaar: z.string(),
+      medischeIndicatie: z.string().optional(),
+      schoenmaat: z
+        .string()
+        .min(1, t('shoeSizeRequired') || 'Shoe size is required'),
+      steunzoolTypeGeneral: z.string().optional(),
+      steunzoolAndersText: z.string().optional(),
+      steunzoolCorrectieMiddenvoet: z.string().optional(),
+      steunzoolCorrectieVoorvoet: z.string().optional(),
+      steunzoolVvPellote: z.string().optional(),
+      steunzoolHakVerhogingLinks: z.string().optional(),
+      steunzoolHakVerhogingRechts: z.string().optional(),
+      prijs: z.number(),
+      prijsNaam: z.string(),
+      bijzonderheden: z.string().optional(),
+    })
+    .refine(
+      data => {
+        const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(
+          opt => opt.label === 'prijsTalonette',
+        );
+        const isTalonette =
+          talonetteOption && data.prijs === talonetteOption.value;
+
+        if (!isTalonette && !data.steunzoolTypeGeneral) {
+          return false;
+        }
+
+        if (
+          data.steunzoolTypeGeneral === 'Anders' &&
+          !data.steunzoolAndersText
+        ) {
+          return false;
+        }
+
+        if (
+          isTalonette &&
+          !data.steunzoolHakVerhogingLinks &&
+          !data.steunzoolHakVerhogingRechts
+        ) {
+          return false;
+        }
+
+        return true;
+      },
+      {
+        message: 'Please fill in all required fields',
+        path: ['steunzoolTypeGeneral'],
+      },
+    );
 
   type FormData = z.infer<typeof formSchema>;
 
@@ -117,7 +134,9 @@ const FormIntakeSteunzolenPage = () => {
   const prijs = form.watch('prijs');
   const steunzoolTypeGeneral = form.watch('steunzoolTypeGeneral');
 
-  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(opt => opt.label === 'prijsTalonette');
+  const talonetteOption = STEUNZOLEN_PRIJS_OPTIES.find(
+    opt => opt.label === 'prijsTalonette',
+  );
   const isTalonette = talonetteOption && prijs === talonetteOption.value;
 
   const onSubmit = (data: FormData) => {
@@ -142,7 +161,7 @@ const FormIntakeSteunzolenPage = () => {
         prijs: data.prijs,
         prijsNaam: data.prijsNaam,
         bijzonderheden: data.bijzonderheden || '',
-      })
+      }),
     );
 
     router.push(Routes.form_results);
@@ -202,7 +221,7 @@ const FormIntakeSteunzolenPage = () => {
                                     {t(
                                       option.value
                                         .toLowerCase()
-                                        .replace(/ /g, '')
+                                        .replace(/ /g, ''),
                                     )}
                                   </Label>
                                 </div>
@@ -273,7 +292,8 @@ const FormIntakeSteunzolenPage = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {t('insolePrice')} <span className="text-destructive">*</span>
+                    {t('insolePrice')}{' '}
+                    <span className="text-destructive">*</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -286,11 +306,16 @@ const FormIntakeSteunzolenPage = () => {
                           <RadioGroup
                             onValueChange={val => {
                               field.onChange(Number(val));
-                              const selectedOption = STEUNZOLEN_PRIJS_OPTIES.find(
-                                opt => opt.value === Number(val)
-                              );
-                              if (selectedOption)
-                                form.setValue('prijsNaam', t(selectedOption.label));
+                              const selectedOption =
+                                STEUNZOLEN_PRIJS_OPTIES.find(
+                                  opt => opt.value === Number(val),
+                                );
+                              if (selectedOption) {
+                                form.setValue(
+                                  'prijsNaam',
+                                  t(selectedOption.label),
+                                );
+                              }
                             }}
                             value={field.value.toString()}
                           >
@@ -528,7 +553,10 @@ const FormIntakeSteunzolenPage = () => {
                           name="steunzoolHakVerhogingLinks"
                           render={({field}) => (
                             <FormItem>
-                              <FormLabel htmlFor="heel-left" className="text-sm">
+                              <FormLabel
+                                htmlFor="heel-left"
+                                className="text-sm"
+                              >
                                 {t('left')}
                               </FormLabel>
                               <FormControl>
@@ -548,7 +576,10 @@ const FormIntakeSteunzolenPage = () => {
                           name="steunzoolHakVerhogingRechts"
                           render={({field}) => (
                             <FormItem>
-                              <FormLabel htmlFor="heel-right" className="text-sm">
+                              <FormLabel
+                                htmlFor="heel-right"
+                                className="text-sm"
+                              >
                                 {t('right')}
                               </FormLabel>
                               <FormControl>
@@ -582,7 +613,10 @@ const FormIntakeSteunzolenPage = () => {
                         name="steunzoolHakVerhogingLinks"
                         render={({field}) => (
                           <FormItem>
-                            <FormLabel htmlFor="talonette-left" className="text-sm">
+                            <FormLabel
+                              htmlFor="talonette-left"
+                              className="text-sm"
+                            >
                               {t('left')}
                             </FormLabel>
                             <FormControl>
@@ -602,7 +636,10 @@ const FormIntakeSteunzolenPage = () => {
                         name="steunzoolHakVerhogingRechts"
                         render={({field}) => (
                           <FormItem>
-                            <FormLabel htmlFor="talonette-right" className="text-sm">
+                            <FormLabel
+                              htmlFor="talonette-right"
+                              className="text-sm"
+                            >
                               {t('right')}
                             </FormLabel>
                             <FormControl>

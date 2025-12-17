@@ -65,7 +65,7 @@ export const DutchAddressInput: React.FC<DutchAddressInputProps> = ({
 
       try {
         const res = await fetch(
-          `https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?fq=postcode:${cleanPc}&fq=huisnummer:${num}`
+          `https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?fq=postcode:${cleanPc}&fq=huisnummer:${num}`,
         );
         const data = await res.json();
 
@@ -97,7 +97,7 @@ export const DutchAddressInput: React.FC<DutchAddressInputProps> = ({
         setLoading(false);
       }
     },
-    [onAddressChange, onStreetChange, onCityChange, translate]
+    [onAddressChange, onStreetChange, onCityChange, translate],
   );
 
   const handlePostcodeBlur = () => {
