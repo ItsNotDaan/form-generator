@@ -1,17 +1,29 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {Textarea} from '@/components/ui/textarea';
+import {Checkbox} from '@/components/ui/checkbox';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
 import {
   OMSLUITING_OPTIES,
   OmsluitingKey,
@@ -32,13 +44,13 @@ import {
   MTP1_DIEP_OPTIES,
   Zijde,
 } from '@/lib/constants/formConstants';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setIntakeOSAData, setClientData } from '@/domain/store/slices/formData';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
 
-import { ChevronRight } from 'lucide-react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import {ChevronRight} from 'lucide-react';
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
 import {
   Form,
   FormControl,
@@ -47,20 +59,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
+import {scrollToFirstError} from '@/utils/formHelpers';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from '@/components/ui/accordion';
 
 const FormIntakeOSAPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
-
 
   const formSchema = z.object({
     welkPaar: z.string(),
@@ -134,7 +145,7 @@ const FormIntakeOSAPage = () => {
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'OSA' }));
+      dispatch(setClientData({...clientData, intakeType: 'OSA'}));
     }
 
     dispatch(
@@ -198,7 +209,7 @@ const FormIntakeOSAPage = () => {
         clawToesEnabled: data.clawToesEnabled,
         scannedWithFoil: data.scannedWithFoil,
         digitalInstructions: data.digitalInstructions || '',
-      })
+      }),
     );
 
     router.push(Routes.form_results);
@@ -209,8 +220,12 @@ const FormIntakeOSAPage = () => {
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
-          <h1 className="text-4xl font-bold text-foreground">{t('intakeOsa')}</h1>
-          <p className="text-lg text-muted-foreground">{t('vlosDescription')}</p>
+          <h1 className="text-4xl font-bold text-foreground">
+            {t('intakeOsa')}
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            {t('vlosDescription')}
+          </p>
         </div>
 
         <FormSection>
@@ -225,12 +240,24 @@ const FormIntakeOSAPage = () => {
                   <CardTitle>{t('whichPair')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <RadioGroup value={form.watch("welkPaar")} onValueChange={(v) => form.setValue("welkPaar", v)}>
+                  <RadioGroup
+                    value={form.watch('welkPaar')}
+                    onValueChange={v => form.setValue('welkPaar', v)}
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {PAARTYPE_OPTIES.map(option => (
-                        <div key={option.value} className="flex items-center space-x-2">
-                          <RadioGroupItem value={option.value} id={`paar-${option.value}`} />
-                          <Label htmlFor={`paar-${option.value}`} className="font-normal cursor-pointer">
+                        <div
+                          key={option.value}
+                          className="flex items-center space-x-2"
+                        >
+                          <RadioGroupItem
+                            value={option.value}
+                            id={`paar-${option.value}`}
+                          />
+                          <Label
+                            htmlFor={`paar-${option.value}`}
+                            className="font-normal cursor-pointer"
+                          >
                             {t(option.label)}
                           </Label>
                         </div>
@@ -246,19 +273,37 @@ const FormIntakeOSAPage = () => {
                   <CardTitle>{t('side')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <RadioGroup value={side} onValueChange={(v) => form.setValue("side", v as Zijde)}>
+                  <RadioGroup
+                    value={side}
+                    onValueChange={v => form.setValue('side', v as Zijde)}
+                  >
                     <div className="flex gap-6">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="both" id="side-both" />
-                        <Label htmlFor="side-both" className="font-normal cursor-pointer">{t('both')}</Label>
+                        <Label
+                          htmlFor="side-both"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('both')}
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="left" id="side-left" />
-                        <Label htmlFor="side-left" className="font-normal cursor-pointer">{t('left')}</Label>
+                        <Label
+                          htmlFor="side-left"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('left')}
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="right" id="side-right" />
-                        <Label htmlFor="side-right" className="font-normal cursor-pointer">{t('right')}</Label>
+                        <Label
+                          htmlFor="side-right"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('right')}
+                        </Label>
                       </div>
                     </div>
                   </RadioGroup>
@@ -276,20 +321,34 @@ const FormIntakeOSAPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-left"
-                          checked={form.watch("amputatieLinksEnabled")}
-                          onCheckedChange={(checked) => form.setValue("amputatieLinksEnabled", !!checked)}
+                          checked={form.watch('amputatieLinksEnabled')}
+                          onCheckedChange={checked =>
+                            form.setValue('amputatieLinksEnabled', !!checked)
+                          }
                         />
-                        <Label htmlFor="amp-left" className="font-normal cursor-pointer">{t('left')}</Label>
+                        <Label
+                          htmlFor="amp-left"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('left')}
+                        </Label>
                       </div>
                     )}
                     {showRechts && (
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-right"
-                          checked={form.watch("amputatieRechtsEnabled")}
-                          onCheckedChange={(checked) => form.setValue("amputatieRechtsEnabled", !!checked)}
+                          checked={form.watch('amputatieRechtsEnabled')}
+                          onCheckedChange={checked =>
+                            form.setValue('amputatieRechtsEnabled', !!checked)
+                          }
                         />
-                        <Label htmlFor="amp-right" className="font-normal cursor-pointer">{t('right')}</Label>
+                        <Label
+                          htmlFor="amp-right"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('right')}
+                        </Label>
                       </div>
                     )}
                   </div>
@@ -301,26 +360,40 @@ const FormIntakeOSAPage = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>{t('functionalResearch')}</CardTitle>
-                  <CardDescription>{t('functionalResearchDescription')}</CardDescription>
+                  <CardDescription>
+                    {t('functionalResearchDescription')}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Ziektebeelden */}
                   <div className="flex flex-col gap-2">
-                    <Label className="text-base font-semibold">{t('medicalConditions')}</Label>
+                    <Label className="text-base font-semibold">
+                      {t('medicalConditions')}
+                    </Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {ZIEKTEBEELDEN_OPTIES.map((optie) => (
-                        <div key={optie.key} className="flex items-center space-x-2">
+                      {ZIEKTEBEELDEN_OPTIES.map(optie => (
+                        <div
+                          key={optie.key}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`ziektebeeld-${optie.key}`}
-                            checked={(form.watch("ziektebeelden")[optie.key] as boolean) || false}
-                            onCheckedChange={(checked) =>
-                              form.setValue("ziektebeelden", {
-                                ...form.getValues("ziektebeelden"),
+                            checked={
+                              (form.watch('ziektebeelden')[
+                                optie.key
+                              ] as boolean) || false
+                            }
+                            onCheckedChange={checked =>
+                              form.setValue('ziektebeelden', {
+                                ...form.getValues('ziektebeelden'),
                                 [optie.key]: !!checked,
                               })
                             }
                           />
-                          <Label htmlFor={`ziektebeeld-${optie.key}`} className="font-normal cursor-pointer">
+                          <Label
+                            htmlFor={`ziektebeeld-${optie.key}`}
+                            className="font-normal cursor-pointer"
+                          >
                             {t(optie.translationKey)}
                           </Label>
                         </div>
@@ -332,21 +405,33 @@ const FormIntakeOSAPage = () => {
 
                   {/* Loopafstand hulpmiddelen */}
                   <div className="flex flex-col gap-2">
-                    <Label className="text-base font-semibold">{t('walkingDistanceAids')}</Label>
+                    <Label className="text-base font-semibold">
+                      {t('walkingDistanceAids')}
+                    </Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {LOOPAFSTAND_OPTIES.map((optie) => (
-                        <div key={optie.key} className="flex items-center space-x-2">
+                      {LOOPAFSTAND_OPTIES.map(optie => (
+                        <div
+                          key={optie.key}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`loopafstand-${optie.key}`}
-                            checked={(form.watch("loopafstandAids")[optie.key] as boolean) || false}
-                            onCheckedChange={(checked) =>
-                              form.setValue("loopafstandAids", {
-                                ...form.getValues("loopafstandAids"),
+                            checked={
+                              (form.watch('loopafstandAids')[
+                                optie.key
+                              ] as boolean) || false
+                            }
+                            onCheckedChange={checked =>
+                              form.setValue('loopafstandAids', {
+                                ...form.getValues('loopafstandAids'),
                                 [optie.key]: !!checked,
                               })
                             }
                           />
-                          <Label htmlFor={`loopafstand-${optie.key}`} className="font-normal cursor-pointer">
+                          <Label
+                            htmlFor={`loopafstand-${optie.key}`}
+                            className="font-normal cursor-pointer"
+                          >
                             {t(optie.translationKey)}
                           </Label>
                         </div>
@@ -358,23 +443,36 @@ const FormIntakeOSAPage = () => {
 
                   {/* Pijnbeleving */}
                   <div className="space-y-2">
-                    <Label htmlFor="pain-perception" className="text-base font-semibold">{t('painPerception')}</Label>
+                    <Label
+                      htmlFor="pain-perception"
+                      className="text-base font-semibold"
+                    >
+                      {t('painPerception')}
+                    </Label>
                     <div className="space-y-2">
                       <div className="grid grid-cols-6 gap-4 items-center">
-                        <div className="text-sm text-muted-foreground text-center">{t('noPain')} (0)</div>
+                        <div className="text-sm text-muted-foreground text-center">
+                          {t('noPain')} (0)
+                        </div>
                         <Input
                           id="pain-perception"
                           type="range"
                           min="0"
                           max="10"
                           step="1"
-                          value={form.watch("painPerception") || '0'}
-                          onChange={(e) => form.setValue("painPerception", e.target.value)}
+                          value={form.watch('painPerception') || '0'}
+                          onChange={e =>
+                            form.setValue('painPerception', e.target.value)
+                          }
                           className="col-span-4"
                         />
-                        <div className="text-sm text-muted-foreground text-center">{t('maximumPain')} (10)</div>
+                        <div className="text-sm text-muted-foreground text-center">
+                          {t('maximumPain')} (10)
+                        </div>
                       </div>
-                      <div className="text-center text-2xl font-bold">{form.watch("painPerception") || '0'}</div>
+                      <div className="text-center text-2xl font-bold">
+                        {form.watch('painPerception') || '0'}
+                      </div>
                     </div>
                   </div>
 
@@ -382,21 +480,33 @@ const FormIntakeOSAPage = () => {
 
                   {/* Inspectie voeten */}
                   <div className="flex flex-col gap-2">
-                    <Label className="text-base font-semibold">{t('footInspection')}</Label>
+                    <Label className="text-base font-semibold">
+                      {t('footInspection')}
+                    </Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {INSPECTIE_VOETEN_OPTIES.map((optie) => (
-                        <div key={optie.key} className="flex items-center space-x-2">
+                      {INSPECTIE_VOETEN_OPTIES.map(optie => (
+                        <div
+                          key={optie.key}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`foot-inspection-${optie.key}`}
-                            checked={(form.watch("footInspection")[optie.key] as boolean) || false}
-                            onCheckedChange={(checked) =>
-                              form.setValue("footInspection", {
-                                ...form.getValues("footInspection"),
+                            checked={
+                              (form.watch('footInspection')[
+                                optie.key
+                              ] as boolean) || false
+                            }
+                            onCheckedChange={checked =>
+                              form.setValue('footInspection', {
+                                ...form.getValues('footInspection'),
                                 [optie.key]: !!checked,
                               })
                             }
                           />
-                          <Label htmlFor={`foot-inspection-${optie.key}`} className="font-normal cursor-pointer">
+                          <Label
+                            htmlFor={`foot-inspection-${optie.key}`}
+                            className="font-normal cursor-pointer"
+                          >
                             {t(optie.translationKey)}
                           </Label>
                         </div>
@@ -422,8 +532,10 @@ const FormIntakeOSAPage = () => {
                           id="shaft-left"
                           type="number"
                           placeholder="cm"
-                          value={form.watch("schachthoogteLinks")}
-                          onChange={(e) => form.setValue("schachthoogteLinks", e.target.value)}
+                          value={form.watch('schachthoogteLinks')}
+                          onChange={e =>
+                            form.setValue('schachthoogteLinks', e.target.value)
+                          }
                         />
                       </div>
                     )}
@@ -434,8 +546,10 @@ const FormIntakeOSAPage = () => {
                           id="shaft-right"
                           type="number"
                           placeholder="cm"
-                          value={form.watch("schachthoogteRechts")}
-                          onChange={(e) => form.setValue("schachthoogteRechts", e.target.value)}
+                          value={form.watch('schachthoogteRechts')}
+                          onChange={e =>
+                            form.setValue('schachthoogteRechts', e.target.value)
+                          }
                         />
                       </div>
                     )}
@@ -454,16 +568,29 @@ const FormIntakeOSAPage = () => {
                 <CardContent className="space-y-6">
                   {/* Digitaal Ja/Nee */}
                   <div className="flex flex-col gap-2">
-                    <Label className="text-base font-semibold">{t('digital')}</Label>
+                    <Label className="text-base font-semibold">
+                      {t('digital')}
+                    </Label>
                     <RadioGroup
                       value={boolToString(digitalEnabled)}
-                      onValueChange={(v) => form.setValue("digitalEnabled", stringToBool(v))}
+                      onValueChange={v =>
+                        form.setValue('digitalEnabled', stringToBool(v))
+                      }
                     >
                       <div className="flex gap-6">
                         {JA_NEE_OPTIES.map(opt => (
-                          <div key={opt.value} className="flex items-center space-x-2">
-                            <RadioGroupItem value={opt.value} id={`digital-${opt.value}`} />
-                            <Label htmlFor={`digital-${opt.value}`} className="font-normal cursor-pointer">
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`digital-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`digital-${opt.value}`}
+                              className="font-normal cursor-pointer"
+                            >
                               {t(opt.label)}
                             </Label>
                           </div>
@@ -479,29 +606,39 @@ const FormIntakeOSAPage = () => {
 
                       {/* Hielheffing L/R */}
                       <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">{t('heelLift')}</Label>
+                        <Label className="text-base font-semibold">
+                          {t('heelLift')}
+                        </Label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           {showLinks && (
                             <div className="flex flex-col gap-2">
-                              <Label htmlFor="heel-lift-left">{t('left')} (mm)</Label>
+                              <Label htmlFor="heel-lift-left">
+                                {t('left')} (mm)
+                              </Label>
                               <Input
                                 id="heel-lift-left"
                                 type="number"
                                 placeholder="mm"
-                                value={form.watch("heelLiftLeft")}
-                                onChange={(e) => form.setValue("heelLiftLeft", e.target.value)}
+                                value={form.watch('heelLiftLeft')}
+                                onChange={e =>
+                                  form.setValue('heelLiftLeft', e.target.value)
+                                }
                               />
                             </div>
                           )}
                           {showRechts && (
                             <div className="flex flex-col gap-2">
-                              <Label htmlFor="heel-lift-right">{t('right')} (mm)</Label>
+                              <Label htmlFor="heel-lift-right">
+                                {t('right')} (mm)
+                              </Label>
                               <Input
                                 id="heel-lift-right"
                                 type="number"
                                 placeholder="mm"
-                                value={form.watch("heelLiftRight")}
-                                onChange={(e) => form.setValue("heelLiftRight", e.target.value)}
+                                value={form.watch('heelLiftRight')}
+                                onChange={e =>
+                                  form.setValue('heelLiftRight', e.target.value)
+                                }
                               />
                             </div>
                           )}
@@ -512,16 +649,27 @@ const FormIntakeOSAPage = () => {
 
                       {/* Leesthoogte */}
                       <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">{t('readingHeight')}</Label>
+                        <Label className="text-base font-semibold">
+                          {t('readingHeight')}
+                        </Label>
                         <RadioGroup
-                          value={form.watch("readingHeight")}
-                          onValueChange={(v) => form.setValue("readingHeight", v)}
+                          value={form.watch('readingHeight')}
+                          onValueChange={v => form.setValue('readingHeight', v)}
                         >
                           <div className="flex flex-wrap gap-4">
                             {LEESTHOOGTE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`reading-height-${opt.value}`} />
-                                <Label htmlFor={`reading-height-${opt.value}`} className="font-normal cursor-pointer">
+                              <div
+                                key={opt.value}
+                                className="flex items-center space-x-2"
+                              >
+                                <RadioGroupItem
+                                  value={opt.value}
+                                  id={`reading-height-${opt.value}`}
+                                />
+                                <Label
+                                  htmlFor={`reading-height-${opt.value}`}
+                                  className="font-normal cursor-pointer"
+                                >
                                   {opt.label}
                                 </Label>
                               </div>
@@ -534,21 +682,30 @@ const FormIntakeOSAPage = () => {
 
                       {/* MTP1 diep? L/R */}
                       <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">{t('mtp1Deep')}</Label>
+                        <Label className="text-base font-semibold">
+                          {t('mtp1Deep')}
+                        </Label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           {showLinks && (
                             <div className="flex flex-col gap-2">
                               <Label htmlFor="mtp1-left">{t('left')}</Label>
                               <Select
-                                value={form.watch("mtp1DeepLeft")}
-                                onValueChange={(v) => form.setValue("mtp1DeepLeft", v)}
+                                value={form.watch('mtp1DeepLeft')}
+                                onValueChange={v =>
+                                  form.setValue('mtp1DeepLeft', v)
+                                }
                               >
                                 <SelectTrigger id="mtp1-left">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {MTP1_DIEP_OPTIES.map(opt => (
-                                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                    <SelectItem
+                                      key={opt.value}
+                                      value={opt.value}
+                                    >
+                                      {opt.label}
+                                    </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
@@ -558,15 +715,22 @@ const FormIntakeOSAPage = () => {
                             <div className="flex flex-col gap-2">
                               <Label htmlFor="mtp1-right">{t('right')}</Label>
                               <Select
-                                value={form.watch("mtp1DeepRight")}
-                                onValueChange={(v) => form.setValue("mtp1DeepRight", v)}
+                                value={form.watch('mtp1DeepRight')}
+                                onValueChange={v =>
+                                  form.setValue('mtp1DeepRight', v)
+                                }
                               >
                                 <SelectTrigger id="mtp1-right">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {MTP1_DIEP_OPTIES.map(opt => (
-                                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                    <SelectItem
+                                      key={opt.value}
+                                      value={opt.value}
+                                    >
+                                      {opt.label}
+                                    </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
@@ -579,16 +743,29 @@ const FormIntakeOSAPage = () => {
 
                       {/* Klauwtenen? Ja/Nee */}
                       <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">{t('clawToes')}</Label>
+                        <Label className="text-base font-semibold">
+                          {t('clawToes')}
+                        </Label>
                         <RadioGroup
-                          value={boolToString(form.watch("clawToesEnabled"))}
-                          onValueChange={(v) => form.setValue("clawToesEnabled", stringToBool(v))}
+                          value={boolToString(form.watch('clawToesEnabled'))}
+                          onValueChange={v =>
+                            form.setValue('clawToesEnabled', stringToBool(v))
+                          }
                         >
                           <div className="flex gap-6">
                             {JA_NEE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`claw-toes-${opt.value}`} />
-                                <Label htmlFor={`claw-toes-${opt.value}`} className="font-normal cursor-pointer">
+                              <div
+                                key={opt.value}
+                                className="flex items-center space-x-2"
+                              >
+                                <RadioGroupItem
+                                  value={opt.value}
+                                  id={`claw-toes-${opt.value}`}
+                                />
+                                <Label
+                                  htmlFor={`claw-toes-${opt.value}`}
+                                  className="font-normal cursor-pointer"
+                                >
                                   {t(opt.label)}
                                 </Label>
                               </div>
@@ -601,16 +778,29 @@ const FormIntakeOSAPage = () => {
 
                       {/* Gescand met folie? Ja/Nee */}
                       <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">{t('scannedWithFoil')}</Label>
+                        <Label className="text-base font-semibold">
+                          {t('scannedWithFoil')}
+                        </Label>
                         <RadioGroup
-                          value={boolToString(form.watch("scannedWithFoil"))}
-                          onValueChange={(v) => form.setValue("scannedWithFoil", stringToBool(v))}
+                          value={boolToString(form.watch('scannedWithFoil'))}
+                          onValueChange={v =>
+                            form.setValue('scannedWithFoil', stringToBool(v))
+                          }
                         >
                           <div className="flex gap-6">
                             {JA_NEE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`scanned-foil-${opt.value}`} />
-                                <Label htmlFor={`scanned-foil-${opt.value}`} className="font-normal cursor-pointer">
+                              <div
+                                key={opt.value}
+                                className="flex items-center space-x-2"
+                              >
+                                <RadioGroupItem
+                                  value={opt.value}
+                                  id={`scanned-foil-${opt.value}`}
+                                />
+                                <Label
+                                  htmlFor={`scanned-foil-${opt.value}`}
+                                  className="font-normal cursor-pointer"
+                                >
                                   {t(opt.label)}
                                 </Label>
                               </div>
@@ -623,12 +813,19 @@ const FormIntakeOSAPage = () => {
 
                       {/* Instructies */}
                       <div className="flex flex-col gap-2">
-                        <Label htmlFor="digital-instructions" className="text-base font-semibold">{t('instructions')}</Label>
+                        <Label
+                          htmlFor="digital-instructions"
+                          className="text-base font-semibold"
+                        >
+                          {t('instructions')}
+                        </Label>
                         <Textarea
                           id="digital-instructions"
                           placeholder={t('instructionsPlaceholder')}
-                          value={form.watch("digitalInstructions")}
-                          onChange={(e) => form.setValue("digitalInstructions", e.target.value)}
+                          value={form.watch('digitalInstructions')}
+                          onChange={e =>
+                            form.setValue('digitalInstructions', e.target.value)
+                          }
                           rows={3}
                           className="resize-none"
                         />
@@ -646,8 +843,10 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <Textarea
                     placeholder={t('specialNotesPlaceholder')}
-                    value={form.watch("bijzonderheden")}
-                    onChange={(e) => form.setValue("bijzonderheden", e.target.value)}
+                    value={form.watch('bijzonderheden')}
+                    onChange={e =>
+                      form.setValue('bijzonderheden', e.target.value)
+                    }
                     rows={5}
                     className="resize-none"
                   />
@@ -656,7 +855,11 @@ const FormIntakeOSAPage = () => {
 
               {/* Submit Section */}
               <FormFooter>
-                <Button type="button" variant="outline" onClick={() => router.back()}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                >
                   {t('cancel')}
                 </Button>
                 <Button type="submit" size="lg" className="min-w-50">

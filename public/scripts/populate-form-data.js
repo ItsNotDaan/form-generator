@@ -52,14 +52,16 @@
     });
   }
 
-  var fieldsPopulated = [];
-  var fieldsNotFound = [];
+  const fieldsPopulated = [];
+  const fieldsNotFound = [];
 
   // Helper function to set field value
   function setFieldValue(element, value) {
-    if (!element) return false;
+    if (!element) {
+      return false;
+    }
 
-    var elementType = element.type || element.tagName.toLowerCase();
+    const elementType = element.type || element.tagName.toLowerCase();
 
     // Handle different field types
     if (elementType === 'checkbox') {
@@ -77,7 +79,7 @@
       // Text input, textarea, etc.
       element.value = value;
       // Trigger input event for React/state management
-      var event = new Event('input', {bubbles: true});
+      const event = new Event('input', {bubbles: true});
       element.dispatchEvent(event);
     }
 
@@ -85,18 +87,20 @@
   }
 
   // Iterate through provided form data
-  for (var key in formData) {
-    if (!formData.hasOwnProperty(key)) continue;
+  for (const key in formData) {
+    if (!formData.hasOwnProperty(key)) {
+      continue;
+    }
 
-    var value = formData[key];
-    var element = null;
+    const value = formData[key];
+    let element = null;
 
     // Try to find element by ID
     element = document.getElementById(key);
 
     // Try to find by name if ID didn't work
     if (!element) {
-      var elementsByName = document.getElementsByName(key);
+      const elementsByName = document.getElementsByName(key);
       if (elementsByName.length > 0) {
         element = elementsByName[0];
       }
@@ -104,10 +108,10 @@
 
     // Try to find by matching label text (case-insensitive)
     if (!element) {
-      var labels = document.querySelectorAll('label');
-      for (var i = 0; i < labels.length; i++) {
+      const labels = document.querySelectorAll('label');
+      for (let i = 0; i < labels.length; i++) {
         if (labels[i].innerText.trim().toLowerCase() === key.toLowerCase()) {
-          var forAttr = labels[i].getAttribute('for');
+          const forAttr = labels[i].getAttribute('for');
           if (forAttr) {
             element = document.getElementById(forAttr);
             break;
@@ -137,6 +141,6 @@
       details: fieldsPopulated,
     },
     null,
-    2
+    2,
   );
 })(arguments[0]);

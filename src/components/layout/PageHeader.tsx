@@ -31,7 +31,7 @@ export const PageHeader = memo(
             <Link href={Routes.overview} className="flex items-center">
               <img
                 src={getAssetPath(
-                  '/images/global/eemland-logo-alleen-white.png'
+                  '/images/global/eemland-logo-alleen-white.png',
                 )}
                 className="w-auto h-10"
                 alt="Eemland Logo"
@@ -71,7 +71,7 @@ export const PageHeader = memo(
         </div>
       </nav>
     );
-  }
+  },
 );
 
 PageHeader.displayName = 'PageHeader';

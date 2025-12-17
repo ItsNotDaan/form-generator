@@ -94,7 +94,7 @@ export function DatePicker({
           placeholder={placeholder}
           className={cn(
             'w-full bg-background pr-10',
-            error && 'border-destructive focus:border-destructive'
+            error && 'border-destructive focus:border-destructive',
           )}
           onChange={e => {
             const newValue = e.target.value;
@@ -118,7 +118,7 @@ export function DatePicker({
               variant="ghost"
               className={cn(
                 'absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 p-0',
-                error && 'text-destructive'
+                error && 'text-destructive',
               )}
             >
               <CalendarIcon className="h-4 w-4" />

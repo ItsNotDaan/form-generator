@@ -16,7 +16,7 @@ interface ReactSelectProps {
   options: SelectOption[];
   value?: SelectOption | SelectOption[] | null;
   onChange?: (
-    value: SingleValue<SelectOption> | MultiValue<SelectOption>
+    value: SingleValue<SelectOption> | MultiValue<SelectOption>,
   ) => void;
   placeholder?: string;
   isMulti?: boolean;
@@ -51,8 +51,8 @@ export const ReactSelect = memo<ReactSelectProps>(
         borderColor: error
           ? '#F56565'
           : state.isFocused
-          ? '#3D7014'
-          : '#DCE7F6',
+            ? '#3D7014'
+            : '#DCE7F6',
         boxShadow: state.isFocused
           ? error
             ? '0 0 0 1px #F56565'
@@ -69,8 +69,8 @@ export const ReactSelect = memo<ReactSelectProps>(
         backgroundColor: state.isSelected
           ? '#3D7014'
           : state.isFocused
-          ? '#EFF4FA'
-          : 'white',
+            ? '#EFF4FA'
+            : 'white',
         color: state.isSelected ? 'white' : '#092253',
         '&:active': {
           backgroundColor: '#3c7014',
@@ -130,7 +130,7 @@ export const ReactSelect = memo<ReactSelectProps>(
         classNamePrefix="react-select"
       />
     );
-  }
+  },
 );
 
 ReactSelect.displayName = 'ReactSelect';

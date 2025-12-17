@@ -113,7 +113,7 @@ const FormOldClientPage = () => {
         insurance: data.insurance || '',
         medischeIndicatie: data.medischeIndicatie || '',
         specialist: data.specialist || '',
-      })
+      }),
     );
     router.push(Routes.form_selection);
   };
@@ -159,7 +159,7 @@ const FormOldClientPage = () => {
                                 value={
                                   field.value
                                     ? BEHANDELAARS.find(
-                                        p => p.value === field.value
+                                        p => p.value === field.value,
                                       )
                                     : null
                                 }
@@ -197,7 +197,7 @@ const FormOldClientPage = () => {
                               }
                               onChange={date =>
                                 field.onChange(
-                                  date?.toISOString().split('T')[0] || ''
+                                  date?.toISOString().split('T')[0] || '',
                                 )
                               }
                               placeholder={t('selectDate')}
@@ -343,7 +343,7 @@ const FormOldClientPage = () => {
                             }
                             onChange={date =>
                               field.onChange(
-                                date?.toISOString().split('T')[0] || ''
+                                date?.toISOString().split('T')[0] || '',
                               )
                             }
                             placeholder={t('selectBirthDate')}

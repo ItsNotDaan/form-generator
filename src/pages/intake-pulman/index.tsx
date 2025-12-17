@@ -149,7 +149,7 @@ const FormIntakePulmanPage = () => {
                                     {t(
                                       option.value
                                         .toLowerCase()
-                                        .replace(/ /g, '')
+                                        .replace(/ /g, ''),
                                     )}
                                   </Label>
                                 </div>

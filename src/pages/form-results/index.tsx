@@ -124,7 +124,7 @@ const FormResultsPage = () => {
           intakeOSB: formData.intakeOSB,
           intakeOVAC: formData.intakeOVAC,
           intakeSteunzolen: formData.intakeSteunzolen,
-        }
+        },
       );
 
       // Group normalized codes under medicalCodes object
@@ -195,7 +195,7 @@ const FormResultsPage = () => {
         <h3 className="text-lg font-bold mb-3">{title}</h3>
         <div className="flex flex-col gap-2">
           {Object.entries(data).map(([key, value]) =>
-            renderFieldValue(key, value)
+            renderFieldValue(key, value),
           )}
         </div>
       </div>

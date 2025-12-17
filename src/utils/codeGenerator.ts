@@ -139,24 +139,39 @@ function generateOSBCodes(
   osb: any,
   codes: GeneratedCodes,
   warnings: string[],
-  insurance: string
+  insurance: string,
 ): void {
   // Supplement Individueel (code 43)
-  if (osb.aanpassingen?.supplementIndividueelLinks) codes.code43Links = true;
-  if (osb.aanpassingen?.supplementIndividueelRechts) codes.code43Rechts = true;
+  if (osb.aanpassingen?.supplementIndividueelLinks) {
+    codes.code43Links = true;
+  }
+  if (osb.aanpassingen?.supplementIndividueelRechts) {
+    codes.code43Rechts = true;
+  }
 
   // Afwikkelrol Eenvoudig (code 46)
-  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) codes.code46Links = true;
-  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) codes.code46Rechts = true;
+  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) {
+    codes.code46Links = true;
+  }
+  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) {
+    codes.code46Rechts = true;
+  }
 
   // Afwikkelrol Gecompliceerd (code 47)
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) codes.code47Links = true;
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts)
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) {
+    codes.code47Links = true;
+  }
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) {
     codes.code47Rechts = true;
+  }
 
   // Zoolverstijving (code 57)
-  if (osb.aanpassingen?.zoolverstijvingLinks) codes.code57Links = true;
-  if (osb.aanpassingen?.zoolverstijvingRechts) codes.code57Rechts = true;
+  if (osb.aanpassingen?.zoolverstijvingLinks) {
+    codes.code57Links = true;
+  }
+  if (osb.aanpassingen?.zoolverstijvingRechts) {
+    codes.code57Rechts = true;
+  }
 
   // Note: Hallux Valgus and Verdieping voorvoet do not generate codes in OSB
   // They are part of the form but don't map to the code generation system
@@ -171,9 +186,11 @@ function generateOSBCodes(
  * Else return true if any value in the record is true
  */
 function hasOmsluiting(
-  omsluitingRecord: Record<string, boolean> | undefined
+  omsluitingRecord: Record<string, boolean> | undefined,
 ): boolean {
-  if (!omsluitingRecord) return false;
+  if (!omsluitingRecord) {
+    return false;
+  }
   return Object.values(omsluitingRecord).some(value => value === true);
 }
 
@@ -201,9 +218,9 @@ function generateVLOSCodes(
   vlos: IntakeVLOSData,
   codes: GeneratedCodes,
   warnings: string[],
-  insurance: string
+  insurance: string,
 ): void {
-  const { side, welkPaar } = vlos;
+  const {side, welkPaar} = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
@@ -236,7 +253,7 @@ function generateVLOSCodes(
     codes.code16Links = true;
     if (!vlos.ezelsoorLinksType) {
       warnings.push(
-        'Ezelsoor links is enabled maar type (mediaal/lateraal) is niet geselecteerd'
+        'Ezelsoor links is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
     }
   }
@@ -244,7 +261,7 @@ function generateVLOSCodes(
     codes.code16Rechts = true;
     if (!vlos.ezelsoorRechtsType) {
       warnings.push(
-        'Ezelsoor rechts is enabled maar type (mediaal/lateraal) is niet geselecteerd'
+        'Ezelsoor rechts is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
     }
   }
@@ -278,9 +295,9 @@ function generateOSACodes(
   osa: IntakeOSAData,
   codes: GeneratedCodes,
   warnings: string[],
-  insurance: string
+  insurance: string,
 ): void {
-  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
+  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -334,7 +351,7 @@ function generateOSACodes(
     codes.code16Links = true;
     if (!osa.ezelsoorLinksType) {
       warnings.push(
-        'Ezelsoor links is enabled maar type (mediaal/lateraal) is niet geselecteerd'
+        'Ezelsoor links is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
     }
   }
@@ -342,7 +359,7 @@ function generateOSACodes(
     codes.code16Rechts = true;
     if (!osa.ezelsoorRechtsType) {
       warnings.push(
-        'Ezelsoor rechts is enabled maar type (mediaal/lateraal) is niet geselecteerd'
+        'Ezelsoor rechts is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
     }
   }
@@ -388,7 +405,7 @@ function generateOSACodes(
  */
 export function generateCodes(
   clientData: ClientData | null,
-  intakeData: IntakeFormData
+  intakeData: IntakeFormData,
 ): CodeGenerationResult {
   const codes = initializeCodes();
   const warnings: string[] = [];
@@ -396,14 +413,14 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
-  const { intakeType, insurance } = clientData;
+  const {intakeType, insurance} = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
   // Generate codes based on intake type
@@ -414,7 +431,7 @@ export function generateCodes(
           intakeData.intakeVLOS,
           codes,
           warnings,
-          insurance || ''
+          insurance || '',
         );
       } else {
         warnings.push('VLOS intake data is niet beschikbaar');
@@ -427,7 +444,7 @@ export function generateCodes(
           intakeData.intakeOSA,
           codes,
           warnings,
-          insurance || ''
+          insurance || '',
         );
       } else {
         warnings.push('OSA intake data is niet beschikbaar');
@@ -440,7 +457,7 @@ export function generateCodes(
           intakeData.intakeOSB,
           codes,
           warnings,
-          insurance || ''
+          insurance || '',
         );
       } else {
         warnings.push('OSB intake data is niet beschikbaar');
@@ -448,7 +465,7 @@ export function generateCodes(
       break;
     case 'OVAC':
       warnings.push(
-        `Code generatie voor ${intakeType} wordt in een latere fase geïmplementeerd`
+        `Code generatie voor ${intakeType} wordt in een latere fase geïmplementeerd`,
       );
       break;
 
@@ -463,20 +480,32 @@ export function generateCodes(
   }
 
   // Determine generalBasiscode (codes 1-8 for VLOS/OSA)
-  if (codes.code01) generalBasiscode = '1';
-  else if (codes.code02) generalBasiscode = '2';
-  else if (codes.code03) generalBasiscode = '3';
-  else if (codes.code04) generalBasiscode = '4';
-  else if (codes.code05) generalBasiscode = '5';
-  else if (codes.code06) generalBasiscode = '6';
-  else if (codes.code07) generalBasiscode = '7';
-  else if (codes.code08) generalBasiscode = '8';
+  if (codes.code01) {
+    generalBasiscode = '1';
+  } else if (codes.code02) {
+    generalBasiscode = '2';
+  } else if (codes.code03) {
+    generalBasiscode = '3';
+  } else if (codes.code04) {
+    generalBasiscode = '4';
+  } else if (codes.code05) {
+    generalBasiscode = '5';
+  } else if (codes.code06) {
+    generalBasiscode = '6';
+  } else if (codes.code07) {
+    generalBasiscode = '7';
+  } else if (codes.code08) {
+    generalBasiscode = '8';
+  }
 
   // Determine generalBasiscode for OSB (42 or 40)
   if (intakeData.intakeOSB?.basiscode) {
-    if (intakeData.intakeOSB.basiscode === '42') generalBasiscode = '42';
-    else if (intakeData.intakeOSB.basiscode === '40') generalBasiscode = '40';
+    if (intakeData.intakeOSB.basiscode === '42') {
+      generalBasiscode = '42';
+    } else if (intakeData.intakeOSB.basiscode === '40') {
+      generalBasiscode = '40';
+    }
   }
 
-  return { codes, warnings, generalBasiscode };
+  return {codes, warnings, generalBasiscode};
 }

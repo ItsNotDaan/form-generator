@@ -11,12 +11,12 @@
  */
 
 (function () {
-  var result = [];
+  const result = [];
 
   // Extract all possible input fields
-  var elements = document.querySelectorAll('input, textarea, select');
+  const elements = document.querySelectorAll('input, textarea, select');
 
-  for (let element of elements) {
+  for (const element of elements) {
     // Skip hidden fields and submit buttons
     if (
       element.type === 'hidden' ||
@@ -27,15 +27,15 @@
     }
 
     // Try to find a label via 'for' attribute or via a parent <label>
-    var labelText = '';
+    let labelText = '';
     if (element.id) {
-      var label = document.querySelector('label[for="' + element.id + '"]');
+      const label = document.querySelector('label[for="' + element.id + '"]');
       if (label) {
         labelText = label.innerText.trim();
       }
     }
     if (!labelText) {
-      var parentLabel = element.closest('label');
+      const parentLabel = element.closest('label');
       if (parentLabel) {
         labelText = parentLabel.innerText.trim();
       }
@@ -45,7 +45,7 @@
     if (!labelText) {
       var parentBox = element.closest('[id^="field-"]');
       if (parentBox) {
-        var boxLabel = parentBox.querySelector('label');
+        const boxLabel = parentBox.querySelector('label');
         if (boxLabel) {
           labelText = boxLabel.innerText.trim();
         }
@@ -53,7 +53,7 @@
     }
 
     // Get field value based on type
-    var fieldValue = null;
+    let fieldValue = null;
     if (element.type === 'checkbox') {
       fieldValue = element.checked;
     } else if (element.type === 'radio') {
@@ -67,7 +67,7 @@
     }
 
     // Get the field container ID for better identification
-    var fieldContainerId = null;
+    let fieldContainerId = null;
     var parentBox = element.closest('[id^="field-"]');
     if (parentBox) {
       fieldContainerId = parentBox.id;

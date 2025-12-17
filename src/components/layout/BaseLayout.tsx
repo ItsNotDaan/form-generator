@@ -36,7 +36,7 @@ export const BaseLayout = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 BaseLayout.displayName = 'BaseLayout';

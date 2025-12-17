@@ -22,7 +22,7 @@ export const scrollToFirstError = (errors: Record<string, any>) => {
 
   // Try to find the element by name attribute (React Hook Form convention)
   let element: HTMLElement | null = document.querySelector(
-    `[name="${firstErrorKey}"]`
+    `[name="${firstErrorKey}"]`,
   );
 
   // If not found by name, try by id

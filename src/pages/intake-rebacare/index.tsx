@@ -122,7 +122,7 @@ const FormIntakeRebacarePage = () => {
                                     {t(
                                       option.value
                                         .toLowerCase()
-                                        .replace(/ /g, '')
+                                        .replace(/ /g, ''),
                                     )}
                                   </Label>
                                 </div>
