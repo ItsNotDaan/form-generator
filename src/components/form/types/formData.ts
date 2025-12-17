@@ -1,5 +1,5 @@
 // Type definities voor cliënt en intake formulier data
-import type {Locatie, Aanhef, Zijde} from '@/lib/constants/formConstants';
+import type { Locatie, Aanhef, Zijde } from '@/lib/constants/formConstants';
 
 export interface ClientData {
   // Practitioner and date
@@ -8,13 +8,13 @@ export interface ClientData {
 
   // Intake form type
   intakeType?:
-    | 'VLOS'
-    | 'OSA'
-    | 'Pulman'
-    | 'Rebacare'
-    | 'OSB'
-    | 'OVAC'
-    | 'Steunzolen';
+  | 'VLOS'
+  | 'OSA'
+  | 'Pulman'
+  | 'Rebacare'
+  | 'OSB'
+  | 'OVAC'
+  | 'Steunzolen';
 
   // Location
   location?: Locatie;
@@ -131,20 +131,20 @@ export interface IntakeVLOSData {
 export interface IntakeOSAData extends IntakeVLOSData {
   // Functieonderzoek - Ziektebeelden
   ziektebeelden?: Record<string, boolean>;
-  
+
   // Functieonderzoek - Loopafstand hulpmiddelen
   loopafstandAids?: Record<string, boolean>;
-  
+
   // Functieonderzoek - Pijnbeleving (0-10)
   painPerception?: string;
-  
+
   // Functieonderzoek - Inspectie voeten
   footInspection?: Record<string, boolean>;
-  
+
   // Functieonderzoek - Beenlengte verschil
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
-  
+
   // Digitaal section
   digitalEnabled?: boolean;
   heelLiftLeft?: string;
@@ -370,7 +370,7 @@ export interface CheckFoliepasData {
   // Reading corrections
   readingCorrectionAfterFoilFit?: string;
   readingCorrectionAfterLiningShoe?: string;
-  
+
   // Enclosure/padding - same structure as VLOS
   omsluitingLinks?: Record<string, boolean>;
   omsluitingRechts?: Record<string, boolean>;
