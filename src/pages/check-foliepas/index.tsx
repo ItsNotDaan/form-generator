@@ -245,6 +245,7 @@ const FormCheckFoliepasPage = () => {
   // Watch for conditional visibility
   const showColorAndModel = form.watch('showColorAndModel');
   const modelType = form.watch('modelType');
+  const colorOptions = form.watch('colorOptions') || [''];
   const closureType = form.watch('closureType');
   const zipperType = form.watch('zipperType');
   const soleType = form.watch('soleType');
@@ -606,26 +607,26 @@ const FormCheckFoliepasPage = () => {
                       <CardTitle>{t('colors')}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      {(form.watch('colorOptions') || ['']).map((color, index) => (
+                      {colorOptions.map((color, index) => (
                         <div key={index} className="flex gap-2">
                           <Textarea
                             placeholder={`${t('colorOption')} ${index + 1}`}
                             value={color}
                             onChange={(e) => {
-                              const colors = [...(form.watch('colorOptions') || [''])];
+                              const colors = [...colorOptions];
                               colors[index] = e.target.value;
                               form.setValue('colorOptions', colors);
                             }}
                             rows={2}
                             className="flex-1"
                           />
-                          {(form.watch('colorOptions') || ['']).length > 1 && (
+                          {colorOptions.length > 1 && (
                             <Button
                               type="button"
                               variant="outline"
                               size="sm"
                               onClick={() => {
-                                const colors = [...(form.watch('colorOptions') || [''])];
+                                const colors = [...colorOptions];
                                 colors.splice(index, 1);
                                 form.setValue('colorOptions', colors);
                               }}
@@ -639,7 +640,7 @@ const FormCheckFoliepasPage = () => {
                         type="button"
                         variant="outline"
                         onClick={() => {
-                          const colors = [...(form.watch('colorOptions') || ['']), ''];
+                          const colors = [...colorOptions, ''];
                           form.setValue('colorOptions', colors);
                         }}
                       >
