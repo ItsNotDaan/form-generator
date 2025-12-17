@@ -198,7 +198,7 @@ const FormCheckFoliepasPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Reading Corrections */}
+              {/* Reading Corrections after Foil Fit */}
               <Card>
                 <CardHeader>
                   <CardTitle>{t('readingCorrectionAfterFoilFit')}</CardTitle>
@@ -214,6 +214,7 @@ const FormCheckFoliepasPage = () => {
                 </CardContent>
               </Card>
 
+              {/* Reading Correction After Lining Shoe */}
               <Card>
                 <CardHeader>
                   <CardTitle>{t('readingCorrectionAfterLiningShoe')}</CardTitle>
@@ -334,6 +335,16 @@ const FormCheckFoliepasPage = () => {
                 </CardContent>
               </Card>
 
+              {/* ----------------------------------------------- */}
+
+              {/* Alles hieronder is een Card met de translated naam: Kleur en Model: 
+              LAAT ALLE COMMENTS STAAN VOOR CONTROLE.
+              Kleur/Model (Ja/Nee) (Radio) 
+              Als ja laat hieronder alles zien
+              als nee verberg alles hieronder.
+              
+              */}
+
               {/* 1. Beenlengte verschil */}
               <Card>
                 <CardHeader>
@@ -365,6 +376,8 @@ const FormCheckFoliepasPage = () => {
                 </CardContent>
               </Card>
 
+              {/* Schachthoogte */}
+
               {/* 2. Openstand schacht */}
               <Card>
                 <CardHeader>
@@ -386,493 +399,213 @@ const FormCheckFoliepasPage = () => {
                 </CardContent>
               </Card>
 
-              {/* 5. Supplement schoring */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('supplementSupport')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-2">
-                      <Label className="text-sm font-semibold">{t('left')}</Label>
-                      <RadioGroup
-                        value={(form.watch('supplementschoringLinksEnabled') ? 'ja' : 'nee')}
-                        onValueChange={(v) => form.setValue('supplementschoringLinksEnabled', v === 'ja')}
-                      >
-                        <div className="flex gap-4 mb-3">
-                          {JA_NEE_OPTIES.map(opt => (
-                            <div key={opt.value} className="flex items-center space-x-2">
-                              <RadioGroupItem value={opt.value} id={`supp-left-${opt.value}`} />
-                              <Label htmlFor={`supp-left-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.label)}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                      {form.watch('supplementschoringLinksEnabled') && (
-                        <Select value={form.watch('supplementschoringLinksType')} onValueChange={(v) => form.setValue('supplementschoringLinksType', v)}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {SUPPLEMENT_TYPE_OPTIES.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label className="text-sm font-semibold">{t('right')}</Label>
-                      <RadioGroup
-                        value={(form.watch('supplementschoringRechtsEnabled') ? 'ja' : 'nee')}
-                        onValueChange={(v) => form.setValue('supplementschoringRechtsEnabled', v === 'ja')}
-                      >
-                        <div className="flex gap-4 mb-3">
-                          {JA_NEE_OPTIES.map(opt => (
-                            <div key={opt.value} className="flex items-center space-x-2">
-                              <RadioGroupItem value={opt.value} id={`supp-right-${opt.value}`} />
-                              <Label htmlFor={`supp-right-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.label)}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                      {form.watch('supplementschoringRechtsEnabled') && (
-                        <Select value={form.watch('supplementschoringRechtsType')} onValueChange={(v) => form.setValue('supplementschoringRechtsType', v)}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {SUPPLEMENT_TYPE_OPTIES.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* !Model (Verplicht)
+              Opties radio: (Radio) 
+              Als foto 
+              of 
+              Model -> (textarea) (Standaard)
+              
+              Output naar form-results in engels: finalModelShoe
+              Voorbeeld: Model: (textarea).
+              Als (Als foto) is gekozen, dan alleen dat tonen.
+              */}
 
-              {/* 4. Zoolverstijving */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('soleStiffening')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-6">
-                    <div className="flex flex-col gap-2">
-                      <RadioGroup
-                        value={(form.watch('zoolverstijvingEnabled') ? 'ja' : 'nee')}
-                        onValueChange={(v) => form.setValue('zoolverstijvingEnabled', v === 'ja')}
-                      >
-                        <div className="flex gap-4">
-                          {JA_NEE_OPTIES.map(opt => (
-                            <div key={opt.value} className="flex items-center space-x-2">
-                              <RadioGroupItem value={opt.value} id={`stiff-${opt.value}`} />
-                              <Label htmlFor={`stiff-${opt.value}`} className="font-normal cursor-pointer">
-                                {t(opt.label)}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                    </div>
+              {/* !Kleuren (Verplicht)
+              Optie 1: (Textarea)
+              Optie 2: (Textarea)
+              Optie 3: (Textarea)
+              Hier moet een plusje of minnetje komen om opties toe te voegen of te verwijderen.
 
-                    {form.watch('zoolverstijvingEnabled') && (
-                      <div className="flex flex-col gap-2">
-                        <Label>{t('side')}</Label>
-                        <div className="flex gap-6">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="stiff-left"
-                              checked={form.watch('zoolverstijvingLinks')}
-                              onCheckedChange={(checked) => form.setValue('zoolverstijvingLinks', !!checked)}
-                            />
-                            <Label htmlFor="stiff-left" className="font-normal cursor-pointer">{t('left')}</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="stiff-right"
-                              checked={form.watch('zoolverstijvingRechts')}
-                              onCheckedChange={(checked) => form.setValue('zoolverstijvingRechts', !!checked)}
-                            />
-                            <Label htmlFor="stiff-right" className="font-normal cursor-pointer">{t('right')}</Label>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              Output naar form-results in engels: finalColorOptionsShoe
+              Voorbeeld: 1: (textarea1) + 2: (textarea2) + 3: (textarea3). 
+              Alleen de gekozen opties toevoegen met een + ertussen als er nog een optie is toegevoegd.
+              */}
 
-              {/* 6. Sluiting en tong */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('closureAndTongue')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-2">
-                      <Label>{t('closureType')}</Label>
-                      <RadioGroup value={form.watch('sluitingType') || ''} onValueChange={(v) => form.setValue('sluitingType', v)}>
-                        <div className="flex flex-col gap-2">
-                          {SLUITING_OPTIES.map(opt => (
-                            <div key={opt.value} className="flex items-center space-x-2">
-                              <RadioGroupItem value={opt.value} id={`closure-${opt.value}`} />
-                              <Label htmlFor={`closure-${opt.value}`} className="font-normal cursor-pointer text-sm">
-                                {opt.label}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                    </div>
+              {/* !Tong polsteren en polsterkraag:
+              Tong polsteren: 3 of 5 mm (Radio)
+              Polsterkraag: 3 of 5 mm (Radio) 
+              
+              Output naar form-results in engels: paddingTongueMmShoe, paddingCollarMmShoe
+              Voorbeeld: 3 mm, 5 mm
 
-                    <div className="flex flex-col gap-2">
-                      <Label htmlFor="insert-point">{t('insertPoint')}</Label>
-                      <Input
-                        id="insert-point"
-                        value={form.watch('inschotpunt') || ''}
-                        onChange={(e) => form.setValue('inschotpunt', e.target.value)}
-                        placeholder={t('insertPointPlaceholder')}
-                      />
-                    </div>
+              Deze zijn los van elkaar. Gewoon naaste elkaar tonen.
+              */}
 
-                    <div className="flex flex-col gap-2">
-                      <Label className="mb-1">{t('tonguePadding')}</Label>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="tongue-pad"
-                          checked={form.watch('tongpolsterEnabled')}
-                          onCheckedChange={(checked) => form.setValue('tongpolsterEnabled', !!checked)}
-                        />
-                        <Label htmlFor="tongue-pad" className="font-normal cursor-pointer">{t('tonguePadding')}</Label>
-                      </div>
-                    </div>
+              {/* !Sluiting: (Verplicht)
+                (Radio)
+               Klitteband met rolpassant (extra lang)
+               Of
+               Ringen nr: (Textarea) + Aantal: (Textarea)
+               Haken nr: (Textarea) + Aantal: (Textarea)
 
-                    <div className="flex flex-col gap-2">
-                      <Label className="mb-1">{t('tongueStitching')}</Label>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="tongue-stitch"
-                          checked={form.watch('tongVaststikkenEnabled')}
-                          onCheckedChange={(checked) => form.setValue('tongVaststikkenEnabled', !!checked)}
-                        />
-                        <Label htmlFor="tongue-stitch" className="font-normal cursor-pointer">{t('tongueStitching')}</Label>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+               Output naar form-results in engels: closureTypeDetailsShoe
+               Voorbeeld: Klitteband met rolpassant (extra lang), Ringen nr: (textarea) Aantal: (textarea) + Haken nr: (textarea) Aantal: (textarea)
+               Alleen de gekozen opties toevoegen. het is of klitteband, of ringen/haken. Ringen/haken kunnen samen zijn. Als ze zijn ingevuld. moeten ze erbij met een + ertussen.
+               */}
 
-              {/* 7. Haksoort en hoogte */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('heelTypeAndHeight')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-2">
-                      <Label className="text-sm font-semibold">{t('left')}</Label>
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm">{t('heelType')}</Label>
-                        <RadioGroup value={form.watch('haksoortLinks') || ''} onValueChange={(v) => form.setValue('haksoortLinks', v)}>
-                          <div className="space-y-2">
-                            {HAKSOORT_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`heel-type-left-${opt.value}`} />
-                                <Label htmlFor={`heel-type-left-${opt.value}`} className="font-normal cursor-pointer text-sm">
-                                  {opt.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="heel-height-left" className="text-sm">{t('heelHeight')} (cm)</Label>
-                        <Input
-                          id="heel-height-left"
-                          type="number"
-                          value={form.watch('hakhoogteLinks') || ''}
-                          onChange={(e) => form.setValue('hakhoogteLinks', e.target.value)}
-                          placeholder="cm"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label className="text-sm font-semibold">{t('right')}</Label>
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm">{t('heelType')}</Label>
-                        <RadioGroup value={form.watch('haksoortRechts') || ''} onValueChange={(v) => form.setValue('haksoortRechts', v)}>
-                          <div className="space-y-2">
-                            {HAKSOORT_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`heel-type-right-${opt.value}`} />
-                                <Label htmlFor={`heel-type-right-${opt.value}`} className="font-normal cursor-pointer text-sm">
-                                  {opt.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="heel-height-right" className="text-sm">{t('heelHeight')} (cm)</Label>
-                        <Input
-                          id="heel-height-right"
-                          type="number"
-                          value={form.watch('hakhoogteRechts') || ''}
-                          onChange={(e) => form.setValue('hakhoogteRechts', e.target.value)}
-                          placeholder="cm"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* !Rits 
+                (Select component)
+                Geen Rits (Standaard)
+                Functioneel Nylon (Checkbox met Mediaal en/of Lateraal)
+                Decoratief Nylon (Checkbox met Mediaal en/of Lateraal)
 
-              {/* 8. Hak aanpassingen (schoring) + 7. Ezelsoor */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('heelModifications')}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div>
-                    <Label className="text-base font-semibold mb-3 block">{t('heelSlant')}</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm">{t('left')}</Label>
-                        <RadioGroup
-                          value={(form.watch('hakschoringLinksEnabled') ? 'ja' : 'nee')}
-                          onValueChange={(v) => form.setValue('hakschoringLinksEnabled', v === 'ja')}
-                        >
-                          <div className="flex gap-4 mb-3">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`slant-left-${opt.value}`} />
-                                <Label htmlFor={`slant-left-${opt.value}`} className="font-normal cursor-pointer">
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                        {form.watch('hakschoringLinksEnabled') && (
-                          <Select value={form.watch('hakschoringLinksType')} onValueChange={(v) => form.setValue('hakschoringLinksType', v)}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                                <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm">{t('right')}</Label>
-                        <RadioGroup
-                          value={(form.watch('hakschoringRechtsEnabled') ? 'ja' : 'nee')}
-                          onValueChange={(v) => form.setValue('hakschoringRechtsEnabled', v === 'ja')}
-                        >
-                          <div className="flex gap-4">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`slant-right-${opt.value}`} />
-                                <Label htmlFor={`slant-right-${opt.value}`} className="font-normal cursor-pointer">
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                        {form.watch('hakschoringRechtsEnabled') && (
-                          <Select value={form.watch('hakschoringRechtsType')} onValueChange={(v) => form.setValue('hakschoringRechtsType', v)}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                                <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                Output naar form-results in engels: zipperDetailsShoe
+                Voorbeeld: Functioneel Nylon Mediaal + Lateraal, Decoratief Nylon Lateraal
+                Alleen de gekozen optie toevoegen.            
+               */}
 
-                  <Separator />
+              {/* !Bijzonderheden:
+               (Checkbox) 
+                Mediaal klittenband tongen
+                Veterlus op de tong
+                Extra leer meeleveren i.v.m bekleden supplementen
+                Anders: (Textarea)
 
-                  <div>
-                    <Label className="text-base font-semibold mb-3 block">{t('donkeyEar')}</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm">{t('left')}</Label>
-                        <RadioGroup
-                          value={(form.watch('ezelsoorLinksEnabled') ? 'ja' : 'nee')}
-                          onValueChange={(v) => form.setValue('ezelsoorLinksEnabled', v === 'ja')}
-                        >
-                          <div className="flex gap-4">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`donkey-left-${opt.value}`} />
-                                <Label htmlFor={`donkey-left-${opt.value}`} className="font-normal cursor-pointer">
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                        {form.watch('ezelsoorLinksEnabled') && (
-                          <Select value={form.watch('ezelsoorLinksType')} onValueChange={(v) => form.setValue('ezelsoorLinksType', v)}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {EZELSOOR_TYPE_OPTIES.map(opt => (
-                                <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm">{t('right')}</Label>
-                        <RadioGroup
-                          value={(form.watch('ezelsoorRechtsEnabled') ? 'ja' : 'nee')}
-                          onValueChange={(v) => form.setValue('ezelsoorRechtsEnabled', v === 'ja')}
-                        >
-                          <div className="flex gap-4">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div key={opt.value} className="flex items-center space-x-2">
-                                <RadioGroupItem value={opt.value} id={`donkey-right-${opt.value}`} />
-                                <Label htmlFor={`donkey-right-${opt.value}`} className="font-normal cursor-pointer">
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                        {form.watch('ezelsoorRechtsEnabled') && (
-                          <Select value={form.watch('ezelsoorRechtsType')} onValueChange={(v) => form.setValue('ezelsoorRechtsType', v)}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {EZELSOOR_TYPE_OPTIES.map(opt => (
-                                <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                Output naar form-results in engels: specialDetailsShoe
+                Voorbeeld: Mediaal klittenband tongen + Veterlus op de tong, Veterlus op de tong
+                Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
+               */}
 
-              {/* 9. Hakafrondingen */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('heelRounding')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="round-left"
-                          checked={form.watch('hakafrondingLinksEnabled')}
-                          onCheckedChange={(checked) => form.setValue('hakafrondingLinksEnabled', !!checked)}
-                        />
-                        <Label htmlFor="round-left" className="font-normal cursor-pointer">{t('left')}</Label>
-                      </div>
-                      {form.watch('hakafrondingLinksEnabled') && (
-                        <div className="space-y-3">
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="round-left-height" className="text-sm">{t('height')} (mm)</Label>
-                            <Input
-                              id="round-left-height"
-                              type="number"
-                              value={form.watch('hakafrondingLinksHoogte') || ''}
-                              onChange={(e) => form.setValue('hakafrondingLinksHoogte', e.target.value)}
-                            />
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="round-left-length" className="text-sm">{t('length')} (mm)</Label>
-                            <Input
-                              id="round-left-length"
-                              type="number"
-                              value={form.watch('hakafrondingLinksLengte') || ''}
-                              onChange={(e) => form.setValue('hakafrondingLinksLengte', e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="round-right"
-                          checked={form.watch('hakafrondingRechtsEnabled')}
-                          onCheckedChange={(checked) => form.setValue('hakafrondingRechtsEnabled', !!checked)}
-                        />
-                        <Label htmlFor="round-right" className="font-normal cursor-pointer">{t('right')}</Label>
-                      </div>
-                      {form.watch('hakafrondingRechtsEnabled') && (
-                        <div className="space-y-3">
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="round-right-height" className="text-sm">{t('height')} (mm)</Label>
-                            <Input
-                              id="round-right-height"
-                              type="number"
-                              value={form.watch('hakafrondingRechtsHoogte') || ''}
-                              onChange={(e) => form.setValue('hakafrondingRechtsHoogte', e.target.value)}
-                            />
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="round-right-length" className="text-sm">{t('length')} (mm)</Label>
-                            <Input
-                              id="round-right-length"
-                              type="number"
-                              value={form.watch('hakafrondingRechtsLengte') || ''}
-                              onChange={(e) => form.setValue('hakafrondingRechtsLengte', e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* !Randtype (Verplicht)
+                Rand type: (Textarea) en Kleur: (Textarea)
+               
+                Output naar form-results in engels: edgeTypeDetailsShoe
+                Voorbeeld: Rand type: (textarea) + Kleur: (textarea)
+               
+               */}
 
-              {/* 10. Loopzool */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('walkingSole')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <RadioGroup value={form.watch('loopzoolType') || ''} onValueChange={(v) => form.setValue('loopzoolType', v)}>
-                    <div className="grid grid-cols-2 gap-3">
-                      {LOOPZOOL_OPTIES.map(opt => (
-                        <div key={opt.value} className="flex items-center space-x-2">
-                          <RadioGroupItem value={opt.value} id={`sole-${opt.value}`} />
-                          <Label htmlFor={`sole-${opt.value}`} className="font-normal cursor-pointer text-sm">
-                            {opt.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </CardContent>
-              </Card>
+              {/* !Zooltype (Verplicht)
+               (Select component))
+               Gumlite: (Textarea) (Standaard met "2644")
+               Leer
+               Antislip
+
+                Output naar form-results in engels: soleTypeDetailsShoe
+                Voorbeeld: Gumlite: (textarea), Leer, Antislip
+                Alleen de gekozen opties toevoegen. Kan er maar 1 zijn.
+               */}
+
+              {/* Koolstofverstijving: 
+               (Select component)
+                Nee (Standaard)
+                Prefab -> dan Links (Checkbox) Rechts (Checkbox)
+                Maatwerk -> dan Links (Checkbox) Rechts (Checkbox)
+
+                Output naar form-results in engels: carbonStiffeningDetailsShoe
+                Voorbeeld: Prefab Links + Rechts, Maatwerk Rechts
+                Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
+               
+               */}
+
+              {/* Neusopties:
+               (Select component)
+               Nee (Standaard)
+               Koolstofneuzen
+               Rubberenkruipneuzen
+
+                Output naar form-results in engels: toeOptionsDetailsShoe
+                Voorbeeld: Koolstofneuzen, Rubberenkruipneuzen
+               
+               */}
+
+              {/* Contrefort:
+                (Select component)
+                Formo (Standaard)
+                Anders: (Textarea)
+
+                Output naar form-results in engels: counterfortDetailsShoe
+                Voorbeeld: Formo, (textarea)
+
+              */}
+
+              {/* Binnenzool:
+              (Select component)
+              Leer (Standaard)
+              Anders: (Textarea)
+
+              Output naar form-results in engels: insoleDetailsShoe
+              Voorbeeld: Leer, (textarea)
+              */}
+
+              {/* Zoolkantuitpoetsen:
+              (Select component)
+              Nee (Standaard)
+              Zwart
+              Bruin
+              Mahonie
+              Zoolkant ribbels frezen
+              Anders: (Textarea)
+
+              Output naar form-results in engels: soleEdgePolishDetailsShoe
+              Voorbeeld: Zwart, Bruin, Mahonie, Zoolkant ribbels frezen, (textarea)
+              Alleen de gekozen opties toevoegen.
+              
+              */}
+
+              {/* Maakwijze 
+              (Select component)
+              Gelijmd (Standaard)
+              Flexibel
+              Anders: (Textarea)
+
+              Output naar form-results in engels: constructionMethodShoe
+              Voorbeeld: Gelijmd, Flexibel
+              Alleen de gekozen opties toevoegen.
+              
+              */}
+
+              {/*  Hakmodel: (verplicht)
+                (Select component)
+                Opbouwhak -> dan Poro of Leer (Radio) (Standaard)
+                Sleehak -> dan Uitholling of Vlak (Radio)
+                Blokhak -> dan Kernbekleding (Checkbox)
+
+                Output naar form-results in engels: heelModelDetailsShoe
+                Voorbeeld: Opbouwhak Poro, Sleehak Vlak, Blokhak Kernbekleding
+                Alleen de gekozen opties toevoegen.
+              */}
+
+              {/* Hakhoogte: (verplicht) 
+                Links: (textarea) en Rechts: (textarea)
+
+                Output naar form-results in engels: heelHeightDetailsShoe
+                Voorbeeld: Links: (textarea) cm, Rechts: (textarea) cm
+
+                Bij hakmodel standaard het volgende invullen als er nog niets is ingevuld L en R:
+                Opbouwhak: 1,5 cm
+                Sleehak: 1,5 cm
+                Blokhak: 2 cm
+              
+              */}
+
+              {/* Hakafronding 
+                (Checkbox)
+                Links: (Checkbox)  
+                Rechts: (Checkbox)
+                
+                (Standaard beide aangevinkt)
+                Output naar form-results in engels: heelRoundingDetailsShoe
+                Voorbeeld: Links + Rechts, Links
+                Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
+              
+              */}
+
+              {/* Schoring
+                Links: Select component (Lateraal, Mediaal) -> dan (Textarea) voor mm lat of mm med
+                Rechts: Select component (Lateraal, Mediaal) -> dan (Textarea) voor mm lat of mm med
+
+                Output naar form-results in engels: shoringDetailsShoe
+                Voorbeeld: L Lat (textarea) mm, R Med (textarea) mm, L Lat (textarea) mm + R Med (textarea) mm
+                Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
+              
+              */}
+
+
+
+
+
+
+
 
               {/* Submit Section */}
               <FormFooter>
