@@ -1,7 +1,7 @@
 import React from 'react';
-import {BaseLayout} from '@/components/layout';
-import {Button} from '@/components/ui/button';
-import {NavigationCard} from '@/components/ui/navigation-card';
+import { BaseLayout } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { NavigationCard } from '@/components/ui/navigation-card';
 import {
   Card,
   CardContent,
@@ -9,16 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {Separator} from '@/components/ui/separator';
+import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
-import {DutchAddressInput} from '@/components/ui/dutch-address-input';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
+import { UserPlus, Users, FileText, ClipboardList } from 'lucide-react';
 
 const OverviewPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
 
   const handleNavigate = (route: string) => {
     router.push(route);
@@ -71,9 +70,12 @@ const OverviewPage = () => {
             {t('intakeForms')}
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+
+            {/* Intake OSA */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_osa)}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -85,9 +87,26 @@ const OverviewPage = () => {
               </div>
             </Button>
 
+            {/* Check Foliepas */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
+              onClick={() => handleNavigate(Routes.form_check_foliepas)}
+            >
+              <FileText className="w-4 h-4 mr-2 shrink-0" />
+
+              <div className="flex flex-col text-left min-w-0 text-wrap">
+                <div className="font-semibold">{t('checkFoliepas')}</div>
+                <div className="text-xs text-muted-foreground">
+                  {t('checkFoliepasDescription')}
+                </div>
+              </div>
+            </Button>
+
+            {/* Intake VLOS */}
+            <Button
+              variant="outline"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_vlos)}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -99,9 +118,10 @@ const OverviewPage = () => {
               </div>
             </Button>
 
+            {/* Intake Pulman */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_pulman)}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -113,9 +133,10 @@ const OverviewPage = () => {
               </div>
             </Button>
 
+            {/* Intake OSB */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_osb)}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -127,9 +148,10 @@ const OverviewPage = () => {
               </div>
             </Button>
 
+            {/* Intake Rebacare */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_rebacare)}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -141,9 +163,10 @@ const OverviewPage = () => {
               </div>
             </Button>
 
+            {/* Intake OVAC */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_ovac)}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -155,9 +178,10 @@ const OverviewPage = () => {
               </div>
             </Button>
 
+            {/* Intake Steunzolen */}
             <Button
               variant="outline"
-              className="justify-start h-auto px-6 py-6"
+              className="items-center justify-start h-auto px-6 py-6"
               onClick={() => handleNavigate(Routes.form_intake_steunzolen)}
             >
               <FileText className="w-4 h-4 mr-2" />

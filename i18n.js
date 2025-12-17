@@ -49,5 +49,6 @@ module.exports = {
     '/intake-osb': ['form'],
     '/intake-ovac': ['form'],
     '/intake-steunzolen': ['form'],
+    '/check-foliepas': ['form'],
   },
 };

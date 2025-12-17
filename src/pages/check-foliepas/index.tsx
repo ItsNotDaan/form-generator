@@ -23,6 +23,7 @@ import {
   Form,
 } from '@/components/ui/form';
 import { scrollToFirstError } from '@/utils/formHelpers';
+import { Textarea } from '@/components/ui/textarea';
 
 const FormCheckFoliepasPage = () => {
   const router = useRouter();
@@ -33,10 +34,10 @@ const FormCheckFoliepasPage = () => {
   const formSchema = z.object({
     readingCorrectionAfterFoilFit: z.string().optional(),
     readingCorrectionAfterLiningShoe: z.string().optional(),
-    omsluitingLinks: z.record(z.boolean()),
-    omsluitingRechts: z.record(z.boolean()),
-    omsluitingLinksMm: z.record(z.string()),
-    omsluitingRechtsMm: z.record(z.string()),
+    omsluitingLinks: z.record(z.string(), z.boolean()),
+    omsluitingRechts: z.record(z.string(), z.boolean()),
+    omsluitingLinksMm: z.record(z.string(), z.string()),
+    omsluitingRechtsMm: z.record(z.string(), z.string()),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -59,10 +60,10 @@ const FormCheckFoliepasPage = () => {
       setCheckFoliepasData({
         readingCorrectionAfterFoilFit: data.readingCorrectionAfterFoilFit || '',
         readingCorrectionAfterLiningShoe: data.readingCorrectionAfterLiningShoe || '',
-        omsluitingLinks: data.omsluitingLinks,
-        omsluitingRechts: data.omsluitingRechts,
-        omsluitingLinksMm: data.omsluitingLinksMm,
-        omsluitingRechtsMm: data.omsluitingRechtsMm,
+        omsluitingLinks: data.omsluitingLinks as Record<string, boolean>,
+        omsluitingRechts: data.omsluitingRechts as Record<string, boolean>,
+        omsluitingLinksMm: data.omsluitingLinksMm as Record<string, string>,
+        omsluitingRechtsMm: data.omsluitingRechtsMm as Record<string, string>,
       })
     );
 
@@ -90,9 +91,9 @@ const FormCheckFoliepasPage = () => {
                   <CardTitle>{t('readingCorrectionAfterFoilFit')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Input
+                  <Textarea
                     id="reading-correction-foil-fit"
-                    type="text"
+                    rows={4}
                     placeholder={t('readingCorrectionAfterFoilFit')}
                     value={form.watch("readingCorrectionAfterFoilFit")}
                     onChange={(e) => form.setValue("readingCorrectionAfterFoilFit", e.target.value)}
@@ -105,9 +106,9 @@ const FormCheckFoliepasPage = () => {
                   <CardTitle>{t('readingCorrectionAfterLiningShoe')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Input
+                  <Textarea
                     id="reading-correction-lining-shoe"
-                    type="text"
+                    rows={4}
                     placeholder={t('readingCorrectionAfterLiningShoe')}
                     value={form.watch("readingCorrectionAfterLiningShoe")}
                     onChange={(e) => form.setValue("readingCorrectionAfterLiningShoe", e.target.value)}
@@ -130,7 +131,7 @@ const FormCheckFoliepasPage = () => {
                           <div className="flex items-center space-x-2 flex-1">
                             <Checkbox
                               id={`encl-left-${optie.key}`}
-                              checked={form.watch("omsluitingLinks")[optie.fullKeyLinks] || false}
+                              checked={(form.watch("omsluitingLinks")[optie.fullKeyLinks] as boolean) || false}
                               onCheckedChange={(checked) => {
                                 form.setValue("omsluitingLinks", {
                                   ...form.getValues("omsluitingLinks"),
@@ -152,11 +153,11 @@ const FormCheckFoliepasPage = () => {
                               {optie.label}
                             </Label>
                           </div>
-                          {optie.needsMm && form.watch("omsluitingLinks")[optie.fullKeyLinks] && (
+                          {optie.needsMm && (form.watch("omsluitingLinks")[optie.fullKeyLinks] as boolean) && (
                             <Input
                               type="number"
                               placeholder="mm"
-                              value={form.watch("omsluitingLinksMm")[optie.mmKeyLinks] || ''}
+                              value={(form.watch("omsluitingLinksMm")[optie.mmKeyLinks] as string) || ''}
                               onChange={(e) =>
                                 form.setValue("omsluitingLinksMm", {
                                   ...form.getValues("omsluitingLinksMm"),
@@ -199,11 +200,11 @@ const FormCheckFoliepasPage = () => {
                               {optie.label}
                             </Label>
                           </div>
-                          {optie.needsMm && form.watch("omsluitingRechts")[optie.fullKeyRechts] && (
+                          {optie.needsMm && (form.watch("omsluitingRechts")[optie.fullKeyRechts] as boolean) && (
                             <Input
                               type="number"
                               placeholder="mm"
-                              value={form.watch("omsluitingRechtsMm")[optie.mmKeyRechts] || ''}
+                              value={(form.watch("omsluitingRechtsMm")[optie.mmKeyRechts] as string) || ''}
                               onChange={(e) =>
                                 form.setValue("omsluitingRechtsMm", {
                                   ...form.getValues("omsluitingRechtsMm"),
