@@ -340,6 +340,37 @@ const FormIntakeOSAPage = () => {
                 </CardContent>
               </Card>
 
+              {/* Amputation */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('amputation')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-6">
+                    {showLinks && (
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="amp-left"
+                          checked={form.watch("amputatieLinksEnabled")}
+                          onCheckedChange={(checked) => form.setValue("amputatieLinksEnabled", !!checked)}
+                        />
+                        <Label htmlFor="amp-left" className="font-normal cursor-pointer">{t('left')}</Label>
+                      </div>
+                    )}
+                    {showRechts && (
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="amp-right"
+                          checked={form.watch("amputatieRechtsEnabled")}
+                          onCheckedChange={(checked) => form.setValue("amputatieRechtsEnabled", !!checked)}
+                        />
+                        <Label htmlFor="amp-right" className="font-normal cursor-pointer">{t('right')}</Label>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Functieonderzoek - New Section */}
               <Card>
                 <CardHeader>
@@ -348,7 +379,7 @@ const FormIntakeOSAPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Ziektebeelden */}
-                  <div className="space-y-3">
+                  <div className="flex flex-col gap-2">
                     <Label className="text-base font-semibold">{t('medicalConditions')}</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                       {ZIEKTEBEELDEN_OPTIES.map((optie) => (
@@ -374,7 +405,7 @@ const FormIntakeOSAPage = () => {
                   <Separator />
 
                   {/* Loopafstand hulpmiddelen */}
-                  <div className="space-y-3">
+                  <div className="flex flex-col gap-2">
                     <Label className="text-base font-semibold">{t('walkingDistanceAids')}</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                       {LOOPAFSTAND_OPTIES.map((optie) => (
@@ -424,7 +455,7 @@ const FormIntakeOSAPage = () => {
                   <Separator />
 
                   {/* Inspectie voeten */}
-                  <div className="space-y-3">
+                  <div className="flex flex-col gap-2">
                     <Label className="text-base font-semibold">{t('footInspection')}</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                       {INSPECTIE_VOETEN_OPTIES.map((optie) => (
@@ -450,10 +481,10 @@ const FormIntakeOSAPage = () => {
                   <Separator />
 
                   {/* Beenlengte verschil */}
-                  <div className="space-y-3">
+                  <div className="flex flex-col gap-2">
                     <Label className="text-base font-semibold">{t('legLengthDifference')}</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="leg-length-left">{t('leftCm')}</Label>
                         <Input
                           id="leg-length-left"
@@ -463,7 +494,7 @@ const FormIntakeOSAPage = () => {
                           onChange={(e) => form.setValue("legLengthDifferenceLeft", e.target.value)}
                         />
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="leg-length-right">{t('rightCm')}</Label>
                         <Input
                           id="leg-length-right"
@@ -486,7 +517,7 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {showLinks && (
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="shaft-left">{t('leftCm')}</Label>
                         <Input
                           id="shaft-left"
@@ -498,7 +529,7 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                     {showRechts && (
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="shaft-right">{t('rightCm')}</Label>
                         <Input
                           id="shaft-right"
@@ -542,7 +573,7 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {showLinks && (
-                      <div className="space-y-3">
+                      <div className='flex flex-col gap-2'>
                         <Label className="text-sm font-semibold">{t('left')}</Label>
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <div key={optie.key} className="flex items-center gap-3">
@@ -583,7 +614,7 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                     {showRechts && (
-                      <div className="space-y-3">
+                      <div className='flex flex-col gap-2'>
                         <Label className="text-sm font-semibold">{t('right')}</Label>
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <div key={optie.key} className="flex items-center gap-3">
@@ -627,7 +658,7 @@ const FormIntakeOSAPage = () => {
                 </CardContent>
               </Card>
 
-              {/* Supplement Support / Ezelsoor / Amputatie sections */}
+              {/* Supplement Schoring */}
               <Card>
                 <CardHeader>
                   <CardTitle>{t('supplementSupport')}</CardTitle>
@@ -635,7 +666,7 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {showLinks && (
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-sm font-semibold">{t('left')}</Label>
                         <RadioGroup
                           value={boolToString(supplementschoringLinksEnabled)}
@@ -667,7 +698,7 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                     {showRechts && (
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-sm font-semibold">{t('right')}</Label>
                         <RadioGroup
                           value={boolToString(supplementschoringRechtsEnabled)}
@@ -707,46 +738,55 @@ const FormIntakeOSAPage = () => {
                 <CardHeader>
                   <CardTitle>{t('soleStiffening')}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <RadioGroup
-                    value={boolToString(zoolverstijvingEnabled)}
-                    onValueChange={(v) => form.setValue("zoolverstijvingEnabled", stringToBool(v))}
-                  >
-                    <div className="flex gap-6">
-                      {JA_NEE_OPTIES.map(opt => (
-                        <div key={opt.value} className="flex items-center space-x-2">
-                          <RadioGroupItem value={opt.value} id={`stiff-${opt.value}`} />
-                          <Label htmlFor={`stiff-${opt.value}`} className="font-normal cursor-pointer">
-                            {t(opt.label)}
-                          </Label>
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-6">
+                    <div className="flex flex-col gap-2">
+                      {/* <Label>{t('enabled')}</Label> */}
+                      <RadioGroup
+                        value={boolToString(zoolverstijvingEnabled)}
+                        onValueChange={(v) => form.setValue("zoolverstijvingEnabled", stringToBool(v))}
+                      >
+                        <div className="flex gap-4">
+                          {JA_NEE_OPTIES.map(opt => (
+                            <div key={opt.value} className="flex items-center space-x-2">
+                              <RadioGroupItem value={opt.value} id={`stiff-${opt.value}`} />
+                              <Label htmlFor={`stiff-${opt.value}`} className="font-normal cursor-pointer">
+                                {t(opt.label)}
+                              </Label>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </RadioGroup>
                     </div>
-                  </RadioGroup>
-                  {zoolverstijvingEnabled && (
-                    <div className="flex gap-6">
-                      {showLinks && (
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="stiff-left"
-                            checked={form.watch("zoolverstijvingLinks")}
-                            onCheckedChange={(checked) => form.setValue("zoolverstijvingLinks", !!checked)}
-                          />
-                          <Label htmlFor="stiff-left" className="font-normal cursor-pointer">{t('left')}</Label>
+
+                    {zoolverstijvingEnabled && (
+                      <div className="flex flex-col gap-2">
+                        <Label>{t('side')}</Label>
+                        <div className="flex gap-6">
+                          {showLinks && (
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id="stiff-left"
+                                checked={form.watch("zoolverstijvingLinks")}
+                                onCheckedChange={(checked) => form.setValue("zoolverstijvingLinks", !!checked)}
+                              />
+                              <Label htmlFor="stiff-left" className="font-normal cursor-pointer">{t('left')}</Label>
+                            </div>
+                          )}
+                          {showRechts && (
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id="stiff-right"
+                                checked={form.watch("zoolverstijvingRechts")}
+                                onCheckedChange={(checked) => form.setValue("zoolverstijvingRechts", !!checked)}
+                              />
+                              <Label htmlFor="stiff-right" className="font-normal cursor-pointer">{t('right')}</Label>
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {showRechts && (
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="stiff-right"
-                            checked={form.watch("zoolverstijvingRechts")}
-                            onCheckedChange={(checked) => form.setValue("zoolverstijvingRechts", !!checked)}
-                          />
-                          <Label htmlFor="stiff-right" className="font-normal cursor-pointer">{t('right')}</Label>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
 
@@ -755,50 +795,56 @@ const FormIntakeOSAPage = () => {
                 <CardHeader>
                   <CardTitle>{t('closureAndTongue')}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label>{t('closureType')}</Label>
-                    <RadioGroup value={form.watch("sluitingType")} onValueChange={(v) => form.setValue("sluitingType", v)}>
-                      <div className="grid grid-cols-2 gap-3">
-                        {SLUITING_OPTIES.map(opt => (
-                          <div key={opt.value} className="flex items-center space-x-2">
-                            <RadioGroupItem value={opt.value} id={`closure-${opt.value}`} />
-                            <Label htmlFor={`closure-${opt.value}`} className="font-normal cursor-pointer text-sm">
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  <Separator />
-                  <div className="space-y-2">
-                    <Label htmlFor="insert-point">{t('insertPoint')}</Label>
-                    <Input
-                      id="insert-point"
-                      value={form.watch("inschotpunt")}
-                      onChange={(e) => form.setValue("inschotpunt", e.target.value)}
-                      placeholder={t('insertPointPlaceholder')}
-                    />
-                  </div>
-                  <Separator />
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="tongue-pad"
-                        checked={form.watch("tongpolsterEnabled")}
-                        onCheckedChange={(checked) => form.setValue("tongpolsterEnabled", !!checked)}
-                      />
-                      <Label htmlFor="tongue-pad" className="font-normal cursor-pointer">{t('tonguePadding')}</Label>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-2">
+                      <Label>{t('closureType')}</Label>
+                      <RadioGroup value={form.watch("sluitingType")} onValueChange={(v) => form.setValue("sluitingType", v)}>
+                        <div className="flex flex-col gap-2">
+                          {SLUITING_OPTIES.map(opt => (
+                            <div key={opt.value} className="flex items-center space-x-2">
+                              <RadioGroupItem value={opt.value} id={`closure-${opt.value}`} />
+                              <Label htmlFor={`closure-${opt.value}`} className="font-normal cursor-pointer text-sm">
+                                {opt.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+                      </RadioGroup>
                     </div>
-                    <Separator />
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="tongue-stitch"
-                        checked={form.watch("tongVaststikkenEnabled")}
-                        onCheckedChange={(checked) => form.setValue("tongVaststikkenEnabled", !!checked)}
+
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor="insert-point">{t('insertPoint')}</Label>
+                      <Input
+                        id="insert-point"
+                        value={form.watch("inschotpunt")}
+                        onChange={(e) => form.setValue("inschotpunt", e.target.value)}
+                        placeholder={t('insertPointPlaceholder')}
                       />
-                      <Label htmlFor="tongue-stitch" className="font-normal cursor-pointer">{t('tongueStitching')}</Label>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <Label className="mb-1">{t('tonguePadding')}</Label>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="tongue-pad"
+                          checked={form.watch("tongpolsterEnabled")}
+                          onCheckedChange={(checked) => form.setValue("tongpolsterEnabled", !!checked)}
+                        />
+                        <Label htmlFor="tongue-pad" className="font-normal cursor-pointer">{t('tonguePadding')}</Label>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <Label className="mb-1">{t('tongueStitching')}</Label>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="tongue-stitch"
+                          checked={form.watch("tongVaststikkenEnabled")}
+                          onCheckedChange={(checked) => form.setValue("tongVaststikkenEnabled", !!checked)}
+                        />
+                        <Label htmlFor="tongue-stitch" className="font-normal cursor-pointer">{t('tongueStitching')}</Label>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -812,9 +858,9 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {showLinks && (
-                      <div className="space-y-4">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-sm font-semibold">{t('left')}</Label>
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                           <Label className="text-sm">{t('heelType')}</Label>
                           <RadioGroup value={form.watch("haksoortLinks")} onValueChange={(v) => form.setValue("haksoortLinks", v)}>
                             <div className="space-y-2">
@@ -829,8 +875,8 @@ const FormIntakeOSAPage = () => {
                             </div>
                           </RadioGroup>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="heel-height-left" className="text-sm">{t('heelHeight')}</Label>
+                        <div className="flex flex-col gap-2">
+                          <Label htmlFor="heel-height-left" className="text-sm">{t('heelHeight')} (cm)</Label>
                           <Input
                             id="heel-height-left"
                             type="number"
@@ -842,9 +888,9 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                     {showRechts && (
-                      <div className="space-y-4">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-sm font-semibold">{t('right')}</Label>
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                           <Label className="text-sm">{t('heelType')}</Label>
                           <RadioGroup value={form.watch("haksoortRechts")} onValueChange={(v) => form.setValue("haksoortRechts", v)}>
                             <div className="space-y-2">
@@ -859,8 +905,8 @@ const FormIntakeOSAPage = () => {
                             </div>
                           </RadioGroup>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="heel-height-right" className="text-sm">{t('heelHeight')}</Label>
+                        <div className="flex flex-col gap-2">
+                          <Label htmlFor="heel-height-right" className="text-sm">{t('heelHeight')} (cm)</Label>
                           <Input
                             id="heel-height-right"
                             type="number"
@@ -875,7 +921,7 @@ const FormIntakeOSAPage = () => {
                 </CardContent>
               </Card>
 
-              {/* Heel Slant, Donkey Ear, Amputation - Consolidated */}
+              {/* Heel Slant, Donkey Ear - Consolidated */}
               <Card>
                 <CardHeader>
                   <CardTitle>{t('heelModifications')}</CardTitle>
@@ -886,7 +932,7 @@ const FormIntakeOSAPage = () => {
                     <Label className="text-base font-semibold mb-3 block">{t('heelSlant')}</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {showLinks && (
-                        <div className="space-y-3">
+                        <div className="flex flex-col gap-2">
                           <Label className="text-sm">{t('left')}</Label>
                           <RadioGroup
                             value={boolToString(hakschoringLinksEnabled)}
@@ -918,7 +964,7 @@ const FormIntakeOSAPage = () => {
                         </div>
                       )}
                       {showRechts && (
-                        <div className="space-y-3">
+                        <div className="flex flex-col gap-2">
                           <Label className="text-sm">{t('right')}</Label>
                           <RadioGroup
                             value={boolToString(hakschoringRechtsEnabled)}
@@ -959,7 +1005,7 @@ const FormIntakeOSAPage = () => {
                     <Label className="text-base font-semibold mb-3 block">{t('donkeyEar')}</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {showLinks && (
-                        <div className="space-y-3">
+                        <div className="flex flex-col gap-2">
                           <Label className="text-sm">{t('left')}</Label>
                           <RadioGroup
                             value={boolToString(ezelsoorLinksEnabled)}
@@ -991,7 +1037,7 @@ const FormIntakeOSAPage = () => {
                         </div>
                       )}
                       {showRechts && (
-                        <div className="space-y-3">
+                        <div className="flex flex-col gap-2">
                           <Label className="text-sm">{t('right')}</Label>
                           <RadioGroup
                             value={boolToString(ezelsoorRechtsEnabled)}
@@ -1024,35 +1070,6 @@ const FormIntakeOSAPage = () => {
                       )}
                     </div>
                   </div>
-
-                  <Separator />
-
-                  {/* Amputation */}
-                  <div>
-                    <Label className="text-base font-semibold mb-3 block">{t('amputation')}</Label>
-                    <div className="flex gap-6">
-                      {showLinks && (
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="amp-left"
-                            checked={form.watch("amputatieLinksEnabled")}
-                            onCheckedChange={(checked) => form.setValue("amputatieLinksEnabled", !!checked)}
-                          />
-                          <Label htmlFor="amp-left" className="font-normal cursor-pointer">{t('left')}</Label>
-                        </div>
-                      )}
-                      {showRechts && (
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="amp-right"
-                            checked={form.watch("amputatieRechtsEnabled")}
-                            onCheckedChange={(checked) => form.setValue("amputatieRechtsEnabled", !!checked)}
-                          />
-                          <Label htmlFor="amp-right" className="font-normal cursor-pointer">{t('right')}</Label>
-                        </div>
-                      )}
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
 
@@ -1075,7 +1092,7 @@ const FormIntakeOSAPage = () => {
                         </div>
                         {hakafrondingLinksEnabled && (
                           <div className="space-y-3">
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="round-left-height" className="text-sm">{t('height')} (mm)</Label>
                               <Input
                                 id="round-left-height"
@@ -1084,7 +1101,7 @@ const FormIntakeOSAPage = () => {
                                 onChange={(e) => form.setValue("hakafrondingLinksHoogte", e.target.value)}
                               />
                             </div>
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="round-left-length" className="text-sm">{t('length')} (mm)</Label>
                               <Input
                                 id="round-left-length"
@@ -1109,7 +1126,7 @@ const FormIntakeOSAPage = () => {
                         </div>
                         {hakafrondingRechtsEnabled && (
                           <div className="space-y-3">
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="round-right-height" className="text-sm">{t('height')} (mm)</Label>
                               <Input
                                 id="round-right-height"
@@ -1118,7 +1135,7 @@ const FormIntakeOSAPage = () => {
                                 onChange={(e) => form.setValue("hakafrondingRechtsHoogte", e.target.value)}
                               />
                             </div>
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="round-right-length" className="text-sm">{t('length')} (mm)</Label>
                               <Input
                                 id="round-right-length"
@@ -1164,7 +1181,7 @@ const FormIntakeOSAPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Digitaal Ja/Nee */}
-                  <div className="space-y-3">
+                  <div className="flex flex-col gap-2">
                     <Label className="text-base font-semibold">{t('digital')}</Label>
                     <RadioGroup
                       value={boolToString(digitalEnabled)}
@@ -1189,11 +1206,11 @@ const FormIntakeOSAPage = () => {
                       <Separator />
 
                       {/* Hielheffing L/R */}
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-base font-semibold">{t('heelLift')}</Label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           {showLinks && (
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="heel-lift-left">{t('left')} (mm)</Label>
                               <Input
                                 id="heel-lift-left"
@@ -1205,7 +1222,7 @@ const FormIntakeOSAPage = () => {
                             </div>
                           )}
                           {showRechts && (
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="heel-lift-right">{t('right')} (mm)</Label>
                               <Input
                                 id="heel-lift-right"
@@ -1222,7 +1239,7 @@ const FormIntakeOSAPage = () => {
                       <Separator />
 
                       {/* Leesthoogte */}
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-base font-semibold">{t('readingHeight')}</Label>
                         <RadioGroup
                           value={form.watch("readingHeight")}
@@ -1244,11 +1261,11 @@ const FormIntakeOSAPage = () => {
                       <Separator />
 
                       {/* MTP1 diep? L/R */}
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-base font-semibold">{t('mtp1Deep')}</Label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           {showLinks && (
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="mtp1-left">{t('left')}</Label>
                               <Select
                                 value={form.watch("mtp1DeepLeft")}
@@ -1266,7 +1283,7 @@ const FormIntakeOSAPage = () => {
                             </div>
                           )}
                           {showRechts && (
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                               <Label htmlFor="mtp1-right">{t('right')}</Label>
                               <Select
                                 value={form.watch("mtp1DeepRight")}
@@ -1289,7 +1306,7 @@ const FormIntakeOSAPage = () => {
                       <Separator />
 
                       {/* Klauwtenen? Ja/Nee */}
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-base font-semibold">{t('clawToes')}</Label>
                         <RadioGroup
                           value={boolToString(form.watch("clawToesEnabled"))}
@@ -1311,7 +1328,7 @@ const FormIntakeOSAPage = () => {
                       <Separator />
 
                       {/* Gescand met folie? Ja/Nee */}
-                      <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
                         <Label className="text-base font-semibold">{t('scannedWithFoil')}</Label>
                         <RadioGroup
                           value={boolToString(form.watch("scannedWithFoil"))}
@@ -1333,7 +1350,7 @@ const FormIntakeOSAPage = () => {
                       <Separator />
 
                       {/* Instructies */}
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="digital-instructions" className="text-base font-semibold">{t('instructions')}</Label>
                         <Textarea
                           id="digital-instructions"
