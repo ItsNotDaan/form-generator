@@ -104,7 +104,7 @@ const FormCheckFoliepasPage = () => {
     colorOptions: z.array(z.string()).optional(),
     // Tong polsteren en polsterkraag
     tonguePaddingMm: z.enum(['3', '5', ''] as const).optional(),
-    paddingCollarMm: z.enum(['3', '5', ''] as const).optional(),
+    paddingCollarMm: z.enum(['5', '10', ''] as const).optional(),
     // Sluiting
     closureType: z.enum(['velcro', 'ringsHooks'] as const).optional(),
     ringsNr: z.string().optional(),
