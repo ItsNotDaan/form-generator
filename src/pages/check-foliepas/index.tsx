@@ -756,9 +756,9 @@ const FormCheckFoliepasPage = () => {
                   </RadioGroup>
 
                   {showColorAndModel && (
-                    <div className="pt-4">
+                    <div className="pt-6 space-y-6">
 
-                      <div className="grid grid-cols-2 gap-6 border-2 p-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 border rounded-lg p-6">
                         {/* !Model (Verplicht)
                           Opties radio: (Radio)
                           Als foto
@@ -769,8 +769,8 @@ const FormCheckFoliepasPage = () => {
                           Voorbeeld: Model: (textarea).
                           Als (Als foto) is gekozen, dan alleen dat tonen.
                           */}
-                        <div className="grid pr-6 border-r">
-                          <Label className="text-sm font-semibold">
+                        <div className="space-y-3">
+                          <Label className="text-base font-semibold">
                             {t('finalModel')}
                           </Label>
                           <RadioGroup
@@ -779,7 +779,7 @@ const FormCheckFoliepasPage = () => {
                               form.setValue('modelType', v as 'asPhoto' | 'model')
                             }
                           >
-                            <div className="flex flex-col gap-2">
+                            <div className="grid gap-3">
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="asPhoto" id="model-photo" />
                                 <Label
@@ -807,6 +807,7 @@ const FormCheckFoliepasPage = () => {
                               onChange={e =>
                                 form.setValue('modelText', e.target.value)
                               }
+                              className="mt-2"
                             />
                           )}
                         </div>
@@ -821,45 +822,48 @@ const FormCheckFoliepasPage = () => {
                         Voorbeeld: 1: (textarea1) + 2: (textarea2) + 3: (textarea3).
                         Alleen de gekozen opties toevoegen met een + ertussen als er nog een optie is toegevoegd.
                         */}
-                        <div className="flex flex-col pl-6">
-                          <Label className="text-sm font-semibold">
+                        <div className="space-y-3">
+                          <Label className="text-base font-semibold">
                             {t('colors')}
                           </Label>
-                          {colorOptions.map((color, index) => (
-                            <div key={index} className="flex gap-2">
-                              <Input
-                                placeholder={`${t('colorOption')} ${index + 1}`}
-                                value={color}
-                                onChange={e => {
-                                  const colors = [...colorOptions];
-                                  colors[index] = e.target.value;
-                                  form.setValue('colorOptions', colors);
-                                }}
-                                className="flex-1"
-                              />
-                              {colorOptions.length > 1 && (
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => {
+                          <div className="grid gap-3">
+                            {colorOptions.map((color, index) => (
+                              <div key={index} className="grid grid-cols-[1fr_auto] gap-2">
+                                <Input
+                                  placeholder={`${t('colorOption')} ${index + 1}`}
+                                  value={color}
+                                  onChange={e => {
                                     const colors = [...colorOptions];
-                                    colors.splice(index, 1);
+                                    colors[index] = e.target.value;
                                     form.setValue('colorOptions', colors);
                                   }}
-                                >
-                                  {t('removeColorOption')}
-                                </Button>
-                              )}
-                            </div>
-                          ))}
+                                />
+                                {colorOptions.length > 1 && (
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      const colors = [...colorOptions];
+                                      colors.splice(index, 1);
+                                      form.setValue('colorOptions', colors);
+                                    }}
+                                  >
+                                    {t('removeColorOption')}
+                                  </Button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
                           <Button
                             type="button"
                             variant="outline"
+                            size="sm"
                             onClick={() => {
                               const colors = [...colorOptions, ''];
                               form.setValue('colorOptions', colors);
                             }}
+                            className="w-full"
                           >
                             + {t('addColorOption')}
                           </Button>
@@ -877,14 +881,14 @@ const FormCheckFoliepasPage = () => {
 
                   Deze zijn los van elkaar. Gewoon naaste elkaar tonen.
                   */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
                           {t('tonguePaddingAndCollar')}
                         </Label>
 
-                        <div className="grid grid-cols-2 gap-6 border-2 p-4">
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm">{t('tonguePadding')}</Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 border rounded-lg p-6">
+                          <div className="space-y-3">
+                            <Label className="text-sm font-medium">{t('tonguePadding')}</Label>
                             <Select
                               value={form.watch('tonguePaddingMm') || ''}
                               onValueChange={v =>
@@ -900,8 +904,8 @@ const FormCheckFoliepasPage = () => {
                               </SelectContent>
                             </Select>
                           </div>
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm">{t('paddingCollar')}</Label>
+                          <div className="space-y-3">
+                            <Label className="text-sm font-medium">{t('paddingCollar')}</Label>
                             <Select
                               value={form.watch('paddingCollarMm') || ''}
                               onValueChange={v =>
@@ -924,11 +928,14 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* !Sluiting & Rits */}
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
+                          {t('closureAndZipper')}
+                        </Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {/* Sluiting */}
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('closure')}
                             </Label>
                             <RadioGroup
@@ -940,7 +947,7 @@ const FormCheckFoliepasPage = () => {
                                 )
                               }
                             >
-                              <div className="flex flex-col gap-2">
+                              <div className="grid gap-3">
                                 <div className="flex items-center space-x-2">
                                   <RadioGroupItem value="velcro" id="closure-velcro" />
                                   <Label
@@ -965,7 +972,7 @@ const FormCheckFoliepasPage = () => {
                               </div>
                             </RadioGroup>
                             {closureType === 'ringsHooks' && (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                              <div className="grid grid-cols-2 gap-4 pt-4">
                                 <div className="space-y-2">
                                   <Label htmlFor="rings-nr">{t('ringsNr')}</Label>
                                   <Input
@@ -1013,8 +1020,8 @@ const FormCheckFoliepasPage = () => {
                           </div>
 
                           {/* Rits */}
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm font-semibold">{t('zipper')}</Label>
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">{t('zipper')}</Label>
                             <Select
                               value={zipperType || 'none'}
                               onValueChange={v =>
@@ -1038,7 +1045,7 @@ const FormCheckFoliepasPage = () => {
                               </SelectContent>
                             </Select>
                             {zipperType && zipperType !== 'none' && (
-                              <div className="flex gap-4 pt-2">
+                              <div className="grid gap-3 pt-4">
                                 <div className="flex items-center space-x-2">
                                   <Checkbox
                                     id="zipper-medial"
@@ -1144,11 +1151,11 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* !Randtype */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
                           {t('edgeType')}
                         </Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="edge-type">{t('edgeTypeLabel')}</Label>
                             <Input
@@ -1177,8 +1184,8 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* !Zooltype */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
                           {t('soleType')}
                         </Label>
                         <Select
@@ -1199,7 +1206,7 @@ const FormCheckFoliepasPage = () => {
                           </SelectContent>
                         </Select>
                         {soleType === 'gumlite' && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
                             <div className="space-y-2">
                               <Label htmlFor="gumlite-number">
                                 {t('gumliteNumber')}
@@ -1231,11 +1238,14 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* Koolstofverstijving & Neusopties */}
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
+                          {t('carbonStiffeningAndToeOptions')}
+                        </Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {/* Koolstofverstijving */}
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('carbonStiffening')}
                             </Label>
                             <Select
@@ -1257,7 +1267,7 @@ const FormCheckFoliepasPage = () => {
                               </SelectContent>
                             </Select>
                             {carbonStiffeningType && carbonStiffeningType !== 'none' && (
-                              <div className="flex gap-4 pt-2">
+                              <div className="grid gap-3 pt-2">
                                 <div className="flex items-center space-x-2">
                                   <Checkbox
                                     id="carbon-left"
@@ -1297,8 +1307,8 @@ const FormCheckFoliepasPage = () => {
                           </div>
 
                           {/* Neusopties */}
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('toeOptions')}
                             </Label>
                             <Select
@@ -1328,11 +1338,14 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* Contrefort & Binnenzool */}
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
+                          {t('counterfortAndInsole')}
+                        </Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {/* Contrefort */}
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('counterfort')}
                             </Label>
                             <Select
@@ -1358,13 +1371,14 @@ const FormCheckFoliepasPage = () => {
                                   form.setValue('counterfortOther', e.target.value)
                                 }
                                 rows={2}
+                                className="mt-2"
                               />
                             )}
                           </div>
 
                           {/* Binnenzool */}
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm font-semibold">{t('insole')}</Label>
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">{t('insole')}</Label>
                             <Select
                               value={insoleType || 'leather'}
                               onValueChange={v =>
@@ -1387,6 +1401,7 @@ const FormCheckFoliepasPage = () => {
                                   form.setValue('insoleOther', e.target.value)
                                 }
                                 rows={2}
+                                className="mt-2"
                               />
                             )}
                           </div>
@@ -1396,11 +1411,14 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* Zoolkantuitpoetsen & Maakwijze */}
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
+                          {t('soleEdgePolishAndConstruction')}
+                        </Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {/* Zoolkantuitpoetsen */}
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('soleEdgePolish')}
                             </Label>
                             <Select
@@ -1440,13 +1458,14 @@ const FormCheckFoliepasPage = () => {
                                   form.setValue('soleEdgePolishOther', e.target.value)
                                 }
                                 rows={2}
+                                className="mt-2"
                               />
                             )}
                           </div>
 
                           {/* Maakwijze */}
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('constructionMethod')}
                             </Label>
                             <Select
@@ -1478,6 +1497,7 @@ const FormCheckFoliepasPage = () => {
                                   )
                                 }
                                 rows={2}
+                                className="mt-2"
                               />
                             )}
                           </div>
@@ -1487,8 +1507,8 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/*  Hakmodel: (verplicht) */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
                           {t('heelModel')}
                         </Label>
                         <Select
@@ -1530,89 +1550,83 @@ const FormCheckFoliepasPage = () => {
                         </Select>
 
                         {heelModelType === 'buildUp' && (
-                          <div className="pt-2">
-                            <RadioGroup
-                              value={form.watch('heelBuildUpMaterial') || 'poro'}
-                              onValueChange={v =>
-                                form.setValue(
-                                  'heelBuildUpMaterial',
-                                  v as 'poro' | 'leather',
-                                )
-                              }
-                            >
-                              <div className="flex gap-4">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="poro" id="heel-poro" />
-                                  <Label
-                                    htmlFor="heel-poro"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('poro')}
-                                  </Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="leather" id="heel-leather" />
-                                  <Label
-                                    htmlFor="heel-leather"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('leather')}
-                                  </Label>
-                                </div>
+                          <RadioGroup
+                            value={form.watch('heelBuildUpMaterial') || 'poro'}
+                            onValueChange={v =>
+                              form.setValue(
+                                'heelBuildUpMaterial',
+                                v as 'poro' | 'leather',
+                              )
+                            }
+                          >
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="poro" id="heel-poro" />
+                                <Label
+                                  htmlFor="heel-poro"
+                                  className="font-normal cursor-pointer"
+                                >
+                                  {t('poro')}
+                                </Label>
                               </div>
-                            </RadioGroup>
-                          </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="leather" id="heel-leather" />
+                                <Label
+                                  htmlFor="heel-leather"
+                                  className="font-normal cursor-pointer"
+                                >
+                                  {t('leather')}
+                                </Label>
+                              </div>
+                            </div>
+                          </RadioGroup>
                         )}
 
                         {heelModelType === 'wedge' && (
-                          <div className="pt-2">
-                            <RadioGroup
-                              value={form.watch('heelWedgeType') || 'flat'}
-                              onValueChange={v =>
-                                form.setValue('heelWedgeType', v as 'hollow' | 'flat')
-                              }
-                            >
-                              <div className="flex gap-4">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="hollow" id="wedge-hollow" />
-                                  <Label
-                                    htmlFor="wedge-hollow"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('hollow')}
-                                  </Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="flat" id="wedge-flat" />
-                                  <Label
-                                    htmlFor="wedge-flat"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('flat')}
-                                  </Label>
-                                </div>
+                          <RadioGroup
+                            value={form.watch('heelWedgeType') || 'flat'}
+                            onValueChange={v =>
+                              form.setValue('heelWedgeType', v as 'hollow' | 'flat')
+                            }
+                          >
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="hollow" id="wedge-hollow" />
+                                <Label
+                                  htmlFor="wedge-hollow"
+                                  className="font-normal cursor-pointer"
+                                >
+                                  {t('hollow')}
+                                </Label>
                               </div>
-                            </RadioGroup>
-                          </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="flat" id="wedge-flat" />
+                                <Label
+                                  htmlFor="wedge-flat"
+                                  className="font-normal cursor-pointer"
+                                >
+                                  {t('flat')}
+                                </Label>
+                              </div>
+                            </div>
+                          </RadioGroup>
                         )}
 
                         {heelModelType === 'block' && (
-                          <div className="pt-2">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="heel-core-coating"
-                                checked={form.watch('heelBlockCoreCoating') || false}
-                                onCheckedChange={checked =>
-                                  form.setValue('heelBlockCoreCoating', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="heel-core-coating"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('coreCoating')}
-                              </Label>
-                            </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="heel-core-coating"
+                              checked={form.watch('heelBlockCoreCoating') || false}
+                              onCheckedChange={checked =>
+                                form.setValue('heelBlockCoreCoating', !!checked)
+                              }
+                            />
+                            <Label
+                              htmlFor="heel-core-coating"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('coreCoating')}
+                            </Label>
                           </div>
                         )}
                       </div>
@@ -1620,14 +1634,17 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* Hakhoogte & Hakafronding */}
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">
+                          {t('heelHeightAndRounding')}
+                        </Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {/* Hakhoogte */}
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('heelHeight')}
                             </Label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                            <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
                                 <Label htmlFor="heel-height-left">
                                   {t('heelHeightLeft')} (cm)
@@ -1660,11 +1677,11 @@ const FormCheckFoliepasPage = () => {
                           </div>
 
                           {/* Hakafronding */}
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm font-semibold">
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">
                               {t('heelRounding')}
                             </Label>
-                            <div className="flex flex-col gap-3 pt-2">
+                            <div className="grid gap-3">
                               <div className="flex items-center space-x-2">
                                 <Checkbox
                                   id="heel-rounding-left"
@@ -1707,12 +1724,12 @@ const FormCheckFoliepasPage = () => {
                       <Separator />
 
                       {/* Schoring */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">{t('shoring')}</Label>
-                        <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-semibold">{t('shoring')}</Label>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {/* Schoring Links */}
-                          <div className="grid pr-6 border-r">
-                            <Label className="text-sm">{t('shoringLeft')}</Label>
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">{t('shoringLeft')}</Label>
                             <Select
                               value={form.watch('shoringLeftType') || 'none'}
                               onValueChange={v =>
@@ -1750,8 +1767,8 @@ const FormCheckFoliepasPage = () => {
                           </div>
 
                           {/* Schoring Rechts */}
-                          <div className="flex flex-col pl-6">
-                            <Label className="text-sm">{t('shoringRight')}</Label>
+                          <div className="space-y-3 border rounded-lg p-6">
+                            <Label className="text-sm font-medium">{t('shoringRight')}</Label>
                             <Select
                               value={form.watch('shoringRightType') || 'none'}
                               onValueChange={v =>
