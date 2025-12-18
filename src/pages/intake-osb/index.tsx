@@ -1016,12 +1016,13 @@ const FormIntakeOSBPage = () => {
                           step="0.01"
                           placeholder={t('insolePrice')}
                           value={form.watch('steunzoolPrijs') || ''}
-                          onChange={e =>
+                          onChange={e => {
+                            const value = e.target.value ? parseFloat(e.target.value) : undefined;
                             form.setValue(
                               'steunzoolPrijs',
-                              e.target.value ? parseFloat(e.target.value) : undefined,
-                            )
-                          }
+                              value !== undefined && !isNaN(value) ? value : undefined,
+                            );
+                          }}
                         />
                       </div>
                       <div className="space-y-2">
