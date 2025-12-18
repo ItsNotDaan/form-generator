@@ -126,8 +126,9 @@ const FormCheckFoliepasPage = () => {
     edgeType: z.string().optional(),
     edgeColor: z.string().optional(),
     // Zooltype
-    soleType: z.enum(['gumlite', 'leather', 'antiSlip'] as const).optional(),
+    soleType: z.enum(['gumlite', 'leather', 'antiSlip', 'leatherAntiSlip'] as const).optional(),
     gumliteNumber: z.string().optional(),
+    gumliteColor: z.string().optional(),
     // Koolstofverstijving
     carbonStiffeningType: z
       .enum(['none', 'prefab', 'custom'] as const)
@@ -139,7 +140,7 @@ const FormCheckFoliepasPage = () => {
       .enum(['none', 'carbon', 'rubberCrawl'] as const)
       .optional(),
     // Contrefort
-    counterfortType: z.enum(['formo', 'other'] as const).optional(),
+    counterfortType: z.enum(['formo', 'leather', 'other'] as const).optional(),
     counterfortOther: z.string().optional(),
     // Binnenzool
     insoleType: z.enum(['leather', 'other'] as const).optional(),
@@ -238,6 +239,7 @@ const FormCheckFoliepasPage = () => {
       edgeColor: '',
       soleType: 'gumlite',
       gumliteNumber: '2644',
+      gumliteColor: '',
       carbonStiffeningType: 'none',
       carbonStiffeningLeft: false,
       carbonStiffeningRight: false,
@@ -347,6 +349,7 @@ const FormCheckFoliepasPage = () => {
         edgeColor: data.edgeColor || '',
         soleType: data.soleType || '',
         gumliteNumber: data.gumliteNumber || '',
+        gumliteColor: data.gumliteColor || '',
         carbonStiffeningType: data.carbonStiffeningType || '',
         carbonStiffeningLeft: data.carbonStiffeningLeft || false,
         carbonStiffeningRight: data.carbonStiffeningRight || false,
@@ -878,254 +881,203 @@ const FormCheckFoliepasPage = () => {
                         <Label className="text-sm font-semibold">
                           {t('tonguePaddingAndCollar')}
                         </Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
+
+                        <div className="grid grid-cols-2 gap-6 border-2 p-4">
+                          <div className="grid pr-6 border-r">
                             <Label className="text-sm">{t('tonguePadding')}</Label>
-                            <RadioGroup
+                            <Select
                               value={form.watch('tonguePaddingMm') || ''}
                               onValueChange={v =>
                                 form.setValue('tonguePaddingMm', v as '3' | '5' | '')
                               }
                             >
-                              <div className="flex gap-4">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="3" id="tongue-3mm" />
-                                  <Label
-                                    htmlFor="tongue-3mm"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('mm3')}
-                                  </Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="5" id="tongue-5mm" />
-                                  <Label
-                                    htmlFor="tongue-5mm"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('mm5')}
-                                  </Label>
-                                </div>
-                              </div>
-                            </RadioGroup>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('tonguePadding')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="3">{t('mm3')}</SelectItem>
+                                <SelectItem value="5">{t('mm5')}</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
-                          <div className="space-y-2">
+                          <div className="flex flex-col pl-6">
                             <Label className="text-sm">{t('paddingCollar')}</Label>
-                            <RadioGroup
+                            <Select
                               value={form.watch('paddingCollarMm') || ''}
                               onValueChange={v =>
-                                form.setValue('paddingCollarMm', v as '3' | '5' | '')
+                                form.setValue('paddingCollarMm', v as '5' | '10' | '')
                               }
                             >
-                              {/* TODO 3mm moet 5mm worden, 5 mm moet 10 worden. */}
-                              <div className="flex gap-4">
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('paddingCollar')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="5">{t('mm5')}</SelectItem>
+                                <SelectItem value="10">{t('mm10')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <Separator />
+
+                      {/* !Sluiting & Rits */}
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Sluiting */}
+                          <div className="grid pr-6 border-r">
+                            <Label className="text-sm font-semibold">
+                              {t('closure')}
+                            </Label>
+                            <RadioGroup
+                              value={closureType || 'velcro'}
+                              onValueChange={v =>
+                                form.setValue(
+                                  'closureType',
+                                  v as 'velcro' | 'ringsHooks',
+                                )
+                              }
+                            >
+                              <div className="flex flex-col gap-2">
                                 <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="3" id="collar-3mm" />
+                                  <RadioGroupItem value="velcro" id="closure-velcro" />
                                   <Label
-                                    htmlFor="collar-3mm"
+                                    htmlFor="closure-velcro"
                                     className="font-normal cursor-pointer"
                                   >
-                                    {t('mm3')}
+                                    {t('velcroWithExtraLongRolPassant')}
                                   </Label>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="5" id="collar-5mm" />
+                                  <RadioGroupItem
+                                    value="ringsHooks"
+                                    id="closure-rings"
+                                  />
                                   <Label
-                                    htmlFor="collar-5mm"
+                                    htmlFor="closure-rings"
                                     className="font-normal cursor-pointer"
                                   >
-                                    {t('mm5')}
+                                    {t('ringsAndHooks')}
                                   </Label>
                                 </div>
                               </div>
                             </RadioGroup>
+                            {closureType === 'ringsHooks' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                <div className="space-y-2">
+                                  <Label htmlFor="rings-nr">{t('ringsNr')}</Label>
+                                  <Input
+                                    id="rings-nr"
+                                    value={form.watch('ringsNr') || ''}
+                                    onChange={e =>
+                                      form.setValue('ringsNr', e.target.value)
+                                    }
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor="rings-amount">{t('ringsAmount')}</Label>
+                                  <Input
+                                    id="rings-amount"
+                                    type="number"
+                                    value={form.watch('ringsAmount') || ''}
+                                    onChange={e =>
+                                      form.setValue('ringsAmount', e.target.value)
+                                    }
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor="hooks-nr">{t('hooksNr')}</Label>
+                                  <Input
+                                    id="hooks-nr"
+                                    value={form.watch('hooksNr') || ''}
+                                    onChange={e =>
+                                      form.setValue('hooksNr', e.target.value)
+                                    }
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor="hooks-amount">{t('hooksAmount')}</Label>
+                                  <Input
+                                    id="hooks-amount"
+                                    type="number"
+                                    value={form.watch('hooksAmount') || ''}
+                                    onChange={e =>
+                                      form.setValue('hooksAmount', e.target.value)
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Rits */}
+                          <div className="flex flex-col pl-6">
+                            <Label className="text-sm font-semibold">{t('zipper')}</Label>
+                            <Select
+                              value={zipperType || 'none'}
+                              onValueChange={v =>
+                                form.setValue(
+                                  'zipperType',
+                                  v as 'none' | 'functionalNylon' | 'decorativeNylon',
+                                )
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('zipper')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">{t('noZipper')}</SelectItem>
+                                <SelectItem value="functionalNylon">
+                                  {t('functionalNylon')}
+                                </SelectItem>
+                                <SelectItem value="decorativeNylon">
+                                  {t('decorativeNylon')}
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {zipperType && zipperType !== 'none' && (
+                              <div className="flex gap-4 pt-2">
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id="zipper-medial"
+                                    checked={form.watch('zipperMedial') || false}
+                                    onCheckedChange={checked =>
+                                      form.setValue('zipperMedial', !!checked)
+                                    }
+                                  />
+                                  <Label
+                                    htmlFor="zipper-medial"
+                                    className="font-normal cursor-pointer"
+                                  >
+                                    {t('medial')}
+                                  </Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id="zipper-lateral"
+                                    checked={form.watch('zipperLateral') || false}
+                                    onCheckedChange={checked =>
+                                      form.setValue('zipperLateral', !!checked)
+                                    }
+                                  />
+                                  <Label
+                                    htmlFor="zipper-lateral"
+                                    className="font-normal cursor-pointer"
+                                  >
+                                    {t('lateral')}
+                                  </Label>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
 
                       <Separator />
 
-                      {/* !Sluiting: (Verplicht)
-                    (Radio)
-                   Klitteband met rolpassant (extra lang)
-                   Of
-                   Ringen nr: (Textarea) + Aantal: (Textarea)
-                   Haken nr: (Textarea) + Aantal: (Textarea)
-
-                   Output naar form-results in engels: closureTypeDetailsShoe
-                   Voorbeeld: Klitteband met rolpassant (extra lang), Ringen nr: (textarea) Aantal: (textarea) + Haken nr: (textarea) Aantal: (textarea)
-                   Alleen de gekozen opties toevoegen. het is of klitteband, of ringen/haken. Ringen/haken kunnen samen zijn. Als ze zijn ingevuld. moeten ze erbij met een + ertussen.
-                   */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('closure')}
-                        </Label>
-                        <RadioGroup
-                          value={closureType || 'velcro'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'closureType',
-                              v as 'velcro' | 'ringsHooks',
-                            )
-                          }
-                        >
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="velcro" id="closure-velcro" />
-                              <Label
-                                htmlFor="closure-velcro"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('velcroWithExtraLongRolPassant')}
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem
-                                value="ringsHooks"
-                                id="closure-rings"
-                              />
-                              <Label
-                                htmlFor="closure-rings"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('ringsAndHooks')}
-                              </Label>
-                            </div>
-                          </div>
-                        </RadioGroup>
-                        {closureType === 'ringsHooks' && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                            <div className="space-y-2">
-                              <Label htmlFor="rings-nr">{t('ringsNr')}</Label>
-                              <Input
-                                id="rings-nr"
-                                value={form.watch('ringsNr') || ''}
-                                onChange={e =>
-                                  form.setValue('ringsNr', e.target.value)
-                                }
-                              />
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="rings-amount">{t('ringsAmount')}</Label>
-                              <Input
-                                id="rings-amount"
-                                type="number"
-                                value={form.watch('ringsAmount') || ''}
-                                onChange={e =>
-                                  form.setValue('ringsAmount', e.target.value)
-                                }
-                              />
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="hooks-nr">{t('hooksNr')}</Label>
-                              <Input
-                                id="hooks-nr"
-                                value={form.watch('hooksNr') || ''}
-                                onChange={e =>
-                                  form.setValue('hooksNr', e.target.value)
-                                }
-                              />
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="hooks-amount">{t('hooksAmount')}</Label>
-                              <Input
-                                id="hooks-amount"
-                                type="number"
-                                value={form.watch('hooksAmount') || ''}
-                                onChange={e =>
-                                  form.setValue('hooksAmount', e.target.value)
-                                }
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <Separator />
-
-                      {/* !Rits
-                    (Select component)
-                    Geen Rits (Standaard)
-                    Functioneel Nylon (Checkbox met Mediaal en/of Lateraal)
-                    Decoratief Nylon (Checkbox met Mediaal en/of Lateraal)
-
-                    Output naar form-results in engels: zipperDetailsShoe
-                    Voorbeeld: Functioneel Nylon Mediaal + Lateraal, Decoratief Nylon Lateraal
-                    Alleen de gekozen optie toevoegen.
-                   */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">{t('zipper')}</Label>
-                        <Select
-                          value={zipperType || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'zipperType',
-                              v as 'none' | 'functionalNylon' | 'decorativeNylon',
-                            )
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('zipper')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('noZipper')}</SelectItem>
-                            <SelectItem value="functionalNylon">
-                              {t('functionalNylon')}
-                            </SelectItem>
-                            <SelectItem value="decorativeNylon">
-                              {t('decorativeNylon')}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {zipperType && zipperType !== 'none' && (
-                          <div className="flex gap-4 pt-1">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="zipper-medial"
-                                checked={form.watch('zipperMedial') || false}
-                                onCheckedChange={checked =>
-                                  form.setValue('zipperMedial', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="zipper-medial"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('medial')}
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="zipper-lateral"
-                                checked={form.watch('zipperLateral') || false}
-                                onCheckedChange={checked =>
-                                  form.setValue('zipperLateral', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="zipper-lateral"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('lateral')}
-                              </Label>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <Separator />
-
-                      {/* !Bijzonderheden:
-                   (Checkbox)
-                    Mediaal klittenband tongen
-                    Veterlus op de tong
-                    Extra leer meeleveren i.v.m bekleden supplementen
-                    Anders: (Textarea)
-
-                    Output naar form-results in engels: specialDetailsShoe
-                    Voorbeeld: Mediaal klittenband tongen + Veterlus op de tong, Veterlus op de tong
-                    Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
-                   */}
+                      {/* !Bijzonderheden */}
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold">
                           {t('specialDetails')}
@@ -1191,13 +1143,7 @@ const FormCheckFoliepasPage = () => {
 
                       <Separator />
 
-                      {/* !Randtype (Verplicht)
-                    Rand type: (Textarea) en Kleur: (Textarea)
-
-                    Output naar form-results in engels: edgeTypeDetailsShoe
-                    Voorbeeld: Rand type: (textarea) + Kleur: (textarea)
-
-                   */}
+                      {/* !Randtype */}
                       <div className="space-y-3">
                         <Label className="text-sm font-semibold">
                           {t('edgeType')}
@@ -1230,16 +1176,7 @@ const FormCheckFoliepasPage = () => {
 
                       <Separator />
 
-                      {/* !Zooltype (Verplicht)
-                   (Select component))
-                   Gumlite: (Textarea) (Standaard met "2644")
-                   Leer
-                   Antislip
-
-                    Output naar form-results in engels: soleTypeDetailsShoe
-                    Voorbeeld: Gumlite: (textarea), Leer, Antislip
-                    Alleen de gekozen opties toevoegen. Kan er maar 1 zijn.
-                   */}
+                      {/* !Zooltype */}
                       <div className="space-y-3">
                         <Label className="text-sm font-semibold">
                           {t('soleType')}
@@ -1258,346 +1195,298 @@ const FormCheckFoliepasPage = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="gumlite">{t('gumlite')}</SelectItem>
-                            <SelectItem value="leather">{t('leather')}</SelectItem>
-                            <SelectItem value="antiSlip">{t('antiSlip')}</SelectItem>
-                            {/* TODO het moet Leer met antislip zijn. Niet beide. */}
+                            <SelectItem value="leatherAntiSlip">{t('leatherAntiSlip')}</SelectItem>
                           </SelectContent>
                         </Select>
                         {soleType === 'gumlite' && (
-                          <div className="space-y-2">
-                            <Label htmlFor="gumlite-number">
-                              {t('gumliteNumber')}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                            <div className="space-y-2">
+                              <Label htmlFor="gumlite-number">
+                                {t('gumliteNumber')}
+                              </Label>
+                              <Input
+                                id="gumlite-number"
+                                value={form.watch('gumliteNumber') || ''}
+                                onChange={e =>
+                                  form.setValue('gumliteNumber', e.target.value)
+                                }
+                                placeholder='2644'
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="gumlite-color">Kleur</Label>
+                              <Input
+                                id="gumlite-color"
+                                value={form.watch('gumliteColor') || ''}
+                                onChange={e =>
+                                  form.setValue('gumliteColor', e.target.value)
+                                }
+                                placeholder='Zwart'
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <Separator />
+
+                      {/* Koolstofverstijving & Neusopties */}
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Koolstofverstijving */}
+                          <div className="grid pr-6 border-r">
+                            <Label className="text-sm font-semibold">
+                              {t('carbonStiffening')}
                             </Label>
-                            <Input
-                              id="gumlite-number"
-                              value={form.watch('gumliteNumber') || ''}
-                              onChange={e =>
-                                form.setValue('gumliteNumber', e.target.value)
+                            <Select
+                              value={carbonStiffeningType || 'none'}
+                              onValueChange={v =>
+                                form.setValue(
+                                  'carbonStiffeningType',
+                                  v as 'none' | 'prefab' | 'custom',
+                                )
                               }
-                            />
-
-                            {/* TODO HIER MOET OOK EEN KLEUR BIJ */}
-                            {/* TODO MAAK DIT NET ZOALS RANDTYPE DUS TEKST EN KLEUR TEKST */}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('carbonStiffening')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">{t('none')}</SelectItem>
+                                <SelectItem value="prefab">{t('prefab')}</SelectItem>
+                                <SelectItem value="custom">{t('custom')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {carbonStiffeningType && carbonStiffeningType !== 'none' && (
+                              <div className="flex gap-4 pt-2">
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id="carbon-left"
+                                    checked={
+                                      form.watch('carbonStiffeningLeft') || false
+                                    }
+                                    onCheckedChange={checked =>
+                                      form.setValue('carbonStiffeningLeft', !!checked)
+                                    }
+                                  />
+                                  <Label
+                                    htmlFor="carbon-left"
+                                    className="font-normal cursor-pointer"
+                                  >
+                                    {t('left')}
+                                  </Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id="carbon-right"
+                                    checked={
+                                      form.watch('carbonStiffeningRight') || false
+                                    }
+                                    onCheckedChange={checked =>
+                                      form.setValue('carbonStiffeningRight', !!checked)
+                                    }
+                                  />
+                                  <Label
+                                    htmlFor="carbon-right"
+                                    className="font-normal cursor-pointer"
+                                  >
+                                    {t('right')}
+                                  </Label>
+                                </div>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
 
-                      <Separator />
-
-                      {/* Koolstofverstijving:
-                   (Select component)
-                    Nee (Standaard)
-                    Prefab -> dan Links (Checkbox) Rechts (Checkbox)
-                    Maatwerk -> dan Links (Checkbox) Rechts (Checkbox)
-
-                    Output naar form-results in engels: carbonStiffeningDetailsShoe
-                    Voorbeeld: Prefab Links + Rechts, Maatwerk Rechts
-                    Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
-
-                   */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('carbonStiffening')}
-                        </Label>
-                        <Select
-                          value={carbonStiffeningType || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'carbonStiffeningType',
-                              v as 'none' | 'prefab' | 'custom',
-                            )
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('carbonStiffening')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="prefab">{t('prefab')}</SelectItem>
-                            <SelectItem value="custom">{t('custom')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {carbonStiffeningType && carbonStiffeningType !== 'none' && (
-                          <div className="flex gap-4 pt-1">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="carbon-left"
-                                checked={
-                                  form.watch('carbonStiffeningLeft') || false
-                                }
-                                onCheckedChange={checked =>
-                                  form.setValue('carbonStiffeningLeft', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="carbon-left"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('left')}
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="carbon-right"
-                                checked={
-                                  form.watch('carbonStiffeningRight') || false
-                                }
-                                onCheckedChange={checked =>
-                                  form.setValue('carbonStiffeningRight', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="carbon-right"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('right')}
-                              </Label>
-                            </div>
+                          {/* Neusopties */}
+                          <div className="flex flex-col pl-6">
+                            <Label className="text-sm font-semibold">
+                              {t('toeOptions')}
+                            </Label>
+                            <Select
+                              value={form.watch('toeOptionsType') || 'none'}
+                              onValueChange={v =>
+                                form.setValue(
+                                  'toeOptionsType',
+                                  v as 'none' | 'carbon' | 'rubberCrawl',
+                                )
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('toeOptions')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">{t('none')}</SelectItem>
+                                <SelectItem value="carbon">{t('carbonToes')}</SelectItem>
+                                <SelectItem value="rubberCrawl">
+                                  {t('rubberCrawlToes')}
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
-                        )}
+                        </div>
                       </div>
 
                       <Separator />
 
-                      {/* Neusopties:
-                   (Select component)
-                   Nee (Standaard)
-                   Koolstofneuzen
-                   Rubberenkruipneuzen
-
-                    Output naar form-results in engels: toeOptionsDetailsShoe
-                    Voorbeeld: Koolstofneuzen, Rubberenkruipneuzen
-
-                   */}
+                      {/* Contrefort & Binnenzool */}
                       <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('toeOptions')}
-                        </Label>
-                        <Select
-                          value={form.watch('toeOptionsType') || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'toeOptionsType',
-                              v as 'none' | 'carbon' | 'rubberCrawl',
-                            )
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('toeOptions')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="carbon">{t('carbonToes')}</SelectItem>
-                            <SelectItem value="rubberCrawl">
-                              {t('rubberCrawlToes')}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Contrefort */}
+                          <div className="grid pr-6 border-r">
+                            <Label className="text-sm font-semibold">
+                              {t('counterfort')}
+                            </Label>
+                            <Select
+                              value={counterfortType || 'formo'}
+                              onValueChange={v =>
+                                form.setValue('counterfortType', v as 'formo' | 'other')
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('counterfort')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="formo">{t('formo')}</SelectItem>
+                                <SelectItem value="leather">{t('leather')}</SelectItem>
+                                <SelectItem value="other">{t('other')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {counterfortType === 'other' && (
+                              <Textarea
+                                placeholder={t('otherPlaceholder')}
+                                value={form.watch('counterfortOther') || ''}
+                                onChange={e =>
+                                  form.setValue('counterfortOther', e.target.value)
+                                }
+                                rows={2}
+                              />
+                            )}
+                          </div>
+
+                          {/* Binnenzool */}
+                          <div className="flex flex-col pl-6">
+                            <Label className="text-sm font-semibold">{t('insole')}</Label>
+                            <Select
+                              value={insoleType || 'leather'}
+                              onValueChange={v =>
+                                form.setValue('insoleType', v as 'leather' | 'other')
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('insole')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="leather">{t('leather')}</SelectItem>
+                                <SelectItem value="other">{t('other')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {insoleType === 'other' && (
+                              <Textarea
+                                placeholder={t('otherPlaceholder')}
+                                value={form.watch('insoleOther') || ''}
+                                onChange={e =>
+                                  form.setValue('insoleOther', e.target.value)
+                                }
+                                rows={2}
+                              />
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       <Separator />
 
-                      {/* Contrefort:
-                    (Select component)
-                    Formo (Standaard)
-                    Anders: (Textarea)
-
-                    Output naar form-results in engels: counterfortDetailsShoe
-                    Voorbeeld: Formo, (textarea)
-
-                  */}
+                      {/* Zoolkantuitpoetsen & Maakwijze */}
                       <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('counterfort')}
-                        </Label>
-                        <Select
-                          value={counterfortType || 'formo'}
-                          onValueChange={v =>
-                            form.setValue('counterfortType', v as 'formo' | 'other')
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('counterfort')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="formo">{t('formo')}</SelectItem>
-                            {/* TODO VOEG HIER LEER TOE. */}
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {counterfortType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('counterfortOther') || ''}
-                            onChange={e =>
-                              form.setValue('counterfortOther', e.target.value)
-                            }
-                            rows={2}
-                          />
-                        )}
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Zoolkantuitpoetsen */}
+                          <div className="grid pr-6 border-r">
+                            <Label className="text-sm font-semibold">
+                              {t('soleEdgePolish')}
+                            </Label>
+                            <Select
+                              value={soleEdgePolishType || 'none'}
+                              onValueChange={v =>
+                                form.setValue(
+                                  'soleEdgePolishType',
+                                  v as
+                                  | 'none'
+                                  | 'black'
+                                  | 'brown'
+                                  | 'mahogany'
+                                  | 'ridges'
+                                  | 'other',
+                                )
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('soleEdgePolish')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">{t('none')}</SelectItem>
+                                <SelectItem value="black">{t('black')}</SelectItem>
+                                <SelectItem value="brown">{t('brown')}</SelectItem>
+                                <SelectItem value="mahogany">{t('mahogany')}</SelectItem>
+                                <SelectItem value="ridges">
+                                  {t('soleEdgeRidgesMilling')}
+                                </SelectItem>
+                                <SelectItem value="other">{t('other')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {soleEdgePolishType === 'other' && (
+                              <Textarea
+                                placeholder={t('otherPlaceholder')}
+                                value={form.watch('soleEdgePolishOther') || ''}
+                                onChange={e =>
+                                  form.setValue('soleEdgePolishOther', e.target.value)
+                                }
+                                rows={2}
+                              />
+                            )}
+                          </div>
+
+                          {/* Maakwijze */}
+                          <div className="flex flex-col pl-6">
+                            <Label className="text-sm font-semibold">
+                              {t('constructionMethod')}
+                            </Label>
+                            <Select
+                              value={constructionMethodType || 'glued'}
+                              onValueChange={v =>
+                                form.setValue(
+                                  'constructionMethodType',
+                                  v as 'glued' | 'flexible' | 'other',
+                                )
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('constructionMethod')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="glued">{t('glued')}</SelectItem>
+                                <SelectItem value="flexible">{t('flexible')}</SelectItem>
+                                <SelectItem value="other">{t('other')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {constructionMethodType === 'other' && (
+                              <Textarea
+                                placeholder={t('otherPlaceholder')}
+                                value={form.watch('constructionMethodOther') || ''}
+                                onChange={e =>
+                                  form.setValue(
+                                    'constructionMethodOther',
+                                    e.target.value,
+                                  )
+                                }
+                                rows={2}
+                              />
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       <Separator />
 
-                      {/* Binnenzool:
-                  (Select component)
-                  Leer (Standaard)
-                  Anders: (Textarea)
-
-                  Output naar form-results in engels: insoleDetailsShoe
-                  Voorbeeld: Leer, (textarea)
-                  */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">{t('insole')}</Label>
-                        <Select
-                          value={insoleType || 'leather'}
-                          onValueChange={v =>
-                            form.setValue('insoleType', v as 'leather' | 'other')
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('insole')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="leather">{t('leather')}</SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {insoleType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('insoleOther') || ''}
-                            onChange={e =>
-                              form.setValue('insoleOther', e.target.value)
-                            }
-                            rows={2}
-                          />
-                        )}
-                      </div>
-
-                      <Separator />
-
-                      {/* Zoolkantuitpoetsen:
-                  (Select component)
-                  Nee (Standaard)
-                  Zwart
-                  Bruin
-                  Mahonie
-                  Zoolkant ribbels frezen
-                  Anders: (Textarea)
-
-                  Output naar form-results in engels: soleEdgePolishDetailsShoe
-                  Voorbeeld: Zwart, Bruin, Mahonie, Zoolkant ribbels frezen, (textarea)
-                  Alleen de gekozen opties toevoegen.
-
-                  */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('soleEdgePolish')}
-                        </Label>
-                        <Select
-                          value={soleEdgePolishType || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'soleEdgePolishType',
-                              v as
-                              | 'none'
-                              | 'black'
-                              | 'brown'
-                              | 'mahogany'
-                              | 'ridges'
-                              | 'other',
-                            )
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('soleEdgePolish')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="black">{t('black')}</SelectItem>
-                            <SelectItem value="brown">{t('brown')}</SelectItem>
-                            <SelectItem value="mahogany">{t('mahogany')}</SelectItem>
-                            <SelectItem value="ridges">
-                              {t('soleEdgeRidgesMilling')}
-                            </SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {soleEdgePolishType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('soleEdgePolishOther') || ''}
-                            onChange={e =>
-                              form.setValue('soleEdgePolishOther', e.target.value)
-                            }
-                            rows={2}
-                          />
-                        )}
-                      </div>
-
-                      <Separator />
-
-                      {/* Maakwijze
-                  (Select component)
-                  Gelijmd (Standaard)
-                  Flexibel
-                  Anders: (Textarea)
-
-                  Output naar form-results in engels: constructionMethodShoe
-                  Voorbeeld: Gelijmd, Flexibel
-                  Alleen de gekozen opties toevoegen.
-
-                  */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('constructionMethod')}
-                        </Label>
-                        <Select
-                          value={constructionMethodType || 'glued'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'constructionMethodType',
-                              v as 'glued' | 'flexible' | 'other',
-                            )
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('constructionMethod')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="glued">{t('glued')}</SelectItem>
-                            <SelectItem value="flexible">{t('flexible')}</SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {constructionMethodType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('constructionMethodOther') || ''}
-                            onChange={e =>
-                              form.setValue(
-                                'constructionMethodOther',
-                                e.target.value,
-                              )
-                            }
-                            rows={2}
-                          />
-                        )}
-                      </div>
-
-                      <Separator />
-
-                      {/*  Hakmodel: (verplicht)
-                    (Select component)
-                    Opbouwhak -> dan Poro of Leer (Radio) (Standaard)
-                    Sleehak -> dan Uitholling of Vlak (Radio)
-                    Blokhak -> dan Kernbekleding (Checkbox)
-
-                    Output naar form-results in engels: heelModelDetailsShoe
-                    Voorbeeld: Opbouwhak Poro, Sleehak Vlak, Blokhak Kernbekleding
-                    Alleen de gekozen opties toevoegen.
-                  */}
+                      {/*  Hakmodel: (verplicht) */}
                       <div className="space-y-3">
                         <Label className="text-sm font-semibold">
                           {t('heelModel')}
@@ -1610,20 +1499,23 @@ const FormCheckFoliepasPage = () => {
                               v as 'buildUp' | 'wedge' | 'block',
                             );
                             // Set default heights based on heel type
-                            if (v === 'buildUp' || v === 'wedge') {
-                              if (!form.watch('hakhoogteLinks')) {
-                                form.setValue('hakhoogteLinks', '1.5');
-                              }
-                              if (!form.watch('hakhoogteRechts')) {
-                                form.setValue('hakhoogteRechts', '1.5');
-                              }
+                            const edgeTypeValue = form.watch('edgeType');
+                            let defaultHeight = '2';
+
+                            if (v === 'buildUp') {
+                              defaultHeight = '2';
+                            } else if (v === 'wedge') {
+                              // For Sleehak (wedge): 1.5cm if CSO, otherwise 2cm
+                              defaultHeight = edgeTypeValue === 'CSO' || edgeTypeValue?.includes('CSO') ? '1.5' : '2';
                             } else if (v === 'block') {
-                              if (!form.watch('hakhoogteLinks')) {
-                                form.setValue('hakhoogteLinks', '2');
-                              }
-                              if (!form.watch('hakhoogteRechts')) {
-                                form.setValue('hakhoogteRechts', '2');
-                              }
+                              defaultHeight = '2.5';
+                            }
+
+                            if (!form.watch('hakhoogteLinks')) {
+                              form.setValue('hakhoogteLinks', defaultHeight);
+                            }
+                            if (!form.watch('hakhoogteRechts')) {
+                              form.setValue('hakhoogteRechts', defaultHeight);
                             }
                           }}
                         >
@@ -1638,7 +1530,7 @@ const FormCheckFoliepasPage = () => {
                         </Select>
 
                         {heelModelType === 'buildUp' && (
-                          <div className="pt-1">
+                          <div className="pt-2">
                             <RadioGroup
                               value={form.watch('heelBuildUpMaterial') || 'poro'}
                               onValueChange={v =>
@@ -1673,7 +1565,7 @@ const FormCheckFoliepasPage = () => {
                         )}
 
                         {heelModelType === 'wedge' && (
-                          <div className="pt-1">
+                          <div className="pt-2">
                             <RadioGroup
                               value={form.watch('heelWedgeType') || 'flat'}
                               onValueChange={v =>
@@ -1705,144 +1597,121 @@ const FormCheckFoliepasPage = () => {
                         )}
 
                         {heelModelType === 'block' && (
-                          <div className="flex items-center space-x-2 pt-1">
-                            <Checkbox
-                              id="heel-core-coating"
-                              checked={form.watch('heelBlockCoreCoating') || false}
-                              onCheckedChange={checked =>
-                                form.setValue('heelBlockCoreCoating', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="heel-core-coating"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('coreCoating')}
-                            </Label>
+                          <div className="pt-2">
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id="heel-core-coating"
+                                checked={form.watch('heelBlockCoreCoating') || false}
+                                onCheckedChange={checked =>
+                                  form.setValue('heelBlockCoreCoating', !!checked)
+                                }
+                              />
+                              <Label
+                                htmlFor="heel-core-coating"
+                                className="font-normal cursor-pointer"
+                              >
+                                {t('coreCoating')}
+                              </Label>
+                            </div>
                           </div>
                         )}
                       </div>
 
                       <Separator />
 
-                      {/* Hakhoogte: (verplicht)
-                    Links: (textarea) en Rechts: (textarea)
-
-                    Output naar form-results in engels: heelHeightDetailsShoe
-                    Voorbeeld: Links: (textarea) cm, Rechts: (textarea) cm
-
-                    Bij hakmodel standaard het volgende invullen als er nog niets is ingevuld L en R:
-                    Opbouwhak: 2 cm
-                    Sleehak: 2 cm -> BIJ CSO IS HET 1,5CM TODO
-                    Blokhak: 2,5 cm
-
-                  */}
+                      {/* Hakhoogte & Hakafronding */}
                       <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('heelHeight')}
-                        </Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div className="space-y-2">
-                            <Label htmlFor="heel-height-left">
-                              {t('heelHeightLeft')} (cm)
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Hakhoogte */}
+                          <div className="grid pr-6 border-r">
+                            <Label className="text-sm font-semibold">
+                              {t('heelHeight')}
                             </Label>
-                            <Input
-                              id="heel-height-left"
-                              type="number"
-                              step="0.1"
-                              value={form.watch('hakhoogteLinks') || ''}
-                              onChange={e =>
-                                form.setValue('hakhoogteLinks', e.target.value)
-                              }
-                            />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                              <div className="space-y-2">
+                                <Label htmlFor="heel-height-left">
+                                  {t('heelHeightLeft')} (cm)
+                                </Label>
+                                <Input
+                                  id="heel-height-left"
+                                  type="number"
+                                  step="0.1"
+                                  value={form.watch('hakhoogteLinks') || ''}
+                                  onChange={e =>
+                                    form.setValue('hakhoogteLinks', e.target.value)
+                                  }
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="heel-height-right">
+                                  {t('heelHeightRight')} (cm)
+                                </Label>
+                                <Input
+                                  id="heel-height-right"
+                                  type="number"
+                                  step="0.1"
+                                  value={form.watch('hakhoogteRechts') || ''}
+                                  onChange={e =>
+                                    form.setValue('hakhoogteRechts', e.target.value)
+                                  }
+                                />
+                              </div>
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="heel-height-right">
-                              {t('heelHeightRight')} (cm)
+
+                          {/* Hakafronding */}
+                          <div className="flex flex-col pl-6">
+                            <Label className="text-sm font-semibold">
+                              {t('heelRounding')}
                             </Label>
-                            <Input
-                              id="heel-height-right"
-                              type="number"
-                              step="0.1"
-                              value={form.watch('hakhoogteRechts') || ''}
-                              onChange={e =>
-                                form.setValue('hakhoogteRechts', e.target.value)
-                              }
-                            />
+                            <div className="flex flex-col gap-3 pt-2">
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
+                                  id="heel-rounding-left"
+                                  checked={
+                                    form.watch('hakafrondingLinksEnabled') || false
+                                  }
+                                  onCheckedChange={checked =>
+                                    form.setValue('hakafrondingLinksEnabled', !!checked)
+                                  }
+                                />
+                                <Label
+                                  htmlFor="heel-rounding-left"
+                                  className="font-normal cursor-pointer"
+                                >
+                                  {t('left')}
+                                </Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
+                                  id="heel-rounding-right"
+                                  checked={
+                                    form.watch('hakafrondingRechtsEnabled') || false
+                                  }
+                                  onCheckedChange={checked =>
+                                    form.setValue('hakafrondingRechtsEnabled', !!checked)
+                                  }
+                                />
+                                <Label
+                                  htmlFor="heel-rounding-right"
+                                  className="font-normal cursor-pointer"
+                                >
+                                  {t('right')}
+                                </Label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       <Separator />
 
-                      {/* Hakafronding
-                    (Checkbox)
-                    Links: (Checkbox)
-                    Rechts: (Checkbox)
-
-                    (Standaard beide aangevinkt)
-                    Output naar form-results in engels: heelRoundingDetailsShoe
-                    Voorbeeld: Links + Rechts, Links
-                    Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
-
-                  */}
-                      <div className="space-y-3">
-                        <Label className="text-sm font-semibold">
-                          {t('heelRounding')}
-                        </Label>
-                        <div className="flex gap-4">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="heel-rounding-left"
-                              checked={
-                                form.watch('hakafrondingLinksEnabled') || false
-                              }
-                              onCheckedChange={checked =>
-                                form.setValue('hakafrondingLinksEnabled', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="heel-rounding-left"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('left')}
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="heel-rounding-right"
-                              checked={
-                                form.watch('hakafrondingRechtsEnabled') || false
-                              }
-                              onCheckedChange={checked =>
-                                form.setValue('hakafrondingRechtsEnabled', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="heel-rounding-right"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('right')}
-                            </Label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <Separator />
-
-                      {/* Schoring
-                    Links: Select component (Lateraal, Mediaal) -> dan (Textarea) voor mm lat of mm med
-                    Rechts: Select component (Lateraal, Mediaal) -> dan (Textarea) voor mm lat of mm med
-
-                    Output naar form-results in engels: shoringDetailsShoe
-                    Voorbeeld: L Lat (textarea) mm, R Med (textarea) mm, L Lat (textarea) mm + R Med (textarea) mm
-                    Alleen de gekozen opties toevoegen met een + ertussen als er meer dan 1 is.
-
-                  */}
+                      {/* Schoring */}
                       <div className="space-y-3">
                         <Label className="text-sm font-semibold">{t('shoring')}</Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Schoring Links */}
+                          <div className="grid pr-6 border-r">
                             <Label className="text-sm">{t('shoringLeft')}</Label>
                             <Select
                               value={form.watch('shoringLeftType') || 'none'}
@@ -1864,7 +1733,7 @@ const FormCheckFoliepasPage = () => {
                             </Select>
                             {form.watch('shoringLeftType') &&
                               form.watch('shoringLeftType') !== 'none' && (
-                                <div className="space-y-2">
+                                <div className="space-y-2 pt-2">
                                   <Label htmlFor="shoring-left-mm">
                                     {t('shoringMm')}
                                   </Label>
@@ -1879,7 +1748,9 @@ const FormCheckFoliepasPage = () => {
                                 </div>
                               )}
                           </div>
-                          <div className="space-y-2">
+
+                          {/* Schoring Rechts */}
+                          <div className="flex flex-col pl-6">
                             <Label className="text-sm">{t('shoringRight')}</Label>
                             <Select
                               value={form.watch('shoringRightType') || 'none'}
@@ -1901,7 +1772,7 @@ const FormCheckFoliepasPage = () => {
                             </Select>
                             {form.watch('shoringRightType') &&
                               form.watch('shoringRightType') !== 'none' && (
-                                <div className="space-y-2">
+                                <div className="space-y-2 pt-2">
                                   <Label htmlFor="shoring-right-mm">
                                     {t('shoringMm')}
                                   </Label>
