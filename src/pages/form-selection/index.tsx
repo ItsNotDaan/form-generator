@@ -127,6 +127,15 @@ const FormSelectionPage = () => {
                 >
                   {t('intakeInsoles')}
                 </Button>
+
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push(Routes.form_check_foliepas)}
+                >
+                  {t('checkFoliepas')}
+                </Button>
               </div>
             </div>
           </div>
