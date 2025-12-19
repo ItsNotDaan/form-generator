@@ -1531,193 +1531,188 @@ const FormCheckFoliepasPage = () => {
                       </div>
                     )}
                   </div>
-                </div>
 
-                <Separator />
+                  <Separator />
 
-                {/* Heel Height & Heel Rounding */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 border rounded-lg p-3 gap-6">
-                  {/* Heel Height */}
-                  <div className="flex flex-col space-y-1">
-                    <Label className="text-sm font-medium">{t('heelHeight')}</Label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="flex flex-col space-y-1">
-                        <Label htmlFor="heel-height-left" className="text-sm">
-                          {t('heelHeightLeft')} (cm)
-                        </Label>
-                        <Input
-                          id="heel-height-left"
-                          type="number"
-                          step="0.1"
-                          value={form.watch('hakhoogteLinks') || ''}
-                          onChange={e =>
-                            form.setValue('hakhoogteLinks', e.target.value)
-                          }
-                        />
+                  {/* Heel Height & Heel Rounding */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 border rounded-lg p-3 gap-6">
+                    {/* Heel Height */}
+                    <div className="flex flex-col space-y-1">
+                      <Label className="text-sm font-medium">{t('heelHeight')}</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col space-y-1">
+                          <Label htmlFor="heel-height-left" className="text-sm">
+                            {t('heelHeightLeft')} (cm)
+                          </Label>
+                          <Input
+                            id="heel-height-left"
+                            type="number"
+                            step="0.1"
+                            value={form.watch('hakhoogteLinks') || ''}
+                            onChange={e =>
+                              form.setValue('hakhoogteLinks', e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="flex flex-col space-y-1">
+                          <Label htmlFor="heel-height-right" className="text-sm">
+                            {t('heelHeightRight')} (cm)
+                          </Label>
+                          <Input
+                            id="heel-height-right"
+                            type="number"
+                            step="0.1"
+                            value={form.watch('hakhoogteRechts') || ''}
+                            onChange={e =>
+                              form.setValue('hakhoogteRechts', e.target.value)
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="flex flex-col space-y-1">
-                        <Label htmlFor="heel-height-right" className="text-sm">
-                          {t('heelHeightRight')} (cm)
-                        </Label>
-                        <Input
-                          id="heel-height-right"
-                          type="number"
-                          step="0.1"
-                          value={form.watch('hakhoogteRechts') || ''}
-                          onChange={e =>
-                            form.setValue('hakhoogteRechts', e.target.value)
-                          }
-                        />
+                    </div>
+
+                    {/* Heel Rounding */}
+                    <div className="flex flex-col space-y-1">
+                      <Label className="text-sm font-medium">{t('heelRounding')}</Label>
+                      <div className="grid gap-3">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="heel-rounding-left"
+                            checked={
+                              form.watch('hakafrondingLinksEnabled') || false
+                            }
+                            onCheckedChange={checked =>
+                              form.setValue('hakafrondingLinksEnabled', !!checked)
+                            }
+                          />
+                          <Label
+                            htmlFor="heel-rounding-left"
+                            className="font-normal cursor-pointer"
+                          >
+                            {t('left')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="heel-rounding-right"
+                            checked={
+                              form.watch('hakafrondingRechtsEnabled') || false
+                            }
+                            onCheckedChange={checked =>
+                              form.setValue('hakafrondingRechtsEnabled', !!checked)
+                            }
+                          />
+                          <Label
+                            htmlFor="heel-rounding-right"
+                            className="font-normal cursor-pointer"
+                          >
+                            {t('right')}
+                          </Label>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Heel Rounding */}
-                  <div className="flex flex-col space-y-1">
-                    <Label className="text-sm font-medium">{t('heelRounding')}</Label>
-                    <div className="grid gap-3">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="heel-rounding-left"
-                          checked={
-                            form.watch('hakafrondingLinksEnabled') || false
-                          }
-                          onCheckedChange={checked =>
-                            form.setValue('hakafrondingLinksEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="heel-rounding-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('left')}
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="heel-rounding-right"
-                          checked={
-                            form.watch('hakafrondingRechtsEnabled') || false
-                          }
-                          onCheckedChange={checked =>
-                            form.setValue('hakafrondingRechtsEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="heel-rounding-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('right')}
-                        </Label>
-                      </div>
+                  <Separator />
+
+                  {/* Shoring */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 border rounded-lg p-3 gap-6">
+                    {/* Shoring Left */}
+                    <div className="flex flex-col space-y-1">
+                      <Label className="text-sm font-medium">{t('shoringLeft')}</Label>
+                      <Select
+                        value={form.watch('shoringLeftType') || 'none'}
+                        onValueChange={v =>
+                          form.setValue(
+                            'shoringLeftType',
+                            v as 'lateral' | 'medial' | 'none',
+                          )
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('shoringType')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">{t('none')}</SelectItem>
+                          <SelectItem value="lateral">{t('lateral')}</SelectItem>
+                          <SelectItem value="medial">{t('medial')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {form.watch('shoringLeftType') &&
+                        form.watch('shoringLeftType') !== 'none' && (
+                          <div className="space-y-1 pt-2">
+                            <Label htmlFor="shoring-left-mm" className="text-sm">
+                              {t('shoringMm')}
+                            </Label>
+                            <Input
+                              id="shoring-left-mm"
+                              type="number"
+                              value={form.watch('shoringLeftMm') || ''}
+                              onChange={e =>
+                                form.setValue('shoringLeftMm', e.target.value)
+                              }
+                            />
+                          </div>
+                        )}
+                    </div>
+
+                    {/* Shoring Right */}
+                    <div className="flex flex-col space-y-1">
+                      <Label className="text-sm font-medium">{t('shoringRight')}</Label>
+                      <Select
+                        value={form.watch('shoringRightType') || 'none'}
+                        onValueChange={v =>
+                          form.setValue(
+                            'shoringRightType',
+                            v as 'lateral' | 'medial' | 'none',
+                          )
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('shoringType')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">{t('none')}</SelectItem>
+                          <SelectItem value="lateral">{t('lateral')}</SelectItem>
+                          <SelectItem value="medial">{t('medial')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {form.watch('shoringRightType') &&
+                        form.watch('shoringRightType') !== 'none' && (
+                          <div className="space-y-1 pt-2">
+                            <Label htmlFor="shoring-right-mm" className="text-sm">
+                              {t('shoringMm')}
+                            </Label>
+                            <Input
+                              id="shoring-right-mm"
+                              type="number"
+                              value={form.watch('shoringRightMm') || ''}
+                              onChange={e =>
+                                form.setValue('shoringRightMm', e.target.value)
+                              }
+                            />
+                          </div>
+                        )}
                     </div>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
-              <Separator />
-
-              {/* Shoring */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 border rounded-lg p-3 gap-6">
-                {/* Shoring Left */}
-                <div className="flex flex-col space-y-1">
-                  <Label className="text-sm font-medium">{t('shoringLeft')}</Label>
-                  <Select
-                    value={form.watch('shoringLeftType') || 'none'}
-                    onValueChange={v =>
-                      form.setValue(
-                        'shoringLeftType',
-                        v as 'lateral' | 'medial' | 'none',
-                      )
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('shoringType')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">{t('none')}</SelectItem>
-                      <SelectItem value="lateral">{t('lateral')}</SelectItem>
-                      <SelectItem value="medial">{t('medial')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {form.watch('shoringLeftType') &&
-                    form.watch('shoringLeftType') !== 'none' && (
-                      <div className="space-y-1 pt-2">
-                        <Label htmlFor="shoring-left-mm" className="text-sm">
-                          {t('shoringMm')}
-                        </Label>
-                        <Input
-                          id="shoring-left-mm"
-                          type="number"
-                          value={form.watch('shoringLeftMm') || ''}
-                          onChange={e =>
-                            form.setValue('shoringLeftMm', e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                </div>
-
-                {/* Shoring Right */}
-                <div className="flex flex-col space-y-1">
-                  <Label className="text-sm font-medium">{t('shoringRight')}</Label>
-                  <Select
-                    value={form.watch('shoringRightType') || 'none'}
-                    onValueChange={v =>
-                      form.setValue(
-                        'shoringRightType',
-                        v as 'lateral' | 'medial' | 'none',
-                      )
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('shoringType')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">{t('none')}</SelectItem>
-                      <SelectItem value="lateral">{t('lateral')}</SelectItem>
-                      <SelectItem value="medial">{t('medial')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {form.watch('shoringRightType') &&
-                    form.watch('shoringRightType') !== 'none' && (
-                      <div className="space-y-1 pt-2">
-                        <Label htmlFor="shoring-right-mm" className="text-sm">
-                          {t('shoringMm')}
-                        </Label>
-                        <Input
-                          id="shoring-right-mm"
-                          type="number"
-                          value={form.watch('shoringRightMm') || ''}
-                          onChange={e =>
-                            form.setValue('shoringRightMm', e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                </div>
-              </div>
-            </div>
-          </div>
-                  )}
-        </CardContent>
-      </Card>
-
-      {/* Submit Section */}
-      <FormFooter>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-        >
-          {t('cancel')}
-        </Button>
-        <Button type="submit" size="lg" className="min-w-50">
-          <span className="mr-2">{t('saveAndContinue')}</span>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </FormFooter>
-    </form>
+              {/* Submit Section */}
+              <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                >
+                  {t('cancel')}
+                </Button>
+                <Button type="submit" size="lg" className="min-w-50">
+                  <span className="mr-2">{t('saveAndContinue')}</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </FormFooter>
+            </form>
           </Form >
         </FormSection >
       </div >
