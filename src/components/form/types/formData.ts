@@ -466,6 +466,7 @@ export interface CheckFoliepasData {
   // Zooltype
   soleType?: string;
   gumliteNumber?: string;
+  gumliteColor?: string;
 
   // Koolstofverstijving
   carbonStiffeningType?: string;
