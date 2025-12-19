@@ -13,7 +13,11 @@
     "sourceMap": true,
     "strict": true,
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -26,9 +30,20 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "src/pages/new-client"],
-  "exclude": ["node_modules", "old-pages"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "src/pages/new-client"
+  ],
+  "exclude": [
+    "node_modules",
+    "old-pages"
+  ]
 }
