@@ -186,8 +186,6 @@ const FormIntakeVLOSPage = () => {
   const stringToBool = (value: string): boolean => value === 'ja';
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     if (clientData) {
       dispatch(setClientData({ ...clientData, intakeType: 'VLOS' }));
     }

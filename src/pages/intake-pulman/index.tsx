@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
-import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
-import {Button} from '@/components/ui/button';
-import {Textarea} from '@/components/ui/textarea';
+import React, { useEffect } from 'react';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -9,12 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Label} from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
   setIntakePulmanData,
   setClientData,
@@ -25,10 +25,10 @@ import {
   SCHOENMATEN,
   PAARTYPE_OPTIES,
 } from '@/lib/constants/formConstants';
-import {ChevronRight, Info} from 'lucide-react';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
+import { ChevronRight, Info } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -44,12 +44,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakePulmanPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -92,10 +92,8 @@ const FormIntakePulmanPage = () => {
   }, [gezwachteld, form]);
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'Pulman'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'Pulman' }));
     }
     dispatch(setIntakePulmanData(data));
     router.push(Routes.form_results);
@@ -130,7 +128,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="welkPaar"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -180,7 +178,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="side"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -220,7 +218,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="medischeIndicatie"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Textarea
@@ -248,7 +246,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="gezwachteld"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -299,7 +297,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="typePulman"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <Select
                           onValueChange={field.onChange}
@@ -337,7 +335,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="schoenmaat"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormLabel>{t('currentShoeSize')}</FormLabel>
                         <Select
@@ -365,7 +363,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="afgegevenMaat"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormLabel>{t('issuedSize')}</FormLabel>
                         <Select
@@ -400,7 +398,7 @@ const FormIntakePulmanPage = () => {
                   <FormField
                     control={form.control}
                     name="bijzonderheden"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Textarea

@@ -1,7 +1,7 @@
 import React from 'react';
-import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
-import {Button} from '@/components/ui/button';
-import {Textarea} from '@/components/ui/textarea';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -9,21 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Label} from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {Zijde, PAARTYPE_OPTIES} from '@/lib/constants/formConstants';
-import {ChevronRight} from 'lucide-react';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
+import { Zijde, PAARTYPE_OPTIES } from '@/lib/constants/formConstants';
+import { ChevronRight } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -31,12 +31,12 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeRebacarePage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -63,10 +63,8 @@ const FormIntakeRebacarePage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'Rebacare'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'Rebacare' }));
     }
     dispatch(setIntakeRebacareData(data));
     router.push(Routes.form_results);
@@ -101,7 +99,7 @@ const FormIntakeRebacarePage = () => {
                   <FormField
                     control={form.control}
                     name="welkPaar"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -151,7 +149,7 @@ const FormIntakeRebacarePage = () => {
                   <FormField
                     control={form.control}
                     name="side"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -191,7 +189,7 @@ const FormIntakeRebacarePage = () => {
                   <FormField
                     control={form.control}
                     name="medischeIndicatie"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Textarea
@@ -219,7 +217,7 @@ const FormIntakeRebacarePage = () => {
                   <FormField
                     control={form.control}
                     name="gezwachteld"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -262,7 +260,7 @@ const FormIntakeRebacarePage = () => {
                   <FormField
                     control={form.control}
                     name="bijzonderheden"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Textarea

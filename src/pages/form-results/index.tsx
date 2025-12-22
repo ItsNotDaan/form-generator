@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
-import {Button} from '@/components/ui/button';
+import React, { useState } from 'react';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,18 +8,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {Separator} from '@/components/ui/separator';
-import {CheckCircle2, AlertTriangle, Copy, Check} from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { CheckCircle2, AlertTriangle, Copy, Check } from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppSelector} from '@/domain/store/hooks';
-import {BEHANDELAARS} from '@/lib/constants/formConstants';
-import {generateCodes} from '@/utils/codeGenerator';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
+import { useAppSelector } from '@/domain/store/hooks';
+import { BEHANDELAARS } from '@/lib/constants/formConstants';
+import { generateCodes } from '@/utils/codeGenerator';
+import { clearAllFormStorage } from '@/utils/localStorageHelper';
 
 const FormResultsPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const formData = useAppSelector(state => state.formData);
   const [copied, setCopied] = useState(false);
 
@@ -74,11 +75,11 @@ const FormResultsPage = () => {
     // Resolve practitioner ID to name
     const resolvedClientData = formData.client
       ? normalizeObject({
-          ...formData.client,
-          practitionerName:
-            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-              ?.label || formData.client?.practitionerId,
-        })
+        ...formData.client,
+        practitionerName:
+          BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+            ?.label || formData.client?.practitionerId,
+      })
       : null;
 
     // Build result object with only non-null intake forms
@@ -114,7 +115,7 @@ const FormResultsPage = () => {
       formData.client &&
       (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)
     ) {
-      const {codes, warnings, generalBasiscode} = generateCodes(
+      const { codes, warnings, generalBasiscode } = generateCodes(
         formData.client,
         {
           intakeVLOS: formData.intakeVLOS,
@@ -338,11 +339,19 @@ const FormResultsPage = () => {
           <FormFooter>
             <Button
               variant="outline"
-              onClick={() => router.push(Routes.form_selection)}
+              onClick={() => {
+                clearAllFormStorage();
+                router.push(Routes.form_selection);
+              }}
             >
               {t('fillAnotherForm')}
             </Button>
-            <Button onClick={() => router.push(Routes.overview)}>
+            <Button
+              onClick={() => {
+                clearAllFormStorage();
+                router.push(Routes.overview);
+              }}
+            >
               {t('backToOverview')}
             </Button>
           </FormFooter>

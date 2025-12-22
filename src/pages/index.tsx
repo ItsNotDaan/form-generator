@@ -1,7 +1,7 @@
 import React from 'react';
-import {BaseLayout} from '@/components/layout';
-import {Button} from '@/components/ui/button';
-import {NavigationCard} from '@/components/ui/navigation-card';
+import { BaseLayout } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { NavigationCard } from '@/components/ui/navigation-card';
 import {
   Card,
   CardContent,
@@ -9,17 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {Separator} from '@/components/ui/separator';
+import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
+import { clearAllFormStorage } from '@/utils/localStorageHelper';
+import { UserPlus, Users, FileText, ClipboardList } from 'lucide-react';
 
 const OverviewPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
 
-  const handleNavigate = (route: string) => {
+  const handleNavigate = (route: string, clearStorage: boolean = false) => {
+    if (clearStorage) {
+      clearAllFormStorage();
+    }
     router.push(route);
   };
 
@@ -47,7 +51,7 @@ const OverviewPage = () => {
               description={t('newClientFormDescription')}
               buttonText={t('newClientButton')}
               buttonIcon={UserPlus}
-              onClick={() => handleNavigate(Routes.form_new_client)}
+              onClick={() => handleNavigate(Routes.form_new_client, true)}
             />
 
             <NavigationCard

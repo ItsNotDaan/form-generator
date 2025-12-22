@@ -285,8 +285,6 @@ const FormCheckFoliepasPage = () => {
   const heelModelType = form.watch('heelModelType');
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     dispatch(
       setCheckFoliepasData({
         side: data.side,

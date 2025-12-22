@@ -97,3 +97,26 @@ export function cleanupExpiredStorage(): void {
     console.error('Error cleaning up localStorage:', error);
   }
 }
+
+/**
+ * Clear all form autosave entries from localStorage
+ * Used when starting a new workflow or finishing completely
+ */
+export function clearAllFormStorage(): void {
+  try {
+    const formKeys = [
+      'checkFoliepas',
+      'intakeVLOS',
+      'intakeOSA',
+      'intakePulman',
+      'intakeRebacare',
+      'intakeOSB',
+      'intakeOVAC',
+      'intakeSteunzolen',
+    ];
+
+    formKeys.forEach(key => removeFromLocalStorage(key));
+  } catch (error) {
+    console.error('Error clearing all form storage:', error);
+  }
+}

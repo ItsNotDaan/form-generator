@@ -1,10 +1,10 @@
 import React from 'react';
-import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {Textarea} from '@/components/ui/textarea';
-import {Checkbox} from '@/components/ui/checkbox';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -20,10 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {Separator} from '@/components/ui/separator';
+import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
 import {
   PAARTYPE_OPTIES,
   DOEL_OPTIES,
@@ -32,20 +32,20 @@ import {
   BASISCODE_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
 } from '@/lib/constants/formConstants';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setIntakeOSBData, setClientData} from '@/domain/store/slices/formData';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import { setIntakeOSBData, setClientData } from '@/domain/store/slices/formData';
 
-import {ChevronRight} from 'lucide-react';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
-import {Form} from '@/components/ui/form';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import { ChevronRight } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form } from '@/components/ui/form';
+import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeOSBPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -144,10 +144,8 @@ const FormIntakeOSBPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'OSB'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'OSB' }));
     }
 
     dispatch(

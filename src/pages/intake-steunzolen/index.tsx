@@ -1,9 +1,9 @@
 import React from 'react';
-import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {Textarea} from '@/components/ui/textarea';
+import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -11,12 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Separator} from '@/components/ui/separator';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import { useRouter } from 'next/router';
+import { Routes } from '@/lib/routes';
+import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
   setIntakeSteunzolenData,
   setClientData,
@@ -29,10 +29,10 @@ import {
   PELLOTE_OPTIES,
   STEUNZOLEN_PRIJS_OPTIES,
 } from '@/lib/constants/formConstants';
-import {ChevronRight} from 'lucide-react';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
+import { ChevronRight } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -48,12 +48,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
-  const {t} = useTranslation('form');
+  const { t } = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -143,10 +143,8 @@ const FormIntakeSteunzolenPage = () => {
   const isTalonette = talonetteOption && prijs === talonetteOption.value;
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     if (clientData) {
-      dispatch(setClientData({...clientData, intakeType: 'Steunzolen'}));
+      dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
     }
 
     dispatch(
@@ -202,7 +200,7 @@ const FormIntakeSteunzolenPage = () => {
                   <FormField
                     control={form.control}
                     name="welkPaar"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -250,7 +248,7 @@ const FormIntakeSteunzolenPage = () => {
                   <FormField
                     control={form.control}
                     name="medischeIndicatie"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Textarea
@@ -278,7 +276,7 @@ const FormIntakeSteunzolenPage = () => {
                   <FormField
                     control={form.control}
                     name="schoenmaat"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Input
@@ -305,7 +303,7 @@ const FormIntakeSteunzolenPage = () => {
                   <FormField
                     control={form.control}
                     name="prijs"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <RadioGroup
@@ -365,7 +363,7 @@ const FormIntakeSteunzolenPage = () => {
                     <FormField
                       control={form.control}
                       name="steunzoolTypeGeneral"
-                      render={({field}) => (
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-semibold">
                             {t('insoleTypeGeneral')}
@@ -405,7 +403,7 @@ const FormIntakeSteunzolenPage = () => {
                       <FormField
                         control={form.control}
                         name="steunzoolAndersText"
-                        render={({field}) => (
+                        render={({ field }) => (
                           <FormItem>
                             <FormControl>
                               <Input
@@ -425,7 +423,7 @@ const FormIntakeSteunzolenPage = () => {
                     <FormField
                       control={form.control}
                       name="steunzoolCorrectieMiddenvoet"
-                      render={({field}) => (
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-semibold">
                             {t('insoleMiddfootCorrection')}
@@ -467,7 +465,7 @@ const FormIntakeSteunzolenPage = () => {
                     <FormField
                       control={form.control}
                       name="steunzoolCorrectieVoorvoet"
-                      render={({field}) => (
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-semibold">
                             {t('insoleForefootCorrection')}
@@ -509,7 +507,7 @@ const FormIntakeSteunzolenPage = () => {
                     <FormField
                       control={form.control}
                       name="steunzoolVvPellote"
-                      render={({field}) => (
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-semibold">
                             {t('insoleForefootPad')}
@@ -556,7 +554,7 @@ const FormIntakeSteunzolenPage = () => {
                         <FormField
                           control={form.control}
                           name="steunzoolHakVerhogingLinks"
-                          render={({field}) => (
+                          render={({ field }) => (
                             <FormItem>
                               <FormLabel
                                 htmlFor="heel-left"
@@ -579,7 +577,7 @@ const FormIntakeSteunzolenPage = () => {
                         <FormField
                           control={form.control}
                           name="steunzoolHakVerhogingRechts"
-                          render={({field}) => (
+                          render={({ field }) => (
                             <FormItem>
                               <FormLabel
                                 htmlFor="heel-right"
@@ -616,7 +614,7 @@ const FormIntakeSteunzolenPage = () => {
                       <FormField
                         control={form.control}
                         name="steunzoolHakVerhogingLinks"
-                        render={({field}) => (
+                        render={({ field }) => (
                           <FormItem>
                             <FormLabel
                               htmlFor="talonette-left"
@@ -639,7 +637,7 @@ const FormIntakeSteunzolenPage = () => {
                       <FormField
                         control={form.control}
                         name="steunzoolHakVerhogingRechts"
-                        render={({field}) => (
+                        render={({ field }) => (
                           <FormItem>
                             <FormLabel
                               htmlFor="talonette-right"
@@ -673,7 +671,7 @@ const FormIntakeSteunzolenPage = () => {
                   <FormField
                     control={form.control}
                     name="bijzonderheden"
-                    render={({field}) => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Textarea
