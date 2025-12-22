@@ -476,6 +476,7 @@ export const LEESTHOOGTE_OPTIES = [
 
 // OSA Digitaal - MTP1 diep options
 export const MTP1_DIEP_OPTIES = [
+  { label: 'Nee', value: 'No' },
   { label: '4cm', value: '4' },
   { label: '8cm', value: '8' },
 ];

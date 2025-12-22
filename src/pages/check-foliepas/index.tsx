@@ -506,8 +506,8 @@ const FormCheckFoliepasPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {showLinks && (
                         <div className="space-y-3 rounded-lg border bg-background p-3 shadow-sm">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold text-foreground">
+                          <div className="flex items-center justify-between ">
+                            <span className="text-sm font-semibold text-foreground ">
                               {t('left')}
                             </span>
                           </div>
@@ -802,9 +802,9 @@ const FormCheckFoliepasPage = () => {
                       </div>
 
                       {/* Colors is a mandatory field, it has the option to show more/less textareas */}
-                      <div className="flex flex-col space-y-1 px-3 items-center w-full">
+                      <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label className="text-base font-semibold mb-2">{t('colors')}</Label>
-                        <div className="grid gap-3 w-full">
+                        <div className="grid gap-3 w-2/3">
                           {colorOptions.map((color, index) => (
                             <div key={index} className="grid grid-cols-[1fr_auto]">
                               <Input
@@ -842,7 +842,7 @@ const FormCheckFoliepasPage = () => {
                             const colors = [...colorOptions, ''];
                             form.setValue('colorOptions', colors);
                           }}
-                          className="w-full bg-background!"
+                          className="w-2/3 bg-background!"
                         >
                           + {t('addColorOption')}
                         </Button>

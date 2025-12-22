@@ -522,9 +522,9 @@ const FormIntakeOSAPage = () => {
                   <CardTitle>{t('shaftHeight')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
                     {showLinks && (
-                      <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm hover:border-primary!">
+                      <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label htmlFor="shaft-left">{t('leftCm')}</Label>
                         <Input
                           id="shaft-left"
@@ -538,7 +538,7 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                     {showRechts && (
-                      <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm hover:border-primary!">
+                      <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label htmlFor="shaft-right">{t('rightCm')}</Label>
                         <Input
                           id="shaft-right"
@@ -582,14 +582,16 @@ const FormIntakeOSAPage = () => {
                 </CardHeader>
                 {digitalEnabled && (
                   <CardContent className="space-y-4">
+
                     {/* Hielheffing L/R */}
-                    <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                      <Label className="text-base font-semibold">
+                    <div className="flex flex-col justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm hover:border-primary!">
+                      <Label className="text-base text-center font-semibold mb-2">
                         {t('heelLift')}
                       </Label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                      <div className="grid grid-cols-1 lg:grid-cols-2 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
                         {showLinks && (
-                          <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
+                          <div className="flex flex-col gap-2 items-center">
                             <Label htmlFor="heel-lift-left">
                               {t('left')} (mm)
                             </Label>
@@ -601,11 +603,12 @@ const FormIntakeOSAPage = () => {
                               onChange={e =>
                                 form.setValue('heelLiftLeft', e.target.value)
                               }
+                              className="w-2/3"
                             />
                           </div>
                         )}
                         {showRechts && (
-                          <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
+                          <div className="flex flex-col gap-2 items-center">
                             <Label htmlFor="heel-lift-right">
                               {t('right')} (mm)
                             </Label>
@@ -617,6 +620,7 @@ const FormIntakeOSAPage = () => {
                               onChange={e =>
                                 form.setValue('heelLiftRight', e.target.value)
                               }
+                              className="w-2/3"
                             />
                           </div>
                         )}
@@ -624,9 +628,10 @@ const FormIntakeOSAPage = () => {
                     </div>
 
                     {/* Leesthoogte, Klauwtenen en Gescand met folie */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-2 gap-y-2 lg:gap-x-4 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-3 bg-secondary/2 hover:border-primary! shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
+
                       {/* Leesthoogte */}
-                      <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
+                      <div className="flex flex-col gap-2 items-center">
                         <Label className="text-base font-semibold">
                           {t('readingHeight')}
                         </Label>
@@ -657,7 +662,7 @@ const FormIntakeOSAPage = () => {
                       </div>
 
                       {/* Klauwtenen */}
-                      <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
+                      <div className="flex flex-col gap-2 items-center">
                         <Label className="text-base font-semibold">
                           {t('clawToes')}
                         </Label>
@@ -690,7 +695,7 @@ const FormIntakeOSAPage = () => {
                       </div>
 
                       {/* Gescand met folie */}
-                      <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
+                      <div className="flex flex-col gap-2 items-center">
                         <Label className="text-base font-semibold">
                           {t('scannedWithFoil')}
                         </Label>
@@ -724,14 +729,17 @@ const FormIntakeOSAPage = () => {
                     </div>
 
                     {/* MTP1 diep? L/R */}
-                    <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                      <Label className="text-base font-semibold">
+                    <div className="flex flex-col justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm hover:border-primary!">
+
+                      <Label className="text-base text-center font-semibold mb-2">
                         {t('mtp1Deep')}
                       </Label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                      {/* Links */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
                         {showLinks && (
-                          <div className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
-                            <Label htmlFor="mtp1-left">{t('left')}</Label>
+                          <div className="flex flex-col gap-2 items-center">
+                            <Label htmlFor="mtp1-left">{t('leftCm')}</Label>
                             <Select
                               value={form.watch('mtp1DeepLeft')}
                               onValueChange={v =>
@@ -754,9 +762,11 @@ const FormIntakeOSAPage = () => {
                             </Select>
                           </div>
                         )}
+
+                        {/* Rechts */}
                         {showRechts && (
-                          <div className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
-                            <Label htmlFor="mtp1-right">{t('right')}</Label>
+                          <div className="flex flex-col gap-2 items-center">
+                            <Label htmlFor="mtp1-right">{t('rightCm')}</Label>
                             <Select
                               value={form.watch('mtp1DeepRight')}
                               onValueChange={v =>
@@ -841,7 +851,7 @@ const FormIntakeOSAPage = () => {
           </Form>
         </FormSection>
       </div>
-    </BaseLayout>
+    </BaseLayout >
   );
 };
 
