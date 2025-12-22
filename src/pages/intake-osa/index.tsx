@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import {
   Card,
   CardContent,
@@ -280,7 +281,7 @@ const FormIntakeOSAPage = () => {
                     value={side}
                     onValueChange={v => form.setValue('side', v as Zijde)}
                   >
-                    <div className="flex gap-6">
+                    <div className="flex flex-wrap gap-6">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="both" id="side-both" />
                         <Label
@@ -319,7 +320,7 @@ const FormIntakeOSAPage = () => {
                   <CardTitle>{t('amputation')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex gap-6">
+                  <div className="flex flex-wrap gap-6">
                     {showLinks && (
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -369,15 +370,15 @@ const FormIntakeOSAPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Ziektebeelden */}
-                  <div className="flex flex-col gap-2">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <Label className="text-base font-semibold">
                       {t('medicalConditions')}
                     </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
                       {ZIEKTEBEELDEN_OPTIES.map(optie => (
                         <div
                           key={optie.key}
-                          className="flex items-center space-x-2"
+                          className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
                         >
                           <Checkbox
                             id={`ziektebeeld-${optie.key}`}
@@ -404,18 +405,16 @@ const FormIntakeOSAPage = () => {
                     </div>
                   </div>
 
-                  <Separator />
-
                   {/* Loopafstand hulpmiddelen */}
-                  <div className="flex flex-col gap-2">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <Label className="text-base font-semibold">
                       {t('walkingDistanceAids')}
                     </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
                       {LOOPAFSTAND_OPTIES.map(optie => (
                         <div
                           key={optie.key}
-                          className="flex items-center space-x-2"
+                          className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
                         >
                           <Checkbox
                             id={`loopafstand-${optie.key}`}
@@ -442,17 +441,15 @@ const FormIntakeOSAPage = () => {
                     </div>
                   </div>
 
-                  <Separator />
-
                   {/* Pijnbeleving */}
-                  <div className="space-y-2">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <Label
                       htmlFor="pain-perception"
                       className="text-base font-semibold"
                     >
                       {t('painPerception')}
                     </Label>
-                    <div className="space-y-2">
+                    <div className="space-y-2 pt-2">
                       <div className="grid grid-cols-6 gap-4 items-center">
                         <div className="text-sm text-muted-foreground text-center">
                           {t('noPain')} (0)
@@ -479,18 +476,16 @@ const FormIntakeOSAPage = () => {
                     </div>
                   </div>
 
-                  <Separator />
-
                   {/* Inspectie voeten */}
-                  <div className="flex flex-col gap-2">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <Label className="text-base font-semibold">
                       {t('footInspection')}
                     </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
                       {INSPECTIE_VOETEN_OPTIES.map(optie => (
                         <div
                           key={optie.key}
-                          className="flex items-center space-x-2"
+                          className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
                         >
                           <Checkbox
                             id={`foot-inspection-${optie.key}`}
@@ -529,7 +524,7 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {showLinks && (
-                      <div className="flex flex-col gap-2">
+                      <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm hover:border-primary!">
                         <Label htmlFor="shaft-left">{t('leftCm')}</Label>
                         <Input
                           id="shaft-left"
@@ -543,7 +538,7 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                     {showRechts && (
-                      <div className="flex flex-col gap-2">
+                      <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm hover:border-primary!">
                         <Label htmlFor="shaft-right">{t('rightCm')}</Label>
                         <Input
                           id="shaft-right"
@@ -564,94 +559,74 @@ const FormIntakeOSAPage = () => {
 
               {/* Digitaal Section - New */}
               <Card>
-                <CardHeader>
-                  <CardTitle>{t('digital')}</CardTitle>
-                  <CardDescription>{t('digitalDescription')}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Digitaal Ja/Nee */}
-                  <div className="flex flex-col gap-2">
-                    <Label className="text-base font-semibold">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>{t('digital')}</CardTitle>
+                    <CardDescription>{t('digitalDescription')}</CardDescription>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Label
+                      htmlFor="digital-toggle"
+                      className="text-sm text-muted-foreground"
+                    >
                       {t('digital')}
                     </Label>
-                    <RadioGroup
-                      value={boolToString(digitalEnabled)}
-                      onValueChange={v =>
-                        form.setValue('digitalEnabled', stringToBool(v))
+                    <Switch
+                      id="digital-toggle"
+                      checked={digitalEnabled}
+                      onCheckedChange={checked =>
+                        form.setValue('digitalEnabled', !!checked)
                       }
-                    >
-                      <div className="flex gap-6">
-                        {JA_NEE_OPTIES.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`digital-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`digital-${opt.value}`}
-                              className="font-normal cursor-pointer"
-                            >
-                              {t(opt.label)}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
+                    />
                   </div>
-
-                  {/* Conditional fields when Digital = Ja */}
-                  {digitalEnabled && (
-                    <>
-                      <Separator />
-
-                      {/* Hielheffing L/R */}
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">
-                          {t('heelLift')}
-                        </Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {showLinks && (
-                            <div className="flex flex-col gap-2">
-                              <Label htmlFor="heel-lift-left">
-                                {t('left')} (mm)
-                              </Label>
-                              <Input
-                                id="heel-lift-left"
-                                type="number"
-                                placeholder="mm"
-                                value={form.watch('heelLiftLeft')}
-                                onChange={e =>
-                                  form.setValue('heelLiftLeft', e.target.value)
-                                }
-                              />
-                            </div>
-                          )}
-                          {showRechts && (
-                            <div className="flex flex-col gap-2">
-                              <Label htmlFor="heel-lift-right">
-                                {t('right')} (mm)
-                              </Label>
-                              <Input
-                                id="heel-lift-right"
-                                type="number"
-                                placeholder="mm"
-                                value={form.watch('heelLiftRight')}
-                                onChange={e =>
-                                  form.setValue('heelLiftRight', e.target.value)
-                                }
-                              />
-                            </div>
-                          )}
-                        </div>
+                </CardHeader>
+                {digitalEnabled && (
+                  <CardContent className="space-y-4">
+                    {/* Hielheffing L/R */}
+                    <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
+                      <Label className="text-base font-semibold">
+                        {t('heelLift')}
+                      </Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {showLinks && (
+                          <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
+                            <Label htmlFor="heel-lift-left">
+                              {t('left')} (mm)
+                            </Label>
+                            <Input
+                              id="heel-lift-left"
+                              type="number"
+                              placeholder="mm"
+                              value={form.watch('heelLiftLeft')}
+                              onChange={e =>
+                                form.setValue('heelLiftLeft', e.target.value)
+                              }
+                            />
+                          </div>
+                        )}
+                        {showRechts && (
+                          <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
+                            <Label htmlFor="heel-lift-right">
+                              {t('right')} (mm)
+                            </Label>
+                            <Input
+                              id="heel-lift-right"
+                              type="number"
+                              placeholder="mm"
+                              value={form.watch('heelLiftRight')}
+                              onChange={e =>
+                                form.setValue('heelLiftRight', e.target.value)
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
+                    </div>
 
-                      <Separator />
-
+                    {/* Leesthoogte, Klauwtenen en Gescand met folie */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-2 gap-y-2 lg:gap-x-4 bg-secondary/2 hover:border-primary!">
                       {/* Leesthoogte */}
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
                         <Label className="text-base font-semibold">
                           {t('readingHeight')}
                         </Label>
@@ -659,7 +634,7 @@ const FormIntakeOSAPage = () => {
                           value={form.watch('readingHeight')}
                           onValueChange={v => form.setValue('readingHeight', v)}
                         >
-                          <div className="flex flex-wrap gap-4">
+                          <div className="flex flex-wrap gap-3">
                             {LEESTHOOGTE_OPTIES.map(opt => (
                               <div
                                 key={opt.value}
@@ -681,71 +656,8 @@ const FormIntakeOSAPage = () => {
                         </RadioGroup>
                       </div>
 
-                      <Separator />
-
-                      {/* MTP1 diep? L/R */}
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-base font-semibold">
-                          {t('mtp1Deep')}
-                        </Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {showLinks && (
-                            <div className="flex flex-col gap-2">
-                              <Label htmlFor="mtp1-left">{t('left')}</Label>
-                              <Select
-                                value={form.watch('mtp1DeepLeft')}
-                                onValueChange={v =>
-                                  form.setValue('mtp1DeepLeft', v)
-                                }
-                              >
-                                <SelectTrigger id="mtp1-left">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {MTP1_DIEP_OPTIES.map(opt => (
-                                    <SelectItem
-                                      key={opt.value}
-                                      value={opt.value}
-                                    >
-                                      {opt.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          )}
-                          {showRechts && (
-                            <div className="flex flex-col gap-2">
-                              <Label htmlFor="mtp1-right">{t('right')}</Label>
-                              <Select
-                                value={form.watch('mtp1DeepRight')}
-                                onValueChange={v =>
-                                  form.setValue('mtp1DeepRight', v)
-                                }
-                              >
-                                <SelectTrigger id="mtp1-right">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {MTP1_DIEP_OPTIES.map(opt => (
-                                    <SelectItem
-                                      key={opt.value}
-                                      value={opt.value}
-                                    >
-                                      {opt.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <Separator />
-
-                      {/* Klauwtenen? Ja/Nee */}
-                      <div className="flex flex-col gap-2">
+                      {/* Klauwtenen */}
+                      <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
                         <Label className="text-base font-semibold">
                           {t('clawToes')}
                         </Label>
@@ -755,7 +667,7 @@ const FormIntakeOSAPage = () => {
                             form.setValue('clawToesEnabled', stringToBool(v))
                           }
                         >
-                          <div className="flex gap-6">
+                          <div className="flex flex-wrap gap-3">
                             {JA_NEE_OPTIES.map(opt => (
                               <div
                                 key={opt.value}
@@ -777,10 +689,8 @@ const FormIntakeOSAPage = () => {
                         </RadioGroup>
                       </div>
 
-                      <Separator />
-
-                      {/* Gescand met folie? Ja/Nee */}
-                      <div className="flex flex-col gap-2">
+                      {/* Gescand met folie */}
+                      <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
                         <Label className="text-base font-semibold">
                           {t('scannedWithFoil')}
                         </Label>
@@ -790,7 +700,7 @@ const FormIntakeOSAPage = () => {
                             form.setValue('scannedWithFoil', stringToBool(v))
                           }
                         >
-                          <div className="flex gap-6">
+                          <div className="flex flex-wrap gap-3">
                             {JA_NEE_OPTIES.map(opt => (
                               <div
                                 key={opt.value}
@@ -811,31 +721,88 @@ const FormIntakeOSAPage = () => {
                           </div>
                         </RadioGroup>
                       </div>
+                    </div>
 
-                      <Separator />
-
-                      {/* Instructies */}
-                      <div className="flex flex-col gap-2">
-                        <Label
-                          htmlFor="digital-instructions"
-                          className="text-base font-semibold"
-                        >
-                          {t('instructions')}
-                        </Label>
-                        <Textarea
-                          id="digital-instructions"
-                          placeholder={t('instructionsPlaceholder')}
-                          value={form.watch('digitalInstructions')}
-                          onChange={e =>
-                            form.setValue('digitalInstructions', e.target.value)
-                          }
-                          rows={3}
-                          className="resize-none"
-                        />
+                    {/* MTP1 diep? L/R */}
+                    <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
+                      <Label className="text-base font-semibold">
+                        {t('mtp1Deep')}
+                      </Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {showLinks && (
+                          <div className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
+                            <Label htmlFor="mtp1-left">{t('left')}</Label>
+                            <Select
+                              value={form.watch('mtp1DeepLeft')}
+                              onValueChange={v =>
+                                form.setValue('mtp1DeepLeft', v)
+                              }
+                            >
+                              <SelectTrigger id="mtp1-left" className="w-2/3">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {MTP1_DIEP_OPTIES.map(opt => (
+                                  <SelectItem
+                                    key={opt.value}
+                                    value={opt.value}
+                                  >
+                                    {opt.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+                        {showRechts && (
+                          <div className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
+                            <Label htmlFor="mtp1-right">{t('right')}</Label>
+                            <Select
+                              value={form.watch('mtp1DeepRight')}
+                              onValueChange={v =>
+                                form.setValue('mtp1DeepRight', v)
+                              }
+                            >
+                              <SelectTrigger id="mtp1-right" className="w-2/3">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {MTP1_DIEP_OPTIES.map(opt => (
+                                  <SelectItem
+                                    key={opt.value}
+                                    value={opt.value}
+                                  >
+                                    {opt.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
                       </div>
-                    </>
-                  )}
-                </CardContent>
+                    </div>
+
+                    {/* Instructies */}
+                    <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
+                      <Label
+                        htmlFor="digital-instructions"
+                        className="text-base font-semibold"
+                      >
+                        {t('instructions')}
+                      </Label>
+                      <Textarea
+                        id="digital-instructions"
+                        placeholder={t('instructionsPlaceholder')}
+                        value={form.watch('digitalInstructions')}
+                        onChange={e =>
+                          form.setValue('digitalInstructions', e.target.value)
+                        }
+                        rows={3}
+                        className="resize-none"
+                      />
+                    </div>
+                  </CardContent>
+                )}
               </Card>
 
               {/* Special Notes */}

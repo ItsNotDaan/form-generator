@@ -768,7 +768,7 @@ const FormCheckFoliepasPage = () => {
                   <CardContent className="pt-0 space-y-3">
 
                     {/* Model & Colors */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 bg-secondary/2 hover:border-primary! divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
 
                       {/* Model is a mandatory field, its picture or model */}
                       <div className="flex flex-col space-y-1 px-3 items-center">
@@ -850,7 +850,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Tongue Padding, Zipper & Padding Collar */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-3 bg-secondary/2 hover:border-primary! divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
 
                       {/* Tongue Padding */}
                       <div className="flex flex-col space-y-1 px-3 items-center">
@@ -955,7 +955,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Closure, Zipper and Special Features */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
                       {/* Closure*/}
                       <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label className="text-base font-medium mb-2">{t('closure')}</Label>
@@ -1087,7 +1087,7 @@ const FormCheckFoliepasPage = () => {
                     {/* </div> */}
 
                     {/* Edge Type */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
 
                       <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label htmlFor="edge-type" className="text-sm font-medium">{t('edgeTypeLabel')}</Label>
@@ -1116,7 +1116,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Sole Type */}
-                    <div className="grid grid-cols-1 lg:grid-cols-5 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-y-0 lg:divide-x-2 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-5 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-y-0 lg:divide-x-2 bg-secondary/2 shadow-sm">
                       <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label className="text-sm font-medium">{t('soleType')}</Label>
                         <Select
@@ -1167,7 +1167,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Carbon Stiffening & Toe Options */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
                       {/* Carbon Stiffening */}
                       <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label className="text-sm font-medium">{t('carbonStiffening')}</Label>
@@ -1256,7 +1256,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Counterfort & Insole */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
                       {/* Counterfort */}
                       <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label className="text-sm font-medium">{t('counterfort')}</Label>
@@ -1320,7 +1320,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Sole Edge Polish & Construction Method */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
                       {/* Sole Edge Polish */}
                       <div className="flex flex-col space-y-1 px-3 items-center">
                         <Label className="text-sm font-medium">{t('soleEdgePolish')}</Label>
@@ -1405,7 +1405,7 @@ const FormCheckFoliepasPage = () => {
                     </div>
 
                     {/* Heel Model, Heel Height & Heel Rounding */}
-                    <div className="grid grid-cols-1 lg:grid-cols-4 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
 
                       {/* Heel Model */}
                       <div className="flex flex-col space-y-1 px-3 items-center">
