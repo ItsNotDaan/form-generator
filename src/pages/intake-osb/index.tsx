@@ -210,7 +210,7 @@ const FormIntakeOSBPage = () => {
           </p>
         </div>
 
-        <FormSection>
+        <FormSection className="max-w-6xl mx-auto">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}

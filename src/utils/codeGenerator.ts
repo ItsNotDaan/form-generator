@@ -29,7 +29,9 @@ import {
   ClientData,
   IntakeVLOSData,
   IntakeOSAData,
+  IntakeOVACData,
 } from '@/components/form/types/formData';
+import { OVAC_OMSCHRIJVING_ITEMS } from '@/lib/constants/formConstants';
 
 export interface GeneratedCodes {
   code01: boolean;
@@ -67,6 +69,26 @@ export interface GeneratedCodes {
   code58Rechts?: boolean;
   code59Links?: boolean;
   code59Rechts?: boolean;
+  code71Links?: boolean;
+  code71Rechts?: boolean;
+  code74Links?: boolean;
+  code74Rechts?: boolean;
+  code75Links?: boolean;
+  code75Rechts?: boolean;
+  code76Links?: boolean;
+  code76Rechts?: boolean;
+  code77Links?: boolean;
+  code77Rechts?: boolean;
+  code78Links?: boolean;
+  code78Rechts?: boolean;
+  code84Links?: boolean;
+  code84Rechts?: boolean;
+  code85Links?: boolean;
+  code85Rechts?: boolean;
+  code88Links?: boolean;
+  code88Rechts?: boolean;
+  codeVerkortingLinks?: boolean;
+  codeVerkortingRechts?: boolean;
   code50Links: boolean;
   code50Rechts: boolean;
 }
@@ -83,7 +105,7 @@ interface IntakeFormData {
   intakePulman: any | null;
   intakeRebacare: any | null;
   intakeOSB: any | null;
-  intakeOVAC: any | null;
+  intakeOVAC: IntakeOVACData | null;
   intakeSteunzolen: any | null;
 }
 
@@ -126,9 +148,69 @@ function initializeCodes(): GeneratedCodes {
     code58Rechts: false,
     code59Links: false,
     code59Rechts: false,
+    code71Links: false,
+    code71Rechts: false,
+    code74Links: false,
+    code74Rechts: false,
+    code75Links: false,
+    code75Rechts: false,
+    code76Links: false,
+    code76Rechts: false,
+    code77Links: false,
+    code77Rechts: false,
+    code78Links: false,
+    code78Rechts: false,
+    code84Links: false,
+    code84Rechts: false,
+    code85Links: false,
+    code85Rechts: false,
+    code88Links: false,
+    code88Rechts: false,
+    codeVerkortingLinks: false,
+    codeVerkortingRechts: false,
     code50Links: false,
     code50Rechts: false,
   };
+}
+
+/**
+ * Generate codes for OVAC intake
+ * Uses OVAC_OMSCHRIJVING_ITEMS (post numbers 71, 74, 75, 76, 77, 78, 84, 85, 88)
+ * Maps left/right booleans to codeXXLinks/Right fields
+ * Verkorting toggles are exposed as codeVerkortingLinks/Rechts for mail merge use
+ */
+function generateOVACCodes(
+  ovac: IntakeOVACData,
+  codes: GeneratedCodes,
+  warnings: string[],
+): void {
+  OVAC_OMSCHRIJVING_ITEMS.forEach(item => {
+    const leftKey = `${item.key}Links` as keyof IntakeOVACData;
+    const rightKey = `${item.key}Rechts` as keyof IntakeOVACData;
+
+    if (ovac[leftKey]) {
+      const codeKey = `code${item.postNr}Links` as keyof GeneratedCodes;
+      codes[codeKey] = true as GeneratedCodes[typeof codeKey];
+    }
+    if (ovac[rightKey]) {
+      const codeKey = `code${item.postNr}Rechts` as keyof GeneratedCodes;
+      codes[codeKey] = true as GeneratedCodes[typeof codeKey];
+    }
+  });
+
+  if (ovac.verkortingLinks) {
+    codes.codeVerkortingLinks = true;
+  }
+  if (ovac.verkortingRechts) {
+    codes.codeVerkortingRechts = true;
+  }
+
+  if ((ovac.verkortingLinks || ovac.verkortingRechts) && !ovac.voorvoetCm) {
+    warnings.push('Verkorting is aangezet maar voorvoet (cm) ontbreekt');
+  }
+  if ((ovac.verkortingLinks || ovac.verkortingRechts) && !ovac.hielCm) {
+    warnings.push('Verkorting is aangezet maar hiel (cm) ontbreekt');
+  }
 }
 /**
  * Generate codes for OSB intake
@@ -220,7 +302,7 @@ function generateVLOSCodes(
   warnings: string[],
   insurance: string,
 ): void {
-  const {side, welkPaar} = vlos;
+  const { side, welkPaar } = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
@@ -297,7 +379,7 @@ function generateOSACodes(
   warnings: string[],
   insurance: string,
 ): void {
-  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
+  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -413,14 +495,14 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return {codes, warnings, generalBasiscode};
+    return { codes, warnings, generalBasiscode };
   }
 
-  const {intakeType, insurance} = clientData;
+  const { intakeType, insurance } = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return {codes, warnings, generalBasiscode};
+    return { codes, warnings, generalBasiscode };
   }
 
   // Generate codes based on intake type
@@ -464,9 +546,11 @@ export function generateCodes(
       }
       break;
     case 'OVAC':
-      warnings.push(
-        `Code generatie voor ${intakeType} wordt in een latere fase geïmplementeerd`,
-      );
+      if (intakeData.intakeOVAC) {
+        generateOVACCodes(intakeData.intakeOVAC, codes, warnings);
+      } else {
+        warnings.push('OVAC intake data is niet beschikbaar');
+      }
       break;
 
     case 'Pulman':
@@ -507,5 +591,5 @@ export function generateCodes(
     }
   }
 
-  return {codes, warnings, generalBasiscode};
+  return { codes, warnings, generalBasiscode };
 }
