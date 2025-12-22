@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../store';
 
 export interface OverviewState {
-  title: String;
+  title: string;
 }
 
 const initialState: OverviewState = {

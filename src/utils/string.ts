@@ -1,6 +1,6 @@
 export function capitalizeFirstLetter(
   text: string | undefined,
-  lowercaseOtherLetters = false
+  lowercaseOtherLetters = false,
 ): string {
   if (!text || text.length === 0) {
     return '';

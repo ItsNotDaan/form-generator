@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
   ClientData,
   IntakeVLOSData,
@@ -8,7 +8,8 @@ import {
   IntakeOSBData,
   IntakeOVACData,
   IntakeSteunzolenData,
-} from '@/presentation/form/types/formData';
+  CheckFoliepasData,
+} from '@/components/form/types/formData';
 
 export interface FormDataState {
   client: ClientData | null;
@@ -19,6 +20,7 @@ export interface FormDataState {
   intakeOSB: IntakeOSBData | null;
   intakeSteunzolen: IntakeSteunzolenData | null;
   intakeOVAC: IntakeOVACData | null;
+  checkFoliepas: CheckFoliepasData | null;
 }
 
 const initialState: FormDataState = {
@@ -30,6 +32,7 @@ const initialState: FormDataState = {
   intakeOSB: null,
   intakeSteunzolen: null,
   intakeOVAC: null,
+  checkFoliepas: null,
 };
 
 const formDataSlice = createSlice({
@@ -50,7 +53,7 @@ const formDataSlice = createSlice({
     },
     setIntakeRebacareData: (
       state,
-      action: PayloadAction<IntakeRebacareData>
+      action: PayloadAction<IntakeRebacareData>,
     ) => {
       state.intakeRebacare = action.payload;
     },
@@ -62,9 +65,12 @@ const formDataSlice = createSlice({
     },
     setIntakeSteunzolenData: (
       state,
-      action: PayloadAction<IntakeSteunzolenData>
+      action: PayloadAction<IntakeSteunzolenData>,
     ) => {
       state.intakeSteunzolen = action.payload;
+    },
+    setCheckFoliepasData: (state, action: PayloadAction<CheckFoliepasData>) => {
+      state.checkFoliepas = action.payload;
     },
     clearFormData: state => {
       state.client = null;
@@ -75,6 +81,7 @@ const formDataSlice = createSlice({
       state.intakeOSB = null;
       state.intakeSteunzolen = null;
       state.intakeOVAC = null;
+      state.checkFoliepas = null;
     },
     clearIntakeForms: state => {
       state.intakeVLOS = null;
@@ -84,6 +91,7 @@ const formDataSlice = createSlice({
       state.intakeOSB = null;
       state.intakeSteunzolen = null;
       state.intakeOVAC = null;
+      state.checkFoliepas = null;
     },
   },
 });
@@ -97,6 +105,7 @@ export const {
   setIntakeOSBData,
   setIntakeOVACData,
   setIntakeSteunzolenData,
+  setCheckFoliepasData,
   clearFormData,
   clearIntakeForms,
 } = formDataSlice.actions;
