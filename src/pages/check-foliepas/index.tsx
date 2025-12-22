@@ -489,12 +489,12 @@ const FormCheckFoliepasPage = () => {
                 <CardHeader>
                   <CardTitle>Foliepas aanmerkingen</CardTitle>
                   <CardDescription>
-                    {t('legLengthDifference')} • {t('shaftOpening')}
+                    {t('enclosure')} • {t('legLengthDifference')} • {t('shaftOpening')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Enclosure */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <div className="flex items-center justify-between">
                       <Label className="text-base font-semibold">
                         {t('enclosure')}
@@ -665,10 +665,8 @@ const FormCheckFoliepasPage = () => {
                     </div>
                   </div>
 
-                  <Separator className="bg-primary h-0.5" />
-
                   {/* Beenlengte verschil */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <Label className="text-base font-semibold">
                       {t('legLengthDifference')}
                     </Label>
@@ -700,10 +698,8 @@ const FormCheckFoliepasPage = () => {
                     </div>
                   </div>
 
-                  <Separator className="bg-primary h-0.5" />
-
                   {/* Openstand schacht */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4">
+                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
                     <Label className="text-base font-semibold">
                       {t('shaftOpening')}
                     </Label>
@@ -716,7 +712,7 @@ const FormCheckFoliepasPage = () => {
                           <label
                             key={opt.value}
                             htmlFor={`opening-${opt.value}`}
-                            className="flex items-center gap-2 rounded-md border bg-background px-3 py-2 cursor-pointer hover:border-primary"
+                            className="flex items-center gap-2 rounded-md border bg-background px-3 py-2 cursor-pointer"
                           >
                             <RadioGroupItem
                               value={opt.value}
