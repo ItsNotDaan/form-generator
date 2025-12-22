@@ -48,6 +48,7 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { scrollToFirstError } from '@/utils/formHelpers';
 import { Textarea } from '@/components/ui/textarea';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormCheckFoliepasPage = () => {
   const router = useRouter();
@@ -263,6 +264,8 @@ const FormCheckFoliepasPage = () => {
     },
   });
 
+  const { clearStorage } = useFormPersistence('checkFoliepas', form.watch, form.setValue);
+
   const side = form.watch('side');
   const showLinks = side === 'left' || side === 'both';
   const showRechts = side === 'right' || side === 'both';
@@ -282,6 +285,8 @@ const FormCheckFoliepasPage = () => {
   const heelModelType = form.watch('heelModelType');
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+    
     dispatch(
       setCheckFoliepasData({
         side: data.side,

@@ -12,6 +12,8 @@ import {persistStore} from 'redux-persist';
 import appWithI18n from 'next-translate/appWithI18n';
 import i18nConfig from '../../i18n';
 import {ThemeProvider} from '@/components/theme-provider';
+import { useEffect } from 'react';
+import { cleanupExpiredStorage } from '@/utils/localStorageHelper';
 
 // Use Next Font for automatic font optimization
 // https://nextjs.org/docs/basic-features/font-optimization
@@ -19,6 +21,10 @@ const asap = Asap({subsets: ['latin'], display: 'swap'});
 
 function App({Component, ...rest}: AppProps) {
   const {store, props} = wrapper.useWrappedStore(rest);
+
+  useEffect(() => {
+    cleanupExpiredStorage();
+  }, []);
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="form-generator-theme">

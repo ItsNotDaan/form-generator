@@ -45,6 +45,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakePulmanPage = () => {
   const router = useRouter();
@@ -80,6 +81,8 @@ const FormIntakePulmanPage = () => {
     },
   });
 
+  const { clearStorage } = useFormPersistence('intakePulman', form.watch, form.setValue);
+
   const gezwachteld = form.watch('gezwachteld');
 
   useEffect(() => {
@@ -89,6 +92,8 @@ const FormIntakePulmanPage = () => {
   }, [gezwachteld, form]);
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'Pulman'}));
     }

@@ -32,6 +32,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeRebacarePage = () => {
   const router = useRouter();
@@ -62,6 +63,8 @@ const FormIntakeRebacarePage = () => {
   });
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'Rebacare'}));
     }

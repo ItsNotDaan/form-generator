@@ -60,6 +60,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 import {
   Accordion,
   AccordionContent,
@@ -132,6 +133,8 @@ const FormIntakeOSAPage = () => {
     },
   });
 
+  const { clearStorage } = useFormPersistence('intakeOsa', form.watch, form.setValue);
+
   const side = form.watch('side');
   // Removed watchers for moved sections
   const digitalEnabled = form.watch('digitalEnabled');
@@ -144,6 +147,8 @@ const FormIntakeOSAPage = () => {
   const stringToBool = (value: string): boolean => value === 'ja';
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'OSA'}));
     }

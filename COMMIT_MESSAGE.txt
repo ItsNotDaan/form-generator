@@ -1,0 +1,28 @@
+feat: implement form data persistence with auto-save
+
+Add localStorage-based form data persistence across all forms with:
+- 500ms debounce for efficient saving
+- 7-day TTL with automatic cleanup
+- Silent background operation (no UI feedback)
+- Restore data after page refresh
+- Clear data on successful form submission
+
+New utilities:
+- src/utils/localStorageHelper.ts - Core storage with TTL
+- src/hooks/useFormPersistence.ts - React Hook Form integration
+
+Forms updated:
+- check-foliepas
+- intake-vlos, intake-osa, intake-osb, intake-pulman
+- intake-rebacare, intake-steunzolen
+- new-client, old-client
+
+App initialization updated:
+- src/pages/_app.tsx - Auto cleanup on mount
+
+Documentation:
+- FORM_PERSISTENCE.md - Feature documentation
+- IMPLEMENTATION_SUMMARY.md - Technical details
+- VERIFICATION_CHECKLIST.md - Testing guide
+
+Closes: [Add issue number if applicable]

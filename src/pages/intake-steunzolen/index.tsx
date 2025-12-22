@@ -49,6 +49,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
@@ -131,6 +132,8 @@ const FormIntakeSteunzolenPage = () => {
     },
   });
 
+  const { clearStorage } = useFormPersistence('intakeSteunzolen', form.watch, form.setValue);
+
   const prijs = form.watch('prijs');
   const steunzoolTypeGeneral = form.watch('steunzoolTypeGeneral');
 
@@ -140,6 +143,8 @@ const FormIntakeSteunzolenPage = () => {
   const isTalonette = talonetteOption && prijs === talonetteOption.value;
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'Steunzolen'}));
     }

@@ -39,6 +39,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {DutchAddressInput} from '@/components/ui/dutch-address-input';
 
@@ -94,6 +95,8 @@ const FormNewClientPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+
     dispatch(
       setClientData({
         practitionerId: data.practitionerId,

@@ -41,6 +41,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {Form} from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeOSBPage = () => {
   const router = useRouter();
@@ -143,6 +144,8 @@ const FormIntakeOSBPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'OSB'}));
     }

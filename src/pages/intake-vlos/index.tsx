@@ -55,6 +55,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
+import { useFormPersistence } from '@/hooks/useFormPersistence';
 
 const FormIntakeVLOSPage = () => {
   const router = useRouter();
@@ -158,6 +159,8 @@ const FormIntakeVLOSPage = () => {
     },
   });
 
+  const { clearStorage } = useFormPersistence('intakeVLOS', form.watch, form.setValue);
+
   const side = form.watch('side');
   const zoolverstijvingEnabled = form.watch('zoolverstijvingEnabled');
   const supplementschoringLinksEnabled = form.watch(
@@ -183,6 +186,8 @@ const FormIntakeVLOSPage = () => {
   const stringToBool = (value: string): boolean => value === 'ja';
 
   const onSubmit = (data: FormData) => {
+    clearStorage();
+    
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'VLOS'}));
     }
