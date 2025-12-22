@@ -95,8 +95,6 @@ const FormNewClientPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    clearStorage();
-
     dispatch(
       setClientData({
         practitionerId: data.practitionerId,
