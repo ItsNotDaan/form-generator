@@ -286,7 +286,7 @@ const FormCheckFoliepasPage = () => {
 
   const onSubmit = (data: FormData) => {
     clearStorage();
-    
+
     dispatch(
       setCheckFoliepasData({
         side: data.side,
