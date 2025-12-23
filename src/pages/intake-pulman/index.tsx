@@ -47,6 +47,7 @@ import {
 import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
 import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
+import { Switch } from '@/components/ui/switch';
 
 const FormIntakePulmanPage = () => {
   const router = useRouter();
@@ -85,12 +86,24 @@ const FormIntakePulmanPage = () => {
   const { clearStorage } = useFormPersistence('intakePulman', form.watch, form.setValue);
 
   const gezwachteld = form.watch('gezwachteld');
+  const schoenmaat = form.watch('schoenmaat');
+  const afgegevenMaat = form.watch('afgegevenMaat');
 
   useEffect(() => {
     if (gezwachteld) {
       form.setValue('typePulman', 'Harlem Extra');
+      // Only auto-set afgegevenMaat if gezwachteld is checked, schoenmaat is selected, and afgegevenMaat is empty
+      if (schoenmaat && !afgegevenMaat) {
+        // Try to parse schoenmaat as a number and add 2
+        const schoenmaatNum = parseInt(schoenmaat, 10);
+        if (!isNaN(schoenmaatNum)) {
+          form.setValue('afgegevenMaat', String(schoenmaatNum + 2));
+        }
+      }
     }
-  }, [gezwachteld, form]);
+  }, [gezwachteld, schoenmaat, afgegevenMaat, form]);
+
+
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
@@ -125,7 +138,7 @@ const FormIntakePulmanPage = () => {
                     value={form.watch('welkPaar')}
                     onValueChange={v => form.setValue('welkPaar', v)}
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {PAARTYPE_OPTIES.map(option => (
                         <div
                           key={option.value}
@@ -196,42 +209,30 @@ const FormIntakePulmanPage = () => {
                       control={form.control}
                       name="gezwachteld"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem
+                          className='flex flex-col items-center'
+                        >
                           <FormControl>
-                            <RadioGroup
-                              onValueChange={v => field.onChange(v === 'yes')}
-                              value={field.value ? 'yes' : 'no'}
-                            >
-                              <div className="flex gap-6">
-                                {['yes', 'no'].map(v => (
-                                  <div
-                                    key={v}
-                                    className="flex items-center space-x-2"
-                                  >
-                                    <RadioGroupItem
-                                      value={v}
-                                      id={`bandaged-${v}`}
-                                    />
-                                    <Label
-                                      htmlFor={`bandaged-${v}`}
-                                      className="font-normal cursor-pointer"
-                                    >
-                                      {t(v)}
-                                    </Label>
-                                  </div>
-                                ))}
-                              </div>
-                            </RadioGroup>
+                            <div className="flex flex-col-2 items-center justify-center space-x-2">
+                              <Switch
+                                id="gezwachteld-switch"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                              <Label htmlFor="gezwachteld-switch" className="font-normal cursor-pointer">
+                                {field.value ? t('yes') : t('no')}
+                              </Label>
+                            </div>
                           </FormControl>
-                          <FormMessage />
                           {gezwachteld && (
-                            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md flex items-start gap-2">
-                              <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-                              <p className="text-sm text-blue-800 dark:text-blue-200">
-                                {t('pulmanHarlemExtraInfo')}
+                            <div className="flex flex-row items-center rounded-md p-3 gap-2 bg-primary/10 w-2/3">
+                              <Info className="h-20 w-20 mt-0.5 text-primary" />
+                              <p className="text-sm text-foreground">
+                                {t('bandagedInformationPulman')}
                               </p>
                             </div>
                           )}
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -253,7 +254,6 @@ const FormIntakePulmanPage = () => {
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
-                            disabled={gezwachteld}
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -396,7 +396,7 @@ const FormIntakePulmanPage = () => {
           </Form>
         </FormSection>
       </div>
-    </BaseLayout>
+    </BaseLayout >
   );
 };
 
