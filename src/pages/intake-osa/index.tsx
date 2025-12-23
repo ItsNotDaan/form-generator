@@ -68,6 +68,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
 
 const FormIntakeOSAPage = () => {
   const router = useRouter();
@@ -236,14 +237,18 @@ const FormIntakeOSAPage = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
-              className="space-y-6"
+              className="space-y-4"
             >
               {/* Which Pair */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('whichPair')}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <FormCard
+                title={t('whichPair')}
+              // description='Hallo'
+              >
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
                   <RadioGroup
                     value={form.watch('welkPaar')}
                     onValueChange={v => form.setValue('welkPaar', v)}
@@ -268,15 +273,16 @@ const FormIntakeOSAPage = () => {
                       ))}
                     </div>
                   </RadioGroup>
-                </CardContent>
-              </Card>
+                </FormBlock>
+              </FormCard>
 
               {/* Side Selection */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('side')}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <FormCard title={t('side')}>
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
                   <RadioGroup
                     value={side}
                     onValueChange={v => form.setValue('side', v as Zijde)}
@@ -311,15 +317,16 @@ const FormIntakeOSAPage = () => {
                       </div>
                     </div>
                   </RadioGroup>
-                </CardContent>
-              </Card>
+                </FormBlock>
+              </FormCard>
 
               {/* Amputation */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('amputation')}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <FormCard title={t('amputation')}>
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
                   <div className="flex flex-wrap gap-6">
                     {showLinks && (
                       <div className="flex items-center space-x-2">
@@ -356,464 +363,357 @@ const FormIntakeOSAPage = () => {
                       </div>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </FormBlock>
+              </FormCard>
 
-              {/* Functieonderzoek - New Section */}
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('functionalResearch')}</CardTitle>
-                  <CardDescription>
-                    {t('functionalResearchDescription')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Ziektebeelden */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <Label className="text-base font-semibold">
-                      {t('medicalConditions')}
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
-                      {ZIEKTEBEELDEN_OPTIES.map(optie => (
-                        <div
-                          key={optie.key}
-                          className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
-                        >
-                          <Checkbox
-                            id={`ziektebeeld-${optie.key}`}
-                            checked={
-                              (form.watch('ziektebeelden')[
-                                optie.key
-                              ] as boolean) || false
-                            }
-                            onCheckedChange={checked =>
-                              form.setValue('ziektebeelden', {
-                                ...form.getValues('ziektebeelden'),
-                                [optie.key]: !!checked,
-                              })
-                            }
-                          />
-                          <Label
-                            htmlFor={`ziektebeeld-${optie.key}`}
-                            className="font-normal cursor-pointer"
-                          >
-                            {t(optie.translationKey)}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Loopafstand hulpmiddelen */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <Label className="text-base font-semibold">
-                      {t('walkingDistanceAids')}
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
-                      {LOOPAFSTAND_OPTIES.map(optie => (
-                        <div
-                          key={optie.key}
-                          className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
-                        >
-                          <Checkbox
-                            id={`loopafstand-${optie.key}`}
-                            checked={
-                              (form.watch('loopafstandAids')[
-                                optie.key
-                              ] as boolean) || false
-                            }
-                            onCheckedChange={checked =>
-                              form.setValue('loopafstandAids', {
-                                ...form.getValues('loopafstandAids'),
-                                [optie.key]: !!checked,
-                              })
-                            }
-                          />
-                          <Label
-                            htmlFor={`loopafstand-${optie.key}`}
-                            className="font-normal cursor-pointer"
-                          >
-                            {t(optie.translationKey)}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Pijnbeleving */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <Label
-                      htmlFor="pain-perception"
-                      className="text-base font-semibold"
+              {/* Functieonderzoek*/}
+              <FormCard
+                title={t('functionalResearch')}
+                description={t('functionalResearchDescription')}
+              >
+                {/* Ziektebeelden */}
+                <FormBlock
+                  title={t('medicalConditions')}
+                  columns={3}
+                  dividers={false}
+                  centerTitle={true}
+                >
+                  {ZIEKTEBEELDEN_OPTIES.map(optie => (
+                    <div
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
                     >
-                      {t('painPerception')}
-                    </Label>
-                    <div className="space-y-2 pt-2">
-                      <div className="grid grid-cols-6 gap-4 items-center">
-                        <div className="text-sm text-muted-foreground text-center">
-                          {t('noPain')} (0)
-                        </div>
-                        <Input
-                          id="pain-perception"
-                          type="range"
-                          min="0"
-                          max="10"
-                          step="1"
-                          value={form.watch('painPerception') || '0'}
-                          onChange={e =>
-                            form.setValue('painPerception', e.target.value)
-                          }
-                          className="col-span-4"
-                        />
-                        <div className="text-sm text-muted-foreground text-center">
-                          {t('maximumPain')} (10)
-                        </div>
-                      </div>
-                      <div className="text-center text-2xl font-bold">
-                        {form.watch('painPerception') || '0'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Inspectie voeten */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <Label className="text-base font-semibold">
-                      {t('footInspection')}
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
-                      {INSPECTIE_VOETEN_OPTIES.map(optie => (
-                        <div
-                          key={optie.key}
-                          className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
-                        >
-                          <Checkbox
-                            id={`foot-inspection-${optie.key}`}
-                            checked={
-                              (form.watch('footInspection')[
-                                optie.key
-                              ] as boolean) || false
-                            }
-                            onCheckedChange={checked =>
-                              form.setValue('footInspection', {
-                                ...form.getValues('footInspection'),
-                                [optie.key]: !!checked,
-                              })
-                            }
-                          />
-                          <Label
-                            htmlFor={`foot-inspection-${optie.key}`}
-                            className="font-normal cursor-pointer"
-                          >
-                            {t(optie.translationKey)}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Leg length moved to Foliepas */}
-                </CardContent>
-              </Card>
-
-              {/* Shaft Height */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('shaftHeight')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
-                    {showLinks && (
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label htmlFor="shaft-left">{t('leftCm')}</Label>
-                        <Input
-                          id="shaft-left"
-                          type="number"
-                          placeholder="cm"
-                          value={form.watch('schachthoogteLinks')}
-                          onChange={e =>
-                            form.setValue('schachthoogteLinks', e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                    {showRechts && (
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label htmlFor="shaft-right">{t('rightCm')}</Label>
-                        <Input
-                          id="shaft-right"
-                          type="number"
-                          placeholder="cm"
-                          value={form.watch('schachthoogteRechts')}
-                          onChange={e =>
-                            form.setValue('schachthoogteRechts', e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Moved sections removed from OSA UI */}
-
-              {/* Digitaal Section - New */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle>{t('digital')}</CardTitle>
-                    <CardDescription>{t('digitalDescription')}</CardDescription>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Label
-                      htmlFor="digital-toggle"
-                      className="text-sm text-muted-foreground"
-                    >
-                      {t('digital')}
-                    </Label>
-                    <Switch
-                      id="digital-toggle"
-                      checked={digitalEnabled}
-                      onCheckedChange={checked =>
-                        form.setValue('digitalEnabled', !!checked)
-                      }
-                    />
-                  </div>
-                </CardHeader>
-                {digitalEnabled && (
-                  <CardContent className="space-y-4">
-
-                    {/* Hielheffing L/R */}
-                    <div className="flex flex-col justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm hover:border-primary!">
-                      <Label className="text-base text-center font-semibold mb-2">
-                        {t('heelLift')}
-                      </Label>
-
-                      <div className="grid grid-cols-1 lg:grid-cols-2 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
-                        {showLinks && (
-                          <div className="flex flex-col gap-2 items-center">
-                            <Label htmlFor="heel-lift-left">
-                              {t('left')} (mm)
-                            </Label>
-                            <Input
-                              id="heel-lift-left"
-                              type="number"
-                              placeholder="mm"
-                              value={form.watch('heelLiftLeft')}
-                              onChange={e =>
-                                form.setValue('heelLiftLeft', e.target.value)
-                              }
-                              className="w-2/3"
-                            />
-                          </div>
-                        )}
-                        {showRechts && (
-                          <div className="flex flex-col gap-2 items-center">
-                            <Label htmlFor="heel-lift-right">
-                              {t('right')} (mm)
-                            </Label>
-                            <Input
-                              id="heel-lift-right"
-                              type="number"
-                              placeholder="mm"
-                              value={form.watch('heelLiftRight')}
-                              onChange={e =>
-                                form.setValue('heelLiftRight', e.target.value)
-                              }
-                              className="w-2/3"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Leesthoogte, Klauwtenen en Gescand met folie */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-3 bg-secondary/2 hover:border-primary! shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
-
-                      {/* Leesthoogte */}
-                      <div className="flex flex-col gap-2 items-center">
-                        <Label className="text-base font-semibold">
-                          {t('readingHeight')}
-                        </Label>
-                        <RadioGroup
-                          value={form.watch('readingHeight')}
-                          onValueChange={v => form.setValue('readingHeight', v)}
-                        >
-                          <div className="flex flex-wrap gap-3">
-                            {LEESTHOOGTE_OPTIES.map(opt => (
-                              <div
-                                key={opt.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <RadioGroupItem
-                                  value={opt.value}
-                                  id={`reading-height-${opt.value}`}
-                                />
-                                <Label
-                                  htmlFor={`reading-height-${opt.value}`}
-                                  className="font-normal cursor-pointer"
-                                >
-                                  {opt.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </div>
-
-                      {/* Klauwtenen */}
-                      <div className="flex flex-col gap-2 items-center">
-                        <Label className="text-base font-semibold">
-                          {t('clawToes')}
-                        </Label>
-                        <RadioGroup
-                          value={boolToString(form.watch('clawToesEnabled'))}
-                          onValueChange={v =>
-                            form.setValue('clawToesEnabled', stringToBool(v))
-                          }
-                        >
-                          <div className="flex flex-wrap gap-3">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div
-                                key={opt.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <RadioGroupItem
-                                  value={opt.value}
-                                  id={`claw-toes-${opt.value}`}
-                                />
-                                <Label
-                                  htmlFor={`claw-toes-${opt.value}`}
-                                  className="font-normal cursor-pointer"
-                                >
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </div>
-
-                      {/* Gescand met folie */}
-                      <div className="flex flex-col gap-2 items-center">
-                        <Label className="text-base font-semibold">
-                          {t('scannedWithFoil')}
-                        </Label>
-                        <RadioGroup
-                          value={boolToString(form.watch('scannedWithFoil'))}
-                          onValueChange={v =>
-                            form.setValue('scannedWithFoil', stringToBool(v))
-                          }
-                        >
-                          <div className="flex flex-wrap gap-3">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div
-                                key={opt.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <RadioGroupItem
-                                  value={opt.value}
-                                  id={`scanned-foil-${opt.value}`}
-                                />
-                                <Label
-                                  htmlFor={`scanned-foil-${opt.value}`}
-                                  className="font-normal cursor-pointer"
-                                >
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </div>
-                    </div>
-
-                    {/* MTP1 diep? L/R */}
-                    <div className="flex flex-col justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm hover:border-primary!">
-
-                      <Label className="text-base text-center font-semibold mb-2">
-                        {t('mtp1Deep')}
-                      </Label>
-
-                      {/* Links */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
-                        {showLinks && (
-                          <div className="flex flex-col gap-2 items-center">
-                            <Label htmlFor="mtp1-left">{t('leftCm')}</Label>
-                            <Select
-                              value={form.watch('mtp1DeepLeft')}
-                              onValueChange={v =>
-                                form.setValue('mtp1DeepLeft', v)
-                              }
-                            >
-                              <SelectTrigger id="mtp1-left" className="w-2/3">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {MTP1_DIEP_OPTIES.map(opt => (
-                                  <SelectItem
-                                    key={opt.value}
-                                    value={opt.value}
-                                  >
-                                    {opt.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        )}
-
-                        {/* Rechts */}
-                        {showRechts && (
-                          <div className="flex flex-col gap-2 items-center">
-                            <Label htmlFor="mtp1-right">{t('rightCm')}</Label>
-                            <Select
-                              value={form.watch('mtp1DeepRight')}
-                              onValueChange={v =>
-                                form.setValue('mtp1DeepRight', v)
-                              }
-                            >
-                              <SelectTrigger id="mtp1-right" className="w-2/3">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {MTP1_DIEP_OPTIES.map(opt => (
-                                  <SelectItem
-                                    key={opt.value}
-                                    value={opt.value}
-                                  >
-                                    {opt.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Instructies */}
-                    <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                      <Label
-                        htmlFor="digital-instructions"
-                        className="text-base font-semibold"
-                      >
-                        {t('instructions')}
-                      </Label>
-                      <Textarea
-                        id="digital-instructions"
-                        placeholder={t('instructionsPlaceholder')}
-                        value={form.watch('digitalInstructions')}
-                        onChange={e =>
-                          form.setValue('digitalInstructions', e.target.value)
+                      <Checkbox
+                        id={`ziektebeeld-${optie.key}`}
+                        checked={
+                          (form.watch('ziektebeelden')[
+                            optie.key
+                          ] as boolean) || false
                         }
-                        rows={3}
-                        className="resize-none"
+                        onCheckedChange={checked =>
+                          form.setValue('ziektebeelden', {
+                            ...form.getValues('ziektebeelden'),
+                            [optie.key]: !!checked,
+                          })
+                        }
                       />
+                      <Label
+                        htmlFor={`ziektebeeld-${optie.key}`}
+                        className="font-normal cursor-pointer"
+                      >
+                        {t(optie.translationKey)}
+                      </Label>
                     </div>
-                  </CardContent>
-                )}
-              </Card>
+                  ))}
+                </FormBlock>
+
+                {/* Loopafstand hulpmiddelen */}
+                <FormBlock title={t('walkingDistanceAids')}
+                  columns={3}
+                  dividers={false}
+                  centerTitle={true}
+                >
+                  {LOOPAFSTAND_OPTIES.map(optie => (
+                    <div
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
+                    >
+                      <Checkbox
+                        id={`loopafstand-${optie.key}`}
+                        checked={
+                          (form.watch('loopafstandAids')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('loopafstandAids', {
+                            ...form.getValues('loopafstandAids'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <Label
+                        htmlFor={`loopafstand-${optie.key}`}
+                        className="font-normal cursor-pointer"
+                      >
+                        {t(optie.translationKey)}
+                      </Label>
+                    </div>
+                  ))}
+                </FormBlock>
+
+                {/* Pijnbeleving */}
+                <FormBlock
+                  title={t('painPerception')}
+                  centerTitle={true}
+                >
+                  <div className="space-y-2 pt-2">
+                    <div className="grid grid-cols-6 gap-4 items-center">
+                      <div className="text-sm text-muted-foreground text-center">
+                        {t('noPain')} (0)
+                      </div>
+                      <Input
+                        id="pain-perception"
+                        type="range"
+                        min="0"
+                        max="10"
+                        step="1"
+                        value={form.watch('painPerception') || '0'}
+                        onChange={e =>
+                          form.setValue('painPerception', e.target.value)
+                        }
+                        className="col-span-4"
+                      />
+                      <div className="text-sm text-muted-foreground text-center">
+                        {t('maximumPain')} (10)
+                      </div>
+                    </div>
+                    <div className="text-center text-2xl font-bold">
+                      {form.watch('painPerception') || '0'}
+                    </div>
+                  </div>
+                </FormBlock>
+
+                {/* Inspectie voeten */}
+                <FormBlock
+                  title={t('footInspection')}
+                  centerTitle={true}
+                  columns={3}
+                  dividers={false}
+
+                >
+                  {INSPECTIE_VOETEN_OPTIES.map(optie => (
+                    <div
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
+                    >
+                      <Checkbox
+                        id={`foot-inspection-${optie.key}`}
+                        checked={
+                          (form.watch('footInspection')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('footInspection', {
+                            ...form.getValues('footInspection'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <Label
+                        htmlFor={`foot-inspection-${optie.key}`}
+                        className="font-normal cursor-pointer"
+                      >
+                        {t(optie.translationKey)}
+                      </Label>
+                    </div>
+                  ))}
+                </FormBlock>
+              </FormCard>
+
+              {/* Shaft Height*/}
+              <FormCard
+                title={t('shaftHeight')}
+              >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                >
+                  {showLinks && (
+                    <FormItemWrapper className="items-center">
+                      <Label htmlFor="shaft-left">{t('leftCm')}</Label>
+                      <Input
+                        id="shaft-left"
+                        type="number"
+                        placeholder="cm"
+                        value={form.watch('schachthoogteLinks')}
+                        onChange={e =>
+                          form.setValue('schachthoogteLinks', e.target.value)
+                        }
+                        className="w-2/3 text-center"
+                      />
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper className="items-center">
+                      <Label htmlFor="shaft-right">{t('rightCm')}</Label>
+                      <Input
+                        id="shaft-right"
+                        type="number"
+                        placeholder="cm"
+                        value={form.watch('schachthoogteRechts')}
+                        onChange={e =>
+                          form.setValue('schachthoogteRechts', e.target.value)
+                        }
+                        className="w-2/3 text-center"
+                      />
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
+
+
+              {/* 
+                   DIGITAAL SECTION
+                */}
+              <FormCard
+                title={t('digital')}
+                description={t('digitalDescription')}
+                toggleAble={true}
+                toggleLabel={t('digital')}
+                toggleId="digital-toggle"
+                defaultOpen={digitalEnabled}
+                contentClassName="space-y-4"
+              >
+                {/* Hielheffing L/R */}
+                <FormBlock
+                  title={t('heelLift')}
+                  columns={2}
+                  dividers={true}
+                  centerTitle={true}
+                >
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label htmlFor="heel-lift-left">{t('left')} (mm)</Label>
+                      <Input
+                        id="heel-lift-left"
+                        type="number"
+                        placeholder="mm"
+                        value={form.watch('heelLiftLeft')}
+                        onChange={e => form.setValue('heelLiftLeft', e.target.value)}
+                        className="w-2/3"
+                      />
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label htmlFor="heel-lift-right">{t('right')} (mm)</Label>
+                      <Input
+                        id="heel-lift-right"
+                        type="number"
+                        placeholder="mm"
+                        value={form.watch('heelLiftRight')}
+                        onChange={e => form.setValue('heelLiftRight', e.target.value)}
+                        className="w-2/3"
+                      />
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+
+                {/* 3-koloms Radio Groups */}
+                <FormBlock
+                  columns={3}
+                  dividers={true}
+                >
+                  <FormItemWrapper                  >
+                    <Label className="text-base font-semibold">{t('readingHeight')}</Label>
+                    <RadioGroup value={form.watch('readingHeight')} onValueChange={v => form.setValue('readingHeight', v)}>
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        {LEESTHOOGTE_OPTIES.map(opt => (
+                          <div key={opt.value} className="flex items-center space-x-2">
+                            <RadioGroupItem value={opt.value} id={`reading-height-${opt.value}`} />
+                            <Label htmlFor={`reading-height-${opt.value}`} className="font-normal cursor-pointer">
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <Label className="text-base font-semibold">{t('clawToes')}</Label>
+                    <RadioGroup value={boolToString(form.watch('clawToesEnabled'))} onValueChange={v => form.setValue('clawToesEnabled', stringToBool(v))}>
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        {JA_NEE_OPTIES.map(opt => (
+                          <div key={opt.value} className="flex items-center space-x-2">
+                            <RadioGroupItem value={opt.value} id={`claw-toes-${opt.value}`} />
+                            <Label htmlFor={`claw-toes-${opt.value}`} className="font-normal cursor-pointer">
+                              {t(opt.label)}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <Label className="text-base font-semibold">{t('scannedWithFoil')}</Label>
+                    <RadioGroup value={boolToString(form.watch('scannedWithFoil'))} onValueChange={v => form.setValue('scannedWithFoil', stringToBool(v))}>
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        {JA_NEE_OPTIES.map(opt => (
+                          <div key={opt.value} className="flex items-center space-x-2">
+                            <RadioGroupItem value={opt.value} id={`scanned-foil-${opt.value}`} />
+                            <Label htmlFor={`scanned-foil-${opt.value}`} className="font-normal cursor-pointer">
+                              {t(opt.label)}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* MTP1 diep L/R */}
+                <FormBlock
+                  title={t('mtp1Deep')}
+                  columns={2}
+                  dividers={true}
+                  centerTitle={true}
+                >
+                  {showLinks && (
+                    <FormItemWrapper className="flex flex-col items-center">
+                      <Label htmlFor="mtp1-left">{t('leftCm')}</Label>
+                      <Select value={form.watch('mtp1DeepLeft')} onValueChange={v => form.setValue('mtp1DeepLeft', v)}>
+                        <SelectTrigger id="mtp1-left" className="w-2/3">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {MTP1_DIEP_OPTIES.map(opt => (
+                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper className="items-center">
+                      <Label htmlFor="mtp1-right">{t('rightCm')}</Label>
+                      <Select value={form.watch('mtp1DeepRight')} onValueChange={v => form.setValue('mtp1DeepRight', v)}>
+                        <SelectTrigger id="mtp1-right" className="w-2/3">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {MTP1_DIEP_OPTIES.map(opt => (
+                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+
+                {/* Instructies */}
+                <FormBlock
+                  title={t('instructions')}
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
+                  <Textarea
+                    id="digital-instructions"
+                    placeholder={t('instructionsPlaceholder')}
+                    value={form.watch('digitalInstructions')}
+                    onChange={e => form.setValue('digitalInstructions', e.target.value)}
+                    rows={3}
+                    className="resize-none"
+                  />
+                </FormBlock>
+              </FormCard>
+
 
               {/* Special Notes */}
               <Card>
