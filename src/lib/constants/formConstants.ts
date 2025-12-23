@@ -73,8 +73,9 @@ export const OPENSTAND_OPTIES = [
 // Supplement types
 export type SupplementType = 'lateral' | 'medial';
 export const SUPPLEMENT_TYPE_OPTIES = [
-  { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
-  { label: 'medial', value: 'medial', translationKey: 'medial' },
+  { value: 'Lateraal', label: 'lateral' },
+  { value: 'Mediaal', label: 'medial' },
+  { value: 'LateraalEnMediaal', label: 'lateralAndMedial' },
 ];
 
 // Haksoort opties
@@ -121,6 +122,7 @@ export type HakschoringType = 'medial' | 'lateral';
 export const HAKSCHORING_TYPE_OPTIES = [
   { label: 'medial', value: 'medial', translationKey: 'medial' },
   { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
+  { value: 'LateraalEnMediaal', label: 'lateralAndMedial' },
 ];
 
 // Ezelsoor types
@@ -128,6 +130,7 @@ export type EzelsoorType = 'medial' | 'lateral';
 export const EZELSOOR_TYPE_OPTIES = [
   { label: 'medial', value: 'medial', translationKey: 'medial' },
   { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
+  { value: 'LateraalEnMediaal', label: 'lateralAndMedial' },
 ];
 
 // Omsluiting

@@ -151,6 +151,7 @@ export const FormBlock = ({
       className={cn(
         'flex flex-col justify-items-stretch border rounded-lg p-2 bg-secondary/2 shadow-sm',
         hoverEffect && 'hover:border-primary!',
+        columns === 1 && 'items-center',
         className
       )}
     >

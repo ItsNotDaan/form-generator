@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Select,
@@ -56,6 +57,7 @@ import {
 } from '@/components/ui/form';
 import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
+import { Switch } from '@/components/ui/switch';
 
 const FormIntakeVLOSPage = () => {
   const router = useRouter();
@@ -144,8 +146,8 @@ const FormIntakeVLOSPage = () => {
       hakschoringRechtsType: 'Lateraal',
       ezelsoorLinksEnabled: false,
       ezelsoorRechtsEnabled: false,
-      ezelsoorLinksType: 'Lateraal',
-      ezelsoorRechtsType: 'Lateraal',
+      ezelsoorLinksType: 'Mediaal',
+      ezelsoorRechtsType: 'Mediaal',
       amputatieLinksEnabled: false,
       amputatieRechtsEnabled: false,
       hakafrondingLinksEnabled: true,
@@ -260,14 +262,18 @@ const FormIntakeVLOSPage = () => {
               className="space-y-6"
             >
               {/* Which Pair */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('whichPair')}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <FormCard
+                title={t('whichPair')}
+              // description='Hallo'
+              >
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
                   <RadioGroup
                     value={form.watch('welkPaar')}
-                    onValueChange={value => form.setValue('welkPaar', value)}
+                    onValueChange={v => form.setValue('welkPaar', v)}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {PAARTYPE_OPTIES.map(option => (
@@ -289,62 +295,57 @@ const FormIntakeVLOSPage = () => {
                       ))}
                     </div>
                   </RadioGroup>
-                </CardContent>
-              </Card>
+                </FormBlock>
+              </FormCard>
 
-              {/* Side Selection */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('side')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <RadioGroup
-                    value={side}
-                    onValueChange={v =>
-                      form.setValue('side', v as 'left' | 'right' | 'both')
-                    }
-                  >
+              {/* Side & Amputation */}
+              <FormCard
+                title={t('side') + ' & ' + t('amputation')}
+                description={t('sideAmputationDescription')}
+              >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                >
+                  {/* Side Selection */}
+                  <FormItemWrapper>
+                    <FormField
+                      control={form.control}
+                      name="side"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label className="font-semibold text-center mb-2 block">{t('side')}</Label>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <div className="flex flex-wrap gap-6">
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="both" id="side-both" />
+                                  <Label htmlFor="side-both">{t('both')}</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="left" id="side-left" />
+                                  <Label htmlFor="side-left">{t('left')}</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="right" id="side-right" />
+                                  <Label htmlFor="side-right">{t('right')}</Label>
+                                </div>
+                              </div>
+                            </RadioGroup>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </FormItemWrapper>
+
+                  {/* Amputation */}
+                  <FormItemWrapper>
+                    <Label className="font-semibold mb-2 block">{t('amputation')}</Label>
                     <div className="flex gap-6">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="both" id="side-both" />
-                        <Label
-                          htmlFor="side-both"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('both')}
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="left" id="side-left" />
-                        <Label
-                          htmlFor="side-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('left')}
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="right" id="side-right" />
-                        <Label
-                          htmlFor="side-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('right')}
-                        </Label>
-                      </div>
-                    </div>
-                  </RadioGroup>
-                </CardContent>
-              </Card>
-
-              {/* Amputation */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('amputation')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-6">
-                    {showLinks && (
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-left"
@@ -353,15 +354,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('amputatieLinksEnabled', !!checked)
                           }
                         />
-                        <Label
-                          htmlFor="amp-left"
-                          className="font-normal cursor-pointer"
-                        >
+                        <Label htmlFor="amp-left" className="font-normal cursor-pointer">
                           {t('left')}
                         </Label>
                       </div>
-                    )}
-                    {showRechts && (
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-right"
@@ -370,63 +366,66 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('amputatieRechtsEnabled', !!checked)
                           }
                         />
-                        <Label
-                          htmlFor="amp-right"
-                          className="font-normal cursor-pointer"
-                        >
+                        <Label htmlFor="amp-right" className="font-normal cursor-pointer">
                           {t('right')}
                         </Label>
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                    </div>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+
 
               {/* Shaft Height */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('shaftHeight')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2">
-                    {showLinks && (
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="shaft-left">{t('leftCm')}</Label>
-                        <Input
-                          id="shaft-left"
-                          type="number"
-                          placeholder="cm"
-                          value={form.watch('schachthoogteLinks')}
-                          onChange={e =>
-                            form.setValue('schachthoogteLinks', e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                    {showRechts && (
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="shaft-right">{t('rightCm')}</Label>
-                        <Input
-                          id="shaft-right"
-                          type="number"
-                          placeholder="cm"
-                          value={form.watch('schachthoogteRechts')}
-                          onChange={e =>
-                            form.setValue('schachthoogteRechts', e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              <FormCard
+                title={t('shaftHeight')}
+              >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                >
+                  {showLinks && (
+                    <FormItemWrapper className="items-center">
+                      <Label htmlFor="shaft-left">{t('leftCm')}</Label>
+                      <Input
+                        id="shaft-left"
+                        type="number"
+                        placeholder="cm"
+                        value={form.watch('schachthoogteLinks')}
+                        onChange={e =>
+                          form.setValue('schachthoogteLinks', e.target.value)
+                        }
+                        className="w-2/3 text-center"
+                      />
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper className="items-center">
+                      <Label htmlFor="shaft-right">{t('rightCm')}</Label>
+                      <Input
+                        id="shaft-right"
+                        type="number"
+                        placeholder="cm"
+                        value={form.watch('schachthoogteRechts')}
+                        onChange={e =>
+                          form.setValue('schachthoogteRechts', e.target.value)
+                        }
+                        className="w-2/3 text-center"
+                      />
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
               {/* Shaft Opening */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('shaftOpening')}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <FormCard title={t('shaftOpening')}>
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
                   <RadioGroup
                     value={form.watch('openstandSchacht')}
                     onValueChange={v => form.setValue('openstandSchacht', v)}
@@ -451,28 +450,27 @@ const FormIntakeVLOSPage = () => {
                       ))}
                     </div>
                   </RadioGroup>
-                </CardContent>
-              </Card>
+                </FormBlock>
+              </FormCard>
 
               {/* Enclosure (Omsluiting) - Complex multi-select with mm values */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('enclosure')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {showLinks && (
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-semibold">
-                          {t('left')}
-                        </Label>
+              <FormCard title={t('enclosure')}>
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                >
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold text-foreground"> {t('left')} </Label>
+                      <div className="space-y-2 w-2/3">
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <div
                             key={optie.key}
-                            className="flex items-center gap-3"
+                            className="flex items-center gap-3 rounded-md border bg-background p-2"
                           >
                             <div className="flex items-center space-x-2 flex-1">
-                              <Checkbox
+                              <Switch
                                 id={`encl-left-${optie.key}`}
                                 checked={
                                   (form.watch('omsluitingLinks')[
@@ -515,7 +513,9 @@ const FormIntakeVLOSPage = () => {
                               ] as boolean) && (
                                 <Input
                                   type="number"
-                                  placeholder="mm"
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
                                   value={
                                     (form.watch('omsluitingLinksMm')[
                                       optie.mmKeyLinks
@@ -533,19 +533,19 @@ const FormIntakeVLOSPage = () => {
                           </div>
                         ))}
                       </div>
-                    )}
-                    {showRechts && (
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-semibold">
-                          {t('right')}
-                        </Label>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold text-foreground"> {t('right')} </Label>
+                      <div className="space-y-2 w-2/3">
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <div
                             key={optie.key}
-                            className="flex items-center gap-3"
+                            className="flex items-center gap-3 rounded-md border bg-background p-2"
                           >
                             <div className="flex items-center space-x-2 flex-1">
-                              <Checkbox
+                              <Switch
                                 id={`encl-right-${optie.key}`}
                                 checked={
                                   (form.watch('omsluitingRechts')[
@@ -588,7 +588,9 @@ const FormIntakeVLOSPage = () => {
                               ] as boolean) && (
                                 <Input
                                   type="number"
-                                  placeholder="mm"
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
                                   value={
                                     (form.watch('omsluitingRechtsMm')[
                                       optie.mmKeyRechts
@@ -606,854 +608,737 @@ const FormIntakeVLOSPage = () => {
                           </div>
                         ))}
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
-              {/* Supplement Support / Ezelsoor / Amputatie sections */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('supplementSupport')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {showLinks && (
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-semibold">
-                          {t('left')}
+              {/* Supplement Support */}
+              <FormCard title={t('supplementSupport')}>
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">
+                        {t('left')}
+                      </Label>
+                      <div className="flex items-center p-3 space-x-2">
+                        <Switch
+                          id="supplementschoring-links-switch"
+                          checked={supplementschoringLinksEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('supplementschoringLinksEnabled', !!checked)
+                          }
+                        />
+                        <Label htmlFor="supplementschoring-links-switch" className="font-normal cursor-pointer">
+                          {supplementschoringLinksEnabled ? t('yes') : t('no')}
                         </Label>
-                        <RadioGroup
-                          value={boolToString(supplementschoringLinksEnabled)}
+                      </div>
+                      {supplementschoringLinksEnabled && (
+                        <Select
+                          value={form.watch('supplementschoringLinksType')}
                           onValueChange={v =>
-                            form.setValue(
-                              'supplementschoringLinksEnabled',
-                              stringToBool(v),
-                            )
+                            form.setValue('supplementschoringLinksType', v)
                           }
                         >
-                          <div className="flex gap-4">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div
-                                key={opt.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <RadioGroupItem
-                                  value={opt.value}
-                                  id={`supp-left-${opt.value}`}
-                                />
-                                <Label
-                                  htmlFor={`supp-left-${opt.value}`}
-                                  className="font-normal cursor-pointer"
-                                >
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                SUPPLEMENT_TYPE_OPTIES.find(
+                                  opt => opt.value === form.watch('supplementschoringLinksType')
+                                )?.label || ''
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {SUPPLEMENT_TYPE_OPTIES.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
                             ))}
-                          </div>
-                        </RadioGroup>
-                        {supplementschoringLinksEnabled && (
-                          <Select
-                            value={form.watch('supplementschoringLinksType')}
-                            onValueChange={v =>
-                              form.setValue('supplementschoringLinksType', v)
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {SUPPLEMENT_TYPE_OPTIES.map(opt => (
-                                <SelectItem key={opt.value} value={opt.value}>
-                                  {t(opt.label)}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      </div>
-                    )}
-                    {showRechts && (
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-semibold">
-                          {t('right')}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">
+                        {t('right')}
+                      </Label>
+                      <div className="flex items-center p-3 space-x-2">
+                        <Switch
+                          id="supplementschoring-rechts-switch"
+                          checked={supplementschoringRechtsEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('supplementschoringRechtsEnabled', !!checked)
+                          }
+                        />
+                        <Label htmlFor="supplementschoring-rechts-switch" className="font-normal cursor-pointer">
+                          {supplementschoringRechtsEnabled ? t('yes') : t('no')}
                         </Label>
-                        <RadioGroup
-                          value={boolToString(supplementschoringRechtsEnabled)}
+                      </div>
+                      {supplementschoringRechtsEnabled && (
+                        <Select
+                          value={form.watch('supplementschoringRechtsType')}
                           onValueChange={v =>
-                            form.setValue(
-                              'supplementschoringRechtsEnabled',
-                              stringToBool(v),
-                            )
+                            form.setValue('supplementschoringRechtsType', v)
                           }
                         >
-                          <div className="flex gap-4">
-                            {JA_NEE_OPTIES.map(opt => (
-                              <div
-                                key={opt.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <RadioGroupItem
-                                  value={opt.value}
-                                  id={`supp-right-${opt.value}`}
-                                />
-                                <Label
-                                  htmlFor={`supp-right-${opt.value}`}
-                                  className="font-normal cursor-pointer"
-                                >
-                                  {t(opt.label)}
-                                </Label>
-                              </div>
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                SUPPLEMENT_TYPE_OPTIES.find(
+                                  opt => opt.value === form.watch('supplementschoringRechtsType')
+                                )?.label || ''
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {SUPPLEMENT_TYPE_OPTIES.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
                             ))}
-                          </div>
-                        </RadioGroup>
-                        {supplementschoringRechtsEnabled && (
-                          <Select
-                            value={form.watch('supplementschoringRechtsType')}
-                            onValueChange={v =>
-                              form.setValue('supplementschoringRechtsType', v)
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {SUPPLEMENT_TYPE_OPTIES.map(opt => (
-                                <SelectItem key={opt.value} value={opt.value}>
-                                  {t(opt.label)}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
               {/* Sole Stiffening */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('soleStiffening')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-6">
-                    <div className="flex flex-col gap-2">
-                      {/* <Label>{t('enabled')}</Label> */}
-                      <RadioGroup
-                        value={boolToString(zoolverstijvingEnabled)}
-                        onValueChange={v =>
-                          form.setValue(
-                            'zoolverstijvingEnabled',
-                            stringToBool(v),
-                          )
+              <FormCard title={t('soleStiffening')}>
+                <FormBlock columns={2} dividers={false} hoverEffect={false}>
+                  <FormItemWrapper>
+                    <Label className="font-semibold">{t('soleStiffening')}</Label>
+                    <div className="flex items-center p-3 space-x-2">
+                      <Switch
+                        id="zoolverstijving-switch"
+                        checked={zoolverstijvingEnabled}
+                        onCheckedChange={checked =>
+                          form.setValue('zoolverstijvingEnabled', !!checked)
                         }
-                      >
-                        <div className="flex gap-4">
-                          {JA_NEE_OPTIES.map(opt => (
-                            <div
-                              key={opt.value}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem
-                                value={opt.value}
-                                id={`stiff-${opt.value}`}
-                              />
-                              <Label
-                                htmlFor={`stiff-${opt.value}`}
-                                className="font-normal cursor-pointer"
-                              >
-                                {t(opt.label)}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
+                      />
+                      <Label htmlFor="zoolverstijving-switch" className="font-normal cursor-pointer">
+                        {zoolverstijvingEnabled ? t('yes') : t('no')}
+                      </Label>
                     </div>
+                  </FormItemWrapper>
 
-                    {zoolverstijvingEnabled && (
-                      <div className="flex flex-col gap-2">
-                        <Label>{t('side')}</Label>
-                        <div className="flex gap-6">
-                          {showLinks && (
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="stiff-left"
-                                checked={form.watch('zoolverstijvingLinks')}
-                                onCheckedChange={checked =>
-                                  form.setValue(
-                                    'zoolverstijvingLinks',
-                                    !!checked,
-                                  )
-                                }
-                              />
-                              <Label
-                                htmlFor="stiff-left"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('left')}
-                              </Label>
-                            </div>
-                          )}
-                          {showRechts && (
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="stiff-right"
-                                checked={form.watch('zoolverstijvingRechts')}
-                                onCheckedChange={checked =>
-                                  form.setValue(
-                                    'zoolverstijvingRechts',
-                                    !!checked,
-                                  )
-                                }
-                              />
-                              <Label
-                                htmlFor="stiff-right"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('right')}
-                              </Label>
-                            </div>
-                          )}
-                        </div>
+                  {zoolverstijvingEnabled && (
+                    <FormItemWrapper>
+                      <Label>{t('side')}</Label>
+                      <div className="flex gap-6">
+                        {showLinks && (
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="stiff-left"
+                              checked={form.watch('zoolverstijvingLinks')}
+                              onCheckedChange={checked =>
+                                form.setValue(
+                                  'zoolverstijvingLinks',
+                                  !!checked,
+                                )
+                              }
+                            />
+                            <Label
+                              htmlFor="stiff-left"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('left')}
+                            </Label>
+                          </div>
+                        )}
+                        {showRechts && (
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="stiff-right"
+                              checked={form.watch('zoolverstijvingRechts')}
+                              onCheckedChange={checked =>
+                                form.setValue(
+                                  'zoolverstijvingRechts',
+                                  !!checked,
+                                )
+                              }
+                            />
+                            <Label
+                              htmlFor="stiff-right"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('right')}
+                            </Label>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
               {/* Closure Type, Insert Point, Tongue Padding, Tongue Stitching */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('closureAndTongue')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-2">
-                      <Label>{t('closureType')}</Label>
-                      <RadioGroup
-                        value={form.watch('sluitingType')}
-                        onValueChange={v => form.setValue('sluitingType', v)}
-                      >
-                        <div className="flex flex-col gap-2">
-                          {SLUITING_OPTIES.map(opt => (
-                            <div
-                              key={opt.value}
-                              className="flex items-center space-x-2"
+              <FormCard title={t('closureAndTongue')}>
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                  <FormItemWrapper>
+                    <Label>{t('closureType')}</Label>
+                    <RadioGroup
+                      value={form.watch('sluitingType')}
+                      onValueChange={v => form.setValue('sluitingType', v)}
+                    >
+                      <div className="flex flex-row gap-2">
+                        {SLUITING_OPTIES.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`closure-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`closure-${opt.value}`}
+                              className="font-normal cursor-pointer text-sm"
                             >
-                              <RadioGroupItem
-                                value={opt.value}
-                                id={`closure-${opt.value}`}
-                              />
-                              <Label
-                                htmlFor={`closure-${opt.value}`}
-                                className="font-normal cursor-pointer text-sm"
-                              >
-                                {opt.label}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                    </div>
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
 
-                    <div className="flex flex-col gap-2">
-                      <Label htmlFor="insert-point">{t('insertPoint')}</Label>
-                      <Input
-                        id="insert-point"
-                        value={form.watch('inschotpunt')}
-                        onChange={e =>
-                          form.setValue('inschotpunt', e.target.value)
+                  <FormItemWrapper>
+                    <Label htmlFor="insert-point">{t('insertPoint')}</Label>
+                    <Input
+                      id="insert-point"
+                      value={form.watch('inschotpunt')}
+                      onChange={e =>
+                        form.setValue('inschotpunt', e.target.value)
+                      }
+                      placeholder={t('insertPointPlaceholder')}
+                      className='w-2/3'
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                  <FormItemWrapper>
+                    <Label className="mb-1">{t('tonguePadding')}</Label>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="tongue-pad"
+                        checked={form.watch('tongpolsterEnabled')}
+                        onCheckedChange={checked =>
+                          form.setValue('tongpolsterEnabled', !!checked)
                         }
-                        placeholder={t('insertPointPlaceholder')}
                       />
+                      <Label
+                        htmlFor="tongue-pad"
+                        className="font-normal cursor-pointer"
+                      >
+                        {t('tonguePadding')}
+                      </Label>
                     </div>
+                  </FormItemWrapper>
 
-                    <div className="flex flex-col gap-2">
-                      <Label className="mb-1">{t('tonguePadding')}</Label>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="tongue-pad"
-                          checked={form.watch('tongpolsterEnabled')}
-                          onCheckedChange={checked =>
-                            form.setValue('tongpolsterEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="tongue-pad"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('tonguePadding')}
-                        </Label>
-                      </div>
+                  <FormItemWrapper>
+                    <Label className="mb-1">{t('tongueStitching')}</Label>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="tongue-stitch"
+                        checked={form.watch('tongVaststikkenEnabled')}
+                        onCheckedChange={checked =>
+                          form.setValue('tongVaststikkenEnabled', !!checked)
+                        }
+                      />
+                      <Label
+                        htmlFor="tongue-stitch"
+                        className="font-normal cursor-pointer"
+                      >
+                        {t('tongueStitching')}
+                      </Label>
                     </div>
-
-                    <div className="flex flex-col gap-2">
-                      <Label className="mb-1">{t('tongueStitching')}</Label>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="tongue-stitch"
-                          checked={form.watch('tongVaststikkenEnabled')}
-                          onCheckedChange={checked =>
-                            form.setValue('tongVaststikkenEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="tongue-stitch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('tongueStitching')}
-                        </Label>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
 
               {/* Heel Type and Height */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('heelTypeAndHeight')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {showLinks && (
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-semibold">
-                          {t('left')}
+              <FormCard title={t('heelTypeAndHeight')}>
+                {/* Heel Type */}
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">
+                        {t('left')}
+                      </Label>
+                      <Select
+                        value={form.watch('haksoortLinks')}
+                        onValueChange={v => form.setValue('haksoortLinks', v)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue>
+                            {t(
+                              HAKSOORT_OPTIES.find(
+                                opt => opt.value === form.watch('haksoortLinks')
+                              )?.label || ''
+                            )}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {HAKSOORT_OPTIES.map(opt => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {t(opt.label)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">
+                        {t('right')}
+                      </Label>
+                      <Select
+                        value={form.watch('haksoortRechts')}
+                        onValueChange={v => form.setValue('haksoortRechts', v)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue>
+                            {t(
+                              HAKSOORT_OPTIES.find(
+                                opt => opt.value === form.watch('haksoortRechts')
+                              )?.label || ''
+                            )}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {HAKSOORT_OPTIES.map(opt => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {t(opt.label)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+
+                {/* Heel Height */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                >
+                  {showLinks && (
+                    <FormItemWrapper
+                      centerTitle={true}
+                    >
+                      <Label htmlFor="heel-height-left" className="text-sm font-semibold">
+                        {t('left')}
+                      </Label>
+                      <div className="flex flex-col gap-2 text-center">
+                        <Label htmlFor="heel-height-left" className="text-sm">
+                          {t('heelHeight')} (cm)
                         </Label>
-                        <div className="flex flex-col gap-2">
-                          <Label className="text-sm">{t('heelType')}</Label>
-                          <RadioGroup
-                            value={form.watch('haksoortLinks')}
-                            onValueChange={v =>
-                              form.setValue('haksoortLinks', v)
-                            }
-                          >
-                            <div className="space-y-2">
-                              {HAKSOORT_OPTIES.map(opt => (
-                                <div
-                                  key={opt.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={opt.value}
-                                    id={`heel-type-left-${opt.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`heel-type-left-${opt.value}`}
-                                    className="font-normal cursor-pointer text-sm"
-                                  >
-                                    {opt.label}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <Label htmlFor="heel-height-left" className="text-sm">
-                            {t('heelHeight')} (cm)
-                          </Label>
-                          <Input
-                            id="heel-height-left"
-                            type="number"
-                            value={form.watch('hakhoogteLinks')}
-                            onChange={e =>
-                              form.setValue('hakhoogteLinks', e.target.value)
-                            }
-                            placeholder="cm"
-                          />
-                        </div>
+                        <Input
+                          id="heel-height-left"
+                          type="number"
+                          value={form.watch('hakhoogteLinks')}
+                          onChange={e =>
+                            form.setValue('hakhoogteLinks', e.target.value)
+                          }
+                          placeholder="cm"
+                        />
                       </div>
-                    )}
-                    {showRechts && (
-                      <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-semibold">
-                          {t('right')}
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label htmlFor="heel-height-right" className="text-sm font-semibold">
+                        {t('right')}
+                      </Label>
+                      <div className="flex flex-col gap-2 text-center">
+                        <Label htmlFor="heel-height-right" className="text-sm">
+                          {t('heelHeight')} (cm)
                         </Label>
-                        <div className="flex flex-col gap-2">
-                          <Label className="text-sm">{t('heelType')}</Label>
-                          <RadioGroup
-                            value={form.watch('haksoortRechts')}
-                            onValueChange={v =>
-                              form.setValue('haksoortRechts', v)
-                            }
-                          >
-                            <div className="space-y-2">
-                              {HAKSOORT_OPTIES.map(opt => (
-                                <div
-                                  key={opt.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={opt.value}
-                                    id={`heel-type-right-${opt.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`heel-type-right-${opt.value}`}
-                                    className="font-normal cursor-pointer text-sm"
-                                  >
-                                    {opt.label}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <Label
-                            htmlFor="heel-height-right"
-                            className="text-sm"
-                          >
-                            {t('heelHeight')} (cm)
-                          </Label>
-                          <Input
-                            id="heel-height-right"
-                            type="number"
-                            value={form.watch('hakhoogteRechts')}
-                            onChange={e =>
-                              form.setValue('hakhoogteRechts', e.target.value)
-                            }
-                            placeholder="cm"
-                          />
-                        </div>
+                        <Input
+                          id="heel-height-right"
+                          type="number"
+                          value={form.watch('hakhoogteRechts')}
+                          onChange={e =>
+                            form.setValue('hakhoogteRechts', e.target.value)
+                          }
+                          placeholder="cm"
+                        />
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
 
-              {/* Heel Slant, Donkey Ear - Consolidated */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('heelModifications')}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Heel Slant */}
-                  <div>
-                    <Label className="text-base font-semibold mb-3 block">
-                      {t('heelSlant')}
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {showLinks && (
-                        <div className="flex flex-col gap-2">
-                          <Label className="text-sm">{t('left')}</Label>
-                          <RadioGroup
-                            value={boolToString(hakschoringLinksEnabled)}
-                            onValueChange={v =>
-                              form.setValue(
-                                'hakschoringLinksEnabled',
-                                stringToBool(v),
-                              )
-                            }
-                          >
-                            <div className="flex gap-4 mb-3">
-                              {JA_NEE_OPTIES.map(opt => (
-                                <div
-                                  key={opt.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={opt.value}
-                                    id={`slant-left-${opt.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`slant-left-${opt.value}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(opt.label)}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                          {hakschoringLinksEnabled && (
-                            <Select
-                              value={form.watch('hakschoringLinksType')}
-                              onValueChange={v =>
-                                form.setValue('hakschoringLinksType', v)
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                                  <SelectItem key={opt.value} value={opt.value}>
-                                    {t(opt.label)}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        </div>
+                {/* Heel Slant */}
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">{t('left')}</Label>
+                      <div className="flex items-center p-3 space-x-2">
+                        <Switch
+                          id="hakschoring-links-switch"
+                          checked={hakschoringLinksEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('hakschoringLinksEnabled', !!checked)
+                          }
+                        />
+                        <Label htmlFor="hakschoring-links-switch" className="font-normal cursor-pointer">
+                          {hakschoringLinksEnabled ? t('yes') : t('no')}
+                        </Label>
+                      </div>
+                      {hakschoringLinksEnabled && (
+                        <Select
+                          value={form.watch('hakschoringLinksType')}
+                          onValueChange={v =>
+                            form.setValue('hakschoringLinksType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                HAKSCHORING_TYPE_OPTIES.find(
+                                  opt => opt.value === form.watch('hakschoringLinksType')
+                                )?.label || ''
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {HAKSCHORING_TYPE_OPTIES.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
-                      {showRechts && (
-                        <div className="flex flex-col gap-2">
-                          <Label className="text-sm">{t('right')}</Label>
-                          <RadioGroup
-                            value={boolToString(hakschoringRechtsEnabled)}
-                            onValueChange={v =>
-                              form.setValue(
-                                'hakschoringRechtsEnabled',
-                                stringToBool(v),
-                              )
-                            }
-                          >
-                            <div className="flex gap-4">
-                              {JA_NEE_OPTIES.map(opt => (
-                                <div
-                                  key={opt.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={opt.value}
-                                    id={`slant-right-${opt.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`slant-right-${opt.value}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(opt.label)}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                          {hakschoringRechtsEnabled && (
-                            <Select
-                              value={form.watch('hakschoringRechtsType')}
-                              onValueChange={v =>
-                                form.setValue('hakschoringRechtsType', v)
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {HAKSCHORING_TYPE_OPTIES.map(opt => (
-                                  <SelectItem key={opt.value} value={opt.value}>
-                                    {t(opt.label)}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        </div>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">{t('right')}</Label>
+                      <div className="flex items-center p-3 space-x-2">
+                        <Switch
+                          id="hakschoring-rechts-switch"
+                          checked={hakschoringRechtsEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('hakschoringRechtsEnabled', !!checked)
+                          }
+                        />
+                        <Label htmlFor="hakschoring-rechts-switch" className="font-normal cursor-pointer">
+                          {hakschoringRechtsEnabled ? t('yes') : t('no')}
+                        </Label>
+                      </div>
+                      {hakschoringRechtsEnabled && (
+                        <Select
+                          value={form.watch('hakschoringRechtsType')}
+                          onValueChange={v =>
+                            form.setValue('hakschoringRechtsType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                HAKSCHORING_TYPE_OPTIES.find(
+                                  opt => opt.value === form.watch('hakschoringRechtsType')
+                                )?.label || ''
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {HAKSCHORING_TYPE_OPTIES.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
-                    </div>
-                  </div>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
-                  <Separator />
-
-                  {/* Donkey Ear */}
-                  <div>
-                    <Label className="text-base font-semibold mb-3 block">
-                      {t('donkeyEar')}
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {showLinks && (
-                        <div className="flex flex-col gap-2">
-                          <Label className="text-sm">{t('left')}</Label>
-                          <RadioGroup
-                            value={boolToString(ezelsoorLinksEnabled)}
-                            onValueChange={v =>
-                              form.setValue(
-                                'ezelsoorLinksEnabled',
-                                stringToBool(v),
-                              )
-                            }
-                          >
-                            <div className="flex gap-4">
-                              {JA_NEE_OPTIES.map(opt => (
-                                <div
-                                  key={opt.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={opt.value}
-                                    id={`donkey-left-${opt.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`donkey-left-${opt.value}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(opt.label)}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                          {ezelsoorLinksEnabled && (
-                            <Select
-                              value={form.watch('ezelsoorLinksType')}
-                              onValueChange={v =>
-                                form.setValue('ezelsoorLinksType', v)
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {EZELSOOR_TYPE_OPTIES.map(opt => (
-                                  <SelectItem key={opt.value} value={opt.value}>
-                                    {t(opt.label)}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        </div>
+              {/* Donkey Ear */}
+              <FormCard title={t('donkeyEar')}>
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">{t('left')}</Label>
+                      <div className="flex items-center p-3 space-x-2">
+                        <Switch
+                          id="ezelsoor-links-switch"
+                          checked={ezelsoorLinksEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('ezelsoorLinksEnabled', !!checked)
+                          }
+                        />
+                        <Label htmlFor="ezelsoor-links-switch" className="font-normal cursor-pointer">
+                          {ezelsoorLinksEnabled ? t('yes') : t('no')}
+                        </Label>
+                      </div>
+                      {ezelsoorLinksEnabled && (
+                        <Select
+                          value={form.watch('ezelsoorLinksType')}
+                          onValueChange={v =>
+                            form.setValue('ezelsoorLinksType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                EZELSOOR_TYPE_OPTIES.find(
+                                  opt => opt.value === form.watch('ezelsoorLinksType')
+                                )?.label || ''
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {EZELSOOR_TYPE_OPTIES.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
-                      {showRechts && (
-                        <div className="flex flex-col gap-2">
-                          <Label className="text-sm">{t('right')}</Label>
-                          <RadioGroup
-                            value={boolToString(ezelsoorRechtsEnabled)}
-                            onValueChange={v =>
-                              form.setValue(
-                                'ezelsoorRechtsEnabled',
-                                stringToBool(v),
-                              )
-                            }
-                          >
-                            <div className="flex gap-4">
-                              {JA_NEE_OPTIES.map(opt => (
-                                <div
-                                  key={opt.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={opt.value}
-                                    id={`donkey-right-${opt.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`donkey-right-${opt.value}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(opt.label)}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                          {ezelsoorRechtsEnabled && (
-                            <Select
-                              value={form.watch('ezelsoorRechtsType')}
-                              onValueChange={v =>
-                                form.setValue('ezelsoorRechtsType', v)
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {EZELSOOR_TYPE_OPTIES.map(opt => (
-                                  <SelectItem key={opt.value} value={opt.value}>
-                                    {t(opt.label)}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        </div>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold">{t('right')}</Label>
+                      <div className="flex items-center p-3 space-x-2">
+                        <Switch
+                          id="ezelsoor-rechts-switch"
+                          checked={ezelsoorRechtsEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('ezelsoorRechtsEnabled', !!checked)
+                          }
+                        />
+                        <Label htmlFor="ezelsoor-rechts-switch" className="font-normal cursor-pointer">
+                          {ezelsoorRechtsEnabled ? t('yes') : t('no')}
+                        </Label>
+                      </div>
+                      {ezelsoorRechtsEnabled && (
+                        <Select
+                          value={form.watch('ezelsoorRechtsType')}
+                          onValueChange={v =>
+                            form.setValue('ezelsoorRechtsType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                EZELSOOR_TYPE_OPTIES.find(
+                                  opt => opt.value === form.watch('ezelsoorRechtsType')
+                                )?.label || ''
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {EZELSOOR_TYPE_OPTIES.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
               {/* Heel Rounding */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('heelRounding')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {showLinks && (
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="round-left"
-                            checked={form.watch('hakafrondingLinksEnabled')}
-                            onCheckedChange={checked =>
-                              form.setValue(
-                                'hakafrondingLinksEnabled',
-                                !!checked,
-                              )
-                            }
-                          />
-                          <Label
-                            htmlFor="round-left"
-                            className="font-normal cursor-pointer"
-                          >
-                            {t('left')}
-                          </Label>
-                        </div>
-                        {hakafrondingLinksEnabled && (
-                          <div className="space-y-3">
-                            <div className="flex flex-col gap-2">
-                              <Label
-                                htmlFor="round-left-height"
-                                className="text-sm"
-                              >
-                                {t('height')} (mm)
-                              </Label>
-                              <Input
-                                id="round-left-height"
-                                type="number"
-                                value={form.watch('hakafrondingLinksHoogte')}
-                                onChange={e =>
-                                  form.setValue(
-                                    'hakafrondingLinksHoogte',
-                                    e.target.value,
-                                  )
-                                }
-                              />
-                            </div>
-                            <div className="flex flex-col gap-2">
-                              <Label
-                                htmlFor="round-left-length"
-                                className="text-sm"
-                              >
-                                {t('length')} (mm)
-                              </Label>
-                              <Input
-                                id="round-left-length"
-                                type="number"
-                                value={form.watch('hakafrondingLinksLengte')}
-                                onChange={e =>
-                                  form.setValue(
-                                    'hakafrondingLinksLengte',
-                                    e.target.value,
-                                  )
-                                }
-                              />
-                            </div>
-                          </div>
-                        )}
+              <FormCard title={t('heelRounding')}>
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                >
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold mb-2 block">{t('left')}</Label>
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Switch
+                          id="round-left"
+                          checked={form.watch('hakafrondingLinksEnabled')}
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'hakafrondingLinksEnabled',
+                              !!checked,
+                            )
+                          }
+                        />
+                        <Label
+                          htmlFor="round-left"
+                          className="font-normal cursor-pointer"
+                        >
+                          {hakafrondingLinksEnabled ? t('yes') : t('no')}
+                        </Label>
                       </div>
-                    )}
-                    {showRechts && (
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="round-right"
-                            checked={form.watch('hakafrondingRechtsEnabled')}
-                            onCheckedChange={checked =>
-                              form.setValue(
-                                'hakafrondingRechtsEnabled',
-                                !!checked,
-                              )
-                            }
-                          />
-                          <Label
-                            htmlFor="round-right"
-                            className="font-normal cursor-pointer"
-                          >
-                            {t('right')}
-                          </Label>
-                        </div>
-                        {hakafrondingRechtsEnabled && (
-                          <div className="space-y-3">
-                            <div className="flex flex-col gap-2">
-                              <Label
-                                htmlFor="round-right-height"
-                                className="text-sm"
-                              >
-                                {t('height')} (mm)
-                              </Label>
-                              <Input
-                                id="round-right-height"
-                                type="number"
-                                value={form.watch('hakafrondingRechtsHoogte')}
-                                onChange={e =>
-                                  form.setValue(
-                                    'hakafrondingRechtsHoogte',
-                                    e.target.value,
-                                  )
-                                }
-                              />
-                            </div>
-                            <div className="flex flex-col gap-2">
-                              <Label
-                                htmlFor="round-right-length"
-                                className="text-sm"
-                              >
-                                {t('length')} (mm)
-                              </Label>
-                              <Input
-                                id="round-right-length"
-                                type="number"
-                                value={form.watch('hakafrondingRechtsLengte')}
-                                onChange={e =>
-                                  form.setValue(
-                                    'hakafrondingRechtsLengte',
-                                    e.target.value,
-                                  )
-                                }
-                              />
-                            </div>
+                      {hakafrondingLinksEnabled && (
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-2">
+                            <Label
+                              htmlFor="round-left-height"
+                              className="text-sm"
+                            >
+                              {t('height')} (mm)
+                            </Label>
+                            <Input
+                              id="round-left-height"
+                              type="number"
+                              value={form.watch('hakafrondingLinksHoogte')}
+                              onChange={e =>
+                                form.setValue(
+                                  'hakafrondingLinksHoogte',
+                                  e.target.value,
+                                )
+                              }
+                            />
                           </div>
-                        )}
+                          <div className="flex flex-col gap-2">
+                            <Label
+                              htmlFor="round-left-length"
+                              className="text-sm"
+                            >
+                              {t('length')} (mm)
+                            </Label>
+                            <Input
+                              id="round-left-length"
+                              type="number"
+                              value={form.watch('hakafrondingLinksLengte')}
+                              onChange={e =>
+                                form.setValue(
+                                  'hakafrondingLinksLengte',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold mb-2 block">{t('right')}</Label>
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Switch
+                          id="round-right"
+                          checked={form.watch('hakafrondingRechtsEnabled')}
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'hakafrondingRechtsEnabled',
+                              !!checked,
+                            )
+                          }
+                        />
+                        <Label
+                          htmlFor="round-right"
+                          className="font-normal cursor-pointer"
+                        >
+                          {hakafrondingRechtsEnabled ? t('yes') : t('no')}
+                        </Label>
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                      {hakafrondingRechtsEnabled && (
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-2">
+                            <Label
+                              htmlFor="round-right-height"
+                              className="text-sm"
+                            >
+                              {t('height')} (mm)
+                            </Label>
+                            <Input
+                              id="round-right-height"
+                              type="number"
+                              value={form.watch('hakafrondingRechtsHoogte')}
+                              onChange={e =>
+                                form.setValue(
+                                  'hakafrondingRechtsHoogte',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Label
+                              htmlFor="round-right-length"
+                              className="text-sm"
+                            >
+                              {t('length')} (mm)
+                            </Label>
+                            <Input
+                              id="round-right-length"
+                              type="number"
+                              value={form.watch('hakafrondingRechtsLengte')}
+                              onChange={e =>
+                                form.setValue(
+                                  'hakafrondingRechtsLengte',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+              </FormCard>
 
               {/* Walking Sole */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('walkingSole')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <RadioGroup
-                    value={form.watch('loopzoolType')}
-                    onValueChange={v => form.setValue('loopzoolType', v)}
-                  >
-                    <div className="grid grid-cols-2 gap-3">
-                      {LOOPZOOL_OPTIES.map(opt => (
-                        <div
-                          key={opt.value}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            value={opt.value}
-                            id={`sole-${opt.value}`}
-                          />
-                          <Label
-                            htmlFor={`sole-${opt.value}`}
-                            className="font-normal cursor-pointer text-sm"
+              <FormCard title={t('walkingSole')}>
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('loopzoolType')}
+                      onValueChange={v => form.setValue('loopzoolType', v)}
+                    >
+                      <div className="grid grid-cols-2 gap-3">
+                        {LOOPZOOL_OPTIES.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
                           >
-                            {opt.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </CardContent>
-              </Card>
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`sole-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`sole-${opt.value}`}
+                              className="font-normal cursor-pointer text-sm"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
 
               {/* Special Notes */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('specialNotes')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    placeholder={t('specialNotesPlaceholder')}
-                    value={form.watch('bijzonderheden')}
-                    onChange={e =>
-                      form.setValue('bijzonderheden', e.target.value)
-                    }
-                    rows={5}
-                    className="resize-none"
-                  />
-                </CardContent>
-              </Card>
+              <FormCard
+                title={t('specialNotes')}
+              >
+                <Textarea
+                  placeholder={t('specialNotesPlaceholder')}
+                  value={form.watch('bijzonderheden')}
+                  onChange={e =>
+                    form.setValue('bijzonderheden', e.target.value)
+                  }
+                  rows={5}
+                />
+              </FormCard>
 
               {/* Submit Section */}
               <FormFooter>
@@ -1472,8 +1357,8 @@ const FormIntakeVLOSPage = () => {
             </form>
           </Form>
         </FormSection>
-      </div>
-    </BaseLayout>
+      </div >
+    </BaseLayout >
   );
 };
 
