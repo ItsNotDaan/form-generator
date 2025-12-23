@@ -242,7 +242,6 @@ const FormIntakeOSAPage = () => {
               {/* Which Pair */}
               <FormCard
                 title={t('whichPair')}
-              // description='Hallo'
               >
                 <FormBlock
                   columns={1}

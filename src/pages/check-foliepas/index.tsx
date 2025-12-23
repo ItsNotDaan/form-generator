@@ -35,6 +35,7 @@ import {
   HAKSCHORING_TYPE_OPTIES,
   EZELSOOR_TYPE_OPTIES,
   LOOPZOOL_OPTIES,
+  Zijde,
 } from '@/lib/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
@@ -50,6 +51,7 @@ import { Form } from '@/components/ui/form';
 import { scrollToFirstError } from '@/utils/formHelpers';
 import { Textarea } from '@/components/ui/textarea';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
+import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
 
 const FormCheckFoliepasPage = () => {
   const router = useRouter();
@@ -400,18 +402,17 @@ const FormCheckFoliepasPage = () => {
               className="space-y-6"
             >
               {/* Side Selection */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('side')}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <FormCard title={t('side')}>
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
                   <RadioGroup
                     value={side}
-                    onValueChange={v =>
-                      form.setValue('side', v as 'left' | 'right' | 'both')
-                    }
+                    onValueChange={v => form.setValue('side', v as Zijde)}
                   >
-                    <div className="flex gap-6">
+                    <div className="flex flex-wrap gap-6">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="both" id="side-both" />
                         <Label
@@ -441,273 +442,254 @@ const FormCheckFoliepasPage = () => {
                       </div>
                     </div>
                   </RadioGroup>
-                </CardContent>
-              </Card>
+                </FormBlock>
+              </FormCard>
 
               {/* Reading Corrections after Foil Fit */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('readingCorrectionAfterFoilFit')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    id="reading-correction-foil-fit"
-                    placeholder={t('readingCorrectionAfterFoilFit')}
-                    value={form.watch('readingCorrectionAfterFoilFit')}
-                    onChange={e =>
-                      form.setValue(
-                        'readingCorrectionAfterFoilFit',
-                        e.target.value,
-                      )
-                    }
-                  />
-                </CardContent>
-              </Card>
+              <FormCard title={t('readingCorrectionAfterFoilFit')}>
+                <Textarea
+                  id="reading-correction-foil-fit"
+                  placeholder={t('readingCorrectionAfterFoilFit')}
+                  value={form.watch('readingCorrectionAfterFoilFit')}
+                  onChange={e =>
+                    form.setValue(
+                      'readingCorrectionAfterFoilFit',
+                      e.target.value,
+                    )
+                  }
+                />
+              </FormCard>
 
               {/* Reading Correction After Lining Shoe */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('readingCorrectionAfterLiningShoe')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    id="reading-correction-lining-shoe"
-                    placeholder={t('readingCorrectionAfterLiningShoe')}
-                    value={form.watch('readingCorrectionAfterLiningShoe')}
-                    onChange={e =>
-                      form.setValue(
-                        'readingCorrectionAfterLiningShoe',
-                        e.target.value,
-                      )
-                    }
-                  />
-                </CardContent>
-              </Card>
+              <FormCard title={t('readingCorrectionAfterLiningShoe')}>
+                <Textarea
+                  id="reading-correction-lining-shoe"
+                  placeholder={t('readingCorrectionAfterLiningShoe')}
+                  value={form.watch('readingCorrectionAfterLiningShoe')}
+                  onChange={e =>
+                    form.setValue(
+                      'readingCorrectionAfterLiningShoe',
+                      e.target.value,
+                    )
+                  }
+                />
+              </FormCard>
 
               {/* Enclosure + Beenlengte + Openstand */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Foliepas aanmerkingen</CardTitle>
-                  <CardDescription>
-                    {t('enclosure')} • {t('legLengthDifference')} • {t('shaftOpening')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Enclosure */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">
-                        {t('enclosure')}
-                      </Label>
-                      <span className="text-xs text-muted-foreground">
-                        {t('left')} / {t('right')}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {showLinks && (
-                        <div className="space-y-3 rounded-lg border bg-background p-3 shadow-sm">
-                          <div className="flex items-center justify-between ">
-                            <span className="text-sm font-semibold text-foreground ">
-                              {t('left')}
-                            </span>
-                          </div>
-                          <div className="space-y-2">
-                            {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
-                              <div
-                                key={optie.key}
-                                className="flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2"
-                              >
-                                <div className="flex items-center space-x-2 flex-1">
-                                  <Switch
-                                    id={`encl-left-${optie.key}`}
-                                    checked={
-                                      (form.watch('omsluitingLinks')[
-                                        optie.fullKeyLinks
-                                      ] as boolean) || false
-                                    }
-                                    onCheckedChange={checked => {
-                                      form.setValue('omsluitingLinks', {
-                                        ...form.getValues('omsluitingLinks'),
-                                        [optie.fullKeyLinks]: !!checked,
-                                      });
-                                      if (
-                                        checked &&
-                                        optie.needsMm &&
-                                        optie.defaultMm
-                                      ) {
-                                        form.setValue('omsluitingLinksMm', {
-                                          ...form.getValues('omsluitingLinksMm'),
-                                          [optie.mmKeyLinks]: optie.defaultMm,
-                                        });
-                                      } else if (!checked) {
-                                        const next = {
-                                          ...form.getValues('omsluitingLinksMm'),
-                                        };
-                                        delete next[optie.mmKeyLinks];
-                                        form.setValue('omsluitingLinksMm', next);
-                                      }
-                                    }}
-                                  />
-                                  <Label
-                                    htmlFor={`encl-left-${optie.key}`}
-                                    className="font-normal cursor-pointer text-sm"
-                                  >
-                                    {optie.label}
-                                  </Label>
-                                </div>
-                                {optie.needsMm &&
+              <FormCard
+                title="Foliepas aanmerkingen"
+                description={`${t('enclosure')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
+              >
+                {/* Enclosure (Omsluiting) - Complex multi-select with mm values */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('enclosure')}
+                >
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold text-foreground"> {t('left')} </Label>
+                      <div className="space-y-2 w-2/3">
+                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                          <div
+                            key={optie.key}
+                            className="flex items-center gap-3 rounded-md border bg-background p-2"
+                          >
+                            <div className="flex items-center space-x-2 flex-1">
+                              <Switch
+                                id={`encl-left-${optie.key}`}
+                                checked={
                                   (form.watch('omsluitingLinks')[
                                     optie.fullKeyLinks
-                                  ] as boolean) && (
-                                    <Input
-                                      type="number"
-                                      placeholder={
-                                        optie.key === 'hoge' ? 'cm' : 'mm'
-                                      }
-                                      value={
-                                        (form.watch('omsluitingLinksMm')[
-                                          optie.mmKeyLinks
-                                        ] as string) || ''
-                                      }
-                                      onChange={e =>
-                                        form.setValue('omsluitingLinksMm', {
-                                          ...form.getValues('omsluitingLinksMm'),
-                                          [optie.mmKeyLinks]: e.target.value,
-                                        })
-                                      }
-                                      className="w-20"
-                                    />
-                                  )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {showRechts && (
-                        <div className="space-y-3 rounded-lg border bg-background p-3 shadow-sm">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold text-foreground">
-                              {t('right')}
-                            </span>
-                          </div>
-                          <div className="space-y-2">
-                            {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
-                              <div
-                                key={optie.key}
-                                className="flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2"
+                                  ] as boolean) || false
+                                }
+                                onCheckedChange={checked => {
+                                  form.setValue('omsluitingLinks', {
+                                    ...form.getValues('omsluitingLinks'),
+                                    [optie.fullKeyLinks]: !!checked,
+                                  });
+                                  if (
+                                    checked &&
+                                    optie.needsMm &&
+                                    optie.defaultMm
+                                  ) {
+                                    form.setValue('omsluitingLinksMm', {
+                                      ...form.getValues('omsluitingLinksMm'),
+                                      [optie.mmKeyLinks]: optie.defaultMm,
+                                    });
+                                  } else if (!checked) {
+                                    const next = {
+                                      ...form.getValues('omsluitingLinksMm'),
+                                    };
+                                    delete next[optie.mmKeyLinks];
+                                    form.setValue('omsluitingLinksMm', next);
+                                  }
+                                }}
+                              />
+                              <Label
+                                htmlFor={`encl-left-${optie.key}`}
+                                className="font-normal cursor-pointer text-sm"
                               >
-                                <div className="flex items-center space-x-2 flex-1">
-                                  <Switch
-                                    id={`encl-right-${optie.key}`}
-                                    checked={
-                                      (form.watch('omsluitingRechts')[
-                                        optie.fullKeyRechts
-                                      ] as boolean) || false
-                                    }
-                                    onCheckedChange={checked => {
-                                      form.setValue('omsluitingRechts', {
-                                        ...form.getValues('omsluitingRechts'),
-                                        [optie.fullKeyRechts]: !!checked,
-                                      });
-                                      if (
-                                        checked &&
-                                        optie.needsMm &&
-                                        optie.defaultMm
-                                      ) {
-                                        form.setValue('omsluitingRechtsMm', {
-                                          ...form.getValues('omsluitingRechtsMm'),
-                                          [optie.mmKeyRechts]: optie.defaultMm,
-                                        });
-                                      } else if (!checked) {
-                                        const next = {
-                                          ...form.getValues('omsluitingRechtsMm'),
-                                        };
-                                        delete next[optie.mmKeyRechts];
-                                        form.setValue('omsluitingRechtsMm', next);
-                                      }
-                                    }}
-                                  />
-                                  <Label
-                                    htmlFor={`encl-right-${optie.key}`}
-                                    className="font-normal cursor-pointer text-sm"
-                                  >
-                                    {optie.label}
-                                  </Label>
-                                </div>
-                                {optie.needsMm &&
+                                {optie.label}
+                              </Label>
+                            </div>
+                            {optie.needsMm &&
+                              (form.watch('omsluitingLinks')[
+                                optie.fullKeyLinks
+                              ] as boolean) && (
+                                <Input
+                                  type="number"
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
+                                  value={
+                                    (form.watch('omsluitingLinksMm')[
+                                      optie.mmKeyLinks
+                                    ] as string) || ''
+                                  }
+                                  onChange={e =>
+                                    form.setValue('omsluitingLinksMm', {
+                                      ...form.getValues('omsluitingLinksMm'),
+                                      [optie.mmKeyLinks]: e.target.value,
+                                    })
+                                  }
+                                  className="w-20"
+                                />
+                              )}
+                          </div>
+                        ))}
+                      </div>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <Label className="text-sm font-semibold text-foreground"> {t('right')} </Label>
+                      <div className="space-y-2 w-2/3">
+                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                          <div
+                            key={optie.key}
+                            className="flex items-center gap-3 rounded-md border bg-background p-2"
+                          >
+                            <div className="flex items-center space-x-2 flex-1">
+                              <Switch
+                                id={`encl-right-${optie.key}`}
+                                checked={
                                   (form.watch('omsluitingRechts')[
                                     optie.fullKeyRechts
-                                  ] as boolean) && (
-                                    <Input
-                                      type="number"
-                                      placeholder={
-                                        optie.key === 'hoge' ? 'cm' : 'mm'
-                                      }
-                                      value={
-                                        (form.watch('omsluitingRechtsMm')[
-                                          optie.mmKeyRechts
-                                        ] as string) || ''
-                                      }
-                                      onChange={e =>
-                                        form.setValue('omsluitingRechtsMm', {
-                                          ...form.getValues('omsluitingRechtsMm'),
-                                          [optie.mmKeyRechts]: e.target.value,
-                                        })
-                                      }
-                                      className="w-20"
-                                    />
-                                  )}
-                              </div>
-                            ))}
+                                  ] as boolean) || false
+                                }
+                                onCheckedChange={checked => {
+                                  form.setValue('omsluitingRechts', {
+                                    ...form.getValues('omsluitingRechts'),
+                                    [optie.fullKeyRechts]: !!checked,
+                                  });
+                                  if (
+                                    checked &&
+                                    optie.needsMm &&
+                                    optie.defaultMm
+                                  ) {
+                                    form.setValue('omsluitingRechtsMm', {
+                                      ...form.getValues('omsluitingRechtsMm'),
+                                      [optie.mmKeyRechts]: optie.defaultMm,
+                                    });
+                                  } else if (!checked) {
+                                    const next = {
+                                      ...form.getValues('omsluitingRechtsMm'),
+                                    };
+                                    delete next[optie.mmKeyRechts];
+                                    form.setValue('omsluitingRechtsMm', next);
+                                  }
+                                }}
+                              />
+                              <Label
+                                htmlFor={`encl-right-${optie.key}`}
+                                className="font-normal cursor-pointer text-sm"
+                              >
+                                {optie.label}
+                              </Label>
+                            </div>
+                            {optie.needsMm &&
+                              (form.watch('omsluitingRechts')[
+                                optie.fullKeyRechts
+                              ] as boolean) && (
+                                <Input
+                                  type="number"
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
+                                  value={
+                                    (form.watch('omsluitingRechtsMm')[
+                                      optie.mmKeyRechts
+                                    ] as string) || ''
+                                  }
+                                  onChange={e =>
+                                    form.setValue('omsluitingRechtsMm', {
+                                      ...form.getValues('omsluitingRechtsMm'),
+                                      [optie.mmKeyRechts]: e.target.value,
+                                    })
+                                  }
+                                  className="w-20"
+                                />
+                              )}
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Beenlengte verschil */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <Label className="text-base font-semibold">
-                      {t('legLengthDifference')}
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="leg-length-left">{t('leftCm')}</Label>
-                        <Input
-                          id="leg-length-left"
-                          type="number"
-                          placeholder="cm"
-                          value={form.watch('legLengthDifferenceLeft')}
-                          onChange={e =>
-                            form.setValue('legLengthDifferenceLeft', e.target.value)
-                          }
-                        />
+                        ))}
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="leg-length-right">{t('rightCm')}</Label>
-                        <Input
-                          id="leg-length-right"
-                          type="number"
-                          placeholder="cm"
-                          value={form.watch('legLengthDifferenceRight')}
-                          onChange={e =>
-                            form.setValue('legLengthDifferenceRight', e.target.value)
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
 
-                  {/* Openstand schacht */}
-                  <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-                    <Label className="text-base font-semibold">
+                {/* Beenlengte verschil */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('legLengthDifference')}
+                >
+                  <FormItemWrapper>
+                    <Label htmlFor="leg-length-left">{t('leftCm')}</Label>
+                    <Input
+                      id="leg-length-left"
+                      type="number"
+                      placeholder="cm"
+                      value={form.watch('legLengthDifferenceLeft')}
+                      onChange={e =>
+                        form.setValue('legLengthDifferenceLeft', e.target.value)
+                      }
+                      className='w-2/3'
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <Label htmlFor="leg-length-right">{t('rightCm')}</Label>
+                    <Input
+                      id="leg-length-right"
+                      type="number"
+                      placeholder="cm"
+                      value={form.watch('legLengthDifferenceRight')}
+                      onChange={e =>
+                        form.setValue('legLengthDifferenceRight', e.target.value)
+                      }
+                      className='w-2/3'
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Openstand schacht */}
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
+                  <FormItemWrapper>
+                    <Label className="text-base font-semibold mb-2">
                       {t('shaftOpening')}
                     </Label>
                     <RadioGroup
                       value={form.watch('openstandSchacht') || ''}
                       onValueChange={v => form.setValue('openstandSchacht', v)}
                     >
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 pt-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
                         {OPENSTAND_OPTIES.map(opt => (
                           <label
                             key={opt.value}
@@ -725,9 +707,9 @@ const FormCheckFoliepasPage = () => {
                         ))}
                       </div>
                     </RadioGroup>
-                  </div>
-                </CardContent>
-              </Card>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
 
               {/* ----------------------------------------------- */}
 
@@ -739,968 +721,861 @@ const FormCheckFoliepasPage = () => {
 
               */}
 
-              {/* Kleur en Model - Switch toggle */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle>{t('colorAndModel')}</CardTitle>
-                    <CardDescription>{t('colors')}</CardDescription>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Label
-                      htmlFor="color-model-toggle"
-                      className="text-sm text-muted-foreground"
-                    >
-                      {t('colorAndModel')}
-                    </Label>
-                    <Switch
-                      id="color-model-toggle"
-                      checked={showColorAndModel}
-                      onCheckedChange={checked =>
-                        form.setValue('showColorAndModel', !!checked)
+              {/* Kleur en Model - Refactored with FormCard, FormBlock, FormItemWrapper */}
+              <FormCard
+                title={t('colorAndModel')}
+                description={t('colors')}
+                toggleAble={true}
+                toggleLabel={t('colorAndModel')}
+                defaultOpen={form.watch('showColorAndModel')} // Optional: Sync initial state if needed
+              >
+                {/* Model & Colors */}
+                <FormBlock columns={2} dividers>
+                  {/* Model */}
+                  <FormItemWrapper label={t('finalModel')}>
+                    <Select
+                      value={modelType ?? 'model'}
+                      onValueChange={(v) =>
+                        form.setValue('modelType', v as 'asPhoto' | 'model')
                       }
-                    />
-                  </div>
-                </CardHeader>
-                {showColorAndModel && (
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('finalModel')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="asPhoto">{t('asPhoto')}</SelectItem>
+                        <SelectItem value="model">{t('model')}</SelectItem>
+                      </SelectContent>
+                    </Select>
 
-                  // This is the main wrapper for the Color and Model section
-                  <CardContent className="pt-0 space-y-3">
+                    {/* If modelType is 'model', show a textarea */}
+                    {modelType === 'model' && (
+                      <Input
+                        placeholder={t('modelPlaceholder')}
+                        value={form.watch('modelText') || ''}
+                        onChange={(e) => form.setValue('modelText', e.target.value)}
+                        className="w-2/3"
+                      />
+                    )}
+                  </FormItemWrapper>
 
-                    {/* Model & Colors */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
-
-                      {/* Model is a mandatory field, its picture or model */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-medium mb-2">{t('finalModel')}</Label>
-                        <Select
-                          value={modelType ?? 'model'}
-                          onValueChange={v =>
-                            form.setValue('modelType', v as 'asPhoto' | 'model')
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('finalModel')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="asPhoto">{t('asPhoto')}</SelectItem>
-                            <SelectItem value="model">{t('model')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-
-                        {/* If modelType is 'model', show a textarea */}
-                        {modelType === 'model' && (
+                  {/* Colors */}
+                  <FormItemWrapper label={t('colors')}>
+                    <div className="grid gap-3 w-2/3">
+                      {colorOptions.map((color, index) => (
+                        <div key={index} className="grid grid-cols-[1fr_auto]">
                           <Input
-                            placeholder={t('modelPlaceholder')}
-                            value={form.watch('modelText') || ''}
-                            onChange={e =>
-                              form.setValue('modelText', e.target.value)
-                            }
-                            className="w-2/3"
+                            placeholder={`${t('colorOption')} ${index + 1}`}
+                            value={color}
+                            onChange={(e) => {
+                              const colors = [...colorOptions];
+                              colors[index] = e.target.value;
+                              form.setValue('colorOptions', colors);
+                            }}
                           />
-                        )}
-                      </div>
-
-                      {/* Colors is a mandatory field, it has the option to show more/less textareas */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-semibold mb-2">{t('colors')}</Label>
-                        <div className="grid gap-3 w-2/3">
-                          {colorOptions.map((color, index) => (
-                            <div key={index} className="grid grid-cols-[1fr_auto]">
-                              <Input
-                                placeholder={`${t('colorOption')} ${index + 1}`}
-                                value={color}
-                                onChange={e => {
-                                  const colors = [...colorOptions];
-                                  colors[index] = e.target.value;
-                                  form.setValue('colorOptions', colors);
-                                }}
-                              />
-                              {colorOptions.length > 1 && (
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => {
-                                    const colors = [...colorOptions];
-                                    colors.splice(index, 1);
-                                    form.setValue('colorOptions', colors);
-                                  }}
-                                  className='ml-2 bg-background!'
-                                >
-                                  {t('removeColorOption')}
-                                </Button>
-                              )}
-                            </div>
-                          ))}
+                          {colorOptions.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                const colors = [...colorOptions];
+                                colors.splice(index, 1);
+                                form.setValue('colorOptions', colors);
+                              }}
+                              className="ml-2 bg-background!"
+                            >
+                              {t('removeColorOption')}
+                            </Button>
+                          )}
                         </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            const colors = [...colorOptions, ''];
-                            form.setValue('colorOptions', colors);
-                          }}
-                          className="w-2/3 bg-background!"
-                        >
-                          + {t('addColorOption')}
-                        </Button>
-                      </div>
+                      ))}
                     </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const colors = [...colorOptions, ''];
+                        form.setValue('colorOptions', colors);
+                      }}
+                      className="w-2/3 bg-background!"
+                    >
+                      + {t('addColorOption')}
+                    </Button>
+                  </FormItemWrapper>
+                </FormBlock>
 
-                    {/* Tongue Padding, Zipper & Padding Collar */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-3 bg-secondary/2 shadow-sm divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
+                {/* Tongue Padding, Zipper & Padding Collar */}
+                <FormBlock columns={3} dividers>
+                  {/* Tongue Padding */}
+                  <FormItemWrapper label={t('tonguePadding')}>
+                    <Select
+                      value={form.watch('tonguePaddingMm') || ''}
+                      onValueChange={(v) =>
+                        form.setValue('tonguePaddingMm', v as 'no' | '3' | '5')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('tonguePadding')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="no">{t('no')}</SelectItem>
+                        <SelectItem value="3">{t('mm3')}</SelectItem>
+                        <SelectItem value="5">{t('mm5')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
 
-                      {/* Tongue Padding */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-medium mb-2">{t('tonguePadding')}</Label>
-                        <Select
-                          value={form.watch('tonguePaddingMm') || ''}
-                          onValueChange={v =>
-                            form.setValue('tonguePaddingMm', v as 'no' | '3' | '5')
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('tonguePadding')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="no">{t('no')}</SelectItem>
-                            <SelectItem value="3">{t('mm3')}</SelectItem>
-                            <SelectItem value="5">{t('mm5')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* Zipper */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-medium mb-2">{t('zipper')}</Label>
-                        <Select
-                          value={zipperType || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'zipperType',
-                              v as 'none' | 'functionalNylon' | 'decorativeNylon',
-                            )
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('zipper')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('noZipper')}</SelectItem>
-                            <SelectItem value="functionalNylon">
-                              {t('functionalNylon')}
-                            </SelectItem>
-                            <SelectItem value="decorativeNylon">
-                              {t('decorativeNylon')}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {zipperType && zipperType !== 'none' && (
-                          <div className="grid grid-cols-2 gap-3 pt-4">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="zipper-medial"
-                                checked={form.watch('zipperMedial') || false}
-                                onCheckedChange={checked =>
-                                  form.setValue('zipperMedial', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="zipper-medial"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('medial')}
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="zipper-lateral"
-                                checked={form.watch('zipperLateral') || false}
-                                onCheckedChange={checked =>
-                                  form.setValue('zipperLateral', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="zipper-lateral"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('lateral')}
-                              </Label>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Padding Collar */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-medium mb-2">{t('paddingCollar')}</Label>
-                        <Select
-                          value={form.watch('paddingCollarMm') || ''}
-                          onValueChange={v =>
-                            form.setValue('paddingCollarMm', v as 'no' | '5' | '10')
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('paddingCollar')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="no">{t('no')}</SelectItem>
-                            <SelectItem value="5">{t('mm5')}</SelectItem>
-                            <SelectItem value="10">{t('mm10')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    {/* Closure, Zipper and Special Features */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
-                      {/* Closure*/}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-medium mb-2">{t('closure')}</Label>
-                        <Select
-                          value={closureType || 'velcro'}
-                          onValueChange={v =>
-                            form.setValue('closureType', v as 'velcro' | 'ringsHooks')
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('closure')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="velcro">
-                              {t('velcroWithExtraLongRolPassant')}
-                            </SelectItem>
-                            <SelectItem value="ringsHooks">
-                              {t('ringsAndHooks')}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-
-                        {/* If closureType is 'ringsHooks' */}
-                        {closureType === 'ringsHooks' && (
-                          <div className="grid grid-cols-2 gap-3 pt-2 w-full">
-                            <div className="flex flex-col space-y-2">
-                              <Label htmlFor="rings-nr">{t('ringsNr')}</Label>
-                              <Input
-                                id="rings-nr"
-                                value={form.watch('ringsNr') || ''}
-                                onChange={e => form.setValue('ringsNr', e.target.value)}
-                              />
-                            </div>
-                            <div className="flex flex-col space-y-2">
-                              <Label htmlFor="rings-amount">{t('ringsAmount')}</Label>
-                              <Input
-                                id="rings-amount"
-                                type="number"
-                                value={form.watch('ringsAmount') || ''}
-                                onChange={e => form.setValue('ringsAmount', e.target.value)}
-                              />
-                            </div>
-                            <div className="flex flex-col space-y-2">
-                              <Label htmlFor="hooks-nr">{t('hooksNr')}</Label>
-                              <Input
-                                id="hooks-nr"
-                                value={form.watch('hooksNr') || ''}
-                                onChange={e => form.setValue('hooksNr', e.target.value)}
-                              />
-                            </div>
-                            <div className="flex flex-col space-y-2">
-                              <Label htmlFor="hooks-amount">{t('hooksAmount')}</Label>
-                              <Input
-                                id="hooks-amount"
-                                type="number"
-                                value={form.watch('hooksAmount') || ''}
-                                onChange={e => form.setValue('hooksAmount', e.target.value)}
-                              />
-                            </div>
-                          </div>
-                        )}
-
-                      </div>
-
-                      {/* Special Features*/}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-base font-medium mb-2">{t('specialDetails')}</Label>
-                        <div className="space-y-2">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="special-medial-velcro"
-                              checked={form.watch('specialMedialVelcro') || false}
-                              onCheckedChange={checked =>
-                                form.setValue('specialMedialVelcro', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="special-medial-velcro"
-                              className="font-normal cursor-pointer text-sm"
-                            >
-                              {t('medialVelcroTongue')}
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="special-lace-loop"
-                              checked={form.watch('specialLaceLoop') || false}
-                              onCheckedChange={checked =>
-                                form.setValue('specialLaceLoop', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="special-lace-loop"
-                              className="font-normal cursor-pointer text-sm"
-                            >
-                              {t('laceLoopOnTongue')}
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="special-extra-leather"
-                              checked={form.watch('specialExtraLeather') || false}
-                              onCheckedChange={checked =>
-                                form.setValue('specialExtraLeather', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="special-extra-leather"
-                              className="font-normal cursor-pointer text-sm"
-                            >
-                              {t('extraLeatherForSupplements')}
-                            </Label>
-                          </div>
-                        </div>
-                        <div className="space-y-2 pt-1 w-2/3">
-                          <Label htmlFor="special-other">{t('other')}</Label>
-                          <Textarea
-                            id="special-other"
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('specialOther') || ''}
-                            onChange={e =>
-                              form.setValue('specialOther', e.target.value)
+                  {/* Zipper */}
+                  <FormItemWrapper label={t('zipper')}>
+                    <Select
+                      value={zipperType || 'none'}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          'zipperType',
+                          v as 'none' | 'functionalNylon' | 'decorativeNylon'
+                        )
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('zipper')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('noZipper')}</SelectItem>
+                        <SelectItem value="functionalNylon">
+                          {t('functionalNylon')}
+                        </SelectItem>
+                        <SelectItem value="decorativeNylon">
+                          {t('decorativeNylon')}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {zipperType && zipperType !== 'none' && (
+                      <div className="grid grid-cols-2 gap-3 pt-4">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="zipper-medial"
+                            checked={form.watch('zipperMedial') || false}
+                            onCheckedChange={(checked) =>
+                              form.setValue('zipperMedial', !!checked)
                             }
-                            rows={1}
+                          />
+                          <Label htmlFor="zipper-medial" className="font-normal cursor-pointer">
+                            {t('medial')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="zipper-lateral"
+                            checked={form.watch('zipperLateral') || false}
+                            onCheckedChange={(checked) =>
+                              form.setValue('zipperLateral', !!checked)
+                            }
+                          />
+                          <Label htmlFor="zipper-lateral" className="font-normal cursor-pointer">
+                            {t('lateral')}
+                          </Label>
+                        </div>
+                      </div>
+                    )}
+                  </FormItemWrapper>
+
+                  {/* Padding Collar */}
+                  <FormItemWrapper label={t('paddingCollar')}>
+                    <Select
+                      value={form.watch('paddingCollarMm') || ''}
+                      onValueChange={(v) =>
+                        form.setValue('paddingCollarMm', v as 'no' | '5' | '10')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('paddingCollar')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="no">{t('no')}</SelectItem>
+                        <SelectItem value="5">{t('mm5')}</SelectItem>
+                        <SelectItem value="10">{t('mm10')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Closure & Special Features */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  alignItems="stretch"
+                >
+                  {/* Closure */}
+                  <FormItemWrapper label={t('closure')}
+                    className="h-full justify-center"
+                  >
+                    <Select
+                      value={closureType || 'velcro'}
+                      onValueChange={(v) =>
+                        form.setValue('closureType', v as 'velcro' | 'ringsHooks')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('closure')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="velcro">
+                          {t('velcroWithExtraLongRolPassant')}
+                        </SelectItem>
+                        <SelectItem value="ringsHooks">{t('ringsAndHooks')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    {/* If closureType is 'ringsHooks' */}
+                    {closureType === 'ringsHooks' && (
+                      <div className="grid grid-cols-2 gap-3 pt-2 w-full">
+                        <div className="flex flex-col space-y-2">
+                          <Label htmlFor="rings-nr">{t('ringsNr')}</Label>
+                          <Input
+                            id="rings-nr"
+                            value={form.watch('ringsNr') || ''}
+                            onChange={(e) => form.setValue('ringsNr', e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                          <Label htmlFor="rings-amount">{t('ringsAmount')}</Label>
+                          <Input
+                            id="rings-amount"
+                            type="number"
+                            value={form.watch('ringsAmount') || ''}
+                            onChange={(e) => form.setValue('ringsAmount', e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                          <Label htmlFor="hooks-nr">{t('hooksNr')}</Label>
+                          <Input
+                            id="hooks-nr"
+                            value={form.watch('hooksNr') || ''}
+                            onChange={(e) => form.setValue('hooksNr', e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                          <Label htmlFor="hooks-amount">{t('hooksAmount')}</Label>
+                          <Input
+                            id="hooks-amount"
+                            type="number"
+                            value={form.watch('hooksAmount') || ''}
+                            onChange={(e) => form.setValue('hooksAmount', e.target.value)}
                           />
                         </div>
                       </div>
-                    </div>
-                    {/* </div> */}
+                    )}
+                  </FormItemWrapper>
 
-                    {/* Edge Type */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
-
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label htmlFor="edge-type" className="text-sm font-medium">{t('edgeTypeLabel')}</Label>
-                        <Input
-                          id="edge-type"
-                          value={form.watch('edgeType') || ''}
-                          onChange={e =>
-                            form.setValue('edgeType', e.target.value)
+                  {/* Special Features */}
+                  <FormItemWrapper label={t('specialDetails')}>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="special-medial-velcro"
+                          checked={form.watch('specialMedialVelcro') || false}
+                          onCheckedChange={(checked) =>
+                            form.setValue('specialMedialVelcro', !!checked)
                           }
-                          placeholder="CSO Rand / 12x11"
-                          className='w-2/3'
                         />
+                        <Label
+                          htmlFor="special-medial-velcro"
+                          className="font-normal cursor-pointer text-sm"
+                        >
+                          {t('medialVelcroTongue')}
+                        </Label>
                       </div>
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label htmlFor="edge-color" className="text-sm font-medium">{t('edgeColor')}</Label>
-                        <Input
-                          id="edge-color"
-                          value={form.watch('edgeColor') || ''}
-                          onChange={e =>
-                            form.setValue('edgeColor', e.target.value)
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="special-lace-loop"
+                          checked={form.watch('specialLaceLoop') || false}
+                          onCheckedChange={(checked) =>
+                            form.setValue('specialLaceLoop', !!checked)
                           }
+                        />
+                        <Label
+                          htmlFor="special-lace-loop"
+                          className="font-normal cursor-pointer text-sm"
+                        >
+                          {t('laceLoopOnTongue')}
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="special-extra-leather"
+                          checked={form.watch('specialExtraLeather') || false}
+                          onCheckedChange={(checked) =>
+                            form.setValue('specialExtraLeather', !!checked)
+                          }
+                        />
+                        <Label
+                          htmlFor="special-extra-leather"
+                          className="font-normal cursor-pointer text-sm"
+                        >
+                          {t('extraLeatherForSupplements')}
+                        </Label>
+                      </div>
+                    </div>
+                    <div className="space-y-2 pt-1 w-2/3">
+                      <Label htmlFor="special-other">{t('other')}</Label>
+                      <Textarea
+                        id="special-other"
+                        placeholder={t('otherPlaceholder')}
+                        value={form.watch('specialOther') || ''}
+                        onChange={(e) => form.setValue('specialOther', e.target.value)}
+                        rows={1}
+                      />
+                    </div>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Edge Type */}
+                <FormBlock
+                  columns={2}
+                  dividers={false}
+                  title={t('edgeType')}
+                >
+                  <FormItemWrapper label={t('edgeTypeLabel')}>
+                    <Input
+                      id="edge-type"
+                      value={form.watch('edgeType') || ''}
+                      onChange={(e) => form.setValue('edgeType', e.target.value)}
+                      placeholder="CSO Rand / 12x11"
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                  <FormItemWrapper label={t('edgeColor')}>
+                    <Input
+                      id="edge-color"
+                      value={form.watch('edgeColor') || ''}
+                      onChange={(e) => form.setValue('edgeColor', e.target.value)}
+                      placeholder="Zwart"
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Sole Type */}
+                <FormBlock
+                  columns={3}
+                  dividers={false}
+                  title={t('soleType')}
+                >
+                  <FormItemWrapper label={t('soleType')}>
+                    <Select
+                      value={soleType || 'gumlite'}
+                      onValueChange={(v) =>
+                        form.setValue('soleType', v as 'gumlite' | 'leather' | 'antiSlip')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('soleType')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="gumlite">{t('gumlite')}</SelectItem>
+                        <SelectItem value="leatherAntiSlip">
+                          {t('leatherAntiSlip')}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
+                  {soleType === 'gumlite' && (
+                    <>
+                      <FormItemWrapper label={t('gumliteNumber')}>
+                        <Input
+                          id="gumlite-number"
+                          value={form.watch('gumliteNumber') || ''}
+                          onChange={(e) => form.setValue('gumliteNumber', e.target.value)}
+                          placeholder="2644"
+                          className="w-2/3"
+                        />
+                      </FormItemWrapper>
+                      <FormItemWrapper label={t('color')}>
+                        <Input
+                          id="gumlite-color"
+                          value={form.watch('gumliteColor') || ''}
+                          onChange={(e) => form.setValue('gumliteColor', e.target.value)}
                           placeholder="Zwart"
-                          className='w-2/3'
+                          className="w-2/3"
+                        />
+                      </FormItemWrapper>
+                    </>
+                  )}
+                  {/* If not gumlite, these columns are empty, or you can add spacers if needed */}
+                </FormBlock>
+
+                {/* Carbon Stiffening & Toe Options */}
+                <FormBlock columns={2} dividers>
+                  <FormItemWrapper label={t('carbonStiffening')}>
+                    <Select
+                      value={carbonStiffeningType || 'none'}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          'carbonStiffeningType',
+                          v as 'none' | 'prefab' | 'custom'
+                        )
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('carbonStiffening')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('none')}</SelectItem>
+                        <SelectItem value="prefab">{t('prefab')}</SelectItem>
+                        <SelectItem value="custom">{t('custom')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {carbonStiffeningType && carbonStiffeningType !== 'none' && (
+                      <div className="grid grid-cols-2 gap-3 pt-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="carbon-left"
+                            checked={form.watch('carbonStiffeningLeft') || false}
+                            onCheckedChange={(checked) =>
+                              form.setValue('carbonStiffeningLeft', !!checked)
+                            }
+                          />
+                          <Label htmlFor="carbon-left" className="font-normal cursor-pointer">
+                            {t('left')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="carbon-right"
+                            checked={form.watch('carbonStiffeningRight') || false}
+                            onCheckedChange={(checked) =>
+                              form.setValue('carbonStiffeningRight', !!checked)
+                            }
+                          />
+                          <Label htmlFor="carbon-right" className="font-normal cursor-pointer">
+                            {t('right')}
+                          </Label>
+                        </div>
+                      </div>
+                    )}
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('toeOptions')}>
+                    <Select
+                      value={form.watch('toeOptionsType') || 'none'}
+                      onValueChange={(v) =>
+                        form.setValue('toeOptionsType', v as 'none' | 'carbon' | 'rubberCrawl')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('toeOptions')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('none')}</SelectItem>
+                        <SelectItem value="carbon">{t('carbonToes')}</SelectItem>
+                        <SelectItem value="rubberCrawl">{t('rubberCrawlToes')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Counterfort & Insole */}
+                <FormBlock columns={2} dividers>
+                  <FormItemWrapper label={t('counterfort')}>
+                    <Select
+                      value={counterfortType || 'formo'}
+                      onValueChange={(v) =>
+                        form.setValue('counterfortType', v as 'formo' | 'other')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('counterfort')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="formo">{t('formo')}</SelectItem>
+                        <SelectItem value="leather">{t('leather')}</SelectItem>
+                        <SelectItem value="other">{t('other')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {counterfortType === 'other' && (
+                      <Textarea
+                        placeholder={t('otherPlaceholder')}
+                        value={form.watch('counterfortOther') || ''}
+                        onChange={(e) => form.setValue('counterfortOther', e.target.value)}
+                        rows={2}
+                        className="mt-2 w-2/3"
+                      />
+                    )}
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('insole')}>
+                    <Select
+                      value={insoleType || 'leather'}
+                      onValueChange={(v) =>
+                        form.setValue('insoleType', v as 'leather' | 'other')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('insole')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="leather">{t('leather')}</SelectItem>
+                        <SelectItem value="other">{t('other')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {insoleType === 'other' && (
+                      <Textarea
+                        placeholder={t('otherPlaceholder')}
+                        value={form.watch('insoleOther') || ''}
+                        onChange={(e) => form.setValue('insoleOther', e.target.value)}
+                        rows={2}
+                        className="mt-2 w-2/3"
+                      />
+                    )}
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Sole Edge Polish & Construction Method */}
+                <FormBlock columns={2} dividers>
+                  <FormItemWrapper label={t('soleEdgePolish')}>
+                    <Select
+                      value={soleEdgePolishType || 'none'}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          'soleEdgePolishType',
+                          v as
+                          | 'none'
+                          | 'black'
+                          | 'brown'
+                          | 'mahogany'
+                          | 'ridges'
+                          | 'other'
+                        )
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('soleEdgePolish')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('none')}</SelectItem>
+                        <SelectItem value="black">{t('black')}</SelectItem>
+                        <SelectItem value="brown">{t('brown')}</SelectItem>
+                        <SelectItem value="mahogany">{t('mahogany')}</SelectItem>
+                        <SelectItem value="ridges">{t('soleEdgeRidgesMilling')}</SelectItem>
+                        <SelectItem value="other">{t('other')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {soleEdgePolishType === 'other' && (
+                      <Textarea
+                        placeholder={t('otherPlaceholder')}
+                        value={form.watch('soleEdgePolishOther') || ''}
+                        onChange={(e) => form.setValue('soleEdgePolishOther', e.target.value)}
+                        rows={2}
+                        className="mt-2 w-2/3"
+                      />
+                    )}
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('constructionMethod')}>
+                    <Select
+                      value={constructionMethodType || 'glued'}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          'constructionMethodType',
+                          v as 'glued' | 'flexible' | 'other'
+                        )
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('constructionMethod')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="glued">{t('glued')}</SelectItem>
+                        <SelectItem value="flexible">{t('flexible')}</SelectItem>
+                        <SelectItem value="other">{t('other')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {constructionMethodType === 'other' && (
+                      <Textarea
+                        placeholder={t('otherPlaceholder')}
+                        value={form.watch('constructionMethodOther') || ''}
+                        onChange={(e) =>
+                          form.setValue('constructionMethodOther', e.target.value)
+                        }
+                        rows={2}
+                        className="mt-2 w-2/3"
+                      />
+                    )}
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Heel Model, Height & Rounding */}
+                <FormBlock columns={3} dividers={true}>
+                  {/* Heel Model */}
+                  <FormItemWrapper label={t('heelModel')}>
+                    <Select
+                      value={heelModelType || 'buildUp'}
+                      onValueChange={(v) => {
+                        form.setValue('heelModelType', v as 'buildUp' | 'wedge' | 'block');
+                        // Set default heights based on heel type
+                        const edgeTypeValue = form.watch('edgeType');
+                        let defaultHeight = '2';
+
+                        if (v === 'buildUp') {
+                          defaultHeight = '2';
+                        } else if (v === 'wedge') {
+                          defaultHeight =
+                            edgeTypeValue === 'CSO' || edgeTypeValue?.includes('CSO')
+                              ? '1.5'
+                              : '2';
+                        } else if (v === 'block') {
+                          defaultHeight = '2.5';
+                        }
+
+                        if (!form.watch('hakhoogteLinks')) {
+                          form.setValue('hakhoogteLinks', defaultHeight);
+                        }
+                        if (!form.watch('hakhoogteRechts')) {
+                          form.setValue('hakhoogteRechts', defaultHeight);
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('heelModel')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="buildUp">{t('buildUpHeel')}</SelectItem>
+                        <SelectItem value="wedge">{t('wedgeHeel')}</SelectItem>
+                        <SelectItem value="block">{t('blockHeel')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    {heelModelType === 'buildUp' && (
+                      <div className="mt-2 w-full flex justify-center">
+                        <RadioGroup
+                          value={form.watch('heelBuildUpMaterial') || 'poro'}
+                          onValueChange={(v) =>
+                            form.setValue('heelBuildUpMaterial', v as 'poro' | 'leather')
+                          }
+                        >
+                          <div className="flex gap-6">
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="poro" id="heel-poro" />
+                              <Label
+                                htmlFor="heel-poro"
+                                className="font-normal cursor-pointer"
+                              >
+                                {t('poro')}
+                              </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="leather" id="heel-leather" />
+                              <Label
+                                htmlFor="heel-leather"
+                                className="font-normal cursor-pointer"
+                              >
+                                {t('leather')}
+                              </Label>
+                            </div>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    )}
+
+                    {heelModelType === 'wedge' && (
+                      <div className="mt-2 w-full flex justify-center">
+                        <RadioGroup
+                          value={form.watch('heelWedgeType') || 'flat'}
+                          onValueChange={(v) =>
+                            form.setValue('heelWedgeType', v as 'hollow' | 'flat')
+                          }
+                        >
+                          <div className="flex gap-6">
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="hollow" id="wedge-hollow" />
+                              <Label
+                                htmlFor="wedge-hollow"
+                                className="font-normal cursor-pointer"
+                              >
+                                {t('hollow')}
+                              </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="flat" id="wedge-flat" />
+                              <Label htmlFor="wedge-flat" className="font-normal cursor-pointer">
+                                {t('flat')}
+                              </Label>
+                            </div>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    )}
+
+                    {heelModelType === 'block' && (
+                      <div className="mt-2 w-full flex justify-center">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="heel-core-coating"
+                            checked={form.watch('heelBlockCoreCoating') || false}
+                            onCheckedChange={(checked) =>
+                              form.setValue('heelBlockCoreCoating', !!checked)
+                            }
+                          />
+                          <Label
+                            htmlFor="heel-core-coating"
+                            className="font-normal cursor-pointer"
+                          >
+                            {t('coreCoating')}
+                          </Label>
+                        </div>
+                      </div>
+                    )}
+                  </FormItemWrapper>
+
+                  {/* Heel Heights - Grouped in one FormBlock for title */}
+                  <FormItemWrapper>
+                    <FormBlock
+                      columns={2}
+                      dividers={true}
+                      title={t('heelHeight')}
+                      hoverEffect={false}
+                      className='border-0 bg-transparent'
+                    >
+                      <FormItemWrapper
+                        label={`${t('heelHeightLeft')} (cm)`}
+                      >
+                        <Input
+                          id="heel-height-left"
+                          type="number"
+                          step="0.1"
+                          value={form.watch('hakhoogteLinks') || ''}
+                          onChange={(e) => form.setValue('hakhoogteLinks', e.target.value)}
+                          className="w-2/3"
+                        />
+                      </FormItemWrapper>
+
+                      <FormItemWrapper label={`${t('heelHeightRight')} (cm)`}>
+                        <Input
+                          id="heel-height-right"
+                          type="number"
+                          step="0.1"
+                          value={form.watch('hakhoogteRechts') || ''}
+                          onChange={(e) => form.setValue('hakhoogteRechts', e.target.value)}
+                          className="w-2/3"
+                        />
+                      </FormItemWrapper>
+                    </FormBlock>
+                  </FormItemWrapper>
+
+                  {/* Heel Rounding */}
+                  <FormItemWrapper label={t('heelRounding')}>
+                    <div className="flex items-center gap-8 pt-2">
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="heel-rounding-left" className="font-normal cursor-pointer">
+                          {t('left')}
+                        </Label>
+                        <Switch
+                          id="heel-rounding-left"
+                          checked={form.watch('hakafrondingLinksEnabled') || false}
+                          onCheckedChange={checked =>
+                            form.setValue('hakafrondingLinksEnabled', !!checked)
+                          }
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="heel-rounding-right" className="font-normal cursor-pointer">
+                          {t('right')}
+                        </Label>
+                        <Switch
+                          id="heel-rounding-right"
+                          checked={form.watch('hakafrondingRechtsEnabled') || false}
+                          onCheckedChange={checked =>
+                            form.setValue('hakafrondingRechtsEnabled', !!checked)
+                          }
                         />
                       </div>
                     </div>
+                  </FormItemWrapper>
+                </FormBlock>
 
-                    {/* Sole Type */}
-                    <div className="grid grid-cols-1 lg:grid-cols-5 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-y-0 lg:divide-x-2 bg-secondary/2 shadow-sm">
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('soleType')}</Label>
-                        <Select
-                          value={soleType || 'gumlite'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'soleType',
-                              v as 'gumlite' | 'leather' | 'antiSlip',
-                            )
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('soleType')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="gumlite">{t('gumlite')}</SelectItem>
-                            <SelectItem value="leatherAntiSlip">{t('leatherAntiSlip')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {soleType === 'gumlite' && (
-                        <>
-                          <div className="flex flex-col lg:col-span-2 space-y-1 px-3 items-center">
-                            <Label htmlFor="gumlite-number" className="text-sm font-medium">{t('gumliteNumber')}</Label>
-                            <Input
-                              id="gumlite-number"
-                              value={form.watch('gumliteNumber') || ''}
-                              onChange={e =>
-                                form.setValue('gumliteNumber', e.target.value)
-                              }
-                              placeholder="2644"
-                            />
-                          </div>
-                          <div className="flex flex-col lg:col-span-2 space-y-1 px-3 items-center">
-                            <Label htmlFor="gumlite-color" className="text-sm font-medium">{t('color')}</Label>
-                            <Input
-                              id="gumlite-color"
-                              value={form.watch('gumliteColor') || ''}
-                              onChange={e =>
-                                form.setValue('gumliteColor', e.target.value)
-                              }
-                              placeholder="Zwart"
-                            />
-                          </div>
-                        </>
+                {/* Shoring */}
+                <FormBlock columns={2} dividers>
+                  <FormItemWrapper label={t('shoringLeft')}>
+                    <Select
+                      value={form.watch('shoringLeftType') || 'none'}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          'shoringLeftType',
+                          v as 'lateral' | 'medial' | 'lateralAndMedial' | 'none'
+                        )
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('shoringType')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('none')}</SelectItem>
+                        <SelectItem value="lateral">{t('lateral')}</SelectItem>
+                        <SelectItem value="medial">{t('medial')}</SelectItem>
+                        <SelectItem value="lateralAndMedial">
+                          {t('lateralAndMedial')}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {form.watch('shoringLeftType') &&
+                      form.watch('shoringLeftType') !== 'none' && (
+                        <div className="space-y-1 pt-2 w-2/3">
+                          <Label htmlFor="shoring-left-mm" className="text-sm">
+                            {t('shoringMm')}
+                          </Label>
+                          <Input
+                            id="shoring-left-mm"
+                            type="number"
+                            value={form.watch('shoringLeftMm') || ''}
+                            onChange={(e) => form.setValue('shoringLeftMm', e.target.value)}
+                          />
+                        </div>
                       )}
-                    </div>
+                  </FormItemWrapper>
 
-                    {/* Carbon Stiffening & Toe Options */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
-                      {/* Carbon Stiffening */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('carbonStiffening')}</Label>
-                        <Select
-                          value={carbonStiffeningType || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'carbonStiffeningType',
-                              v as 'none' | 'prefab' | 'custom',
-                            )
-                          }
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('carbonStiffening')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="prefab">{t('prefab')}</SelectItem>
-                            <SelectItem value="custom">{t('custom')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {carbonStiffeningType && carbonStiffeningType !== 'none' && (
-                          <div className="grid grid-cols-2 gap-3 pt-2">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="carbon-left"
-                                checked={
-                                  form.watch('carbonStiffeningLeft') || false
-                                }
-                                onCheckedChange={checked =>
-                                  form.setValue('carbonStiffeningLeft', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="carbon-left"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('left')}
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="carbon-right"
-                                checked={
-                                  form.watch('carbonStiffeningRight') || false
-                                }
-                                onCheckedChange={checked =>
-                                  form.setValue('carbonStiffeningRight', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="carbon-right"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('right')}
-                              </Label>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Toe Options */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('toeOptions')}</Label>
-                        <Select
-                          value={form.watch('toeOptionsType') || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'toeOptionsType',
-                              v as 'none' | 'carbon' | 'rubberCrawl',
-                            )
-                          }
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('toeOptions')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="carbon">{t('carbonToes')}</SelectItem>
-                            <SelectItem value="rubberCrawl">
-                              {t('rubberCrawlToes')}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    {/* Counterfort & Insole */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
-                      {/* Counterfort */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('counterfort')}</Label>
-                        <Select
-                          value={counterfortType || 'formo'}
-                          onValueChange={v =>
-                            form.setValue('counterfortType', v as 'formo' | 'other')
-                          }
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('counterfort')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="formo">{t('formo')}</SelectItem>
-                            <SelectItem value="leather">{t('leather')}</SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {counterfortType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('counterfortOther') || ''}
-                            onChange={e =>
-                              form.setValue('counterfortOther', e.target.value)
-                            }
-                            rows={2}
-                            className="mt-2 w-2/3"
+                  <FormItemWrapper label={t('shoringRight')}>
+                    <Select
+                      value={form.watch('shoringRightType') || 'none'}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          'shoringRightType',
+                          v as 'lateral' | 'medial' | 'lateralAndMedial' | 'none'
+                        )
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('shoringType')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('none')}</SelectItem>
+                        <SelectItem value="lateral">{t('lateral')}</SelectItem>
+                        <SelectItem value="medial">{t('medial')}</SelectItem>
+                        <SelectItem value="lateralAndMedial">
+                          {t('lateralAndMedial')}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {form.watch('shoringRightType') &&
+                      form.watch('shoringRightType') !== 'none' && (
+                        <div className="space-y-1 pt-2 w-2/3">
+                          <Label htmlFor="shoring-right-mm" className="text-sm">
+                            {t('shoringMm')}
+                          </Label>
+                          <Input
+                            id="shoring-right-mm"
+                            type="number"
+                            value={form.watch('shoringRightMm') || ''}
+                            onChange={(e) => form.setValue('shoringRightMm', e.target.value)}
                           />
-                        )}
-                      </div>
-
-                      {/* Insole */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('insole')}</Label>
-                        <Select
-                          value={insoleType || 'leather'}
-                          onValueChange={v =>
-                            form.setValue('insoleType', v as 'leather' | 'other')
-                          }
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('insole')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="leather">{t('leather')}</SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {insoleType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('insoleOther') || ''}
-                            onChange={e =>
-                              form.setValue('insoleOther', e.target.value)
-                            }
-                            rows={2}
-                            className="mt-2 w-2/3"
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Sole Edge Polish & Construction Method */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
-                      {/* Sole Edge Polish */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('soleEdgePolish')}</Label>
-                        <Select
-                          value={soleEdgePolishType || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'soleEdgePolishType',
-                              v as
-                              | 'none'
-                              | 'black'
-                              | 'brown'
-                              | 'mahogany'
-                              | 'ridges'
-                              | 'other',
-                            )
-                          }
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('soleEdgePolish')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="black">{t('black')}</SelectItem>
-                            <SelectItem value="brown">{t('brown')}</SelectItem>
-                            <SelectItem value="mahogany">{t('mahogany')}</SelectItem>
-                            <SelectItem value="ridges">
-                              {t('soleEdgeRidgesMilling')}
-                            </SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {soleEdgePolishType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('soleEdgePolishOther') || ''}
-                            onChange={e =>
-                              form.setValue('soleEdgePolishOther', e.target.value)
-                            }
-                            rows={2}
-                            className="mt-2 w-2/3"
-                          />
-                        )}
-                      </div>
-
-                      {/* Construction Method */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('constructionMethod')}</Label>
-                        <Select
-                          value={constructionMethodType || 'glued'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'constructionMethodType',
-                              v as 'glued' | 'flexible' | 'other',
-                            )
-                          }
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('constructionMethod')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="glued">{t('glued')}</SelectItem>
-                            <SelectItem value="flexible">{t('flexible')}</SelectItem>
-                            <SelectItem value="other">{t('other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {constructionMethodType === 'other' && (
-                          <Textarea
-                            placeholder={t('otherPlaceholder')}
-                            value={form.watch('constructionMethodOther') || ''}
-                            onChange={e =>
-                              form.setValue(
-                                'constructionMethodOther',
-                                e.target.value,
-                              )
-                            }
-                            rows={2}
-                            className="mt-2 w-2/3"
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Heel Model, Heel Height & Heel Rounding */}
-                    <div className="grid grid-cols-1 lg:grid-cols-4 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 shadow-sm">
-
-                      {/* Heel Model */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('heelModel')}</Label>
-                        <Select
-                          value={heelModelType || 'buildUp'}
-                          onValueChange={v => {
-                            form.setValue(
-                              'heelModelType',
-                              v as 'buildUp' | 'wedge' | 'block',
-                            );
-                            // Set default heights based on heel type
-                            const edgeTypeValue = form.watch('edgeType');
-                            let defaultHeight = '2';
-
-                            if (v === 'buildUp') {
-                              defaultHeight = '2';
-                            } else if (v === 'wedge') {
-                              // For Sleehak (wedge): 1.5cm if CSO, otherwise 2cm
-                              defaultHeight = edgeTypeValue === 'CSO' || edgeTypeValue?.includes('CSO') ? '1.5' : '2';
-                            } else if (v === 'block') {
-                              defaultHeight = '2.5';
-                            }
-
-                            if (!form.watch('hakhoogteLinks')) {
-                              form.setValue('hakhoogteLinks', defaultHeight);
-                            }
-                            if (!form.watch('hakhoogteRechts')) {
-                              form.setValue('hakhoogteRechts', defaultHeight);
-                            }
-                          }}
-                        >
-                          <SelectTrigger className='bg-background! w-2/3'>
-                            <SelectValue placeholder={t('heelModel')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="buildUp">{t('buildUpHeel')}</SelectItem>
-                            <SelectItem value="wedge">{t('wedgeHeel')}</SelectItem>
-                            <SelectItem value="block">{t('blockHeel')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-
-                        {heelModelType === 'buildUp' && (
-                          <div className="mt-2 w-full flex justify-center">
-                            <RadioGroup
-                              value={form.watch('heelBuildUpMaterial') || 'poro'}
-                              onValueChange={v =>
-                                form.setValue(
-                                  'heelBuildUpMaterial',
-                                  v as 'poro' | 'leather',
-                                )
-                              }
-                            >
-                              <div className="flex gap-6">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="poro" id="heel-poro" />
-                                  <Label
-                                    htmlFor="heel-poro"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('poro')}
-                                  </Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="leather" id="heel-leather" />
-                                  <Label
-                                    htmlFor="heel-leather"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('leather')}
-                                  </Label>
-                                </div>
-                              </div>
-                            </RadioGroup>
-                          </div>
-                        )}
-
-                        {heelModelType === 'wedge' && (
-                          <div className="mt-2 w-full flex justify-center">
-                            <RadioGroup
-                              value={form.watch('heelWedgeType') || 'flat'}
-                              onValueChange={v =>
-                                form.setValue('heelWedgeType', v as 'hollow' | 'flat')
-                              }
-                            >
-                              <div className="flex gap-6">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="hollow" id="wedge-hollow" />
-                                  <Label
-                                    htmlFor="wedge-hollow"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('hollow')}
-                                  </Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="flat" id="wedge-flat" />
-                                  <Label
-                                    htmlFor="wedge-flat"
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t('flat')}
-                                  </Label>
-                                </div>
-                              </div>
-                            </RadioGroup>
-                          </div>
-                        )}
-
-                        {heelModelType === 'block' && (
-                          <div className="mt-2 w-full flex justify-center">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id="heel-core-coating"
-                                checked={form.watch('heelBlockCoreCoating') || false}
-                                onCheckedChange={checked =>
-                                  form.setValue('heelBlockCoreCoating', !!checked)
-                                }
-                              />
-                              <Label
-                                htmlFor="heel-core-coating"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('coreCoating')}
-                              </Label>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Heel Height */}
-                      <div className="flex flex-col col-span-2 space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('heelHeight')}</Label>
-                        <div className="grid grid-cols-2 gap-3 text-center">
-                          <div className="flex flex-col space-y-1">
-                            <Label htmlFor="heel-height-left" className="text-sm">
-                              {t('heelHeightLeft')} (cm)
-                            </Label>
-                            <Input
-                              id="heel-height-left"
-                              type="number"
-                              step="0.1"
-                              value={form.watch('hakhoogteLinks') || ''}
-                              onChange={e =>
-                                form.setValue('hakhoogteLinks', e.target.value)
-                              }
-                            />
-                          </div>
-                          <div className="flex flex-col space-y-1">
-                            <Label htmlFor="heel-height-right" className="text-sm">
-                              {t('heelHeightRight')} (cm)
-                            </Label>
-                            <Input
-                              id="heel-height-right"
-                              type="number"
-                              step="0.1"
-                              value={form.watch('hakhoogteRechts') || ''}
-                              onChange={e =>
-                                form.setValue('hakhoogteRechts', e.target.value)
-                              }
-                            />
-                          </div>
                         </div>
-                      </div>
+                      )}
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>;
 
-                      {/* Heel Rounding */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('heelRounding')}</Label>
-                        <div className="grid grid-cols-2 gap-3 pt-2">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="heel-rounding-left"
-                              checked={
-                                form.watch('hakafrondingLinksEnabled') || false
-                              }
-                              onCheckedChange={checked =>
-                                form.setValue('hakafrondingLinksEnabled', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="heel-rounding-left"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('left')}
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="heel-rounding-right"
-                              checked={
-                                form.watch('hakafrondingRechtsEnabled') || false
-                              }
-                              onCheckedChange={checked =>
-                                form.setValue('hakafrondingRechtsEnabled', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="heel-rounding-right"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('right')}
-                            </Label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Shoring */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0 bg-secondary/2 hover:border-primary!">
-                      {/* Shoring Left */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('shoringLeft')}</Label>
-                        <Select
-                          value={form.watch('shoringLeftType') || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'shoringLeftType',
-                              v as 'lateral' | 'medial' | 'lateralAndMedial' | 'none',
-                            )
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('shoringType')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="lateral">{t('lateral')}</SelectItem>
-                            <SelectItem value="medial">{t('medial')}</SelectItem>
-                            <SelectItem value="lateralAndMedial">{t('lateralAndMedial')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {form.watch('shoringLeftType') &&
-                          form.watch('shoringLeftType') !== 'none' && (
-                            <div className="space-y-1 pt-2">
-                              <Label htmlFor="shoring-left-mm" className="text-sm">
-                                {t('shoringMm')}
-                              </Label>
-                              <Input
-                                id="shoring-left-mm"
-                                type="number"
-                                value={form.watch('shoringLeftMm') || ''}
-                                onChange={e =>
-                                  form.setValue('shoringLeftMm', e.target.value)
-                                }
-                              />
-                            </div>
-                          )}
-                      </div>
-
-                      {/* Shoring Right */}
-                      <div className="flex flex-col space-y-1 px-3 items-center">
-                        <Label className="text-sm font-medium">{t('shoringRight')}</Label>
-                        <Select
-                          value={form.watch('shoringRightType') || 'none'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'shoringRightType',
-                              v as 'lateral' | 'medial' | 'lateralAndMedial' | 'none',
-                            )
-                          }
-                        >
-                          <SelectTrigger className="bg-background! w-2/3">
-                            <SelectValue placeholder={t('shoringType')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">{t('none')}</SelectItem>
-                            <SelectItem value="lateral">{t('lateral')}</SelectItem>
-                            <SelectItem value="medial">{t('medial')}</SelectItem>
-                            <SelectItem value="lateralAndMedial">{t('lateralAndMedial')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {form.watch('shoringRightType') &&
-                          form.watch('shoringRightType') !== 'none' && (
-                            <div className="space-y-1 pt-2">
-                              <Label htmlFor="shoring-right-mm" className="text-sm">
-                                {t('shoringMm')}
-                              </Label>
-                              <Input
-                                id="shoring-right-mm"
-                                type="number"
-                                value={form.watch('shoringRightMm') || ''}
-                                onChange={e =>
-                                  form.setValue('shoringRightMm', e.target.value)
-                                }
-                              />
-                            </div>
-                          )}
-                      </div>
-
-                    </div>
-                    {/* </div> */}
-
-                  </CardContent>
-                )}
-              </Card>
 
               {/* Submit Section */}
               <FormFooter>
