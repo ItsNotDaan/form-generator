@@ -1574,7 +1574,7 @@ const FormCheckFoliepasPage = () => {
                       )}
                   </FormItemWrapper>
                 </FormBlock>
-              </FormCard>;
+              </FormCard>
 
 
               {/* Submit Section */}

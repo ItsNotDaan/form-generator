@@ -176,7 +176,7 @@
   "selectType": "Selecteer type",
   "shoeSize": "Schoenmaat klant",
   "shoeSizePlaceholder": "Bijv. 42",
-  "providedSize": "Afgegeven maat",
+  "providedShoeSize": "Afgegeven maat",
   "rebacareDescription": "Vul de gegevens in voor de Rebacare intake.",
   "_comment_osb": "=== OSB FORMULIER ===",
   "description": "Omschrijving",
