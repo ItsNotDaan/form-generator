@@ -20,7 +20,7 @@ import {
   setClientData,
 } from '@/domain/store/slices/formData';
 import { Zijde, PAARTYPE_OPTIES } from '@/lib/constants/formConstants';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Info } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -29,10 +29,13 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { scrollToFirstError } from '@/utils/formHelpers';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
+import { FormBlock, FormCard, FormItemWrapper } from '@/components/ui/form-block';
+import { Switch } from '@/components/ui/switch';
 
 const FormIntakeRebacarePage = () => {
   const router = useRouter();
@@ -88,194 +91,154 @@ const FormIntakeRebacarePage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('whichPair')}</CardTitle>
-                  <CardDescription>
-                    Select which pair this intake is for
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="welkPaar"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {PAARTYPE_OPTIES.map(option => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={option.value}
-                                    id={`paar-${option.value}`}
-                                  />
-                                  <Label
-                                    htmlFor={`paar-${option.value}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(
-                                      option.value
-                                        .toLowerCase()
-                                        .replace(/ /g, ''),
-                                    )}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('side')}</CardTitle>
-                  <CardDescription>
-                    Select which side (left, right, or both)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="side"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <div className="flex gap-6">
-                              {['both', 'left', 'right'].map(s => (
-                                <div
-                                  key={s}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem value={s} id={`side-${s}`} />
-                                  <Label
-                                    htmlFor={`side-${s}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(s)}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('medicalIndication')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="medischeIndicatie"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t('medicalIndicationPlaceholder')}
-                            rows={4}
-                            className="resize-none"
-                            {...field}
+              {/* Which Pair */}
+              <FormCard title={t('whichPair')}>
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
+                  <RadioGroup
+                    value={form.watch('welkPaar')}
+                    onValueChange={v => form.setValue('welkPaar', v)}
+                  >
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {PAARTYPE_OPTIES.map(option => (
+                        <div
+                          key={option.value}
+                          className="flex items-center space-x-2"
+                        >
+                          <RadioGroupItem
+                            value={option.value}
+                            id={`paar-${option.value}`}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('bandaged')}</CardTitle>
-                  <CardDescription>
-                    Is the affected area bandaged?
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="gezwachteld"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={v => field.onChange(v === 'yes')}
-                            value={field.value ? 'yes' : 'no'}
+                          <Label
+                            htmlFor={`paar-${option.value}`}
+                            className="font-normal cursor-pointer"
                           >
-                            <div className="flex gap-6">
-                              {['yes', 'no'].map(v => (
-                                <div
-                                  key={v}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <RadioGroupItem
-                                    value={v}
-                                    id={`bandaged-${v}`}
-                                  />
-                                  <Label
-                                    htmlFor={`bandaged-${v}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {t(v)}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
+                            {t(option.label)}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </RadioGroup>
+                </FormBlock>
+              </FormCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('specialNotes')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="bijzonderheden"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t('specialNotesPlaceholder')}
-                            rows={5}
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
+              {/* Side & Bandaged */}
+              <FormCard title={t('side') + ' & ' + t('bandaged')}>
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                >
+                  <FormItemWrapper>
+                    <Label>{t('side')}</Label>
+                    <FormField
+                      control={form.control}
+                      name="side"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <div className="flex gap-6">
+                                {['both', 'left', 'right'].map(s => (
+                                  <div
+                                    key={s}
+                                    className="flex items-center space-x-2"
+                                  >
+                                    <RadioGroupItem value={s} id={`side-${s}`} />
+                                    <Label
+                                      htmlFor={`side-${s}`}
+                                      className="font-normal cursor-pointer"
+                                    >
+                                      {t(s)}
+                                    </Label>
+                                  </div>
+                                ))}
+                              </div>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </FormItemWrapper>
+                  <FormItemWrapper>
+                    <FormLabel>{t('bandaged')}</FormLabel>
+                    <FormField
+                      control={form.control}
+                      name="gezwachteld"
+                      render={({ field }) => (
+                        <FormItem
+                          className='flex flex-col items-center'
+                        >
+                          <FormControl>
+                            <div className="flex flex-col-2 items-center justify-center space-x-2">
+                              <Switch
+                                id="gezwachteld-switch"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                              <Label htmlFor="gezwachteld-switch" className="font-normal cursor-pointer">
+                                {field.value ? t('yes') : t('no')}
+                              </Label>
+                            </div>
+                          </FormControl>
+                          {field.value && (
+                            <div className="flex flex-row items-center rounded-md p-3 gap-2 bg-primary/10 w-2/3">
+                              <Info className="h-20 w-20 mt-0.5 text-primary" />
+                              <p className="text-sm text-foreground">
+                                {t('bandagedInformationPulman')}
+                              </p>
+                            </div>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+
+              <FormCard title={t('medicalIndication')}>
+                <FormField
+                  control={form.control}
+                  name="medischeIndicatie"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder={t('medicalIndicationPlaceholder')}
+                          rows={4}
+                          className="resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </FormCard>
+
+              <FormCard title={t('specialNotes')}>
+                <FormField
+                  control={form.control}
+                  name="bijzonderheden"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder={t('specialNotesPlaceholder')}
+                          rows={5}
+                          className="resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </FormCard>
 
               <FormFooter>
                 <Button
