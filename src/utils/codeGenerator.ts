@@ -205,10 +205,16 @@ function generateOVACCodes(
     codes.codeVerkortingRechts = true;
   }
 
-  if ((ovac.verkortingLinks || ovac.verkortingRechts) && !ovac.voorvoetCm) {
+  if (
+    (ovac.verkortingLinks || ovac.verkortingRechts) &&
+    !((ovac.voorvoetCmLinks && ovac.voorvoetCmLinks.trim() !== '') || (ovac.voorvoetCmRechts && ovac.voorvoetCmRechts.trim() !== ''))
+  ) {
     warnings.push('Verkorting is aangezet maar voorvoet (cm) ontbreekt');
   }
-  if ((ovac.verkortingLinks || ovac.verkortingRechts) && !ovac.hielCm) {
+  if (
+    (ovac.verkortingLinks || ovac.verkortingRechts) &&
+    !((ovac.hielCmLinks && ovac.hielCmLinks.trim() !== '') || (ovac.hielCmRechts && ovac.hielCmRechts.trim() !== ''))
+  ) {
     warnings.push('Verkorting is aangezet maar hiel (cm) ontbreekt');
   }
 }
