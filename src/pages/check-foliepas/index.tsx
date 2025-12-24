@@ -412,7 +412,7 @@ const FormCheckFoliepasPage = () => {
                     value={side}
                     onValueChange={v => form.setValue('side', v as Zijde)}
                   >
-                    <div className="flex flex-wrap gap-6">
+                    <div className="flex flex-row justify-center gap-6">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="both" id="side-both" />
                         <Label

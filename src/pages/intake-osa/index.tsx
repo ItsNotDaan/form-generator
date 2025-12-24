@@ -78,6 +78,8 @@ const FormIntakeOSAPage = () => {
 
   const formSchema = z.object({
     welkPaar: z.string(),
+    medischeIndicatie: z.string().optional(),
+
     side: z.enum(['left', 'right', 'both'] as const),
     schachthoogteLinks: z.string().optional(),
     schachthoogteRechts: z.string().optional(),
@@ -112,6 +114,7 @@ const FormIntakeOSAPage = () => {
     defaultValues: {
       welkPaar: 'Eerste paar',
       side: 'both',
+      medischeIndicatie: '',
       schachthoogteLinks: '14',
       schachthoogteRechts: '14',
       amputatieLinksEnabled: false,
@@ -156,6 +159,7 @@ const FormIntakeOSAPage = () => {
     dispatch(
       setIntakeOSAData({
         welkPaar: data.welkPaar,
+        medischeIndicatie: data.medischeIndicatie || '',
         side: data.side,
         schachthoogteLinks: data.schachthoogteLinks || '',
         schachthoogteRechts: data.schachthoogteRechts || '',
@@ -239,39 +243,54 @@ const FormIntakeOSAPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-4"
             >
-              {/* Which Pair */}
+              {/* Paartype & indicatie */}
               <FormCard
-                title={t('whichPair')}
+                title={t('description')}
+                description={t('whichPair')}
               >
                 <FormBlock
-                  columns={1}
-                  dividers={false}
-                  hoverEffect={false}
+                  columns={2}
+                  dividers={true}
+                  alignItems="start"
                 >
-                  <RadioGroup
-                    value={form.watch('welkPaar')}
-                    onValueChange={v => form.setValue('welkPaar', v)}
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {PAARTYPE_OPTIES.map(option => (
-                        <div
-                          key={option.value}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            value={option.value}
-                            id={`paar-${option.value}`}
-                          />
+                  {/* Which Pair (Radio Group) */}
+                  <FormItemWrapper label={t('whichPair')}>
+                    <RadioGroup
+                      value={form.watch('welkPaar')}
+                      onValueChange={val => form.setValue('welkPaar', val)}
+                      className="w-2/3"
+                    >
+                      <div className="flex flex-col gap-3">
+                        {PAARTYPE_OPTIES.map(option => (
                           <Label
-                            htmlFor={`paar-${option.value}`}
-                            className="font-normal cursor-pointer"
+                            key={option.value}
+                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
+                            htmlFor={`ov-${option.value}`}
                           >
-                            {t(option.label)}
+                            <RadioGroupItem
+                              id={`ov-${option.value}`}
+                              value={option.value}
+                            />
+                            <span className="text-sm text-foreground">
+                              {t(option.label)}
+                            </span>
                           </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </RadioGroup>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+
+                  {/* Medical Indication (Textarea) */}
+                  <FormItemWrapper label={t('medicalIndication')}>
+                    <Textarea
+                      id="medische-indicatie"
+                      placeholder={t('medicalIndicationPlaceholder')}
+                      value={form.watch('medischeIndicatie')}
+                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      rows={4}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 

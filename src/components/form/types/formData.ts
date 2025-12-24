@@ -45,6 +45,7 @@ export interface ClientData {
 export interface IntakeVLOSData {
   // Description/pair type
   welkPaar?: string;
+  medischeIndicatie?: string;
 
   // Side selection (both/left/right)
   side: Zijde;

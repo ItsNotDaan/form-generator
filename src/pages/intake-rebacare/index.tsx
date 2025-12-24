@@ -91,33 +91,54 @@ const FormIntakeRebacarePage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Which Pair */}
-              <FormCard title={t('whichPair')}>
-                <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <RadioGroup
-                    value={form.watch('welkPaar')}
-                    onValueChange={v => form.setValue('welkPaar', v)}
-                  >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {PAARTYPE_OPTIES.map(option => (
-                        <div
-                          key={option.value}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            value={option.value}
-                            id={`paar-${option.value}`}
-                          />
+              {/* Paartype & indicatie */}
+              <FormCard
+                title={t('description')}
+                description={t('whichPair')}
+              >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  alignItems="start"
+                >
+                  {/* Which Pair (Radio Group) */}
+                  <FormItemWrapper label={t('whichPair')}>
+                    <RadioGroup
+                      value={form.watch('welkPaar')}
+                      onValueChange={val => form.setValue('welkPaar', val)}
+                      className="w-2/3"
+                    >
+                      <div className="flex flex-col gap-3">
+                        {PAARTYPE_OPTIES.map(option => (
                           <Label
-                            htmlFor={`paar-${option.value}`}
-                            className="font-normal cursor-pointer"
+                            key={option.value}
+                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
+                            htmlFor={`ov-${option.value}`}
                           >
-                            {t(option.label)}
+                            <RadioGroupItem
+                              id={`ov-${option.value}`}
+                              value={option.value}
+                            />
+                            <span className="text-sm text-foreground">
+                              {t(option.label)}
+                            </span>
                           </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </RadioGroup>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+
+                  {/* Medical Indication (Textarea) */}
+                  <FormItemWrapper label={t('medicalIndication')}>
+                    <Textarea
+                      id="medische-indicatie"
+                      placeholder={t('medicalIndicationPlaceholder')}
+                      value={form.watch('medischeIndicatie')}
+                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      rows={4}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 
@@ -127,6 +148,7 @@ const FormIntakeRebacarePage = () => {
                   columns={2}
                   dividers={true}
                 >
+                  {/* Side (Radio Group) */}
                   <FormItemWrapper>
                     <Label>{t('side')}</Label>
                     <FormField
@@ -162,6 +184,8 @@ const FormIntakeRebacarePage = () => {
                       )}
                     />
                   </FormItemWrapper>
+
+                  {/* Bandaged Switch */}
                   <FormItemWrapper>
                     <FormLabel>{t('bandaged')}</FormLabel>
                     <FormField
@@ -183,15 +207,6 @@ const FormIntakeRebacarePage = () => {
                               </Label>
                             </div>
                           </FormControl>
-                          {field.value && (
-                            <div className="flex flex-row items-center rounded-md p-3 gap-2 bg-primary/10 w-2/3">
-                              <Info className="h-20 w-20 mt-0.5 text-primary" />
-                              <p className="text-sm text-foreground">
-                                {t('bandagedInformationPulman')}
-                              </p>
-                            </div>
-                          )}
-                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -199,27 +214,7 @@ const FormIntakeRebacarePage = () => {
                 </FormBlock>
               </FormCard>
 
-
-              <FormCard title={t('medicalIndication')}>
-                <FormField
-                  control={form.control}
-                  name="medischeIndicatie"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Textarea
-                          placeholder={t('medicalIndicationPlaceholder')}
-                          rows={4}
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </FormCard>
-
+              {/* Special Notes */}
               <FormCard title={t('specialNotes')}>
                 <FormField
                   control={form.control}
