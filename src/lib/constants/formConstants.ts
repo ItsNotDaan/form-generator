@@ -308,15 +308,17 @@ export const SUPPLEMENT_OPTIES = [
 export type SupplementOptie = (typeof SUPPLEMENT_OPTIES)[number];
 
 // Hallux valgus mm opties
-export type HalluxMmOptie = '3 mm' | '8 mm';
+export type HalluxMmOptie = 'Nee' | '3 mm' | '8 mm';
 export const HALLUX_MM_OPTIES = [
+  { label: 'Nee', value: 'Nee' },
   { label: '3 mm', value: '3 mm' },
   { label: '8 mm', value: '8 mm' },
 ];
 
 // Verdieping voorvoet mm opties
-export type VerdiepingMmOptie = '3 mm' | '5 mm';
+export type VerdiepingMmOptie = 'Nee' | '3 mm' | '5 mm';
 export const VERDIEPING_MM_OPTIES = [
+  { label: 'Nee', value: 'Nee' },
   { label: '3 mm', value: '3 mm' },
   { label: '5 mm', value: '5 mm' },
 ];
@@ -355,24 +357,29 @@ export const STEUNZOOL_TYPE_OPTIES = [
 ];
 
 // Correctie middenvoet
-export type CorrectieMiddenvoet = 'Neutraal' | 'Laag' | 'Hoog';
+export type CorrectieMiddenvoet = 'Nee' | 'Neutraal' | 'Laag' | 'Hoog';
 export const CORRECTIE_MIDDENVOET_OPTIES = [
+
+  { label: 'Nee', value: 'Nee' },
   { label: 'Neutraal', value: 'Neutraal' },
   { label: 'Laag', value: 'Laag' },
   { label: 'Hoog', value: 'Hoog' },
 ];
 
 // Correctie voorvoet
-export type CorrectieVoorvoet = 'Neutraal' | 'Pronatie' | 'Supinatie';
+export type CorrectieVoorvoet = 'Nee' | 'Neutraal' | 'Pronatie' | 'Supinatie';
 export const CORRECTIE_VOORVOET_OPTIES = [
+
+  { label: 'Nee', value: 'Nee' },
   { label: 'Neutraal', value: 'Neutraal' },
   { label: 'Pronatie', value: 'Pronatie' },
   { label: 'Supinatie', value: 'Supinatie' },
 ];
 
 // Pellote opties
-export type PelloteOptie = 'Hoog' | 'Laag';
+export type PelloteOptie = 'Nee' | 'Hoog' | 'Laag';
 export const PELLOTE_OPTIES = [
+  { label: 'Nee', value: 'Nee' },
   { label: 'Hoog', value: 'Hoog' },
   { label: 'Laag', value: 'Laag' },
 ];
@@ -419,6 +426,7 @@ export const STEUNZOLEN_PRIJS_OPTIES = [
 
 // OSA Functieonderzoek - Ziektebeelden (Medical Conditions)
 export const ZIEKTEBEELDEN_OPTIES = [
+  { key: 'no', label: 'no', translationKey: 'no' },
   { key: 'diabetes', label: 'diabetes', translationKey: 'diabetes' },
   {
     key: 'polyNeuropathie',
@@ -434,6 +442,7 @@ export const ZIEKTEBEELDEN_OPTIES = [
 
 // OSA Functieonderzoek - Loopafstand hulpmiddelen (Walking Distance Aids)
 export const LOOPAFSTAND_OPTIES = [
+  { key: 'no', label: 'no', translationKey: 'no' },
   { key: 'steunzolen', label: 'steunzolen', translationKey: 'supportSoles' },
   { key: 'rollator', label: 'rollator', translationKey: 'rollator' },
   { key: 'stok', label: 'stok', translationKey: 'cane' },
@@ -445,6 +454,7 @@ export const LOOPAFSTAND_OPTIES = [
 
 // OSA Functieonderzoek - Inspectie voeten (Foot Inspection)
 export const INSPECTIE_VOETEN_OPTIES = [
+  { key: 'no', label: 'no', translationKey: 'no' },
   { key: 'oedeem', label: 'oedeem', translationKey: 'edema' },
   { key: 'wisselend', label: 'wisselend', translationKey: 'variable' },
   { key: 'structureel', label: 'structureel', translationKey: 'structural' },
@@ -472,6 +482,7 @@ export const INSPECTIE_VOETEN_OPTIES = [
 
 // OSA Digitaal - Leesthoogte options
 export const LEESTHOOGTE_OPTIES = [
+  { label: 'Nee', value: 'No' },
   { label: '15cm', value: '15' },
   { label: '20cm', value: '20' },
   { label: '25cm', value: '25' },

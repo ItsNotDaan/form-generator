@@ -24,13 +24,19 @@ import { ChevronRight } from 'lucide-react';
 import { Form } from '@/components/ui/form';
 import { Routes } from '@/lib/routes';
 import {
+  CORRECTIE_MIDDENVOET_OPTIES,
+  CORRECTIE_VOORVOET_OPTIES,
   OVAC_OMSCHRIJVING_ITEMS,
   PAARTYPE_OPTIES,
+  PELLOTE_OPTIES,
+  STEUNZOLEN_PRIJS_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
 } from '@/lib/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setClientData, setIntakeOVACData } from '@/domain/store/slices/formData';
 import { scrollToFirstError } from '@/utils/formHelpers';
+import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const OVAC_ITEM_TRANSLATIONS: Record<string, string> = {
   supplementIndividueel: 'supplementIndividual',
@@ -70,8 +76,10 @@ const formSchema = z.object({
   // Verkorting
   verkortingLinks: z.boolean().optional(),
   verkortingRechts: z.boolean().optional(),
-  voorvoetCm: z.string().optional(),
-  hielCm: z.string().optional(),
+  voorvoetCmLinks: z.string().optional(),
+  voorvoetCmRechts: z.string().optional(),
+  hielCmLinks: z.string().optional(),
+  hielCmRechts: z.string().optional(),
 
   // Optional steunzolen
   steunzoolEnabled: z.boolean().optional(),
@@ -102,8 +110,12 @@ const FormIntakeOVACPage = () => {
     defaultValues: {
       welkPaar: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
       medischeIndicatie: '',
-      voorvoetCm: '',
-      hielCm: '',
+      verkortingLinks: false,
+      verkortingRechts: false,
+      voorvoetCmLinks: '',
+      voorvoetCmRechts: '',
+      hielCmLinks: '',
+      hielCmRechts: '',
       steunzoolEnabled: false,
       steunzoolTypeGeneral: '',
       steunzoolAndersText: '',
@@ -192,8 +204,10 @@ const FormIntakeOVACPage = () => {
         nieuweWreefsluitingRechts: !!data.nieuweWreefsluitingRechts,
         verkortingLinks: !!data.verkortingLinks,
         verkortingRechts: !!data.verkortingRechts,
-        voorvoetCm: data.voorvoetCm || '',
-        hielCm: data.hielCm || '',
+        voorvoetCmLinks: data.voorvoetCmLinks || '',
+        voorvoetCmRechts: data.voorvoetCmRechts || '',
+        hielCmLinks: data.hielCmLinks || '',
+        hielCmRechts: data.hielCmRechts || '',
         steunzoolTypeGeneral: steunzoolEnabled ? data.steunzoolTypeGeneral || '' : '',
         steunzoolAndersText: steunzoolEnabled ? data.steunzoolAndersText || '' : '',
         steunzoolCorrectieMiddenvoet: steunzoolEnabled
@@ -218,6 +232,12 @@ const FormIntakeOVACPage = () => {
     router.push(Routes.form_results);
   };
 
+  // Determine which sides to show based on your form logic
+  // For now, always show both sides
+  const showLinks = true;
+  const showRechts = true;
+  const side = showLinks && showRechts ? 'both' : showLinks ? 'left' : 'right';
+
   return (
     <BaseLayout title={t('intakeOvac')} currentStep={2}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -237,319 +257,390 @@ const FormIntakeOVACPage = () => {
               className="space-y-6"
             >
               {/* Paartype & indicatie */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('description')}</CardTitle>
-                  <CardDescription>{t('whichPair')}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <Label className="text-sm font-semibold">
-                        {t('whichPair')}
-                      </Label>
-                      <RadioGroup
-                        value={form.watch('welkPaar')}
-                        onValueChange={val => form.setValue('welkPaar', val)}
-                      >
-                        <div className="grid gap-3">
-                          {PAARTYPE_OPTIES.map(option => (
-                            <label
-                              key={option.value}
-                              className="flex items-center gap-2 rounded-lg border bg-muted/30 px-3 py-2 cursor-pointer"
-                              htmlFor={`ov-${option.value}`}
-                            >
-                              <RadioGroupItem
-                                id={`ov-${option.value}`}
-                                value={option.value}
-                              />
-                              <span className="text-sm text-foreground">
-                                {t(option.label)}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="medische-indicatie">
-                        {t('medicalIndication')}
-                      </Label>
-                      <Textarea
-                        id="medische-indicatie"
-                        placeholder={t('medicalIndicationPlaceholder')}
-                        value={form.watch('medischeIndicatie')}
-                        onChange={e =>
-                          form.setValue('medischeIndicatie', e.target.value)
-                        }
-                        rows={4}
-                        className="resize-none"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Omschrijving items */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('description')}</CardTitle>
-                  <CardDescription>
-                    {t('modules')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {omschrijvingItems.map(item =>
-                    renderOmschrijvingRow(
-                      item.key,
-                      t(OVAC_ITEM_TRANSLATIONS[item.key] || item.label),
-                      item.postNr,
-                    ),
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Verkorting */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('verkorting')}</CardTitle>
-                  <CardDescription>
-                    {t('specialNotesPlaceholder')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <label className="flex items-center gap-2 rounded-lg border bg-muted/40 px-3 py-2 cursor-pointer" htmlFor="verkorting-links">
-                      <Checkbox
-                        id="verkorting-links"
-                        checked={!!form.watch('verkortingLinks')}
-                        onCheckedChange={checked =>
-                          form.setValue('verkortingLinks', !!checked)
-                        }
-                      />
-                      <span className="text-sm text-foreground">{t('left')}</span>
-                    </label>
-                    <label className="flex items-center gap-2 rounded-lg border bg-muted/40 px-3 py-2 cursor-pointer" htmlFor="verkorting-rechts">
-                      <Checkbox
-                        id="verkorting-rechts"
-                        checked={!!form.watch('verkortingRechts')}
-                        onCheckedChange={checked =>
-                          form.setValue('verkortingRechts', !!checked)
-                        }
-                      />
-                      <span className="text-sm text-foreground">{t('right')}</span>
-                    </label>
-                  </div>
-
-                  <Separator />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="voorvoet-cm">{t('voorvoetCm')}</Label>
-                      <Input
-                        id="voorvoet-cm"
-                        type="number"
-                        step="0.1"
-                        placeholder={t('voorvoetCm')}
-                        value={form.watch('voorvoetCm')}
-                        onChange={e => form.setValue('voorvoetCm', e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="hiel-cm">{t('hielCm')}</Label>
-                      <Input
-                        id="hiel-cm"
-                        type="number"
-                        step="0.1"
-                        placeholder={t('hielCm')}
-                        value={form.watch('hielCm')}
-                        onChange={e => form.setValue('hielCm', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Steunzolen (optional) */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle>{t('insolesSection')}</CardTitle>
-                    <CardDescription>{t('insolesDescription')}</CardDescription>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground">
-                      {t('enableInsoles')}
-                    </span>
-                    <Switch
-                      checked={showSteunzolen}
-                      onCheckedChange={checked =>
-                        form.setValue('steunzoolEnabled', !!checked)
-                      }
-                    />
-                  </div>
-                </CardHeader>
-                {showSteunzolen && (
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>{t('insoleType')}</Label>
-                      <RadioGroup
-                        value={form.watch('steunzoolTypeGeneral') || ''}
-                        onValueChange={val =>
-                          form.setValue('steunzoolTypeGeneral', val)
-                        }
-                        className="grid grid-cols-1 sm:grid-cols-2 gap-2"
-                      >
-                        {STEUNZOOL_TYPE_OPTIES.map(option => (
-                          <label
+              <FormCard
+                title={t('description')}
+                description={t('whichPair')}
+              >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  alignItems="start"
+                >
+                  {/* Which Pair (Radio Group) */}
+                  <FormItemWrapper label={t('whichPair')}>
+                    <RadioGroup
+                      value={form.watch('welkPaar')}
+                      onValueChange={val => form.setValue('welkPaar', val)}
+                      className="w-2/3"
+                    >
+                      <div className="flex flex-col gap-3">
+                        {PAARTYPE_OPTIES.map(option => (
+                          <Label
                             key={option.value}
-                            htmlFor={`steunzool-${option.value}`}
-                            className="flex items-center gap-2 rounded-lg border bg-muted/30 px-3 py-2 cursor-pointer"
+                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
+                            htmlFor={`ov-${option.value}`}
                           >
                             <RadioGroupItem
-                              id={`steunzool-${option.value}`}
+                              id={`ov-${option.value}`}
                               value={option.value}
                             />
-                            <span className="text-sm text-foreground">{option.label}</span>
-                          </label>
+                            <span className="text-sm text-foreground">
+                              {t(option.label)}
+                            </span>
+                          </Label>
                         ))}
-                      </RadioGroup>
-                    </div>
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
 
-                    {form.watch('steunzoolTypeGeneral') === 'Anders' && (
-                      <div className="space-y-2">
-                        <Label htmlFor="steunzool-anders">
-                          {t('specifyOther')}
-                        </Label>
-                        <Textarea
-                          id="steunzool-anders"
-                          placeholder={t('specifyPlaceholder')}
-                          value={form.watch('steunzoolAndersText')}
-                          onChange={e =>
-                            form.setValue('steunzoolAndersText', e.target.value)
-                          }
-                          rows={2}
-                          className="resize-none"
-                        />
+                  {/* Medical Indication (Textarea) */}
+                  <FormItemWrapper label={t('medicalIndication')}>
+                    <Textarea
+                      id="medische-indicatie"
+                      placeholder={t('medicalIndicationPlaceholder')}
+                      value={form.watch('medischeIndicatie')}
+                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      rows={4}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Omschrijving items */}
+              <FormCard
+                title={t('description')}
+                description={t('modules')}
+              >
+                <FormBlock
+                  columns={2}
+                  // dividers={true} // We handle dividers internally for the lists
+                  alignItems="center" // Ensure headers stay at top
+                  contentClassName="space-x-4" // Extra gap between the huge Left/Right blocks
+                >
+                  <FormItemWrapper>
+                    {/* LEFT SIDE LIST */}
+                    {showLinks && (
+                      <div className="flex flex-col p-3 w-full">
+                        <div className="flex items-center justify-center pb-2 border-b">
+                          <Label className="text-base font-bold">{t('left')}</Label>
+                        </div>
+                        {/* TIGHT LIST CONTAINER */}
+                        < div className="flex flex-col divide-y border overflow-hidden">
+                          {omschrijvingItems.map((item) => (
+                            <ModuleSwitchRow
+                              key={`left-${item.key}`}
+                              item={item}
+                              side="left"
+                              form={form}
+                              t={t}
+                            />
+                          ))}
+                        </div>
                       </div>
                     )}
+                  </FormItemWrapper>
 
-                    <Separator />
+                  <FormItemWrapper>
+                    {/* RIGHT SIDE LIST */}
+                    {showRechts && (
+                      <div className="flex flex-col p-3 w-full">
+                        <div className="flex items-center justify-center pb-2 border-b">
+                          <Label className="text-base font-bold">{t('right')}</Label>
+                        </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="correctie-middenvoet">
-                          {t('midfootCorrection')}
-                        </Label>
-                        <Input
-                          id="correctie-middenvoet"
-                          placeholder={t('midfootCorrection')}
-                          value={form.watch('steunzoolCorrectieMiddenvoet')}
-                          onChange={e =>
-                            form.setValue('steunzoolCorrectieMiddenvoet', e.target.value)
-                          }
-                        />
+                        {/* TIGHT LIST CONTAINER */}
+                        <div className="flex flex-col divide-y border rounded-lg overflow-hidden">
+                          {omschrijvingItems.map((item) => (
+                            <ModuleSwitchRow
+                              key={`right-${item.key}`}
+                              item={item}
+                              side="right"
+                              form={form}
+                              t={t}
+                            />
+                          ))}
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="correctie-voorvoet">
-                          {t('forefootCorrection')}
-                        </Label>
-                        <Input
-                          id="correctie-voorvoet"
-                          placeholder={t('forefootCorrection')}
-                          value={form.watch('steunzoolCorrectieVoorvoet')}
-                          onChange={e =>
-                            form.setValue('steunzoolCorrectieVoorvoet', e.target.value)
-                          }
-                        />
-                      </div>
-                    </div>
+                    )}
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="vv-pellote">{t('forefootPad')}</Label>
-                      <Input
-                        id="vv-pellote"
-                        placeholder={t('forefootPad')}
-                        value={form.watch('steunzoolVvPellote')}
-                        onChange={e =>
-                          form.setValue('steunzoolVvPellote', e.target.value)
-                        }
+              {/* Verkorting */}
+              <FormCard
+                title={t('verkorting')}
+                description={t('specialNotesPlaceholder')}
+              >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                >
+                  <FormItemWrapper >
+                    <Label htmlFor="verkorting-links" className="text-sm font-medium cursor-pointer">
+                      {t('left')}
+                    </Label>
+                    <Switch
+                      id="verkorting-links"
+                      checked={!!form.watch('verkortingLinks')}
+                      onCheckedChange={checked => form.setValue('verkortingLinks', !!checked)}
+                    />
+                    {form.watch('verkortingLinks') && (
+                      <div className="flex flex-row mt-2 space-x-4">
+                        <FormItemWrapper label={t('voorvoetCm')}>
+                          <Input
+                            id="voorvoet-cm-links"
+                            type="number"
+                            step="0.5"
+                            placeholder={t('voorvoetCm')}
+                            value={form.watch('voorvoetCmLinks') || ''}
+                            onChange={e => form.setValue('voorvoetCmLinks', e.target.value)}
+                            className=""
+                          />
+                        </FormItemWrapper>
+                        <FormItemWrapper label={t('hielCm')}>
+                          <Input
+                            id="hiel-cm-links"
+                            type="number"
+                            step="0.5"
+                            placeholder={t('hielCm')}
+                            value={form.watch('hielCmLinks') || ''}
+                            onChange={e => form.setValue('hielCmLinks', e.target.value)}
+                            className=""
+                          />
+                        </FormItemWrapper>
+                      </div>
+                    )}
+                  </FormItemWrapper>
+
+                  {/* Right Side */}
+                  <FormItemWrapper >
+                    <Label htmlFor="verkorting-rechts" className="text-sm font-medium cursor-pointer">
+                      {t('right')}
+                    </Label>
+                    <Switch
+                      id="verkorting-rechts"
+                      checked={!!form.watch('verkortingRechts')}
+                      onCheckedChange={checked => form.setValue('verkortingRechts', !!checked)}
+                    />
+
+                    {form.watch('verkortingRechts') && (
+                      <div className="flex flex-row mt-2 space-x-4">
+                        <FormItemWrapper label={t('voorvoetCm')}>
+                          <Input
+                            id="voorvoet-cm-rechts"
+                            type="number"
+                            step="0.5"
+                            placeholder={t('voorvoetCm')}
+                            value={form.watch('voorvoetCmRechts') || ''}
+                            onChange={e => form.setValue('voorvoetCmRechts', e.target.value)}
+                            className=""
+                          />
+                        </FormItemWrapper>
+                        <FormItemWrapper label={t('hielCm')}>
+                          <Input
+                            id="hiel-cm-rechts"
+                            type="number"
+                            step="0.1"
+                            placeholder={t('hielCm')}
+                            value={form.watch('hielCmRechts') || ''}
+                            onChange={e => form.setValue('hielCmRechts', e.target.value)}
+                            className=""
+                          />
+                        </FormItemWrapper>
+                      </div>
+                    )}
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Steunzolen (optional) */}
+              <FormCard
+                title={t('insolesSection')}
+                description={t('insolesDescription')}
+                toggleAble={true}
+                toggleLabel={t('enableInsoles')}
+                toggleId="steunzolen-toggle"
+                defaultOpen={form.watch('steunzoolEnabled')}
+              >
+
+                {/* Type Selection */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  title={t('insoleType')}
+                  alignItems="start"
+                >
+                  {/* Radio Grid for Types */}
+                  <FormItemWrapper className="col-span-2">
+                    <Select
+                      value={form.watch('steunzoolTypeGeneral') || undefined}
+                      onValueChange={val => form.setValue('steunzoolTypeGeneral', val)}
+                    >
+                      <SelectTrigger className="w-2/3 mt-2">
+                        <SelectValue
+                          placeholder={t('insoleType')}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STEUNZOOL_TYPE_OPTIES.map(option => (
+                          <SelectItem
+                            key={option.value}
+                            value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
+                  {/* Conditional "Other" Textarea */}
+                  {form.watch('steunzoolTypeGeneral') === 'Anders' && (
+                    <FormItemWrapper label={t('specifyOther')} className="col-span-2 pt-2">
+                      <Textarea
+                        id="steunzool-anders"
+                        placeholder={t('specifyPlaceholder')}
+                        value={form.watch('steunzoolAndersText')}
+                        onChange={e => form.setValue('steunzoolAndersText', e.target.value)}
+                        rows={2}
+                        className="w-2/3 resize-none"
                       />
-                    </div>
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
 
-                    <Separator />
+                {/* Corrections */}
+                <FormBlock
+                  columns={3}
+                  dividers={true}
+                  title={t('insoleCorrections')} // Optional: Add a title if translation exists, or leave blank
+                >
+                  <FormItemWrapper label={t('midfootCorrection')}>
+                    <Select
+                      value={form.watch('steunzoolCorrectieMiddenvoet') || undefined}
+                      onValueChange={val => form.setValue('steunzoolCorrectieMiddenvoet', val)}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="hak-verhoging-links">
-                          {t('insoleHeelRaiseLeft')}
-                        </Label>
-                        <Input
-                          id="hak-verhoging-links"
-                          type="number"
-                          step="0.1"
-                          placeholder={t('heelRaisePlaceholder')}
-                          value={form.watch('steunzoolHakVerhogingLinks')}
-                          onChange={e =>
-                            form.setValue('steunzoolHakVerhogingLinks', e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="hak-verhoging-rechts">
-                          {t('insoleHeelRaiseRight')}
-                        </Label>
-                        <Input
-                          id="hak-verhoging-rechts"
-                          type="number"
-                          step="0.1"
-                          placeholder={t('heelRaisePlaceholder')}
-                          value={form.watch('steunzoolHakVerhogingRechts')}
-                          onChange={e =>
-                            form.setValue('steunzoolHakVerhogingRechts', e.target.value)
-                          }
-                        />
-                      </div>
-                    </div>
+                  <FormItemWrapper label={t('forefootCorrection')}>
+                    <Select
+                      value={form.watch('steunzoolCorrectieVoorvoet') || undefined}
+                      onValueChange={val => form.setValue('steunzoolCorrectieVoorvoet', val)}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="steunzool-prijs">{t('insolePrice')}</Label>
+                  <FormItemWrapper label={t('forefootPad')}>
+                    <Select
+                      value={form.watch('steunzoolVvPellote') || undefined}
+                      onValueChange={val => form.setValue('steunzoolVvPellote', val)}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PELLOTE_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Heel Raise & Price */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                >
+                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
+                    <Input
+                      id="hak-verhoging-links"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('steunzoolHakVerhogingLinks')}
+                      onChange={e => form.setValue('steunzoolHakVerhogingLinks', e.target.value)}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
+                    <Input
+                      id="hak-verhoging-rechts"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('steunzoolHakVerhogingRechts')}
+                      onChange={e => form.setValue('steunzoolHakVerhogingRechts', e.target.value)}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+
+                </FormBlock>
+
+                {/* Price Selection */}
+                <FormBlock
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper label={t('insolePrice')}>
+                    <div className="flex gap-4 items-center">
+                      <Select
+                        value={form.watch('steunzoolPrijs') ? String(form.watch('steunzoolPrijs')) : undefined}
+                        onValueChange={val => {
+                          const numVal = val ? parseFloat(val) : undefined;
+                          form.setValue('steunzoolPrijs', numVal);
+                        }}
+                      >
+                        <SelectTrigger className="">
+                          <SelectValue placeholder={t('chooseOption')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {STEUNZOLEN_PRIJS_OPTIES.map(option => (
+                            <SelectItem key={option.value} value={String(option.value)}>
+                              {t(option.label)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <div className="relative w-28">
+                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">€</span>
                         <Input
-                          id="steunzool-prijs"
+                          id="steunzool-prijs-value"
                           type="number"
-                          step="0.01"
-                          placeholder={t('insolePrice')}
                           value={form.watch('steunzoolPrijs') || ''}
-                          onChange={e => {
-                            const value = e.target.value
-                              ? parseFloat(e.target.value)
-                              : undefined;
-                            form.setValue(
-                              'steunzoolPrijs',
-                              value !== undefined && !isNaN(value) ? value : undefined,
-                            );
-                          }}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="steunzool-prijs-naam">
-                          {t('insolePriceName')}
-                        </Label>
-                        <Input
-                          id="steunzool-prijs-naam"
-                          placeholder={t('insolePriceName')}
-                          value={form.watch('steunzoolPrijsNaam')}
-                          onChange={e =>
-                            form.setValue('steunzoolPrijsNaam', e.target.value)
-                          }
+                          readOnly
+                          className="pl-6 bg-muted text-center cursor-not-allowed"
+                          tabIndex={-1}
                         />
                       </div>
                     </div>
-                  </CardContent>
-                )}
-              </Card>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
 
               {/* Bijzonderheden */}
               <Card>
@@ -579,9 +670,53 @@ const FormIntakeOVACPage = () => {
             </form>
           </Form>
         </FormSection>
-      </div>
-    </BaseLayout>
+      </div >
+    </BaseLayout >
   );
 };
 
+const ModuleSwitchRow = ({ item, side, form, t }: any) => {
+  // Determine field path based on side (Matches your schema structure)
+  // Assuming schema is: omsluitingLinks: { [key]: boolean }
+  const fieldGroup = side === 'left' ? 'omsluitingLinks' : 'omsluitingRechts';
+  const fullPath = `${fieldGroup}.${item.key}`;
+
+  // Watch specific value
+  const fieldValues = form.watch(fieldGroup) || {};
+  const isChecked = !!fieldValues[item.key];
+
+  return (
+    <div className="flex items-center justify-between p-3 bg-card border-2 hover:border-primary! transition-colors">
+      <div className="flex flex-col gap-0.5">
+        <Label
+          htmlFor={`${side}-${item.key}`}
+          className="text-sm font-medium cursor-pointer"
+        >
+          {t(OVAC_ITEM_TRANSLATIONS[item.key] || item.label)}
+        </Label>
+        {item.postNr && (
+          <span className="text-[10px] text-muted-foreground font-mono">
+            #{item.postNr}
+          </span>
+        )}
+      </div>
+
+      <Switch
+        id={`${side}-${item.key}`}
+        checked={isChecked}
+        onCheckedChange={(checked) => {
+          // Update the specific record in the object
+          const currentValues = form.getValues(fieldGroup) || {};
+          form.setValue(fieldGroup, {
+            ...currentValues,
+            [item.key]: checked
+          });
+        }}
+      />
+    </div>
+  );
+};
+
+
 export default FormIntakeOVACPage;
+

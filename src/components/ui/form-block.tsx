@@ -182,7 +182,8 @@ export const FormBlock = ({
 
       <div
         className={cn(
-          'grid gap-3',
+          'grid w-full',
+          dividers ? '*:py-4 lg:*:py-0 *:px-0 lg:*:px-4' : 'gap-3',
           dividers && 'gap-0', // Geen gap als dividers aan staan
           responsive ? 'grid-cols-1' : '',
           gridCols[columns], // <--- Werkt nu correct
@@ -208,7 +209,6 @@ interface FormItemWrapperProps {
   centerItems?: boolean;
   label?: React.ReactNode;
 }
-
 
 export const FormItemWrapper = ({
   children,
