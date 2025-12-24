@@ -335,27 +335,21 @@ export interface IntakeSteunzolenData {
   // Shoe size (required)
   schoenmaat?: string;
 
-  // Insole type - single select
   steunzoolTypeGeneral?: string; // Single selected type
-
-  // Anders option
-  steunzoolAndersText?: string;
-
-  // Corrections
+  steunzoolAndersText?: string; // Anders text input
   steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
   steunzoolCorrectieVoorvoet?: string; // Forefoot correction
   steunzoolVvPellote?: string; // Forefoot pad
-
-  // Heel raises (split by side)
   steunzoolHakVerhogingLinks?: string; // Heel raise in cm
   steunzoolHakVerhogingRechts?: string;
-
-  // Price (required) - numeric value and label
-  prijs?: number; // Price numeric value
-  prijsNaam?: string; // Price label name
+  steunzoolPrijs?: number; // Price numeric value
+  steunzoolPrijsNaam?: string; // Price label name
 
   // Special notes
   bijzonderheden?: string;
+
+  // UI state (optional, for Talonette logic)
+  isTalonette?: boolean;
 }
 
 export interface FormSubmissionData {
