@@ -36,6 +36,7 @@ import {
   EZELSOOR_TYPE_OPTIES,
   LOOPZOOL_OPTIES,
   Zijde,
+  LEESTCORRECTIE_OPTIES,
 } from '@/lib/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import {
@@ -446,8 +447,31 @@ const FormCheckFoliepasPage = () => {
               </FormCard>
 
               {/* Reading Corrections after Foil Fit */}
-              <FormCard title={t('readingCorrectionAfterFoilFit')}>
-                <Textarea
+              {/* <FormCard title={t('readingCorrectionAfterFoilFit')}> */}
+
+              {/* //Foliepas Leestcorrectie opties
+                export const LEESTCORRECTIE_OPTIES = [
+                // Label: Openstand (zie Foliepas), Value: 'openstandLastCorrection', translationKey: 'openstandLastCorrection'
+                // Translation: Openstand (zie Foliepas): Links: Rechts:
+                {label: 'Openstand (zie Foliepas)', value: 'openstandLastCorrection', translationKey: 'openstandLastCorrection' },
+
+                // Label: Schachthoogte (zie Foliepas), Value: 'shaftHeightLastCorrection', translationKey: 'shaftHeightLastCorrection',
+                // Translation: Schachthoogte (zie Foliepas): Links: Rechts:
+                {label: 'Schachthoogte', value: 'shaftHeightLastCorrection', translationKey: 'shaftHeightLastCorrection' },
+
+                // Label: Achter innemen (zie Foliepas), Value: 'achterInnemenLastCorrection', translationKey: 'rearTakeInLastCorrection',
+                // Translation: Achter innemen (zie Foliepas): Links: Rechts:
+                {label: 'Achter innemen (zie Foliepas)', value: 'achterInnemenLastCorrection', translationKey: 'rearTakeInLastCorrection' },
+
+                // Label: Enkels aanpassen (zie Foliepas), Value: 'ankleAdjustmentLastCorrection', translationKey: 'ankleAdjustmentLastCorrection',
+                // Translation: Enkels aanpassen (zie Foliepas): Links: Rechts:
+                {label: 'Enkels aanpassen (zie Foliepas)', value: 'ankleAdjustmentLastCorrection', translationKey: 'ankleAdjustmentLastCorrection' },
+                ]; */}
+
+
+
+
+              {/* <Textarea
                   id="reading-correction-foil-fit"
                   placeholder={t('readingCorrectionAfterFoilFit')}
                   value={form.watch('readingCorrectionAfterFoilFit')}
@@ -458,7 +482,62 @@ const FormCheckFoliepasPage = () => {
                     )
                   }
                 />
+              </FormCard> */}
+
+
+              {/* Reading Corrections after Foil Fit */}
+              <FormCard title={t('readingCorrectionAfterFoilFit')}>
+
+                {/* Pressable Labels Section */}
+                <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {LEESTCORRECTIE_OPTIES.map((optie) => (
+                    <Label
+                      key={optie.value}
+                      onClick={() => {
+                        // Get current value
+                        const currentText = form.getValues('readingCorrectionAfterFoilFit') || '';
+
+                        // Construct new line: "- Translation: Links: Rechts:"
+                        const textToAdd = `- ` + t(optie.translationKey);
+
+                        // Append with newline if text exists
+                        const newText = currentText
+                          ? `${currentText}\n${textToAdd}`
+                          : textToAdd;
+
+                        // Update form
+                        form.setValue('readingCorrectionAfterFoilFit', newText, {
+                          shouldDirty: true,
+                          shouldTouch: true,
+                          shouldValidate: true,
+                        });
+                      }}
+                      className="flex cursor-pointer items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 transition-colors hover:bg-accent/30"
+                    >
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm font-medium leading-none">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </div>
+
+                {/* Textarea */}
+                <Textarea
+                  id="reading-correction-foil-fit"
+                  placeholder={t('readingCorrectionAfterFoilFit')}
+                  // Using watch/setValue pattern ensures the textarea updates when buttons are clicked
+                  value={form.watch('readingCorrectionAfterFoilFit') || ''}
+                  onChange={(e) =>
+                    form.setValue('readingCorrectionAfterFoilFit', e.target.value, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    })
+                  }
+                />
               </FormCard>
+
 
               {/* Reading Correction After Lining Shoe */}
               <FormCard title={t('readingCorrectionAfterLiningShoe')}>

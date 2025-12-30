@@ -490,3 +490,11 @@ export const MTP1_DIEP_OPTIES = [
   { label: '4cm', value: '4' },
   { label: '8cm', value: '8' },
 ];
+
+//Foliepas Leestcorrectie opties
+export const LEESTCORRECTIE_OPTIES = [
+  { label: 'Openstand (zie Foliepas)', value: 'openstandLastCorrection', translationKey: 'openstandLastCorrection' },
+  { label: 'Schachthoogte', value: 'shaftHeightLastCorrection', translationKey: 'shaftHeightLastCorrection' },
+  { label: 'Achter innemen (zie Foliepas)', value: 'achterInnemenLastCorrection', translationKey: 'rearTakeInLastCorrection' },
+  { label: 'Enkels aanpassen (zie Foliepas)', value: 'ankleAdjustmentLastCorrection', translationKey: 'ankleAdjustmentLastCorrection' },
+];
