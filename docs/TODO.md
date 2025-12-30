@@ -7,7 +7,7 @@
 
 ## VLOS
 - [x] Zoolverstijving moet center staan.
-- [ ] Moeten nog plaatjes bij.
+- [x] Moeten nog plaatjes bij.
 - [x] Haksoort hoogte, wat is col 3?
 
 ## OSA
