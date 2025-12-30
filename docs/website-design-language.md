@@ -168,7 +168,7 @@ Shared patterns taken from the current Check-Foliepas page. Use this as a refere
       {/* Triple grid: reading height, claw toes, scanned with foil */}
       <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-2 gap-y-2 lg:gap-x-4 bg-secondary/2 hover:border-primary!">
         <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
-          <Label className="text-base font-semibold">{t('readingHeight')}</Label>
+          <Label className="text-base font-semibold">{t('lastHeight')}</Label>
           <RadioGroup value="" onValueChange={() => {}}>
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center space-x-2">

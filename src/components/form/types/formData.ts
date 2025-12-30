@@ -150,7 +150,7 @@ export interface IntakeOSAData extends IntakeVLOSData {
   digitalEnabled?: boolean;
   heelLiftLeft?: string;
   heelLiftRight?: string;
-  readingHeight?: string; // 15, 20, or 25 cm
+  lastHeight?: string; // 15, 20, or 25 cm
   mtp1DeepLeft?: string; // 4 or 8 cm
   mtp1DeepRight?: string; // 4 or 8 cm
   clawToesEnabled?: boolean;

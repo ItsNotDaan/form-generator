@@ -66,7 +66,7 @@ const FormIntakeTestPage = () => {
     digitalEnabled: z.boolean(),
     heelLiftLeft: z.string().optional(),
     heelLiftRight: z.string().optional(),
-    readingHeight: z.string().optional(),
+    lastHeight: z.string().optional(),
     mtp1DeepLeft: z.string().optional(),
     mtp1DeepRight: z.string().optional(),
     clawToesEnabled: z.boolean(),
@@ -94,7 +94,7 @@ const FormIntakeTestPage = () => {
       digitalEnabled: false,
       heelLiftLeft: '',
       heelLiftRight: '',
-      readingHeight: LEESTHOOGTE_OPTIES[0]?.value || '',
+      lastHeight: LEESTHOOGTE_OPTIES[0]?.value || '',
       mtp1DeepLeft: 'No',
       mtp1DeepRight: 'No',
       clawToesEnabled: false,
@@ -170,7 +170,7 @@ const FormIntakeTestPage = () => {
         digitalEnabled: data.digitalEnabled,
         heelLiftLeft: data.heelLiftLeft || '',
         heelLiftRight: data.heelLiftRight || '',
-        readingHeight: data.readingHeight || '',
+        lastHeight: data.lastHeight || '',
         mtp1DeepLeft: data.mtp1DeepLeft || '',
         mtp1DeepRight: data.mtp1DeepRight || '',
         clawToesEnabled: data.clawToesEnabled,
@@ -570,8 +570,8 @@ const FormIntakeTestPage = () => {
                   dividers={true}
                 >
                   <FormItemWrapper                  >
-                    <Label className="text-base font-semibold">{t('readingHeight')}</Label>
-                    <RadioGroup value={form.watch('readingHeight')} onValueChange={v => form.setValue('readingHeight', v)}>
+                    <Label className="text-base font-semibold">{t('lastHeight')}</Label>
+                    <RadioGroup value={form.watch('lastHeight')} onValueChange={v => form.setValue('lastHeight', v)}>
                       <div className="flex flex-wrap gap-3 pt-2">
                         {LEESTHOOGTE_OPTIES.map(opt => (
                           <div key={opt.value} className="flex items-center space-x-2">

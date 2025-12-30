@@ -426,7 +426,6 @@ export const STEUNZOLEN_PRIJS_OPTIES = [
 
 // OSA Functieonderzoek - Ziektebeelden (Medical Conditions)
 export const ZIEKTEBEELDEN_OPTIES = [
-  { key: 'no', label: 'no', translationKey: 'no' },
   { key: 'diabetes', label: 'diabetes', translationKey: 'diabetes' },
   {
     key: 'polyNeuropathie',
@@ -442,7 +441,6 @@ export const ZIEKTEBEELDEN_OPTIES = [
 
 // OSA Functieonderzoek - Loopafstand hulpmiddelen (Walking Distance Aids)
 export const LOOPAFSTAND_OPTIES = [
-  { key: 'no', label: 'no', translationKey: 'no' },
   { key: 'steunzolen', label: 'steunzolen', translationKey: 'supportSoles' },
   { key: 'rollator', label: 'rollator', translationKey: 'rollator' },
   { key: 'stok', label: 'stok', translationKey: 'cane' },
@@ -454,7 +452,6 @@ export const LOOPAFSTAND_OPTIES = [
 
 // OSA Functieonderzoek - Inspectie voeten (Foot Inspection)
 export const INSPECTIE_VOETEN_OPTIES = [
-  { key: 'no', label: 'no', translationKey: 'no' },
   { key: 'oedeem', label: 'oedeem', translationKey: 'edema' },
   { key: 'wisselend', label: 'wisselend', translationKey: 'variable' },
   { key: 'structureel', label: 'structureel', translationKey: 'structural' },
@@ -482,7 +479,6 @@ export const INSPECTIE_VOETEN_OPTIES = [
 
 // OSA Digitaal - Leesthoogte options
 export const LEESTHOOGTE_OPTIES = [
-  { label: 'Nee', value: 'No' },
   { label: '15cm', value: '15' },
   { label: '20cm', value: '20' },
   { label: '25cm', value: '25' },
