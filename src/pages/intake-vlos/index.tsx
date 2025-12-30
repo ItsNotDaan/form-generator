@@ -40,6 +40,9 @@ import {
   JA_NEE_OPTIES,
   PAARTYPE_OPTIES,
   Zijde,
+  ZIEKTEBEELDEN_OPTIES,
+  LOOPAFSTAND_OPTIES,
+  INSPECTIE_VOETEN_OPTIES,
 } from '@/lib/constants/formConstants';
 import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
 import { setIntakeVLOSData, setClientData } from '@/domain/store/slices/formData';
@@ -70,6 +73,7 @@ const FormIntakeVLOSPage = () => {
     welkPaar: z.string(),
     medischeIndicatie: z.string().optional(),
     side: z.enum(['left', 'right', 'both'] as const),
+
     schachthoogteLinks: z.string().optional(),
     schachthoogteRechts: z.string().optional(),
     omsluitingLinks: z.record(z.string(), z.boolean()),
@@ -109,7 +113,15 @@ const FormIntakeVLOSPage = () => {
     hakafrondingRechtsHoogte: z.string().optional(),
     hakafrondingRechtsLengte: z.string().optional(),
     loopzoolType: z.string().optional(),
+
     bijzonderheden: z.string().optional(),
+
+    // Functieonderzoek fields
+    ziektebeelden: z.record(z.string(), z.boolean()),
+    loopafstandAids: z.record(z.string(), z.boolean()),
+    painPerception: z.string().optional(),
+    footInspection: z.record(z.string(), z.boolean()),
+
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -161,6 +173,12 @@ const FormIntakeVLOSPage = () => {
       hakafrondingRechtsLengte: '50',
       loopzoolType: LOOPZOOL_OPTIES[0]?.value || '',
       bijzonderheden: '',
+
+      // Functieonderzoek defaults
+      ziektebeelden: {},
+      loopafstandAids: {},
+      painPerception: '0',
+      footInspection: {},
     },
   });
 
@@ -240,6 +258,13 @@ const FormIntakeVLOSPage = () => {
         hakafrondingRechtsLengte: data.hakafrondingRechtsLengte || '',
         loopzoolType: data.loopzoolType || '',
         bijzonderheden: data.bijzonderheden || '',
+
+        // Functieonderzoek fields
+        ziektebeelden: data.ziektebeelden as Record<string, boolean>,
+        loopafstandAids: data.loopafstandAids as Record<string, boolean>,
+        painPerception: data.painPerception || '',
+        footInspection: data.footInspection as Record<string, boolean>,
+
       }),
     );
 
@@ -395,7 +420,150 @@ const FormIntakeVLOSPage = () => {
                 </FormBlock>
               </FormCard>
 
+              {/* Functieonderzoek*/}
+              <FormCard
+                title={t('functionalResearch')}
+                description={t('functionalResearchDescription')}
+              >
+                {/* Ziektebeelden */}
+                <FormBlock
+                  title={t('medicalConditions')}
+                  columns={3}
+                  dividers={false}
+                  centerTitle={true}
+                >
+                  {ZIEKTEBEELDEN_OPTIES.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`ziektebeeld-${optie.key}`}
+                        checked={
+                          (form.watch('ziektebeelden')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('ziektebeelden', {
+                            ...form.getValues('ziektebeelden'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                        className=""
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t(optie.translationKey)}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
 
+                {/* Loopafstand hulpmiddelen */}
+                <FormBlock title={t('walkingDistanceAids')}
+                  columns={3}
+                  dividers={false}
+                  centerTitle={true}
+                >
+                  {LOOPAFSTAND_OPTIES.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`loopafstand-${optie.key}`}
+                        checked={
+                          (form.watch('loopafstandAids')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('loopafstandAids', {
+                            ...form.getValues('loopafstandAids'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                        className=""
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t(optie.translationKey)}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Pijnbeleving */}
+                <FormBlock
+                  title={t('painPerception')}
+                  centerTitle={true}
+                >
+                  <div className="space-y-2 pt-2">
+                    <div className="grid grid-cols-6 gap-4 items-center">
+                      <div className="text-sm leading-none font-medium text-center">
+                        {t('noPain')} (0)
+                      </div>
+                      <Input
+                        id="pain-perception"
+                        type="range"
+                        min="0"
+                        max="10"
+                        step="1"
+                        value={form.watch('painPerception') || '0'}
+                        onChange={e =>
+                          form.setValue('painPerception', e.target.value)
+                        }
+                        className="col-span-4 accent-primary"
+                      />
+                      <div className="text-sm leading-none font-medium text-center">
+                        {t('maximumPain')} (10)
+                      </div>
+                    </div>
+                    <div className="text-center text-2xl font-bold">
+                      {form.watch('painPerception') || '0'}
+                    </div>
+                  </div>
+                </FormBlock>
+
+                {/* Inspectie voeten */}
+                <FormBlock
+                  title={t('footInspection')}
+                  centerTitle={true}
+                  columns={3}
+                  dividers={false}
+
+                >
+                  {INSPECTIE_VOETEN_OPTIES.map(optie => (
+                    <Label
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`foot-inspection-${optie.key}`}
+                        checked={
+                          (form.watch('footInspection')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('footInspection', {
+                            ...form.getValues('footInspection'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                        className=""
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t(optie.translationKey)}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+              </FormCard>
 
               {/* Shaft Height */}
               <FormCard
@@ -878,14 +1046,6 @@ const FormIntakeVLOSPage = () => {
                   hoverEffect={false}
                   title={t('insertPoint')}
                 >
-                  <FormItemWrapper>
-                    <img
-                      src={getAssetPath('/images/intake-vlos/inschotpunt.png')}
-                      alt={t('insertPoint')}
-                      className="w-1/2 mb-2"
-                    />
-                  </FormItemWrapper>
-
                   <FormItemWrapper
                     label={t('insertPoint')}
                     className='justify-center'
@@ -898,6 +1058,14 @@ const FormIntakeVLOSPage = () => {
                       }
                       placeholder={t('insertPointPlaceholder')}
                       className='w-2/3'
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <img
+                      src={getAssetPath('/images/intake-vlos/inschotpunt.png')}
+                      alt={t('insertPoint')}
+                      className="w-1/2 mb-2"
                     />
                   </FormItemWrapper>
                 </FormBlock>

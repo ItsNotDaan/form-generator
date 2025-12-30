@@ -43,6 +43,14 @@ export interface ClientData {
 }
 
 export interface IntakeVLOSData {
+  // Functieonderzoek
+  ziektebeelden?: Record<string, boolean>;
+  loopafstandAids?: Record<string, boolean>;
+  painPerception?: string;
+  footInspection?: Record<string, boolean>;
+  legLengthDifferenceLeft?: string;
+  legLengthDifferenceRight?: string;
+
   // Description/pair type
   welkPaar?: string;
   medischeIndicatie?: string;
@@ -130,19 +138,11 @@ export interface IntakeVLOSData {
 
 // OSA intake data extends VLOS structure with additional fields
 export interface IntakeOSAData extends IntakeVLOSData {
-  // Functieonderzoek - Ziektebeelden
+  // Functieonderzoek
   ziektebeelden?: Record<string, boolean>;
-
-  // Functieonderzoek - Loopafstand hulpmiddelen
   loopafstandAids?: Record<string, boolean>;
-
-  // Functieonderzoek - Pijnbeleving (0-10)
   painPerception?: string;
-
-  // Functieonderzoek - Inspectie voeten
   footInspection?: Record<string, boolean>;
-
-  // Functieonderzoek - Beenlengte verschil
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
 

@@ -11,13 +11,13 @@
 - [x] Haksoort hoogte, wat is col 3?
 
 ## OSA
-- Functieonderzoek. Nee moet weg. En kopieer naar VLOS. Voeg ook andere toe. 
-- Bij nieuwe OSA standaard 12,5 niet 14cm hoogte. 
+- [x] Functieonderzoek. Nee moet weg. En kopieer naar VLOS. Voeg ook andere toe. 
+- [x] Bij nieuwe OSA standaard 12,5 niet 14cm hoogte. 
 
 
 ## Foliepas
 - Checkboxen met dingen zoals achter innemen, zie openstand, enz.
-Meteen alles invullen. Veel checkboxen. 
+  Meteen alles invullen. Veel checkboxen. 
 
 - Hoogte Schoen toevoegen
 

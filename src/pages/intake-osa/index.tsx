@@ -387,7 +387,7 @@ const FormIntakeOSAPage = () => {
                   {ZIEKTEBEELDEN_OPTIES.map(optie => (
                     <Label
                       key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-[[aria-checked=true]]:bg-accent/30"
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
                       <Checkbox
                         id={`ziektebeeld-${optie.key}`}
@@ -422,7 +422,7 @@ const FormIntakeOSAPage = () => {
                   {LOOPAFSTAND_OPTIES.map(optie => (
                     <Label
                       key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-[[aria-checked=true]]:bg-accent/30"
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
                       <Checkbox
                         id={`loopafstand-${optie.key}`}
@@ -490,7 +490,7 @@ const FormIntakeOSAPage = () => {
                 >
                   {INSPECTIE_VOETEN_OPTIES.map(optie => (
                     <Label
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-[[aria-checked=true]]:bg-accent/30"
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
                       <Checkbox
                         id={`foot-inspection-${optie.key}`}
