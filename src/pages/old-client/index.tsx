@@ -169,7 +169,7 @@ const FormOldClientPage = () => {
               >
                 <FormBlock
                   columns={2}
-                  dividers={true}
+                // dividers={true}
                 >
                   {/* Practitioner */}
                   <FormItemWrapper
@@ -282,7 +282,10 @@ const FormOldClientPage = () => {
                 title={t('personalInformation')}
                 description={t('personalInformationDescription')}
               >
-                <FormBlock columns={3} dividers={true}>
+                <FormBlock
+                  columns={3}
+                // dividers={true}
+                >
 
                   {/* Salutation */}
                   <FormItemWrapper
