@@ -208,6 +208,7 @@ interface FormItemWrapperProps {
   centerTitle?: boolean;
   centerItems?: boolean;
   label?: React.ReactNode;
+  requiredLabel?: boolean;
 }
 
 export const FormItemWrapper = ({
@@ -215,8 +216,9 @@ export const FormItemWrapper = ({
   className,
   centerTitle = true,
   centerItems = true,
-  label }:
-  FormItemWrapperProps) => (
+  label,
+  requiredLabel = false,
+}: FormItemWrapperProps) => (
 
   <div className={cn(
     "flex flex-col gap-2",
@@ -224,11 +226,12 @@ export const FormItemWrapper = ({
     className
   )}>
     {label && (
-      <Label className={cn
-        ("text-sm font-semibold",
-          centerTitle ? "text-center w-full" : "text-left w-full"
-        )}>
+      <Label className={cn(
+        "text-sm font-semibold",
+        centerTitle ? "text-center w-full" : "text-left w-full"
+      )}>
         {label}
+        {requiredLabel && <span className="text-destructive"> *</span>}
       </Label>
     )}
     {children}
