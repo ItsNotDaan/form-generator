@@ -1,14 +1,14 @@
 # TODO
 
 ## NEW/OLD Client
-- [ ] In new-client en old-clinet bij de geboortedatum automatisch streepjes toevoegen. Vb 15092001 moet 15-09-2001 worden.
-- [ ] Telefoon 1 moet een must zijn.
+- [x] In new-client en old-clinet bij de geboortedatum automatisch streepjes toevoegen. Vb 15092001 moet 15-09-2001 worden.
+- [x] Telefoon 1 moet een must zijn.
 
 
 ## VLOS
-- Zoolverstijving moet center staan.
-- Moeten nog plaatjes bij.
-- Haksoort hoogte, wat is col 3?
+- [x] Zoolverstijving moet center staan.
+- [ ] Moeten nog plaatjes bij.
+- [x] Haksoort hoogte, wat is col 3?
 
 ## OSA
 - Functieonderzoek. Nee moet weg. En kopieer naar VLOS. Voeg ook andere toe. 

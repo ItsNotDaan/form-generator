@@ -221,7 +221,7 @@ export const FormItemWrapper = ({
 }: FormItemWrapperProps) => (
 
   <div className={cn(
-    "flex flex-col gap-2",
+    "flex flex-col gap-2 h-full",
     centerItems ? "items-center" : "items-start",
     className
   )}>

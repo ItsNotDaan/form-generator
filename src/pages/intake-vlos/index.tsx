@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAssetPath } from '@/utils/assetPath';
 import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -128,8 +129,8 @@ const FormIntakeVLOSPage = () => {
       omsluitingRechtsMm: { omsluitingMmRechtsMultivorm: '3' },
       supplementschoringLinksEnabled: false,
       supplementschoringRechtsEnabled: false,
-      supplementschoringLinksType: 'Lateraal',
-      supplementschoringRechtsType: 'Lateraal',
+      supplementschoringLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      supplementschoringRechtsType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
       zoolverstijvingEnabled: false,
       zoolverstijvingLinks: false,
       zoolverstijvingRechts: false,
@@ -144,12 +145,12 @@ const FormIntakeVLOSPage = () => {
       hakhoogteRechts: '2',
       hakschoringLinksEnabled: false,
       hakschoringRechtsEnabled: false,
-      hakschoringLinksType: 'Lateraal',
-      hakschoringRechtsType: 'Lateraal',
+      hakschoringLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      hakschoringRechtsType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
       ezelsoorLinksEnabled: false,
       ezelsoorRechtsEnabled: false,
-      ezelsoorLinksType: 'Mediaal',
-      ezelsoorRechtsType: 'Mediaal',
+      ezelsoorLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      ezelsoorRechtsType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
       amputatieLinksEnabled: false,
       amputatieRechtsEnabled: false,
       hakafrondingLinksEnabled: true,
@@ -326,13 +327,14 @@ const FormIntakeVLOSPage = () => {
                   hoverEffect={false}
                 >
                   {/* Side Selection */}
-                  <FormItemWrapper>
+                  <FormItemWrapper
+                    label={t('side')}
+                  >
                     <FormField
                       control={form.control}
                       name="side"
                       render={({ field }) => (
                         <FormItem>
-                          <Label className="font-semibold text-center mb-2 block">{t('side')}</Label>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
@@ -360,8 +362,9 @@ const FormIntakeVLOSPage = () => {
                   </FormItemWrapper>
 
                   {/* Amputation */}
-                  <FormItemWrapper>
-                    <Label className="font-semibold mb-2 block">{t('amputation')}</Label>
+                  <FormItemWrapper
+                    label={t('amputation')}
+                  >
                     <div className="flex gap-6">
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -404,8 +407,9 @@ const FormIntakeVLOSPage = () => {
                   hoverEffect={false}
                 >
                   {showLinks && (
-                    <FormItemWrapper className="items-center">
-                      <Label htmlFor="shaft-left">{t('leftCm')}</Label>
+                    <FormItemWrapper
+                      label={t('leftCm')}
+                      className="items-center">
                       <Input
                         id="shaft-left"
                         type="number"
@@ -419,8 +423,10 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper className="items-center">
-                      <Label htmlFor="shaft-right">{t('rightCm')}</Label>
+                    <FormItemWrapper
+                      className="items-center"
+                      label={t('rightCm')}
+                    >
                       <Input
                         id="shaft-right"
                         type="number"
@@ -446,8 +452,9 @@ const FormIntakeVLOSPage = () => {
                   <RadioGroup
                     value={form.watch('openstandSchacht')}
                     onValueChange={v => form.setValue('openstandSchacht', v)}
+                    className="justify-center"
                   >
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap center-items gap-4">
                       {OPENSTAND_OPTIES.map(opt => (
                         <div
                           key={opt.value}
@@ -478,8 +485,10 @@ const FormIntakeVLOSPage = () => {
                   hoverEffect={false}
                 >
                   {showLinks && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold text-foreground"> {t('left')} </Label>
+                    <FormItemWrapper
+                      label={t('left')}
+                      className="items-center"
+                    >
                       <div className="space-y-2 w-2/3">
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <div
@@ -553,8 +562,10 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold text-foreground"> {t('right')} </Label>
+                    <FormItemWrapper
+                      className="items-center"
+                      label={t('right')}
+                    >
                       <div className="space-y-2 w-2/3">
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <div
@@ -634,10 +645,10 @@ const FormIntakeVLOSPage = () => {
               <FormCard title={t('supplementSupport')}>
                 <FormBlock columns={2} dividers={true} hoverEffect={false}>
                   {showLinks && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">
-                        {t('left')}
-                      </Label>
+                    <FormItemWrapper
+                      label={t('left')}
+                      className="items-center"
+                    >
                       <div className="flex items-center p-3 space-x-2">
                         <Switch
                           id="supplementschoring-links-switch"
@@ -678,10 +689,10 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">
-                        {t('right')}
-                      </Label>
+                    <FormItemWrapper
+                      label={t('right')}
+                      className="items-center"
+                    >
                       <div className="flex items-center p-3 space-x-2">
                         <Switch
                           id="supplementschoring-rechts-switch"
@@ -726,9 +737,11 @@ const FormIntakeVLOSPage = () => {
 
               {/* Sole Stiffening */}
               <FormCard title={t('soleStiffening')}>
-                <FormBlock columns={2} dividers={false} hoverEffect={false}>
-                  <FormItemWrapper>
-                    <Label className="font-semibold">{t('soleStiffening')}</Label>
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
+                  <FormItemWrapper
+                    className="items-center"
+                    label={t('soleStiffening')}
+                  >
                     <div className="flex items-center p-3 space-x-2">
                       <Switch
                         id="zoolverstijving-switch"
@@ -744,9 +757,10 @@ const FormIntakeVLOSPage = () => {
                   </FormItemWrapper>
 
                   {zoolverstijvingEnabled && (
-                    <FormItemWrapper>
-                      <Label>{t('side')}</Label>
-                      <div className="flex gap-6">
+                    <FormItemWrapper
+                      label={t('side')}
+                    >
+                      <div className="flex gap-6 pt-2">
                         {showLinks && (
                           <div className="flex items-center space-x-2">
                             <Checkbox
@@ -794,15 +808,14 @@ const FormIntakeVLOSPage = () => {
               </FormCard>
 
               {/* Closure Type, Insert Point, Tongue Padding, Tongue Stitching */}
-              <FormCard title={t('closureAndTongue')}>
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  <FormItemWrapper>
-                    <Label>{t('closureType')}</Label>
+              <FormCard title={t('closure') + ' & ' + t('tongueOptions') + ' & ' + t('insertPoint')}>
+                <FormBlock columns={3} dividers={true} hoverEffect={false}>
+                  <FormItemWrapper label={t('closureType')}>
                     <RadioGroup
                       value={form.watch('sluitingType')}
                       onValueChange={v => form.setValue('sluitingType', v)}
                     >
-                      <div className="flex flex-row gap-2">
+                      <div className="flex flex-row gap-4">
                         {SLUITING_OPTIES.map(opt => (
                           <div
                             key={opt.value}
@@ -823,23 +836,7 @@ const FormIntakeVLOSPage = () => {
                       </div>
                     </RadioGroup>
                   </FormItemWrapper>
-
-                  <FormItemWrapper>
-                    <Label htmlFor="insert-point">{t('insertPoint')}</Label>
-                    <Input
-                      id="insert-point"
-                      value={form.watch('inschotpunt')}
-                      onChange={e =>
-                        form.setValue('inschotpunt', e.target.value)
-                      }
-                      placeholder={t('insertPointPlaceholder')}
-                      className='w-2/3'
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  <FormItemWrapper>
-                    <Label className="mb-1">{t('tonguePadding')}</Label>
+                  <FormItemWrapper label={t('tonguePadding')}>
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="tongue-pad"
@@ -856,9 +853,7 @@ const FormIntakeVLOSPage = () => {
                       </Label>
                     </div>
                   </FormItemWrapper>
-
-                  <FormItemWrapper>
-                    <Label className="mb-1">{t('tongueStitching')}</Label>
+                  <FormItemWrapper label={t('tongueStitching')}>
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="tongue-stitch"
@@ -876,17 +871,46 @@ const FormIntakeVLOSPage = () => {
                     </div>
                   </FormItemWrapper>
                 </FormBlock>
+
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('insertPoint')}
+                >
+                  <FormItemWrapper>
+                    <img
+                      src={getAssetPath('/images/intake-vlos/inschotpunt.png')}
+                      alt={t('insertPoint')}
+                      className="w-1/2 mb-2"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper
+                    label={t('insertPoint')}
+                    className='justify-center'
+                  >
+                    <Input
+                      id="insert-point"
+                      value={form.watch('inschotpunt')}
+                      onChange={e =>
+                        form.setValue('inschotpunt', e.target.value)
+                      }
+                      placeholder={t('insertPointPlaceholder')}
+                      className='w-2/3'
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
               </FormCard>
 
               {/* Heel Type and Height */}
-              <FormCard title={t('heelTypeAndHeight')}>
+              <FormCard title={t('heelType') + ' & ' + t('heelHeight') + ' & ' + t('heelSlant')}>
                 {/* Heel Type */}
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                <FormBlock columns={2} dividers={true} hoverEffect={false} title={t('heelType')}>
                   {showLinks && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">
-                        {t('left')}
-                      </Label>
+                    <FormItemWrapper
+                      label={t('left')}
+                    >
                       <Select
                         value={form.watch('haksoortLinks')}
                         onValueChange={v => form.setValue('haksoortLinks', v)}
@@ -911,10 +935,9 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">
-                        {t('right')}
-                      </Label>
+                    <FormItemWrapper
+                      label={t('right')}
+                    >
                       <Select
                         value={form.watch('haksoortRechts')}
                         onValueChange={v => form.setValue('haksoortRechts', v)}
@@ -945,18 +968,13 @@ const FormIntakeVLOSPage = () => {
                   columns={2}
                   dividers={true}
                   hoverEffect={false}
+                  title={`${t('heelHeight')} (cm)`}
                 >
                   {showLinks && (
                     <FormItemWrapper
-                      centerTitle={true}
+                      label={t('left')}
                     >
-                      <Label htmlFor="heel-height-left" className="text-sm font-semibold">
-                        {t('left')}
-                      </Label>
-                      <div className="flex flex-col gap-2 text-center">
-                        <Label htmlFor="heel-height-left" className="text-sm">
-                          {t('heelHeight')} (cm)
-                        </Label>
+                      <div className="flex flex-col text-center">
                         <Input
                           id="heel-height-left"
                           type="number"
@@ -970,14 +988,10 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper>
-                      <Label htmlFor="heel-height-right" className="text-sm font-semibold">
-                        {t('right')}
-                      </Label>
-                      <div className="flex flex-col gap-2 text-center">
-                        <Label htmlFor="heel-height-right" className="text-sm">
-                          {t('heelHeight')} (cm)
-                        </Label>
+                    <FormItemWrapper
+                      label={t('right')}
+                    >
+                      <div className="flex flex-col text-center">
                         <Input
                           id="heel-height-right"
                           type="number"
@@ -993,11 +1007,10 @@ const FormIntakeVLOSPage = () => {
                 </FormBlock>
 
                 {/* Heel Slant */}
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
+                <FormBlock columns={2} dividers={true} hoverEffect={false} title={t('heelSlant')}>
                   {showLinks && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">{t('left')}</Label>
-                      <div className="flex items-center p-3 space-x-2">
+                    <FormItemWrapper label={t('left')}>
+                      <div className="flex items-center space-x-2">
                         <Switch
                           id="hakschoring-links-switch"
                           checked={hakschoringLinksEnabled}
@@ -1037,9 +1050,8 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">{t('right')}</Label>
-                      <div className="flex items-center p-3 space-x-2">
+                    <FormItemWrapper label={t('right')}>
+                      <div className="flex items-center space-x-2">
                         <Switch
                           id="hakschoring-rechts-switch"
                           checked={hakschoringRechtsEnabled}
@@ -1085,9 +1097,8 @@ const FormIntakeVLOSPage = () => {
               <FormCard title={t('donkeyEar')}>
                 <FormBlock columns={2} dividers={true} hoverEffect={false}>
                   {showLinks && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">{t('left')}</Label>
-                      <div className="flex items-center p-3 space-x-2">
+                    <FormItemWrapper label={t('left')}>
+                      <div className="flex items-center space-x-2">
                         <Switch
                           id="ezelsoor-links-switch"
                           checked={ezelsoorLinksEnabled}
@@ -1127,9 +1138,8 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold">{t('right')}</Label>
-                      <div className="flex items-center p-3 space-x-2">
+                    <FormItemWrapper label={t('right')}>
+                      <div className="flex items-center space-x-2">
                         <Switch
                           id="ezelsoor-rechts-switch"
                           checked={ezelsoorRechtsEnabled}
@@ -1174,140 +1184,153 @@ const FormIntakeVLOSPage = () => {
               {/* Heel Rounding */}
               <FormCard title={t('heelRounding')}>
                 <FormBlock
-                  columns={2}
+                  columns={3}
                   dividers={true}
                   hoverEffect={false}
+                  alignItems='start'
                 >
-                  {showLinks && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold mb-2 block">{t('left')}</Label>
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Switch
-                          id="round-left"
-                          checked={form.watch('hakafrondingLinksEnabled')}
-                          onCheckedChange={checked =>
-                            form.setValue(
-                              'hakafrondingLinksEnabled',
-                              !!checked,
-                            )
-                          }
-                        />
-                        <Label
-                          htmlFor="round-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {hakafrondingLinksEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {hakafrondingLinksEnabled && (
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="flex flex-col gap-2">
-                            <Label
-                              htmlFor="round-left-height"
-                              className="text-sm"
-                            >
-                              {t('height')} (mm)
-                            </Label>
-                            <Input
-                              id="round-left-height"
-                              type="number"
-                              value={form.watch('hakafrondingLinksHoogte')}
-                              onChange={e =>
-                                form.setValue(
-                                  'hakafrondingLinksHoogte',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <Label
-                              htmlFor="round-left-length"
-                              className="text-sm"
-                            >
-                              {t('length')} (mm)
-                            </Label>
-                            <Input
-                              id="round-left-length"
-                              type="number"
-                              value={form.watch('hakafrondingLinksLengte')}
-                              onChange={e =>
-                                form.setValue(
-                                  'hakafrondingLinksLengte',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                          </div>
+                  <FormItemWrapper label={t('left')}>
+                    {showLinks && (
+                      <>
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Switch
+                            id="round-left"
+                            checked={form.watch('hakafrondingLinksEnabled')}
+                            onCheckedChange={checked =>
+                              form.setValue(
+                                'hakafrondingLinksEnabled',
+                                !!checked,
+                              )
+                            }
+                          />
+                          <Label
+                            htmlFor="round-left"
+                            className="font-normal cursor-pointer"
+                          >
+                            {hakafrondingLinksEnabled ? t('yes') : t('no')}
+                          </Label>
                         </div>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper>
-                      <Label className="text-sm font-semibold mb-2 block">{t('right')}</Label>
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Switch
-                          id="round-right"
-                          checked={form.watch('hakafrondingRechtsEnabled')}
-                          onCheckedChange={checked =>
-                            form.setValue(
-                              'hakafrondingRechtsEnabled',
-                              !!checked,
-                            )
-                          }
-                        />
-                        <Label
-                          htmlFor="round-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {hakafrondingRechtsEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {hakafrondingRechtsEnabled && (
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="flex flex-col gap-2">
-                            <Label
-                              htmlFor="round-right-height"
-                              className="text-sm"
-                            >
-                              {t('height')} (mm)
-                            </Label>
-                            <Input
-                              id="round-right-height"
-                              type="number"
-                              value={form.watch('hakafrondingRechtsHoogte')}
-                              onChange={e =>
-                                form.setValue(
-                                  'hakafrondingRechtsHoogte',
-                                  e.target.value,
-                                )
-                              }
-                            />
+                        {hakafrondingLinksEnabled && (
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="flex flex-col gap-2">
+                              <Label
+                                htmlFor="round-left-height"
+                                className="text-sm"
+                              >
+                                {t('height')} (mm)
+                              </Label>
+                              <Input
+                                id="round-left-height"
+                                type="number"
+                                value={form.watch('hakafrondingLinksHoogte')}
+                                onChange={e =>
+                                  form.setValue(
+                                    'hakafrondingLinksHoogte',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <Label
+                                htmlFor="round-left-length"
+                                className="text-sm"
+                              >
+                                {t('length')} (mm)
+                              </Label>
+                              <Input
+                                id="round-left-length"
+                                type="number"
+                                value={form.watch('hakafrondingLinksLengte')}
+                                onChange={e =>
+                                  form.setValue(
+                                    'hakafrondingLinksLengte',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
                           </div>
-                          <div className="flex flex-col gap-2">
-                            <Label
-                              htmlFor="round-right-length"
-                              className="text-sm"
-                            >
-                              {t('length')} (mm)
-                            </Label>
-                            <Input
-                              id="round-right-length"
-                              type="number"
-                              value={form.watch('hakafrondingRechtsLengte')}
-                              onChange={e =>
-                                form.setValue(
-                                  'hakafrondingRechtsLengte',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                          </div>
+                        )}
+                      </>
+                    )}
+                  </FormItemWrapper>
+
+                  {/* Heel rounding image */}
+                  <FormItemWrapper className="">
+                    <img
+                      src={getAssetPath('/images/intake-vlos/hakafronding.png')}
+                      alt={t('heelRounding')}
+                      className="w-1/2"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('right')}>
+                    {showRechts && (
+                      <>
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Switch
+                            id="round-right"
+                            checked={form.watch('hakafrondingRechtsEnabled')}
+                            onCheckedChange={checked =>
+                              form.setValue(
+                                'hakafrondingRechtsEnabled',
+                                !!checked,
+                              )
+                            }
+                          />
+                          <Label
+                            htmlFor="round-right"
+                            className="font-normal cursor-pointer"
+                          >
+                            {hakafrondingRechtsEnabled ? t('yes') : t('no')}
+                          </Label>
                         </div>
-                      )}
-                    </FormItemWrapper>
-                  )}
+                        {hakafrondingRechtsEnabled && (
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="flex flex-col gap-2">
+                              <Label
+                                htmlFor="round-right-height"
+                                className="text-sm"
+                              >
+                                {t('height')} (mm)
+                              </Label>
+                              <Input
+                                id="round-right-height"
+                                type="number"
+                                value={form.watch('hakafrondingRechtsHoogte')}
+                                onChange={e =>
+                                  form.setValue(
+                                    'hakafrondingRechtsHoogte',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <Label
+                                htmlFor="round-right-length"
+                                className="text-sm"
+                              >
+                                {t('length')} (mm)
+                              </Label>
+                              <Input
+                                id="round-right-length"
+                                type="number"
+                                value={form.watch('hakafrondingRechtsLengte')}
+                                onChange={e =>
+                                  form.setValue(
+                                    'hakafrondingRechtsLengte',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 
@@ -1315,30 +1338,27 @@ const FormIntakeVLOSPage = () => {
               <FormCard title={t('walkingSole')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormItemWrapper>
-                    <RadioGroup
+                    <Select
                       value={form.watch('loopzoolType')}
                       onValueChange={v => form.setValue('loopzoolType', v)}
                     >
-                      <div className="grid grid-cols-2 gap-3">
+                      <SelectTrigger className="w-2/3">
+                        <SelectValue>
+                          {t(
+                            LOOPZOOL_OPTIES.find(
+                              opt => opt.value === form.watch('loopzoolType')
+                            )?.label || ''
+                          )}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
                         {LOOPZOOL_OPTIES.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`sole-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`sole-${opt.value}`}
-                              className="font-normal cursor-pointer text-sm"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {t(opt.label)}
+                          </SelectItem>
                         ))}
-                      </div>
-                    </RadioGroup>
+                      </SelectContent>
+                    </Select>
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>

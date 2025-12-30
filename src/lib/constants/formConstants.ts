@@ -118,11 +118,11 @@ export const SLUITING_OPTIES = [
 ];
 
 // Hakschoring types
-export type HakschoringType = 'medial' | 'lateral';
+export type HakschoringType = 'medial' | 'lateral' | 'LateraalEnMediaal';
 export const HAKSCHORING_TYPE_OPTIES = [
   { label: 'medial', value: 'medial', translationKey: 'medial' },
   { label: 'lateral', value: 'lateral', translationKey: 'lateral' },
-  { value: 'LateraalEnMediaal', label: 'lateralAndMedial' },
+  { value: 'LateraalEnMediaal', label: 'lateralAndMedial', translationKey: 'lateralAndMedial' },
 ];
 
 // Ezelsoor types
