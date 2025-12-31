@@ -368,7 +368,7 @@ const FormIntakeSteunzolenPage = () => {
                       value={form.watch('steunzoolTypeGeneral') || undefined}
                       onValueChange={val => form.setValue('steunzoolTypeGeneral', val)}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-fit">
                         <SelectValue placeholder={t('insoleType')} />
                       </SelectTrigger>
                       <SelectContent>
@@ -440,7 +440,9 @@ const FormIntakeSteunzolenPage = () => {
                     </Select>
                   </FormItemWrapper>
 
-                  <FormItemWrapper label={t('forefootPad')}>
+                  <FormItemWrapper
+                    label={t('forefootPad')}
+                  >
                     <Select
                       value={form.watch('steunzoolVvPellote') || undefined}
                       onValueChange={val => form.setValue('steunzoolVvPellote', val)}
@@ -476,7 +478,7 @@ const FormIntakeSteunzolenPage = () => {
                         // Logic left to you, currently it stays enabled.
                       }}
                     >
-                      <SelectTrigger className="w-1/3">
+                      <SelectTrigger>
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>

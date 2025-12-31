@@ -10,7 +10,16 @@ const RadioGroup = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
-      className={cn('grid gap-2', className)}
+      className={cn(
+
+        // Minimum width is w-2/3, but if content is larger, use w-max
+        'min-w-3/4',
+        'w-max',
+
+        // Other existing classes
+        'grid gap-2',
+
+        className)}
       {...props}
       ref={ref}
     />
