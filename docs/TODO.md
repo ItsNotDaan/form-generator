@@ -1,40 +1,18 @@
 # TODO
 
-## NEW/OLD Client
-- [x] In new-client en old-client bij de geboortedatum automatisch streepjes toevoegen. Vb 15092001 moet 15-09-2001 worden.
-- [x] Telefoon 1 moet een must zijn.
+## Form-Selection
+- [] This page should be changed and use the standard form-block style. It also should be redesigned so that the copy button shows up immediatly. With the FormCard dropdown possibility to shown the JSON and another FormCard with dropdown for the selected data.
+- [] Back to main pae button should remove the last Form redux. Not the client data. 
 
-## VLOS
-- [x] Zoolverstijving moet center staan.
-- [x] Moeten nog plaatjes bij.
-- [x] Haksoort hoogte, wat is col 3?
+## New and Old client 
+- [] a switch should be able to be set in the cards that removes the "verplicht" there could be cases where someone does not have a email for example. you understand?
 
-## OSA
-- [x] Functieonderzoek. Nee moet weg. En kopieer naar VLOS. Voeg ook andere toe.
-- [x] Bij nieuwe OSA standaard 12,5 niet 14cm hoogte.
+## General form Redux edits. 
+- [] It should be checked that when a new-client/old-client is clicked from the homescreen all the redux that are set are removed. 
+- [] When 
 
-## Foliepas
-- [x] Checkboxen met dingen zoals achter innemen, zie openstand, enz. Meteen alles invullen. Veel checkboxen.
-- [x] Hoogte Schoen toevoegen
-- [x] Openstand zie foliepas
-- [x] Achter innemen: links 5mm
 
-## OVAC
-
-- [ ] OVAC is bij steunzolen geen prijs.
-
-## Steunzolen
-- [x] Zorg dat in het steunzolen block Talonnete bovenaan komt. Met links/rechts. MOCHT steunzool worden aangeklikt moet talonnete moet de mogelijkheid er komen om de verhoging onder de steunzool te maken. Zodat de optie er blijft om een losse Talonnete te leveren.
-
-      Dus:
-      Steunzolen Segment:
-      Boven de Steunzolen Segmenten Switch:
-      - Switch met Talonnete. Aan? Links + Rechts
-
-      Wanneer Steunzolen wordt aangeklikt:
-      - Standaard dingen in de steunzolen segmenten. Als Talonnete is aangeklikt moet er een switch toegevoegd worden met talonnete onder steunzolen?
-
-      Dus:
-      FormCard met Talonnete: Switch met Talonnete. Aan? Links + Rechts hierin ook: Hak verhoging L + R
-      FormCard van steunzolen: Steunzolen Type, Steunzolen Correcties.
-      FormCard met Prijs. Dus Talonnete met Steunzolen als dat gepakt is.
+## iPad
+- [] fix the input areas for the new/old-client if the labels are clear. 
+- [] create a script that fills "standard" items in the correct fields.
+- [] If the basic values work try to implement AI to fill in those fields. Using PTT picture to text.
