@@ -86,8 +86,8 @@ const FormIntakeOSBPage = () => {
     steunzoolCorrectieMiddenvoet: z.string().optional(),
     steunzoolCorrectieVoorvoet: z.string().optional(),
     steunzoolVvPellote: z.string().optional(),
-    steunzoolHakVerhogingLinks: z.string().optional(),
-    steunzoolHakVerhogingRechts: z.string().optional(),
+    talonetteVerhogingLinks: z.string().optional(),
+    talonetteVerhogingRechts: z.string().optional(),
     steunzoolPrijs: z.number().optional(),
     steunzoolPrijsNaam: z.string().optional(),
     bijzonderheden: z.string().optional(),
@@ -135,8 +135,8 @@ const FormIntakeOSBPage = () => {
       steunzoolCorrectieMiddenvoet: '',
       steunzoolCorrectieVoorvoet: '',
       steunzoolVvPellote: '',
-      steunzoolHakVerhogingLinks: '',
-      steunzoolHakVerhogingRechts: '',
+      talonetteVerhogingLinks: '',
+      talonetteVerhogingRechts: '',
       steunzoolPrijs: undefined,
       steunzoolPrijsNaam: '',
       bijzonderheden: '',
@@ -186,8 +186,8 @@ const FormIntakeOSBPage = () => {
         steunzoolCorrectieMiddenvoet: data.steunzoolCorrectieMiddenvoet || '',
         steunzoolCorrectieVoorvoet: data.steunzoolCorrectieVoorvoet || '',
         steunzoolVvPellote: data.steunzoolVvPellote || '',
-        steunzoolHakVerhogingLinks: data.steunzoolHakVerhogingLinks || '',
-        steunzoolHakVerhogingRechts: data.steunzoolHakVerhogingRechts || '',
+        talonetteVerhogingLinks: data.talonetteVerhogingLinks || '',
+        talonetteVerhogingRechts: data.talonetteVerhogingRechts || '',
         steunzoolPrijs: data.steunzoolPrijs,
         steunzoolPrijsNaam: data.steunzoolPrijsNaam || '',
         bijzonderheden: data.bijzonderheden || '',
@@ -976,10 +976,10 @@ const FormIntakeOSBPage = () => {
                             type="number"
                             step="0.1"
                             placeholder={t('heelRaise')}
-                            value={form.watch('steunzoolHakVerhogingLinks')}
+                            value={form.watch('talonetteVerhogingLinks')}
                             onChange={e =>
                               form.setValue(
-                                'steunzoolHakVerhogingLinks',
+                                'talonetteVerhogingLinks',
                                 e.target.value,
                               )
                             }
@@ -994,10 +994,10 @@ const FormIntakeOSBPage = () => {
                             type="number"
                             step="0.1"
                             placeholder={t('heelRaise')}
-                            value={form.watch('steunzoolHakVerhogingRechts')}
+                            value={form.watch('talonetteVerhogingRechts')}
                             onChange={e =>
                               form.setValue(
-                                'steunzoolHakVerhogingRechts',
+                                'talonetteVerhogingRechts',
                                 e.target.value,
                               )
                             }

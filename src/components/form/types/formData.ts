@@ -263,8 +263,8 @@ export interface IntakeOSBData {
   steunzoolVvPellote?: string;
 
   // Insole component - hak verhoging is gesplitst
-  steunzoolHakVerhogingLinks?: string;
-  steunzoolHakVerhogingRechts?: string;
+  talonetteVerhogingLinks?: string;
+  talonetteVerhogingRechts?: string;
 
   // Insole price
   steunzoolPrijs?: number;
@@ -316,8 +316,8 @@ export interface IntakeOVACData {
   steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
   steunzoolCorrectieVoorvoet?: string; // Forefoot correction
   steunzoolVvPellote?: string; // Forefoot pad
-  steunzoolHakVerhogingLinks?: string; // Heel raise in cm
-  steunzoolHakVerhogingRechts?: string;
+  talonetteVerhogingLinks?: string; // Heel raise in cm
+  talonetteVerhogingRechts?: string;
   steunzoolPrijs?: number; // Price numeric value
   steunzoolPrijsNaam?: string; // Price label name
 
@@ -335,21 +335,25 @@ export interface IntakeSteunzolenData {
   // Shoe size (required)
   schoenmaat?: string;
 
+  // Talonette logic
+  talonetteEnabled?: boolean;
+  talonetteVerhogingLinks?: string;
+  talonetteVerhogingRechts?: string;
+
+  // Steunzool fields
   steunzoolTypeGeneral?: string; // Single selected type
   steunzoolAndersText?: string; // Anders text input
   steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
   steunzoolCorrectieVoorvoet?: string; // Forefoot correction
   steunzoolVvPellote?: string; // Forefoot pad
-  steunzoolHakVerhogingLinks?: string; // Heel raise in cm
-  steunzoolHakVerhogingRechts?: string;
   steunzoolPrijs?: number; // Price numeric value
   steunzoolPrijsNaam?: string; // Price label name
 
+  // Calculated final price
+  finalPrice?: number;
+
   // Special notes
   bijzonderheden?: string;
-
-  // UI state (optional, for Talonette logic)
-  isTalonette?: boolean;
 }
 
 export interface FormSubmissionData {

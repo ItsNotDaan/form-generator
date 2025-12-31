@@ -22,6 +22,7 @@ import {
   CORRECTIE_VOORVOET_OPTIES,
   PELLOTE_OPTIES,
   STEUNZOLEN_PRIJS_OPTIES,
+  TALONETTE_PRIJS_OPTIES,
 } from '@/lib/constants/formConstants';
 import { ChevronRight } from 'lucide-react';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -44,50 +45,34 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 // SCHEMA DEFINITION
 // ---------------------------------------------------------------------------
 const formSchema = z.object({
+
+  // Basic info
   welkPaar: z.string(),
   medischeIndicatie: z.string().optional(),
   schoenmaat: z.string(),
 
+  // Talonette fields
+  talonetteEnabled: z.boolean().optional(),
+  talonetteVerhogingLinks: z.string().optional(),
+  talonetteVerhogingRechts: z.string().optional(),
+  talonettePrijs: z.number().optional(),
+
   // Steunzool fields
+  steunzoolEnabled: z.boolean().optional(),
   steunzoolTypeGeneral: z.string().optional(),
   steunzoolAndersText: z.string().optional(),
-
-  // Corrections (Optional when Talonette is active)
   steunzoolCorrectieMiddenvoet: z.string().optional(),
   steunzoolCorrectieVoorvoet: z.string().optional(),
   steunzoolVvPellote: z.string().optional(),
-
-  steunzoolHakVerhogingLinks: z.string().optional(),
-  steunzoolHakVerhogingRechts: z.string().optional(),
   steunzoolPrijs: z.number().optional(),
   steunzoolPrijsNaam: z.string().optional(),
-  bijzonderheden: z.string().optional(),
 
-  // New field for state tracking (not necessarily sent to backend, but good for form logic)
-  isTalonette: z.boolean(),
-}).refine(
-  data => {
-    // Validation logic
-    // If NOT Talonette, Type is required
-    if (!data.isTalonette && !data.steunzoolTypeGeneral) {
-      return false;
-    }
-    // If Type is 'Anders', text is required
-    if (data.steunzoolTypeGeneral === 'Anders' && !data.steunzoolAndersText) {
-      return false;
-    }
-    // If Talonette is active, we expect at least one heel raise? (Optional logic)
-    if (data.isTalonette && !data.steunzoolHakVerhogingLinks && !data.steunzoolHakVerhogingRechts) {
-      // Uncomment if you want to enforce heel raise for talonette
-      // return false; 
-    }
-    return true;
-  },
-  {
-    message: 'Please fill in all required fields',
-    path: ['steunzoolTypeGeneral'],
-  }
-);
+  // Calculated final price
+  finalPrice: z.number().optional(),
+
+  // Special notes
+  bijzonderheden: z.string().optional(),
+});
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -104,76 +89,110 @@ const FormIntakeSteunzolenPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
+      // Basic info
       welkPaar: 'Eerste paar',
       medischeIndicatie: '',
       schoenmaat: '',
-      steunzoolTypeGeneral: '',
+
+      // Talonette state
+      talonetteEnabled: false,
+      talonetteVerhogingLinks: '',
+      talonetteVerhogingRechts: '',
+      talonettePrijs: TALONETTE_PRIJS_OPTIES[0]?.value || 0,
+
+      // Steunzool defaults
+      steunzoolEnabled: false,
+      steunzoolTypeGeneral: STEUNZOOL_TYPE_OPTIES[0]?.value || '',
       steunzoolAndersText: '',
-      steunzoolCorrectieMiddenvoet: '',
-      steunzoolCorrectieVoorvoet: '',
-      steunzoolVvPellote: '',
-      steunzoolHakVerhogingLinks: '',
-      steunzoolHakVerhogingRechts: '',
-      steunzoolPrijs: STEUNZOLEN_PRIJS_OPTIES[0]?.value || undefined,
+      steunzoolCorrectieMiddenvoet: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      steunzoolCorrectieVoorvoet: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      steunzoolVvPellote: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      steunzoolPrijs: STEUNZOLEN_PRIJS_OPTIES[1]?.value || 0,
       steunzoolPrijsNaam: '',
+
+      // Calculated final price
+      finalPrice: undefined,
+
+      // Special notes
       bijzonderheden: '',
-      isTalonette: false,
     },
   });
 
   const { clearStorage } = useFormPersistence('intakeSteunzolen', form.watch, form.setValue);
 
-  // Watch values for logic
-  const isTalonetteActive = form.watch('isTalonette');
   const steunzoolTypeGeneral = form.watch('steunzoolTypeGeneral');
+  const talonetteEnabled = form.watch('talonetteEnabled');
+  const steunzoolEnabled = form.watch('steunzoolEnabled');
+  const talonettePrijs = form.watch('talonettePrijs');
+  const steunzoolPrijs = form.watch('steunzoolPrijs');
+
+
+  // Watch values for logic
+  const finalPrice = React.useMemo(() => {
+    const talonettePrice = talonetteEnabled ? (talonettePrijs || 0) : 0;
+    const steunzoolPrice = steunzoolEnabled ? (steunzoolPrijs || 0) : 0;
+    return talonettePrice + steunzoolPrice;
+  }, [talonetteEnabled, talonettePrijs, steunzoolEnabled, steunzoolPrijs]);
+
+  // Sync finalPrice to form state so it is available on submit
+  React.useEffect(() => {
+    form.setValue('finalPrice', finalPrice);
+  }, [finalPrice, form]);
+
+  // Debug
+  console.log('Debug values:', {
+    talonetteEnabled,
+    talonettePrijs,
+    steunzoolEnabled,
+    steunzoolPrijs,
+    finalPrice
+  });
+
+
 
   // ---------------------------------------------------------------------------
-  // TALONETTE LOGIC
+  // On Submit Handler for sending data to Redux store and end JSON
   // ---------------------------------------------------------------------------
-
-  const handleTalonetteToggle = (checked: boolean) => {
-    form.setValue('isTalonette', checked);
-
-    if (checked) {
-      // 1. Clear Corrections
-      form.setValue('steunzoolCorrectieMiddenvoet', '');
-      form.setValue('steunzoolCorrectieVoorvoet', '');
-      form.setValue('steunzoolVvPellote', '');
-
-      // 2. Set Price to Last Option (Talonette Price)
-      const lastPriceOption = STEUNZOLEN_PRIJS_OPTIES[STEUNZOLEN_PRIJS_OPTIES.length - 1];
-      if (lastPriceOption) {
-        form.setValue('steunzoolPrijs', lastPriceOption.value);
-      }
-    } else {
-      const lastPriceOption = STEUNZOLEN_PRIJS_OPTIES[0];
-      if (lastPriceOption) {
-        form.setValue('steunzoolPrijs', lastPriceOption.value);
-      }
-    }
-  };
-
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (clientData) {
       dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
     }
+
+    //Check if talonette is enabled
+    const talonetteEnabled = !!data.talonetteEnabled;
+
+    //Check if steunzool is enabled
+    const steunzoolEnabled = !!data.steunzoolEnabled;
 
     dispatch(
       setIntakeSteunzolenData({
         welkPaar: data.welkPaar,
         medischeIndicatie: data.medischeIndicatie || '',
         schoenmaat: data.schoenmaat,
-        steunzoolTypeGeneral: data.steunzoolTypeGeneral || '',
-        steunzoolAndersText: data.steunzoolAndersText || '',
-        steunzoolCorrectieMiddenvoet: data.steunzoolCorrectieMiddenvoet || '',
-        steunzoolCorrectieVoorvoet: data.steunzoolCorrectieVoorvoet || '',
-        steunzoolVvPellote: data.steunzoolVvPellote || '',
-        steunzoolHakVerhogingLinks: data.steunzoolHakVerhogingLinks || '',
-        steunzoolHakVerhogingRechts: data.steunzoolHakVerhogingRechts || '',
-        steunzoolPrijs: data.steunzoolPrijs,
-        steunzoolPrijsNaam: data.steunzoolPrijsNaam || '',
+
+        // Talonette logic
+        talonetteEnabled: data.talonetteEnabled,
+        talonetteVerhogingLinks: data.talonetteVerhogingLinks || '',
+        talonetteVerhogingRechts: data.talonetteVerhogingRechts || '',
+
+        // Steunzool fields
+        steunzoolTypeGeneral: steunzoolEnabled ? data.steunzoolTypeGeneral || '' : '',
+        steunzoolAndersText: steunzoolEnabled ? data.steunzoolAndersText || '' : '',
+        steunzoolCorrectieMiddenvoet: steunzoolEnabled
+          ? data.steunzoolCorrectieMiddenvoet || ''
+          : '',
+        steunzoolCorrectieVoorvoet: steunzoolEnabled
+          ? data.steunzoolCorrectieVoorvoet || ''
+          : '',
+        steunzoolVvPellote: steunzoolEnabled ? data.steunzoolVvPellote || '' : '',
+        steunzoolPrijs: steunzoolEnabled ? data.steunzoolPrijs : undefined,
+        steunzoolPrijsNaam: steunzoolEnabled ? data.steunzoolPrijsNaam || '' : '',
+
+        // Final Price
+        finalPrice: data.finalPrice || 0,
+
+        // Special notes
         bijzonderheden: data.bijzonderheden || '',
-        isTalonette: data.isTalonette,
       }),
     );
 
@@ -271,20 +290,79 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Steunzolen / Talonette Section 
+                  Talonette Section 
+                 ========================================================== */}
+              <FormCard
+                title={t('talonetteSection')}
+                description={t('talonetteDescription')}
+                toggleAble={true}
+                toggleLabel={t('enableTalonette')}
+                toggleId="talonette-toggle"
+                defaultOpen={form.watch('talonetteEnabled')}
+                onToggleChange={(isOpen) => {
+                  form.setValue('talonetteEnabled', isOpen, {
+                    shouldValidate: true,
+                    shouldDirty: true
+                  });
+                }}
+              >
+                {/* Heel Raise */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                >
+                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
+                    <Input
+                      id="hak-verhoging-links"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('talonetteVerhogingLinks')}
+                      onChange={e => form.setValue('talonetteVerhogingLinks', e.target.value)}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
+                    <Input
+                      id="hak-verhoging-rechts"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('talonetteVerhogingRechts')}
+                      onChange={e => form.setValue('talonetteVerhogingRechts', e.target.value)}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+
+              {/* ==========================================================
+                  Steunzolen Section 
                  ========================================================== */}
               <FormCard
                 title={t('insolesSection')}
                 description={t('insolesDescription')}
+                toggleAble={true}
+                toggleLabel={t('enableInsoles')}
+                toggleId="steunzolen-toggle"
+                defaultOpen={form.watch('steunzoolEnabled')}
+                onToggleChange={(isOpen) => {
+                  form.setValue('steunzoolEnabled', isOpen, {
+                    shouldValidate: true,
+                    shouldDirty: true
+                  });
+                }}
               >
 
-                {/* ROW 1: Type Selection + Talonette Toggle */}
+                {/* ROW 1: Type Selection */}
                 <FormBlock
-                  columns={2}
+                  columns={1}
                   dividers={true}
                   alignItems="start"
                 >
-                  {/* Left Column: Type Selection */}
+                  {/* Type Selection */}
                   <FormItemWrapper label={t('insoleType')}>
                     <Select
                       value={form.watch('steunzoolTypeGeneral') || undefined}
@@ -305,23 +383,6 @@ const FormIntakeSteunzolenPage = () => {
                     </Select>
                   </FormItemWrapper>
 
-                  {/* Right Column: Talonette Toggle */}
-                  <FormItemWrapper
-                    label="Talonette"
-                    className="h-full justify-start pt-1" // Align toggle with label visually
-                  >
-                    <div className="flex items-center gap-3 pt-2">
-                      <Switch
-                        id="talonette-switch"
-                        checked={isTalonetteActive}
-                        onCheckedChange={handleTalonetteToggle}
-                      />
-                      <Label htmlFor="talonette-switch" className="cursor-pointer">
-                        {t('activateTalonette') || 'Activate Talonette'}
-                      </Label>
-                    </div>
-                  </FormItemWrapper>
-
                   {/* Conditional "Other" Textarea (Spans full width if visible) */}
                   {steunzoolTypeGeneral === 'Anders' && (
                     <FormItemWrapper label={t('specifyOther')} className="col-span-2 pt-2">
@@ -337,139 +398,126 @@ const FormIntakeSteunzolenPage = () => {
                   )}
                 </FormBlock>
 
-                {/* ROW 2: Corrections (HIDDEN if Talonette is Active) */}
-                {!isTalonetteActive && (
-                  <FormBlock
-                    columns={3}
-                    dividers={true}
-                    title={t('insoleCorrections')}
-                  >
-                    <FormItemWrapper label={t('midfootCorrection')}>
-                      <Select
-                        value={form.watch('steunzoolCorrectieMiddenvoet') || undefined}
-                        onValueChange={val => form.setValue('steunzoolCorrectieMiddenvoet', val)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('chooseOption')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormItemWrapper>
-
-                    <FormItemWrapper label={t('forefootCorrection')}>
-                      <Select
-                        value={form.watch('steunzoolCorrectieVoorvoet') || undefined}
-                        onValueChange={val => form.setValue('steunzoolCorrectieVoorvoet', val)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('chooseOption')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {CORRECTIE_VOORVOET_OPTIES.map(option => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormItemWrapper>
-
-                    <FormItemWrapper label={t('forefootPad')}>
-                      <Select
-                        value={form.watch('steunzoolVvPellote') || undefined}
-                        onValueChange={val => form.setValue('steunzoolVvPellote', val)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('chooseOption')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {PELLOTE_OPTIES.map(option => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormItemWrapper>
-                  </FormBlock>
-                )}
-
-                {/* ROW 3: Heel Raise & Price */}
+                {/* ROW 2: Corrections */}
                 <FormBlock
-                  columns={2}
+                  columns={3}
                   dividers={true}
+                  title={t('insoleCorrections')}
                 >
-                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
-                    <Input
-                      id="hak-verhoging-links"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('steunzoolHakVerhogingLinks')}
-                      onChange={e => form.setValue('steunzoolHakVerhogingLinks', e.target.value)}
-                      className="w-2/3"
-                    />
+                  <FormItemWrapper label={t('midfootCorrection')}>
+                    <Select
+                      value={form.watch('steunzoolCorrectieMiddenvoet') || undefined}
+                      onValueChange={val => form.setValue('steunzoolCorrectieMiddenvoet', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormItemWrapper>
 
-                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
-                    <Input
-                      id="hak-verhoging-rechts"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('steunzoolHakVerhogingRechts')}
-                      onChange={e => form.setValue('steunzoolHakVerhogingRechts', e.target.value)}
-                      className="w-2/3"
-                    />
+                  <FormItemWrapper label={t('forefootCorrection')}>
+                    <Select
+                      value={form.watch('steunzoolCorrectieVoorvoet') || undefined}
+                      onValueChange={val => form.setValue('steunzoolCorrectieVoorvoet', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('forefootPad')}>
+                    <Select
+                      value={form.watch('steunzoolVvPellote') || undefined}
+                      onValueChange={val => form.setValue('steunzoolVvPellote', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PELLOTE_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormItemWrapper>
                 </FormBlock>
 
-                {/* Price Section */}
-                <FormBlock columns={1} dividers={false}>
-                  <FormItemWrapper label={t('insolePrice')}>
-                    <div className="flex gap-4 items-center">
-                      <Select
-                        value={form.watch('steunzoolPrijs') ? String(form.watch('steunzoolPrijs')) : undefined}
-                        onValueChange={val => {
-                          const numVal = val ? parseFloat(val) : undefined;
-                          form.setValue('steunzoolPrijs', numVal);
+                {/* ROW 3: Steunzool type selectie */}
+                <FormBlock
+                  columns={1}
+                  dividers={true}
+                  alignItems="start"
+                >
+                  <FormItemWrapper label={t('insoleType')}>
+                    <Select
+                      value={form.watch('steunzoolPrijs') ? String(form.watch('steunzoolPrijs')) : undefined}
+                      onValueChange={val => {
+                        const numVal = val ? parseFloat(val) : undefined;
+                        form.setValue('steunzoolPrijs', numVal);
 
-                          // Optional: If user manually changes price to something else, should Talonette toggle off?
-                          // Logic left to you, currently it stays enabled.
-                        }}
-                      >
-                        <SelectTrigger className="w-1/3">
-                          <SelectValue placeholder={t('chooseOption')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {STEUNZOLEN_PRIJS_OPTIES.map(option => (
-                            <SelectItem key={option.value} value={String(option.value)}>
-                              {t(option.label)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <div className="relative w-28">
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">€</span>
-                        <Input
-                          id="steunzool-prijs-value"
-                          type="number"
-                          value={form.watch('steunzoolPrijs') || ''}
-                          readOnly
-                          className="pl-6 bg-muted text-center cursor-not-allowed"
-                          tabIndex={-1}
-                        />
-                      </div>
+                        // Optional: If user manually changes price to something else, should Talonette toggle off?
+                        // Logic left to you, currently it stays enabled.
+                      }}
+                    >
+                      <SelectTrigger className="w-1/3">
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STEUNZOLEN_PRIJS_OPTIES.map(option => (
+                          <SelectItem key={option.value} value={String(option.value)}>
+                            {t(option.label)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+
+              {/* ==========================================================
+                  Price Section 
+                 ========================================================== */}
+              <FormCard
+                title={t('priceDetails')}
+              >
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
+                  <FormItemWrapper>
+                    <div className="relative w-28">
+                      <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+                        €
+                      </span>
+                      <Input
+                        id="steunzool-prijs-value"
+                        type="text"
+                        value={finalPrice || 0}
+                        readOnly
+                        className="pl-6 bg-muted text-center cursor-not-allowed"
+                        tabIndex={-1}
+                        disabled
+                      />
                     </div>
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>
+
 
               {/* Special Notes */}
               <FormCard title={t('specialNotes')}>

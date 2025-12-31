@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,7 @@ interface FormCardProps {
   toggleLabel?: string;
   toggleId?: string;
   defaultOpen?: boolean;
+  onToggleChange?: (isOpen: boolean) => void;
 
   // Center title option
   centerTitle?: boolean;
@@ -33,10 +34,20 @@ export const FormCard: React.FC<FormCardProps> = ({
   toggleLabel,
   toggleId = 'toggle',
   defaultOpen = false,
+  onToggleChange,
   centerTitle,
   contentClassName,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    setIsOpen(defaultOpen);
+  }, [defaultOpen]);
+
+  const handleToggleChange = (checked: boolean) => {
+    setIsOpen(checked);
+    onToggleChange?.(checked);
+  };
 
   // Als toggleAble=false, staat hij altijd open
   const showContent = !toggleAble || isOpen;
@@ -76,7 +87,7 @@ export const FormCard: React.FC<FormCardProps> = ({
             <Switch
               id={toggleId}
               checked={isOpen}
-              onCheckedChange={setIsOpen}
+              onCheckedChange={handleToggleChange}
             />
           </div>
         )}

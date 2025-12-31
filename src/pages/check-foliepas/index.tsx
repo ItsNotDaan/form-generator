@@ -208,8 +208,8 @@ const FormCheckFoliepasPage = () => {
       omsluitingRechts: { omsluitingRechtsMultivorm: true },
       omsluitingLinksMm: { omsluitingMmLinksMultivorm: '3' },
       omsluitingRechtsMm: { omsluitingMmRechtsMultivorm: '3' },
-      schachthoogteLinks: '14',
-      schachthoogteRechts: '14',
+      schachthoogteLinks: '12.5',
+      schachthoogteRechts: '12.5',
       // Defaults for moved fields
       legLengthDifferenceLeft: '',
       legLengthDifferenceRight: '',
@@ -584,7 +584,7 @@ const FormCheckFoliepasPage = () => {
               {/* Enclosure + Beenlengte + Openstand */}
               <FormCard
                 title="Foliepas aanmerkingen"
-                description={`${t('enclosure')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
+                description={`${t('shaftHeight')} • ${t('enclosure')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
               >
                 <FormBlock
                   columns={2}

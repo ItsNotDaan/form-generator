@@ -416,11 +416,16 @@ export const OVAC_OMSCHRIJVING_ITEMS: OvacOmschrijvingItem[] = [
 ];
 
 // Steunzolen pricing options - numeric values
-export type SteunzolenPrijs = 175 | 225 | 195 | 29;
+export type SteunzolenPrijs = 175 | 225 | 195;
 export const STEUNZOLEN_PRIJS_OPTIES = [
   { label: 'priceUpTo15Years', value: 175 },
   { label: 'insolesPrice225', value: 225 },
   { label: 'priceWithin3Months', value: 195 },
+];
+
+// Talonette pricing
+export type TalonettePrijs = 29;
+export const TALONETTE_PRIJS_OPTIES = [
   { label: 'priceTalonette', value: 29 },
 ];
 

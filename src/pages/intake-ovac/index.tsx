@@ -88,8 +88,8 @@ const formSchema = z.object({
   steunzoolCorrectieMiddenvoet: z.string().optional(),
   steunzoolCorrectieVoorvoet: z.string().optional(),
   steunzoolVvPellote: z.string().optional(),
-  steunzoolHakVerhogingLinks: z.string().optional(),
-  steunzoolHakVerhogingRechts: z.string().optional(),
+  talonetteVerhogingLinks: z.string().optional(),
+  talonetteVerhogingRechts: z.string().optional(),
   steunzoolPrijs: z.number().optional(),
   steunzoolPrijsNaam: z.string().optional(),
 
@@ -122,8 +122,8 @@ const FormIntakeOVACPage = () => {
       steunzoolCorrectieMiddenvoet: '',
       steunzoolCorrectieVoorvoet: '',
       steunzoolVvPellote: '',
-      steunzoolHakVerhogingLinks: '',
-      steunzoolHakVerhogingRechts: '',
+      talonetteVerhogingLinks: '',
+      talonetteVerhogingRechts: '',
       steunzoolPrijs: undefined,
       steunzoolPrijsNaam: '',
       bijzonderheden: '',
@@ -217,11 +217,11 @@ const FormIntakeOVACPage = () => {
           ? data.steunzoolCorrectieVoorvoet || ''
           : '',
         steunzoolVvPellote: steunzoolEnabled ? data.steunzoolVvPellote || '' : '',
-        steunzoolHakVerhogingLinks: steunzoolEnabled
-          ? data.steunzoolHakVerhogingLinks || ''
+        talonetteVerhogingLinks: steunzoolEnabled
+          ? data.talonetteVerhogingLinks || ''
           : '',
-        steunzoolHakVerhogingRechts: steunzoolEnabled
-          ? data.steunzoolHakVerhogingRechts || ''
+        talonetteVerhogingRechts: steunzoolEnabled
+          ? data.talonetteVerhogingRechts || ''
           : '',
         steunzoolPrijs: steunzoolEnabled ? data.steunzoolPrijs : undefined,
         steunzoolPrijsNaam: steunzoolEnabled ? data.steunzoolPrijsNaam || '' : '',
@@ -581,8 +581,8 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('steunzoolHakVerhogingLinks')}
-                      onChange={e => form.setValue('steunzoolHakVerhogingLinks', e.target.value)}
+                      value={form.watch('talonetteVerhogingLinks')}
+                      onChange={e => form.setValue('talonetteVerhogingLinks', e.target.value)}
                       className="w-2/3"
                     />
                   </FormItemWrapper>
@@ -593,8 +593,8 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('steunzoolHakVerhogingRechts')}
-                      onChange={e => form.setValue('steunzoolHakVerhogingRechts', e.target.value)}
+                      value={form.watch('talonetteVerhogingRechts')}
+                      onChange={e => form.setValue('talonetteVerhogingRechts', e.target.value)}
                       className="w-2/3"
                     />
                   </FormItemWrapper>
