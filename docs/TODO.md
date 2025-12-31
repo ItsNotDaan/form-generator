@@ -16,13 +16,13 @@
 
 
 ## Foliepas
-- Checkboxen met dingen zoals achter innemen, zie openstand, enz.
-  Meteen alles invullen. Veel checkboxen. 
+- [x] Checkboxen met dingen zoals achter innemen, zie openstand, enz.
+      Meteen alles invullen. Veel checkboxen. 
 
-- Hoogte Schoen toevoegen
+- [] Hoogte Schoen toevoegen
 
-- Openstand zie foliepas
-- Achter innemen: links 5mm
+- [x] Openstand zie foliepas
+- [x] Achter innemen: links 5mm
 
 
 ## OVAC

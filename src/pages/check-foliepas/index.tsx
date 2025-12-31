@@ -61,113 +61,134 @@ const FormCheckFoliepasPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
+    // Side selection
     side: z.enum(['left', 'right', 'both'] as const),
+
+    // Reading corrections
     readingCorrectionAfterFoilFit: z.string().optional(),
     readingCorrectionAfterLiningShoe: z.string().optional(),
+
+    // Enclosure (Omsluiting)
     omsluitingLinks: z.record(z.string(), z.boolean()),
     omsluitingRechts: z.record(z.string(), z.boolean()),
     omsluitingLinksMm: z.record(z.string(), z.string()),
     omsluitingRechtsMm: z.record(z.string(), z.string()),
-    // Moved from OSA
+
+    // Shaft heights
+    schachthoogteLinks: z.string().optional(),
+    schachthoogteRechts: z.string().optional(),
+
+    // Leg length difference
     legLengthDifferenceLeft: z.string().optional(),
     legLengthDifferenceRight: z.string().optional(),
+
+    // Shaft opening
     openstandSchacht: z.string().optional(),
+
+    // Supplement schoring
     supplementschoringLinksEnabled: z.boolean(),
     supplementschoringRechtsEnabled: z.boolean(),
     supplementschoringLinksType: z.string().optional(),
     supplementschoringRechtsType: z.string().optional(),
+
+    // Sole stiffening
     zoolverstijvingEnabled: z.boolean(),
     zoolverstijvingLinks: z.boolean().optional(),
     zoolverstijvingRechts: z.boolean().optional(),
+
+    // Closure
     sluitingType: z.string().optional(),
     inschotpunt: z.string().optional(),
+
+    // Tong padding
     tongpolsterEnabled: z.boolean(),
     tongVaststikkenEnabled: z.boolean(),
+
+    // Heel types and heights
     haksoortLinks: z.string().optional(),
     haksoortRechts: z.string().optional(),
     hakhoogteLinks: z.string().optional(),
     hakhoogteRechts: z.string().optional(),
+
+    // Heel shoring
     hakschoringLinksEnabled: z.boolean(),
     hakschoringRechtsEnabled: z.boolean(),
     hakschoringLinksType: z.string().optional(),
     hakschoringRechtsType: z.string().optional(),
+
+    // Ezelsoor
     ezelsoorLinksEnabled: z.boolean(),
     ezelsoorRechtsEnabled: z.boolean(),
     ezelsoorLinksType: z.string().optional(),
     ezelsoorRechtsType: z.string().optional(),
+
+    // Heel rounding
     hakafrondingLinksEnabled: z.boolean(),
     hakafrondingRechtsEnabled: z.boolean(),
     hakafrondingLinksHoogte: z.string().optional(),
     hakafrondingLinksLengte: z.string().optional(),
     hakafrondingRechtsHoogte: z.string().optional(),
     hakafrondingRechtsLengte: z.string().optional(),
+
+    // Outsole type
     loopzoolType: z.string().optional(),
-    // New fields for Kleur en Model section
+
+    // --- Kleur en Model section ---
     showColorAndModel: z.boolean(),
+    // Model
     modelType: z.enum(['asPhoto', 'model'] as const).optional(),
     modelText: z.string().optional(),
+    // Colors
     colorOptions: z.array(z.string()).optional(),
-    // Tong polsteren en polsterkraag
+    // Tongue padding and collar
     tonguePaddingMm: z.enum(['no', '3', '5'] as const).optional(),
     paddingCollarMm: z.enum(['no', '5', '10'] as const).optional(),
-    // Sluiting
+    // Closure details
     closureType: z.enum(['velcro', 'ringsHooks'] as const).optional(),
     ringsNr: z.string().optional(),
     ringsAmount: z.string().optional(),
     hooksNr: z.string().optional(),
     hooksAmount: z.string().optional(),
-    // Rits
-    zipperType: z
-      .enum(['none', 'functionalNylon', 'decorativeNylon'] as const)
-      .optional(),
+    // Zipper
+    zipperType: z.enum(['none', 'functionalNylon', 'decorativeNylon'] as const).optional(),
     zipperMedial: z.boolean().optional(),
     zipperLateral: z.boolean().optional(),
-    // Bijzonderheden
+    // Special features
     specialMedialVelcro: z.boolean().optional(),
     specialLaceLoop: z.boolean().optional(),
     specialExtraLeather: z.boolean().optional(),
     specialOther: z.string().optional(),
-    // Randtype
+    // Edge type and color
     edgeType: z.string().optional(),
     edgeColor: z.string().optional(),
-    // Zooltype
+    // Sole type
     soleType: z.enum(['gumlite', 'leather', 'antiSlip', 'leatherAntiSlip'] as const).optional(),
     gumliteNumber: z.string().optional(),
     gumliteColor: z.string().optional(),
-    // Koolstofverstijving
-    carbonStiffeningType: z
-      .enum(['none', 'prefab', 'custom'] as const)
-      .optional(),
+    // Carbon stiffening
+    carbonStiffeningType: z.enum(['none', 'prefab', 'custom'] as const).optional(),
     carbonStiffeningLeft: z.boolean().optional(),
     carbonStiffeningRight: z.boolean().optional(),
-    // Neusopties
-    toeOptionsType: z
-      .enum(['none', 'carbon', 'rubberCrawl'] as const)
-      .optional(),
-    // Contrefort
+    // Toe options
+    toeOptionsType: z.enum(['none', 'carbon', 'rubberCrawl'] as const).optional(),
+    // Counterfort
     counterfortType: z.enum(['formo', 'leather', 'other'] as const).optional(),
     counterfortOther: z.string().optional(),
-    // Binnenzool
+    // Insole
     insoleType: z.enum(['leather', 'other'] as const).optional(),
     insoleOther: z.string().optional(),
-    // Zoolkantuitpoetsen
-    soleEdgePolishType: z
-      .enum(['none', 'black', 'brown', 'mahogany', 'ridges', 'other'] as const)
-      .optional(),
+    // Sole edge polish
+    soleEdgePolishType: z.enum(['none', 'black', 'brown', 'mahogany', 'ridges', 'other'] as const).optional(),
     soleEdgePolishOther: z.string().optional(),
-    // Maakwijze
-    constructionMethodType: z
-      .enum(['glued', 'flexible', 'other'] as const)
-      .optional(),
+    // Construction method
+    constructionMethodType: z.enum(['glued', 'flexible', 'other'] as const).optional(),
     constructionMethodOther: z.string().optional(),
-    // Hakmodel
+    // Heel model
     heelModelType: z.enum(['buildUp', 'wedge', 'block'] as const).optional(),
     heelBuildUpMaterial: z.enum(['poro', 'leather'] as const).optional(),
     heelWedgeType: z.enum(['hollow', 'flat'] as const).optional(),
     heelBlockCoreCoating: z.boolean().optional(),
-    // Hakhoogte already exists but I'll keep for reference
-    // Hakafronding already exists but I'll keep for reference
-    // Schoring
+    // Shoring
     shoringLeftType: z.enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const).optional(),
     shoringLeftMm: z.string().optional(),
     shoringRightType: z.enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const).optional(),
@@ -187,6 +208,8 @@ const FormCheckFoliepasPage = () => {
       omsluitingRechts: { omsluitingRechtsMultivorm: true },
       omsluitingLinksMm: { omsluitingMmLinksMultivorm: '3' },
       omsluitingRechtsMm: { omsluitingMmRechtsMultivorm: '3' },
+      schachthoogteLinks: '14',
+      schachthoogteRechts: '14',
       // Defaults for moved fields
       legLengthDifferenceLeft: '',
       legLengthDifferenceRight: '',
@@ -299,6 +322,10 @@ const FormCheckFoliepasPage = () => {
         omsluitingRechts: data.omsluitingRechts as Record<string, boolean>,
         omsluitingLinksMm: data.omsluitingLinksMm as Record<string, string>,
         omsluitingRechtsMm: data.omsluitingRechtsMm as Record<string, string>,
+
+        schachthoogteLinks: data.schachthoogteLinks || '',
+        schachthoogteRechts: data.schachthoogteRechts || '',
+
         // Moved fields
         legLengthDifferenceLeft: data.legLengthDifferenceLeft || '',
         legLengthDifferenceRight: data.legLengthDifferenceRight || '',
@@ -447,45 +474,6 @@ const FormCheckFoliepasPage = () => {
               </FormCard>
 
               {/* Reading Corrections after Foil Fit */}
-              {/* <FormCard title={t('readingCorrectionAfterFoilFit')}> */}
-
-              {/* //Foliepas Leestcorrectie opties
-                export const LEESTCORRECTIE_OPTIES = [
-                // Label: Openstand (zie Foliepas), Value: 'openstandLastCorrection', translationKey: 'openstandLastCorrection'
-                // Translation: Openstand (zie Foliepas): Links: Rechts:
-                {label: 'Openstand (zie Foliepas)', value: 'openstandLastCorrection', translationKey: 'openstandLastCorrection' },
-
-                // Label: Schachthoogte (zie Foliepas), Value: 'shaftHeightLastCorrection', translationKey: 'shaftHeightLastCorrection',
-                // Translation: Schachthoogte (zie Foliepas): Links: Rechts:
-                {label: 'Schachthoogte', value: 'shaftHeightLastCorrection', translationKey: 'shaftHeightLastCorrection' },
-
-                // Label: Achter innemen (zie Foliepas), Value: 'achterInnemenLastCorrection', translationKey: 'rearTakeInLastCorrection',
-                // Translation: Achter innemen (zie Foliepas): Links: Rechts:
-                {label: 'Achter innemen (zie Foliepas)', value: 'achterInnemenLastCorrection', translationKey: 'rearTakeInLastCorrection' },
-
-                // Label: Enkels aanpassen (zie Foliepas), Value: 'ankleAdjustmentLastCorrection', translationKey: 'ankleAdjustmentLastCorrection',
-                // Translation: Enkels aanpassen (zie Foliepas): Links: Rechts:
-                {label: 'Enkels aanpassen (zie Foliepas)', value: 'ankleAdjustmentLastCorrection', translationKey: 'ankleAdjustmentLastCorrection' },
-                ]; */}
-
-
-
-
-              {/* <Textarea
-                  id="reading-correction-foil-fit"
-                  placeholder={t('readingCorrectionAfterFoilFit')}
-                  value={form.watch('readingCorrectionAfterFoilFit')}
-                  onChange={e =>
-                    form.setValue(
-                      'readingCorrectionAfterFoilFit',
-                      e.target.value,
-                    )
-                  }
-                />
-              </FormCard> */}
-
-
-              {/* Reading Corrections after Foil Fit */}
               <FormCard title={t('readingCorrectionAfterFoilFit')}>
 
                 {/* Pressable Labels Section */}
@@ -539,16 +527,55 @@ const FormCheckFoliepasPage = () => {
               </FormCard>
 
 
-              {/* Reading Correction After Lining Shoe */}
+              {/* Reading Corrections after Lining Shoe */}
               <FormCard title={t('readingCorrectionAfterLiningShoe')}>
+                {/* Pressable Labels Section */}
+                <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {LEESTCORRECTIE_OPTIES.map((optie) => (
+                    <Label
+                      key={optie.value}
+                      onClick={() => {
+                        // Get current value
+                        const currentText = form.getValues('readingCorrectionAfterLiningShoe') || '';
+
+                        // Construct new line: "- Translation: Links: Rechts:"
+                        const textToAdd = `- ` + t(optie.translationKey);
+
+                        // Append with newline if text exists
+                        const newText = currentText
+                          ? `${currentText}\n${textToAdd}`
+                          : textToAdd;
+
+                        // Update form
+                        form.setValue('readingCorrectionAfterLiningShoe', newText, {
+                          shouldDirty: true,
+                          shouldTouch: true,
+                          shouldValidate: true,
+                        });
+                      }}
+                      className="flex cursor-pointer items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 transition-colors hover:bg-accent/30"
+                    >
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm font-medium leading-none">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </div>
+                {/* Textarea */}
                 <Textarea
                   id="reading-correction-lining-shoe"
                   placeholder={t('readingCorrectionAfterLiningShoe')}
-                  value={form.watch('readingCorrectionAfterLiningShoe')}
+                  value={form.watch('readingCorrectionAfterLiningShoe') || ''}
                   onChange={e =>
                     form.setValue(
                       'readingCorrectionAfterLiningShoe',
                       e.target.value,
+                      {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      }
                     )
                   }
                 />
@@ -559,6 +586,47 @@ const FormCheckFoliepasPage = () => {
                 title="Foliepas aanmerkingen"
                 description={`${t('enclosure')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
               >
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('shaftHeightCm')}
+                >
+                  {showLinks && (
+                    <FormItemWrapper
+                      label={t('leftCm')}
+                      className="items-center">
+                      <Input
+                        id="shaft-left"
+                        type="number"
+                        placeholder="cm"
+                        value={form.watch('schachthoogteLinks')}
+                        onChange={e =>
+                          form.setValue('schachthoogteLinks', e.target.value)
+                        }
+                        className="w-2/3 text-center"
+                      />
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper
+                      className="items-center"
+                      label={t('rightCm')}
+                    >
+                      <Input
+                        id="shaft-right"
+                        type="number"
+                        placeholder="cm"
+                        value={form.watch('schachthoogteRechts')}
+                        onChange={e =>
+                          form.setValue('schachthoogteRechts', e.target.value)
+                        }
+                        className="w-2/3 text-center"
+                      />
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
+
                 {/* Enclosure (Omsluiting) - Complex multi-select with mm values */}
                 <FormBlock
                   columns={2}

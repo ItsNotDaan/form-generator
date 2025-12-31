@@ -382,6 +382,10 @@ export interface CheckFoliepasData {
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
 
+  // Shaft height in cm
+  schachthoogteLinks?: string;
+  schachthoogteRechts?: string;
+
   // Openstand schacht
   openstandSchacht?: string;
 
