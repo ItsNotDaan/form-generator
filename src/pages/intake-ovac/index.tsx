@@ -1,35 +1,25 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {useRouter} from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {BaseLayout, FormFooter, FormSection} from '@/components/layout';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Textarea} from '@/components/ui/textarea';
 import {Label} from '@/components/ui/label';
 import {Checkbox} from '@/components/ui/checkbox';
-import {Switch} from '@/components/ui/switch';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Separator} from '@/components/ui/separator';
 import {ChevronRight} from 'lucide-react';
 import {Form} from '@/components/ui/form';
 import {Routes} from '@/lib/routes';
 import {
   CORRECTIE_MIDDENVOET_OPTIES,
   CORRECTIE_VOORVOET_OPTIES,
-  OVAC_OMSCHRIJVING_ITEMS,
   PAARTYPE_OPTIES,
   PELLOTE_OPTIES,
-  STEUNZOLEN_PRIJS_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -44,60 +34,47 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const OVAC_ITEM_TRANSLATIONS: Record<string, string> = {
-  supplementIndividueel: 'supplementIndividual',
-  eenvoudigeAfwikkelrol: 'simpleRockerSole',
-  gecompliceerdeAfwikkelrol: 'complicatedRockerSole',
-  hakAanpassing2cm: 'heelAdjustmentUpTo2cm',
-  hakZoolVerhoging3cm: 'heelSoleRaiseUpTo3cm',
-  hakZoolVerhoging7cm: 'heelSoleRaiseUpTo7cm',
-  aangepastehakken: 'customHeels',
-  zoolverstijving: 'soleStiffeningOsb',
-  nieuweWreefsluiting: 'newInstepClosure',
-};
-
 const formSchema = z.object({
   welkPaar: z.string(),
   medischeIndicatie: z.string().optional(),
-  // Omschrijving items (9 × L/R)
-  supplementIndividueelLinks: z.boolean().optional(),
-  supplementIndividueelRechts: z.boolean().optional(),
-  eenvoudigeAfwikkelrolLinks: z.boolean().optional(),
-  eenvoudigeAfwikkelrolRechts: z.boolean().optional(),
-  gecompliceerdeAfwikkelrolLinks: z.boolean().optional(),
-  gecompliceerdeAfwikkelrolRechts: z.boolean().optional(),
-  hakAanpassing2cmLinks: z.boolean().optional(),
-  hakAanpassing2cmRechts: z.boolean().optional(),
-  hakZoolVerhoging3cmLinks: z.boolean().optional(),
-  hakZoolVerhoging3cmRechts: z.boolean().optional(),
-  hakZoolVerhoging7cmLinks: z.boolean().optional(),
-  hakZoolVerhoging7cmRechts: z.boolean().optional(),
-  aangepastehakkenLinks: z.boolean().optional(),
-  aangepastehakkenRechts: z.boolean().optional(),
-  zoolverstijvingLinks: z.boolean().optional(),
-  zoolverstijvingRechts: z.boolean().optional(),
-  nieuweWreefsluitingLinks: z.boolean().optional(),
-  nieuweWreefsluitingRechts: z.boolean().optional(),
+  side: z.enum(['left', 'right', 'both'] as const).optional(),
 
-  // Verkorting
-  verkortingLinks: z.boolean().optional(),
-  verkortingRechts: z.boolean().optional(),
-  voorvoetCmLinks: z.string().optional(),
-  voorvoetCmRechts: z.string().optional(),
-  hielCmLinks: z.string().optional(),
-  hielCmRechts: z.string().optional(),
+  // Section 1: Steunzolen/Talonette
+  talonetteEnabled: z.boolean().optional(),
+  talonetteVerhogingLinks: z.string().optional(),
+  talonetteVerhogingRechts: z.string().optional(),
 
-  // Optional steunzolen
   steunzoolEnabled: z.boolean().optional(),
   steunzoolTypeGeneral: z.string().optional(),
   steunzoolAndersText: z.string().optional(),
   steunzoolCorrectieMiddenvoet: z.string().optional(),
   steunzoolCorrectieVoorvoet: z.string().optional(),
   steunzoolVvPellote: z.string().optional(),
-  talonetteVerhogingLinks: z.string().optional(),
-  talonetteVerhogingRechts: z.string().optional(),
-  steunzoolPrijs: z.number().optional(),
-  steunzoolPrijsNaam: z.string().optional(),
+
+  // Section 2: Supplement (van leest)
+  supplementIndividueelEnabled: z.boolean().optional(),
+  supplementIndividueelLinks: z.boolean().optional(),
+  supplementIndividueelRechts: z.boolean().optional(),
+
+  // Section 3: Zoolverstijving
+  zoolverstijvingEnabled: z.boolean().optional(),
+  zoolverstijvingLinks: z.boolean().optional(),
+  zoolverstijvingRechts: z.boolean().optional(),
+
+  // Section 4: Afwikkelrol (onder schoen)
+  afwikkelrolEnabled: z.boolean().optional(),
+  afwikkelrolCmLinks: z.string().optional(),
+  afwikkelrolCmRechts: z.string().optional(),
+
+  // Section 5: Hakzool verhoging
+  hakzoolVerhogingEnabled: z.boolean().optional(),
+  hakzoolVerhogingCmLinks: z.string().optional(),
+  hakzoolVerhogingCmRechts: z.string().optional(),
+
+  // Section 6: Nieuwe wreefsluiting
+  nieuweWreefsluitingEnabled: z.boolean().optional(),
+  nieuweWreefsluitingLinks: z.boolean().optional(),
+  nieuweWreefsluitingRechts: z.boolean().optional(),
 
   bijzonderheden: z.string().optional(),
 });
@@ -116,148 +93,131 @@ const FormIntakeOVACPage = () => {
     defaultValues: {
       welkPaar: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
       medischeIndicatie: '',
-      verkortingLinks: false,
-      verkortingRechts: false,
-      voorvoetCmLinks: '',
-      voorvoetCmRechts: '',
-      hielCmLinks: '',
-      hielCmRechts: '',
+      side: 'both',
+
+      // Section 1: Steunzolen/Talonette
+      talonetteEnabled: false,
+      talonetteVerhogingLinks: '',
+      talonetteVerhogingRechts: '',
+
       steunzoolEnabled: false,
       steunzoolTypeGeneral: '',
       steunzoolAndersText: '',
       steunzoolCorrectieMiddenvoet: '',
       steunzoolCorrectieVoorvoet: '',
       steunzoolVvPellote: '',
-      talonetteVerhogingLinks: '',
-      talonetteVerhogingRechts: '',
-      steunzoolPrijs: undefined,
-      steunzoolPrijsNaam: '',
+
+      // Section 2: Supplement
+      supplementIndividueelEnabled: false,
+      supplementIndividueelLinks: false,
+      supplementIndividueelRechts: false,
+
+      // Section 3: Zoolverstijving
+      zoolverstijvingEnabled: false,
+      zoolverstijvingLinks: false,
+      zoolverstijvingRechts: false,
+
+      // Section 4: Afwikkelrol
+      afwikkelrolEnabled: false,
+      afwikkelrolCmLinks: '',
+      afwikkelrolCmRechts: '',
+
+      // Section 5: Hakzool verhoging
+      hakzoolVerhogingEnabled: false,
+      hakzoolVerhogingCmLinks: '',
+      hakzoolVerhogingCmRechts: '',
+
+      // Section 6: Nieuwe wreefsluiting
+      nieuweWreefsluitingEnabled: false,
+      nieuweWreefsluitingLinks: false,
+      nieuweWreefsluitingRechts: false,
+
       bijzonderheden: '',
     },
   });
 
   const showSteunzolen = form.watch('steunzoolEnabled');
 
-  const omschrijvingItems = useMemo(() => OVAC_OMSCHRIJVING_ITEMS, []);
-
-  const renderOmschrijvingRow = (
-    key: string,
-    label: string,
-    postNr: string,
-  ) => {
-    const leftField = `${key}Links` as keyof FormData;
-    const rightField = `${key}Rechts` as keyof FormData;
-
-    return (
-      <div key={key} className="rounded-lg border bg-muted/50 p-4 space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <p className="font-semibold text-foreground">{label}</p>
-          <span className="text-xs text-muted-foreground">Post {postNr}</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id={`${key}-links`}
-              checked={!!form.watch(leftField)}
-              onCheckedChange={checked => form.setValue(leftField, !!checked)}
-            />
-            <Label
-              htmlFor={`${key}-links`}
-              className="font-normal cursor-pointer"
-            >
-              {t('left')}
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id={`${key}-rechts`}
-              checked={!!form.watch(rightField)}
-              onCheckedChange={checked => form.setValue(rightField, !!checked)}
-            />
-            <Label
-              htmlFor={`${key}-rechts`}
-              className="font-normal cursor-pointer"
-            >
-              {t('right')}
-            </Label>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const onSubmit = (data: FormData) => {
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'OVAC'}));
     }
 
-    const steunzoolEnabled = !!data.steunzoolEnabled;
-
     dispatch(
       setIntakeOVACData({
         welkPaar: data.welkPaar,
         medischeIndicatie: data.medischeIndicatie || '',
-        supplementIndividueelLinks: !!data.supplementIndividueelLinks,
-        supplementIndividueelRechts: !!data.supplementIndividueelRechts,
-        eenvoudigeAfwikkelrolLinks: !!data.eenvoudigeAfwikkelrolLinks,
-        eenvoudigeAfwikkelrolRechts: !!data.eenvoudigeAfwikkelrolRechts,
-        gecompliceerdeAfwikkelrolLinks: !!data.gecompliceerdeAfwikkelrolLinks,
-        gecompliceerdeAfwikkelrolRechts: !!data.gecompliceerdeAfwikkelrolRechts,
-        hakAanpassing2cmLinks: !!data.hakAanpassing2cmLinks,
-        hakAanpassing2cmRechts: !!data.hakAanpassing2cmRechts,
-        hakZoolVerhoging3cmLinks: !!data.hakZoolVerhoging3cmLinks,
-        hakZoolVerhoging3cmRechts: !!data.hakZoolVerhoging3cmRechts,
-        hakZoolVerhoging7cmLinks: !!data.hakZoolVerhoging7cmLinks,
-        hakZoolVerhoging7cmRechts: !!data.hakZoolVerhoging7cmRechts,
-        aangepastehakkenLinks: !!data.aangepastehakkenLinks,
-        aangepastehakkenRechts: !!data.aangepastehakkenRechts,
-        zoolverstijvingLinks: !!data.zoolverstijvingLinks,
-        zoolverstijvingRechts: !!data.zoolverstijvingRechts,
-        nieuweWreefsluitingLinks: !!data.nieuweWreefsluitingLinks,
-        nieuweWreefsluitingRechts: !!data.nieuweWreefsluitingRechts,
-        verkortingLinks: !!data.verkortingLinks,
-        verkortingRechts: !!data.verkortingRechts,
-        voorvoetCmLinks: data.voorvoetCmLinks || '',
-        voorvoetCmRechts: data.voorvoetCmRechts || '',
-        hielCmLinks: data.hielCmLinks || '',
-        hielCmRechts: data.hielCmRechts || '',
-        steunzoolTypeGeneral: steunzoolEnabled
-          ? data.steunzoolTypeGeneral || ''
-          : '',
-        steunzoolAndersText: steunzoolEnabled
-          ? data.steunzoolAndersText || ''
-          : '',
-        steunzoolCorrectieMiddenvoet: steunzoolEnabled
-          ? data.steunzoolCorrectieMiddenvoet || ''
-          : '',
-        steunzoolCorrectieVoorvoet: steunzoolEnabled
-          ? data.steunzoolCorrectieVoorvoet || ''
-          : '',
-        steunzoolVvPellote: steunzoolEnabled
-          ? data.steunzoolVvPellote || ''
-          : '',
-        talonetteVerhogingLinks: steunzoolEnabled
+
+        // Section 1: Steunzolen/Talonette
+        talonetteVerhogingLinks: data.talonetteEnabled
           ? data.talonetteVerhogingLinks || ''
           : '',
-        talonetteVerhogingRechts: steunzoolEnabled
+        talonetteVerhogingRechts: data.talonetteEnabled
           ? data.talonetteVerhogingRechts || ''
           : '',
-        steunzoolPrijs: steunzoolEnabled ? data.steunzoolPrijs : undefined,
-        steunzoolPrijsNaam: steunzoolEnabled
-          ? data.steunzoolPrijsNaam || ''
+
+        steunzoolTypeGeneral: data.steunzoolEnabled
+          ? data.steunzoolTypeGeneral || ''
           : '',
+        steunzoolAndersText: data.steunzoolEnabled
+          ? data.steunzoolAndersText || ''
+          : '',
+        steunzoolCorrectieMiddenvoet: data.steunzoolEnabled
+          ? data.steunzoolCorrectieMiddenvoet || ''
+          : '',
+        steunzoolCorrectieVoorvoet: data.steunzoolEnabled
+          ? data.steunzoolCorrectieVoorvoet || ''
+          : '',
+        steunzoolVvPellote: data.steunzoolEnabled
+          ? data.steunzoolVvPellote || ''
+          : '',
+
+        // Section 2: Supplement (van leest)
+        supplementIndividueelLinks: data.supplementIndividueelEnabled
+          ? !!data.supplementIndividueelLinks
+          : false,
+        supplementIndividueelRechts: data.supplementIndividueelEnabled
+          ? !!data.supplementIndividueelRechts
+          : false,
+
+        // Section 3: Zoolverstijving
+        zoolverstijvingLinks: data.zoolverstijvingEnabled
+          ? !!data.zoolverstijvingLinks
+          : false,
+        zoolverstijvingRechts: data.zoolverstijvingEnabled
+          ? !!data.zoolverstijvingRechts
+          : false,
+
+        // Section 4: Afwikkelrol (onder schoen) - dispatch cm values
+        afwikkelrolCmLinks: data.afwikkelrolEnabled
+          ? data.afwikkelrolCmLinks || ''
+          : '',
+        afwikkelrolCmRechts: data.afwikkelrolEnabled
+          ? data.afwikkelrolCmRechts || ''
+          : '',
+
+        // Section 5: Hakzool verhoging - dispatch cm values
+        hakzoolVerhogingCmLinks: data.hakzoolVerhogingEnabled
+          ? data.hakzoolVerhogingCmLinks || ''
+          : '',
+        hakzoolVerhogingCmRechts: data.hakzoolVerhogingEnabled
+          ? data.hakzoolVerhogingCmRechts || ''
+          : '',
+
+        // Section 6: Nieuwe wreefsluiting
+        nieuweWreefsluitingLinks: data.nieuweWreefsluitingEnabled
+          ? !!data.nieuweWreefsluitingLinks
+          : false,
+        nieuweWreefsluitingRechts: data.nieuweWreefsluitingEnabled
+          ? !!data.nieuweWreefsluitingRechts
+          : false,
+
         bijzonderheden: data.bijzonderheden || '',
       }),
     );
 
     void router.push(Routes.form_results);
   };
-
-  // Determine which sides to show based on your form logic
-  // For now, always show both sides
-  const showLinks = true;
-  const showRechts = true;
-  const side = showLinks && showRechts ? 'both' : showLinks ? 'left' : 'right';
 
   return (
     <BaseLayout title={t('intakeOvac')} currentStep={2}>
@@ -277,7 +237,7 @@ const FormIntakeOVACPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Paartype & indicatie */}
+              {/* Section 0: Description and which pair */}
               <FormCard title={t('description')} description={t('whichPair')}>
                 <FormBlock columns={2} dividers={true} alignItems="start">
                   {/* Which Pair (Radio Group) */}
@@ -323,177 +283,110 @@ const FormIntakeOVACPage = () => {
                 </FormBlock>
               </FormCard>
 
-              {/* Omschrijving items */}
-              <FormCard title={t('description')} description={t('modules')}>
-                <FormBlock
-                  columns={2}
-                  // dividers={true} // We handle dividers internally for the lists
-                  alignItems="center" // Ensure headers stay at top
-                  contentClassName="space-x-4" // Extra gap between the huge Left/Right blocks
-                >
-                  <FormItemWrapper>
-                    {/* LEFT SIDE LIST */}
-                    {showLinks && (
-                      <div className="flex flex-col p-3 w-full">
-                        <div className="flex items-center justify-center pb-2 border-b">
-                          <Label className="text-base font-bold">
-                            {t('left')}
-                          </Label>
-                        </div>
-                        {/* TIGHT LIST CONTAINER */}
-                        <div className="flex flex-col divide-y border overflow-hidden">
-                          {omschrijvingItems.map(item => (
-                            <ModuleSwitchRow
-                              key={`left-${item.key}`}
-                              item={item}
-                              side="left"
-                              form={form}
-                              t={t}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </FormItemWrapper>
-
-                  <FormItemWrapper>
-                    {/* RIGHT SIDE LIST */}
-                    {showRechts && (
-                      <div className="flex flex-col p-3 w-full">
-                        <div className="flex items-center justify-center pb-2 border-b">
-                          <Label className="text-base font-bold">
-                            {t('right')}
-                          </Label>
-                        </div>
-
-                        {/* TIGHT LIST CONTAINER */}
-                        <div className="flex flex-col divide-y border rounded-lg overflow-hidden">
-                          {omschrijvingItems.map(item => (
-                            <ModuleSwitchRow
-                              key={`right-${item.key}`}
-                              item={item}
-                              side="right"
-                              form={form}
-                              t={t}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Verkorting */}
+              {/* Section 0.2: Left/Right/Both selector */}
               <FormCard
-                title={t('verkorting')}
-                description={t('specialNotesPlaceholder')}
+                title={t('side')}
+                description={t('chooseSideDescription')}
               >
-                <FormBlock columns={2} dividers={true}>
+                <FormBlock columns={1} alignItems="center">
                   <FormItemWrapper>
-                    <Label
-                      htmlFor="verkorting-links"
-                      className="text-sm font-medium cursor-pointer"
-                    >
-                      {t('left')}
-                    </Label>
-                    <Switch
-                      id="verkorting-links"
-                      checked={!!form.watch('verkortingLinks')}
-                      onCheckedChange={checked =>
-                        form.setValue('verkortingLinks', !!checked)
+                    <RadioGroup
+                      value={form.watch('side') || 'both'}
+                      onValueChange={val =>
+                        form.setValue('side', val as 'left' | 'right' | 'both')
                       }
-                    />
-                    {form.watch('verkortingLinks') && (
-                      <div className="flex flex-row mt-2 space-x-4">
-                        <FormItemWrapper label={t('voorvoetCm')}>
-                          <Input
-                            id="voorvoet-cm-links"
-                            type="number"
-                            step="0.5"
-                            placeholder={t('voorvoetCm')}
-                            value={form.watch('voorvoetCmLinks') || ''}
-                            onChange={e =>
-                              form.setValue('voorvoetCmLinks', e.target.value)
-                            }
-                            className=""
-                          />
-                        </FormItemWrapper>
-                        <FormItemWrapper label={t('hielCm')}>
-                          <Input
-                            id="hiel-cm-links"
-                            type="number"
-                            step="0.5"
-                            placeholder={t('hielCm')}
-                            value={form.watch('hielCmLinks') || ''}
-                            onChange={e =>
-                              form.setValue('hielCmLinks', e.target.value)
-                            }
-                            className=""
-                          />
-                        </FormItemWrapper>
-                      </div>
-                    )}
-                  </FormItemWrapper>
-
-                  {/* Right Side */}
-                  <FormItemWrapper>
-                    <Label
-                      htmlFor="verkorting-rechts"
-                      className="text-sm font-medium cursor-pointer"
                     >
-                      {t('right')}
-                    </Label>
-                    <Switch
-                      id="verkorting-rechts"
-                      checked={!!form.watch('verkortingRechts')}
-                      onCheckedChange={checked =>
-                        form.setValue('verkortingRechts', !!checked)
-                      }
-                    />
-
-                    {form.watch('verkortingRechts') && (
-                      <div className="flex flex-row mt-2 space-x-4">
-                        <FormItemWrapper label={t('voorvoetCm')}>
-                          <Input
-                            id="voorvoet-cm-rechts"
-                            type="number"
-                            step="0.5"
-                            placeholder={t('voorvoetCm')}
-                            value={form.watch('voorvoetCmRechts') || ''}
-                            onChange={e =>
-                              form.setValue('voorvoetCmRechts', e.target.value)
-                            }
-                            className=""
-                          />
-                        </FormItemWrapper>
-                        <FormItemWrapper label={t('hielCm')}>
-                          <Input
-                            id="hiel-cm-rechts"
-                            type="number"
-                            step="0.1"
-                            placeholder={t('hielCm')}
-                            value={form.watch('hielCmRechts') || ''}
-                            onChange={e =>
-                              form.setValue('hielCmRechts', e.target.value)
-                            }
-                            className=""
-                          />
-                        </FormItemWrapper>
+                      <div className="flex gap-6 justify-center">
+                        <Label className="flex items-center gap-2 cursor-pointer">
+                          <RadioGroupItem value="left" />
+                          {t('left')}
+                        </Label>
+                        <Label className="flex items-center gap-2 cursor-pointer">
+                          <RadioGroupItem value="right" />
+                          {t('right')}
+                        </Label>
+                        <Label className="flex items-center gap-2 cursor-pointer">
+                          <RadioGroupItem value="both" />
+                          {t('both')}
+                        </Label>
                       </div>
-                    )}
+                    </RadioGroup>
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 
-              {/* Steunzolen (optional) */}
+              {/* Section 1: Steunzolen/Talonette */}
+
+              {/* Talonette */}
+              <FormCard
+                title={t('talonetteSection')}
+                description={t('talonetteDescription')}
+                toggleAble={true}
+                toggleLabel={t('addTalonette')}
+                toggleId="talonette-toggle"
+                defaultOpen={form.watch('talonetteEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('talonetteEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('talonetteVerhogingLinks', '');
+                    form.setValue('talonetteVerhogingRechts', '');
+                  }
+                }}
+              >
+                {/* Heel Raise (no pricing for OVAC) */}
+                <FormBlock columns={2} dividers={true}>
+                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
+                    <Input
+                      id="hak-verhoging-links"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('talonetteVerhogingLinks')}
+                      onChange={e =>
+                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                      }
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
+                    <Input
+                      id="hak-verhoging-rechts"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('talonetteVerhogingRechts')}
+                      onChange={e =>
+                        form.setValue(
+                          'talonetteVerhogingRechts',
+                          e.target.value,
+                        )
+                      }
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Steunzolen */}
               <FormCard
                 title={t('insolesSection')}
                 description={t('insolesDescription')}
                 toggleAble={true}
-                toggleLabel={t('enableInsoles')}
+                toggleLabel={t('addInsoles')}
                 toggleId="steunzolen-toggle"
                 defaultOpen={form.watch('steunzoolEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('steunzoolEnabled', isOpen);
+                  if (!isOpen) {
+                    // Clear steunzolen fields when disabled
+                    form.setValue('steunzoolTypeGeneral', '');
+                    form.setValue('steunzoolAndersText', '');
+                    form.setValue('steunzoolCorrectieMiddenvoet', '');
+                    form.setValue('steunzoolCorrectieVoorvoet', '');
+                    form.setValue('steunzoolVvPellote', '');
+                  }
+                }}
               >
                 {/* Type Selection */}
                 <FormBlock
@@ -502,7 +395,6 @@ const FormIntakeOVACPage = () => {
                   title={t('insoleType')}
                   alignItems="start"
                 >
-                  {/* Radio Grid for Types */}
                   <FormItemWrapper className="col-span-2">
                     <Select
                       value={form.watch('steunzoolTypeGeneral') || undefined}
@@ -523,7 +415,6 @@ const FormIntakeOVACPage = () => {
                     </Select>
                   </FormItemWrapper>
 
-                  {/* Conditional "Other" Textarea */}
                   {form.watch('steunzoolTypeGeneral') === 'Anders' && (
                     <FormItemWrapper
                       label={t('specifyOther')}
@@ -547,7 +438,7 @@ const FormIntakeOVACPage = () => {
                 <FormBlock
                   columns={3}
                   dividers={true}
-                  title={t('insoleCorrections')} // Optional: Add a title if translation exists, or leave blank
+                  title={t('insoleCorrections')}
                 >
                   <FormItemWrapper label={t('midfootCorrection')}>
                     <Select
@@ -613,84 +504,278 @@ const FormIntakeOVACPage = () => {
                     </Select>
                   </FormItemWrapper>
                 </FormBlock>
+              </FormCard>
 
-                {/* Heel Raise & Price */}
+              {/* Section 2: Supplement (van leest) */}
+              <FormCard
+                title={t('supplement')}
+                description={t('supplementDescription')}
+                toggleAble={true}
+                toggleLabel={t('addSupplement')}
+                toggleId="supplement-toggle"
+                defaultOpen={form.watch('supplementIndividueelEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('supplementIndividueelEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('supplementIndividueelLinks', false);
+                    form.setValue('supplementIndividueelRechts', false);
+                  }
+                }}
+              >
                 <FormBlock columns={2} dividers={true}>
-                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
+                  <FormItemWrapper>
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
+                      <Checkbox
+                        id="supplement-links"
+                        checked={!!form.watch('supplementIndividueelLinks')}
+                        onCheckedChange={checked =>
+                          form.setValue(
+                            'supplementIndividueelRechts',
+                            !!checked,
+                          )
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t('left')}
+                        </p>
+                      </div>
+                    </Label>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
+                      <Checkbox
+                        id="supplement-rechts"
+                        checked={!!form.watch('supplementIndividueelRechts')}
+                        onCheckedChange={checked =>
+                          form.setValue(
+                            'supplementIndividueelRechts',
+                            !!checked,
+                          )
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t('right')}
+                        </p>
+                      </div>
+                    </Label>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Section 3: Zoolverstijving */}
+              <FormCard
+                title={t('soleStiffening')}
+                toggleAble={true}
+                toggleLabel={t('addSoleStiffening')}
+                toggleId="zoolverstijving-toggle"
+                defaultOpen={form.watch('zoolverstijvingEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('zoolverstijvingEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('zoolverstijvingLinks', false);
+                    form.setValue('zoolverstijvingRechts', false);
+                  }
+                }}
+              >
+                <FormBlock columns={2} dividers={true}>
+                  <FormItemWrapper>
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
+                      <Checkbox
+                        id="zoolverstijving-links"
+                        checked={!!form.watch('zoolverstijvingLinks')}
+                        onCheckedChange={checked =>
+                          form.setValue('zoolverstijvingLinks', !!checked)
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t('left')}
+                        </p>
+                      </div>
+                    </Label>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
+                      <Checkbox
+                        id="zoolverstijving-rechts"
+                        checked={!!form.watch('zoolverstijvingRechts')}
+                        onCheckedChange={checked =>
+                          form.setValue('zoolverstijvingRechts', !!checked)
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t('right')}
+                        </p>
+                      </div>
+                    </Label>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Section 4: Afwikkelrol (onder schoen) */}
+              <FormCard
+                title={t('rockerSole')}
+                toggleAble={true}
+                toggleLabel={t('addRockerSole')}
+                toggleId="afwikkelrol-toggle"
+                defaultOpen={form.watch('afwikkelrolEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('afwikkelrolEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('afwikkelrolCmLinks', '');
+                    form.setValue('afwikkelrolCmRechts', '');
+                  }
+                }}
+              >
+                <FormBlock columns={3} dividers={true}>
+                  <FormItemWrapper label={t('leftCm')}>
                     <Input
-                      id="hak-verhoging-links"
+                      id="afwikkelrol-cm-links"
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingLinks')}
+                      value={form.watch('afwikkelrolCmLinks') || ''}
                       onChange={e =>
-                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                        form.setValue('afwikkelrolCmLinks', e.target.value)
                       }
-                      className="w-2/3"
+                      className="w-full"
                     />
                   </FormItemWrapper>
 
-                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
+                  <FormItemWrapper>
+                    <div className="flex items-center justify-center h-full min-h-25 border-2 border-dashed border-muted-foreground/25 rounded-md bg-muted/20">
+                      <p className="text-sm text-muted-foreground">
+                        {t('rockerSoleImage')}
+                      </p>
+                    </div>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('rightCm')}>
                     <Input
-                      id="hak-verhoging-rechts"
+                      id="afwikkelrol-cm-rechts"
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingRechts')}
+                      value={form.watch('afwikkelrolCmRechts') || ''}
                       onChange={e =>
-                        form.setValue(
-                          'talonetteVerhogingRechts',
-                          e.target.value,
-                        )
+                        form.setValue('afwikkelrolCmRechts', e.target.value)
                       }
-                      className="w-2/3"
+                      className="w-full"
                     />
                   </FormItemWrapper>
                 </FormBlock>
+              </FormCard>
 
-                {/* Price Selection */}
-                <FormBlock columns={1} dividers={false}>
-                  <FormItemWrapper label={t('insolePrice')}>
-                    <div className="flex gap-4 items-center">
-                      <Select
-                        value={
-                          form.watch('steunzoolPrijs')
-                            ? String(form.watch('steunzoolPrijs'))
-                            : undefined
-                        }
-                        onValueChange={val => {
-                          const numVal = val ? parseFloat(val) : undefined;
-                          form.setValue('steunzoolPrijs', numVal);
-                        }}
-                      >
-                        <SelectTrigger className="">
-                          <SelectValue placeholder={t('chooseOption')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {STEUNZOLEN_PRIJS_OPTIES.map(option => (
-                            <SelectItem
-                              key={option.value}
-                              value={String(option.value)}
-                            >
-                              {t(option.label)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <div className="relative w-28">
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
-                          €
-                        </span>
-                        <Input
-                          id="steunzool-prijs-value"
-                          type="number"
-                          value={form.watch('steunzoolPrijs') || ''}
-                          readOnly
-                          className="pl-6 bg-muted text-center cursor-not-allowed"
-                          tabIndex={-1}
-                        />
-                      </div>
+              {/* Section 5: Hakzool verhoging */}
+              <FormCard
+                title={t('heelSoleRaise')}
+                toggleAble={true}
+                toggleLabel={t('addHeelSoleRaise')}
+                toggleId="hakzool-toggle"
+                defaultOpen={form.watch('hakzoolVerhogingEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('hakzoolVerhogingEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('hakzoolVerhogingCmLinks', '');
+                    form.setValue('hakzoolVerhogingCmRechts', '');
+                  }
+                }}
+              >
+                <FormBlock columns={3} dividers={true}>
+                  <FormItemWrapper label={t('leftCm')}>
+                    <Input
+                      id="hakzool-cm-links"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('hakzoolVerhogingCmLinks') || ''}
+                      onChange={e =>
+                        form.setValue('hakzoolVerhogingCmLinks', e.target.value)
+                      }
+                      className="w-full"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <div className="flex items-center justify-center h-full min-h-25 border-2 border-dashed border-muted-foreground/25 rounded-md bg-muted/20">
+                      <p className="text-sm text-muted-foreground">
+                        {t('heelSoleRaiseImage')}
+                      </p>
                     </div>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('rightCm')}>
+                    <Input
+                      id="hakzool-cm-rechts"
+                      type="number"
+                      step="0.1"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('hakzoolVerhogingCmRechts') || ''}
+                      onChange={e =>
+                        form.setValue(
+                          'hakzoolVerhogingCmRechts',
+                          e.target.value,
+                        )
+                      }
+                      className="w-full"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Section 6: Nieuwe wreefsluiting */}
+              <FormCard
+                title={t('newInstepClosure')}
+                toggleAble={true}
+                toggleLabel={t('addNewInstepClosure')}
+                toggleId="wreefsluiting-toggle"
+                defaultOpen={form.watch('nieuweWreefsluitingEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('nieuweWreefsluitingEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('nieuweWreefsluitingLinks', false);
+                    form.setValue('nieuweWreefsluitingRechts', false);
+                  }
+                }}
+              >
+                <FormBlock columns={2} dividers={true}>
+                  <FormItemWrapper>
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
+                      <Checkbox
+                        id="wreefsluiting-links"
+                        checked={!!form.watch('nieuweWreefsluitingLinks')}
+                        onCheckedChange={checked =>
+                          form.setValue('nieuweWreefsluitingLinks', !!checked)
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t('left')}
+                        </p>
+                      </div>
+                    </Label>
+                  </FormItemWrapper>
+
+                  <FormItemWrapper>
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
+                      <Checkbox
+                        id="wreefsluiting-rechts"
+                        checked={!!form.watch('nieuweWreefsluitingRechts')}
+                        onCheckedChange={checked =>
+                          form.setValue('nieuweWreefsluitingRechts', !!checked)
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {t('right')}
+                        </p>
+                      </div>
+                    </Label>
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>
@@ -731,48 +816,6 @@ const FormIntakeOVACPage = () => {
         </FormSection>
       </div>
     </BaseLayout>
-  );
-};
-
-const ModuleSwitchRow = ({item, side, form, t}: any) => {
-  // Determine field path based on side (Matches your schema structure)
-  // Assuming schema is: omsluitingLinks: { [key]: boolean }
-  const fieldGroup = side === 'left' ? 'omsluitingLinks' : 'omsluitingRechts';
-  const fullPath = `${fieldGroup}.${item.key}`;
-
-  // Watch specific value
-  const fieldValues = form.watch(fieldGroup) || {};
-  const isChecked = !!fieldValues[item.key];
-
-  return (
-    <div className="flex items-center justify-between p-3 bg-card border-2 hover:border-primary! transition-colors">
-      <div className="flex flex-col gap-0.5">
-        <Label
-          htmlFor={`${side}-${item.key}`}
-          className="text-sm font-medium cursor-pointer"
-        >
-          {t(OVAC_ITEM_TRANSLATIONS[item.key] || item.label)}
-        </Label>
-        {item.postNr && (
-          <span className="text-[10px] text-muted-foreground font-mono">
-            #{item.postNr}
-          </span>
-        )}
-      </div>
-
-      <Switch
-        id={`${side}-${item.key}`}
-        checked={isChecked}
-        onCheckedChange={checked => {
-          // Update the specific record in the object
-          const currentValues = form.getValues(fieldGroup) || {};
-          form.setValue(fieldGroup, {
-            ...currentValues,
-            [item.key]: checked,
-          });
-        }}
-      />
-    </div>
   );
 };
 

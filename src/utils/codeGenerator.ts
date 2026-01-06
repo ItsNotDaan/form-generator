@@ -25,32 +25,13 @@
  * - 50: Diverse Amputaties per side
  */
 
-/**
- * Medical Code Generation System for OVAC intake forms
- *
- * OVAC Definitions
- *
- * ---MAIN CODE---
- * - 70: OVAC Cluster (varies by insurer; some use 70 L, 70 R, or just 70)
- *
- * ---SUB CODES---
- * - 71: Supplement individueel
- * - 74: Eenvoudige afwikkelrol
- * - 75: Gecompliceerde afwikkelrol
- * - 76: Hak aanpassing t/m 2 cm
- * - 77: Hak zool verhoging t/m 3 cm
- * - 78: Hak zool verhoging t/m 7 cm
- * - 84: Aangepaste hakken
- * - 85: Zoolverstijving
- * - 88: Nieuwe wreefsluiting
- */
-
 import {
   ClientData,
   IntakeVLOSData,
   IntakeOSAData,
   IntakeOVACData,
 } from '@/components/form/types/formData';
+
 import {OVAC_OMSCHRIJVING_ITEMS} from '@/lib/constants/formConstants';
 
 export interface GeneratedCodes {
@@ -107,6 +88,9 @@ export interface GeneratedCodes {
   code85Rechts: boolean;
   code88Links: boolean;
   code88Rechts: boolean;
+  code70: boolean;
+  code70Links: boolean;
+  code70Rechts: boolean;
   codeVerkortingLinks: boolean;
   codeVerkortingRechts: boolean;
   code50Links: boolean;
@@ -186,6 +170,9 @@ function initializeCodes(): GeneratedCodes {
     code85Rechts: false,
     code88Links: false,
     code88Rechts: false,
+    code70: false,
+    code70Links: false,
+    code70Rechts: false,
     codeVerkortingLinks: false,
     codeVerkortingRechts: false,
     code50Links: false,
@@ -194,160 +181,149 @@ function initializeCodes(): GeneratedCodes {
 }
 
 /**
- * Generate codes for OVAC intake
- * Uses OVAC_OMSCHRIJVING_ITEMS (post numbers 71, 74, 75, 76, 77, 78, 84, 85, 88)
- * Maps left/right booleans to codeXXLinks/Right fields
- * Verkorting toggles are exposed as codeVerkortingLinks/Rechts for mail merge use
+ * Main code generation function
  */
-function generateOVACCodes(
-  ovac: IntakeOVACData,
-  codes: GeneratedCodes,
-  warnings: string[],
-): void {
-  // TODO:
-  // ASR: OVAC Cluster (hoofdcode: 70 L of 70 R of 70 Both)
-  // Caresq: OVAC Cluster per stuk (Geen hoofdcode, wel subcodes)
-  // CZ: OVAC Cluster (Hoofdcode: Hoofdcode: 70)
-  // DSW: OVAC Opbouw (Hoofdcode: 70, met tekst ("Administratie zelf opbouwen!"))
-  // Menzis: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
-  // ONVZ: OVAC Cluster (Hoofdcode: 70 L of 70 R or 70 Both)
-  // Salland: OVAC Cluster (Hoofdcode: 70 L of 70 R or 70 Both)
-  // VGZ: OVAC Cluster (Hoofdcode: 70)
-  // ZK: OVAC Cluster (Hoofdcode: 70)
-  // Zorg en Zekerheid: OVAC Cluster (Hoofdcode: 70)
+export function generateCodes(
+  clientData: ClientData | null,
+  intakeData: IntakeFormData,
+): CodeGenerationResult {
+  const codes = initializeCodes();
+  const warnings: string[] = [];
+  let generalBasiscode: string | null = null;
 
-  // Map OVAC_OMSCHRIJVING_ITEMS to codes
-  OVAC_OMSCHRIJVING_ITEMS.forEach(item => {
-    const leftKey = `${item.key}Links` as keyof IntakeOVACData;
-    const rightKey = `${item.key}Rechts` as keyof IntakeOVACData;
+  if (!clientData) {
+    warnings.push('Geen client data gevonden');
+    return {codes, warnings, generalBasiscode};
+  }
 
-    if (ovac[leftKey]) {
-      const codeKey = `code${item.postNr}Links` as keyof GeneratedCodes;
-      codes[codeKey] = true as GeneratedCodes[typeof codeKey];
+  const {intakeType, insurance} = clientData;
+
+  if (!intakeType) {
+    warnings.push('Intake type is niet geselecteerd');
+    return {codes, warnings, generalBasiscode};
+  }
+
+  // Generate codes based on intake type
+  switch (intakeType) {
+    case 'VLOS':
+      if (intakeData.intakeVLOS) {
+        generateVLOSCodes(
+          intakeData.intakeVLOS,
+          codes,
+          warnings,
+          insurance || '',
+        );
+      } else {
+        warnings.push('VLOS intake data is niet beschikbaar');
+      }
+      break;
+
+    case 'OSA':
+      if (intakeData.intakeOSA) {
+        generateOSACodes(
+          intakeData.intakeOSA,
+          codes,
+          warnings,
+          insurance || '',
+        );
+      } else {
+        warnings.push('OSA intake data is niet beschikbaar');
+      }
+      break;
+
+    case 'OSB':
+      if (intakeData.intakeOSB) {
+        generateOSBCodes(
+          intakeData.intakeOSB,
+          codes,
+          warnings,
+          insurance || '',
+        );
+      } else {
+        warnings.push('OSB intake data is niet beschikbaar');
+      }
+      break;
+    case 'OVAC':
+      if (intakeData.intakeOVAC) {
+        generateOVACCodes(
+          intakeData.intakeOVAC,
+          codes,
+          warnings,
+          insurance || '',
+        );
+      } else {
+        warnings.push('OVAC intake data is niet beschikbaar');
+      }
+      break;
+
+    case 'Pulman':
+    case 'Rebacare':
+    case 'Steunzolen':
+      warnings.push(`Code generatie is niet beschikbaar voor ${intakeType}`);
+      break;
+
+    default:
+      warnings.push(`Onbekend intake type: ${intakeType}`);
+  }
+
+  // Determine generalBasiscode (codes 1-8 for VLOS/OSA)
+  if (codes.code01) {
+    generalBasiscode = '1';
+  } else if (codes.code02) {
+    generalBasiscode = '2';
+  } else if (codes.code03) {
+    generalBasiscode = '3';
+  } else if (codes.code04) {
+    generalBasiscode = '4';
+  } else if (codes.code05) {
+    generalBasiscode = '5';
+  } else if (codes.code06) {
+    generalBasiscode = '6';
+  } else if (codes.code07) {
+    generalBasiscode = '7';
+  } else if (codes.code08) {
+    generalBasiscode = '8';
+  }
+
+  // Determine generalBasiscode for OSB (42 or 40)
+  if (intakeData.intakeOSB?.basiscode) {
+    if (intakeData.intakeOSB.basiscode === '42') {
+      generalBasiscode = '42';
+    } else if (intakeData.intakeOSB.basiscode === '40') {
+      generalBasiscode = '40';
     }
-    if (ovac[rightKey]) {
-      const codeKey = `code${item.postNr}Rechts` as keyof GeneratedCodes;
-      codes[codeKey] = true as GeneratedCodes[typeof codeKey];
+  }
+
+  // Determine generalBasiscode for OVAC (70 and variants by insurer)
+  if (intakeType === 'OVAC') {
+    const insuranceLower = (insurance || '').toLowerCase();
+    const hasAny70 = codes.code70 || codes.code70Links || codes.code70Rechts;
+    if (hasAny70) {
+      if (insuranceLower === 'caresq') {
+        // No main code for Caresq; leave generalBasiscode as-is
+      } else if (
+        ['asr', 'menzis', 'onvz', 'salland'].includes(insuranceLower)
+      ) {
+        // Side-specific main code representation
+        if (codes.code70Links && !codes.code70Rechts) {
+          generalBasiscode = '70 L';
+        } else if (codes.code70Rechts && !codes.code70Links) {
+          generalBasiscode = '70 R';
+        } else {
+          // Both sides or unified 70
+          generalBasiscode = '70';
+        }
+      } else if (insuranceLower === 'dsw') {
+        // DSW requires special note inline with the main code
+        generalBasiscode = '70 - Administratie zelf opbouwen!';
+      } else {
+        // Default: single 70
+        generalBasiscode = '70';
+      }
     }
-  });
-
-  if (ovac.verkortingLinks) {
-    codes.codeVerkortingLinks = true;
-  }
-  if (ovac.verkortingRechts) {
-    codes.codeVerkortingRechts = true;
   }
 
-  if (
-    (ovac.verkortingLinks || ovac.verkortingRechts) &&
-    !(
-      (ovac.voorvoetCmLinks && ovac.voorvoetCmLinks.trim() !== '') ||
-      (ovac.voorvoetCmRechts && ovac.voorvoetCmRechts.trim() !== '')
-    )
-  ) {
-    warnings.push('Verkorting is aangezet maar voorvoet (cm) ontbreekt');
-  }
-  if (
-    (ovac.verkortingLinks || ovac.verkortingRechts) &&
-    !(
-      (ovac.hielCmLinks && ovac.hielCmLinks.trim() !== '') ||
-      (ovac.hielCmRechts && ovac.hielCmRechts.trim() !== '')
-    )
-  ) {
-    warnings.push('Verkorting is aangezet maar hiel (cm) ontbreekt');
-  }
-}
-/**
- * Generate codes for OSB intake
- * Codes: 43 (Supplement Individueel), 46 (Afwikkelrol Eenvoudig), 47 (Afwikkelrol Gecompliceerd), 57 (Zoolverstijving)
- * Per zijde (Links/Rechts)
- */
-function generateOSBCodes(
-  osb: any,
-  codes: GeneratedCodes,
-  warnings: string[],
-  insurance: string,
-): void {
-  // TODO:
-  // ASR: OSB Cluster (Hoofdcode: 42)
-  // Caresq: OSB Cluster (Hoofdcode: 42)
-  // CZ: OSB Cluster (Hoofdcode: 42)
-  // DSW: OSB Opbouw (Hoofdcode: 42, met tekst ("Administratie zelf opbouwen!"))
-  // Menzis: OSB Cluster (Hoofdcode: 42)
-  // ONVZ: OSB Cluster (Hoofdcode: 42)
-  // Salland: OSB Cluster (Hoofdcode: 42)
-  // VGZ: OSB Cluster (Hoofdcode: 42)
-  // ZK: OSB Cluster (Hoofdcode: 42)
-  // Zorg en Zekerheid: OSB Cluster (Hoofdcode: 42)
-
-  // Supplement Individueel (code 43)
-  if (osb.aanpassingen?.supplementIndividueelLinks) {
-    codes.code43Links = true;
-  }
-  if (osb.aanpassingen?.supplementIndividueelRechts) {
-    codes.code43Rechts = true;
-  }
-
-  // Afwikkelrol Eenvoudig (code 46)
-  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) {
-    codes.code46Links = true;
-  }
-  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) {
-    codes.code46Rechts = true;
-  }
-
-  // Afwikkelrol Gecompliceerd (code 47)
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) {
-    codes.code47Links = true;
-  }
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) {
-    codes.code47Rechts = true;
-  }
-
-  // Zoolverstijving (code 57)
-  if (osb.aanpassingen?.zoolverstijvingLinks) {
-    codes.code57Links = true;
-  }
-  if (osb.aanpassingen?.zoolverstijvingRechts) {
-    codes.code57Rechts = true;
-  }
-
-  // Note: Hallux Valgus and Verdieping voorvoet do not generate codes in OSB
-  // They are part of the form but don't map to the code generation system
-
-  // Basiscode (optioneel, voor rapportage)
-  // if (osb.basiscode) ...
-}
-
-/**
- * Check if any omsluiting option is checked for a side
- * If omsluitingRecord is undefined or null, return false
- * Else return true if any value in the record is true
- */
-function hasOmsluiting(
-  omsluitingRecord: Record<string, boolean> | undefined,
-): boolean {
-  if (!omsluitingRecord) {
-    return false;
-  }
-  return Object.values(omsluitingRecord).some(value => value === true);
-}
-
-/**
- * Determine if this is "eerste paar" (odd codes) or "herhaling/reserve paar" (even codes)
- * Privepaar will also give eerste paar
- */
-function isEerstePaar(welkPaar: string): boolean {
-  return welkPaar === 'Eerste paar' || welkPaar === 'Privepaar';
-}
-
-/**
- * Check if insurance company should get proefschoen code (Code 9)
- * Code 9 is only generated for Achmea, DSW, and ASR when code 07 + 17 are present
- */
-function shouldGenerateProefschoen(insurance: string): boolean {
-  const eligibleInsurers = ['Achmea', 'DSW', 'ASR'];
-  return eligibleInsurers.includes(insurance);
+  return {codes, warnings, generalBasiscode};
 }
 
 /**
@@ -362,7 +338,7 @@ function generateVLOSCodes(
   const {side, welkPaar} = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
-  const isEerste = isEerstePaar(welkPaar || '');
+  const isEerste = welkPaar === 'Eerste paar' || welkPaar === 'Privepaar';
 
   // Determine which sides are active
   const hasLinks = side === 'left' || side === 'both';
@@ -437,7 +413,7 @@ function generateOSACodes(
   insurance: string,
 ): void {
   const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
-  const isEerste = isEerstePaar(welkPaar || '');
+  const isEerste = welkPaar === 'Eerste paar' || welkPaar === 'Privepaar';
 
   // Determine which sides are active
   const hasLinks = side === 'left' || side === 'both';
@@ -523,7 +499,7 @@ function generateOSACodes(
   // Dit krijg je alleen als 07 met 17 wordt gedaan bij de volgende verzekeraars:
   // Achmea, DSW en ASR.
   // Only generate for high OSA (code 07) combined with koker tussen voering (code 17)
-  if (codes.code07 && shouldGenerateProefschoen(insurance)) {
+  if (codes.code07 && ['Achmea', 'DSW', 'ASR'].includes(insurance)) {
     // Check if code 17 is present on either side
     if (hasLinks && codes.code17Links) {
       codes.code09Links = true;
@@ -538,115 +514,252 @@ function generateOSACodes(
     warnings.push('OSA welk paar (paartype) is niet ingevuld');
   }
 }
+/**
+ * Generate codes for OSB intake
+ * Codes: 43 (Supplement Individueel), 46 (Afwikkelrol Eenvoudig), 47 (Afwikkelrol Gecompliceerd), 57 (Zoolverstijving)
+ * Per zijde (Links/Rechts)
+ */
+function generateOSBCodes(
+  osb: any,
+  codes: GeneratedCodes,
+  warnings: string[],
+  insurance: string,
+): void {
+  // TODO:
+  // ASR: OSB Cluster (Hoofdcode: 42)
+  // Caresq: OSB Cluster (Hoofdcode: 42)
+  // CZ: OSB Cluster (Hoofdcode: 42)
+  // DSW: OSB Opbouw (Hoofdcode: 42, met tekst ("Administratie zelf opbouwen!"))
+  // Menzis: OSB Cluster (Hoofdcode: 42)
+  // ONVZ: OSB Cluster (Hoofdcode: 42)
+  // Salland: OSB Cluster (Hoofdcode: 42)
+  // VGZ: OSB Cluster (Hoofdcode: 42)
+  // ZK: OSB Cluster (Hoofdcode: 42)
+  // Zorg en Zekerheid: OSB Cluster (Hoofdcode: 42)
+
+  // Supplement Individueel (code 43)
+  if (osb.aanpassingen?.supplementIndividueelLinks) {
+    codes.code43Links = true;
+  }
+  if (osb.aanpassingen?.supplementIndividueelRechts) {
+    codes.code43Rechts = true;
+  }
+
+  // Afwikkelrol Eenvoudig (code 46)
+  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) {
+    codes.code46Links = true;
+  }
+  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) {
+    codes.code46Rechts = true;
+  }
+
+  // Afwikkelrol Gecompliceerd (code 47)
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) {
+    codes.code47Links = true;
+  }
+  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) {
+    codes.code47Rechts = true;
+  }
+
+  // Zoolverstijving (code 57)
+  if (osb.aanpassingen?.zoolverstijvingLinks) {
+    codes.code57Links = true;
+  }
+  if (osb.aanpassingen?.zoolverstijvingRechts) {
+    codes.code57Rechts = true;
+  }
+
+  // Note: Hallux Valgus and Verdieping voorvoet do not generate codes in OSB
+  // They are part of the form but don't map to the code generation system
+
+  // Basiscode (optioneel, voor rapportage)
+  // if (osb.basiscode) ...
+}
 
 /**
- * Main code generation function
+ * Medical Code Generation System for OVAC intake forms
+ *
+ * OVAC Definitions
+ *
+ * ---MAIN CODE---
+ * - 70: OVAC Cluster (varies by insurer; some use 70 L, 70 R, or just 70)
+ *
+ * ---SUB CODES---
+ * - 71: Supplement individueel
+ * - 74: Eenvoudige afwikkelrol
+ * - 75: Gecompliceerde afwikkelrol
+ * - 76: Hak aanpassing t/m 2 cm
+ * - 77: Hak zool verhoging t/m 3 cm
+ * - 78: Hak zool verhoging t/m 7 cm
+ * - 84: Aangepaste hakken
+ * - 85: Zoolverstijving
+ * - 88: Nieuwe wreefsluiting
+ *
+ *  OVAC Code Mapping:
+ * - Section 2: Supplement (van leest) -> Code 71
+ * - Section 4a: Eenvoudige afwikkelrol (onder schoen) -> Code 74
+ * - Section 4b: Gecompliceerde afwikkelrol (onder schoen) -> Code 75
+ * - Section 5a: Hakzool verhoging t/m 2cm -> Code 76
+ * - Section 5b: Hakzool verhoging t/m 3cm -> Code 77
+ * - Section 5c: Hakzool verhoging t/m 7cm -> Code 78
+ * - Section 3: Zoolverstijving -> Code 85
+ * - Section 6: Nieuwe wreefsluiting -> Code 88
+ *
+ * Insurance-specific configurations:
+ * - ASR: OVAC Cluster (hoofdcode: 70 L of 70 R of 70 Both)
+ * - Caresq: OVAC Cluster per stuk (Geen hoofdcode, wel subcodes)
+ * - CZ: OVAC Cluster (Hoofdcode: 70)
+ * - DSW: OVAC Opbouw (Hoofdcode: 70, met tekst "Administratie zelf opbouwen!")
+ * - Menzis: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+ * - ONVZ: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+ * - Salland: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+ * - VGZ: OVAC Cluster (Hoofdcode: 70)
+ * - ZK: OVAC Cluster (Hoofdcode: 70)
+ * - Zorg en Zekerheid: OVAC Cluster (Hoofdcode: 70)
  */
-export function generateCodes(
-  clientData: ClientData | null,
-  intakeData: IntakeFormData,
-): CodeGenerationResult {
-  const codes = initializeCodes();
-  const warnings: string[] = [];
-  let generalBasiscode: string | null = null;
+function generateOVACCodes(
+  ovac: IntakeOVACData,
+  codes: GeneratedCodes,
+  warnings: string[],
+  insurance: string,
+): void {
+  // Determine which sides need main code 70
+  let hasAnyLeftCode = false;
+  let hasAnyRightCode = false;
 
-  if (!clientData) {
-    warnings.push('Geen client data gevonden');
-    return {codes, warnings, generalBasiscode};
-  }
+  // Map OVAC_OMSCHRIJVING_ITEMS to codes (for supplement, zoolverstijving, wreefsluiting, aangepaste hakken)
+  OVAC_OMSCHRIJVING_ITEMS.forEach(item => {
+    const leftKey = `${item.key}Links` as keyof IntakeOVACData;
+    const rightKey = `${item.key}Rechts` as keyof IntakeOVACData;
 
-  const {intakeType, insurance} = clientData;
+    if (ovac[leftKey]) {
+      const codeKey = `code${item.postNr}Links` as keyof GeneratedCodes;
+      codes[codeKey] = true as GeneratedCodes[typeof codeKey];
+      hasAnyLeftCode = true;
+    }
+    if (ovac[rightKey]) {
+      const codeKey = `code${item.postNr}Rechts` as keyof GeneratedCodes;
+      codes[codeKey] = true as GeneratedCodes[typeof codeKey];
+      hasAnyRightCode = true;
+    }
+  });
 
-  if (!intakeType) {
-    warnings.push('Intake type is niet geselecteerd');
-    return {codes, warnings, generalBasiscode};
-  }
-
-  // Generate codes based on intake type
-  switch (intakeType) {
-    case 'VLOS':
-      if (intakeData.intakeVLOS) {
-        generateVLOSCodes(
-          intakeData.intakeVLOS,
-          codes,
-          warnings,
-          insurance || '',
-        );
+  // Afwikkelrol: Determine code 74 or 75 based on cm value
+  // < 1cm = eenvoudig (74), >= 1cm = gecompliceerd (75)
+  if (ovac.afwikkelrolCmLinks && ovac.afwikkelrolCmLinks.trim() !== '') {
+    const cmValue = parseFloat(ovac.afwikkelrolCmLinks);
+    if (!isNaN(cmValue) && cmValue > 0) {
+      if (cmValue < 1) {
+        codes.code74Links = true; // Eenvoudige afwikkelrol
       } else {
-        warnings.push('VLOS intake data is niet beschikbaar');
+        codes.code75Links = true; // Gecompliceerde afwikkelrol
       }
-      break;
-
-    case 'OSA':
-      if (intakeData.intakeOSA) {
-        generateOSACodes(
-          intakeData.intakeOSA,
-          codes,
-          warnings,
-          insurance || '',
-        );
-      } else {
-        warnings.push('OSA intake data is niet beschikbaar');
-      }
-      break;
-
-    case 'OSB':
-      if (intakeData.intakeOSB) {
-        generateOSBCodes(
-          intakeData.intakeOSB,
-          codes,
-          warnings,
-          insurance || '',
-        );
-      } else {
-        warnings.push('OSB intake data is niet beschikbaar');
-      }
-      break;
-    case 'OVAC':
-      if (intakeData.intakeOVAC) {
-        generateOVACCodes(intakeData.intakeOVAC, codes, warnings);
-      } else {
-        warnings.push('OVAC intake data is niet beschikbaar');
-      }
-      break;
-
-    case 'Pulman':
-    case 'Rebacare':
-    case 'Steunzolen':
-      warnings.push(`Code generatie is niet beschikbaar voor ${intakeType}`);
-      break;
-
-    default:
-      warnings.push(`Onbekend intake type: ${intakeType}`);
-  }
-
-  // Determine generalBasiscode (codes 1-8 for VLOS/OSA)
-  if (codes.code01) {
-    generalBasiscode = '1';
-  } else if (codes.code02) {
-    generalBasiscode = '2';
-  } else if (codes.code03) {
-    generalBasiscode = '3';
-  } else if (codes.code04) {
-    generalBasiscode = '4';
-  } else if (codes.code05) {
-    generalBasiscode = '5';
-  } else if (codes.code06) {
-    generalBasiscode = '6';
-  } else if (codes.code07) {
-    generalBasiscode = '7';
-  } else if (codes.code08) {
-    generalBasiscode = '8';
-  }
-
-  // Determine generalBasiscode for OSB (42 or 40)
-  if (intakeData.intakeOSB?.basiscode) {
-    if (intakeData.intakeOSB.basiscode === '42') {
-      generalBasiscode = '42';
-    } else if (intakeData.intakeOSB.basiscode === '40') {
-      generalBasiscode = '40';
+      hasAnyLeftCode = true;
     }
   }
 
-  return {codes, warnings, generalBasiscode};
+  if (ovac.afwikkelrolCmRechts && ovac.afwikkelrolCmRechts.trim() !== '') {
+    const cmValue = parseFloat(ovac.afwikkelrolCmRechts);
+    if (!isNaN(cmValue) && cmValue > 0) {
+      if (cmValue < 1) {
+        codes.code74Rechts = true; // Eenvoudige afwikkelrol
+      } else {
+        codes.code75Rechts = true; // Gecompliceerde afwikkelrol
+      }
+      hasAnyRightCode = true;
+    }
+  }
+
+  // Hakzool verhoging: Determine code 76, 77, or 78 based on cm value
+  // < 2cm = 76, 2-3cm = 77, 3-7cm = 78
+  if (
+    ovac.hakzoolVerhogingCmLinks &&
+    ovac.hakzoolVerhogingCmLinks.trim() !== ''
+  ) {
+    const cmValue = parseFloat(ovac.hakzoolVerhogingCmLinks);
+    if (!isNaN(cmValue) && cmValue > 0) {
+      if (cmValue < 2) {
+        codes.code76Links = true; // Hak aanpassing t/m 2cm
+      } else if (cmValue < 3) {
+        codes.code77Links = true; // Hak zool verhoging t/m 3cm
+      } else if (cmValue <= 7) {
+        codes.code78Links = true; // Hak zool verhoging t/m 7cm
+      }
+      hasAnyLeftCode = true;
+    }
+  }
+
+  if (
+    ovac.hakzoolVerhogingCmRechts &&
+    ovac.hakzoolVerhogingCmRechts.trim() !== ''
+  ) {
+    const cmValue = parseFloat(ovac.hakzoolVerhogingCmRechts);
+    if (!isNaN(cmValue) && cmValue > 0) {
+      if (cmValue < 2) {
+        codes.code76Rechts = true; // Hak aanpassing t/m 2cm
+      } else if (cmValue < 3) {
+        codes.code77Rechts = true; // Hak zool verhoging t/m 3cm
+      } else if (cmValue <= 7) {
+        codes.code78Rechts = true; // Hak zool verhoging t/m 7cm
+      }
+      hasAnyRightCode = true;
+    }
+  }
+
+  // Generate main code 70 based on insurance requirements
+  // Insurance-specific logic:
+  // - Caresq: No main code (subcodes only)
+  // - ASR, Menzis, ONVZ, Salland: Use 70 L, 70 R, or 70 (both)
+  // - CZ, DSW, VGZ, ZK, Zorg en Zekerheid: Use single 70
+
+  if (hasAnyLeftCode || hasAnyRightCode) {
+    const insuranceLower = insurance.toLowerCase();
+
+    // Insurances that don't use main code 70
+    if (insuranceLower === 'caresq') {
+      // Caresq: No main code, only subcodes
+      return;
+    }
+
+    // Insurances that use side-specific codes (70 L, 70 R, or 70 both)
+    const sideSpecificInsurances = ['asr', 'menzis', 'onvz', 'salland'];
+    if (sideSpecificInsurances.includes(insuranceLower)) {
+      // If both sides have codes, use single code70; otherwise use side-specific codes
+      if (hasAnyLeftCode && hasAnyRightCode) {
+        codes.code70 = true;
+      } else {
+        if (hasAnyLeftCode) {
+          codes.code70Links = true;
+        }
+        if (hasAnyRightCode) {
+          codes.code70Rechts = true;
+        }
+      }
+    } else {
+      // All other insurances (CZ, DSW, VGZ, ZK, Zorg en Zekerheid, etc.)
+      // Use single code 70 if any subcode is present
+      codes.code70 = true;
+
+      // DSW: main code text handled via generalBasiscode downstream
+    }
+  }
+}
+
+/**
+ * Check if any omsluiting option is checked for a side
+ * If omsluitingRecord is undefined or null, return false
+ * Else return true if any value in the record is true
+ */
+/**
+ * Check if any omsluiting option is checked for a side
+ * If omsluitingRecord is undefined or null, return false
+ * Else return true if any value in the record is true
+ */
+function hasOmsluiting(
+  omsluitingRecord: Record<string, boolean> | undefined,
+): boolean {
+  return (
+    !!omsluitingRecord &&
+    Object.values(omsluitingRecord).some(value => value === true)
+  );
 }

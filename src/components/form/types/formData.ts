@@ -1,5 +1,5 @@
 // Type definities voor cliënt en intake formulier data
-import type { Locatie, Aanhef, Zijde } from '@/lib/constants/formConstants';
+import type {Locatie, Aanhef, Zijde} from '@/lib/constants/formConstants';
 
 export interface ClientData {
   // Practitioner and date
@@ -8,13 +8,13 @@ export interface ClientData {
 
   // Intake form type
   intakeType?:
-  | 'VLOS'
-  | 'OSA'
-  | 'Pulman'
-  | 'Rebacare'
-  | 'OSB'
-  | 'OVAC'
-  | 'Steunzolen';
+    | 'VLOS'
+    | 'OSA'
+    | 'Pulman'
+    | 'Rebacare'
+    | 'OSB'
+    | 'OVAC'
+    | 'Steunzolen';
 
   // Location
   location?: Locatie;
@@ -309,6 +309,14 @@ export interface IntakeOVACData {
   voorvoetCmRechts?: string;
   hielCmLinks?: string;
   hielCmRechts?: string;
+
+  // Afwikkelrol cm values (used to determine code 74 or 75)
+  afwikkelrolCmLinks?: string;
+  afwikkelrolCmRechts?: string;
+
+  // Hakzool verhoging cm values (used to determine code 76, 77, or 78)
+  hakzoolVerhogingCmLinks?: string;
+  hakzoolVerhogingCmRechts?: string;
 
   // Steunzolen (optional)
   steunzoolTypeGeneral?: string; // Single selected type
