@@ -74,6 +74,8 @@
   "lastName": "Achternaam",
   "lastNamePlaceholder": "Bijv. van der Berg",
   "birthDate": "Geboortedatum",
+  "bsn": "BSN",
+  "bsnPlaceholder": "Bijv. 123456789",
   "addressInformation": "Adresgegevens",
   "addressInformationDescription": "Woonadres gegevens van de cliënt",
   "postalCode": "Postcode",

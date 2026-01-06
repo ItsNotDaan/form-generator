@@ -1,7 +1,7 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Textarea} from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -9,21 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {Label} from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import { Zijde, PAARTYPE_OPTIES } from '@/lib/constants/formConstants';
-import { ChevronRight, Info } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import {Zijde, PAARTYPE_OPTIES} from '@/lib/constants/formConstants';
+import {ChevronRight, Info} from 'lucide-react';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
 import {
   Form,
   FormControl,
@@ -32,14 +32,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { useFormPersistence } from '@/hooks/useFormPersistence';
-import { FormBlock, FormCard, FormItemWrapper } from '@/components/ui/form-block';
-import { Switch } from '@/components/ui/switch';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
+import {Switch} from '@/components/ui/switch';
 
 const FormIntakeRebacarePage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -67,10 +67,10 @@ const FormIntakeRebacarePage = () => {
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'Rebacare' }));
+      dispatch(setClientData({...clientData, intakeType: 'Rebacare'}));
     }
     dispatch(setIntakeRebacareData(data));
-    router.push(Routes.form_results);
+    void router.push(Routes.form_results);
   };
 
   return (
@@ -92,15 +92,8 @@ const FormIntakeRebacarePage = () => {
               className="space-y-6"
             >
               {/* Paartype & indicatie */}
-              <FormCard
-                title={t('description')}
-                description={t('whichPair')}
-              >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  alignItems="start"
-                >
+              <FormCard title={t('description')} description={t('whichPair')}>
+                <FormBlock columns={2} dividers={true} alignItems="start">
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
@@ -134,7 +127,9 @@ const FormIntakeRebacarePage = () => {
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
                       value={form.watch('medischeIndicatie')}
-                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      onChange={e =>
+                        form.setValue('medischeIndicatie', e.target.value)
+                      }
                       rows={4}
                       className="w-2/3"
                     />
@@ -144,17 +139,14 @@ const FormIntakeRebacarePage = () => {
 
               {/* Side & Bandaged */}
               <FormCard title={t('side') + ' & ' + t('bandaged')}>
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                >
+                <FormBlock columns={2} dividers={true}>
                   {/* Side (Radio Group) */}
                   <FormItemWrapper>
                     <Label>{t('side')}</Label>
                     <FormField
                       control={form.control}
                       name="side"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormControl>
                             <RadioGroup
@@ -167,7 +159,10 @@ const FormIntakeRebacarePage = () => {
                                     key={s}
                                     className="flex items-center space-x-2"
                                   >
-                                    <RadioGroupItem value={s} id={`side-${s}`} />
+                                    <RadioGroupItem
+                                      value={s}
+                                      id={`side-${s}`}
+                                    />
                                     <Label
                                       htmlFor={`side-${s}`}
                                       className="font-normal cursor-pointer"
@@ -191,10 +186,8 @@ const FormIntakeRebacarePage = () => {
                     <FormField
                       control={form.control}
                       name="gezwachteld"
-                      render={({ field }) => (
-                        <FormItem
-                          className='flex flex-col items-center'
-                        >
+                      render={({field}) => (
+                        <FormItem className="flex flex-col items-center">
                           <FormControl>
                             <div className="flex flex-col-2 items-center justify-center space-x-2">
                               <Switch
@@ -202,7 +195,10 @@ const FormIntakeRebacarePage = () => {
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
                               />
-                              <Label htmlFor="gezwachteld-switch" className="font-normal cursor-pointer">
+                              <Label
+                                htmlFor="gezwachteld-switch"
+                                className="font-normal cursor-pointer"
+                              >
                                 {field.value ? t('yes') : t('no')}
                               </Label>
                             </div>
@@ -219,7 +215,7 @@ const FormIntakeRebacarePage = () => {
                 <FormField
                   control={form.control}
                   name="bijzonderheden"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormControl>
                         <Textarea

@@ -14,7 +14,7 @@
  * - 7: Hoog OSA (>18cm schachthoogte) eerste paar
  * - 8: Hoog OSA (>18cm schachthoogte) herhaling/reservepaar
  *
- * --ADDITIONAL CODES---
+ * --SUB CODES---
  * - 9: Proefschoen (only for high OSA code 07 + code 17 for Achmea, DSW, ASR) per side
  * - 10: (placeholder - not implemented)
  * - 11: (placeholder - not implemented)
@@ -25,13 +25,33 @@
  * - 50: Diverse Amputaties per side
  */
 
+/**
+ * Medical Code Generation System for OVAC intake forms
+ *
+ * OVAC Definitions
+ *
+ * ---MAIN CODE---
+ * - 70: OVAC Cluster (varies by insurer; some use 70 L, 70 R, or just 70)
+ *
+ * ---SUB CODES---
+ * - 71: Supplement individueel
+ * - 74: Eenvoudige afwikkelrol
+ * - 75: Gecompliceerde afwikkelrol
+ * - 76: Hak aanpassing t/m 2 cm
+ * - 77: Hak zool verhoging t/m 3 cm
+ * - 78: Hak zool verhoging t/m 7 cm
+ * - 84: Aangepaste hakken
+ * - 85: Zoolverstijving
+ * - 88: Nieuwe wreefsluiting
+ */
+
 import {
   ClientData,
   IntakeVLOSData,
   IntakeOSAData,
   IntakeOVACData,
 } from '@/components/form/types/formData';
-import { OVAC_OMSCHRIJVING_ITEMS } from '@/lib/constants/formConstants';
+import {OVAC_OMSCHRIJVING_ITEMS} from '@/lib/constants/formConstants';
 
 export interface GeneratedCodes {
   code01: boolean;
@@ -184,6 +204,19 @@ function generateOVACCodes(
   codes: GeneratedCodes,
   warnings: string[],
 ): void {
+  // TODO:
+  // ASR: OVAC Cluster (hoofdcode: 70 L of 70 R of 70 Both)
+  // Caresq: OVAC Cluster per stuk (Geen hoofdcode, wel subcodes)
+  // CZ: OVAC Cluster (Hoofdcode: Hoofdcode: 70)
+  // DSW: OVAC Opbouw (Hoofdcode: 70, met tekst ("Administratie zelf opbouwen!"))
+  // Menzis: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+  // ONVZ: OVAC Cluster (Hoofdcode: 70 L of 70 R or 70 Both)
+  // Salland: OVAC Cluster (Hoofdcode: 70 L of 70 R or 70 Both)
+  // VGZ: OVAC Cluster (Hoofdcode: 70)
+  // ZK: OVAC Cluster (Hoofdcode: 70)
+  // Zorg en Zekerheid: OVAC Cluster (Hoofdcode: 70)
+
+  // Map OVAC_OMSCHRIJVING_ITEMS to codes
   OVAC_OMSCHRIJVING_ITEMS.forEach(item => {
     const leftKey = `${item.key}Links` as keyof IntakeOVACData;
     const rightKey = `${item.key}Rechts` as keyof IntakeOVACData;
@@ -207,13 +240,19 @@ function generateOVACCodes(
 
   if (
     (ovac.verkortingLinks || ovac.verkortingRechts) &&
-    !((ovac.voorvoetCmLinks && ovac.voorvoetCmLinks.trim() !== '') || (ovac.voorvoetCmRechts && ovac.voorvoetCmRechts.trim() !== ''))
+    !(
+      (ovac.voorvoetCmLinks && ovac.voorvoetCmLinks.trim() !== '') ||
+      (ovac.voorvoetCmRechts && ovac.voorvoetCmRechts.trim() !== '')
+    )
   ) {
     warnings.push('Verkorting is aangezet maar voorvoet (cm) ontbreekt');
   }
   if (
     (ovac.verkortingLinks || ovac.verkortingRechts) &&
-    !((ovac.hielCmLinks && ovac.hielCmLinks.trim() !== '') || (ovac.hielCmRechts && ovac.hielCmRechts.trim() !== ''))
+    !(
+      (ovac.hielCmLinks && ovac.hielCmLinks.trim() !== '') ||
+      (ovac.hielCmRechts && ovac.hielCmRechts.trim() !== '')
+    )
   ) {
     warnings.push('Verkorting is aangezet maar hiel (cm) ontbreekt');
   }
@@ -229,6 +268,18 @@ function generateOSBCodes(
   warnings: string[],
   insurance: string,
 ): void {
+  // TODO:
+  // ASR: OSB Cluster (Hoofdcode: 42)
+  // Caresq: OSB Cluster (Hoofdcode: 42)
+  // CZ: OSB Cluster (Hoofdcode: 42)
+  // DSW: OSB Opbouw (Hoofdcode: 42, met tekst ("Administratie zelf opbouwen!"))
+  // Menzis: OSB Cluster (Hoofdcode: 42)
+  // ONVZ: OSB Cluster (Hoofdcode: 42)
+  // Salland: OSB Cluster (Hoofdcode: 42)
+  // VGZ: OSB Cluster (Hoofdcode: 42)
+  // ZK: OSB Cluster (Hoofdcode: 42)
+  // Zorg en Zekerheid: OSB Cluster (Hoofdcode: 42)
+
   // Supplement Individueel (code 43)
   if (osb.aanpassingen?.supplementIndividueelLinks) {
     codes.code43Links = true;
@@ -308,7 +359,7 @@ function generateVLOSCodes(
   warnings: string[],
   insurance: string,
 ): void {
-  const { side, welkPaar } = vlos;
+  const {side, welkPaar} = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
   const isEerste = isEerstePaar(welkPaar || '');
@@ -385,7 +436,7 @@ function generateOSACodes(
   warnings: string[],
   insurance: string,
 ): void {
-  const { side, welkPaar, schachthoogteLinks, schachthoogteRechts } = osa;
+  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
   const isEerste = isEerstePaar(welkPaar || '');
 
   // Determine which sides are active
@@ -501,14 +552,14 @@ export function generateCodes(
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
-  const { intakeType, insurance } = clientData;
+  const {intakeType, insurance} = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return { codes, warnings, generalBasiscode };
+    return {codes, warnings, generalBasiscode};
   }
 
   // Generate codes based on intake type
@@ -597,5 +648,5 @@ export function generateCodes(
     }
   }
 
-  return { codes, warnings, generalBasiscode };
+  return {codes, warnings, generalBasiscode};
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import { getAssetPath } from '@/utils/assetPath';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+import {getAssetPath} from '@/utils/assetPath';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {Textarea} from '@/components/ui/textarea';
+import {Checkbox} from '@/components/ui/checkbox';
 import {
   Card,
   CardContent,
@@ -13,8 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -22,10 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
 import {
   OMSLUITING_OPTIES,
   OmsluitingKey,
@@ -44,13 +44,13 @@ import {
   LOOPAFSTAND_OPTIES,
   INSPECTIE_VOETEN_OPTIES,
 } from '@/lib/constants/formConstants';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setIntakeVLOSData, setClientData } from '@/domain/store/slices/formData';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setIntakeVLOSData, setClientData} from '@/domain/store/slices/formData';
 
-import { ChevronRight } from 'lucide-react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import {ChevronRight} from 'lucide-react';
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
 import {
   Form,
   FormControl,
@@ -59,13 +59,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { useFormPersistence } from '@/hooks/useFormPersistence';
-import { Switch } from '@/components/ui/switch';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {Switch} from '@/components/ui/switch';
 
 const FormIntakeVLOSPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -121,7 +121,6 @@ const FormIntakeVLOSPage = () => {
     loopafstandAids: z.record(z.string(), z.boolean()),
     painPerception: z.string().optional(),
     footInspection: z.record(z.string(), z.boolean()),
-
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -135,10 +134,10 @@ const FormIntakeVLOSPage = () => {
       side: 'both',
       schachthoogteLinks: '14',
       schachthoogteRechts: '14',
-      omsluitingLinks: { omsluitingLinksMultivorm: true },
-      omsluitingRechts: { omsluitingRechtsMultivorm: true },
-      omsluitingLinksMm: { omsluitingMmLinksMultivorm: '3' },
-      omsluitingRechtsMm: { omsluitingMmRechtsMultivorm: '3' },
+      omsluitingLinks: {omsluitingLinksMultivorm: true},
+      omsluitingRechts: {omsluitingRechtsMultivorm: true},
+      omsluitingLinksMm: {omsluitingMmLinksMultivorm: '3'},
+      omsluitingRechtsMm: {omsluitingMmRechtsMultivorm: '3'},
       supplementschoringLinksEnabled: false,
       supplementschoringRechtsEnabled: false,
       supplementschoringLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
@@ -167,9 +166,9 @@ const FormIntakeVLOSPage = () => {
       amputatieRechtsEnabled: false,
       hakafrondingLinksEnabled: true,
       hakafrondingRechtsEnabled: true,
-      hakafrondingLinksHoogte: '10',
+      hakafrondingLinksHoogte: '13',
       hakafrondingLinksLengte: '50',
-      hakafrondingRechtsHoogte: '10',
+      hakafrondingRechtsHoogte: '13',
       hakafrondingRechtsLengte: '50',
       loopzoolType: LOOPZOOL_OPTIES[0]?.value || '',
       bijzonderheden: '',
@@ -182,7 +181,11 @@ const FormIntakeVLOSPage = () => {
     },
   });
 
-  const { clearStorage } = useFormPersistence('intakeVLOS', form.watch, form.setValue);
+  const {clearStorage} = useFormPersistence(
+    'intakeVLOS',
+    form.watch,
+    form.setValue,
+  );
 
   const side = form.watch('side');
   const zoolverstijvingEnabled = form.watch('zoolverstijvingEnabled');
@@ -210,7 +213,7 @@ const FormIntakeVLOSPage = () => {
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'VLOS' }));
+      dispatch(setClientData({...clientData, intakeType: 'VLOS'}));
     }
 
     dispatch(
@@ -264,11 +267,10 @@ const FormIntakeVLOSPage = () => {
         loopafstandAids: data.loopafstandAids as Record<string, boolean>,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
-
       }),
     );
 
-    router.push(Routes.form_results);
+    void router.push(Routes.form_results);
   };
 
   return (
@@ -291,15 +293,8 @@ const FormIntakeVLOSPage = () => {
               className="space-y-6"
             >
               {/* Paartype & indicatie */}
-              <FormCard
-                title={t('description')}
-                description={t('whichPair')}
-              >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  alignItems="start"
-                >
+              <FormCard title={t('description')} description={t('whichPair')}>
+                <FormBlock columns={2} dividers={true} alignItems="start">
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
@@ -333,7 +328,9 @@ const FormIntakeVLOSPage = () => {
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
                       value={form.watch('medischeIndicatie')}
-                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      onChange={e =>
+                        form.setValue('medischeIndicatie', e.target.value)
+                      }
                       rows={4}
                       className="w-2/3"
                     />
@@ -346,19 +343,13 @@ const FormIntakeVLOSPage = () => {
                 title={t('side') + ' & ' + t('amputation')}
                 description={t('sideAmputationDescription')}
               >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  hoverEffect={false}
-                >
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
                   {/* Side Selection */}
-                  <FormItemWrapper
-                    label={t('side')}
-                  >
+                  <FormItemWrapper label={t('side')}>
                     <FormField
                       control={form.control}
                       name="side"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormControl>
                             <RadioGroup
@@ -375,8 +366,13 @@ const FormIntakeVLOSPage = () => {
                                   <Label htmlFor="side-left">{t('left')}</Label>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="right" id="side-right" />
-                                  <Label htmlFor="side-right">{t('right')}</Label>
+                                  <RadioGroupItem
+                                    value="right"
+                                    id="side-right"
+                                  />
+                                  <Label htmlFor="side-right">
+                                    {t('right')}
+                                  </Label>
                                 </div>
                               </div>
                             </RadioGroup>
@@ -387,9 +383,7 @@ const FormIntakeVLOSPage = () => {
                   </FormItemWrapper>
 
                   {/* Amputation */}
-                  <FormItemWrapper
-                    label={t('amputation')}
-                  >
+                  <FormItemWrapper label={t('amputation')}>
                     <div className="flex gap-6">
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -399,7 +393,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('amputatieLinksEnabled', !!checked)
                           }
                         />
-                        <Label htmlFor="amp-left" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="amp-left"
+                          className="font-normal cursor-pointer"
+                        >
                           {t('left')}
                         </Label>
                       </div>
@@ -411,7 +408,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('amputatieRechtsEnabled', !!checked)
                           }
                         />
-                        <Label htmlFor="amp-right" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="amp-right"
+                          className="font-normal cursor-pointer"
+                        >
                           {t('right')}
                         </Label>
                       </div>
@@ -440,9 +440,8 @@ const FormIntakeVLOSPage = () => {
                       <Checkbox
                         id={`ziektebeeld-${optie.key}`}
                         checked={
-                          (form.watch('ziektebeelden')[
-                            optie.key
-                          ] as boolean) || false
+                          (form.watch('ziektebeelden')[optie.key] as boolean) ||
+                          false
                         }
                         onCheckedChange={checked =>
                           form.setValue('ziektebeelden', {
@@ -462,7 +461,8 @@ const FormIntakeVLOSPage = () => {
                 </FormBlock>
 
                 {/* Loopafstand hulpmiddelen */}
-                <FormBlock title={t('walkingDistanceAids')}
+                <FormBlock
+                  title={t('walkingDistanceAids')}
                   columns={3}
                   dividers={false}
                   centerTitle={true}
@@ -497,10 +497,7 @@ const FormIntakeVLOSPage = () => {
                 </FormBlock>
 
                 {/* Pijnbeleving */}
-                <FormBlock
-                  title={t('painPerception')}
-                  centerTitle={true}
-                >
+                <FormBlock title={t('painPerception')} centerTitle={true}>
                   <div className="space-y-2 pt-2">
                     <div className="grid grid-cols-6 gap-4 items-center">
                       <div className="text-sm leading-none font-medium text-center">
@@ -534,12 +531,9 @@ const FormIntakeVLOSPage = () => {
                   centerTitle={true}
                   columns={3}
                   dividers={false}
-
                 >
                   {INSPECTIE_VOETEN_OPTIES.map(optie => (
-                    <Label
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
+                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30">
                       <Checkbox
                         id={`foot-inspection-${optie.key}`}
                         checked={
@@ -566,18 +560,13 @@ const FormIntakeVLOSPage = () => {
               </FormCard>
 
               {/* Shaft Height */}
-              <FormCard
-                title={t('shaftHeight')}
-              >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  hoverEffect={false}
-                >
+              <FormCard title={t('shaftHeight')}>
+                <FormBlock columns={2} dividers={true} hoverEffect={false}>
                   {showLinks && (
                     <FormItemWrapper
                       label={t('leftCm')}
-                      className="items-center">
+                      className="items-center"
+                    >
                       <Input
                         id="shaft-left"
                         type="number"
@@ -612,11 +601,7 @@ const FormIntakeVLOSPage = () => {
 
               {/* Shaft Opening */}
               <FormCard title={t('shaftOpening')}>
-                <FormBlock
-                  columns={1}
-                  dividers={false}
-                  hoverEffect={false}
-                >
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <RadioGroup
                     value={form.watch('openstandSchacht')}
                     onValueChange={v => form.setValue('openstandSchacht', v)}
@@ -654,10 +639,10 @@ const FormIntakeVLOSPage = () => {
                   title={t('enclosure')}
                 >
                   {showLinks && (
-                    <FormItemWrapper
-                      label={t('left')}
-                    >
-                      <div className="space-y-3 w-full lg:w-3/4"> {/* Full on mobile, 3/4 on desktop */}
+                    <FormItemWrapper label={t('left')}>
+                      <div className="space-y-3 w-full lg:w-3/4">
+                        {' '}
+                        {/* Full on mobile, 3/4 on desktop */}
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <Label
                             key={optie.key}
@@ -679,7 +664,11 @@ const FormIntakeVLOSPage = () => {
                                   ...form.getValues('omsluitingLinks'),
                                   [optie.fullKeyLinks]: !!checked,
                                 });
-                                if (checked && optie.needsMm && optie.defaultMm) {
+                                if (
+                                  checked &&
+                                  optie.needsMm &&
+                                  optie.defaultMm
+                                ) {
                                   form.setValue('omsluitingLinksMm', {
                                     ...form.getValues('omsluitingLinksMm'),
                                     [optie.mmKeyLinks]: optie.defaultMm,
@@ -703,9 +692,13 @@ const FormIntakeVLOSPage = () => {
                               ] as boolean) && (
                                 <Input
                                   type="number"
-                                  inputMode={optie.key === 'hoge' ? 'decimal' : 'numeric'}
+                                  inputMode={
+                                    optie.key === 'hoge' ? 'decimal' : 'numeric'
+                                  }
                                   pattern="[0-9]*"
-                                  placeholder={optie.key === 'hoge' ? 'cm' : 'mm'}
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
                                   value={
                                     (form.watch('omsluitingLinksMm')[
                                       optie.mmKeyLinks
@@ -727,9 +720,7 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper
-                      label={t('right')}
-                    >
+                    <FormItemWrapper label={t('right')}>
                       <div className="space-y-3 w-full lg:w-3/4">
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <Label
@@ -752,7 +743,11 @@ const FormIntakeVLOSPage = () => {
                                   ...form.getValues('omsluitingRechts'),
                                   [optie.fullKeyRechts]: !!checked,
                                 });
-                                if (checked && optie.needsMm && optie.defaultMm) {
+                                if (
+                                  checked &&
+                                  optie.needsMm &&
+                                  optie.defaultMm
+                                ) {
                                   form.setValue('omsluitingRechtsMm', {
                                     ...form.getValues('omsluitingRechtsMm'),
                                     [optie.mmKeyRechts]: optie.defaultMm,
@@ -776,9 +771,13 @@ const FormIntakeVLOSPage = () => {
                               ] as boolean) && (
                                 <Input
                                   type="number"
-                                  inputMode={optie.key === 'hoge' ? 'decimal' : 'numeric'}
+                                  inputMode={
+                                    optie.key === 'hoge' ? 'decimal' : 'numeric'
+                                  }
                                   pattern="[0-9]*"
-                                  placeholder={optie.key === 'hoge' ? 'cm' : 'mm'}
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
                                   value={
                                     (form.watch('omsluitingRechtsMm')[
                                       optie.mmKeyRechts
@@ -806,19 +805,22 @@ const FormIntakeVLOSPage = () => {
               <FormCard title={t('supplementSupport')}>
                 <FormBlock columns={2} dividers={true} hoverEffect={false}>
                   {showLinks && (
-                    <FormItemWrapper
-                      label={t('left')}
-                      className="items-center"
-                    >
+                    <FormItemWrapper label={t('left')} className="items-center">
                       <div className="flex items-center p-3 space-x-2">
                         <Switch
                           id="supplementschoring-links-switch"
                           checked={supplementschoringLinksEnabled}
                           onCheckedChange={checked =>
-                            form.setValue('supplementschoringLinksEnabled', !!checked)
+                            form.setValue(
+                              'supplementschoringLinksEnabled',
+                              !!checked,
+                            )
                           }
                         />
-                        <Label htmlFor="supplementschoring-links-switch" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="supplementschoring-links-switch"
+                          className="font-normal cursor-pointer"
+                        >
                           {supplementschoringLinksEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
@@ -833,8 +835,10 @@ const FormIntakeVLOSPage = () => {
                             <SelectValue>
                               {t(
                                 SUPPLEMENT_TYPE_OPTIES.find(
-                                  opt => opt.value === form.watch('supplementschoringLinksType')
-                                )?.label || ''
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('supplementschoringLinksType'),
+                                )?.label || '',
                               )}
                             </SelectValue>
                           </SelectTrigger>
@@ -859,10 +863,16 @@ const FormIntakeVLOSPage = () => {
                           id="supplementschoring-rechts-switch"
                           checked={supplementschoringRechtsEnabled}
                           onCheckedChange={checked =>
-                            form.setValue('supplementschoringRechtsEnabled', !!checked)
+                            form.setValue(
+                              'supplementschoringRechtsEnabled',
+                              !!checked,
+                            )
                           }
                         />
-                        <Label htmlFor="supplementschoring-rechts-switch" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="supplementschoring-rechts-switch"
+                          className="font-normal cursor-pointer"
+                        >
                           {supplementschoringRechtsEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
@@ -877,8 +887,10 @@ const FormIntakeVLOSPage = () => {
                             <SelectValue>
                               {t(
                                 SUPPLEMENT_TYPE_OPTIES.find(
-                                  opt => opt.value === form.watch('supplementschoringRechtsType')
-                                )?.label || ''
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('supplementschoringRechtsType'),
+                                )?.label || '',
                               )}
                             </SelectValue>
                           </SelectTrigger>
@@ -911,16 +923,17 @@ const FormIntakeVLOSPage = () => {
                           form.setValue('zoolverstijvingEnabled', !!checked)
                         }
                       />
-                      <Label htmlFor="zoolverstijving-switch" className="font-normal cursor-pointer">
+                      <Label
+                        htmlFor="zoolverstijving-switch"
+                        className="font-normal cursor-pointer"
+                      >
                         {zoolverstijvingEnabled ? t('yes') : t('no')}
                       </Label>
                     </div>
                   </FormItemWrapper>
 
                   {zoolverstijvingEnabled && (
-                    <FormItemWrapper
-                      label={t('side')}
-                    >
+                    <FormItemWrapper label={t('side')}>
                       <div className="flex gap-6 pt-2">
                         {showLinks && (
                           <div className="flex items-center space-x-2">
@@ -928,10 +941,7 @@ const FormIntakeVLOSPage = () => {
                               id="stiff-left"
                               checked={form.watch('zoolverstijvingLinks')}
                               onCheckedChange={checked =>
-                                form.setValue(
-                                  'zoolverstijvingLinks',
-                                  !!checked,
-                                )
+                                form.setValue('zoolverstijvingLinks', !!checked)
                               }
                             />
                             <Label
@@ -969,7 +979,15 @@ const FormIntakeVLOSPage = () => {
               </FormCard>
 
               {/* Closure Type, Insert Point, Tongue Padding, Tongue Stitching */}
-              <FormCard title={t('closure') + ' & ' + t('tongueOptions') + ' & ' + t('insertPoint')}>
+              <FormCard
+                title={
+                  t('closure') +
+                  ' & ' +
+                  t('tongueOptions') +
+                  ' & ' +
+                  t('insertPoint')
+                }
+              >
                 <FormBlock columns={3} dividers={true} hoverEffect={false}>
                   <FormItemWrapper label={t('closureType')}>
                     <RadioGroup
@@ -1041,7 +1059,7 @@ const FormIntakeVLOSPage = () => {
                 >
                   <FormItemWrapper
                     label={t('insertPoint')}
-                    className='justify-center'
+                    className="justify-center"
                   >
                     <Input
                       id="insert-point"
@@ -1050,7 +1068,7 @@ const FormIntakeVLOSPage = () => {
                         form.setValue('inschotpunt', e.target.value)
                       }
                       placeholder={t('insertPointPlaceholder')}
-                      className='w-2/3'
+                      className="w-2/3"
                     />
                   </FormItemWrapper>
 
@@ -1065,13 +1083,24 @@ const FormIntakeVLOSPage = () => {
               </FormCard>
 
               {/* Heel Type and Height */}
-              <FormCard title={t('heelType') + ' & ' + t('heelHeight') + ' & ' + t('heelSlant')}>
+              <FormCard
+                title={
+                  t('heelType') +
+                  ' & ' +
+                  t('heelHeight') +
+                  ' & ' +
+                  t('heelSlant')
+                }
+              >
                 {/* Heel Type */}
-                <FormBlock columns={2} dividers={true} hoverEffect={false} title={t('heelType')}>
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('heelType')}
+                >
                   {showLinks && (
-                    <FormItemWrapper
-                      label={t('left')}
-                    >
+                    <FormItemWrapper label={t('left')}>
                       <Select
                         value={form.watch('haksoortLinks')}
                         onValueChange={v => form.setValue('haksoortLinks', v)}
@@ -1080,8 +1109,9 @@ const FormIntakeVLOSPage = () => {
                           <SelectValue>
                             {t(
                               HAKSOORT_OPTIES.find(
-                                opt => opt.value === form.watch('haksoortLinks')
-                              )?.label || ''
+                                opt =>
+                                  opt.value === form.watch('haksoortLinks'),
+                              )?.label || '',
                             )}
                           </SelectValue>
                         </SelectTrigger>
@@ -1096,9 +1126,7 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper
-                      label={t('right')}
-                    >
+                    <FormItemWrapper label={t('right')}>
                       <Select
                         value={form.watch('haksoortRechts')}
                         onValueChange={v => form.setValue('haksoortRechts', v)}
@@ -1107,8 +1135,9 @@ const FormIntakeVLOSPage = () => {
                           <SelectValue>
                             {t(
                               HAKSOORT_OPTIES.find(
-                                opt => opt.value === form.watch('haksoortRechts')
-                              )?.label || ''
+                                opt =>
+                                  opt.value === form.watch('haksoortRechts'),
+                              )?.label || '',
                             )}
                           </SelectValue>
                         </SelectTrigger>
@@ -1132,9 +1161,7 @@ const FormIntakeVLOSPage = () => {
                   title={`${t('heelHeight')} (cm)`}
                 >
                   {showLinks && (
-                    <FormItemWrapper
-                      label={t('left')}
-                    >
+                    <FormItemWrapper label={t('left')}>
                       <div className="flex flex-col text-center">
                         <Input
                           id="heel-height-left"
@@ -1149,9 +1176,7 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper
-                      label={t('right')}
-                    >
+                    <FormItemWrapper label={t('right')}>
                       <div className="flex flex-col text-center">
                         <Input
                           id="heel-height-right"
@@ -1168,7 +1193,12 @@ const FormIntakeVLOSPage = () => {
                 </FormBlock>
 
                 {/* Heel Slant */}
-                <FormBlock columns={2} dividers={true} hoverEffect={false} title={t('heelSlant')}>
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('heelSlant')}
+                >
                   {showLinks && (
                     <FormItemWrapper label={t('left')}>
                       <div className="flex items-center space-x-2">
@@ -1179,7 +1209,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('hakschoringLinksEnabled', !!checked)
                           }
                         />
-                        <Label htmlFor="hakschoring-links-switch" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="hakschoring-links-switch"
+                          className="font-normal cursor-pointer"
+                        >
                           {hakschoringLinksEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
@@ -1194,8 +1227,10 @@ const FormIntakeVLOSPage = () => {
                             <SelectValue>
                               {t(
                                 HAKSCHORING_TYPE_OPTIES.find(
-                                  opt => opt.value === form.watch('hakschoringLinksType')
-                                )?.label || ''
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('hakschoringLinksType'),
+                                )?.label || '',
                               )}
                             </SelectValue>
                           </SelectTrigger>
@@ -1220,7 +1255,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('hakschoringRechtsEnabled', !!checked)
                           }
                         />
-                        <Label htmlFor="hakschoring-rechts-switch" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="hakschoring-rechts-switch"
+                          className="font-normal cursor-pointer"
+                        >
                           {hakschoringRechtsEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
@@ -1235,8 +1273,10 @@ const FormIntakeVLOSPage = () => {
                             <SelectValue>
                               {t(
                                 HAKSCHORING_TYPE_OPTIES.find(
-                                  opt => opt.value === form.watch('hakschoringRechtsType')
-                                )?.label || ''
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('hakschoringRechtsType'),
+                                )?.label || '',
                               )}
                             </SelectValue>
                           </SelectTrigger>
@@ -1267,7 +1307,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('ezelsoorLinksEnabled', !!checked)
                           }
                         />
-                        <Label htmlFor="ezelsoor-links-switch" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="ezelsoor-links-switch"
+                          className="font-normal cursor-pointer"
+                        >
                           {ezelsoorLinksEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
@@ -1282,8 +1325,10 @@ const FormIntakeVLOSPage = () => {
                             <SelectValue>
                               {t(
                                 EZELSOOR_TYPE_OPTIES.find(
-                                  opt => opt.value === form.watch('ezelsoorLinksType')
-                                )?.label || ''
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('ezelsoorLinksType'),
+                                )?.label || '',
                               )}
                             </SelectValue>
                           </SelectTrigger>
@@ -1308,7 +1353,10 @@ const FormIntakeVLOSPage = () => {
                             form.setValue('ezelsoorRechtsEnabled', !!checked)
                           }
                         />
-                        <Label htmlFor="ezelsoor-rechts-switch" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="ezelsoor-rechts-switch"
+                          className="font-normal cursor-pointer"
+                        >
                           {ezelsoorRechtsEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
@@ -1323,8 +1371,10 @@ const FormIntakeVLOSPage = () => {
                             <SelectValue>
                               {t(
                                 EZELSOOR_TYPE_OPTIES.find(
-                                  opt => opt.value === form.watch('ezelsoorRechtsType')
-                                )?.label || ''
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('ezelsoorRechtsType'),
+                                )?.label || '',
                               )}
                             </SelectValue>
                           </SelectTrigger>
@@ -1348,7 +1398,7 @@ const FormIntakeVLOSPage = () => {
                   columns={3}
                   dividers={true}
                   hoverEffect={false}
-                  alignItems='start'
+                  alignItems="start"
                 >
                   <FormItemWrapper label={t('left')}>
                     {showLinks && (
@@ -1507,8 +1557,8 @@ const FormIntakeVLOSPage = () => {
                         <SelectValue>
                           {t(
                             LOOPZOOL_OPTIES.find(
-                              opt => opt.value === form.watch('loopzoolType')
-                            )?.label || ''
+                              opt => opt.value === form.watch('loopzoolType'),
+                            )?.label || '',
                           )}
                         </SelectValue>
                       </SelectTrigger>
@@ -1525,9 +1575,7 @@ const FormIntakeVLOSPage = () => {
               </FormCard>
 
               {/* Special Notes */}
-              <FormCard
-                title={t('specialNotes')}
-              >
+              <FormCard title={t('specialNotes')}>
                 <Textarea
                   placeholder={t('specialNotesPlaceholder')}
                   value={form.watch('bijzonderheden')}
@@ -1555,8 +1603,8 @@ const FormIntakeVLOSPage = () => {
             </form>
           </Form>
         </FormSection>
-      </div >
-    </BaseLayout >
+      </div>
+    </BaseLayout>
   );
 };
 

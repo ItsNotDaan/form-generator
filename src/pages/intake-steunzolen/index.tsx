@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch'; // Added Switch
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
+import React, {useEffect, useState} from 'react';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {Textarea} from '@/components/ui/textarea';
+import {Switch} from '@/components/ui/switch'; // Added Switch
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
   setIntakeSteunzolenData,
   setClientData,
@@ -24,11 +24,11 @@ import {
   STEUNZOLEN_PRIJS_OPTIES,
   TALONETTE_PRIJS_OPTIES,
 } from '@/lib/constants/formConstants';
-import { ChevronRight } from 'lucide-react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import {ChevronRight} from 'lucide-react';
+import {useForm, SubmitHandler} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
 
-import { z } from 'zod';
+import {z} from 'zod';
 import {
   Form,
   FormControl,
@@ -37,15 +37,20 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { useFormPersistence } from '@/hooks/useFormPersistence';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 // ---------------------------------------------------------------------------
 // SCHEMA DEFINITION
 // ---------------------------------------------------------------------------
 const formSchema = z.object({
-
   // Basic info
   welkPaar: z.string(),
   medischeIndicatie: z.string().optional(),
@@ -78,7 +83,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const FormIntakeSteunzolenPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -118,7 +123,11 @@ const FormIntakeSteunzolenPage = () => {
     },
   });
 
-  const { clearStorage } = useFormPersistence('intakeSteunzolen', form.watch, form.setValue);
+  const {clearStorage} = useFormPersistence(
+    'intakeSteunzolen',
+    form.watch,
+    form.setValue,
+  );
 
   const steunzoolTypeGeneral = form.watch('steunzoolTypeGeneral');
   const talonetteEnabled = form.watch('talonetteEnabled');
@@ -126,11 +135,10 @@ const FormIntakeSteunzolenPage = () => {
   const talonettePrijs = form.watch('talonettePrijs');
   const steunzoolPrijs = form.watch('steunzoolPrijs');
 
-
   // Watch values for logic
   const finalPrice = React.useMemo(() => {
-    const talonettePrice = talonetteEnabled ? (talonettePrijs || 0) : 0;
-    const steunzoolPrice = steunzoolEnabled ? (steunzoolPrijs || 0) : 0;
+    const talonettePrice = talonetteEnabled ? talonettePrijs || 0 : 0;
+    const steunzoolPrice = steunzoolEnabled ? steunzoolPrijs || 0 : 0;
     return talonettePrice + steunzoolPrice;
   }, [talonetteEnabled, talonettePrijs, steunzoolEnabled, steunzoolPrijs]);
 
@@ -145,17 +153,15 @@ const FormIntakeSteunzolenPage = () => {
     talonettePrijs,
     steunzoolEnabled,
     steunzoolPrijs,
-    finalPrice
+    finalPrice,
   });
-
-
 
   // ---------------------------------------------------------------------------
   // On Submit Handler for sending data to Redux store and end JSON
   // ---------------------------------------------------------------------------
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<FormData> = data => {
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'Steunzolen' }));
+      dispatch(setClientData({...clientData, intakeType: 'Steunzolen'}));
     }
 
     //Check if talonette is enabled
@@ -176,17 +182,25 @@ const FormIntakeSteunzolenPage = () => {
         talonetteVerhogingRechts: data.talonetteVerhogingRechts || '',
 
         // Steunzool fields
-        steunzoolTypeGeneral: steunzoolEnabled ? data.steunzoolTypeGeneral || '' : '',
-        steunzoolAndersText: steunzoolEnabled ? data.steunzoolAndersText || '' : '',
+        steunzoolTypeGeneral: steunzoolEnabled
+          ? data.steunzoolTypeGeneral || ''
+          : '',
+        steunzoolAndersText: steunzoolEnabled
+          ? data.steunzoolAndersText || ''
+          : '',
         steunzoolCorrectieMiddenvoet: steunzoolEnabled
           ? data.steunzoolCorrectieMiddenvoet || ''
           : '',
         steunzoolCorrectieVoorvoet: steunzoolEnabled
           ? data.steunzoolCorrectieVoorvoet || ''
           : '',
-        steunzoolVvPellote: steunzoolEnabled ? data.steunzoolVvPellote || '' : '',
+        steunzoolVvPellote: steunzoolEnabled
+          ? data.steunzoolVvPellote || ''
+          : '',
         steunzoolPrijs: steunzoolEnabled ? data.steunzoolPrijs : undefined,
-        steunzoolPrijsNaam: steunzoolEnabled ? data.steunzoolPrijsNaam || '' : '',
+        steunzoolPrijsNaam: steunzoolEnabled
+          ? data.steunzoolPrijsNaam || ''
+          : '',
 
         // Final Price
         finalPrice: data.finalPrice || 0,
@@ -196,7 +210,7 @@ const FormIntakeSteunzolenPage = () => {
       }),
     );
 
-    router.push(Routes.form_results);
+    void router.push(Routes.form_results);
   };
 
   return (
@@ -218,15 +232,8 @@ const FormIntakeSteunzolenPage = () => {
               className="space-y-6"
             >
               {/* Paartype & indicatie */}
-              <FormCard
-                title={t('description')}
-                description={t('whichPair')}
-              >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  alignItems="start"
-                >
+              <FormCard title={t('description')} description={t('whichPair')}>
+                <FormBlock columns={2} dividers={true} alignItems="start">
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
@@ -260,7 +267,9 @@ const FormIntakeSteunzolenPage = () => {
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
                       value={form.watch('medischeIndicatie')}
-                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      onChange={e =>
+                        form.setValue('medischeIndicatie', e.target.value)
+                      }
                       rows={4}
                       className="w-2/3"
                     />
@@ -274,7 +283,7 @@ const FormIntakeSteunzolenPage = () => {
                   <FormField
                     control={form.control}
                     name="schoenmaat"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormControl>
                           <Input
@@ -299,18 +308,15 @@ const FormIntakeSteunzolenPage = () => {
                 toggleLabel={t('enableTalonette')}
                 toggleId="talonette-toggle"
                 defaultOpen={form.watch('talonetteEnabled')}
-                onToggleChange={(isOpen) => {
+                onToggleChange={isOpen => {
                   form.setValue('talonetteEnabled', isOpen, {
                     shouldValidate: true,
-                    shouldDirty: true
+                    shouldDirty: true,
                   });
                 }}
               >
                 {/* Heel Raise */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                >
+                <FormBlock columns={2} dividers={true}>
                   <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
                     <Input
                       id="hak-verhoging-links"
@@ -318,7 +324,9 @@ const FormIntakeSteunzolenPage = () => {
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
                       value={form.watch('talonetteVerhogingLinks')}
-                      onChange={e => form.setValue('talonetteVerhogingLinks', e.target.value)}
+                      onChange={e =>
+                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                      }
                       className="w-2/3"
                     />
                   </FormItemWrapper>
@@ -330,13 +338,17 @@ const FormIntakeSteunzolenPage = () => {
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
                       value={form.watch('talonetteVerhogingRechts')}
-                      onChange={e => form.setValue('talonetteVerhogingRechts', e.target.value)}
+                      onChange={e =>
+                        form.setValue(
+                          'talonetteVerhogingRechts',
+                          e.target.value,
+                        )
+                      }
                       className="w-2/3"
                     />
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>
-
 
               {/* ==========================================================
                   Steunzolen Section 
@@ -348,34 +360,29 @@ const FormIntakeSteunzolenPage = () => {
                 toggleLabel={t('enableInsoles')}
                 toggleId="steunzolen-toggle"
                 defaultOpen={form.watch('steunzoolEnabled')}
-                onToggleChange={(isOpen) => {
+                onToggleChange={isOpen => {
                   form.setValue('steunzoolEnabled', isOpen, {
                     shouldValidate: true,
-                    shouldDirty: true
+                    shouldDirty: true,
                   });
                 }}
               >
-
                 {/* ROW 1: Type Selection */}
-                <FormBlock
-                  columns={1}
-                  dividers={true}
-                  alignItems="start"
-                >
+                <FormBlock columns={1} dividers={true} alignItems="start">
                   {/* Type Selection */}
                   <FormItemWrapper label={t('insoleType')}>
                     <Select
                       value={form.watch('steunzoolTypeGeneral') || undefined}
-                      onValueChange={val => form.setValue('steunzoolTypeGeneral', val)}
+                      onValueChange={val =>
+                        form.setValue('steunzoolTypeGeneral', val)
+                      }
                     >
                       <SelectTrigger className="w-fit">
                         <SelectValue placeholder={t('insoleType')} />
                       </SelectTrigger>
                       <SelectContent>
                         {STEUNZOOL_TYPE_OPTIES.map(option => (
-                          <SelectItem
-                            key={option.value}
-                            value={option.value}>
+                          <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
                         ))}
@@ -385,12 +392,17 @@ const FormIntakeSteunzolenPage = () => {
 
                   {/* Conditional "Other" Textarea (Spans full width if visible) */}
                   {steunzoolTypeGeneral === 'Anders' && (
-                    <FormItemWrapper label={t('specifyOther')} className="col-span-2 pt-2">
+                    <FormItemWrapper
+                      label={t('specifyOther')}
+                      className="col-span-2 pt-2"
+                    >
                       <Textarea
                         id="steunzool-anders"
                         placeholder={t('specifyPlaceholder')}
                         value={form.watch('steunzoolAndersText')}
-                        onChange={e => form.setValue('steunzoolAndersText', e.target.value)}
+                        onChange={e =>
+                          form.setValue('steunzoolAndersText', e.target.value)
+                        }
                         rows={2}
                         className="w-2/3 resize-none"
                       />
@@ -406,8 +418,12 @@ const FormIntakeSteunzolenPage = () => {
                 >
                   <FormItemWrapper label={t('midfootCorrection')}>
                     <Select
-                      value={form.watch('steunzoolCorrectieMiddenvoet') || undefined}
-                      onValueChange={val => form.setValue('steunzoolCorrectieMiddenvoet', val)}
+                      value={
+                        form.watch('steunzoolCorrectieMiddenvoet') || undefined
+                      }
+                      onValueChange={val =>
+                        form.setValue('steunzoolCorrectieMiddenvoet', val)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder={t('chooseOption')} />
@@ -424,8 +440,12 @@ const FormIntakeSteunzolenPage = () => {
 
                   <FormItemWrapper label={t('forefootCorrection')}>
                     <Select
-                      value={form.watch('steunzoolCorrectieVoorvoet') || undefined}
-                      onValueChange={val => form.setValue('steunzoolCorrectieVoorvoet', val)}
+                      value={
+                        form.watch('steunzoolCorrectieVoorvoet') || undefined
+                      }
+                      onValueChange={val =>
+                        form.setValue('steunzoolCorrectieVoorvoet', val)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder={t('chooseOption')} />
@@ -440,12 +460,12 @@ const FormIntakeSteunzolenPage = () => {
                     </Select>
                   </FormItemWrapper>
 
-                  <FormItemWrapper
-                    label={t('forefootPad')}
-                  >
+                  <FormItemWrapper label={t('forefootPad')}>
                     <Select
                       value={form.watch('steunzoolVvPellote') || undefined}
-                      onValueChange={val => form.setValue('steunzoolVvPellote', val)}
+                      onValueChange={val =>
+                        form.setValue('steunzoolVvPellote', val)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder={t('chooseOption')} />
@@ -462,14 +482,14 @@ const FormIntakeSteunzolenPage = () => {
                 </FormBlock>
 
                 {/* ROW 3: Steunzool type selectie */}
-                <FormBlock
-                  columns={1}
-                  dividers={true}
-                  alignItems="start"
-                >
+                <FormBlock columns={1} dividers={true} alignItems="start">
                   <FormItemWrapper label={t('insoleType')}>
                     <Select
-                      value={form.watch('steunzoolPrijs') ? String(form.watch('steunzoolPrijs')) : undefined}
+                      value={
+                        form.watch('steunzoolPrijs')
+                          ? String(form.watch('steunzoolPrijs'))
+                          : undefined
+                      }
                       onValueChange={val => {
                         const numVal = val ? parseFloat(val) : undefined;
                         form.setValue('steunzoolPrijs', numVal);
@@ -483,7 +503,10 @@ const FormIntakeSteunzolenPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {STEUNZOLEN_PRIJS_OPTIES.map(option => (
-                          <SelectItem key={option.value} value={String(option.value)}>
+                          <SelectItem
+                            key={option.value}
+                            value={String(option.value)}
+                          >
                             {t(option.label)}
                           </SelectItem>
                         ))}
@@ -493,13 +516,10 @@ const FormIntakeSteunzolenPage = () => {
                 </FormBlock>
               </FormCard>
 
-
               {/* ==========================================================
                   Price Section 
                  ========================================================== */}
-              <FormCard
-                title={t('priceDetails')}
-              >
+              <FormCard title={t('priceDetails')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormItemWrapper>
                     <div className="relative w-28">
@@ -520,14 +540,13 @@ const FormIntakeSteunzolenPage = () => {
                 </FormBlock>
               </FormCard>
 
-
               {/* Special Notes */}
               <FormCard title={t('specialNotes')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormField
                     control={form.control}
                     name="bijzonderheden"
-                    render={({ field }) => (
+                    render={({field}) => (
                       <FormItem>
                         <FormControl>
                           <Textarea

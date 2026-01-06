@@ -1,7 +1,7 @@
 import React from 'react';
-import { BaseLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { NavigationCard } from '@/components/ui/navigation-card';
+import {BaseLayout} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {NavigationCard} from '@/components/ui/navigation-card';
 import {
   Card,
   CardContent,
@@ -9,22 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { clearAllFormStorage } from '@/utils/localStorageHelper';
-import { UserPlus, Users, FileText, ClipboardList } from 'lucide-react';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {clearAllFormStorage} from '@/utils/localStorageHelper';
+import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {clearFormData} from '@/domain/store/slices/formData';
 
 const OverviewPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
+  const dispatch = useAppDispatch();
 
   const handleNavigate = (route: string, clearStorage: boolean = false) => {
     if (clearStorage) {
+      dispatch(clearFormData());
       clearAllFormStorage();
     }
-    router.push(route);
+    void router.push(route);
   };
 
   return (
@@ -60,7 +64,7 @@ const OverviewPage = () => {
               description={t('existingClientFormDescription')}
               buttonText={t('existingClientButton')}
               buttonIcon={Users}
-              onClick={() => handleNavigate(Routes.form_old_client)}
+              onClick={() => handleNavigate(Routes.form_old_client, true)}
             />
           </div>
         </div>
@@ -196,6 +200,49 @@ const OverviewPage = () => {
             </Button>
           </div>
         </div>
+
+        <Separator className="my-8" />
+
+        {/* Testing pages Section */}
+        <div>
+          <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
+            <ClipboardList className="w-6 h-6" />
+            {t('testPages')}
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Form results */}
+            <Button
+              variant="outline"
+              className="items-center justify-start h-auto px-6 py-6"
+              onClick={() => handleNavigate(Routes.form_results)}
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('formResults')}</div>
+                <div className="text-xs text-muted-foreground">
+                  {t('formResultsDescription')}
+                </div>
+              </div>
+            </Button>
+
+            {/* form-selection */}
+            <Button
+              variant="outline"
+              className="items-center justify-start h-auto px-6 py-6"
+              onClick={() => handleNavigate(Routes.form_selection)}
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              <div className="text-left">
+                <div className="font-semibold">{t('formSelection')}</div>
+                <div className="text-xs text-muted-foreground">
+                  {t('formSelectionDescription')}
+                </div>
+              </div>
+            </Button>
+          </div>
+        </div>
+
+        <Separator className="my-8" />
 
         {/* Info Card */}
         <Card className="mt-8 bg-muted/50">

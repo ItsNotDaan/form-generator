@@ -28,7 +28,7 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
 
     const handleStepClick = (step: Step) => {
       if (step.number < currentStep) {
-        router.push(step.route);
+        void router.push(step.route);
       }
     };
 
@@ -36,7 +36,7 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
       if (onBackButtonClicked) {
         onBackButtonClicked();
       } else if (currentStep > 1) {
-        router.push(steps[currentStep - 2].route);
+        void router.push(steps[currentStep - 2].route);
       }
     };
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
+import {Label} from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
 import {
   LOCATIE_OPTIES,
   AANHEF_OPTIES,
@@ -15,13 +15,13 @@ import {
   Locatie,
   Aanhef,
 } from '@/lib/constants/formConstants';
-import { useAppDispatch } from '@/domain/store/hooks';
-import { setClientData } from '@/domain/store/slices/formData';
-import { ChevronRight } from 'lucide-react';
-import { DatePicker } from '@/components/ui/date-picker';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import {useAppDispatch} from '@/domain/store/hooks';
+import {setClientData} from '@/domain/store/slices/formData';
+import {ChevronRight} from 'lucide-react';
+import {DatePicker} from '@/components/ui/date-picker';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
 import {
   Form,
   FormControl,
@@ -36,33 +36,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useDutchAddressLookup } from '@/components/ui/dutch-address-input';
-import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {useDutchAddressLookup} from '@/components/ui/dutch-address-input';
+import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
 const FormNewClientPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
 
   const formSchema = z.object({
-    practitionerId: z.string().min(1, { message: t('required') }),
-    date: z.string().min(1, { message: t('required') }),
-    location: z.string().min(1, { message: t('required') }),
-    salutation: z.string().min(1, { message: t('required') }),
-    initials: z.string().min(1, { message: t('required') }),
-    clientName: z.string().min(1, { message: t('required') }),
-    birthDate: z.string().min(1, { message: t('required') }),
-    address: z.string().min(1, { message: t('required') }),
-    houseNumber: z.string().min(1, { message: t('required') }),
-    postalCode: z.string().min(1, { message: t('required') }),
-    city: z.string().min(1, { message: t('required') }),
-    email: z.string().min(1, { message: t('required') }),
-    insurance: z.string().min(1, { message: t('required') }),
-    phoneOne: z.string().min(1, { message: t('required') }),
+    practitionerId: z.string().min(1, {message: t('required')}),
+    date: z.string().min(1, {message: t('required')}),
+    location: z.string().min(1, {message: t('required')}),
+    salutation: z.string().min(1, {message: t('required')}),
+    initials: z.string().min(1, {message: t('required')}),
+    clientName: z.string().min(1, {message: t('required')}),
+    birthDate: z.string().min(1, {message: t('required')}),
+    bsn: z.string().optional(),
+    address: z.string().min(1, {message: t('required')}),
+    houseNumber: z.string().min(1, {message: t('required')}),
+    postalCode: z.string().min(1, {message: t('required')}),
+    city: z.string().min(1, {message: t('required')}),
+    email: z.string().min(1, {message: t('required')}),
+    insurance: z.string().min(1, {message: t('required')}),
+    phoneOne: z.string().min(1, {message: t('required')}),
     phoneTwo: z.string().optional(),
-    specialist: z.string().min(1, { message: t('required') }),
+    specialist: z.string().min(1, {message: t('required')}),
     medischeIndicatie: z.string().optional(),
   });
 
@@ -79,6 +80,7 @@ const FormNewClientPage = () => {
       initials: '',
       clientName: '',
       birthDate: '',
+      bsn: '',
       address: '',
       houseNumber: '',
       postalCode: '',
@@ -108,16 +110,24 @@ const FormNewClientPage = () => {
 
   // Auto-fill street and city when they change
   React.useEffect(() => {
-    if (street) form.setValue('address', street, { shouldValidate: true });
+    if (street) form.setValue('address', street, {shouldValidate: true});
     // Only clear if street is empty and user has entered both fields
-    if (!street && form.getValues('postalCode') && form.getValues('houseNumber')) {
-      form.setValue('address', '', { shouldValidate: true });
+    if (
+      !street &&
+      form.getValues('postalCode') &&
+      form.getValues('houseNumber')
+    ) {
+      form.setValue('address', '', {shouldValidate: true});
     }
   }, [street]);
   React.useEffect(() => {
-    if (city) form.setValue('city', city, { shouldValidate: true });
-    if (!city && form.getValues('postalCode') && form.getValues('houseNumber')) {
-      form.setValue('city', '', { shouldValidate: true });
+    if (city) form.setValue('city', city, {shouldValidate: true});
+    if (
+      !city &&
+      form.getValues('postalCode') &&
+      form.getValues('houseNumber')
+    ) {
+      form.setValue('city', '', {shouldValidate: true});
     }
   }, [city]);
   const onSubmit = (data: FormData) => {
@@ -142,7 +152,7 @@ const FormNewClientPage = () => {
         specialist: data.specialist || '',
       }),
     );
-    router.push(Routes.form_selection);
+    void router.push(Routes.form_selection);
   };
 
   return (
@@ -169,7 +179,7 @@ const FormNewClientPage = () => {
               >
                 <FormBlock
                   columns={2}
-                // dividers={true}
+                  // dividers={true}
                 >
                   {/* Practitioner */}
                   <FormItemWrapper
@@ -179,21 +189,27 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="practitionerId"
-                      render={({ field, fieldState }) => (
-                        <FormItem
-                          className="w-2/3"
-                        >
+                      render={({field, fieldState}) => (
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Select
                               value={field.value}
                               onValueChange={field.onChange}
                             >
-                              <SelectTrigger className="w-full" aria-invalid={!!fieldState.error}>
-                                <SelectValue placeholder={t('selectPractitioner')} />
+                              <SelectTrigger
+                                className="w-full"
+                                aria-invalid={!!fieldState.error}
+                              >
+                                <SelectValue
+                                  placeholder={t('selectPractitioner')}
+                                />
                               </SelectTrigger>
                               <SelectContent>
                                 {BEHANDELAARS.map(option => (
-                                  <SelectItem key={option.value} value={option.value}>
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
                                     {option.label}
                                   </SelectItem>
                                 ))}
@@ -214,10 +230,8 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="date"
-                      render={({ field }) => (
-                        <FormItem
-                          className="w-2/3"
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <DatePicker
                               value={
@@ -243,26 +257,31 @@ const FormNewClientPage = () => {
                 </FormBlock>
 
                 <FormBlock>
-                  <FormItemWrapper
-                    label={t('location')}
-                    requiredLabel={true}
-                  >
+                  <FormItemWrapper label={t('location')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="location"
-                      render={({ field, fieldState }) => (
+                      render={({field, fieldState}) => (
                         <FormItem className="w-2/3">
                           <FormControl>
                             <Select
                               value={field.value}
                               onValueChange={field.onChange}
                             >
-                              <SelectTrigger className="w-full" aria-invalid={!!fieldState.error}>
-                                <SelectValue placeholder={t('selectLocation')} />
+                              <SelectTrigger
+                                className="w-full"
+                                aria-invalid={!!fieldState.error}
+                              >
+                                <SelectValue
+                                  placeholder={t('selectLocation')}
+                                />
                               </SelectTrigger>
                               <SelectContent>
                                 {LOCATIE_OPTIES.map(option => (
-                                  <SelectItem key={option.value} value={option.value}>
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
                                     {option.label}
                                   </SelectItem>
                                 ))}
@@ -284,18 +303,14 @@ const FormNewClientPage = () => {
               >
                 <FormBlock
                   columns={3}
-                // dividers={true}
+                  // dividers={true}
                 >
-
                   {/* Salutation */}
-                  <FormItemWrapper
-                    label={t('salutation')}
-                    requiredLabel={true}
-                  >
+                  <FormItemWrapper label={t('salutation')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="salutation"
-                      render={({ field, fieldState }) => (
+                      render={({field, fieldState}) => (
                         <FormItem>
                           <FormControl>
                             <RadioGroup
@@ -330,16 +345,12 @@ const FormNewClientPage = () => {
                   </FormItemWrapper>
 
                   {/* Initials */}
-                  <FormItemWrapper
-                    label={t('initials')}
-                    requiredLabel={true}
-                  >
+                  <FormItemWrapper label={t('initials')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="initials"
-                      render={({ field }) => (
-                        <FormItem
-                        >
+                      render={({field}) => (
+                        <FormItem>
                           <FormControl>
                             <Input
                               {...field}
@@ -353,17 +364,12 @@ const FormNewClientPage = () => {
                   </FormItemWrapper>
 
                   {/* Last Name */}
-                  <FormItemWrapper
-                    label={t('lastName')}
-                    requiredLabel={true}
-                  >
+                  <FormItemWrapper label={t('lastName')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="clientName"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-full'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-full">
                           <FormControl>
                             <Input
                               {...field}
@@ -377,20 +383,14 @@ const FormNewClientPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
-                <FormBlock>
-
+                <FormBlock columns={2}>
                   {/* Birth Date */}
-                  <FormItemWrapper
-                    label={t('birthDate')}
-                    requiredLabel={true}
-                  >
+                  <FormItemWrapper label={t('birthDate')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="birthDate"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-2/3'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Input
                               {...field}
@@ -415,6 +415,32 @@ const FormNewClientPage = () => {
                       )}
                     />
                   </FormItemWrapper>
+
+                  {/* BSN Niet verplicht  */}
+                  <FormItemWrapper label={t('bsn')} requiredLabel={false}>
+                    <FormField
+                      control={form.control}
+                      name="bsn"
+                      render={({field}) => (
+                        <FormItem className="w-2/3">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder={t('bsnPlaceholder')}
+                              type="text"
+                              maxLength={9}
+                              onChange={e => {
+                                const value = e.target.value.replace(/\D/g, '');
+                                field.onChange(value);
+                              }}
+                              value={field.value}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 
@@ -424,23 +450,21 @@ const FormNewClientPage = () => {
                 title={t('addressInformation')}
                 description={t('addressInformationDescription')}
               >
-                <FormBlock
-                  columns={2}
-                >
+                <FormBlock columns={2}>
                   <FormItemWrapper label={t('postalCode')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="postalCode"
-                      render={({ field, fieldState }) => (
-                        <FormItem
-                          className='w-3/4'
-                        >
+                      render={({field, fieldState}) => (
+                        <FormItem className="w-3/4">
                           <FormControl>
                             <Input
                               {...field}
                               id="postcode"
                               placeholder={t('postalCodePlaceholder')}
-                              aria-invalid={!!fieldState.error || !!addressError}
+                              aria-invalid={
+                                !!fieldState.error || !!addressError
+                              }
                               onBlur={e => {
                                 field.onBlur();
                                 handlePostcodeBlur();
@@ -452,20 +476,23 @@ const FormNewClientPage = () => {
                       )}
                     />
                   </FormItemWrapper>
-                  <FormItemWrapper label={t('houseNumber')} requiredLabel={true}>
+                  <FormItemWrapper
+                    label={t('houseNumber')}
+                    requiredLabel={true}
+                  >
                     <FormField
                       control={form.control}
                       name="houseNumber"
-                      render={({ field, fieldState }) => (
-                        <FormItem
-                          className='w-3/4'
-                        >
+                      render={({field, fieldState}) => (
+                        <FormItem className="w-3/4">
                           <FormControl>
                             <Input
                               {...field}
                               id="houseNumber"
                               placeholder={t('houseNumberPlaceholder')}
-                              aria-invalid={!!fieldState.error || !!addressError}
+                              aria-invalid={
+                                !!fieldState.error || !!addressError
+                              }
                               onBlur={e => {
                                 field.onBlur();
                                 handleHouseNumberBlur();
@@ -481,10 +508,8 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="address"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-3/4'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-3/4">
                           <FormControl>
                             <Input
                               {...field}
@@ -504,10 +529,8 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="city"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-3/4'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-3/4">
                           <FormControl>
                             <Input
                               {...field}
@@ -539,14 +562,12 @@ const FormNewClientPage = () => {
               >
                 {/* Phone Numbers */}
                 <FormBlock columns={2}>
-                  <FormItemWrapper label={t('phoneOne')} requiredLabel={false}>
+                  <FormItemWrapper label={t('phoneOne')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="phoneOne"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-2/3'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Input
                               {...field}
@@ -563,10 +584,8 @@ const FormNewClientPage = () => {
                     <FormField
                       control={form.control}
                       name="phoneTwo"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-2/3'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Input
                               {...field}
@@ -582,17 +601,13 @@ const FormNewClientPage = () => {
                 </FormBlock>
 
                 {/* Email */}
-                <FormBlock
-                  columns={1}
-                >
+                <FormBlock columns={1}>
                   <FormItemWrapper label={t('email')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="email"
-                      render={({ field }) => (
-                        <FormItem
-                          className='w-2/3'
-                        >
+                      render={({field}) => (
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Input
                               {...field}
@@ -614,25 +629,32 @@ const FormNewClientPage = () => {
                 description={t('insuranceAndMedicalDescription')}
               >
                 <FormBlock>
-
                   {/* Insurance */}
                   <FormItemWrapper label={t('insurance')} requiredLabel={true}>
                     <FormField
                       control={form.control}
                       name="insurance"
-                      render={({ field, fieldState }) => (
+                      render={({field, fieldState}) => (
                         <FormItem className="w-full">
                           <FormControl>
                             <Select
                               value={field.value}
                               onValueChange={field.onChange}
                             >
-                              <SelectTrigger className="w-full" aria-invalid={!!fieldState.error}>
-                                <SelectValue placeholder={t('selectInsurance')} />
+                              <SelectTrigger
+                                className="w-full"
+                                aria-invalid={!!fieldState.error}
+                              >
+                                <SelectValue
+                                  placeholder={t('selectInsurance')}
+                                />
                               </SelectTrigger>
                               <SelectContent>
                                 {ZORGVERZEKERAARS.map(option => (
-                                  <SelectItem key={option.value} value={option.value}>
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
                                     {option.label}
                                   </SelectItem>
                                 ))}
@@ -646,11 +668,15 @@ const FormNewClientPage = () => {
                   </FormItemWrapper>
 
                   {/* Specialist */}
-                  <FormItemWrapper label={t('specialist')} requiredLabel={true} className="w-full">
+                  <FormItemWrapper
+                    label={t('specialist')}
+                    requiredLabel={true}
+                    className="w-full"
+                  >
                     <FormField
                       control={form.control}
                       name="specialist"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem className="w-full">
                           <FormControl>
                             <Input
@@ -665,11 +691,15 @@ const FormNewClientPage = () => {
                   </FormItemWrapper>
 
                   {/* Medical Indication */}
-                  <FormItemWrapper label={t('medicalIndication')} requiredLabel={false} className="w-full">
+                  <FormItemWrapper
+                    label={t('medicalIndication')}
+                    requiredLabel={false}
+                    className="w-full"
+                  >
                     <FormField
                       control={form.control}
                       name="medischeIndicatie"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem className="w-full">
                           <FormControl>
                             <Textarea
@@ -704,7 +734,7 @@ const FormNewClientPage = () => {
           </Form>
         </FormSection>
       </div>
-    </BaseLayout >
+    </BaseLayout>
   );
 };
 

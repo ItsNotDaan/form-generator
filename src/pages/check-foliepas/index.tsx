@@ -1,10 +1,10 @@
 import React from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Switch } from '@/components/ui/switch';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {Checkbox} from '@/components/ui/checkbox';
+import {Switch} from '@/components/ui/switch';
 import {
   Card,
   CardContent,
@@ -12,8 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {Separator} from '@/components/ui/separator';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -22,8 +22,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
 import {
   OMSLUITING_OPTIES,
   OmsluitingOptie,
@@ -38,25 +38,25 @@ import {
   Zijde,
   LEESTCORRECTIE_OPTIES,
 } from '@/lib/constants/formConstants';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
   setCheckFoliepasData,
   setClientData,
 } from '@/domain/store/slices/formData';
 
-import { ChevronRight } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Form } from '@/components/ui/form';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { Textarea } from '@/components/ui/textarea';
-import { useFormPersistence } from '@/hooks/useFormPersistence';
-import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
+import {ChevronRight} from 'lucide-react';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
+import {Form} from '@/components/ui/form';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {Textarea} from '@/components/ui/textarea';
+import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
 const FormCheckFoliepasPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
@@ -150,7 +150,9 @@ const FormCheckFoliepasPage = () => {
     hooksNr: z.string().optional(),
     hooksAmount: z.string().optional(),
     // Zipper
-    zipperType: z.enum(['none', 'functionalNylon', 'decorativeNylon'] as const).optional(),
+    zipperType: z
+      .enum(['none', 'functionalNylon', 'decorativeNylon'] as const)
+      .optional(),
     zipperMedial: z.boolean().optional(),
     zipperLateral: z.boolean().optional(),
     // Special features
@@ -162,15 +164,21 @@ const FormCheckFoliepasPage = () => {
     edgeType: z.string().optional(),
     edgeColor: z.string().optional(),
     // Sole type
-    soleType: z.enum(['gumlite', 'leather', 'antiSlip', 'leatherAntiSlip'] as const).optional(),
+    soleType: z
+      .enum(['gumlite', 'leather', 'antiSlip', 'leatherAntiSlip'] as const)
+      .optional(),
     gumliteNumber: z.string().optional(),
     gumliteColor: z.string().optional(),
     // Carbon stiffening
-    carbonStiffeningType: z.enum(['none', 'prefab', 'custom'] as const).optional(),
+    carbonStiffeningType: z
+      .enum(['none', 'prefab', 'custom'] as const)
+      .optional(),
     carbonStiffeningLeft: z.boolean().optional(),
     carbonStiffeningRight: z.boolean().optional(),
     // Toe options
-    toeOptionsType: z.enum(['none', 'carbon', 'rubberCrawl'] as const).optional(),
+    toeOptionsType: z
+      .enum(['none', 'carbon', 'rubberCrawl'] as const)
+      .optional(),
     // Counterfort
     counterfortType: z.enum(['formo', 'leather', 'other'] as const).optional(),
     counterfortOther: z.string().optional(),
@@ -178,10 +186,14 @@ const FormCheckFoliepasPage = () => {
     insoleType: z.enum(['leather', 'other'] as const).optional(),
     insoleOther: z.string().optional(),
     // Sole edge polish
-    soleEdgePolishType: z.enum(['none', 'black', 'brown', 'mahogany', 'ridges', 'other'] as const).optional(),
+    soleEdgePolishType: z
+      .enum(['none', 'black', 'brown', 'mahogany', 'ridges', 'other'] as const)
+      .optional(),
     soleEdgePolishOther: z.string().optional(),
     // Construction method
-    constructionMethodType: z.enum(['glued', 'flexible', 'other'] as const).optional(),
+    constructionMethodType: z
+      .enum(['glued', 'flexible', 'other'] as const)
+      .optional(),
     constructionMethodOther: z.string().optional(),
     // Heel model
     heelModelType: z.enum(['buildUp', 'wedge', 'block'] as const).optional(),
@@ -189,9 +201,13 @@ const FormCheckFoliepasPage = () => {
     heelWedgeType: z.enum(['hollow', 'flat'] as const).optional(),
     heelBlockCoreCoating: z.boolean().optional(),
     // Shoring
-    shoringLeftType: z.enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const).optional(),
+    shoringLeftType: z
+      .enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const)
+      .optional(),
     shoringLeftMm: z.string().optional(),
-    shoringRightType: z.enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const).optional(),
+    shoringRightType: z
+      .enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const)
+      .optional(),
     shoringRightMm: z.string().optional(),
   });
 
@@ -204,10 +220,10 @@ const FormCheckFoliepasPage = () => {
       side: 'both',
       readingCorrectionAfterFoilFit: '',
       readingCorrectionAfterLiningShoe: '',
-      omsluitingLinks: { omsluitingLinksMultivorm: true },
-      omsluitingRechts: { omsluitingRechtsMultivorm: true },
-      omsluitingLinksMm: { omsluitingMmLinksMultivorm: '3' },
-      omsluitingRechtsMm: { omsluitingMmRechtsMultivorm: '3' },
+      omsluitingLinks: {omsluitingLinksMultivorm: true},
+      omsluitingRechts: {omsluitingRechtsMultivorm: true},
+      omsluitingLinksMm: {omsluitingMmLinksMultivorm: '3'},
+      omsluitingRechtsMm: {omsluitingMmRechtsMultivorm: '3'},
       schachthoogteLinks: '12.5',
       schachthoogteRechts: '12.5',
       // Defaults for moved fields
@@ -291,7 +307,11 @@ const FormCheckFoliepasPage = () => {
     },
   });
 
-  const { clearStorage } = useFormPersistence('checkFoliepas', form.watch, form.setValue);
+  const {clearStorage} = useFormPersistence(
+    'checkFoliepas',
+    form.watch,
+    form.setValue,
+  );
 
   const side = form.watch('side');
   const showLinks = side === 'left' || side === 'both';
@@ -407,7 +427,7 @@ const FormCheckFoliepasPage = () => {
       }),
     );
 
-    router.push(Routes.form_results);
+    void router.push(Routes.form_results);
   };
 
   return (
@@ -431,11 +451,7 @@ const FormCheckFoliepasPage = () => {
             >
               {/* Side Selection */}
               <FormCard title={t('side')}>
-                <FormBlock
-                  columns={1}
-                  dividers={false}
-                  hoverEffect={false}
-                >
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <RadioGroup
                     value={side}
                     onValueChange={v => form.setValue('side', v as Zijde)}
@@ -477,12 +493,13 @@ const FormCheckFoliepasPage = () => {
               <FormCard title={t('readingCorrectionAfterFoilFit')}>
                 {/* Pressable Labels Section */}
                 <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {LEESTCORRECTIE_OPTIES.map((optie) => (
+                  {LEESTCORRECTIE_OPTIES.map(optie => (
                     <Label
                       key={optie.value}
                       onClick={() => {
                         // Get current value
-                        const currentText = form.getValues('readingCorrectionAfterFoilFit') || '';
+                        const currentText =
+                          form.getValues('readingCorrectionAfterFoilFit') || '';
 
                         // Construct new line: "- Translation: Links: Rechts:"
                         const textToAdd = `- ` + t(optie.translationKey);
@@ -493,11 +510,15 @@ const FormCheckFoliepasPage = () => {
                           : textToAdd;
 
                         // Update form
-                        form.setValue('readingCorrectionAfterFoilFit', newText, {
-                          shouldDirty: true,
-                          shouldTouch: true,
-                          shouldValidate: true,
-                        });
+                        form.setValue(
+                          'readingCorrectionAfterFoilFit',
+                          newText,
+                          {
+                            shouldDirty: true,
+                            shouldTouch: true,
+                            shouldValidate: true,
+                          },
+                        );
                       }}
                       className="flex cursor-pointer items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 transition-colors hover:bg-accent/30"
                     >
@@ -516,26 +537,31 @@ const FormCheckFoliepasPage = () => {
                   placeholder={t('readingCorrectionAfterFoilFit')}
                   // Using watch/setValue pattern ensures the textarea updates when buttons are clicked
                   value={form.watch('readingCorrectionAfterFoilFit') || ''}
-                  onChange={(e) =>
-                    form.setValue('readingCorrectionAfterFoilFit', e.target.value, {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
+                  onChange={e =>
+                    form.setValue(
+                      'readingCorrectionAfterFoilFit',
+                      e.target.value,
+                      {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      },
+                    )
                   }
                 />
               </FormCard>
-
 
               {/* Reading Corrections after Lining Shoe */}
               <FormCard title={t('readingCorrectionAfterLiningShoe')}>
                 {/* Pressable Labels Section */}
                 <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {LEESTCORRECTIE_OPTIES.map((optie) => (
+                  {LEESTCORRECTIE_OPTIES.map(optie => (
                     <Label
                       key={optie.value}
                       onClick={() => {
                         // Get current value
-                        const currentText = form.getValues('readingCorrectionAfterLiningShoe') || '';
+                        const currentText =
+                          form.getValues('readingCorrectionAfterLiningShoe') ||
+                          '';
 
                         // Construct new line: "- Translation: Links: Rechts:"
                         const textToAdd = `- ` + t(optie.translationKey);
@@ -546,11 +572,15 @@ const FormCheckFoliepasPage = () => {
                           : textToAdd;
 
                         // Update form
-                        form.setValue('readingCorrectionAfterLiningShoe', newText, {
-                          shouldDirty: true,
-                          shouldTouch: true,
-                          shouldValidate: true,
-                        });
+                        form.setValue(
+                          'readingCorrectionAfterLiningShoe',
+                          newText,
+                          {
+                            shouldDirty: true,
+                            shouldTouch: true,
+                            shouldValidate: true,
+                          },
+                        );
                       }}
                       className="flex cursor-pointer items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 transition-colors hover:bg-accent/30"
                     >
@@ -574,7 +604,7 @@ const FormCheckFoliepasPage = () => {
                       {
                         shouldDirty: true,
                         shouldTouch: true,
-                      }
+                      },
                     )
                   }
                 />
@@ -594,7 +624,8 @@ const FormCheckFoliepasPage = () => {
                   {showLinks && (
                     <FormItemWrapper
                       label={t('leftCm')}
-                      className="items-center">
+                      className="items-center"
+                    >
                       <Input
                         id="shaft-left"
                         type="number"
@@ -634,10 +665,10 @@ const FormCheckFoliepasPage = () => {
                   title={t('enclosure')}
                 >
                   {showLinks && (
-                    <FormItemWrapper
-                      label={t('left')}
-                    >
-                      <div className="space-y-3 w-full lg:w-3/4"> {/* Full on mobile, 3/4 on desktop */}
+                    <FormItemWrapper label={t('left')}>
+                      <div className="space-y-3 w-full lg:w-3/4">
+                        {' '}
+                        {/* Full on mobile, 3/4 on desktop */}
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <Label
                             key={optie.key}
@@ -659,7 +690,11 @@ const FormCheckFoliepasPage = () => {
                                   ...form.getValues('omsluitingLinks'),
                                   [optie.fullKeyLinks]: !!checked,
                                 });
-                                if (checked && optie.needsMm && optie.defaultMm) {
+                                if (
+                                  checked &&
+                                  optie.needsMm &&
+                                  optie.defaultMm
+                                ) {
                                   form.setValue('omsluitingLinksMm', {
                                     ...form.getValues('omsluitingLinksMm'),
                                     [optie.mmKeyLinks]: optie.defaultMm,
@@ -683,9 +718,13 @@ const FormCheckFoliepasPage = () => {
                               ] as boolean) && (
                                 <Input
                                   type="number"
-                                  inputMode={optie.key === 'hoge' ? 'decimal' : 'numeric'}
+                                  inputMode={
+                                    optie.key === 'hoge' ? 'decimal' : 'numeric'
+                                  }
                                   pattern="[0-9]*"
-                                  placeholder={optie.key === 'hoge' ? 'cm' : 'mm'}
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
                                   value={
                                     (form.watch('omsluitingLinksMm')[
                                       optie.mmKeyLinks
@@ -707,9 +746,7 @@ const FormCheckFoliepasPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper
-                      label={t('right')}
-                    >
+                    <FormItemWrapper label={t('right')}>
                       <div className="space-y-3 w-full lg:w-3/4">
                         {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
                           <Label
@@ -732,7 +769,11 @@ const FormCheckFoliepasPage = () => {
                                   ...form.getValues('omsluitingRechts'),
                                   [optie.fullKeyRechts]: !!checked,
                                 });
-                                if (checked && optie.needsMm && optie.defaultMm) {
+                                if (
+                                  checked &&
+                                  optie.needsMm &&
+                                  optie.defaultMm
+                                ) {
                                   form.setValue('omsluitingRechtsMm', {
                                     ...form.getValues('omsluitingRechtsMm'),
                                     [optie.mmKeyRechts]: optie.defaultMm,
@@ -756,9 +797,13 @@ const FormCheckFoliepasPage = () => {
                               ] as boolean) && (
                                 <Input
                                   type="number"
-                                  inputMode={optie.key === 'hoge' ? 'decimal' : 'numeric'}
+                                  inputMode={
+                                    optie.key === 'hoge' ? 'decimal' : 'numeric'
+                                  }
                                   pattern="[0-9]*"
-                                  placeholder={optie.key === 'hoge' ? 'cm' : 'mm'}
+                                  placeholder={
+                                    optie.key === 'hoge' ? 'cm' : 'mm'
+                                  }
                                   value={
                                     (form.watch('omsluitingRechtsMm')[
                                       optie.mmKeyRechts
@@ -788,9 +833,7 @@ const FormCheckFoliepasPage = () => {
                   hoverEffect={false}
                   title={t('legLengthDifference')}
                 >
-                  <FormItemWrapper
-                    label={t('leftCm')}
-                  >
+                  <FormItemWrapper label={t('leftCm')}>
                     <Input
                       id="leg-length-left"
                       type="number"
@@ -799,39 +842,34 @@ const FormCheckFoliepasPage = () => {
                       onChange={e =>
                         form.setValue('legLengthDifferenceLeft', e.target.value)
                       }
-                      className='w-2/3'
+                      className="w-2/3"
                     />
                   </FormItemWrapper>
 
-                  <FormItemWrapper
-                    label={t('rightCm')}
-                  >
+                  <FormItemWrapper label={t('rightCm')}>
                     <Input
                       id="leg-length-right"
                       type="number"
                       placeholder="cm"
                       value={form.watch('legLengthDifferenceRight')}
                       onChange={e =>
-                        form.setValue('legLengthDifferenceRight', e.target.value)
+                        form.setValue(
+                          'legLengthDifferenceRight',
+                          e.target.value,
+                        )
                       }
-                      className='w-2/3'
+                      className="w-2/3"
                     />
                   </FormItemWrapper>
                 </FormBlock>
 
                 {/* Openstand schacht */}
-                <FormBlock
-                  columns={1}
-                  dividers={false}
-                  hoverEffect={false}
-                >
-                  <FormItemWrapper
-                    label={t('shaftOpening')}
-                  >
+                <FormBlock columns={1} dividers={false} hoverEffect={false}>
+                  <FormItemWrapper label={t('shaftOpening')}>
                     <RadioGroup
                       value={form.watch('openstandSchacht') || ''}
                       onValueChange={v => form.setValue('openstandSchacht', v)}
-                      className='justify-center'
+                      className="justify-center"
                     >
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
                         {OPENSTAND_OPTIES.map(opt => (
@@ -879,7 +917,7 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('finalModel')}>
                     <Select
                       value={modelType ?? 'model'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue('modelType', v as 'asPhoto' | 'model')
                       }
                     >
@@ -897,7 +935,9 @@ const FormCheckFoliepasPage = () => {
                       <Input
                         placeholder={t('modelPlaceholder')}
                         value={form.watch('modelText') || ''}
-                        onChange={(e) => form.setValue('modelText', e.target.value)}
+                        onChange={e =>
+                          form.setValue('modelText', e.target.value)
+                        }
                         className="w-2/3"
                       />
                     )}
@@ -911,7 +951,7 @@ const FormCheckFoliepasPage = () => {
                           <Input
                             placeholder={`${t('colorOption')} ${index + 1}`}
                             value={color}
-                            onChange={(e) => {
+                            onChange={e => {
                               const colors = [...colorOptions];
                               colors[index] = e.target.value;
                               form.setValue('colorOptions', colors);
@@ -956,7 +996,7 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('tonguePadding')}>
                     <Select
                       value={form.watch('tonguePaddingMm') || ''}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue('tonguePaddingMm', v as 'no' | '3' | '5')
                       }
                     >
@@ -975,10 +1015,10 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('zipper')}>
                     <Select
                       value={zipperType || 'none'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue(
                           'zipperType',
-                          v as 'none' | 'functionalNylon' | 'decorativeNylon'
+                          v as 'none' | 'functionalNylon' | 'decorativeNylon',
                         )
                       }
                     >
@@ -1001,11 +1041,14 @@ const FormCheckFoliepasPage = () => {
                           <Checkbox
                             id="zipper-medial"
                             checked={form.watch('zipperMedial') || false}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={checked =>
                               form.setValue('zipperMedial', !!checked)
                             }
                           />
-                          <Label htmlFor="zipper-medial" className="font-normal cursor-pointer">
+                          <Label
+                            htmlFor="zipper-medial"
+                            className="font-normal cursor-pointer"
+                          >
                             {t('medial')}
                           </Label>
                         </div>
@@ -1013,11 +1056,14 @@ const FormCheckFoliepasPage = () => {
                           <Checkbox
                             id="zipper-lateral"
                             checked={form.watch('zipperLateral') || false}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={checked =>
                               form.setValue('zipperLateral', !!checked)
                             }
                           />
-                          <Label htmlFor="zipper-lateral" className="font-normal cursor-pointer">
+                          <Label
+                            htmlFor="zipper-lateral"
+                            className="font-normal cursor-pointer"
+                          >
                             {t('lateral')}
                           </Label>
                         </div>
@@ -1029,7 +1075,7 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('paddingCollar')}>
                     <Select
                       value={form.watch('paddingCollarMm') || ''}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue('paddingCollarMm', v as 'no' | '5' | '10')
                       }
                     >
@@ -1046,19 +1092,19 @@ const FormCheckFoliepasPage = () => {
                 </FormBlock>
 
                 {/* Closure & Special Features */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  alignItems="stretch"
-                >
+                <FormBlock columns={2} dividers={true} alignItems="stretch">
                   {/* Closure */}
-                  <FormItemWrapper label={t('closure')}
+                  <FormItemWrapper
+                    label={t('closure')}
                     className="h-full justify-center"
                   >
                     <Select
                       value={closureType || 'velcro'}
-                      onValueChange={(v) =>
-                        form.setValue('closureType', v as 'velcro' | 'ringsHooks')
+                      onValueChange={v =>
+                        form.setValue(
+                          'closureType',
+                          v as 'velcro' | 'ringsHooks',
+                        )
                       }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
@@ -1068,7 +1114,9 @@ const FormCheckFoliepasPage = () => {
                         <SelectItem value="velcro">
                           {t('velcroWithExtraLongRolPassant')}
                         </SelectItem>
-                        <SelectItem value="ringsHooks">{t('ringsAndHooks')}</SelectItem>
+                        <SelectItem value="ringsHooks">
+                          {t('ringsAndHooks')}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
 
@@ -1080,16 +1128,22 @@ const FormCheckFoliepasPage = () => {
                           <Input
                             id="rings-nr"
                             value={form.watch('ringsNr') || ''}
-                            onChange={(e) => form.setValue('ringsNr', e.target.value)}
+                            onChange={e =>
+                              form.setValue('ringsNr', e.target.value)
+                            }
                           />
                         </div>
                         <div className="flex flex-col space-y-2">
-                          <Label htmlFor="rings-amount">{t('ringsAmount')}</Label>
+                          <Label htmlFor="rings-amount">
+                            {t('ringsAmount')}
+                          </Label>
                           <Input
                             id="rings-amount"
                             type="number"
                             value={form.watch('ringsAmount') || ''}
-                            onChange={(e) => form.setValue('ringsAmount', e.target.value)}
+                            onChange={e =>
+                              form.setValue('ringsAmount', e.target.value)
+                            }
                           />
                         </div>
                         <div className="flex flex-col space-y-2">
@@ -1097,16 +1151,22 @@ const FormCheckFoliepasPage = () => {
                           <Input
                             id="hooks-nr"
                             value={form.watch('hooksNr') || ''}
-                            onChange={(e) => form.setValue('hooksNr', e.target.value)}
+                            onChange={e =>
+                              form.setValue('hooksNr', e.target.value)
+                            }
                           />
                         </div>
                         <div className="flex flex-col space-y-2">
-                          <Label htmlFor="hooks-amount">{t('hooksAmount')}</Label>
+                          <Label htmlFor="hooks-amount">
+                            {t('hooksAmount')}
+                          </Label>
                           <Input
                             id="hooks-amount"
                             type="number"
                             value={form.watch('hooksAmount') || ''}
-                            onChange={(e) => form.setValue('hooksAmount', e.target.value)}
+                            onChange={e =>
+                              form.setValue('hooksAmount', e.target.value)
+                            }
                           />
                         </div>
                       </div>
@@ -1120,7 +1180,7 @@ const FormCheckFoliepasPage = () => {
                         <Checkbox
                           id="special-medial-velcro"
                           checked={form.watch('specialMedialVelcro') || false}
-                          onCheckedChange={(checked) =>
+                          onCheckedChange={checked =>
                             form.setValue('specialMedialVelcro', !!checked)
                           }
                         />
@@ -1135,7 +1195,7 @@ const FormCheckFoliepasPage = () => {
                         <Checkbox
                           id="special-lace-loop"
                           checked={form.watch('specialLaceLoop') || false}
-                          onCheckedChange={(checked) =>
+                          onCheckedChange={checked =>
                             form.setValue('specialLaceLoop', !!checked)
                           }
                         />
@@ -1150,7 +1210,7 @@ const FormCheckFoliepasPage = () => {
                         <Checkbox
                           id="special-extra-leather"
                           checked={form.watch('specialExtraLeather') || false}
-                          onCheckedChange={(checked) =>
+                          onCheckedChange={checked =>
                             form.setValue('specialExtraLeather', !!checked)
                           }
                         />
@@ -1168,7 +1228,9 @@ const FormCheckFoliepasPage = () => {
                         id="special-other"
                         placeholder={t('otherPlaceholder')}
                         value={form.watch('specialOther') || ''}
-                        onChange={(e) => form.setValue('specialOther', e.target.value)}
+                        onChange={e =>
+                          form.setValue('specialOther', e.target.value)
+                        }
                         rows={1}
                       />
                     </div>
@@ -1176,16 +1238,12 @@ const FormCheckFoliepasPage = () => {
                 </FormBlock>
 
                 {/* Edge Type */}
-                <FormBlock
-                  columns={2}
-                  dividers={false}
-                  title={t('edgeType')}
-                >
+                <FormBlock columns={2} dividers={false} title={t('edgeType')}>
                   <FormItemWrapper label={t('edgeTypeLabel')}>
                     <Input
                       id="edge-type"
                       value={form.watch('edgeType') || ''}
-                      onChange={(e) => form.setValue('edgeType', e.target.value)}
+                      onChange={e => form.setValue('edgeType', e.target.value)}
                       placeholder="CSO Rand / 12x11"
                       className="w-2/3"
                     />
@@ -1194,7 +1252,7 @@ const FormCheckFoliepasPage = () => {
                     <Input
                       id="edge-color"
                       value={form.watch('edgeColor') || ''}
-                      onChange={(e) => form.setValue('edgeColor', e.target.value)}
+                      onChange={e => form.setValue('edgeColor', e.target.value)}
                       placeholder="Zwart"
                       className="w-2/3"
                     />
@@ -1202,16 +1260,15 @@ const FormCheckFoliepasPage = () => {
                 </FormBlock>
 
                 {/* Sole Type */}
-                <FormBlock
-                  columns={3}
-                  dividers={false}
-                  title={t('soleType')}
-                >
+                <FormBlock columns={3} dividers={false} title={t('soleType')}>
                   <FormItemWrapper label={t('soleType')}>
                     <Select
                       value={soleType || 'gumlite'}
-                      onValueChange={(v) =>
-                        form.setValue('soleType', v as 'gumlite' | 'leather' | 'antiSlip')
+                      onValueChange={v =>
+                        form.setValue(
+                          'soleType',
+                          v as 'gumlite' | 'leather' | 'antiSlip',
+                        )
                       }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
@@ -1232,7 +1289,9 @@ const FormCheckFoliepasPage = () => {
                         <Input
                           id="gumlite-number"
                           value={form.watch('gumliteNumber') || ''}
-                          onChange={(e) => form.setValue('gumliteNumber', e.target.value)}
+                          onChange={e =>
+                            form.setValue('gumliteNumber', e.target.value)
+                          }
                           placeholder="2644"
                           className="w-2/3"
                         />
@@ -1241,7 +1300,9 @@ const FormCheckFoliepasPage = () => {
                         <Input
                           id="gumlite-color"
                           value={form.watch('gumliteColor') || ''}
-                          onChange={(e) => form.setValue('gumliteColor', e.target.value)}
+                          onChange={e =>
+                            form.setValue('gumliteColor', e.target.value)
+                          }
                           placeholder="Zwart"
                           className="w-2/3"
                         />
@@ -1256,10 +1317,10 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('carbonStiffening')}>
                     <Select
                       value={carbonStiffeningType || 'none'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue(
                           'carbonStiffeningType',
-                          v as 'none' | 'prefab' | 'custom'
+                          v as 'none' | 'prefab' | 'custom',
                         )
                       }
                     >
@@ -1272,41 +1333,58 @@ const FormCheckFoliepasPage = () => {
                         <SelectItem value="custom">{t('custom')}</SelectItem>
                       </SelectContent>
                     </Select>
-                    {carbonStiffeningType && carbonStiffeningType !== 'none' && (
-                      <div className="grid grid-cols-2 gap-3 pt-2">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="carbon-left"
-                            checked={form.watch('carbonStiffeningLeft') || false}
-                            onCheckedChange={(checked) =>
-                              form.setValue('carbonStiffeningLeft', !!checked)
-                            }
-                          />
-                          <Label htmlFor="carbon-left" className="font-normal cursor-pointer">
-                            {t('left')}
-                          </Label>
+                    {carbonStiffeningType &&
+                      carbonStiffeningType !== 'none' && (
+                        <div className="grid grid-cols-2 gap-3 pt-2">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="carbon-left"
+                              checked={
+                                form.watch('carbonStiffeningLeft') || false
+                              }
+                              onCheckedChange={checked =>
+                                form.setValue('carbonStiffeningLeft', !!checked)
+                              }
+                            />
+                            <Label
+                              htmlFor="carbon-left"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('left')}
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="carbon-right"
+                              checked={
+                                form.watch('carbonStiffeningRight') || false
+                              }
+                              onCheckedChange={checked =>
+                                form.setValue(
+                                  'carbonStiffeningRight',
+                                  !!checked,
+                                )
+                              }
+                            />
+                            <Label
+                              htmlFor="carbon-right"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('right')}
+                            </Label>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="carbon-right"
-                            checked={form.watch('carbonStiffeningRight') || false}
-                            onCheckedChange={(checked) =>
-                              form.setValue('carbonStiffeningRight', !!checked)
-                            }
-                          />
-                          <Label htmlFor="carbon-right" className="font-normal cursor-pointer">
-                            {t('right')}
-                          </Label>
-                        </div>
-                      </div>
-                    )}
+                      )}
                   </FormItemWrapper>
 
                   <FormItemWrapper label={t('toeOptions')}>
                     <Select
                       value={form.watch('toeOptionsType') || 'none'}
-                      onValueChange={(v) =>
-                        form.setValue('toeOptionsType', v as 'none' | 'carbon' | 'rubberCrawl')
+                      onValueChange={v =>
+                        form.setValue(
+                          'toeOptionsType',
+                          v as 'none' | 'carbon' | 'rubberCrawl',
+                        )
                       }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
@@ -1314,8 +1392,12 @@ const FormCheckFoliepasPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">{t('none')}</SelectItem>
-                        <SelectItem value="carbon">{t('carbonToes')}</SelectItem>
-                        <SelectItem value="rubberCrawl">{t('rubberCrawlToes')}</SelectItem>
+                        <SelectItem value="carbon">
+                          {t('carbonToes')}
+                        </SelectItem>
+                        <SelectItem value="rubberCrawl">
+                          {t('rubberCrawlToes')}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItemWrapper>
@@ -1326,7 +1408,7 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('counterfort')}>
                     <Select
                       value={counterfortType || 'formo'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue('counterfortType', v as 'formo' | 'other')
                       }
                     >
@@ -1343,7 +1425,9 @@ const FormCheckFoliepasPage = () => {
                       <Textarea
                         placeholder={t('otherPlaceholder')}
                         value={form.watch('counterfortOther') || ''}
-                        onChange={(e) => form.setValue('counterfortOther', e.target.value)}
+                        onChange={e =>
+                          form.setValue('counterfortOther', e.target.value)
+                        }
                         rows={2}
                         className="mt-2 w-2/3"
                       />
@@ -1353,7 +1437,7 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('insole')}>
                     <Select
                       value={insoleType || 'leather'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue('insoleType', v as 'leather' | 'other')
                       }
                     >
@@ -1369,7 +1453,9 @@ const FormCheckFoliepasPage = () => {
                       <Textarea
                         placeholder={t('otherPlaceholder')}
                         value={form.watch('insoleOther') || ''}
-                        onChange={(e) => form.setValue('insoleOther', e.target.value)}
+                        onChange={e =>
+                          form.setValue('insoleOther', e.target.value)
+                        }
                         rows={2}
                         className="mt-2 w-2/3"
                       />
@@ -1382,16 +1468,16 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('soleEdgePolish')}>
                     <Select
                       value={soleEdgePolishType || 'none'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue(
                           'soleEdgePolishType',
                           v as
-                          | 'none'
-                          | 'black'
-                          | 'brown'
-                          | 'mahogany'
-                          | 'ridges'
-                          | 'other'
+                            | 'none'
+                            | 'black'
+                            | 'brown'
+                            | 'mahogany'
+                            | 'ridges'
+                            | 'other',
                         )
                       }
                     >
@@ -1402,8 +1488,12 @@ const FormCheckFoliepasPage = () => {
                         <SelectItem value="none">{t('none')}</SelectItem>
                         <SelectItem value="black">{t('black')}</SelectItem>
                         <SelectItem value="brown">{t('brown')}</SelectItem>
-                        <SelectItem value="mahogany">{t('mahogany')}</SelectItem>
-                        <SelectItem value="ridges">{t('soleEdgeRidgesMilling')}</SelectItem>
+                        <SelectItem value="mahogany">
+                          {t('mahogany')}
+                        </SelectItem>
+                        <SelectItem value="ridges">
+                          {t('soleEdgeRidgesMilling')}
+                        </SelectItem>
                         <SelectItem value="other">{t('other')}</SelectItem>
                       </SelectContent>
                     </Select>
@@ -1411,7 +1501,9 @@ const FormCheckFoliepasPage = () => {
                       <Textarea
                         placeholder={t('otherPlaceholder')}
                         value={form.watch('soleEdgePolishOther') || ''}
-                        onChange={(e) => form.setValue('soleEdgePolishOther', e.target.value)}
+                        onChange={e =>
+                          form.setValue('soleEdgePolishOther', e.target.value)
+                        }
                         rows={2}
                         className="mt-2 w-2/3"
                       />
@@ -1421,10 +1513,10 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('constructionMethod')}>
                     <Select
                       value={constructionMethodType || 'glued'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue(
                           'constructionMethodType',
-                          v as 'glued' | 'flexible' | 'other'
+                          v as 'glued' | 'flexible' | 'other',
                         )
                       }
                     >
@@ -1433,7 +1525,9 @@ const FormCheckFoliepasPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="glued">{t('glued')}</SelectItem>
-                        <SelectItem value="flexible">{t('flexible')}</SelectItem>
+                        <SelectItem value="flexible">
+                          {t('flexible')}
+                        </SelectItem>
                         <SelectItem value="other">{t('other')}</SelectItem>
                       </SelectContent>
                     </Select>
@@ -1441,8 +1535,11 @@ const FormCheckFoliepasPage = () => {
                       <Textarea
                         placeholder={t('otherPlaceholder')}
                         value={form.watch('constructionMethodOther') || ''}
-                        onChange={(e) =>
-                          form.setValue('constructionMethodOther', e.target.value)
+                        onChange={e =>
+                          form.setValue(
+                            'constructionMethodOther',
+                            e.target.value,
+                          )
                         }
                         rows={2}
                         className="mt-2 w-2/3"
@@ -1457,8 +1554,11 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('heelModel')}>
                     <Select
                       value={heelModelType || 'buildUp'}
-                      onValueChange={(v) => {
-                        form.setValue('heelModelType', v as 'buildUp' | 'wedge' | 'block');
+                      onValueChange={v => {
+                        form.setValue(
+                          'heelModelType',
+                          v as 'buildUp' | 'wedge' | 'block',
+                        );
                         // Set default heights based on heel type
                         const edgeTypeValue = form.watch('edgeType');
                         let defaultHeight = '2';
@@ -1467,7 +1567,8 @@ const FormCheckFoliepasPage = () => {
                           defaultHeight = '2';
                         } else if (v === 'wedge') {
                           defaultHeight =
-                            edgeTypeValue === 'CSO' || edgeTypeValue?.includes('CSO')
+                            edgeTypeValue === 'CSO' ||
+                            edgeTypeValue?.includes('CSO')
                               ? '1.5'
                               : '2';
                         } else if (v === 'block') {
@@ -1486,7 +1587,9 @@ const FormCheckFoliepasPage = () => {
                         <SelectValue placeholder={t('heelModel')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="buildUp">{t('buildUpHeel')}</SelectItem>
+                        <SelectItem value="buildUp">
+                          {t('buildUpHeel')}
+                        </SelectItem>
                         <SelectItem value="wedge">{t('wedgeHeel')}</SelectItem>
                         <SelectItem value="block">{t('blockHeel')}</SelectItem>
                       </SelectContent>
@@ -1496,8 +1599,11 @@ const FormCheckFoliepasPage = () => {
                       <div className="mt-2 w-full flex justify-center">
                         <RadioGroup
                           value={form.watch('heelBuildUpMaterial') || 'poro'}
-                          onValueChange={(v) =>
-                            form.setValue('heelBuildUpMaterial', v as 'poro' | 'leather')
+                          onValueChange={v =>
+                            form.setValue(
+                              'heelBuildUpMaterial',
+                              v as 'poro' | 'leather',
+                            )
                           }
                         >
                           <div className="flex gap-6">
@@ -1511,7 +1617,10 @@ const FormCheckFoliepasPage = () => {
                               </Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="leather" id="heel-leather" />
+                              <RadioGroupItem
+                                value="leather"
+                                id="heel-leather"
+                              />
                               <Label
                                 htmlFor="heel-leather"
                                 className="font-normal cursor-pointer"
@@ -1528,13 +1637,19 @@ const FormCheckFoliepasPage = () => {
                       <div className="mt-2 w-full flex justify-center">
                         <RadioGroup
                           value={form.watch('heelWedgeType') || 'flat'}
-                          onValueChange={(v) =>
-                            form.setValue('heelWedgeType', v as 'hollow' | 'flat')
+                          onValueChange={v =>
+                            form.setValue(
+                              'heelWedgeType',
+                              v as 'hollow' | 'flat',
+                            )
                           }
                         >
                           <div className="flex gap-6">
                             <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="hollow" id="wedge-hollow" />
+                              <RadioGroupItem
+                                value="hollow"
+                                id="wedge-hollow"
+                              />
                               <Label
                                 htmlFor="wedge-hollow"
                                 className="font-normal cursor-pointer"
@@ -1544,7 +1659,10 @@ const FormCheckFoliepasPage = () => {
                             </div>
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value="flat" id="wedge-flat" />
-                              <Label htmlFor="wedge-flat" className="font-normal cursor-pointer">
+                              <Label
+                                htmlFor="wedge-flat"
+                                className="font-normal cursor-pointer"
+                              >
                                 {t('flat')}
                               </Label>
                             </div>
@@ -1558,8 +1676,10 @@ const FormCheckFoliepasPage = () => {
                         <div className="flex items-center space-x-2">
                           <Checkbox
                             id="heel-core-coating"
-                            checked={form.watch('heelBlockCoreCoating') || false}
-                            onCheckedChange={(checked) =>
+                            checked={
+                              form.watch('heelBlockCoreCoating') || false
+                            }
+                            onCheckedChange={checked =>
                               form.setValue('heelBlockCoreCoating', !!checked)
                             }
                           />
@@ -1581,17 +1701,17 @@ const FormCheckFoliepasPage = () => {
                       dividers={true}
                       title={t('heelHeight')}
                       hoverEffect={false}
-                      className='border-0 bg-transparent'
+                      className="border-0 bg-transparent"
                     >
-                      <FormItemWrapper
-                        label={`${t('heelHeightLeft')} (cm)`}
-                      >
+                      <FormItemWrapper label={`${t('heelHeightLeft')} (cm)`}>
                         <Input
                           id="heel-height-left"
                           type="number"
                           step="0.1"
                           value={form.watch('hakhoogteLinks') || ''}
-                          onChange={(e) => form.setValue('hakhoogteLinks', e.target.value)}
+                          onChange={e =>
+                            form.setValue('hakhoogteLinks', e.target.value)
+                          }
                           className="w-2/3"
                         />
                       </FormItemWrapper>
@@ -1602,7 +1722,9 @@ const FormCheckFoliepasPage = () => {
                           type="number"
                           step="0.1"
                           value={form.watch('hakhoogteRechts') || ''}
-                          onChange={(e) => form.setValue('hakhoogteRechts', e.target.value)}
+                          onChange={e =>
+                            form.setValue('hakhoogteRechts', e.target.value)
+                          }
                           className="w-2/3"
                         />
                       </FormItemWrapper>
@@ -1613,26 +1735,39 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('heelRounding')}>
                     <div className="flex items-center gap-8 pt-2">
                       <div className="flex items-center gap-2">
-                        <Label htmlFor="heel-rounding-left" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="heel-rounding-left"
+                          className="font-normal cursor-pointer"
+                        >
                           {t('left')}
                         </Label>
                         <Switch
                           id="heel-rounding-left"
-                          checked={form.watch('hakafrondingLinksEnabled') || false}
+                          checked={
+                            form.watch('hakafrondingLinksEnabled') || false
+                          }
                           onCheckedChange={checked =>
                             form.setValue('hakafrondingLinksEnabled', !!checked)
                           }
                         />
                       </div>
                       <div className="flex items-center gap-2">
-                        <Label htmlFor="heel-rounding-right" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="heel-rounding-right"
+                          className="font-normal cursor-pointer"
+                        >
                           {t('right')}
                         </Label>
                         <Switch
                           id="heel-rounding-right"
-                          checked={form.watch('hakafrondingRechtsEnabled') || false}
+                          checked={
+                            form.watch('hakafrondingRechtsEnabled') || false
+                          }
                           onCheckedChange={checked =>
-                            form.setValue('hakafrondingRechtsEnabled', !!checked)
+                            form.setValue(
+                              'hakafrondingRechtsEnabled',
+                              !!checked,
+                            )
                           }
                         />
                       </div>
@@ -1645,10 +1780,14 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('shoringLeft')}>
                     <Select
                       value={form.watch('shoringLeftType') || 'none'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue(
                           'shoringLeftType',
-                          v as 'lateral' | 'medial' | 'lateralAndMedial' | 'none'
+                          v as
+                            | 'lateral'
+                            | 'medial'
+                            | 'lateralAndMedial'
+                            | 'none',
                         )
                       }
                     >
@@ -1674,7 +1813,9 @@ const FormCheckFoliepasPage = () => {
                             id="shoring-left-mm"
                             type="number"
                             value={form.watch('shoringLeftMm') || ''}
-                            onChange={(e) => form.setValue('shoringLeftMm', e.target.value)}
+                            onChange={e =>
+                              form.setValue('shoringLeftMm', e.target.value)
+                            }
                           />
                         </div>
                       )}
@@ -1683,10 +1824,14 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('shoringRight')}>
                     <Select
                       value={form.watch('shoringRightType') || 'none'}
-                      onValueChange={(v) =>
+                      onValueChange={v =>
                         form.setValue(
                           'shoringRightType',
-                          v as 'lateral' | 'medial' | 'lateralAndMedial' | 'none'
+                          v as
+                            | 'lateral'
+                            | 'medial'
+                            | 'lateralAndMedial'
+                            | 'none',
                         )
                       }
                     >
@@ -1712,14 +1857,15 @@ const FormCheckFoliepasPage = () => {
                             id="shoring-right-mm"
                             type="number"
                             value={form.watch('shoringRightMm') || ''}
-                            onChange={(e) => form.setValue('shoringRightMm', e.target.value)}
+                            onChange={e =>
+                              form.setValue('shoringRightMm', e.target.value)
+                            }
                           />
                         </div>
                       )}
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>
-
 
               {/* Submit Section */}
               <FormFooter>
@@ -1736,10 +1882,10 @@ const FormCheckFoliepasPage = () => {
                 </Button>
               </FormFooter>
             </form>
-          </Form >
-        </FormSection >
-      </div >
-    </BaseLayout >
+          </Form>
+        </FormSection>
+      </div>
+    </BaseLayout>
   );
 };
 

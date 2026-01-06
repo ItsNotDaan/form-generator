@@ -1,33 +1,27 @@
-import React, { useState } from 'react';
-import { BaseLayout, FormSection, FormFooter } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { CheckCircle2, AlertTriangle, Copy, Check } from 'lucide-react';
+import React, {useState} from 'react';
+import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
+import {Button} from '@/components/ui/button';
+import {Separator} from '@/components/ui/separator';
+import {CheckCircle2, AlertTriangle, Copy, Check} from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Routes } from '@/lib/routes';
-import { useAppSelector } from '@/domain/store/hooks';
-import { BEHANDELAARS } from '@/lib/constants/formConstants';
-import { generateCodes } from '@/utils/codeGenerator';
-import { clearAllFormStorage } from '@/utils/localStorageHelper';
+import {useRouter} from 'next/router';
+import {Routes} from '@/lib/routes';
+import {useAppSelector} from '@/domain/store/hooks';
+import {BEHANDELAARS} from '@/lib/constants/formConstants';
+import {generateCodes} from '@/utils/codeGenerator';
+import {clearAllFormStorage} from '@/utils/localStorageHelper';
+import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 
 const FormResultsPage = () => {
   const router = useRouter();
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const formData = useAppSelector(state => state.formData);
   const [copied, setCopied] = useState(false);
 
   // If no client data exists, redirect to new client page
   React.useEffect(() => {
     if (!formData.client) {
-      router.push(Routes.form_new_client);
+      void router.push(Routes.form_new_client);
     }
   }, [formData.client, router]);
 
@@ -75,11 +69,11 @@ const FormResultsPage = () => {
     // Resolve practitioner ID to name
     const resolvedClientData = formData.client
       ? normalizeObject({
-        ...formData.client,
-        practitionerName:
-          BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-            ?.label || formData.client?.practitionerId,
-      })
+          ...formData.client,
+          practitionerName:
+            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+              ?.label || formData.client?.practitionerId,
+        })
       : null;
 
     // Build result object with only non-null intake forms
@@ -115,7 +109,7 @@ const FormResultsPage = () => {
       formData.client &&
       (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)
     ) {
-      const { codes, warnings, generalBasiscode } = generateCodes(
+      const {codes, warnings, generalBasiscode} = generateCodes(
         formData.client,
         {
           intakeVLOS: formData.intakeVLOS,
@@ -179,10 +173,14 @@ const FormResultsPage = () => {
     }
 
     return (
-      <div key={label} className="mb-2">
-        <p className="text-sm font-semibold text-muted-foreground">{label}:</p>
-        <p className="text-md">{displayValue}</p>
-      </div>
+      <FormItemWrapper
+        key={label}
+        centerItems={false}
+        centerTitle={false}
+        label={label}
+      >
+        <p className="text-md text-foreground break-words">{displayValue}</p>
+      </FormItemWrapper>
     );
   };
 
@@ -192,9 +190,9 @@ const FormResultsPage = () => {
     }
 
     return (
-      <div>
-        <h3 className="text-lg font-bold mb-3">{title}</h3>
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-lg font-bold">{title}</h3>
+        <div className="grid gap-3 md:grid-cols-2">
           {Object.entries(data).map(([key, value]) =>
             renderFieldValue(key, value),
           )}
@@ -217,95 +215,33 @@ const FormResultsPage = () => {
         </div>
 
         <FormSection>
-          <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-md">
-            <CheckCircle2 className="w-5 h-5 text-green-600" />
-            <p className="text-sm">{t('formDataComplete')}</p>
-          </div>
-
-          {/* Display code generation warnings if any */}
-          {codeWarnings && codeWarnings.length > 0 && (
-            <div className="flex flex-col gap-3 p-4 bg-orange-50 border border-orange-200 rounded-md">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-600" />
-                <p className="font-bold">{t('codeWarnings')}:</p>
-              </div>
-              <div className="flex flex-col gap-2 ml-6">
-                {codeWarnings.map((warning, idx) => (
-                  <div
-                    key={idx}
-                    className="flex justify-between items-center gap-2"
-                  >
-                    <p className="text-sm">{warning}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="flex flex-col gap-6">
+            {/* Alle formuliergegevens zijn succesvol opgeslagen. */}
+            <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-md">
+              <CheckCircle2 className="w-5 h-5 text-green-600" />
+              <p className="text-sm">{t('formDataComplete')}</p>
             </div>
-          )}
 
-          <Separator />
-
-          {/* Display all form data */}
-          <div>
-            <h2 className="text-xl font-bold mb-4">{t('submittedData')}</h2>
-
-            {renderSection(t('clientData'), formData.client)}
-
-            {formData.intakeVLOS && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakeVlos'), formData.intakeVLOS)}
-              </>
+            {codeWarnings && codeWarnings.length > 0 && (
+              <div className="flex flex-col gap-3 p-4 bg-orange-50 border border-orange-200 rounded-md">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-orange-600" />
+                  <p className="font-bold">{t('codeWarnings')}:</p>
+                </div>
+                <div className="flex flex-col gap-2 ml-6">
+                  {codeWarnings.map((warning, idx) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between items-center gap-2"
+                    >
+                      <p className="text-sm">{warning}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
 
-            {formData.intakeOSA && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakeOsa'), formData.intakeOSA)}
-              </>
-            )}
-
-            {formData.intakePulman && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakePulman'), formData.intakePulman)}
-              </>
-            )}
-
-            {formData.intakeRebacare && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakeRebacare'), formData.intakeRebacare)}
-              </>
-            )}
-
-            {formData.intakeOSB && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakeOsb'), formData.intakeOSB)}
-              </>
-            )}
-
-            {formData.intakeOVAC && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakeOvac'), formData.intakeOVAC)}
-              </>
-            )}
-
-            {formData.intakeSteunzolen && (
-              <>
-                <Separator className="my-4" />
-                {renderSection(t('intakeInsoles'), formData.intakeSteunzolen)}
-              </>
-            )}
-          </div>
-
-          <Separator />
-
-          {/* JSON Output Section */}
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">{t('jsonOutput')}</h2>
+            <div className="flex justify-center">
               <Button
                 onClick={handleCopyJSON}
                 className="flex items-center gap-2"
@@ -313,7 +249,7 @@ const FormResultsPage = () => {
                 {copied ? (
                   <>
                     <Check className="w-4 h-4" />
-                    Copied!
+                    {t('copied') ?? 'Copied!'}
                   </>
                 ) : (
                   <>
@@ -324,24 +260,69 @@ const FormResultsPage = () => {
               </Button>
             </div>
 
-            <p className="text-sm text-muted-foreground mb-3">
-              {t('jsonOutputDescription')}
-            </p>
+            {/* Alle gegevens van het formulier */}
+            <FormBlock
+              columns={1}
+              responsive
+              alignItems="stretch"
+              centerTitle={false}
+            >
+              {/* De ingediende gegevens */}
+              <FormCard
+                title={t('submittedData')}
+                description={t('formResultsDescription')}
+                toggleAble
+                toggleLabel="Open/Sluit"
+                defaultOpen={false}
+                contentClassName="space-y-6"
+              >
+                {renderSection(t('clientData'), formData.client)}
 
-            <div className="bg-gray-50 p-4 rounded-md border border-gray-200 max-h-[500px] overflow-y-auto">
-              <pre className="text-sm whitespace-pre font-mono">
-                {jsonString}
-              </pre>
-            </div>
+                {formData.intakeVLOS &&
+                  renderSection(t('intakeVlos'), formData.intakeVLOS)}
+                {formData.intakeOSA &&
+                  renderSection(t('intakeOsa'), formData.intakeOSA)}
+                {formData.intakePulman &&
+                  renderSection(t('intakePulman'), formData.intakePulman)}
+                {formData.intakeRebacare &&
+                  renderSection(t('intakeRebacare'), formData.intakeRebacare)}
+                {formData.intakeOSB &&
+                  renderSection(t('intakeOsb'), formData.intakeOSB)}
+                {formData.intakeOVAC &&
+                  renderSection(t('intakeOvac'), formData.intakeOVAC)}
+                {formData.intakeSteunzolen &&
+                  renderSection(t('intakeInsoles'), formData.intakeSteunzolen)}
+              </FormCard>
+
+              {/* De volledige JSON output */}
+              <FormCard
+                title={t('jsonOutput')}
+                description={t('jsonOutputDescription')}
+                toggleAble
+                toggleLabel="Open/Sluit"
+                defaultOpen
+              >
+                <FormItemWrapper
+                  centerItems={false}
+                  centerTitle={false}
+                  label={t('jsonOutput')}
+                >
+                  <pre className="p-4 bg-gray-50 rounded-md border border-gray-200 max-h-[500px] overflow-y-auto text-sm whitespace-pre-wrap break-words font-mono">
+                    {jsonString}
+                  </pre>
+                </FormItemWrapper>
+              </FormCard>
+            </FormBlock>
           </div>
 
-          {/* Action Buttons */}
+          <Separator />
+
           <FormFooter>
             <Button
               variant="outline"
               onClick={() => {
                 clearAllFormStorage();
-                router.push(Routes.form_selection);
+                void router.push(Routes.form_selection);
               }}
             >
               {t('fillAnotherForm')}
@@ -349,7 +330,7 @@ const FormResultsPage = () => {
             <Button
               onClick={() => {
                 clearAllFormStorage();
-                router.push(Routes.overview);
+                void router.push(Routes.overview);
               }}
             >
               {t('backToOverview')}

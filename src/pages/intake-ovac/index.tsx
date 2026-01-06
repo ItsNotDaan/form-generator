@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import { useRouter } from 'next/router';
+import React, {useMemo} from 'react';
+import {useRouter} from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { BaseLayout, FormFooter, FormSection } from '@/components/layout';
+import {useForm} from 'react-hook-form';
+import {z} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {BaseLayout, FormFooter, FormSection} from '@/components/layout';
 import {
   Card,
   CardContent,
@@ -12,17 +12,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Switch } from '@/components/ui/switch';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Separator } from '@/components/ui/separator';
-import { ChevronRight } from 'lucide-react';
-import { Form } from '@/components/ui/form';
-import { Routes } from '@/lib/routes';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
+import {Label} from '@/components/ui/label';
+import {Checkbox} from '@/components/ui/checkbox';
+import {Switch} from '@/components/ui/switch';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {Separator} from '@/components/ui/separator';
+import {ChevronRight} from 'lucide-react';
+import {Form} from '@/components/ui/form';
+import {Routes} from '@/lib/routes';
 import {
   CORRECTIE_MIDDENVOET_OPTIES,
   CORRECTIE_VOORVOET_OPTIES,
@@ -32,11 +32,17 @@ import {
   STEUNZOLEN_PRIJS_OPTIES,
   STEUNZOOL_TYPE_OPTIES,
 } from '@/lib/constants/formConstants';
-import { useAppDispatch, useAppSelector } from '@/domain/store/hooks';
-import { setClientData, setIntakeOVACData } from '@/domain/store/slices/formData';
-import { scrollToFirstError } from '@/utils/formHelpers';
-import { FormCard, FormBlock, FormItemWrapper } from '@/components/ui/form-block';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {setClientData, setIntakeOVACData} from '@/domain/store/slices/formData';
+import {scrollToFirstError} from '@/utils/formHelpers';
+import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const OVAC_ITEM_TRANSLATIONS: Record<string, string> = {
   supplementIndividueel: 'supplementIndividual',
@@ -99,7 +105,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const FormIntakeOVACPage = () => {
-  const { t } = useTranslation('form');
+  const {t} = useTranslation('form');
   const router = useRouter();
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
@@ -134,15 +140,16 @@ const FormIntakeOVACPage = () => {
 
   const omschrijvingItems = useMemo(() => OVAC_OMSCHRIJVING_ITEMS, []);
 
-  const renderOmschrijvingRow = (key: string, label: string, postNr: string) => {
+  const renderOmschrijvingRow = (
+    key: string,
+    label: string,
+    postNr: string,
+  ) => {
     const leftField = `${key}Links` as keyof FormData;
     const rightField = `${key}Rechts` as keyof FormData;
 
     return (
-      <div
-        key={key}
-        className="rounded-lg border bg-muted/50 p-4 space-y-3"
-      >
+      <div key={key} className="rounded-lg border bg-muted/50 p-4 space-y-3">
         <div className="flex items-center justify-between gap-3">
           <p className="font-semibold text-foreground">{label}</p>
           <span className="text-xs text-muted-foreground">Post {postNr}</span>
@@ -154,7 +161,10 @@ const FormIntakeOVACPage = () => {
               checked={!!form.watch(leftField)}
               onCheckedChange={checked => form.setValue(leftField, !!checked)}
             />
-            <Label htmlFor={`${key}-links`} className="font-normal cursor-pointer">
+            <Label
+              htmlFor={`${key}-links`}
+              className="font-normal cursor-pointer"
+            >
               {t('left')}
             </Label>
           </div>
@@ -164,7 +174,10 @@ const FormIntakeOVACPage = () => {
               checked={!!form.watch(rightField)}
               onCheckedChange={checked => form.setValue(rightField, !!checked)}
             />
-            <Label htmlFor={`${key}-rechts`} className="font-normal cursor-pointer">
+            <Label
+              htmlFor={`${key}-rechts`}
+              className="font-normal cursor-pointer"
+            >
               {t('right')}
             </Label>
           </div>
@@ -175,7 +188,7 @@ const FormIntakeOVACPage = () => {
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
-      dispatch(setClientData({ ...clientData, intakeType: 'OVAC' }));
+      dispatch(setClientData({...clientData, intakeType: 'OVAC'}));
     }
 
     const steunzoolEnabled = !!data.steunzoolEnabled;
@@ -208,15 +221,21 @@ const FormIntakeOVACPage = () => {
         voorvoetCmRechts: data.voorvoetCmRechts || '',
         hielCmLinks: data.hielCmLinks || '',
         hielCmRechts: data.hielCmRechts || '',
-        steunzoolTypeGeneral: steunzoolEnabled ? data.steunzoolTypeGeneral || '' : '',
-        steunzoolAndersText: steunzoolEnabled ? data.steunzoolAndersText || '' : '',
+        steunzoolTypeGeneral: steunzoolEnabled
+          ? data.steunzoolTypeGeneral || ''
+          : '',
+        steunzoolAndersText: steunzoolEnabled
+          ? data.steunzoolAndersText || ''
+          : '',
         steunzoolCorrectieMiddenvoet: steunzoolEnabled
           ? data.steunzoolCorrectieMiddenvoet || ''
           : '',
         steunzoolCorrectieVoorvoet: steunzoolEnabled
           ? data.steunzoolCorrectieVoorvoet || ''
           : '',
-        steunzoolVvPellote: steunzoolEnabled ? data.steunzoolVvPellote || '' : '',
+        steunzoolVvPellote: steunzoolEnabled
+          ? data.steunzoolVvPellote || ''
+          : '',
         talonetteVerhogingLinks: steunzoolEnabled
           ? data.talonetteVerhogingLinks || ''
           : '',
@@ -224,12 +243,14 @@ const FormIntakeOVACPage = () => {
           ? data.talonetteVerhogingRechts || ''
           : '',
         steunzoolPrijs: steunzoolEnabled ? data.steunzoolPrijs : undefined,
-        steunzoolPrijsNaam: steunzoolEnabled ? data.steunzoolPrijsNaam || '' : '',
+        steunzoolPrijsNaam: steunzoolEnabled
+          ? data.steunzoolPrijsNaam || ''
+          : '',
         bijzonderheden: data.bijzonderheden || '',
       }),
     );
 
-    router.push(Routes.form_results);
+    void router.push(Routes.form_results);
   };
 
   // Determine which sides to show based on your form logic
@@ -257,15 +278,8 @@ const FormIntakeOVACPage = () => {
               className="space-y-6"
             >
               {/* Paartype & indicatie */}
-              <FormCard
-                title={t('description')}
-                description={t('whichPair')}
-              >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  alignItems="start"
-                >
+              <FormCard title={t('description')} description={t('whichPair')}>
+                <FormBlock columns={2} dividers={true} alignItems="start">
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
@@ -299,7 +313,9 @@ const FormIntakeOVACPage = () => {
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
                       value={form.watch('medischeIndicatie')}
-                      onChange={e => form.setValue('medischeIndicatie', e.target.value)}
+                      onChange={e =>
+                        form.setValue('medischeIndicatie', e.target.value)
+                      }
                       rows={4}
                       className="w-2/3"
                     />
@@ -308,10 +324,7 @@ const FormIntakeOVACPage = () => {
               </FormCard>
 
               {/* Omschrijving items */}
-              <FormCard
-                title={t('description')}
-                description={t('modules')}
-              >
+              <FormCard title={t('description')} description={t('modules')}>
                 <FormBlock
                   columns={2}
                   // dividers={true} // We handle dividers internally for the lists
@@ -323,11 +336,13 @@ const FormIntakeOVACPage = () => {
                     {showLinks && (
                       <div className="flex flex-col p-3 w-full">
                         <div className="flex items-center justify-center pb-2 border-b">
-                          <Label className="text-base font-bold">{t('left')}</Label>
+                          <Label className="text-base font-bold">
+                            {t('left')}
+                          </Label>
                         </div>
                         {/* TIGHT LIST CONTAINER */}
-                        < div className="flex flex-col divide-y border overflow-hidden">
-                          {omschrijvingItems.map((item) => (
+                        <div className="flex flex-col divide-y border overflow-hidden">
+                          {omschrijvingItems.map(item => (
                             <ModuleSwitchRow
                               key={`left-${item.key}`}
                               item={item}
@@ -346,12 +361,14 @@ const FormIntakeOVACPage = () => {
                     {showRechts && (
                       <div className="flex flex-col p-3 w-full">
                         <div className="flex items-center justify-center pb-2 border-b">
-                          <Label className="text-base font-bold">{t('right')}</Label>
+                          <Label className="text-base font-bold">
+                            {t('right')}
+                          </Label>
                         </div>
 
                         {/* TIGHT LIST CONTAINER */}
                         <div className="flex flex-col divide-y border rounded-lg overflow-hidden">
-                          {omschrijvingItems.map((item) => (
+                          {omschrijvingItems.map(item => (
                             <ModuleSwitchRow
                               key={`right-${item.key}`}
                               item={item}
@@ -372,18 +389,20 @@ const FormIntakeOVACPage = () => {
                 title={t('verkorting')}
                 description={t('specialNotesPlaceholder')}
               >
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                >
-                  <FormItemWrapper >
-                    <Label htmlFor="verkorting-links" className="text-sm font-medium cursor-pointer">
+                <FormBlock columns={2} dividers={true}>
+                  <FormItemWrapper>
+                    <Label
+                      htmlFor="verkorting-links"
+                      className="text-sm font-medium cursor-pointer"
+                    >
                       {t('left')}
                     </Label>
                     <Switch
                       id="verkorting-links"
                       checked={!!form.watch('verkortingLinks')}
-                      onCheckedChange={checked => form.setValue('verkortingLinks', !!checked)}
+                      onCheckedChange={checked =>
+                        form.setValue('verkortingLinks', !!checked)
+                      }
                     />
                     {form.watch('verkortingLinks') && (
                       <div className="flex flex-row mt-2 space-x-4">
@@ -394,7 +413,9 @@ const FormIntakeOVACPage = () => {
                             step="0.5"
                             placeholder={t('voorvoetCm')}
                             value={form.watch('voorvoetCmLinks') || ''}
-                            onChange={e => form.setValue('voorvoetCmLinks', e.target.value)}
+                            onChange={e =>
+                              form.setValue('voorvoetCmLinks', e.target.value)
+                            }
                             className=""
                           />
                         </FormItemWrapper>
@@ -405,7 +426,9 @@ const FormIntakeOVACPage = () => {
                             step="0.5"
                             placeholder={t('hielCm')}
                             value={form.watch('hielCmLinks') || ''}
-                            onChange={e => form.setValue('hielCmLinks', e.target.value)}
+                            onChange={e =>
+                              form.setValue('hielCmLinks', e.target.value)
+                            }
                             className=""
                           />
                         </FormItemWrapper>
@@ -414,14 +437,19 @@ const FormIntakeOVACPage = () => {
                   </FormItemWrapper>
 
                   {/* Right Side */}
-                  <FormItemWrapper >
-                    <Label htmlFor="verkorting-rechts" className="text-sm font-medium cursor-pointer">
+                  <FormItemWrapper>
+                    <Label
+                      htmlFor="verkorting-rechts"
+                      className="text-sm font-medium cursor-pointer"
+                    >
                       {t('right')}
                     </Label>
                     <Switch
                       id="verkorting-rechts"
                       checked={!!form.watch('verkortingRechts')}
-                      onCheckedChange={checked => form.setValue('verkortingRechts', !!checked)}
+                      onCheckedChange={checked =>
+                        form.setValue('verkortingRechts', !!checked)
+                      }
                     />
 
                     {form.watch('verkortingRechts') && (
@@ -433,7 +461,9 @@ const FormIntakeOVACPage = () => {
                             step="0.5"
                             placeholder={t('voorvoetCm')}
                             value={form.watch('voorvoetCmRechts') || ''}
-                            onChange={e => form.setValue('voorvoetCmRechts', e.target.value)}
+                            onChange={e =>
+                              form.setValue('voorvoetCmRechts', e.target.value)
+                            }
                             className=""
                           />
                         </FormItemWrapper>
@@ -444,7 +474,9 @@ const FormIntakeOVACPage = () => {
                             step="0.1"
                             placeholder={t('hielCm')}
                             value={form.watch('hielCmRechts') || ''}
-                            onChange={e => form.setValue('hielCmRechts', e.target.value)}
+                            onChange={e =>
+                              form.setValue('hielCmRechts', e.target.value)
+                            }
                             className=""
                           />
                         </FormItemWrapper>
@@ -463,7 +495,6 @@ const FormIntakeOVACPage = () => {
                 toggleId="steunzolen-toggle"
                 defaultOpen={form.watch('steunzoolEnabled')}
               >
-
                 {/* Type Selection */}
                 <FormBlock
                   columns={2}
@@ -475,18 +506,16 @@ const FormIntakeOVACPage = () => {
                   <FormItemWrapper className="col-span-2">
                     <Select
                       value={form.watch('steunzoolTypeGeneral') || undefined}
-                      onValueChange={val => form.setValue('steunzoolTypeGeneral', val)}
+                      onValueChange={val =>
+                        form.setValue('steunzoolTypeGeneral', val)
+                      }
                     >
                       <SelectTrigger className="w-2/3 mt-2">
-                        <SelectValue
-                          placeholder={t('insoleType')}
-                        />
+                        <SelectValue placeholder={t('insoleType')} />
                       </SelectTrigger>
                       <SelectContent>
                         {STEUNZOOL_TYPE_OPTIES.map(option => (
-                          <SelectItem
-                            key={option.value}
-                            value={option.value}>
+                          <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
                         ))}
@@ -496,12 +525,17 @@ const FormIntakeOVACPage = () => {
 
                   {/* Conditional "Other" Textarea */}
                   {form.watch('steunzoolTypeGeneral') === 'Anders' && (
-                    <FormItemWrapper label={t('specifyOther')} className="col-span-2 pt-2">
+                    <FormItemWrapper
+                      label={t('specifyOther')}
+                      className="col-span-2 pt-2"
+                    >
                       <Textarea
                         id="steunzool-anders"
                         placeholder={t('specifyPlaceholder')}
                         value={form.watch('steunzoolAndersText')}
-                        onChange={e => form.setValue('steunzoolAndersText', e.target.value)}
+                        onChange={e =>
+                          form.setValue('steunzoolAndersText', e.target.value)
+                        }
                         rows={2}
                         className="w-2/3 resize-none"
                       />
@@ -517,8 +551,12 @@ const FormIntakeOVACPage = () => {
                 >
                   <FormItemWrapper label={t('midfootCorrection')}>
                     <Select
-                      value={form.watch('steunzoolCorrectieMiddenvoet') || undefined}
-                      onValueChange={val => form.setValue('steunzoolCorrectieMiddenvoet', val)}
+                      value={
+                        form.watch('steunzoolCorrectieMiddenvoet') || undefined
+                      }
+                      onValueChange={val =>
+                        form.setValue('steunzoolCorrectieMiddenvoet', val)
+                      }
                     >
                       <SelectTrigger className="">
                         <SelectValue placeholder={t('chooseOption')} />
@@ -535,8 +573,12 @@ const FormIntakeOVACPage = () => {
 
                   <FormItemWrapper label={t('forefootCorrection')}>
                     <Select
-                      value={form.watch('steunzoolCorrectieVoorvoet') || undefined}
-                      onValueChange={val => form.setValue('steunzoolCorrectieVoorvoet', val)}
+                      value={
+                        form.watch('steunzoolCorrectieVoorvoet') || undefined
+                      }
+                      onValueChange={val =>
+                        form.setValue('steunzoolCorrectieVoorvoet', val)
+                      }
                     >
                       <SelectTrigger className="">
                         <SelectValue placeholder={t('chooseOption')} />
@@ -554,7 +596,9 @@ const FormIntakeOVACPage = () => {
                   <FormItemWrapper label={t('forefootPad')}>
                     <Select
                       value={form.watch('steunzoolVvPellote') || undefined}
-                      onValueChange={val => form.setValue('steunzoolVvPellote', val)}
+                      onValueChange={val =>
+                        form.setValue('steunzoolVvPellote', val)
+                      }
                     >
                       <SelectTrigger className="">
                         <SelectValue placeholder={t('chooseOption')} />
@@ -571,10 +615,7 @@ const FormIntakeOVACPage = () => {
                 </FormBlock>
 
                 {/* Heel Raise & Price */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                >
+                <FormBlock columns={2} dividers={true}>
                   <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
                     <Input
                       id="hak-verhoging-links"
@@ -582,7 +623,9 @@ const FormIntakeOVACPage = () => {
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
                       value={form.watch('talonetteVerhogingLinks')}
-                      onChange={e => form.setValue('talonetteVerhogingLinks', e.target.value)}
+                      onChange={e =>
+                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                      }
                       className="w-2/3"
                     />
                   </FormItemWrapper>
@@ -594,22 +637,27 @@ const FormIntakeOVACPage = () => {
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
                       value={form.watch('talonetteVerhogingRechts')}
-                      onChange={e => form.setValue('talonetteVerhogingRechts', e.target.value)}
+                      onChange={e =>
+                        form.setValue(
+                          'talonetteVerhogingRechts',
+                          e.target.value,
+                        )
+                      }
                       className="w-2/3"
                     />
                   </FormItemWrapper>
-
                 </FormBlock>
 
                 {/* Price Selection */}
-                <FormBlock
-                  columns={1}
-                  dividers={false}
-                >
+                <FormBlock columns={1} dividers={false}>
                   <FormItemWrapper label={t('insolePrice')}>
                     <div className="flex gap-4 items-center">
                       <Select
-                        value={form.watch('steunzoolPrijs') ? String(form.watch('steunzoolPrijs')) : undefined}
+                        value={
+                          form.watch('steunzoolPrijs')
+                            ? String(form.watch('steunzoolPrijs'))
+                            : undefined
+                        }
                         onValueChange={val => {
                           const numVal = val ? parseFloat(val) : undefined;
                           form.setValue('steunzoolPrijs', numVal);
@@ -620,14 +668,19 @@ const FormIntakeOVACPage = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {STEUNZOLEN_PRIJS_OPTIES.map(option => (
-                            <SelectItem key={option.value} value={String(option.value)}>
+                            <SelectItem
+                              key={option.value}
+                              value={String(option.value)}
+                            >
                               {t(option.label)}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                       <div className="relative w-28">
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">€</span>
+                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+                          €
+                        </span>
                         <Input
                           id="steunzool-prijs-value"
                           type="number"
@@ -651,7 +704,9 @@ const FormIntakeOVACPage = () => {
                   <Textarea
                     placeholder={t('specialNotesPlaceholder')}
                     value={form.watch('bijzonderheden')}
-                    onChange={e => form.setValue('bijzonderheden', e.target.value)}
+                    onChange={e =>
+                      form.setValue('bijzonderheden', e.target.value)
+                    }
                     rows={4}
                     className="resize-none"
                   />
@@ -659,7 +714,11 @@ const FormIntakeOVACPage = () => {
               </Card>
 
               <FormFooter>
-                <Button type="button" variant="outline" onClick={() => router.back()}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                >
                   {t('cancel')}
                 </Button>
                 <Button type="submit" size="lg" className="min-w-50">
@@ -670,12 +729,12 @@ const FormIntakeOVACPage = () => {
             </form>
           </Form>
         </FormSection>
-      </div >
-    </BaseLayout >
+      </div>
+    </BaseLayout>
   );
 };
 
-const ModuleSwitchRow = ({ item, side, form, t }: any) => {
+const ModuleSwitchRow = ({item, side, form, t}: any) => {
   // Determine field path based on side (Matches your schema structure)
   // Assuming schema is: omsluitingLinks: { [key]: boolean }
   const fieldGroup = side === 'left' ? 'omsluitingLinks' : 'omsluitingRechts';
@@ -704,12 +763,12 @@ const ModuleSwitchRow = ({ item, side, form, t }: any) => {
       <Switch
         id={`${side}-${item.key}`}
         checked={isChecked}
-        onCheckedChange={(checked) => {
+        onCheckedChange={checked => {
           // Update the specific record in the object
           const currentValues = form.getValues(fieldGroup) || {};
           form.setValue(fieldGroup, {
             ...currentValues,
-            [item.key]: checked
+            [item.key]: checked,
           });
         }}
       />
@@ -717,6 +776,4 @@ const ModuleSwitchRow = ({ item, side, form, t }: any) => {
   );
 };
 
-
 export default FormIntakeOVACPage;
-
