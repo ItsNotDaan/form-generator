@@ -16,7 +16,7 @@ import {cn} from '@/lib/utils';
 interface FormCardProps {
   title: string;
   description?: string;
-  children: ReactNode;
+  children?: ReactNode;
 
   // Toggle/Slider voor de hele card
   toggleAble?: boolean;

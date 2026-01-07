@@ -2,14 +2,6 @@ import React from 'react';
 import {BaseLayout} from '@/components/layout';
 import {Button} from '@/components/ui/button';
 import {NavigationCard} from '@/components/ui/navigation-card';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
@@ -17,6 +9,7 @@ import {clearAllFormStorage} from '@/utils/localStorageHelper';
 import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
 import {useAppDispatch} from '@/domain/store/hooks';
 import {clearFormData} from '@/domain/store/slices/formData';
+import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 
 const OverviewPage = () => {
   const router = useRouter();
@@ -33,9 +26,9 @@ const OverviewPage = () => {
 
   return (
     <BaseLayout title={t('title')}>
-      <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8">
+      <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 space-y-8">
         {/* Header Section */}
-        <div className="flex flex-col items-center justify-center gap-3 mb-12">
+        <div className="flex flex-col items-center justify-center gap-3">
           <h1 className="text-4xl font-bold text-foreground">{t('forms')}</h1>
           <p className="text-lg text-muted-foreground">
             {t('selectOptionToGetStarted')}
@@ -43,12 +36,8 @@ const OverviewPage = () => {
         </div>
 
         {/* Client Forms Section */}
-        <div className="mb-12">
-          <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
-            <Users className="w-6 h-6" />
-            {t('clientFormsSection')}
-          </h2>
-          <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
+        <FormCard title={t('clientFormsSection')}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <NavigationCard
               icon={UserPlus}
               title={t('newClientForm')}
@@ -67,199 +56,197 @@ const OverviewPage = () => {
               onClick={() => handleNavigate(Routes.form_old_client, true)}
             />
           </div>
-        </div>
-
-        <Separator className="my-8" />
+        </FormCard>
 
         {/* Intake Forms Section */}
-        <div>
-          <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
-            <ClipboardList className="w-6 h-6" />
-            {t('intakeForms')}
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <FormCard title={t('intakeForms')}>
+          <FormBlock columns={3} responsive={true} alignItems="stretch">
             {/* Intake OSA */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_osa)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakeOsa')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakeOsaDescription')}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_osa)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakeOsa')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakeOsaDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
+              </Button>
+            </FormItemWrapper>
 
             {/* Check Foliepas */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_check_foliepas)}
-            >
-              <FileText className="w-4 h-4 mr-2 shrink-0" />
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_check_foliepas)}
+              >
+                <FileText className="w-4 h-4 mr-2 shrink-0" />
 
-              <div className="flex flex-col text-left min-w-0 text-wrap">
-                <div className="font-semibold">{t('checkFoliepas')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('checkFoliepasDescription')}
+                <div className="flex flex-col text-left min-w-0 text-wrap">
+                  <div className="font-semibold">{t('checkFoliepas')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('checkFoliepasDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
+              </Button>
+            </FormItemWrapper>
 
             {/* Intake VLOS */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_vlos)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakeVlos')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakeVlosDescription')}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_vlos)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakeVlos')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakeVlosDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
-
-            {/* Intake Pulman */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_pulman)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakePulman')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakePulmanDescription')}
-                </div>
-              </div>
-            </Button>
+              </Button>
+            </FormItemWrapper>
 
             {/* Intake OSB */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_osb)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakeOsb')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakeOsbDescription')}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_osb)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakeOsb')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakeOsbDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
-
-            {/* Intake Rebacare */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_rebacare)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakeRebacare')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakeRebacareDescription')}
-                </div>
-              </div>
-            </Button>
-
-            {/* Intake OVAC */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_ovac)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakeOvac')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakeOvacDescription')}
-                </div>
-              </div>
-            </Button>
+              </Button>
+            </FormItemWrapper>
 
             {/* Intake Steunzolen */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_intake_steunzolen)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('intakeInsoles')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('intakeInsolesDescription')}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_steunzolen)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakeInsoles')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakeInsolesDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
-          </div>
-        </div>
+              </Button>
+            </FormItemWrapper>
 
-        <Separator className="my-8" />
+            {/* Intake Pulman */}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_pulman)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakePulman')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakePulmanDescription')}
+                  </div>
+                </div>
+              </Button>
+            </FormItemWrapper>
+
+            {/* Intake Rebacare */}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_rebacare)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakeRebacare')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakeRebacareDescription')}
+                  </div>
+                </div>
+              </Button>
+            </FormItemWrapper>
+
+            {/* Intake OVAC */}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_intake_ovac)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <div className="text-left">
+                  <div className="font-semibold">{t('intakeOvac')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('intakeOvacDescription')}
+                  </div>
+                </div>
+              </Button>
+            </FormItemWrapper>
+          </FormBlock>
+        </FormCard>
 
         {/* Testing pages Section */}
-        <div>
-          <h2 className="flex items-center gap-2 mb-6 text-2xl font-semibold text-foreground">
-            <ClipboardList className="w-6 h-6" />
-            {t('testPages')}
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <FormCard title={t('testPages')}>
+          <FormBlock columns={3} responsive={true} alignItems="stretch">
             {/* Form results */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_results)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('formResults')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('formResultsDescription')}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_results)}
+              >
+                <FileText className="w-4 h-4 mr-2 shrink-0" />
+                <div className="flex flex-col text-left min-w-0 text-wrap">
+                  <div className="font-semibold">{t('formResults')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('formResultsDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
+              </Button>
+            </FormItemWrapper>
 
             {/* form-selection */}
-            <Button
-              variant="outline"
-              className="items-center justify-start h-auto px-6 py-6"
-              onClick={() => handleNavigate(Routes.form_selection)}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">{t('formSelection')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('formSelectionDescription')}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => handleNavigate(Routes.form_selection)}
+              >
+                <FileText className="w-4 h-4 mr-2 shrink-0" />
+                <div className="flex flex-col text-left min-w-0 text-wrap">
+                  <div className="font-semibold">{t('formSelection')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('formSelectionDescription')}
+                  </div>
                 </div>
-              </div>
-            </Button>
-          </div>
-        </div>
-
-        <Separator className="my-8" />
+              </Button>
+            </FormItemWrapper>
+          </FormBlock>
+        </FormCard>
 
         {/* Info Card */}
-        <Card className="mt-8 bg-muted/50">
-          <CardHeader>
-            <div className="flex items-start gap-3">
-              <FileText className="w-5 h-5 text-muted-foreground mt-0.5" />
-              <div>
-                <CardTitle className="text-lg">
-                  {t('gettingStartedTitle')}
-                </CardTitle>
-                <CardDescription className="mt-2">
-                  {t('gettingStartedDescription')}
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
+        <FormCard
+          title={t('gettingStartedTitle')}
+          description={t('gettingStartedDescription')}
+          contentClassName="pt-0"
+        >
+          <div className="hidden" aria-hidden="true" />
+        </FormCard>
       </div>
     </BaseLayout>
   );
