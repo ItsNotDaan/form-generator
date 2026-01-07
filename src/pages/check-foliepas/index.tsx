@@ -313,6 +313,11 @@ const FormCheckFoliepasPage = () => {
     form.setValue,
   );
 
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const side = form.watch('side');
   const showLinks = side === 'left' || side === 'both';
   const showRechts = side === 'right' || side === 'both';
@@ -519,6 +524,7 @@ const FormCheckFoliepasPage = () => {
                             shouldValidate: true,
                           },
                         );
+                        clearStorage();
                       }}
                       className="flex cursor-pointer items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 transition-colors hover:bg-accent/30"
                     >
@@ -1869,6 +1875,13 @@ const FormCheckFoliepasPage = () => {
 
               {/* Submit Section */}
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

@@ -143,6 +143,11 @@ const FormIntakeOSAPage = () => {
     form.setValue,
   );
 
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const side = form.watch('side');
   // Removed watchers for moved sections
   const digitalEnabled = form.watch('digitalEnabled');
@@ -223,6 +228,8 @@ const FormIntakeOSAPage = () => {
         digitalInstructions: data.digitalInstructions || '',
       }),
     );
+
+    clearStorage();
 
     void router.push(Routes.form_results);
   };
@@ -786,6 +793,13 @@ const FormIntakeOSAPage = () => {
 
               {/* Submit Section */}
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

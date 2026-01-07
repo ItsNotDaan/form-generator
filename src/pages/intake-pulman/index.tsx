@@ -89,6 +89,11 @@ const FormIntakePulmanPage = () => {
     form.setValue,
   );
 
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const gezwachteld = form.watch('gezwachteld');
   const schoenmaat = form.watch('schoenmaat');
   const afgegevenMaat = form.watch('afgegevenMaat');
@@ -112,6 +117,7 @@ const FormIntakePulmanPage = () => {
       dispatch(setClientData({...clientData, intakeType: 'Pulman'}));
     }
     dispatch(setIntakePulmanData(data));
+    clearStorage();
     void router.push(Routes.form_results);
   };
 
@@ -385,6 +391,13 @@ const FormIntakePulmanPage = () => {
               </FormCard>
 
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

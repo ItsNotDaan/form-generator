@@ -187,6 +187,11 @@ const FormIntakeVLOSPage = () => {
     form.setValue,
   );
 
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const side = form.watch('side');
   const zoolverstijvingEnabled = form.watch('zoolverstijvingEnabled');
   const supplementschoringLinksEnabled = form.watch(
@@ -269,6 +274,8 @@ const FormIntakeVLOSPage = () => {
         footInspection: data.footInspection as Record<string, boolean>,
       }),
     );
+
+    clearStorage();
 
     void router.push(Routes.form_results);
   };
@@ -1588,6 +1595,13 @@ const FormIntakeVLOSPage = () => {
 
               {/* Submit Section */}
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

@@ -65,11 +65,23 @@ const FormIntakeRebacarePage = () => {
     },
   });
 
+  const {clearStorage} = useFormPersistence(
+    'intakeRebacare',
+    form.watch,
+    form.setValue,
+  );
+
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const onSubmit = (data: FormData) => {
     if (clientData) {
       dispatch(setClientData({...clientData, intakeType: 'Rebacare'}));
     }
     dispatch(setIntakeRebacareData(data));
+    clearStorage();
     void router.push(Routes.form_results);
   };
 
@@ -232,6 +244,13 @@ const FormIntakeRebacarePage = () => {
               </FormCard>
 
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

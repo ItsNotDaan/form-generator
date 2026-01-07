@@ -20,6 +20,7 @@ import {setClientData} from '@/domain/store/slices/formData';
 import {ChevronRight} from 'lucide-react';
 import {DatePicker} from '@/components/ui/date-picker';
 import {useForm} from 'react-hook-form';
+import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {
@@ -94,6 +95,21 @@ const FormNewClientPage = () => {
     },
   });
 
+  // Persist New Client form state across refreshes
+  const {clearStorage} = useFormPersistence(
+    'newClient',
+    form.watch,
+    form.setValue,
+  );
+
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
+  // Persist New Client form state across refreshes
+  useFormPersistence('newClient', form.watch, form.setValue);
+
   // Address lookup logic using the custom hook
   const {
     loading: addressLoading,
@@ -152,6 +168,7 @@ const FormNewClientPage = () => {
         specialist: data.specialist || '',
       }),
     );
+    clearStorage();
     void router.push(Routes.form_selection);
   };
 
@@ -718,6 +735,13 @@ const FormNewClientPage = () => {
               </FormCard>
 
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

@@ -2,6 +2,7 @@ import React from 'react';
 import {useRouter} from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import {useForm} from 'react-hook-form';
+import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {BaseLayout, FormFooter, FormSection} from '@/components/layout';
@@ -136,6 +137,18 @@ const FormIntakeOVACPage = () => {
     },
   });
 
+  // Persist OVAC form state across refreshes
+  const {clearStorage} = useFormPersistence(
+    'intakeOVAC',
+    form.watch,
+    form.setValue,
+  );
+
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const showSteunzolen = form.watch('steunzoolEnabled');
 
   const onSubmit = (data: FormData) => {
@@ -215,6 +228,8 @@ const FormIntakeOVACPage = () => {
         bijzonderheden: data.bijzonderheden || '',
       }),
     );
+
+    clearStorage();
 
     void router.push(Routes.form_results);
   };
@@ -805,6 +820,13 @@ const FormIntakeOVACPage = () => {
                   onClick={() => router.back()}
                 >
                   {t('cancel')}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
                 </Button>
                 <Button type="submit" size="lg" className="min-w-50">
                   <span className="mr-2">{t('saveAndContinue')}</span>

@@ -129,6 +129,11 @@ const FormIntakeSteunzolenPage = () => {
     form.setValue,
   );
 
+  const handleResetDraft = () => {
+    clearStorage();
+    form.reset();
+  };
+
   const steunzoolTypeGeneral = form.watch('steunzoolTypeGeneral');
   const talonetteEnabled = form.watch('talonetteEnabled');
   const steunzoolEnabled = form.watch('steunzoolEnabled');
@@ -565,6 +570,13 @@ const FormIntakeSteunzolenPage = () => {
 
               {/* Submit Section */}
               <FormFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDraft}
+                >
+                  {t('reset')}
+                </Button>
                 <Button
                   type="button"
                   variant="outline"

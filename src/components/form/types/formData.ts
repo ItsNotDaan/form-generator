@@ -208,25 +208,19 @@ export interface IntakeRebacareData {
 }
 
 export interface IntakeOSBData {
-  // Order information
-  ordernummer?: string;
+  // Description/pair type
   welkPaar?: string;
-
-  // Medical indication
   medischeIndicatie?: string;
+  side?: 'left' | 'right' | 'both';
 
-  // Goals/objectives (no left/right)
+  // Functieonderzoek
   doel?: Record<string, boolean>;
-
-  // Walking functions
   loopfunctieIndicatie?: string;
   loopfunctieAndersText?: string;
 
-  // Supplier and order date
+  // Supplier and Product
   leverancierNaam?: string;
   bestelDatum?: string;
-
-  // Product specifications
   productSpecificaties?: {
     artCode?: string;
     lengteMaat?: string;
@@ -235,40 +229,26 @@ export interface IntakeOSBData {
     sluiting?: string;
   };
 
-  // Nieuw: Basiscode blok
-  basiscode?: string;
-  generalBasiscode?: string;
-
-  // Nieuw: Aanpassingen blok
-  aanpassingen?: {
-    zoolverstijvingLinks?: boolean;
-    zoolverstijvingRechts?: boolean;
-    halluxValgusLinks?: boolean;
-    halluxValgusRechts?: boolean;
-    verdiepingVoorvoetLinks?: boolean;
-    verdiepingVoorvoetRechts?: boolean;
-    supplementIndividueelLinks?: boolean;
-    supplementIndividueelRechts?: boolean;
-    afwikkelrolEenvoudigLinks?: boolean;
-    afwikkelrolEenvoudigRechts?: boolean;
-    afwikkelrolGecompliceerdLinks?: boolean;
-    afwikkelrolGecompliceerdRechts?: boolean;
-  };
-
-  // Insole component - single select steunzooltype
+  // Steunzolen/Talonette Section
+  talonetteVerhogingLinks?: string;
+  talonetteVerhogingRechts?: string;
   steunzoolTypeGeneral?: string;
   steunzoolAndersText?: string;
   steunzoolCorrectieMiddenvoet?: string;
   steunzoolCorrectieVoorvoet?: string;
   steunzoolVvPellote?: string;
 
-  // Insole component - hak verhoging is gesplitst
-  talonetteVerhogingLinks?: string;
-  talonetteVerhogingRechts?: string;
+  // Supplement (van leest)
+  supplementIndividueelLinks?: boolean;
+  supplementIndividueelRechts?: boolean;
 
-  // Insole price
-  steunzoolPrijs?: number;
-  steunzoolPrijsNaam?: string;
+  // Zoolverstijving
+  zoolverstijvingLinks?: boolean;
+  zoolverstijvingRechts?: boolean;
+
+  // Afwikkelrol (onder schoen)
+  afwikkelrolCmLinks?: string;
+  afwikkelrolCmRechts?: string;
 
   // Special notes
   bijzonderheden?: string;
