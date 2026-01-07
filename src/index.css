@@ -128,6 +128,11 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
+  /* Navbar colors (not affected by dark mode) */
+  --color-navbar: hsl(var(--navbar));
+  --color-navbar-foreground: hsl(var(--navbar-foreground));
+  --color-navbar-border: hsl(var(--navbar-border));
+
   /* Chart colors */
   --color-chart-1: hsl(var(--chart-1));
   --color-chart-2: hsl(var(--chart-2));
@@ -191,6 +196,11 @@
     --color-chart-3: hsl(var(--chart-3));
     --color-chart-4: hsl(var(--chart-4));
     --color-chart-5: hsl(var(--chart-5));
+
+    /* Navbar - Fixed colors for both light and dark mode */
+    --navbar: 142.1 64% 32%;
+    --navbar-foreground: 0 0% 100%;
+    --navbar-border: 142.1 64% 25%;
   }
 
   .dark {
@@ -225,6 +235,11 @@
     --color-chart-3: hsl(var(--chart-3));
     --color-chart-4: hsl(var(--chart-4));
     --color-chart-5: hsl(var(--chart-5));
+
+    /* Navbar - Same colors for dark mode (not affected by theme) */
+    --navbar: 142.1 64% 32%;
+    --navbar-foreground: 0 0% 100%;
+    --navbar-border: 142.1 64% 25%;
   }
 }
 

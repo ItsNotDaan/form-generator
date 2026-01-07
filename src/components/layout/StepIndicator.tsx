@@ -3,6 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {ArrowLeft} from 'lucide-react';
 import {Routes} from '@/lib/routes';
+import {Button} from '../ui/button';
 
 interface Step {
   number: number;
@@ -35,7 +36,9 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
     const handleBackClick = () => {
       if (onBackButtonClicked) {
         onBackButtonClicked();
-      } else if (currentStep > 1) {
+      } else if (currentStep === 1) {
+        void router.push(Routes.overview);
+      } else {
         void router.push(steps[currentStep - 2].route);
       }
     };
@@ -43,15 +46,17 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
     return (
       <div className="flex items-center justify-center gap-4">
         {/* Back Button */}
-        <button
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="text-navbar-foreground hover:text-navbar-foreground/60"
           onClick={handleBackClick}
-          className="inline-flex items-center justify-center gap-2 px-3 text-sm font-medium rounded-md text-primary-foreground hover:bg-primary-foreground/15"
           aria-label={t('back')}
-          disabled={currentStep === 1}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 mr-2" />
           <span className="hidden sm:inline">{t('back')}</span>
-        </button>
+        </Button>
 
         {/* Step Indicator */}
         <div className="items-center hidden gap-2 md:flex">
@@ -66,10 +71,10 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
                 <div
                   className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-all ${
                     step.number === currentStep
-                      ? 'bg-white text-brand-700 ring-2 ring-white ring-offset-2 ring-offset-brand-700'
+                      ? 'bg-navbar-foreground text-navbar ring-2 ring-navbar-foreground ring-offset-2 ring-offset-navbar'
                       : step.number < currentStep
-                        ? 'bg-white/30 text-white hover:bg-white/40'
-                        : 'bg-brand-800 text-white/50'
+                        ? 'bg-navbar-foreground/30 text-navbar-foreground hover:bg-navbar-foreground/40'
+                        : 'bg-navbar-border text-navbar-foreground/50'
                   }`}
                 >
                   {step.number}
@@ -77,10 +82,10 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
                 <span
                   className={`text-sm font-medium hidden lg:inline ${
                     step.number === currentStep
-                      ? 'text-white'
+                      ? 'text-navbar-foreground'
                       : step.number < currentStep
-                        ? 'text-white/80'
-                        : 'text-white/50'
+                        ? 'text-navbar-foreground/80'
+                        : 'text-navbar-foreground/50'
                   }`}
                 >
                   {step.label}
@@ -89,7 +94,9 @@ export const StepIndicator = React.memo<StepIndicatorProps>(
               {index < steps.length - 1 && (
                 <div
                   className={`h-0.5 w-12 ${
-                    step.number < currentStep ? 'bg-white/50' : 'bg-white/20'
+                    step.number < currentStep
+                      ? 'bg-navbar-foreground/50'
+                      : 'bg-navbar-foreground/20'
                   }`}
                 />
               )}

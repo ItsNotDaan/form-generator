@@ -36,6 +36,7 @@ module.exports = {
 
     // Overview
     '/': ['form'],
+    '/help': ['form'],
 
     // Forms
     '/new-client': ['form'],
@@ -50,6 +51,5 @@ module.exports = {
     '/intake-ovac': ['form'],
     '/intake-steunzolen': ['form'],
     '/check-foliepas': ['form'],
-    '/test': ['form'],
   },
 };
