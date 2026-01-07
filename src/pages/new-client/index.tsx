@@ -12,8 +12,8 @@ import {
   AANHEF_OPTIES,
   BEHANDELAARS,
   ZORGVERZEKERAARS,
-  Locatie,
-  Aanhef,
+  Location,
+  Salutation,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch} from '@/domain/store/hooks';
 import {setClientData} from '@/domain/store/slices/formData';
@@ -65,7 +65,7 @@ const FormNewClientPage = () => {
     phoneOne: z.string().min(1, {message: t('required')}),
     phoneTwo: z.string().optional(),
     specialist: z.string().min(1, {message: t('required')}),
-    medischeIndicatie: z.string().optional(),
+    medicalIndication: z.string().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -91,7 +91,7 @@ const FormNewClientPage = () => {
       phoneOne: '',
       phoneTwo: '',
       specialist: '',
-      medischeIndicatie: '',
+      medicalIndication: '',
     },
   });
 
@@ -126,7 +126,9 @@ const FormNewClientPage = () => {
 
   // Auto-fill street and city when they change
   React.useEffect(() => {
-    if (street) form.setValue('address', street, {shouldValidate: true});
+    if (street) {
+      form.setValue('address', street, {shouldValidate: true});
+    }
     // Only clear if street is empty and user has entered both fields
     if (
       !street &&
@@ -137,7 +139,9 @@ const FormNewClientPage = () => {
     }
   }, [street]);
   React.useEffect(() => {
-    if (city) form.setValue('city', city, {shouldValidate: true});
+    if (city) {
+      form.setValue('city', city, {shouldValidate: true});
+    }
     if (
       !city &&
       form.getValues('postalCode') &&
@@ -151,8 +155,8 @@ const FormNewClientPage = () => {
       setClientData({
         practitionerId: data.practitionerId,
         date: data.date,
-        location: data.location as Locatie,
-        salutation: data.salutation as Aanhef,
+        location: data.location as Location,
+        salutation: data.salutation as Salutation,
         initials: data.initials,
         clientName: data.clientName,
         birthDate: data.birthDate,
@@ -164,7 +168,7 @@ const FormNewClientPage = () => {
         phoneTwo: data.phoneTwo || '',
         email: data.email,
         insurance: data.insurance,
-        medischeIndicatie: data.medischeIndicatie || '',
+        medicalIndication: data.medicalIndication || '',
         specialist: data.specialist || '',
       }),
     );
@@ -415,7 +419,9 @@ const FormNewClientPage = () => {
                               maxLength={10}
                               onChange={e => {
                                 let value = e.target.value.replace(/\D/g, '');
-                                if (value.length > 8) value = value.slice(0, 8);
+                                if (value.length > 8) {
+                                  value = value.slice(0, 8);
+                                }
                                 let formatted = value;
                                 if (value.length > 4) {
                                   formatted = `${value.slice(0, 2)}-${value.slice(2, 4)}-${value.slice(4)}`;
@@ -715,7 +721,7 @@ const FormNewClientPage = () => {
                   >
                     <FormField
                       control={form.control}
-                      name="medischeIndicatie"
+                      name="medicalIndication"
                       render={({field}) => (
                         <FormItem className="w-full">
                           <FormControl>

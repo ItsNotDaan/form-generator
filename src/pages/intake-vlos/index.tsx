@@ -39,8 +39,8 @@ import {
   EZELSOOR_TYPE_OPTIES,
   JA_NEE_OPTIES,
   PAARTYPE_OPTIES,
-  Zijde,
-  ZIEKTEBEELDEN_OPTIES,
+  Side,
+  PATHOLOGIES_OPTIONS,
   LOOPAFSTAND_OPTIES,
   INSPECTIE_VOETEN_OPTIES,
 } from '@/lib/constants/formConstants';
@@ -70,55 +70,55 @@ const FormIntakeVLOSPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
-    welkPaar: z.string(),
-    medischeIndicatie: z.string().optional(),
+    whichPair: z.string(),
+    medicalIndication: z.string().optional(),
     side: z.enum(['left', 'right', 'both'] as const),
 
-    schachthoogteLinks: z.string().optional(),
-    schachthoogteRechts: z.string().optional(),
-    omsluitingLinks: z.record(z.string(), z.boolean()),
-    omsluitingRechts: z.record(z.string(), z.boolean()),
-    omsluitingLinksMm: z.record(z.string(), z.string()),
-    omsluitingRechtsMm: z.record(z.string(), z.string()),
-    supplementschoringLinksEnabled: z.boolean(),
-    supplementschoringRechtsEnabled: z.boolean(),
-    supplementschoringLinksType: z.string().optional(),
-    supplementschoringRechtsType: z.string().optional(),
-    zoolverstijvingEnabled: z.boolean(),
-    zoolverstijvingLinks: z.boolean().optional(),
-    zoolverstijvingRechts: z.boolean().optional(),
-    sluitingType: z.string().optional(),
-    inschotpunt: z.string().optional(),
-    openstandSchacht: z.string().optional(),
-    tongpolsterEnabled: z.boolean(),
-    tongVaststikkenEnabled: z.boolean(),
-    haksoortLinks: z.string().optional(),
-    haksoortRechts: z.string().optional(),
-    hakhoogteLinks: z.string().optional(),
-    hakhoogteRechts: z.string().optional(),
-    hakschoringLinksEnabled: z.boolean(),
-    hakschoringRechtsEnabled: z.boolean(),
-    hakschoringLinksType: z.string().optional(),
-    hakschoringRechtsType: z.string().optional(),
-    ezelsoorLinksEnabled: z.boolean(),
-    ezelsoorRechtsEnabled: z.boolean(),
-    ezelsoorLinksType: z.string().optional(),
-    ezelsoorRechtsType: z.string().optional(),
-    amputatieLinksEnabled: z.boolean(),
-    amputatieRechtsEnabled: z.boolean(),
-    hakafrondingLinksEnabled: z.boolean(),
-    hakafrondingRechtsEnabled: z.boolean(),
-    hakafrondingLinksHoogte: z.string().optional(),
-    hakafrondingLinksLengte: z.string().optional(),
-    hakafrondingRechtsHoogte: z.string().optional(),
-    hakafrondingRechtsLengte: z.string().optional(),
-    loopzoolType: z.string().optional(),
+    shaftHeightLeft: z.string().optional(),
+    shaftHeightRight: z.string().optional(),
+    enclosureLeft: z.record(z.string(), z.boolean()),
+    enclosureRight: z.record(z.string(), z.boolean()),
+    enclosureLeftMm: z.record(z.string(), z.string()),
+    enclosureRightMm: z.record(z.string(), z.string()),
+    customInsoleShoringLeftEnabled: z.boolean(),
+    customInsoleShoringRightEnabled: z.boolean(),
+    customInsoleShoringLeftType: z.string().optional(),
+    customInsoleShoringRightType: z.string().optional(),
+    soleReinforcementEnabled: z.boolean(),
+    soleReinforcementLeft: z.boolean().optional(),
+    soleReinforcementRight: z.boolean().optional(),
+    closureType: z.string().optional(),
+    entryPoint: z.string().optional(),
+    shaftOpeningWidth: z.string().optional(),
+    tonguePaddingEnabled: z.boolean(),
+    fixedTongueEnabled: z.boolean(),
+    heelTypeLeft: z.string().optional(),
+    heelTypeRight: z.string().optional(),
+    heelHeightLeft: z.string().optional(),
+    heelHeightRight: z.string().optional(),
+    heelWedgeLeftEnabled: z.boolean(),
+    heelWedgeRightEnabled: z.boolean(),
+    heelWedgeLeftType: z.string().optional(),
+    heelWedgeRightType: z.string().optional(),
+    donkeyEarLeftEnabled: z.boolean(),
+    donkeyEarRightEnabled: z.boolean(),
+    donkeyEarLeftType: z.string().optional(),
+    donkeyEarRightType: z.string().optional(),
+    amputationLeftEnabled: z.boolean(),
+    amputationRightEnabled: z.boolean(),
+    heelRoundingLeftEnabled: z.boolean(),
+    heelRoundingRightEnabled: z.boolean(),
+    heelRoundingLeftHeight: z.string().optional(),
+    heelRoundingLeftLength: z.string().optional(),
+    heelRoundingRightHeight: z.string().optional(),
+    heelRoundingRightLength: z.string().optional(),
+    rockerSoleType: z.string().optional(),
 
-    bijzonderheden: z.string().optional(),
+    specialNotes: z.string().optional(),
 
     // Functieonderzoek fields
-    ziektebeelden: z.record(z.string(), z.boolean()),
-    loopafstandAids: z.record(z.string(), z.boolean()),
+    pathologies: z.record(z.string(), z.boolean()),
+    walkingDistanceAids: z.record(z.string(), z.boolean()),
     painPerception: z.string().optional(),
     footInspection: z.record(z.string(), z.boolean()),
   });
@@ -129,53 +129,53 @@ const FormIntakeVLOSPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      welkPaar: 'Eerste paar',
-      medischeIndicatie: '',
+      whichPair: 'Eerste paar',
+      medicalIndication: '',
       side: 'both',
-      schachthoogteLinks: '14',
-      schachthoogteRechts: '14',
-      omsluitingLinks: {omsluitingLinksMultivorm: true},
-      omsluitingRechts: {omsluitingRechtsMultivorm: true},
-      omsluitingLinksMm: {omsluitingMmLinksMultivorm: '3'},
-      omsluitingRechtsMm: {omsluitingMmRechtsMultivorm: '3'},
-      supplementschoringLinksEnabled: false,
-      supplementschoringRechtsEnabled: false,
-      supplementschoringLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      supplementschoringRechtsType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      zoolverstijvingEnabled: false,
-      zoolverstijvingLinks: false,
-      zoolverstijvingRechts: false,
-      sluitingType: SLUITING_OPTIES[0]?.value || '',
-      inschotpunt: '',
-      openstandSchacht: OPENSTAND_OPTIES[2]?.value || '',
-      tongpolsterEnabled: false,
-      tongVaststikkenEnabled: false,
-      haksoortLinks: HAKSOORT_OPTIES[0]?.value || '',
-      haksoortRechts: HAKSOORT_OPTIES[0]?.value || '',
-      hakhoogteLinks: '2',
-      hakhoogteRechts: '2',
-      hakschoringLinksEnabled: false,
-      hakschoringRechtsEnabled: false,
-      hakschoringLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      hakschoringRechtsType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      ezelsoorLinksEnabled: false,
-      ezelsoorRechtsEnabled: false,
-      ezelsoorLinksType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      ezelsoorRechtsType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      amputatieLinksEnabled: false,
-      amputatieRechtsEnabled: false,
-      hakafrondingLinksEnabled: true,
-      hakafrondingRechtsEnabled: true,
-      hakafrondingLinksHoogte: '13',
-      hakafrondingLinksLengte: '50',
-      hakafrondingRechtsHoogte: '13',
-      hakafrondingRechtsLengte: '50',
-      loopzoolType: LOOPZOOL_OPTIES[0]?.value || '',
-      bijzonderheden: '',
+      shaftHeightLeft: '14',
+      shaftHeightRight: '14',
+      enclosureLeft: {omsluitingLinksMultivorm: true},
+      enclosureRight: {omsluitingRechtsMultivorm: true},
+      enclosureLeftMm: {omsluitingMmLinksMultivorm: '3'},
+      enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
+      customInsoleShoringLeftEnabled: false,
+      customInsoleShoringRightEnabled: false,
+      customInsoleShoringLeftType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      customInsoleShoringRightType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      soleReinforcementEnabled: false,
+      soleReinforcementLeft: false,
+      soleReinforcementRight: false,
+      closureType: SLUITING_OPTIES[0]?.value || '',
+      entryPoint: '',
+      shaftOpeningWidth: OPENSTAND_OPTIES[2]?.value || '',
+      tonguePaddingEnabled: false,
+      fixedTongueEnabled: false,
+      heelTypeLeft: HAKSOORT_OPTIES[0]?.value || '',
+      heelTypeRight: HAKSOORT_OPTIES[0]?.value || '',
+      heelHeightLeft: '2',
+      heelHeightRight: '2',
+      heelWedgeLeftEnabled: false,
+      heelWedgeRightEnabled: false,
+      heelWedgeLeftType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      heelWedgeRightType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      donkeyEarLeftEnabled: false,
+      donkeyEarRightEnabled: false,
+      donkeyEarLeftType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      donkeyEarRightType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      amputationLeftEnabled: false,
+      amputationRightEnabled: false,
+      heelRoundingLeftEnabled: true,
+      heelRoundingRightEnabled: true,
+      heelRoundingLeftHeight: '13',
+      heelRoundingLeftLength: '50',
+      heelRoundingRightHeight: '13',
+      heelRoundingRightLength: '50',
+      rockerSoleType: LOOPZOOL_OPTIES[0]?.value || '',
+      specialNotes: '',
 
       // Functieonderzoek defaults
-      ziektebeelden: {},
-      loopafstandAids: {},
+      pathologies: {},
+      walkingDistanceAids: {},
       painPerception: '0',
       footInspection: {},
     },
@@ -193,21 +193,21 @@ const FormIntakeVLOSPage = () => {
   };
 
   const side = form.watch('side');
-  const zoolverstijvingEnabled = form.watch('zoolverstijvingEnabled');
-  const supplementschoringLinksEnabled = form.watch(
-    'supplementschoringLinksEnabled',
+  const soleReinforcementEnabled = form.watch('soleReinforcementEnabled');
+  const customInsoleShoringLeftEnabled = form.watch(
+    'customInsoleShoringLeftEnabled',
   );
-  const supplementschoringRechtsEnabled = form.watch(
-    'supplementschoringRechtsEnabled',
+  const customInsoleShoringRightEnabled = form.watch(
+    'customInsoleShoringRightEnabled',
   );
-  const hakschoringLinksEnabled = form.watch('hakschoringLinksEnabled');
-  const hakschoringRechtsEnabled = form.watch('hakschoringRechtsEnabled');
-  const ezelsoorLinksEnabled = form.watch('ezelsoorLinksEnabled');
-  const ezelsoorRechtsEnabled = form.watch('ezelsoorRechtsEnabled');
-  const hakafrondingLinksEnabled = form.watch('hakafrondingLinksEnabled');
-  const hakafrondingRechtsEnabled = form.watch('hakafrondingRechtsEnabled');
-  const omsluitingLinks = form.watch('omsluitingLinks');
-  const omsluitingRechts = form.watch('omsluitingRechts');
+  const heelWedgeLeftEnabled = form.watch('heelWedgeLeftEnabled');
+  const heelWedgeRightEnabled = form.watch('heelWedgeRightEnabled');
+  const donkeyEarLeftEnabled = form.watch('donkeyEarLeftEnabled');
+  const donkeyEarRightEnabled = form.watch('donkeyEarRightEnabled');
+  const heelRoundingLeftEnabled = form.watch('heelRoundingLeftEnabled');
+  const heelRoundingRightEnabled = form.watch('heelRoundingRightEnabled');
+  const enclosureLeft = form.watch('enclosureLeft');
+  const enclosureRight = form.watch('enclosureRight');
 
   const showLinks = side === 'left' || side === 'both';
   const showRechts = side === 'right' || side === 'both';
@@ -223,53 +223,53 @@ const FormIntakeVLOSPage = () => {
 
     dispatch(
       setIntakeVLOSData({
-        welkPaar: data.welkPaar,
-        medischeIndicatie: data.medischeIndicatie || '',
+        whichPair: data.whichPair,
+        medicalIndication: data.medicalIndication || '',
         side: data.side,
-        schachthoogteLinks: data.schachthoogteLinks || '',
-        schachthoogteRechts: data.schachthoogteRechts || '',
-        omsluitingLinks: data.omsluitingLinks as Record<string, boolean>,
-        omsluitingRechts: data.omsluitingRechts as Record<string, boolean>,
-        omsluitingLinksMm: data.omsluitingLinksMm as Record<string, string>,
-        omsluitingRechtsMm: data.omsluitingRechtsMm as Record<string, string>,
-        supplementschoringLinksEnabled: data.supplementschoringLinksEnabled,
-        supplementschoringRechtsEnabled: data.supplementschoringRechtsEnabled,
-        supplementschoringLinksType: data.supplementschoringLinksType || '',
-        supplementschoringRechtsType: data.supplementschoringRechtsType || '',
-        zoolverstijvingEnabled: data.zoolverstijvingEnabled,
-        zoolverstijvingLinks: data.zoolverstijvingLinks,
-        zoolverstijvingRechts: data.zoolverstijvingRechts,
-        sluitingType: data.sluitingType || '',
-        inschotpunt: data.inschotpunt || '',
-        openstandSchacht: data.openstandSchacht || '',
-        tongpolsterEnabled: data.tongpolsterEnabled,
-        tongVaststikkenEnabled: data.tongVaststikkenEnabled,
-        haksoortLinks: data.haksoortLinks || '',
-        haksoortRechts: data.haksoortRechts || '',
-        hakhoogteLinks: data.hakhoogteLinks || '',
-        hakhoogteRechts: data.hakhoogteRechts || '',
-        hakschoringLinksEnabled: data.hakschoringLinksEnabled,
-        hakschoringRechtsEnabled: data.hakschoringRechtsEnabled,
-        hakschoringLinksType: data.hakschoringLinksType || '',
-        hakschoringRechtsType: data.hakschoringRechtsType || '',
-        ezelsoorLinksEnabled: data.ezelsoorLinksEnabled,
-        ezelsoorRechtsEnabled: data.ezelsoorRechtsEnabled,
-        ezelsoorLinksType: data.ezelsoorLinksType || '',
-        ezelsoorRechtsType: data.ezelsoorRechtsType || '',
-        amputatieLinksEnabled: data.amputatieLinksEnabled,
-        amputatieRechtsEnabled: data.amputatieRechtsEnabled,
-        hakafrondingLinksEnabled: data.hakafrondingLinksEnabled,
-        hakafrondingRechtsEnabled: data.hakafrondingRechtsEnabled,
-        hakafrondingLinksHoogte: data.hakafrondingLinksHoogte || '',
-        hakafrondingLinksLengte: data.hakafrondingLinksLengte || '',
-        hakafrondingRechtsHoogte: data.hakafrondingRechtsHoogte || '',
-        hakafrondingRechtsLengte: data.hakafrondingRechtsLengte || '',
-        loopzoolType: data.loopzoolType || '',
-        bijzonderheden: data.bijzonderheden || '',
+        shaftHeightLeft: data.shaftHeightLeft || '',
+        shaftHeightRight: data.shaftHeightRight || '',
+        enclosureLeft: data.enclosureLeft as Record<string, boolean>,
+        enclosureRight: data.enclosureRight as Record<string, boolean>,
+        enclosureLeftMm: data.enclosureLeftMm as Record<string, string>,
+        enclosureRightMm: data.enclosureRightMm as Record<string, string>,
+        customInsoleShoringLeftEnabled: data.customInsoleShoringLeftEnabled,
+        customInsoleShoringRightEnabled: data.customInsoleShoringRightEnabled,
+        customInsoleShoringLeftType: data.customInsoleShoringLeftType || '',
+        customInsoleShoringRightType: data.customInsoleShoringRightType || '',
+        soleReinforcementEnabled: data.soleReinforcementEnabled,
+        soleReinforcementLeft: data.soleReinforcementLeft,
+        soleReinforcementRight: data.soleReinforcementRight,
+        closureType: data.closureType || '',
+        entryPoint: data.entryPoint || '',
+        shaftOpeningWidth: data.shaftOpeningWidth || '',
+        tonguePaddingEnabled: data.tonguePaddingEnabled,
+        fixedTongueEnabled: data.fixedTongueEnabled,
+        heelTypeLeft: data.heelTypeLeft || '',
+        heelTypeRight: data.heelTypeRight || '',
+        heelHeightLeft: data.heelHeightLeft || '',
+        heelHeightRight: data.heelHeightRight || '',
+        heelWedgeLeftEnabled: data.heelWedgeLeftEnabled,
+        heelWedgeRightEnabled: data.heelWedgeRightEnabled,
+        heelWedgeLeftType: data.heelWedgeLeftType || '',
+        heelWedgeRightType: data.heelWedgeRightType || '',
+        donkeyEarLeftEnabled: data.donkeyEarLeftEnabled,
+        donkeyEarRightEnabled: data.donkeyEarRightEnabled,
+        donkeyEarLeftType: data.donkeyEarLeftType || '',
+        donkeyEarRightType: data.donkeyEarRightType || '',
+        amputationLeftEnabled: data.amputationLeftEnabled,
+        amputationRightEnabled: data.amputationRightEnabled,
+        heelRoundingLeftEnabled: data.heelRoundingLeftEnabled,
+        heelRoundingRightEnabled: data.heelRoundingRightEnabled,
+        heelRoundingLeftHeight: data.heelRoundingLeftHeight || '',
+        heelRoundingLeftLength: data.heelRoundingLeftLength || '',
+        heelRoundingRightHeight: data.heelRoundingRightHeight || '',
+        heelRoundingRightLength: data.heelRoundingRightLength || '',
+        rockerSoleType: data.rockerSoleType || '',
+        specialNotes: data.specialNotes || '',
 
         // Functieonderzoek fields
-        ziektebeelden: data.ziektebeelden as Record<string, boolean>,
-        loopafstandAids: data.loopafstandAids as Record<string, boolean>,
+        pathologies: data.pathologies as Record<string, boolean>,
+        walkingDistanceAids: data.walkingDistanceAids as Record<string, boolean>,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
       }),
@@ -305,8 +305,8 @@ const FormIntakeVLOSPage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -334,9 +334,9 @@ const FormIntakeVLOSPage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -395,9 +395,9 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-left"
-                          checked={form.watch('amputatieLinksEnabled')}
+                          checked={form.watch('amputationLeftEnabled')}
                           onCheckedChange={checked =>
-                            form.setValue('amputatieLinksEnabled', !!checked)
+                            form.setValue('amputationLeftEnabled', !!checked)
                           }
                         />
                         <Label
@@ -410,9 +410,9 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-right"
-                          checked={form.watch('amputatieRechtsEnabled')}
+                          checked={form.watch('amputationRightEnabled')}
                           onCheckedChange={checked =>
-                            form.setValue('amputatieRechtsEnabled', !!checked)
+                            form.setValue('amputationRightEnabled', !!checked)
                           }
                         />
                         <Label
@@ -439,7 +439,7 @@ const FormIntakeVLOSPage = () => {
                   dividers={false}
                   centerTitle={true}
                 >
-                  {ZIEKTEBEELDEN_OPTIES.map(optie => (
+                  {PATHOLOGIES_OPTIONS.map(optie => (
                     <Label
                       key={optie.key}
                       className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
@@ -447,12 +447,12 @@ const FormIntakeVLOSPage = () => {
                       <Checkbox
                         id={`ziektebeeld-${optie.key}`}
                         checked={
-                          (form.watch('ziektebeelden')[optie.key] as boolean) ||
+                          (form.watch('pathologies')[optie.key] as boolean) ||
                           false
                         }
                         onCheckedChange={checked =>
-                          form.setValue('ziektebeelden', {
-                            ...form.getValues('ziektebeelden'),
+                          form.setValue('pathologies', {
+                            ...form.getValues('pathologies'),
                             [optie.key]: !!checked,
                           })
                         }
@@ -482,13 +482,13 @@ const FormIntakeVLOSPage = () => {
                       <Checkbox
                         id={`loopafstand-${optie.key}`}
                         checked={
-                          (form.watch('loopafstandAids')[
+                          (form.watch('walkingDistanceAids')[
                             optie.key
                           ] as boolean) || false
                         }
                         onCheckedChange={checked =>
-                          form.setValue('loopafstandAids', {
-                            ...form.getValues('loopafstandAids'),
+                          form.setValue('walkingDistanceAids', {
+                            ...form.getValues('walkingDistanceAids'),
                             [optie.key]: !!checked,
                           })
                         }
@@ -578,9 +578,9 @@ const FormIntakeVLOSPage = () => {
                         id="shaft-left"
                         type="number"
                         placeholder={t('cmPlaceholder')}
-                        value={form.watch('schachthoogteLinks')}
+                        value={form.watch('shaftHeightLeft')}
                         onChange={e =>
-                          form.setValue('schachthoogteLinks', e.target.value)
+                          form.setValue('shaftHeightLeft', e.target.value)
                         }
                         className="w-2/3 text-center"
                       />
@@ -595,9 +595,9 @@ const FormIntakeVLOSPage = () => {
                         id="shaft-right"
                         type="number"
                         placeholder={t('cmPlaceholder')}
-                        value={form.watch('schachthoogteRechts')}
+                        value={form.watch('shaftHeightRight')}
                         onChange={e =>
-                          form.setValue('schachthoogteRechts', e.target.value)
+                          form.setValue('shaftHeightRight', e.target.value)
                         }
                         className="w-2/3 text-center"
                       />
@@ -610,8 +610,8 @@ const FormIntakeVLOSPage = () => {
               <FormCard title={t('shaftOpening')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <RadioGroup
-                    value={form.watch('openstandSchacht')}
-                    onValueChange={v => form.setValue('openstandSchacht', v)}
+                    value={form.watch('shaftOpeningWidth')}
+                    onValueChange={v => form.setValue('shaftOpeningWidth', v)}
                     className="justify-center"
                   >
                     <div className="flex flex-wrap justify-center gap-4">
@@ -658,7 +658,7 @@ const FormIntakeVLOSPage = () => {
                             <Switch
                               id={`encl-left-${optie.key}`}
                               checked={
-                                (form.watch('omsluitingLinks')[
+                                (form.watch('enclosureLeft')[
                                   optie.fullKeyLinks
                                 ] as boolean) || false
                               }
@@ -667,8 +667,8 @@ const FormIntakeVLOSPage = () => {
                                   window.navigator.vibrate(10);
                                 }
 
-                                form.setValue('omsluitingLinks', {
-                                  ...form.getValues('omsluitingLinks'),
+                                form.setValue('enclosureLeft', {
+                                  ...form.getValues('enclosureLeft'),
                                   [optie.fullKeyLinks]: !!checked,
                                 });
                                 if (
@@ -676,16 +676,16 @@ const FormIntakeVLOSPage = () => {
                                   optie.needsMm &&
                                   optie.defaultMm
                                 ) {
-                                  form.setValue('omsluitingLinksMm', {
-                                    ...form.getValues('omsluitingLinksMm'),
+                                  form.setValue('enclosureLeftMm', {
+                                    ...form.getValues('enclosureLeftMm'),
                                     [optie.mmKeyLinks]: optie.defaultMm,
                                   });
                                 } else if (!checked) {
                                   const next = {
-                                    ...form.getValues('omsluitingLinksMm'),
+                                    ...form.getValues('enclosureLeftMm'),
                                   };
                                   delete next[optie.mmKeyLinks];
-                                  form.setValue('omsluitingLinksMm', next);
+                                  form.setValue('enclosureLeftMm', next);
                                 }
                               }}
                               className="mr-2"
@@ -694,7 +694,7 @@ const FormIntakeVLOSPage = () => {
                               {optie.label}
                             </span>
                             {optie.needsMm &&
-                              (form.watch('omsluitingLinks')[
+                              (form.watch('enclosureLeft')[
                                 optie.fullKeyLinks
                               ] as boolean) && (
                                 <Input
@@ -707,13 +707,13 @@ const FormIntakeVLOSPage = () => {
                                     optie.key === 'hoge' ? 'cm' : 'mm'
                                   }
                                   value={
-                                    (form.watch('omsluitingLinksMm')[
+                                    (form.watch('enclosureLeftMm')[
                                       optie.mmKeyLinks
                                     ] as string) || ''
                                   }
                                   onChange={e =>
-                                    form.setValue('omsluitingLinksMm', {
-                                      ...form.getValues('omsluitingLinksMm'),
+                                    form.setValue('enclosureLeftMm', {
+                                      ...form.getValues('enclosureLeftMm'),
                                       [optie.mmKeyLinks]: e.target.value,
                                     })
                                   }
@@ -737,7 +737,7 @@ const FormIntakeVLOSPage = () => {
                             <Switch
                               id={`encl-right-${optie.key}`}
                               checked={
-                                (form.watch('omsluitingRechts')[
+                                (form.watch('enclosureRight')[
                                   optie.fullKeyRechts
                                 ] as boolean) || false
                               }
@@ -746,8 +746,8 @@ const FormIntakeVLOSPage = () => {
                                   window.navigator.vibrate(10);
                                 }
 
-                                form.setValue('omsluitingRechts', {
-                                  ...form.getValues('omsluitingRechts'),
+                                form.setValue('enclosureRight', {
+                                  ...form.getValues('enclosureRight'),
                                   [optie.fullKeyRechts]: !!checked,
                                 });
                                 if (
@@ -755,16 +755,16 @@ const FormIntakeVLOSPage = () => {
                                   optie.needsMm &&
                                   optie.defaultMm
                                 ) {
-                                  form.setValue('omsluitingRechtsMm', {
-                                    ...form.getValues('omsluitingRechtsMm'),
+                                  form.setValue('enclosureRightMm', {
+                                    ...form.getValues('enclosureRightMm'),
                                     [optie.mmKeyRechts]: optie.defaultMm,
                                   });
                                 } else if (!checked) {
                                   const next = {
-                                    ...form.getValues('omsluitingRechtsMm'),
+                                    ...form.getValues('enclosureRightMm'),
                                   };
                                   delete next[optie.mmKeyRechts];
-                                  form.setValue('omsluitingRechtsMm', next);
+                                  form.setValue('enclosureRightMm', next);
                                 }
                               }}
                               className="mr-2"
@@ -773,7 +773,7 @@ const FormIntakeVLOSPage = () => {
                               {optie.label}
                             </span>
                             {optie.needsMm &&
-                              (form.watch('omsluitingRechts')[
+                              (form.watch('enclosureRight')[
                                 optie.fullKeyRechts
                               ] as boolean) && (
                                 <Input
@@ -786,13 +786,13 @@ const FormIntakeVLOSPage = () => {
                                     optie.key === 'hoge' ? 'cm' : 'mm'
                                   }
                                   value={
-                                    (form.watch('omsluitingRechtsMm')[
+                                    (form.watch('enclosureRightMm')[
                                       optie.mmKeyRechts
                                     ] as string) || ''
                                   }
                                   onChange={e =>
-                                    form.setValue('omsluitingRechtsMm', {
-                                      ...form.getValues('omsluitingRechtsMm'),
+                                    form.setValue('enclosureRightMm', {
+                                      ...form.getValues('enclosureRightMm'),
                                       [optie.mmKeyRechts]: e.target.value,
                                     })
                                   }
@@ -816,10 +816,10 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center p-3 space-x-2">
                         <Switch
                           id="supplementschoring-links-switch"
-                          checked={supplementschoringLinksEnabled}
+                          checked={customInsoleShoringLeftEnabled}
                           onCheckedChange={checked =>
                             form.setValue(
-                              'supplementschoringLinksEnabled',
+                              'customInsoleShoringLeftEnabled',
                               !!checked,
                             )
                           }
@@ -828,14 +828,14 @@ const FormIntakeVLOSPage = () => {
                           htmlFor="supplementschoring-links-switch"
                           className="font-normal cursor-pointer"
                         >
-                          {supplementschoringLinksEnabled ? t('yes') : t('no')}
+                          {customInsoleShoringLeftEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
-                      {supplementschoringLinksEnabled && (
+                      {customInsoleShoringLeftEnabled && (
                         <Select
-                          value={form.watch('supplementschoringLinksType')}
+                          value={form.watch('customInsoleShoringLeftType')}
                           onValueChange={v =>
-                            form.setValue('supplementschoringLinksType', v)
+                            form.setValue('customInsoleShoringLeftType', v)
                           }
                         >
                           <SelectTrigger>
@@ -844,7 +844,7 @@ const FormIntakeVLOSPage = () => {
                                 SUPPLEMENT_TYPE_OPTIES.find(
                                   opt =>
                                     opt.value ===
-                                    form.watch('supplementschoringLinksType'),
+                                    form.watch('customInsoleShoringLeftType'),
                                 )?.label || '',
                               )}
                             </SelectValue>
@@ -868,10 +868,10 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center p-3 space-x-2">
                         <Switch
                           id="supplementschoring-rechts-switch"
-                          checked={supplementschoringRechtsEnabled}
+                          checked={customInsoleShoringRightEnabled}
                           onCheckedChange={checked =>
                             form.setValue(
-                              'supplementschoringRechtsEnabled',
+                              'customInsoleShoringRightEnabled',
                               !!checked,
                             )
                           }
@@ -880,14 +880,14 @@ const FormIntakeVLOSPage = () => {
                           htmlFor="supplementschoring-rechts-switch"
                           className="font-normal cursor-pointer"
                         >
-                          {supplementschoringRechtsEnabled ? t('yes') : t('no')}
+                          {customInsoleShoringRightEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
-                      {supplementschoringRechtsEnabled && (
+                      {customInsoleShoringRightEnabled && (
                         <Select
-                          value={form.watch('supplementschoringRechtsType')}
+                          value={form.watch('customInsoleShoringRightType')}
                           onValueChange={v =>
-                            form.setValue('supplementschoringRechtsType', v)
+                            form.setValue('customInsoleShoringRightType', v)
                           }
                         >
                           <SelectTrigger>
@@ -896,7 +896,7 @@ const FormIntakeVLOSPage = () => {
                                 SUPPLEMENT_TYPE_OPTIES.find(
                                   opt =>
                                     opt.value ===
-                                    form.watch('supplementschoringRechtsType'),
+                                    form.watch('customInsoleShoringRightType'),
                                 )?.label || '',
                               )}
                             </SelectValue>
@@ -925,30 +925,30 @@ const FormIntakeVLOSPage = () => {
                     <div className="flex items-center p-3 space-x-2">
                       <Switch
                         id="zoolverstijving-switch"
-                        checked={zoolverstijvingEnabled}
+                        checked={soleReinforcementEnabled}
                         onCheckedChange={checked =>
-                          form.setValue('zoolverstijvingEnabled', !!checked)
+                          form.setValue('soleReinforcementEnabled', !!checked)
                         }
                       />
                       <Label
                         htmlFor="zoolverstijving-switch"
                         className="font-normal cursor-pointer"
                       >
-                        {zoolverstijvingEnabled ? t('yes') : t('no')}
+                        {soleReinforcementEnabled ? t('yes') : t('no')}
                       </Label>
                     </div>
                   </FormItemWrapper>
 
-                  {zoolverstijvingEnabled && (
+                  {soleReinforcementEnabled && (
                     <FormItemWrapper label={t('side')}>
                       <div className="flex gap-6 pt-2">
                         {showLinks && (
                           <div className="flex items-center space-x-2">
                             <Checkbox
                               id="stiff-left"
-                              checked={form.watch('zoolverstijvingLinks')}
+                              checked={form.watch('soleReinforcementLeft')}
                               onCheckedChange={checked =>
-                                form.setValue('zoolverstijvingLinks', !!checked)
+                                form.setValue('soleReinforcementLeft', !!checked)
                               }
                             />
                             <Label
@@ -963,10 +963,10 @@ const FormIntakeVLOSPage = () => {
                           <div className="flex items-center space-x-2">
                             <Checkbox
                               id="stiff-right"
-                              checked={form.watch('zoolverstijvingRechts')}
+                              checked={form.watch('soleReinforcementRight')}
                               onCheckedChange={checked =>
                                 form.setValue(
-                                  'zoolverstijvingRechts',
+                                  'soleReinforcementRight',
                                   !!checked,
                                 )
                               }
@@ -998,8 +998,8 @@ const FormIntakeVLOSPage = () => {
                 <FormBlock columns={3} dividers={true} hoverEffect={false}>
                   <FormItemWrapper label={t('closureType')}>
                     <RadioGroup
-                      value={form.watch('sluitingType')}
-                      onValueChange={v => form.setValue('sluitingType', v)}
+                      value={form.watch('closureType')}
+                      onValueChange={v => form.setValue('closureType', v)}
                     >
                       <div className="flex flex-row gap-4">
                         {SLUITING_OPTIES.map(opt => (
@@ -1026,9 +1026,9 @@ const FormIntakeVLOSPage = () => {
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="tongue-pad"
-                        checked={form.watch('tongpolsterEnabled')}
+                        checked={form.watch('tonguePaddingEnabled')}
                         onCheckedChange={checked =>
-                          form.setValue('tongpolsterEnabled', !!checked)
+                          form.setValue('tonguePaddingEnabled', !!checked)
                         }
                       />
                       <Label
@@ -1043,9 +1043,9 @@ const FormIntakeVLOSPage = () => {
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="tongue-stitch"
-                        checked={form.watch('tongVaststikkenEnabled')}
+                        checked={form.watch('fixedTongueEnabled')}
                         onCheckedChange={checked =>
-                          form.setValue('tongVaststikkenEnabled', !!checked)
+                          form.setValue('fixedTongueEnabled', !!checked)
                         }
                       />
                       <Label
@@ -1070,9 +1070,9 @@ const FormIntakeVLOSPage = () => {
                   >
                     <Input
                       id="insert-point"
-                      value={form.watch('inschotpunt')}
+                      value={form.watch('entryPoint')}
                       onChange={e =>
-                        form.setValue('inschotpunt', e.target.value)
+                        form.setValue('entryPoint', e.target.value)
                       }
                       placeholder={t('insertPointPlaceholder')}
                       className="w-2/3"
@@ -1081,7 +1081,7 @@ const FormIntakeVLOSPage = () => {
 
                   <FormItemWrapper>
                     <img
-                      src={getAssetPath('/images/intake-vlos/inschotpunt.png')}
+                      src={getAssetPath('/images/intake-vlos/entryPoint.png')}
                       alt={t('insertPoint')}
                       className="w-1/2 mb-2"
                     />
@@ -1109,15 +1109,15 @@ const FormIntakeVLOSPage = () => {
                   {showLinks && (
                     <FormItemWrapper label={t('left')}>
                       <Select
-                        value={form.watch('haksoortLinks')}
-                        onValueChange={v => form.setValue('haksoortLinks', v)}
+                        value={form.watch('heelTypeLeft')}
+                        onValueChange={v => form.setValue('heelTypeLeft', v)}
                       >
                         <SelectTrigger>
                           <SelectValue>
                             {t(
                               HAKSOORT_OPTIES.find(
                                 opt =>
-                                  opt.value === form.watch('haksoortLinks'),
+                                  opt.value === form.watch('heelTypeLeft'),
                               )?.label || '',
                             )}
                           </SelectValue>
@@ -1135,15 +1135,15 @@ const FormIntakeVLOSPage = () => {
                   {showRechts && (
                     <FormItemWrapper label={t('right')}>
                       <Select
-                        value={form.watch('haksoortRechts')}
-                        onValueChange={v => form.setValue('haksoortRechts', v)}
+                        value={form.watch('heelTypeRight')}
+                        onValueChange={v => form.setValue('heelTypeRight', v)}
                       >
                         <SelectTrigger>
                           <SelectValue>
                             {t(
                               HAKSOORT_OPTIES.find(
                                 opt =>
-                                  opt.value === form.watch('haksoortRechts'),
+                                  opt.value === form.watch('heelTypeRight'),
                               )?.label || '',
                             )}
                           </SelectValue>
@@ -1173,9 +1173,9 @@ const FormIntakeVLOSPage = () => {
                         <Input
                           id="heel-height-left"
                           type="number"
-                          value={form.watch('hakhoogteLinks')}
+                          value={form.watch('heelHeightLeft')}
                           onChange={e =>
-                            form.setValue('hakhoogteLinks', e.target.value)
+                            form.setValue('heelHeightLeft', e.target.value)
                           }
                           placeholder={t('cmPlaceholder')}
                         />
@@ -1188,9 +1188,9 @@ const FormIntakeVLOSPage = () => {
                         <Input
                           id="heel-height-right"
                           type="number"
-                          value={form.watch('hakhoogteRechts')}
+                          value={form.watch('heelHeightRight')}
                           onChange={e =>
-                            form.setValue('hakhoogteRechts', e.target.value)
+                            form.setValue('heelHeightRight', e.target.value)
                           }
                           placeholder={t('cmPlaceholder')}
                         />
@@ -1211,23 +1211,23 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="hakschoring-links-switch"
-                          checked={hakschoringLinksEnabled}
+                          checked={heelWedgeLeftEnabled}
                           onCheckedChange={checked =>
-                            form.setValue('hakschoringLinksEnabled', !!checked)
+                            form.setValue('heelWedgeLeftEnabled', !!checked)
                           }
                         />
                         <Label
                           htmlFor="hakschoring-links-switch"
                           className="font-normal cursor-pointer"
                         >
-                          {hakschoringLinksEnabled ? t('yes') : t('no')}
+                          {heelWedgeLeftEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
-                      {hakschoringLinksEnabled && (
+                      {heelWedgeLeftEnabled && (
                         <Select
-                          value={form.watch('hakschoringLinksType')}
+                          value={form.watch('heelWedgeLeftType')}
                           onValueChange={v =>
-                            form.setValue('hakschoringLinksType', v)
+                            form.setValue('heelWedgeLeftType', v)
                           }
                         >
                           <SelectTrigger>
@@ -1236,7 +1236,7 @@ const FormIntakeVLOSPage = () => {
                                 HAKSCHORING_TYPE_OPTIES.find(
                                   opt =>
                                     opt.value ===
-                                    form.watch('hakschoringLinksType'),
+                                    form.watch('heelWedgeLeftType'),
                                 )?.label || '',
                               )}
                             </SelectValue>
@@ -1257,23 +1257,23 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="hakschoring-rechts-switch"
-                          checked={hakschoringRechtsEnabled}
+                          checked={heelWedgeRightEnabled}
                           onCheckedChange={checked =>
-                            form.setValue('hakschoringRechtsEnabled', !!checked)
+                            form.setValue('heelWedgeRightEnabled', !!checked)
                           }
                         />
                         <Label
                           htmlFor="hakschoring-rechts-switch"
                           className="font-normal cursor-pointer"
                         >
-                          {hakschoringRechtsEnabled ? t('yes') : t('no')}
+                          {heelWedgeRightEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
-                      {hakschoringRechtsEnabled && (
+                      {heelWedgeRightEnabled && (
                         <Select
-                          value={form.watch('hakschoringRechtsType')}
+                          value={form.watch('heelWedgeRightType')}
                           onValueChange={v =>
-                            form.setValue('hakschoringRechtsType', v)
+                            form.setValue('heelWedgeRightType', v)
                           }
                         >
                           <SelectTrigger>
@@ -1282,7 +1282,7 @@ const FormIntakeVLOSPage = () => {
                                 HAKSCHORING_TYPE_OPTIES.find(
                                   opt =>
                                     opt.value ===
-                                    form.watch('hakschoringRechtsType'),
+                                    form.watch('heelWedgeRightType'),
                                 )?.label || '',
                               )}
                             </SelectValue>
@@ -1309,23 +1309,23 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="ezelsoor-links-switch"
-                          checked={ezelsoorLinksEnabled}
+                          checked={donkeyEarLeftEnabled}
                           onCheckedChange={checked =>
-                            form.setValue('ezelsoorLinksEnabled', !!checked)
+                            form.setValue('donkeyEarLeftEnabled', !!checked)
                           }
                         />
                         <Label
                           htmlFor="ezelsoor-links-switch"
                           className="font-normal cursor-pointer"
                         >
-                          {ezelsoorLinksEnabled ? t('yes') : t('no')}
+                          {donkeyEarLeftEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
-                      {ezelsoorLinksEnabled && (
+                      {donkeyEarLeftEnabled && (
                         <Select
-                          value={form.watch('ezelsoorLinksType')}
+                          value={form.watch('donkeyEarLeftType')}
                           onValueChange={v =>
-                            form.setValue('ezelsoorLinksType', v)
+                            form.setValue('donkeyEarLeftType', v)
                           }
                         >
                           <SelectTrigger>
@@ -1334,7 +1334,7 @@ const FormIntakeVLOSPage = () => {
                                 EZELSOOR_TYPE_OPTIES.find(
                                   opt =>
                                     opt.value ===
-                                    form.watch('ezelsoorLinksType'),
+                                    form.watch('donkeyEarLeftType'),
                                 )?.label || '',
                               )}
                             </SelectValue>
@@ -1355,23 +1355,23 @@ const FormIntakeVLOSPage = () => {
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="ezelsoor-rechts-switch"
-                          checked={ezelsoorRechtsEnabled}
+                          checked={donkeyEarRightEnabled}
                           onCheckedChange={checked =>
-                            form.setValue('ezelsoorRechtsEnabled', !!checked)
+                            form.setValue('donkeyEarRightEnabled', !!checked)
                           }
                         />
                         <Label
                           htmlFor="ezelsoor-rechts-switch"
                           className="font-normal cursor-pointer"
                         >
-                          {ezelsoorRechtsEnabled ? t('yes') : t('no')}
+                          {donkeyEarRightEnabled ? t('yes') : t('no')}
                         </Label>
                       </div>
-                      {ezelsoorRechtsEnabled && (
+                      {donkeyEarRightEnabled && (
                         <Select
-                          value={form.watch('ezelsoorRechtsType')}
+                          value={form.watch('donkeyEarRightType')}
                           onValueChange={v =>
-                            form.setValue('ezelsoorRechtsType', v)
+                            form.setValue('donkeyEarRightType', v)
                           }
                         >
                           <SelectTrigger>
@@ -1380,7 +1380,7 @@ const FormIntakeVLOSPage = () => {
                                 EZELSOOR_TYPE_OPTIES.find(
                                   opt =>
                                     opt.value ===
-                                    form.watch('ezelsoorRechtsType'),
+                                    form.watch('donkeyEarRightType'),
                                 )?.label || '',
                               )}
                             </SelectValue>
@@ -1413,10 +1413,10 @@ const FormIntakeVLOSPage = () => {
                         <div className="flex items-center space-x-2 mb-2">
                           <Switch
                             id="round-left"
-                            checked={form.watch('hakafrondingLinksEnabled')}
+                            checked={form.watch('heelRoundingLeftEnabled')}
                             onCheckedChange={checked =>
                               form.setValue(
-                                'hakafrondingLinksEnabled',
+                                'heelRoundingLeftEnabled',
                                 !!checked,
                               )
                             }
@@ -1425,10 +1425,10 @@ const FormIntakeVLOSPage = () => {
                             htmlFor="round-left"
                             className="font-normal cursor-pointer"
                           >
-                            {hakafrondingLinksEnabled ? t('yes') : t('no')}
+                            {heelRoundingLeftEnabled ? t('yes') : t('no')}
                           </Label>
                         </div>
-                        {hakafrondingLinksEnabled && (
+                        {heelRoundingLeftEnabled && (
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col gap-2">
                               <Label
@@ -1440,10 +1440,10 @@ const FormIntakeVLOSPage = () => {
                               <Input
                                 id="round-left-height"
                                 type="number"
-                                value={form.watch('hakafrondingLinksHoogte')}
+                                value={form.watch('heelRoundingLeftHeight')}
                                 onChange={e =>
                                   form.setValue(
-                                    'hakafrondingLinksHoogte',
+                                    'heelRoundingLeftHeight',
                                     e.target.value,
                                   )
                                 }
@@ -1459,10 +1459,10 @@ const FormIntakeVLOSPage = () => {
                               <Input
                                 id="round-left-length"
                                 type="number"
-                                value={form.watch('hakafrondingLinksLengte')}
+                                value={form.watch('heelRoundingLeftLength')}
                                 onChange={e =>
                                   form.setValue(
-                                    'hakafrondingLinksLengte',
+                                    'heelRoundingLeftLength',
                                     e.target.value,
                                   )
                                 }
@@ -1489,10 +1489,10 @@ const FormIntakeVLOSPage = () => {
                         <div className="flex items-center space-x-2 mb-2">
                           <Switch
                             id="round-right"
-                            checked={form.watch('hakafrondingRechtsEnabled')}
+                            checked={form.watch('heelRoundingRightEnabled')}
                             onCheckedChange={checked =>
                               form.setValue(
-                                'hakafrondingRechtsEnabled',
+                                'heelRoundingRightEnabled',
                                 !!checked,
                               )
                             }
@@ -1501,10 +1501,10 @@ const FormIntakeVLOSPage = () => {
                             htmlFor="round-right"
                             className="font-normal cursor-pointer"
                           >
-                            {hakafrondingRechtsEnabled ? t('yes') : t('no')}
+                            {heelRoundingRightEnabled ? t('yes') : t('no')}
                           </Label>
                         </div>
-                        {hakafrondingRechtsEnabled && (
+                        {heelRoundingRightEnabled && (
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col gap-2">
                               <Label
@@ -1516,10 +1516,10 @@ const FormIntakeVLOSPage = () => {
                               <Input
                                 id="round-right-height"
                                 type="number"
-                                value={form.watch('hakafrondingRechtsHoogte')}
+                                value={form.watch('heelRoundingRightHeight')}
                                 onChange={e =>
                                   form.setValue(
-                                    'hakafrondingRechtsHoogte',
+                                    'heelRoundingRightHeight',
                                     e.target.value,
                                   )
                                 }
@@ -1535,10 +1535,10 @@ const FormIntakeVLOSPage = () => {
                               <Input
                                 id="round-right-length"
                                 type="number"
-                                value={form.watch('hakafrondingRechtsLengte')}
+                                value={form.watch('heelRoundingRightLength')}
                                 onChange={e =>
                                   form.setValue(
-                                    'hakafrondingRechtsLengte',
+                                    'heelRoundingRightLength',
                                     e.target.value,
                                   )
                                 }
@@ -1557,14 +1557,14 @@ const FormIntakeVLOSPage = () => {
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormItemWrapper>
                     <Select
-                      value={form.watch('loopzoolType')}
-                      onValueChange={v => form.setValue('loopzoolType', v)}
+                      value={form.watch('rockerSoleType')}
+                      onValueChange={v => form.setValue('rockerSoleType', v)}
                     >
                       <SelectTrigger className="w-2/3">
                         <SelectValue>
                           {t(
                             LOOPZOOL_OPTIES.find(
-                              opt => opt.value === form.watch('loopzoolType'),
+                              opt => opt.value === form.watch('rockerSoleType'),
                             )?.label || '',
                           )}
                         </SelectValue>
@@ -1585,9 +1585,9 @@ const FormIntakeVLOSPage = () => {
               <FormCard title={t('specialNotes')}>
                 <Textarea
                   placeholder={t('specialNotesPlaceholder')}
-                  value={form.watch('bijzonderheden')}
+                  value={form.watch('specialNotes')}
                   onChange={e =>
-                    form.setValue('bijzonderheden', e.target.value)
+                    form.setValue('specialNotes', e.target.value)
                   }
                   rows={5}
                 />

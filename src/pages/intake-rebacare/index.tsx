@@ -19,7 +19,7 @@ import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {Zijde, PAARTYPE_OPTIES} from '@/lib/constants/formConstants';
+import {Side, PAARTYPE_OPTIES} from '@/lib/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -44,11 +44,11 @@ const FormIntakeRebacarePage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
-    welkPaar: z.string(),
+    whichPair: z.string(),
     side: z.enum(['left', 'right', 'both'] as const),
-    medischeIndicatie: z.string().optional(),
-    gezwachteld: z.boolean(),
-    bijzonderheden: z.string().optional(),
+    medicalIndication: z.string().optional(),
+    bandagedFoot: z.boolean(),
+    specialNotes: z.string().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -57,11 +57,11 @@ const FormIntakeRebacarePage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      welkPaar: 'Eerste paar',
+      whichPair: 'Eerste paar',
       side: 'both',
-      medischeIndicatie: '',
-      gezwachteld: false,
-      bijzonderheden: '',
+      medicalIndication: '',
+      bandagedFoot: false,
+      specialNotes: '',
     },
   });
 
@@ -109,8 +109,8 @@ const FormIntakeRebacarePage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -138,9 +138,9 @@ const FormIntakeRebacarePage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -197,18 +197,18 @@ const FormIntakeRebacarePage = () => {
                     <FormLabel>{t('bandaged')}</FormLabel>
                     <FormField
                       control={form.control}
-                      name="gezwachteld"
+                      name="bandagedFoot"
                       render={({field}) => (
                         <FormItem className="flex flex-col items-center">
                           <FormControl>
                             <div className="flex flex-col-2 items-center justify-center space-x-2">
                               <Switch
-                                id="gezwachteld-switch"
+                                id="bandagedFoot-switch"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
                               />
                               <Label
-                                htmlFor="gezwachteld-switch"
+                                htmlFor="bandagedFoot-switch"
                                 className="font-normal cursor-pointer"
                               >
                                 {field.value ? t('yes') : t('no')}
@@ -226,7 +226,7 @@ const FormIntakeRebacarePage = () => {
               <FormCard title={t('specialNotes')}>
                 <FormField
                   control={form.control}
-                  name="bijzonderheden"
+                  name="specialNotes"
                   render={({field}) => (
                     <FormItem>
                       <FormControl>

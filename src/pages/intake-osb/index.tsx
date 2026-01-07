@@ -23,7 +23,7 @@ import {
   DOEL_OPTIES,
   LOOPFUNCTIE_INDICATIE_OPTIES,
   LEVERANCIER_OPTIES,
-  STEUNZOOL_TYPE_OPTIES,
+  INSOLE_TYPE_OPTIONS,
   CORRECTIE_MIDDENVOET_OPTIES,
   CORRECTIE_VOORVOET_OPTIES,
   PELLOTE_OPTIES,
@@ -46,54 +46,54 @@ const FormIntakeOSBPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
-    welkPaar: z.string(),
-    medischeIndicatie: z.string().optional(),
+    whichPair: z.string(),
+    medicalIndication: z.string().optional(),
     side: z.enum(['left', 'right', 'both'] as const).optional(),
 
     // Functieonderzoek
-    doel: z.record(z.string(), z.boolean()),
-    loopfunctieIndicatie: z.string().optional(),
-    loopfunctieAndersText: z.string().optional(),
+    goal: z.record(z.string(), z.boolean()),
+    walkingFunctionIndication: z.string().optional(),
+    walkingFunctionOtherText: z.string().optional(),
 
     // Supplier and Product
-    leverancierNaam: z.string().optional(),
-    bestelDatum: z.string().optional(),
-    productSpecificaties: z.object({
-      artCode: z.string().optional(),
-      lengteMaat: z.string().optional(),
-      wijdte: z.string().optional(),
-      kleur: z.string().optional(),
-      sluiting: z.string().optional(),
+    supplierName: z.string().optional(),
+    orderDate: z.string().optional(),
+    productSpecifications: z.object({
+      articleCode: z.string().optional(),
+      lengthSize: z.string().optional(),
+      width: z.string().optional(),
+      color: z.string().optional(),
+      closure: z.string().optional(),
     }),
 
     // Steunzolen/Talonette Section
-    talonetteEnabled: z.boolean().optional(),
-    talonetteVerhogingLinks: z.string().optional(),
-    talonetteVerhogingRechts: z.string().optional(),
+    heelRaiseEnabled: z.boolean().optional(),
+    heelRaiseLeft: z.string().optional(),
+    heelRaiseRight: z.string().optional(),
 
-    steunzoolEnabled: z.boolean().optional(),
-    steunzoolTypeGeneral: z.string().optional(),
-    steunzoolAndersText: z.string().optional(),
-    steunzoolCorrectieMiddenvoet: z.string().optional(),
-    steunzoolCorrectieVoorvoet: z.string().optional(),
-    steunzoolVvPellote: z.string().optional(),
+    insoleEnabled: z.boolean().optional(),
+    insoleTypeGeneral: z.string().optional(),
+    insoleOtherText: z.string().optional(),
+    insoleMidfootCorrection: z.string().optional(),
+    insoleForefootCorrection: z.string().optional(),
+    insoleForefootPad: z.string().optional(),
 
     // Supplement (van leest)
     supplementIndividueelEnabled: z.boolean().optional(),
-    supplementIndividueelLinks: z.boolean().optional(),
-    supplementIndividueelRechts: z.boolean().optional(),
+    customInsoleIndividualLeft: z.boolean().optional(),
+    customInsoleIndividualRight: z.boolean().optional(),
 
     // Zoolverstijving
-    zoolverstijvingEnabled: z.boolean().optional(),
-    zoolverstijvingLinks: z.boolean().optional(),
-    zoolverstijvingRechts: z.boolean().optional(),
+    soleReinforcementEnabled: z.boolean().optional(),
+    soleReinforcementLeft: z.boolean().optional(),
+    soleReinforcementRight: z.boolean().optional(),
 
     // Afwikkelrol (onder schoen)
     afwikkelrolEnabled: z.boolean().optional(),
-    afwikkelrolCmLinks: z.string().optional(),
-    afwikkelrolCmRechts: z.string().optional(),
+    rockerRollCmLeft: z.string().optional(),
+    rockerRollCmRight: z.string().optional(),
 
-    bijzonderheden: z.string().optional(),
+    specialNotes: z.string().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -102,54 +102,54 @@ const FormIntakeOSBPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      welkPaar: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
-      medischeIndicatie: '',
+      whichPair: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
+      medicalIndication: '',
       side: 'both',
 
       // Functieonderzoek
-      doel: {},
-      loopfunctieIndicatie: '',
-      loopfunctieAndersText: '',
+      goal: {},
+      walkingFunctionIndication: '',
+      walkingFunctionOtherText: '',
 
       // Supplier and Product
-      leverancierNaam: '',
-      bestelDatum: new Date().toISOString().split('T')[0],
-      productSpecificaties: {
-        artCode: '',
-        lengteMaat: '',
-        wijdte: '',
-        kleur: '',
-        sluiting: '',
+      supplierName: '',
+      orderDate: new Date().toISOString().split('T')[0],
+      productSpecifications: {
+        articleCode: '',
+        lengthSize: '',
+        width: '',
+        color: '',
+        closure: '',
       },
 
       // Steunzolen/Talonette Section
-      talonetteEnabled: false,
-      talonetteVerhogingLinks: '',
-      talonetteVerhogingRechts: '',
+      heelRaiseEnabled: false,
+      heelRaiseLeft: '',
+      heelRaiseRight: '',
 
-      steunzoolEnabled: false,
-      steunzoolTypeGeneral: '',
-      steunzoolAndersText: '',
-      steunzoolCorrectieMiddenvoet: '',
-      steunzoolCorrectieVoorvoet: '',
-      steunzoolVvPellote: '',
+      insoleEnabled: false,
+      insoleTypeGeneral: '',
+      insoleOtherText: '',
+      insoleMidfootCorrection: '',
+      insoleForefootCorrection: '',
+      insoleForefootPad: '',
 
       // Supplement (van leest)
       supplementIndividueelEnabled: false,
-      supplementIndividueelLinks: false,
-      supplementIndividueelRechts: false,
+      customInsoleIndividualLeft: false,
+      customInsoleIndividualRight: false,
 
       // Zoolverstijving
-      zoolverstijvingEnabled: false,
-      zoolverstijvingLinks: false,
-      zoolverstijvingRechts: false,
+      soleReinforcementEnabled: false,
+      soleReinforcementLeft: false,
+      soleReinforcementRight: false,
 
       // Afwikkelrol (onder schoen)
       afwikkelrolEnabled: false,
-      afwikkelrolCmLinks: '',
-      afwikkelrolCmRechts: '',
+      rockerRollCmLeft: '',
+      rockerRollCmRight: '',
 
-      bijzonderheden: '',
+      specialNotes: '',
     },
   });
 
@@ -172,74 +172,68 @@ const FormIntakeOSBPage = () => {
 
     dispatch(
       setIntakeOSBData({
-        welkPaar: data.welkPaar,
-        medischeIndicatie: data.medischeIndicatie || '',
+        whichPair: data.whichPair,
+        medicalIndication: data.medicalIndication || '',
         side: data.side || 'both',
 
         // Functieonderzoek
-        doel: data.doel as Record<string, boolean>,
-        loopfunctieIndicatie: data.loopfunctieIndicatie || '',
-        loopfunctieAndersText: data.loopfunctieAndersText || '',
+        goal: data.goal as Record<string, boolean>,
+        walkingFunctionIndication: data.walkingFunctionIndication || '',
+        walkingFunctionOtherText: data.walkingFunctionOtherText || '',
 
         // Supplier and Product
-        leverancierNaam: data.leverancierNaam || '',
-        bestelDatum: data.bestelDatum || '',
-        productSpecificaties: {
-          artCode: data.productSpecificaties?.artCode || '',
-          lengteMaat: data.productSpecificaties?.lengteMaat || '',
-          wijdte: data.productSpecificaties?.wijdte || '',
-          kleur: data.productSpecificaties?.kleur || '',
-          sluiting: data.productSpecificaties?.sluiting || '',
+        supplierName: data.supplierName || '',
+        orderDate: data.orderDate || '',
+        productSpecifications: {
+          articleCode: data.productSpecifications?.articleCode || '',
+          lengthSize: data.productSpecifications?.lengthSize || '',
+          width: data.productSpecifications?.width || '',
+          color: data.productSpecifications?.color || '',
+          closure: data.productSpecifications?.closure || '',
         },
 
         // Steunzolen/Talonette (conditional based on toggle)
-        talonetteVerhogingLinks: data.talonetteEnabled
-          ? data.talonetteVerhogingLinks || ''
+        heelRaiseLeft: data.heelRaiseEnabled ? data.heelRaiseLeft || '' : '',
+        heelRaiseRight: data.heelRaiseEnabled ? data.heelRaiseRight || '' : '',
+        insoleTypeGeneral: data.insoleEnabled
+          ? data.insoleTypeGeneral || ''
           : '',
-        talonetteVerhogingRechts: data.talonetteEnabled
-          ? data.talonetteVerhogingRechts || ''
+        insoleOtherText: data.insoleEnabled ? data.insoleOtherText || '' : '',
+        insoleMidfootCorrection: data.insoleEnabled
+          ? data.insoleMidfootCorrection || ''
           : '',
-        steunzoolTypeGeneral: data.steunzoolEnabled
-          ? data.steunzoolTypeGeneral || ''
+        insoleForefootCorrection: data.insoleEnabled
+          ? data.insoleForefootCorrection || ''
           : '',
-        steunzoolAndersText: data.steunzoolEnabled
-          ? data.steunzoolAndersText || ''
-          : '',
-        steunzoolCorrectieMiddenvoet: data.steunzoolEnabled
-          ? data.steunzoolCorrectieMiddenvoet || ''
-          : '',
-        steunzoolCorrectieVoorvoet: data.steunzoolEnabled
-          ? data.steunzoolCorrectieVoorvoet || ''
-          : '',
-        steunzoolVvPellote: data.steunzoolEnabled
-          ? data.steunzoolVvPellote || ''
+        insoleForefootPad: data.insoleEnabled
+          ? data.insoleForefootPad || ''
           : '',
 
         // Supplement (conditional based on toggle)
-        supplementIndividueelLinks: data.supplementIndividueelEnabled
-          ? !!data.supplementIndividueelLinks
+        customInsoleIndividualLeft: data.supplementIndividueelEnabled
+          ? !!data.customInsoleIndividualLeft
           : false,
-        supplementIndividueelRechts: data.supplementIndividueelEnabled
-          ? !!data.supplementIndividueelRechts
+        customInsoleIndividualRight: data.supplementIndividueelEnabled
+          ? !!data.customInsoleIndividualRight
           : false,
 
         // Zoolverstijving (conditional based on toggle)
-        zoolverstijvingLinks: data.zoolverstijvingEnabled
-          ? !!data.zoolverstijvingLinks
+        soleReinforcementLeft: data.soleReinforcementEnabled
+          ? !!data.soleReinforcementLeft
           : false,
-        zoolverstijvingRechts: data.zoolverstijvingEnabled
-          ? !!data.zoolverstijvingRechts
+        soleReinforcementRight: data.soleReinforcementEnabled
+          ? !!data.soleReinforcementRight
           : false,
 
         // Afwikkelrol (conditional based on toggle)
-        afwikkelrolCmLinks: data.afwikkelrolEnabled
-          ? data.afwikkelrolCmLinks || ''
+        rockerRollCmLeft: data.afwikkelrolEnabled
+          ? data.rockerRollCmLeft || ''
           : '',
-        afwikkelrolCmRechts: data.afwikkelrolEnabled
-          ? data.afwikkelrolCmRechts || ''
+        rockerRollCmRight: data.afwikkelrolEnabled
+          ? data.rockerRollCmRight || ''
           : '',
 
-        bijzonderheden: data.bijzonderheden || '',
+        specialNotes: data.specialNotes || '',
       }),
     );
 
@@ -271,8 +265,8 @@ const FormIntakeOSBPage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -300,9 +294,9 @@ const FormIntakeOSBPage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -361,14 +355,14 @@ const FormIntakeOSBPage = () => {
                       className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
                       <Checkbox
-                        id={`doel-${optie.fullKey}`}
+                        id={`goal-${optie.fullKey}`}
                         checked={
-                          (form.watch('doel')[optie.fullKey] as boolean) ||
+                          (form.watch('goal')[optie.fullKey] as boolean) ||
                           false
                         }
                         onCheckedChange={checked =>
-                          form.setValue('doel', {
-                            ...form.getValues('doel'),
+                          form.setValue('goal', {
+                            ...form.getValues('goal'),
                             [optie.fullKey]: !!checked,
                           })
                         }
@@ -385,9 +379,9 @@ const FormIntakeOSBPage = () => {
                 <FormBlock title={t('walkingFunction')} centerTitle={true}>
                   <FormItemWrapper>
                     <Select
-                      value={form.watch('loopfunctieIndicatie') || ''}
+                      value={form.watch('walkingFunctionIndication') || ''}
                       onValueChange={v =>
-                        form.setValue('loopfunctieIndicatie', v)
+                        form.setValue('walkingFunctionIndication', v)
                       }
                     >
                       <SelectTrigger className="w-2/3">
@@ -407,15 +401,18 @@ const FormIntakeOSBPage = () => {
                 </FormBlock>
 
                 {/* Conditional "Anders" textarea */}
-                {form.watch('loopfunctieIndicatie') === 'Anders' && (
+                {form.watch('walkingFunctionIndication') === 'Anders' && (
                   <FormBlock centerTitle={false}>
                     <FormItemWrapper label={t('otherWalkingFunction')}>
                       <Textarea
                         id="loopfunctie-anders"
                         placeholder={t('otherWalkingFunctionPlaceholder')}
-                        value={form.watch('loopfunctieAndersText')}
+                        value={form.watch('walkingFunctionOtherText')}
                         onChange={e =>
-                          form.setValue('loopfunctieAndersText', e.target.value)
+                          form.setValue(
+                            'walkingFunctionOtherText',
+                            e.target.value,
+                          )
                         }
                         rows={2}
                         className="w-2/3 resize-none"
@@ -431,8 +428,8 @@ const FormIntakeOSBPage = () => {
                 <FormBlock columns={2} dividers={true} hoverEffect={true}>
                   <FormItemWrapper label={t('supplier')}>
                     <Select
-                      value={form.watch('leverancierNaam') || ''}
-                      onValueChange={v => form.setValue('leverancierNaam', v)}
+                      value={form.watch('supplierName') || ''}
+                      onValueChange={v => form.setValue('supplierName', v)}
                     >
                       <SelectTrigger className="w-2/3">
                         <SelectValue placeholder={t('supplier')} />
@@ -450,14 +447,14 @@ const FormIntakeOSBPage = () => {
                   <FormItemWrapper label={t('orderDate')}>
                     <DatePicker
                       value={
-                        form.watch('bestelDatum') &&
-                        form.watch('bestelDatum') !== ''
-                          ? new Date(form.watch('bestelDatum')!)
+                        form.watch('orderDate') &&
+                        form.watch('orderDate') !== ''
+                          ? new Date(form.watch('orderDate')!)
                           : undefined
                       }
                       onChange={selectedDate =>
                         form.setValue(
-                          'bestelDatum',
+                          'orderDate',
                           selectedDate
                             ? selectedDate.toISOString().split('T')[0]
                             : '',
@@ -476,11 +473,13 @@ const FormIntakeOSBPage = () => {
                     <Input
                       id="art-code"
                       placeholder={t('articleCode')}
-                      value={form.watch('productSpecificaties')?.artCode || ''}
+                      value={
+                        form.watch('productSpecifications')?.articleCode || ''
+                      }
                       onChange={e =>
-                        form.setValue('productSpecificaties', {
-                          ...form.getValues('productSpecificaties'),
-                          artCode: e.target.value,
+                        form.setValue('productSpecifications', {
+                          ...form.getValues('productSpecifications'),
+                          articleCode: e.target.value,
                         })
                       }
                       className="w-2/3"
@@ -489,13 +488,13 @@ const FormIntakeOSBPage = () => {
 
                   <FormItemWrapper label={t('color')}>
                     <Input
-                      id="kleur-osb"
+                      id="color-osb"
                       placeholder={t('color')}
-                      value={form.watch('productSpecificaties')?.kleur || ''}
+                      value={form.watch('productSpecifications')?.color || ''}
                       onChange={e =>
-                        form.setValue('productSpecificaties', {
-                          ...form.getValues('productSpecificaties'),
-                          kleur: e.target.value,
+                        form.setValue('productSpecifications', {
+                          ...form.getValues('productSpecifications'),
+                          color: e.target.value,
                         })
                       }
                       className="w-2/3"
@@ -506,13 +505,13 @@ const FormIntakeOSBPage = () => {
                 <FormBlock columns={3} dividers={true} hoverEffect={true}>
                   <FormItemWrapper label={t('width')}>
                     <Input
-                      id="wijdte"
+                      id="width"
                       placeholder={t('width')}
-                      value={form.watch('productSpecificaties')?.wijdte || ''}
+                      value={form.watch('productSpecifications')?.width || ''}
                       onChange={e =>
-                        form.setValue('productSpecificaties', {
-                          ...form.getValues('productSpecificaties'),
-                          wijdte: e.target.value,
+                        form.setValue('productSpecifications', {
+                          ...form.getValues('productSpecifications'),
+                          width: e.target.value,
                         })
                       }
                       className="w-2/3"
@@ -524,12 +523,12 @@ const FormIntakeOSBPage = () => {
                       id="lengte-maat"
                       placeholder={t('lengthSize')}
                       value={
-                        form.watch('productSpecificaties')?.lengteMaat || ''
+                        form.watch('productSpecifications')?.lengthSize || ''
                       }
                       onChange={e =>
-                        form.setValue('productSpecificaties', {
-                          ...form.getValues('productSpecificaties'),
-                          lengteMaat: e.target.value,
+                        form.setValue('productSpecifications', {
+                          ...form.getValues('productSpecifications'),
+                          lengthSize: e.target.value,
                         })
                       }
                       className="w-2/3"
@@ -538,13 +537,13 @@ const FormIntakeOSBPage = () => {
 
                   <FormItemWrapper label={t('closure')}>
                     <Input
-                      id="sluiting-osb"
+                      id="closure-osb"
                       placeholder={t('closure')}
-                      value={form.watch('productSpecificaties')?.sluiting || ''}
+                      value={form.watch('productSpecifications')?.closure || ''}
                       onChange={e =>
-                        form.setValue('productSpecificaties', {
-                          ...form.getValues('productSpecificaties'),
-                          sluiting: e.target.value,
+                        form.setValue('productSpecifications', {
+                          ...form.getValues('productSpecifications'),
+                          closure: e.target.value,
                         })
                       }
                       className="w-2/3"
@@ -561,20 +560,19 @@ const FormIntakeOSBPage = () => {
                 toggleLabel={t('addInsolesOrTalonette')}
                 toggleId="steunzolen-talonette-toggle"
                 defaultOpen={
-                  form.watch('steunzoolEnabled') ||
-                  form.watch('talonetteEnabled')
+                  form.watch('insoleEnabled') || form.watch('heelRaiseEnabled')
                 }
                 onToggleChange={isOpen => {
-                  form.setValue('steunzoolEnabled', isOpen);
-                  form.setValue('talonetteEnabled', isOpen);
+                  form.setValue('insoleEnabled', isOpen);
+                  form.setValue('heelRaiseEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('talonetteVerhogingLinks', '');
-                    form.setValue('talonetteVerhogingRechts', '');
-                    form.setValue('steunzoolTypeGeneral', '');
-                    form.setValue('steunzoolAndersText', '');
-                    form.setValue('steunzoolCorrectieMiddenvoet', '');
-                    form.setValue('steunzoolCorrectieVoorvoet', '');
-                    form.setValue('steunzoolVvPellote', '');
+                    form.setValue('heelRaiseLeft', '');
+                    form.setValue('heelRaiseRight', '');
+                    form.setValue('insoleTypeGeneral', '');
+                    form.setValue('insoleOtherText', '');
+                    form.setValue('insoleMidfootCorrection', '');
+                    form.setValue('insoleForefootCorrection', '');
+                    form.setValue('insoleForefootPad', '');
                   }
                 }}
               >
@@ -590,9 +588,9 @@ const FormIntakeOSBPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingLinks')}
+                      value={form.watch('heelRaiseLeft')}
                       onChange={e =>
-                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                        form.setValue('heelRaiseLeft', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -604,12 +602,9 @@ const FormIntakeOSBPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingRechts')}
+                      value={form.watch('heelRaiseRight')}
                       onChange={e =>
-                        form.setValue(
-                          'talonetteVerhogingRechts',
-                          e.target.value,
-                        )
+                        form.setValue('heelRaiseRight', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -625,16 +620,16 @@ const FormIntakeOSBPage = () => {
                 >
                   <FormItemWrapper className="col-span-2">
                     <Select
-                      value={form.watch('steunzoolTypeGeneral') || undefined}
+                      value={form.watch('insoleTypeGeneral') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolTypeGeneral', val)
+                        form.setValue('insoleTypeGeneral', val)
                       }
                     >
                       <SelectTrigger className="w-2/3 mt-2">
                         <SelectValue placeholder={t('insoleType')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {STEUNZOOL_TYPE_OPTIES.map(option => (
+                        {INSOLE_TYPE_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -643,7 +638,7 @@ const FormIntakeOSBPage = () => {
                     </Select>
                   </FormItemWrapper>
 
-                  {form.watch('steunzoolTypeGeneral') === 'Anders' && (
+                  {form.watch('insoleTypeGeneral') === 'Anders' && (
                     <FormItemWrapper
                       label={t('specifyOther')}
                       className="col-span-2 pt-2"
@@ -651,9 +646,9 @@ const FormIntakeOSBPage = () => {
                       <Textarea
                         id="steunzool-anders"
                         placeholder={t('specifyPlaceholder')}
-                        value={form.watch('steunzoolAndersText')}
+                        value={form.watch('insoleOtherText')}
                         onChange={e =>
-                          form.setValue('steunzoolAndersText', e.target.value)
+                          form.setValue('insoleOtherText', e.target.value)
                         }
                         rows={2}
                         className="w-2/3 resize-none"
@@ -670,11 +665,9 @@ const FormIntakeOSBPage = () => {
                 >
                   <FormItemWrapper label={t('midfootCorrection')}>
                     <Select
-                      value={
-                        form.watch('steunzoolCorrectieMiddenvoet') || undefined
-                      }
+                      value={form.watch('insoleMidfootCorrection') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolCorrectieMiddenvoet', val)
+                        form.setValue('insoleMidfootCorrection', val)
                       }
                     >
                       <SelectTrigger className="">
@@ -693,10 +686,10 @@ const FormIntakeOSBPage = () => {
                   <FormItemWrapper label={t('forefootCorrection')}>
                     <Select
                       value={
-                        form.watch('steunzoolCorrectieVoorvoet') || undefined
+                        form.watch('insoleForefootCorrection') || undefined
                       }
                       onValueChange={val =>
-                        form.setValue('steunzoolCorrectieVoorvoet', val)
+                        form.setValue('insoleForefootCorrection', val)
                       }
                     >
                       <SelectTrigger className="">
@@ -714,9 +707,9 @@ const FormIntakeOSBPage = () => {
 
                   <FormItemWrapper label={t('forefootPad')}>
                     <Select
-                      value={form.watch('steunzoolVvPellote') || undefined}
+                      value={form.watch('insoleForefootPad') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolVvPellote', val)
+                        form.setValue('insoleForefootPad', val)
                       }
                     >
                       <SelectTrigger className="">
@@ -745,8 +738,8 @@ const FormIntakeOSBPage = () => {
                 onToggleChange={isOpen => {
                   form.setValue('supplementIndividueelEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('supplementIndividueelLinks', false);
-                    form.setValue('supplementIndividueelRechts', false);
+                    form.setValue('customInsoleIndividualLeft', false);
+                    form.setValue('customInsoleIndividualRight', false);
                   }
                 }}
               >
@@ -755,9 +748,9 @@ const FormIntakeOSBPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="supplement-links"
-                        checked={!!form.watch('supplementIndividueelLinks')}
+                        checked={!!form.watch('customInsoleIndividualLeft')}
                         onCheckedChange={checked =>
-                          form.setValue('supplementIndividueelLinks', !!checked)
+                          form.setValue('customInsoleIndividualLeft', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -772,10 +765,10 @@ const FormIntakeOSBPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="supplement-rechts"
-                        checked={!!form.watch('supplementIndividueelRechts')}
+                        checked={!!form.watch('customInsoleIndividualRight')}
                         onCheckedChange={checked =>
                           form.setValue(
-                            'supplementIndividueelRechts',
+                            'customInsoleIndividualRight',
                             !!checked,
                           )
                         }
@@ -796,12 +789,12 @@ const FormIntakeOSBPage = () => {
                 toggleAble={true}
                 toggleLabel={t('addSoleStiffening')}
                 toggleId="zoolverstijving-toggle"
-                defaultOpen={form.watch('zoolverstijvingEnabled')}
+                defaultOpen={form.watch('soleReinforcementEnabled')}
                 onToggleChange={isOpen => {
-                  form.setValue('zoolverstijvingEnabled', isOpen);
+                  form.setValue('soleReinforcementEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('zoolverstijvingLinks', false);
-                    form.setValue('zoolverstijvingRechts', false);
+                    form.setValue('soleReinforcementLeft', false);
+                    form.setValue('soleReinforcementRight', false);
                   }
                 }}
               >
@@ -810,9 +803,9 @@ const FormIntakeOSBPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="zoolverstijving-links"
-                        checked={!!form.watch('zoolverstijvingLinks')}
+                        checked={!!form.watch('soleReinforcementLeft')}
                         onCheckedChange={checked =>
-                          form.setValue('zoolverstijvingLinks', !!checked)
+                          form.setValue('soleReinforcementLeft', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -827,9 +820,9 @@ const FormIntakeOSBPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="zoolverstijving-rechts"
-                        checked={!!form.watch('zoolverstijvingRechts')}
+                        checked={!!form.watch('soleReinforcementRight')}
                         onCheckedChange={checked =>
-                          form.setValue('zoolverstijvingRechts', !!checked)
+                          form.setValue('soleReinforcementRight', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -852,8 +845,8 @@ const FormIntakeOSBPage = () => {
                 onToggleChange={isOpen => {
                   form.setValue('afwikkelrolEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('afwikkelrolCmLinks', '');
-                    form.setValue('afwikkelrolCmRechts', '');
+                    form.setValue('rockerRollCmLeft', '');
+                    form.setValue('rockerRollCmRight', '');
                   }
                 }}
               >
@@ -864,9 +857,9 @@ const FormIntakeOSBPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('afwikkelrolCmLinks') || ''}
+                      value={form.watch('rockerRollCmLeft') || ''}
                       onChange={e =>
-                        form.setValue('afwikkelrolCmLinks', e.target.value)
+                        form.setValue('rockerRollCmLeft', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -878,9 +871,9 @@ const FormIntakeOSBPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('afwikkelrolCmRechts') || ''}
+                      value={form.watch('rockerRollCmRight') || ''}
                       onChange={e =>
-                        form.setValue('afwikkelrolCmRechts', e.target.value)
+                        form.setValue('rockerRollCmRight', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -892,10 +885,8 @@ const FormIntakeOSBPage = () => {
               <FormCard title={t('specialNotes')}>
                 <Textarea
                   placeholder={t('specialNotesPlaceholder')}
-                  value={form.watch('bijzonderheden')}
-                  onChange={e =>
-                    form.setValue('bijzonderheden', e.target.value)
-                  }
+                  value={form.watch('specialNotes')}
+                  onChange={e => form.setValue('specialNotes', e.target.value)}
                   rows={5}
                 />
               </FormCard>

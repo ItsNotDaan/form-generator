@@ -17,11 +17,11 @@ import {
 } from '@/domain/store/slices/formData';
 import {
   PAARTYPE_OPTIES,
-  STEUNZOOL_TYPE_OPTIES,
+  INSOLE_TYPE_OPTIONS,
   CORRECTIE_MIDDENVOET_OPTIES,
   CORRECTIE_VOORVOET_OPTIES,
   PELLOTE_OPTIES,
-  STEUNZOLEN_PRIJS_OPTIES,
+  INSOLE_PRICE_OPTIONS,
   TALONETTE_PRIJS_OPTIES,
 } from '@/lib/constants/formConstants';
 import {ChevronRight} from 'lucide-react';
@@ -52,31 +52,31 @@ import {
 // ---------------------------------------------------------------------------
 const formSchema = z.object({
   // Basic info
-  welkPaar: z.string(),
-  medischeIndicatie: z.string().optional(),
-  schoenmaat: z.string(),
+  whichPair: z.string(),
+  medicalIndication: z.string().optional(),
+  shoeSize: z.string(),
 
   // Talonette fields
-  talonetteEnabled: z.boolean().optional(),
-  talonetteVerhogingLinks: z.string().optional(),
-  talonetteVerhogingRechts: z.string().optional(),
-  talonettePrijs: z.number().optional(),
+  heelRaiseEnabled: z.boolean().optional(),
+  heelRaiseLeft: z.string().optional(),
+  heelRaiseRight: z.string().optional(),
+  heelRaisePrice: z.number().optional(),
 
   // Steunzool fields
-  steunzoolEnabled: z.boolean().optional(),
-  steunzoolTypeGeneral: z.string().optional(),
-  steunzoolAndersText: z.string().optional(),
-  steunzoolCorrectieMiddenvoet: z.string().optional(),
-  steunzoolCorrectieVoorvoet: z.string().optional(),
-  steunzoolVvPellote: z.string().optional(),
-  steunzoolPrijs: z.number().optional(),
-  steunzoolPrijsNaam: z.string().optional(),
+  insoleEnabled: z.boolean().optional(),
+  insoleTypeGeneral: z.string().optional(),
+  insoleOtherText: z.string().optional(),
+  insoleMidfootCorrection: z.string().optional(),
+  insoleForefootCorrection: z.string().optional(),
+  insoleForefootPad: z.string().optional(),
+  insolePrice: z.number().optional(),
+  insolePriceName: z.string().optional(),
 
   // Calculated final price
   finalPrice: z.number().optional(),
 
   // Special notes
-  bijzonderheden: z.string().optional(),
+  specialNotes: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -95,36 +95,36 @@ const FormIntakeSteunzolenPage = () => {
     shouldFocusError: true,
     defaultValues: {
       // Basic info
-      welkPaar: 'Eerste paar',
-      medischeIndicatie: '',
-      schoenmaat: '',
+      whichPair: 'Eerste paar',
+      medicalIndication: '',
+      shoeSize: '',
 
       // Talonette state
-      talonetteEnabled: false,
-      talonetteVerhogingLinks: '',
-      talonetteVerhogingRechts: '',
-      talonettePrijs: TALONETTE_PRIJS_OPTIES[0]?.value || 0,
+      heelRaiseEnabled: false,
+      heelRaiseLeft: '',
+      heelRaiseRight: '',
+      heelRaisePrice: TALONETTE_PRIJS_OPTIES[0]?.value || 0,
 
       // Steunzool defaults
-      steunzoolEnabled: false,
-      steunzoolTypeGeneral: STEUNZOOL_TYPE_OPTIES[0]?.value || '',
-      steunzoolAndersText: '',
-      steunzoolCorrectieMiddenvoet: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
-      steunzoolCorrectieVoorvoet: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
-      steunzoolVvPellote: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
-      steunzoolPrijs: STEUNZOLEN_PRIJS_OPTIES[1]?.value || 0,
-      steunzoolPrijsNaam: '',
+      insoleEnabled: false,
+      insoleTypeGeneral: INSOLE_TYPE_OPTIONS[0]?.value || '',
+      insoleOtherText: '',
+      insoleMidfootCorrection: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      insoleForefootCorrection: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      insoleForefootPad: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      insolePrice: INSOLE_PRICE_OPTIONS[1]?.value || 0,
+      insolePriceName: '',
 
       // Calculated final price
       finalPrice: undefined,
 
       // Special notes
-      bijzonderheden: '',
+      specialNotes: '',
     },
   });
 
   const {clearStorage} = useFormPersistence(
-    'intakeSteunzolen',
+    'intakeInsoles',
     form.watch,
     form.setValue,
   );
@@ -134,18 +134,18 @@ const FormIntakeSteunzolenPage = () => {
     form.reset();
   };
 
-  const steunzoolTypeGeneral = form.watch('steunzoolTypeGeneral');
-  const talonetteEnabled = form.watch('talonetteEnabled');
-  const steunzoolEnabled = form.watch('steunzoolEnabled');
-  const talonettePrijs = form.watch('talonettePrijs');
-  const steunzoolPrijs = form.watch('steunzoolPrijs');
+  const insoleTypeGeneral = form.watch('insoleTypeGeneral');
+  const heelRaiseEnabled = form.watch('heelRaiseEnabled');
+  const insoleEnabled = form.watch('insoleEnabled');
+  const heelRaisePriceValue = form.watch('heelRaisePrice');
+  const insolePriceValue = form.watch('insolePrice');
 
   // Watch values for logic
   const finalPrice = React.useMemo(() => {
-    const talonettePrice = talonetteEnabled ? talonettePrijs || 0 : 0;
-    const steunzoolPrice = steunzoolEnabled ? steunzoolPrijs || 0 : 0;
-    return talonettePrice + steunzoolPrice;
-  }, [talonetteEnabled, talonettePrijs, steunzoolEnabled, steunzoolPrijs]);
+    const heelRaisePrice = heelRaiseEnabled ? heelRaisePriceValue || 0 : 0;
+    const insolePrice = insoleEnabled ? insolePriceValue || 0 : 0;
+    return heelRaisePrice + insolePrice;
+  }, [heelRaiseEnabled, heelRaisePriceValue, insoleEnabled, insolePriceValue]);
 
   // Sync finalPrice to form state so it is available on submit
   React.useEffect(() => {
@@ -154,10 +154,10 @@ const FormIntakeSteunzolenPage = () => {
 
   // Debug
   console.log('Debug values:', {
-    talonetteEnabled,
-    talonettePrijs,
-    steunzoolEnabled,
-    steunzoolPrijs,
+    heelRaiseEnabled,
+    heelRaisePrice: heelRaisePriceValue,
+    insoleEnabled,
+    insolePrice: insolePriceValue,
     finalPrice,
   });
 
@@ -170,48 +170,40 @@ const FormIntakeSteunzolenPage = () => {
     }
 
     //Check if talonette is enabled
-    const talonetteEnabled = !!data.talonetteEnabled;
+    const heelRaiseEnabled = !!data.heelRaiseEnabled;
 
     //Check if steunzool is enabled
-    const steunzoolEnabled = !!data.steunzoolEnabled;
+    const insoleEnabled = !!data.insoleEnabled;
 
     dispatch(
       setIntakeSteunzolenData({
-        welkPaar: data.welkPaar,
-        medischeIndicatie: data.medischeIndicatie || '',
-        schoenmaat: data.schoenmaat,
+        whichPair: data.whichPair,
+        medicalIndication: data.medicalIndication || '',
+        shoeSize: data.shoeSize,
 
         // Talonette logic
-        talonetteEnabled: data.talonetteEnabled,
-        talonetteVerhogingLinks: data.talonetteVerhogingLinks || '',
-        talonetteVerhogingRechts: data.talonetteVerhogingRechts || '',
+        heelRaiseEnabled: data.heelRaiseEnabled,
+        heelRaiseLeft: data.heelRaiseLeft || '',
+        heelRaiseRight: data.heelRaiseRight || '',
 
         // Steunzool fields
-        steunzoolTypeGeneral: steunzoolEnabled
-          ? data.steunzoolTypeGeneral || ''
+        insoleTypeGeneral: insoleEnabled ? data.insoleTypeGeneral || '' : '',
+        insoleOtherText: insoleEnabled ? data.insoleOtherText || '' : '',
+        insoleMidfootCorrection: insoleEnabled
+          ? data.insoleMidfootCorrection || ''
           : '',
-        steunzoolAndersText: steunzoolEnabled
-          ? data.steunzoolAndersText || ''
+        insoleForefootCorrection: insoleEnabled
+          ? data.insoleForefootCorrection || ''
           : '',
-        steunzoolCorrectieMiddenvoet: steunzoolEnabled
-          ? data.steunzoolCorrectieMiddenvoet || ''
-          : '',
-        steunzoolCorrectieVoorvoet: steunzoolEnabled
-          ? data.steunzoolCorrectieVoorvoet || ''
-          : '',
-        steunzoolVvPellote: steunzoolEnabled
-          ? data.steunzoolVvPellote || ''
-          : '',
-        steunzoolPrijs: steunzoolEnabled ? data.steunzoolPrijs : undefined,
-        steunzoolPrijsNaam: steunzoolEnabled
-          ? data.steunzoolPrijsNaam || ''
-          : '',
+        insoleForefootPad: insoleEnabled ? data.insoleForefootPad || '' : '',
+        insolePrice: insoleEnabled ? data.insolePrice : undefined,
+        insolePriceName: insoleEnabled ? data.insolePriceName || '' : '',
 
         // Final Price
         finalPrice: data.finalPrice || 0,
 
         // Special notes
-        bijzonderheden: data.bijzonderheden || '',
+        specialNotes: data.specialNotes || '',
       }),
     );
 
@@ -242,8 +234,8 @@ const FormIntakeSteunzolenPage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -271,9 +263,9 @@ const FormIntakeSteunzolenPage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -287,7 +279,7 @@ const FormIntakeSteunzolenPage = () => {
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormField
                     control={form.control}
-                    name="schoenmaat"
+                    name="shoeSize"
                     render={({field}) => (
                       <FormItem>
                         <FormControl>
@@ -312,9 +304,9 @@ const FormIntakeSteunzolenPage = () => {
                 toggleAble={true}
                 toggleLabel={t('enableTalonette')}
                 toggleId="talonette-toggle"
-                defaultOpen={form.watch('talonetteEnabled')}
+                defaultOpen={form.watch('heelRaiseEnabled')}
                 onToggleChange={isOpen => {
-                  form.setValue('talonetteEnabled', isOpen, {
+                  form.setValue('heelRaiseEnabled', isOpen, {
                     shouldValidate: true,
                     shouldDirty: true,
                   });
@@ -328,9 +320,9 @@ const FormIntakeSteunzolenPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingLinks')}
+                      value={form.watch('heelRaiseLeft')}
                       onChange={e =>
-                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                        form.setValue('heelRaiseLeft', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -342,12 +334,9 @@ const FormIntakeSteunzolenPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingRechts')}
+                      value={form.watch('heelRaiseRight')}
                       onChange={e =>
-                        form.setValue(
-                          'talonetteVerhogingRechts',
-                          e.target.value,
-                        )
+                        form.setValue('heelRaiseRight', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -364,9 +353,9 @@ const FormIntakeSteunzolenPage = () => {
                 toggleAble={true}
                 toggleLabel={t('enableInsoles')}
                 toggleId="steunzolen-toggle"
-                defaultOpen={form.watch('steunzoolEnabled')}
+                defaultOpen={form.watch('insoleEnabled')}
                 onToggleChange={isOpen => {
-                  form.setValue('steunzoolEnabled', isOpen, {
+                  form.setValue('insoleEnabled', isOpen, {
                     shouldValidate: true,
                     shouldDirty: true,
                   });
@@ -377,16 +366,16 @@ const FormIntakeSteunzolenPage = () => {
                   {/* Type Selection */}
                   <FormItemWrapper label={t('insoleType')}>
                     <Select
-                      value={form.watch('steunzoolTypeGeneral') || undefined}
+                      value={form.watch('insoleTypeGeneral') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolTypeGeneral', val)
+                        form.setValue('insoleTypeGeneral', val)
                       }
                     >
                       <SelectTrigger className="w-fit">
                         <SelectValue placeholder={t('insoleType')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {STEUNZOOL_TYPE_OPTIES.map(option => (
+                        {INSOLE_TYPE_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -396,7 +385,7 @@ const FormIntakeSteunzolenPage = () => {
                   </FormItemWrapper>
 
                   {/* Conditional "Other" Textarea (Spans full width if visible) */}
-                  {steunzoolTypeGeneral === 'Anders' && (
+                  {insoleTypeGeneral === 'Anders' && (
                     <FormItemWrapper
                       label={t('specifyOther')}
                       className="col-span-2 pt-2"
@@ -404,9 +393,9 @@ const FormIntakeSteunzolenPage = () => {
                       <Textarea
                         id="steunzool-anders"
                         placeholder={t('specifyPlaceholder')}
-                        value={form.watch('steunzoolAndersText')}
+                        value={form.watch('insoleOtherText')}
                         onChange={e =>
-                          form.setValue('steunzoolAndersText', e.target.value)
+                          form.setValue('insoleOtherText', e.target.value)
                         }
                         rows={2}
                         className="w-2/3 resize-none"
@@ -423,11 +412,9 @@ const FormIntakeSteunzolenPage = () => {
                 >
                   <FormItemWrapper label={t('midfootCorrection')}>
                     <Select
-                      value={
-                        form.watch('steunzoolCorrectieMiddenvoet') || undefined
-                      }
+                      value={form.watch('insoleMidfootCorrection') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolCorrectieMiddenvoet', val)
+                        form.setValue('insoleMidfootCorrection', val)
                       }
                     >
                       <SelectTrigger>
@@ -446,10 +433,10 @@ const FormIntakeSteunzolenPage = () => {
                   <FormItemWrapper label={t('forefootCorrection')}>
                     <Select
                       value={
-                        form.watch('steunzoolCorrectieVoorvoet') || undefined
+                        form.watch('insoleForefootCorrection') || undefined
                       }
                       onValueChange={val =>
-                        form.setValue('steunzoolCorrectieVoorvoet', val)
+                        form.setValue('insoleForefootCorrection', val)
                       }
                     >
                       <SelectTrigger>
@@ -467,9 +454,9 @@ const FormIntakeSteunzolenPage = () => {
 
                   <FormItemWrapper label={t('forefootPad')}>
                     <Select
-                      value={form.watch('steunzoolVvPellote') || undefined}
+                      value={form.watch('insoleForefootPad') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolVvPellote', val)
+                        form.setValue('insoleForefootPad', val)
                       }
                     >
                       <SelectTrigger>
@@ -491,13 +478,13 @@ const FormIntakeSteunzolenPage = () => {
                   <FormItemWrapper label={t('insoleType')}>
                     <Select
                       value={
-                        form.watch('steunzoolPrijs')
-                          ? String(form.watch('steunzoolPrijs'))
+                        form.watch('insolePrice')
+                          ? String(form.watch('insolePrice'))
                           : undefined
                       }
                       onValueChange={val => {
                         const numVal = val ? parseFloat(val) : undefined;
-                        form.setValue('steunzoolPrijs', numVal);
+                        form.setValue('insolePrice', numVal);
 
                         // Optional: If user manually changes price to something else, should Talonette toggle off?
                         // Logic left to you, currently it stays enabled.
@@ -507,7 +494,7 @@ const FormIntakeSteunzolenPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {STEUNZOLEN_PRIJS_OPTIES.map(option => (
+                        {INSOLE_PRICE_OPTIONS.map(option => (
                           <SelectItem
                             key={option.value}
                             value={String(option.value)}
@@ -550,7 +537,7 @@ const FormIntakeSteunzolenPage = () => {
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormField
                     control={form.control}
-                    name="bijzonderheden"
+                    name="specialNotes"
                     render={({field}) => (
                       <FormItem>
                         <FormControl>

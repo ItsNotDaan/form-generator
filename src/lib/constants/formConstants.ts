@@ -34,7 +34,7 @@ export const ZORGVERZEKERAARS = [
 ];
 
 /** Locaties (Locations) */
-export type Locatie = 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | 'Holten' | 'Markelo';
+export type Location = 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | 'Holten' | 'Markelo';
 export const LOCATIE_OPTIES = [
   {label: 'FZ', value: 'FZ'},
   {label: 'FM', value: 'FM'},
@@ -45,16 +45,16 @@ export const LOCATIE_OPTIES = [
   {label: 'Markelo', value: 'Markelo'},
 ];
 
-/** Aanhef (Salutation) */
-export type Aanhef = 'Mw.' | 'Dhr.' | 'X.';
+/** Salutation (Salutation) */
+export type Salutation = 'Mw.' | 'Dhr.' | 'X.';
 export const AANHEF_OPTIES = [
   {label: 'Mw.', value: 'Mw.'},
   {label: 'Dhr.', value: 'Dhr.'},
   {label: 'X.', value: 'X.'},
 ];
 
-/** Zijde (Side) - Generic, used across forms */
-export type Zijde = 'both' | 'left' | 'right';
+/** Side (Side) - Generic, used across forms */
+export type Side = 'both' | 'left' | 'right';
 export const ZIJDE_OPTIES = [
   {label: 'both', value: 'both'},
   {label: 'left', value: 'left'},
@@ -233,7 +233,7 @@ export type Schoenmaat = (typeof SCHOENMATEN)[number];
 // ============================================================================
 
 /** OSA Functieonderzoek - Ziektebeelden (Medical Conditions) */
-export const ZIEKTEBEELDEN_OPTIES = [
+export const PATHOLOGIES_OPTIONS = [
   {key: 'diabetes', label: 'diabetes', translationKey: 'diabetes'},
   {
     key: 'polyNeuropathie',
@@ -438,36 +438,36 @@ export const VERDIEPING_MM_OPTIES = [
 // ============================================================================
 
 /** Steunzool types */
-export type SteunzoolType =
+export type InsoleType =
   | 'Berksteunzool met'
   | 'Berksteunzool zonder'
   | 'Kinderkniksteun'
   | 'Ergopad redux heel'
   | 'Birco'
   | 'Anders';
-export const STEUNZOOL_TYPE_OPTIES = [
+export const INSOLE_TYPE_OPTIONS = [
   {
     label: 'Berksteunzool met',
     value: 'Berksteunzool met',
-    fullKey: 'steunzoolTypeBerksteunzoolMet',
+    fullKey: 'insoleTypeBerksteunzoolMet',
   },
   {
     label: 'Berksteunzool zonder',
     value: 'Berksteunzool zonder',
-    fullKey: 'steunzoolTypeBerksteunzoolZonder',
+    fullKey: 'insoleTypeBerksteunzoolZonder',
   },
   {
     label: 'Kinderkniksteun',
     value: 'Kinderkniksteun',
-    fullKey: 'steunzoolTypeKinderkniksteun',
+    fullKey: 'insoleTypeKinderkniksteun',
   },
   {
     label: 'Ergopad redux heel',
     value: 'Ergopad redux heel',
-    fullKey: 'steunzoolTypeErgopadReduxHeel',
+    fullKey: 'insoleTypeErgopadReduxHeel',
   },
-  {label: 'Birco', value: 'Birco', fullKey: 'steunzoolTypeBirco'},
-  {label: 'Anders', value: 'Anders', fullKey: 'steunzoolTypeAnders'},
+  {label: 'Birco', value: 'Birco', fullKey: 'insoleTypeBirco'},
+  {label: 'Anders', value: 'Anders', fullKey: 'insoleTypeAnders'},
 ];
 
 /** Correctie middenvoet */
@@ -498,14 +498,14 @@ export const PELLOTE_OPTIES = [
 
 /** Steunzolen pricing options - numeric values */
 export type SteunzolenPrijs = 175 | 225 | 195;
-export const STEUNZOLEN_PRIJS_OPTIES = [
+export const INSOLE_PRICE_OPTIONS = [
   {label: 'priceUpTo15Years', value: 175},
   {label: 'insolesPrice225', value: 225},
   {label: 'priceWithin3Months', value: 195},
 ];
 
 /** Talonette pricing */
-export type TalonettePrijs = 29;
+export type HeelRaisePrice = 29;
 export const TALONETTE_PRIJS_OPTIES = [{label: 'priceTalonette', value: 29}];
 
 // ============================================================================

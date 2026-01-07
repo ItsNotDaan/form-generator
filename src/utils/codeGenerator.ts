@@ -131,7 +131,7 @@ export interface GeneratedCodes {
 export interface CodeGenerationResult {
   codes: GeneratedCodes;
   warnings: string[];
-  generalBasiscode: string | null;
+  generalBaseCode: string | null;
 }
 
 interface IntakeFormData {
@@ -141,7 +141,7 @@ interface IntakeFormData {
   intakeRebacare: any | null;
   intakeOSB: any | null;
   intakeOVAC: IntakeOVACData | null;
-  intakeSteunzolen: any | null;
+  intakeInsoles: any | null;
 }
 
 /**
@@ -249,18 +249,18 @@ export function generateCodes(
 ): CodeGenerationResult {
   const codes = initializeCodes();
   const warnings: string[] = [];
-  let generalBasiscode: string | null = null;
+  let generalBaseCode: string | null = null;
 
   if (!clientData) {
     warnings.push('Geen client data gevonden');
-    return {codes, warnings, generalBasiscode};
+    return {codes, warnings, generalBaseCode};
   }
 
   const {intakeType, insurance} = clientData;
 
   if (!intakeType) {
     warnings.push('Intake type is niet geselecteerd');
-    return {codes, warnings, generalBasiscode};
+    return {codes, warnings, generalBaseCode};
   }
 
   // Generate codes based on intake type
@@ -326,67 +326,67 @@ export function generateCodes(
       warnings.push(`Onbekend intake type: ${intakeType}`);
   }
 
-  // Determine generalBasiscode (codes 1-8 for VLOS/OSA)
+  // Determine generalBaseCode (codes 1-8 for VLOS/OSA)
   if (codes.code01) {
-    generalBasiscode = '1';
+    generalBaseCode = '1';
   } else if (codes.code02) {
-    generalBasiscode = '2';
+    generalBaseCode = '2';
   } else if (codes.code03) {
-    generalBasiscode = '3';
+    generalBaseCode = '3';
   } else if (codes.code04) {
-    generalBasiscode = '4';
+    generalBaseCode = '4';
   } else if (codes.code05) {
-    generalBasiscode = '5';
+    generalBaseCode = '5';
   } else if (codes.code06) {
-    generalBasiscode = '6';
+    generalBaseCode = '6';
   } else if (codes.code07) {
-    generalBasiscode = '7';
+    generalBaseCode = '7';
   } else if (codes.code08) {
-    generalBasiscode = '8';
+    generalBaseCode = '8';
   }
 
-  // Determine generalBasiscode for OSB (always 42, add DSW text)
+  // Determine generalBaseCode for OSB (always 42, add DSW text)
   if (intakeType === 'OSB') {
     if (codes.code42) {
       const insuranceLower = (insurance || '').toLowerCase();
       if (insuranceLower === 'dsw') {
-        generalBasiscode = '42 - Administratie zelf opbouwen!';
+        generalBaseCode = '42 - Administratie zelf opbouwen!';
       } else {
-        generalBasiscode = '42';
+        generalBaseCode = '42';
       }
     }
   }
 
-  // Determine generalBasiscode for OVAC (70 and variants by insurer)
+  // Determine generalBaseCode for OVAC (70 and variants by insurer)
   if (intakeType === 'OVAC') {
     const insuranceLower = (insurance || '').toLowerCase();
     const hasAny70 = codes.code70 || codes.code70Links || codes.code70Rechts;
     if (hasAny70) {
       if (insuranceLower === 'caresq') {
-        // No main code for Caresq; leave generalBasiscode as-is
+        // No main code for Caresq; leave generalBaseCode as-is
       } else if (
         ['asr', 'menzis', 'onvz', 'salland'].includes(insuranceLower)
       ) {
         // Side-specific main code representation
         if (codes.code70Links && !codes.code70Rechts) {
-          generalBasiscode = '70 L';
+          generalBaseCode = '70 L';
         } else if (codes.code70Rechts && !codes.code70Links) {
-          generalBasiscode = '70 R';
+          generalBaseCode = '70 R';
         } else {
           // Both sides or unified 70
-          generalBasiscode = '70';
+          generalBaseCode = '70';
         }
       } else if (insuranceLower === 'dsw') {
         // DSW requires special note inline with the main code
-        generalBasiscode = '70 - Administratie zelf opbouwen!';
+        generalBaseCode = '70 - Administratie zelf opbouwen!';
       } else {
         // Default: single 70
-        generalBasiscode = '70';
+        generalBaseCode = '70';
       }
     }
   }
 
-  return {codes, warnings, generalBasiscode};
+  return {codes, warnings, generalBaseCode};
 }
 
 // ==================================================
@@ -411,10 +411,10 @@ function generateVLOSCodes(
   warnings: string[],
   insurance: string,
 ): void {
-  const {side, welkPaar} = vlos;
+  const {side, whichPair} = vlos;
 
   // Determine if it's eerste paar. Needed for the main code selection.
-  const isEerste = welkPaar === 'Eerste paar' || welkPaar === 'Privepaar';
+  const isEerste = whichPair === 'Eerste paar' || whichPair === 'Privepaar';
 
   // Determine which sides are active
   const hasLinks = side === 'left' || side === 'both';
@@ -430,27 +430,27 @@ function generateVLOSCodes(
   }
 
   // Code 15: Zoolverstijving
-  if (vlos.zoolverstijvingEnabled) {
-    if (vlos.zoolverstijvingLinks) {
+  if (vlos.soleReinforcementEnabled) {
+    if (vlos.soleReinforcementLeft) {
       codes.code15Links = true;
     }
-    if (vlos.zoolverstijvingRechts) {
+    if (vlos.soleReinforcementRight) {
       codes.code15Rechts = true;
     }
   }
 
   // Code 16: Ezelsoor
-  if (vlos.ezelsoorLinksEnabled) {
+  if (vlos.donkeyEarLeftEnabled) {
     codes.code16Links = true;
-    if (!vlos.ezelsoorLinksType) {
+    if (!vlos.donkeyEarLeftType) {
       warnings.push(
         'Ezelsoor links is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
     }
   }
-  if (vlos.ezelsoorRechtsEnabled) {
+  if (vlos.donkeyEarRightEnabled) {
     codes.code16Rechts = true;
-    if (!vlos.ezelsoorRechtsType) {
+    if (!vlos.donkeyEarRightType) {
       warnings.push(
         'Ezelsoor rechts is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
@@ -458,23 +458,23 @@ function generateVLOSCodes(
   }
 
   // Code 17: Koker tussen voering (any omsluiting)
-  if (hasOmsluiting(vlos.omsluitingLinks)) {
+  if (hasOmsluiting(vlos.enclosureLeft)) {
     codes.code17Links = true;
   }
-  if (hasOmsluiting(vlos.omsluitingRechts)) {
+  if (hasOmsluiting(vlos.enclosureRight)) {
     codes.code17Rechts = true;
   }
 
   // Code 50: Diverse Amputaties
-  if (vlos.amputatieLinksEnabled) {
+  if (vlos.amputationLeftEnabled) {
     codes.code50Links = true;
   }
-  if (vlos.amputatieRechtsEnabled) {
+  if (vlos.amputationRightEnabled) {
     codes.code50Rechts = true;
   }
 
   // Validation warnings
-  if (!welkPaar) {
+  if (!whichPair) {
     warnings.push('VLOS welk paar (paartype) is niet ingevuld');
   }
 }
@@ -506,16 +506,16 @@ function generateOSACodes(
   warnings: string[],
   insurance: string,
 ): void {
-  const {side, welkPaar, schachthoogteLinks, schachthoogteRechts} = osa;
-  const isEerste = welkPaar === 'Eerste paar' || welkPaar === 'Privepaar';
+  const {side, whichPair, shaftHeightLeft, shaftHeightRight} = osa;
+  const isEerste = whichPair === 'Eerste paar' || whichPair === 'Privepaar';
 
   // Determine which sides are active
   const hasLinks = side === 'left' || side === 'both';
   const hasRechts = side === 'right' || side === 'both';
 
   // Parse schachthoogte values
-  const heightLinks = parseFloat(schachthoogteLinks || '0') || 0;
-  const heightRechts = parseFloat(schachthoogteRechts || '0') || 0;
+  const heightLinks = parseFloat(shaftHeightLeft || '0') || 0;
+  const heightRechts = parseFloat(shaftHeightRight || '0') || 0;
 
   // Determine OSA type based on schachthoogte
   // < 12cm = laag (codes 3/4)
@@ -546,27 +546,27 @@ function generateOSACodes(
   }
 
   // Code 15: Zoolverstijving
-  if (osa.zoolverstijvingEnabled) {
-    if (osa.zoolverstijvingLinks) {
+  if (osa.soleReinforcementEnabled) {
+    if (osa.soleReinforcementLeft) {
       codes.code15Links = true;
     }
-    if (osa.zoolverstijvingRechts) {
+    if (osa.soleReinforcementRight) {
       codes.code15Rechts = true;
     }
   }
 
   // Code 16: Ezelsoor
-  if (osa.ezelsoorLinksEnabled) {
+  if (osa.donkeyEarLeftEnabled) {
     codes.code16Links = true;
-    if (!osa.ezelsoorLinksType) {
+    if (!osa.donkeyEarLeftType) {
       warnings.push(
         'Ezelsoor links is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
     }
   }
-  if (osa.ezelsoorRechtsEnabled) {
+  if (osa.donkeyEarRightEnabled) {
     codes.code16Rechts = true;
-    if (!osa.ezelsoorRechtsType) {
+    if (!osa.donkeyEarRightType) {
       warnings.push(
         'Ezelsoor rechts is enabled maar type (mediaal/lateraal) is niet geselecteerd',
       );
@@ -574,18 +574,18 @@ function generateOSACodes(
   }
 
   // Code 17: Koker tussen voering (any omsluiting)
-  if (hasOmsluiting(osa.omsluitingLinks)) {
+  if (hasOmsluiting(osa.enclosureLeft)) {
     codes.code17Links = true;
   }
-  if (hasOmsluiting(osa.omsluitingRechts)) {
+  if (hasOmsluiting(osa.enclosureRight)) {
     codes.code17Rechts = true;
   }
 
   // Code 50: Diverse Amputaties
-  if (osa.amputatieLinksEnabled) {
+  if (osa.amputationLeftEnabled) {
     codes.code50Links = true;
   }
-  if (osa.amputatieRechtsEnabled) {
+  if (osa.amputationRightEnabled) {
     codes.code50Rechts = true;
   }
 
@@ -604,7 +604,7 @@ function generateOSACodes(
   }
 
   // Validation warnings
-  if (!welkPaar) {
+  if (!whichPair) {
     warnings.push('OSA welk paar (paartype) is niet ingevuld');
   }
 }
@@ -640,19 +640,19 @@ function generateOSBCodes(
   let hasAnyRightCode = false;
 
   // Supplement Individueel (code 43)
-  if (osb.supplementIndividueelLinks) {
+  if (osb.customInsoleIndividualLeft) {
     codes.code43Links = true;
     hasAnyLeftCode = true;
   }
-  if (osb.supplementIndividueelRechts) {
+  if (osb.customInsoleIndividualRight) {
     codes.code43Rechts = true;
     hasAnyRightCode = true;
   }
 
   // Afwikkelrol: Determine code 46 (eenvoudig) or 47 (gecompliceerd) based on cm value
   // < 1cm = eenvoudig (46), >= 1cm = gecompliceerd (47)
-  if (osb.afwikkelrolCmLinks && osb.afwikkelrolCmLinks.trim() !== '') {
-    const cmValue = parseFloat(osb.afwikkelrolCmLinks);
+  if (osb.rockerRollCmLeft && osb.rockerRollCmLeft.trim() !== '') {
+    const cmValue = parseFloat(osb.rockerRollCmLeft);
     if (!isNaN(cmValue) && cmValue > 0) {
       if (cmValue < 1) {
         codes.code46Links = true;
@@ -662,8 +662,8 @@ function generateOSBCodes(
       hasAnyLeftCode = true;
     }
   }
-  if (osb.afwikkelrolCmRechts && osb.afwikkelrolCmRechts.trim() !== '') {
-    const cmValue = parseFloat(osb.afwikkelrolCmRechts);
+  if (osb.rockerRollCmRight && osb.rockerRollCmRight.trim() !== '') {
+    const cmValue = parseFloat(osb.rockerRollCmRight);
     if (!isNaN(cmValue) && cmValue > 0) {
       if (cmValue < 1) {
         codes.code46Rechts = true;
@@ -675,11 +675,11 @@ function generateOSBCodes(
   }
 
   // Zoolverstijving (code 57)
-  if (osb.zoolverstijvingLinks) {
+  if (osb.soleReinforcementLeft) {
     codes.code57Links = true;
     hasAnyLeftCode = true;
   }
-  if (osb.zoolverstijvingRechts) {
+  if (osb.soleReinforcementRight) {
     codes.code57Rechts = true;
     hasAnyRightCode = true;
   }
@@ -745,8 +745,8 @@ function generateOVACCodes(
 
   // Afwikkelrol: Determine code 74 or 75 based on cm value
   // < 1cm = eenvoudig (74), >= 1cm = gecompliceerd (75)
-  if (ovac.afwikkelrolCmLinks && ovac.afwikkelrolCmLinks.trim() !== '') {
-    const cmValue = parseFloat(ovac.afwikkelrolCmLinks);
+  if (ovac.rockerRollCmLeft && ovac.rockerRollCmLeft.trim() !== '') {
+    const cmValue = parseFloat(ovac.rockerRollCmLeft);
     if (!isNaN(cmValue) && cmValue > 0) {
       if (cmValue < 1) {
         codes.code74Links = true; // Eenvoudige afwikkelrol
@@ -757,8 +757,8 @@ function generateOVACCodes(
     }
   }
 
-  if (ovac.afwikkelrolCmRechts && ovac.afwikkelrolCmRechts.trim() !== '') {
-    const cmValue = parseFloat(ovac.afwikkelrolCmRechts);
+  if (ovac.rockerRollCmRight && ovac.rockerRollCmRight.trim() !== '') {
+    const cmValue = parseFloat(ovac.rockerRollCmRight);
     if (!isNaN(cmValue) && cmValue > 0) {
       if (cmValue < 1) {
         codes.code74Rechts = true; // Eenvoudige afwikkelrol
@@ -772,10 +772,10 @@ function generateOVACCodes(
   // Hakzool verhoging: Determine code 76, 77, or 78 based on cm value
   // < 2cm = 76, 2-3cm = 77, 3-7cm = 78
   if (
-    ovac.hakzoolVerhogingCmLinks &&
-    ovac.hakzoolVerhogingCmLinks.trim() !== ''
+    ovac.heelSoleElevationCmLeft &&
+    ovac.heelSoleElevationCmLeft.trim() !== ''
   ) {
-    const cmValue = parseFloat(ovac.hakzoolVerhogingCmLinks);
+    const cmValue = parseFloat(ovac.heelSoleElevationCmLeft);
     if (!isNaN(cmValue) && cmValue > 0) {
       if (cmValue < 2) {
         codes.code76Links = true; // Hak aanpassing t/m 2cm
@@ -789,10 +789,10 @@ function generateOVACCodes(
   }
 
   if (
-    ovac.hakzoolVerhogingCmRechts &&
-    ovac.hakzoolVerhogingCmRechts.trim() !== ''
+    ovac.heelSoleElevationCmRight &&
+    ovac.heelSoleElevationCmRight.trim() !== ''
   ) {
-    const cmValue = parseFloat(ovac.hakzoolVerhogingCmRechts);
+    const cmValue = parseFloat(ovac.heelSoleElevationCmRight);
     if (!isNaN(cmValue) && cmValue > 0) {
       if (cmValue < 2) {
         codes.code76Rechts = true; // Hak aanpassing t/m 2cm
@@ -839,7 +839,7 @@ function generateOVACCodes(
       // Use single code 70 if any subcode is present
       codes.code70 = true;
 
-      // DSW: main code text handled via generalBasiscode downstream
+      // DSW: main code text handled via generalBaseCode downstream
     }
   }
 }

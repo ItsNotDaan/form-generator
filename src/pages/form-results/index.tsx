@@ -100,8 +100,8 @@ const FormResultsPage = () => {
     if (formData.intakeOVAC) {
       result.intakeOVAC = normalizeObject(formData.intakeOVAC);
     }
-    if (formData.intakeSteunzolen) {
-      result.intakeSteunzolen = normalizeObject(formData.intakeSteunzolen);
+    if (formData.intakeInsoles) {
+      result.intakeInsoles = normalizeObject(formData.intakeInsoles);
     }
 
     // Generate medical codes if applicable
@@ -109,7 +109,7 @@ const FormResultsPage = () => {
       formData.client &&
       (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)
     ) {
-      const {codes, warnings, generalBasiscode} = generateCodes(
+      const {codes, warnings, generalBaseCode} = generateCodes(
         formData.client,
         {
           intakeVLOS: formData.intakeVLOS,
@@ -118,23 +118,23 @@ const FormResultsPage = () => {
           intakeRebacare: formData.intakeRebacare,
           intakeOSB: formData.intakeOSB,
           intakeOVAC: formData.intakeOVAC,
-          intakeSteunzolen: formData.intakeSteunzolen,
+          intakeInsoles: formData.intakeInsoles,
         },
       );
 
       // Group normalized codes under medicalCodes object
       result.medicalCodes = normalizeObject(codes);
 
-      // Add generalBasiscode to the appropriate intake data
-      if (generalBasiscode) {
+      // Add generalBaseCode to the appropriate intake data
+      if (generalBaseCode) {
         if (formData.intakeVLOS && result.intakeVLOS) {
-          result.intakeVLOS.generalBasiscode = generalBasiscode;
+          result.intakeVLOS.generalBaseCode = generalBaseCode;
         }
         if (formData.intakeOSA && result.intakeOSA) {
-          result.intakeOSA.generalBasiscode = generalBasiscode;
+          result.intakeOSA.generalBaseCode = generalBaseCode;
         }
         if (formData.intakeOSB && result.intakeOSB) {
-          result.intakeOSB.generalBasiscode = generalBasiscode;
+          result.intakeOSB.generalBaseCode = generalBaseCode;
         }
       }
 
@@ -154,10 +154,15 @@ const FormResultsPage = () => {
   const codeWarnings = jsonData.codeWarnings as string[] | undefined;
 
   const handleCopyJSON = () => {
-    navigator.clipboard.writeText(jsonString).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    navigator.clipboard
+      .writeText(jsonString)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        // Handle clipboard error silently
+      });
   };
 
   const renderFieldValue = (label: string, value: any) => {
@@ -179,7 +184,9 @@ const FormResultsPage = () => {
         centerTitle={false}
         label={label}
       >
-        <p className="text-md text-foreground break-words">{displayValue}</p>
+        <p className="text-md text-foreground wrap-break-word">
+          {displayValue}
+        </p>
       </FormItemWrapper>
     );
   };
@@ -290,8 +297,8 @@ const FormResultsPage = () => {
                   renderSection(t('intakeOsb'), formData.intakeOSB)}
                 {formData.intakeOVAC &&
                   renderSection(t('intakeOvac'), formData.intakeOVAC)}
-                {formData.intakeSteunzolen &&
-                  renderSection(t('intakeInsoles'), formData.intakeSteunzolen)}
+                {formData.intakeInsoles &&
+                  renderSection(t('intakeInsoles'), formData.intakeInsoles)}
               </FormCard>
 
               {/* De volledige JSON output */}
@@ -307,7 +314,7 @@ const FormResultsPage = () => {
                   centerTitle={false}
                   label={t('jsonOutput')}
                 >
-                  <pre className="p-4 bg-gray-50 rounded-md border border-gray-200 max-h-[500px] overflow-y-auto text-sm whitespace-pre-wrap break-words font-mono">
+                  <pre className="p-4 bg-gray-50 rounded-md border border-gray-200 max-h-125 overflow-y-auto text-sm whitespace-pre-wrap wrap-break-word font-mono">
                     {jsonString}
                   </pre>
                 </FormItemWrapper>

@@ -38,12 +38,12 @@ import {
   EZELSOOR_TYPE_OPTIES,
   JA_NEE_OPTIES,
   PAARTYPE_OPTIES,
-  ZIEKTEBEELDEN_OPTIES,
+  PATHOLOGIES_OPTIONS,
   LOOPAFSTAND_OPTIES,
   INSPECTIE_VOETEN_OPTIES,
   LEESTHOOGTE_OPTIES,
   MTP1_DIEP_OPTIES,
-  Zijde,
+  Side,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
@@ -77,19 +77,19 @@ const FormIntakeOSAPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
-    welkPaar: z.string(),
-    medischeIndicatie: z.string().optional(),
+    whichPair: z.string(),
+    medicalIndication: z.string().optional(),
 
     side: z.enum(['left', 'right', 'both'] as const),
-    schachthoogteLinks: z.string().optional(),
-    schachthoogteRechts: z.string().optional(),
-    amputatieLinksEnabled: z.boolean(),
-    amputatieRechtsEnabled: z.boolean(),
-    bijzonderheden: z.string().optional(),
+    shaftHeightLeft: z.string().optional(),
+    shaftHeightRight: z.string().optional(),
+    amputationLeftEnabled: z.boolean(),
+    amputationRightEnabled: z.boolean(),
+    specialNotes: z.string().optional(),
 
     // Functieonderzoek fields
-    ziektebeelden: z.record(z.string(), z.boolean()),
-    loopafstandAids: z.record(z.string(), z.boolean()),
+    pathologies: z.record(z.string(), z.boolean()),
+    walkingDistanceAids: z.record(z.string(), z.boolean()),
     painPerception: z.string().optional(),
     footInspection: z.record(z.string(), z.boolean()),
 
@@ -111,17 +111,17 @@ const FormIntakeOSAPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      welkPaar: PAARTYPE_OPTIES[0]?.value || '',
+      whichPair: PAARTYPE_OPTIES[0]?.value || '',
       side: 'both',
-      medischeIndicatie: '',
-      schachthoogteLinks: '12.5',
-      schachthoogteRechts: '12.5',
-      amputatieLinksEnabled: false,
-      amputatieRechtsEnabled: false,
-      bijzonderheden: '',
+      medicalIndication: '',
+      shaftHeightLeft: '12.5',
+      shaftHeightRight: '12.5',
+      amputationLeftEnabled: false,
+      amputationRightEnabled: false,
+      specialNotes: '',
       // Functieonderzoek defaults
-      ziektebeelden: {},
-      loopafstandAids: {},
+      pathologies: {},
+      walkingDistanceAids: {},
       painPerception: '0',
       footInspection: {},
       // Digitaal defaults
@@ -166,53 +166,56 @@ const FormIntakeOSAPage = () => {
 
     dispatch(
       setIntakeOSAData({
-        welkPaar: data.welkPaar,
-        medischeIndicatie: data.medischeIndicatie || '',
+        whichPair: data.whichPair,
+        medicalIndication: data.medicalIndication || '',
         side: data.side,
-        schachthoogteLinks: data.schachthoogteLinks || '',
-        schachthoogteRechts: data.schachthoogteRechts || '',
+        shaftHeightLeft: data.shaftHeightLeft || '',
+        shaftHeightRight: data.shaftHeightRight || '',
         // Neutral defaults for fields moved to Foliepas to satisfy typing
-        omsluitingLinks: {},
-        omsluitingRechts: {},
-        omsluitingLinksMm: {},
-        omsluitingRechtsMm: {},
-        supplementschoringLinksEnabled: false,
-        supplementschoringRechtsEnabled: false,
-        supplementschoringLinksType: '',
-        supplementschoringRechtsType: '',
-        zoolverstijvingEnabled: false,
-        zoolverstijvingLinks: false,
-        zoolverstijvingRechts: false,
-        sluitingType: '',
-        inschotpunt: '',
-        openstandSchacht: '',
-        tongpolsterEnabled: false,
-        tongVaststikkenEnabled: false,
-        haksoortLinks: '',
-        haksoortRechts: '',
-        hakhoogteLinks: '',
-        hakhoogteRechts: '',
-        hakschoringLinksEnabled: false,
-        hakschoringRechtsEnabled: false,
-        hakschoringLinksType: '',
-        hakschoringRechtsType: '',
-        ezelsoorLinksEnabled: false,
-        ezelsoorRechtsEnabled: false,
-        ezelsoorLinksType: '',
-        ezelsoorRechtsType: '',
-        amputatieLinksEnabled: data.amputatieLinksEnabled,
-        amputatieRechtsEnabled: data.amputatieRechtsEnabled,
-        hakafrondingLinksEnabled: false,
-        hakafrondingRechtsEnabled: false,
-        hakafrondingLinksHoogte: '',
-        hakafrondingLinksLengte: '',
-        hakafrondingRechtsHoogte: '',
-        hakafrondingRechtsLengte: '',
-        loopzoolType: '',
-        bijzonderheden: data.bijzonderheden || '',
+        enclosureLeft: {},
+        enclosureRight: {},
+        enclosureLeftMm: {},
+        enclosureRightMm: {},
+        customInsoleShoringLeftEnabled: false,
+        customInsoleShoringRightEnabled: false,
+        customInsoleShoringLeftType: '',
+        customInsoleShoringRightType: '',
+        soleReinforcementEnabled: false,
+        soleReinforcementLeft: false,
+        soleReinforcementRight: false,
+        closureType: '',
+        entryPoint: '',
+        shaftOpeningWidth: '',
+        tonguePaddingEnabled: false,
+        fixedTongueEnabled: false,
+        heelTypeLeft: '',
+        heelTypeRight: '',
+        heelHeightLeft: '',
+        heelHeightRight: '',
+        heelWedgeLeftEnabled: false,
+        heelWedgeRightEnabled: false,
+        heelWedgeLeftType: '',
+        heelWedgeRightType: '',
+        donkeyEarLeftEnabled: false,
+        donkeyEarRightEnabled: false,
+        donkeyEarLeftType: '',
+        donkeyEarRightType: '',
+        amputationLeftEnabled: data.amputationLeftEnabled,
+        amputationRightEnabled: data.amputationRightEnabled,
+        heelRoundingLeftEnabled: false,
+        heelRoundingRightEnabled: false,
+        heelRoundingLeftHeight: '',
+        heelRoundingLeftLength: '',
+        heelRoundingRightHeight: '',
+        heelRoundingRightLength: '',
+        rockerSoleType: '',
+        specialNotes: data.specialNotes || '',
         // Functieonderzoek fields
-        ziektebeelden: data.ziektebeelden as Record<string, boolean>,
-        loopafstandAids: data.loopafstandAids as Record<string, boolean>,
+        pathologies: data.pathologies as Record<string, boolean>,
+        walkingDistanceAids: data.walkingDistanceAids as Record<
+          string,
+          boolean
+        >,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
         // Leg length moved to Foliepas
@@ -259,8 +262,8 @@ const FormIntakeOSAPage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -288,9 +291,9 @@ const FormIntakeOSAPage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -349,9 +352,9 @@ const FormIntakeOSAPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-left"
-                          checked={form.watch('amputatieLinksEnabled')}
+                          checked={form.watch('amputationLeftEnabled')}
                           onCheckedChange={checked =>
-                            form.setValue('amputatieLinksEnabled', !!checked)
+                            form.setValue('amputationLeftEnabled', !!checked)
                           }
                         />
                         <Label
@@ -364,9 +367,9 @@ const FormIntakeOSAPage = () => {
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="amp-right"
-                          checked={form.watch('amputatieRechtsEnabled')}
+                          checked={form.watch('amputationRightEnabled')}
                           onCheckedChange={checked =>
-                            form.setValue('amputatieRechtsEnabled', !!checked)
+                            form.setValue('amputationRightEnabled', !!checked)
                           }
                         />
                         <Label
@@ -393,7 +396,7 @@ const FormIntakeOSAPage = () => {
                   dividers={false}
                   centerTitle={true}
                 >
-                  {ZIEKTEBEELDEN_OPTIES.map(optie => (
+                  {PATHOLOGIES_OPTIONS.map(optie => (
                     <Label
                       key={optie.key}
                       className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
@@ -401,12 +404,12 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`ziektebeeld-${optie.key}`}
                         checked={
-                          (form.watch('ziektebeelden')[optie.key] as boolean) ||
+                          (form.watch('pathologies')[optie.key] as boolean) ||
                           false
                         }
                         onCheckedChange={checked =>
-                          form.setValue('ziektebeelden', {
-                            ...form.getValues('ziektebeelden'),
+                          form.setValue('pathologies', {
+                            ...form.getValues('pathologies'),
                             [optie.key]: !!checked,
                           })
                         }
@@ -436,13 +439,13 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`loopafstand-${optie.key}`}
                         checked={
-                          (form.watch('loopafstandAids')[
+                          (form.watch('walkingDistanceAids')[
                             optie.key
                           ] as boolean) || false
                         }
                         onCheckedChange={checked =>
-                          form.setValue('loopafstandAids', {
-                            ...form.getValues('loopafstandAids'),
+                          form.setValue('walkingDistanceAids', {
+                            ...form.getValues('walkingDistanceAids'),
                             [optie.key]: !!checked,
                           })
                         }
@@ -530,9 +533,9 @@ const FormIntakeOSAPage = () => {
                         id="shaft-left"
                         type="number"
                         placeholder={t('cmPlaceholder')}
-                        value={form.watch('schachthoogteLinks')}
+                        value={form.watch('shaftHeightLeft')}
                         onChange={e =>
-                          form.setValue('schachthoogteLinks', e.target.value)
+                          form.setValue('shaftHeightLeft', e.target.value)
                         }
                         className="w-2/3 text-center"
                       />
@@ -545,9 +548,9 @@ const FormIntakeOSAPage = () => {
                         id="shaft-right"
                         type="number"
                         placeholder={t('cmPlaceholder')}
-                        value={form.watch('schachthoogteRechts')}
+                        value={form.watch('shaftHeightRight')}
                         onChange={e =>
-                          form.setValue('schachthoogteRechts', e.target.value)
+                          form.setValue('shaftHeightRight', e.target.value)
                         }
                         className="w-2/3 text-center"
                       />
@@ -556,9 +559,7 @@ const FormIntakeOSAPage = () => {
                 </FormBlock>
               </FormCard>
 
-              {/* 
-                   DIGITAAL SECTION
-                */}
+              {/* DIGITAAL SECTION */}
               <FormCard
                 title={t('digital')}
                 description={t('digitalDescription')}
@@ -608,8 +609,12 @@ const FormIntakeOSAPage = () => {
                 </FormBlock>
 
                 {/* 3-koloms Radio Groups */}
-                <FormBlock columns={3} dividers={true}>
-                  <FormItemWrapper>
+                <FormBlock
+                  columns={3}
+                  dividers={true}
+                  className="justify-center"
+                >
+                  <FormItemWrapper className="flex flex-col items-center">
                     <Label className="text-base font-semibold">
                       {t('lastHeight')}
                     </Label>
@@ -617,7 +622,7 @@ const FormIntakeOSAPage = () => {
                       value={form.watch('lastHeight')}
                       onValueChange={v => form.setValue('lastHeight', v)}
                     >
-                      <div className="flex flex-wrap gap-3 pt-2">
+                      <div className="flex flex-wrap gap-3 pt-2 justify-center">
                         {LEESTHOOGTE_OPTIES.map(opt => (
                           <div
                             key={opt.value}
@@ -639,7 +644,7 @@ const FormIntakeOSAPage = () => {
                     </RadioGroup>
                   </FormItemWrapper>
 
-                  <FormItemWrapper>
+                  <FormItemWrapper className="flex flex-col items-center">
                     <Label className="text-base font-semibold">
                       {t('clawToes')}
                     </Label>
@@ -649,7 +654,7 @@ const FormIntakeOSAPage = () => {
                         form.setValue('clawToesEnabled', stringToBool(v))
                       }
                     >
-                      <div className="flex flex-wrap gap-3 pt-2">
+                      <div className="flex flex-wrap gap-3 pt-2 justify-center">
                         {JA_NEE_OPTIES.map(opt => (
                           <div
                             key={opt.value}
@@ -671,7 +676,7 @@ const FormIntakeOSAPage = () => {
                     </RadioGroup>
                   </FormItemWrapper>
 
-                  <FormItemWrapper>
+                  <FormItemWrapper className="flex flex-col items-center">
                     <Label className="text-base font-semibold">
                       {t('scannedWithFoil')}
                     </Label>
@@ -681,7 +686,7 @@ const FormIntakeOSAPage = () => {
                         form.setValue('scannedWithFoil', stringToBool(v))
                       }
                     >
-                      <div className="flex flex-wrap gap-3 pt-2">
+                      <div className="flex flex-wrap gap-3 pt-2 justify-center">
                         {JA_NEE_OPTIES.map(opt => (
                           <div
                             key={opt.value}
@@ -781,9 +786,9 @@ const FormIntakeOSAPage = () => {
                 <CardContent>
                   <Textarea
                     placeholder={t('specialNotesPlaceholder')}
-                    value={form.watch('bijzonderheden')}
+                    value={form.watch('specialNotes')}
                     onChange={e =>
-                      form.setValue('bijzonderheden', e.target.value)
+                      form.setValue('specialNotes', e.target.value)
                     }
                     rows={5}
                     className="resize-none"

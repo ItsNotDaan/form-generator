@@ -20,7 +20,7 @@ import {
   setClientData,
 } from '@/domain/store/slices/formData';
 import {
-  Zijde,
+  Side,
   PULMAN_TYPE_OPTIES,
   SCHOENMATEN,
   PAARTYPE_OPTIES,
@@ -56,14 +56,14 @@ const FormIntakePulmanPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
-    welkPaar: z.string(),
+    whichPair: z.string(),
     side: z.enum(['left', 'right', 'both'] as const),
-    medischeIndicatie: z.string().optional(),
-    gezwachteld: z.boolean(),
-    typePulman: z.string().optional(),
-    schoenmaat: z.string().optional(),
-    afgegevenMaat: z.string().optional(),
-    bijzonderheden: z.string().optional(),
+    medicalIndication: z.string().optional(),
+    bandagedFoot: z.boolean(),
+    pulmanType: z.string().optional(),
+    shoeSize: z.string().optional(),
+    providedSize: z.string().optional(),
+    specialNotes: z.string().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -72,14 +72,14 @@ const FormIntakePulmanPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      welkPaar: 'Eerste paar',
+      whichPair: 'Eerste paar',
       side: 'both',
-      medischeIndicatie: '',
-      gezwachteld: false,
-      typePulman: '',
-      schoenmaat: '',
-      afgegevenMaat: '',
-      bijzonderheden: '',
+      medicalIndication: '',
+      bandagedFoot: false,
+      pulmanType: '',
+      shoeSize: '',
+      providedSize: '',
+      specialNotes: '',
     },
   });
 
@@ -94,23 +94,23 @@ const FormIntakePulmanPage = () => {
     form.reset();
   };
 
-  const gezwachteld = form.watch('gezwachteld');
-  const schoenmaat = form.watch('schoenmaat');
-  const afgegevenMaat = form.watch('afgegevenMaat');
+  const bandagedFoot = form.watch('bandagedFoot');
+  const shoeSize = form.watch('shoeSize');
+  const providedSize = form.watch('providedSize');
 
   useEffect(() => {
-    if (gezwachteld) {
-      form.setValue('typePulman', 'Harlem Extra');
-      // Only auto-set afgegevenMaat if gezwachteld is checked, schoenmaat is selected, and afgegevenMaat is empty
-      if (schoenmaat && !afgegevenMaat) {
-        // Try to parse schoenmaat as a number and add 2
-        const schoenmaatNum = parseInt(schoenmaat, 10);
-        if (!isNaN(schoenmaatNum)) {
-          form.setValue('afgegevenMaat', String(schoenmaatNum + 2));
+    if (bandagedFoot) {
+      form.setValue('pulmanType', 'Harlem Extra');
+      // Only auto-set providedSize if bandagedFoot is checked, shoeSize is selected, and providedSize is empty
+      if (shoeSize && !providedSize) {
+        // Try to parse shoeSize as a number and add 2
+        const shoeSizeNum = parseInt(shoeSize, 10);
+        if (!isNaN(shoeSizeNum)) {
+          form.setValue('providedSize', String(shoeSizeNum + 2));
         }
       }
     }
-  }, [gezwachteld, schoenmaat, afgegevenMaat, form]);
+  }, [bandagedFoot, shoeSize, providedSize, form]);
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
@@ -145,8 +145,8 @@ const FormIntakePulmanPage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -174,9 +174,9 @@ const FormIntakePulmanPage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -230,25 +230,25 @@ const FormIntakePulmanPage = () => {
                     <FormLabel>{t('bandaged')}</FormLabel>
                     <FormField
                       control={form.control}
-                      name="gezwachteld"
+                      name="bandagedFoot"
                       render={({field}) => (
                         <FormItem className="flex flex-col items-center">
                           <FormControl>
                             <div className="flex flex-col-2 items-center justify-center space-x-2">
                               <Switch
-                                id="gezwachteld-switch"
+                                id="bandagedFoot-switch"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
                               />
                               <Label
-                                htmlFor="gezwachteld-switch"
+                                htmlFor="bandagedFoot-switch"
                                 className="font-normal cursor-pointer"
                               >
                                 {field.value ? t('yes') : t('no')}
                               </Label>
                             </div>
                           </FormControl>
-                          {gezwachteld && (
+                          {bandagedFoot && (
                             <div className="flex flex-row items-center rounded-md p-3 gap-2 bg-primary/10 w-2/3">
                               <Info className="h-20 w-20 mt-0.5 text-primary" />
                               <p className="text-sm text-foreground">
@@ -279,7 +279,7 @@ const FormIntakePulmanPage = () => {
                   <FormItemWrapper label={t('pulmanType')}>
                     <FormField
                       control={form.control}
-                      name="typePulman"
+                      name="pulmanType"
                       render={({field}) => (
                         <FormItem>
                           <Select
@@ -312,7 +312,7 @@ const FormIntakePulmanPage = () => {
                   <FormItemWrapper label={t('shoeSize')}>
                     <FormField
                       control={form.control}
-                      name="schoenmaat"
+                      name="shoeSize"
                       render={({field}) => (
                         <FormItem>
                           <Select
@@ -342,7 +342,7 @@ const FormIntakePulmanPage = () => {
                   <FormItemWrapper label={t('providedShoeSize')}>
                     <FormField
                       control={form.control}
-                      name="afgegevenMaat"
+                      name="providedSize"
                       render={({field}) => (
                         <FormItem>
                           <Select
@@ -373,7 +373,7 @@ const FormIntakePulmanPage = () => {
               <FormCard title={t('specialNotes')}>
                 <FormField
                   control={form.control}
-                  name="bijzonderheden"
+                  name="specialNotes"
                   render={({field}) => (
                     <FormItem>
                       <FormControl>

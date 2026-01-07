@@ -1,5 +1,5 @@
 // Type definities voor cliënt en intake formulier data
-import type {Locatie, Aanhef, Zijde} from '@/lib/constants/formConstants';
+import type {Location, Salutation, Side} from '@/lib/constants/formConstants';
 
 export interface ClientData {
   // Practitioner and date
@@ -17,10 +17,10 @@ export interface ClientData {
     | 'Steunzolen';
 
   // Location
-  location?: Locatie;
+  location?: Location;
 
   // Personal information
-  salutation?: Aanhef;
+  salutation?: Salutation;
   initials: string;
   clientName: string;
   birthDate: string;
@@ -37,110 +37,110 @@ export interface ClientData {
   email: string;
 
   // Medical information
-  medischeIndicatie?: string;
+  medicalIndication?: string;
   insurance: string;
   specialist?: string;
 }
 
 export interface IntakeVLOSData {
   // Functieonderzoek
-  ziektebeelden?: Record<string, boolean>;
-  loopafstandAids?: Record<string, boolean>;
+  pathologies?: Record<string, boolean>;
+  walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
 
   // Description/pair type
-  welkPaar?: string;
-  medischeIndicatie?: string;
+  whichPair?: string;
+  medicalIndication?: string;
 
   // Side selection (both/left/right)
-  side: Zijde;
+  side: Side;
 
   // Shaft height in cm
-  schachthoogteLinks?: string;
-  schachthoogteRechts?: string;
+  shaftHeightLeft?: string;
+  shaftHeightRight?: string;
 
   // Enclosure/padding - now key-value pairs for Word document generation
-  omsluitingLinks: Record<string, boolean>; // Keys like omsluitingLinksMultivorm
-  omsluitingRechts: Record<string, boolean>; // Keys like omsluitingRechtsLavero
-  omsluitingLinksMm: Record<string, string>; // Keys like omsluitingMmLinksMultivorm
-  omsluitingRechtsMm: Record<string, string>; // Keys like omsluitingMmRechtsLavero
+  enclosureLeft: Record<string, boolean>; // Keys like omsluitingLinksMultivorm
+  enclosureRight: Record<string, boolean>; // Keys like omsluitingRechtsLavero
+  enclosureLeftMm: Record<string, string>; // Keys like omsluitingMmLinksMultivorm
+  enclosureRightMm: Record<string, string>; // Keys like omsluitingMmRechtsLavero
 
   // Supplement shoring/support
-  supplementschoringLinksEnabled: boolean;
-  supplementschoringRechtsEnabled: boolean;
-  supplementschoringLinksType?: string; // Lateral/Medial
-  supplementschoringRechtsType?: string;
+  customInsoleShoringLeftEnabled: boolean;
+  customInsoleShoringRightEnabled: boolean;
+  customInsoleShoringLeftType?: string; // Lateral/Medial
+  customInsoleShoringRightType?: string;
 
   // Sole stiffening
-  zoolverstijvingEnabled: boolean;
-  zoolverstijvingLinks?: boolean;
-  zoolverstijvingRechts?: boolean;
+  soleReinforcementEnabled: boolean;
+  soleReinforcementLeft?: boolean;
+  soleReinforcementRight?: boolean;
 
   // Closure type
-  sluitingType?: string; // hooks/rings or velcro
+  closureType?: string; // hooks/rings or velcro
 
   // Entry point in cm
-  inschotpunt?: string;
+  entryPoint?: string;
 
   // Shaft opening width
-  openstandSchacht?: string;
+  shaftOpeningWidth?: string;
 
   // Tongue padding
-  tongpolsterEnabled: boolean;
+  tonguePaddingEnabled: boolean;
 
   // Fixed tongue
-  tongVaststikkenEnabled: boolean;
+  fixedTongueEnabled: boolean;
 
   // Heel type
-  haksoortLinks?: string;
-  haksoortRechts?: string;
+  heelTypeLeft?: string;
+  heelTypeRight?: string;
 
   // Heel height in cm
-  hakhoogteLinks?: string;
-  hakhoogteRechts?: string;
+  heelHeightLeft?: string;
+  heelHeightRight?: string;
 
   // Heel shoring/wedge
-  hakschoringLinksEnabled: boolean;
-  hakschoringRechtsEnabled: boolean;
-  hakschoringLinksType?: string; // Medial/Lateral
-  hakschoringRechtsType?: string;
+  heelWedgeLeftEnabled: boolean;
+  heelWedgeRightEnabled: boolean;
+  heelWedgeLeftType?: string; // Medial/Lateral
+  heelWedgeRightType?: string;
 
   // Heel rounding
-  hakafrondingLinksEnabled: boolean;
-  hakafrondingRechtsEnabled: boolean;
-  hakafrondingLinksHoogte?: string; // Height in mm
-  hakafrondingLinksLengte?: string; // Length in mm
-  hakafrondingRechtsHoogte?: string;
-  hakafrondingRechtsLengte?: string;
+  heelRoundingLeftEnabled: boolean;
+  heelRoundingRightEnabled: boolean;
+  heelRoundingLeftHeight?: string; // Height in mm
+  heelRoundingLeftLength?: string; // Length in mm
+  heelRoundingRightHeight?: string;
+  heelRoundingRightLength?: string;
 
   // Ezelsoor (donkey ear)
-  ezelsoorLinksEnabled: boolean;
-  ezelsoorRechtsEnabled: boolean;
-  ezelsoorLinksType?: string; // Medial/Lateral
-  ezelsoorRechtsType?: string;
+  donkeyEarLeftEnabled: boolean;
+  donkeyEarRightEnabled: boolean;
+  donkeyEarLeftType?: string; // Medial/Lateral
+  donkeyEarRightType?: string;
 
   // Amputatie (code 50)
-  amputatieLinksEnabled: boolean;
-  amputatieRechtsEnabled: boolean;
+  amputationLeftEnabled: boolean;
+  amputationRightEnabled: boolean;
 
   // Walking sole type
-  loopzoolType?: string;
+  rockerSoleType?: string;
 
   // Generated basis code (1-8)
-  generalBasiscode?: string;
+  generalBaseCode?: string;
 
   // Special notes
-  bijzonderheden?: string;
+  specialNotes?: string;
 }
 
 // OSA intake data extends VLOS structure with additional fields
 export interface IntakeOSAData extends IntakeVLOSData {
   // Functieonderzoek
-  ziektebeelden?: Record<string, boolean>;
-  loopafstandAids?: Record<string, boolean>;
+  pathologies?: Record<string, boolean>;
+  walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
   legLengthDifferenceLeft?: string;
@@ -160,188 +160,188 @@ export interface IntakeOSAData extends IntakeVLOSData {
 
 export interface IntakePulmanData {
   // Description/pair type
-  welkPaar?: string;
+  whichPair?: string;
 
   // Side selection
-  side: Zijde;
+  side: Side;
 
   // Medical indication
-  medischeIndicatie?: string;
+  medicalIndication?: string;
 
   // Bandaged foot
-  gezwachteld?: boolean;
+  bandagedFoot?: boolean;
 
   // Pulman type (New Harlem, Harlem Extra)
-  typePulman?: string;
+  pulmanType?: string;
 
   // Shoe size (client's size)
-  schoenmaat?: string; // 37-48
+  shoeSize?: string; // 37-48
 
   // Provided size (actual size given)
-  afgegevenMaat?: string; // 37-48
+  providedSize?: string; // 37-48
 
   // Special notes
-  bijzonderheden?: string;
+  specialNotes?: string;
 }
 
 export interface IntakeRebacareData {
   // Description/pair type
-  welkPaar?: string;
+  whichPair?: string;
 
   // Side selection
-  side: Zijde;
+  side: Side;
 
   // Medical indication
-  medischeIndicatie?: string;
+  medicalIndication?: string;
 
   // Bandaged foot
-  gezwachteld?: boolean;
+  bandagedFoot?: boolean;
 
   // Shoe size (client's size)
-  schoenmaat?: string; // 37-48
+  shoeSize?: string; // 37-48
 
   // Provided size (actual size given)
-  afgegevenMaat?: string; // 37-48
+  providedSize?: string; // 37-48
 
   // Special notes
-  bijzonderheden?: string;
+  specialNotes?: string;
 }
 
 export interface IntakeOSBData {
   // Description/pair type
-  welkPaar?: string;
-  medischeIndicatie?: string;
+  whichPair?: string;
+  medicalIndication?: string;
   side?: 'left' | 'right' | 'both';
 
   // Functieonderzoek
-  doel?: Record<string, boolean>;
-  loopfunctieIndicatie?: string;
-  loopfunctieAndersText?: string;
+  goal?: Record<string, boolean>;
+  walkingFunctionIndication?: string;
+  walkingFunctionOtherText?: string;
 
   // Supplier and Product
-  leverancierNaam?: string;
-  bestelDatum?: string;
-  productSpecificaties?: {
-    artCode?: string;
-    lengteMaat?: string;
-    wijdte?: string;
-    kleur?: string;
-    sluiting?: string;
+  supplierName?: string;
+  orderDate?: string;
+  productSpecifications?: {
+    articleCode?: string;
+    lengthSize?: string;
+    width?: string;
+    color?: string;
+    closure?: string;
   };
 
   // Steunzolen/Talonette Section
-  talonetteVerhogingLinks?: string;
-  talonetteVerhogingRechts?: string;
-  steunzoolTypeGeneral?: string;
-  steunzoolAndersText?: string;
-  steunzoolCorrectieMiddenvoet?: string;
-  steunzoolCorrectieVoorvoet?: string;
-  steunzoolVvPellote?: string;
+  heelRaiseLeft?: string;
+  heelRaiseRight?: string;
+  insoleTypeGeneral?: string;
+  insoleOtherText?: string;
+  insoleMidfootCorrection?: string;
+  insoleForefootCorrection?: string;
+  insoleForefootPad?: string;
 
   // Supplement (van leest)
-  supplementIndividueelLinks?: boolean;
-  supplementIndividueelRechts?: boolean;
+  customInsoleIndividualLeft?: boolean;
+  customInsoleIndividualRight?: boolean;
 
   // Zoolverstijving
-  zoolverstijvingLinks?: boolean;
-  zoolverstijvingRechts?: boolean;
+  soleReinforcementLeft?: boolean;
+  soleReinforcementRight?: boolean;
 
   // Afwikkelrol (onder schoen)
-  afwikkelrolCmLinks?: string;
-  afwikkelrolCmRechts?: string;
+  rockerRollCmLeft?: string;
+  rockerRollCmRight?: string;
 
   // Special notes
-  bijzonderheden?: string;
+  specialNotes?: string;
 }
 
 export interface IntakeOVACData {
   // Description/pair type
-  welkPaar?: string;
+  whichPair?: string;
 
   // Medical indication
-  medischeIndicatie?: string;
+  medicalIndication?: string;
 
   // Omschrijving items - vlakke structuur (9 items × 2 zijdes = 18 velden)
-  supplementIndividueelLinks?: boolean;
-  supplementIndividueelRechts?: boolean;
-  eenvoudigeAfwikkelrolLinks?: boolean;
-  eenvoudigeAfwikkelrolRechts?: boolean;
-  gecompliceerdeAfwikkelrolLinks?: boolean;
-  gecompliceerdeAfwikkelrolRechts?: boolean;
-  hakAanpassing2cmLinks?: boolean;
-  hakAanpassing2cmRechts?: boolean;
-  hakZoolVerhoging3cmLinks?: boolean;
-  hakZoolVerhoging3cmRechts?: boolean;
-  hakZoolVerhoging7cmLinks?: boolean;
-  hakZoolVerhoging7cmRechts?: boolean;
-  aangepastehakkenLinks?: boolean;
-  aangepastehakkenRechts?: boolean;
-  zoolverstijvingLinks?: boolean;
-  zoolverstijvingRechts?: boolean;
-  nieuweWreefsluitingLinks?: boolean;
-  nieuweWreefsluitingRechts?: boolean;
+  customInsoleIndividualLeft?: boolean;
+  customInsoleIndividualRight?: boolean;
+  simpleRockerLeft?: boolean;
+  simpleRockerRight?: boolean;
+  complicatedRockerLeft?: boolean;
+  complicatedRockerRight?: boolean;
+  heelAdjustment2cmLeft?: boolean;
+  heelAdjustment2cmRight?: boolean;
+  heelSoleElevation3cmLeft?: boolean;
+  heelSoleElevation3cmRight?: boolean;
+  heelSoleElevation7cmLeft?: boolean;
+  heelSoleElevation7cmRight?: boolean;
+  adjustedHeelsLeft?: boolean;
+  adjustedHeelsRight?: boolean;
+  soleReinforcementLeft?: boolean;
+  soleReinforcementRight?: boolean;
+  newInstepClosureLeft?: boolean;
+  newInstepClosureRight?: boolean;
 
   // Verkorting
-  verkortingLinks?: boolean;
-  verkortingRechts?: boolean;
+  shorteningLeft?: boolean;
+  shorteningRight?: boolean;
   // New: separate left/right measurements
-  voorvoetCmLinks?: string;
-  voorvoetCmRechts?: string;
-  hielCmLinks?: string;
-  hielCmRechts?: string;
+  forefootCmLeft?: string;
+  forefootCmRight?: string;
+  heelCmLeft?: string;
+  heelCmRight?: string;
 
   // Afwikkelrol cm values (used to determine code 74 or 75)
-  afwikkelrolCmLinks?: string;
-  afwikkelrolCmRechts?: string;
+  rockerRollCmLeft?: string;
+  rockerRollCmRight?: string;
 
   // Hakzool verhoging cm values (used to determine code 76, 77, or 78)
-  hakzoolVerhogingCmLinks?: string;
-  hakzoolVerhogingCmRechts?: string;
+  heelSoleElevationCmLeft?: string;
+  heelSoleElevationCmRight?: string;
 
   // Steunzolen (optional)
-  steunzoolTypeGeneral?: string; // Single selected type
-  steunzoolAndersText?: string; // Anders text input
-  steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
-  steunzoolCorrectieVoorvoet?: string; // Forefoot correction
-  steunzoolVvPellote?: string; // Forefoot pad
-  talonetteVerhogingLinks?: string; // Heel raise in cm
-  talonetteVerhogingRechts?: string;
-  steunzoolPrijs?: number; // Price numeric value
-  steunzoolPrijsNaam?: string; // Price label name
+  insoleTypeGeneral?: string; // Single selected type
+  insoleOtherText?: string; // Anders text input
+  insoleMidfootCorrection?: string; // Midfoot correction
+  insoleForefootCorrection?: string; // Forefoot correction
+  insoleForefootPad?: string; // Forefoot pad
+  heelRaiseLeft?: string; // Heel raise in cm
+  heelRaiseRight?: string;
+  insolePrice?: number; // Price numeric value
+  insolePriceName?: string; // Price label name
 
   // Special notes
-  bijzonderheden?: string;
+  specialNotes?: string;
 }
 
-export interface IntakeSteunzolenData {
+export interface IntakeInsolesData {
   // Description/pair type
-  welkPaar?: string;
+  whichPair?: string;
 
   // Medical indication
-  medischeIndicatie?: string;
+  medicalIndication?: string;
 
   // Shoe size (required)
-  schoenmaat?: string;
+  shoeSize?: string;
 
   // Talonette logic
-  talonetteEnabled?: boolean;
-  talonetteVerhogingLinks?: string;
-  talonetteVerhogingRechts?: string;
+  heelRaiseEnabled?: boolean;
+  heelRaiseLeft?: string;
+  heelRaiseRight?: string;
 
   // Steunzool fields
-  steunzoolTypeGeneral?: string; // Single selected type
-  steunzoolAndersText?: string; // Anders text input
-  steunzoolCorrectieMiddenvoet?: string; // Midfoot correction
-  steunzoolCorrectieVoorvoet?: string; // Forefoot correction
-  steunzoolVvPellote?: string; // Forefoot pad
-  steunzoolPrijs?: number; // Price numeric value
-  steunzoolPrijsNaam?: string; // Price label name
+  insoleTypeGeneral?: string; // Single selected type
+  insoleOtherText?: string; // Anders text input
+  insoleMidfootCorrection?: string; // Midfoot correction
+  insoleForefootCorrection?: string; // Forefoot correction
+  insoleForefootPad?: string; // Forefoot pad
+  insolePrice?: number; // Price numeric value
+  insolePriceName?: string; // Price label name
 
   // Calculated final price
   finalPrice?: number;
 
   // Special notes
-  bijzonderheden?: string;
+  specialNotes?: string;
 }
 
 export interface FormSubmissionData {
@@ -352,78 +352,78 @@ export interface FormSubmissionData {
   intakeRebacare?: IntakeRebacareData;
   intakeOSB?: IntakeOSBData;
   intakeOVAC?: IntakeOVACData;
-  intakeSteunzolen?: IntakeSteunzolenData;
+  intakeInsoles?: IntakeInsolesData;
 }
 
 // Check Foliepas data
 export interface CheckFoliepasData {
   // Side selection
-  side?: Zijde;
+  side?: Side;
 
   // Reading corrections
   readingCorrectionAfterFoilFit?: string;
   readingCorrectionAfterLiningShoe?: string;
 
   // Enclosure/padding - same structure as VLOS
-  omsluitingLinks?: Record<string, boolean>;
-  omsluitingRechts?: Record<string, boolean>;
-  omsluitingLinksMm?: Record<string, string>;
-  omsluitingRechtsMm?: Record<string, string>;
+  enclosureLeft?: Record<string, boolean>;
+  enclosureRight?: Record<string, boolean>;
+  enclosureLeftMm?: Record<string, string>;
+  enclosureRightMm?: Record<string, string>;
 
   // Beenlengte verschil (functieonderzoek)
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
 
   // Shaft height in cm
-  schachthoogteLinks?: string;
-  schachthoogteRechts?: string;
+  shaftHeightLeft?: string;
+  shaftHeightRight?: string;
 
   // Openstand schacht
-  openstandSchacht?: string;
+  shaftOpeningWidth?: string;
 
   // Supplement schoring
-  supplementschoringLinksEnabled?: boolean;
-  supplementschoringRechtsEnabled?: boolean;
-  supplementschoringLinksType?: string;
-  supplementschoringRechtsType?: string;
+  customInsoleShoringLeftEnabled?: boolean;
+  customInsoleShoringRightEnabled?: boolean;
+  customInsoleShoringLeftType?: string;
+  customInsoleShoringRightType?: string;
 
   // Zoolverstijving
-  zoolverstijvingEnabled?: boolean;
-  zoolverstijvingLinks?: boolean;
-  zoolverstijvingRechts?: boolean;
+  soleReinforcementEnabled?: boolean;
+  soleReinforcementLeft?: boolean;
+  soleReinforcementRight?: boolean;
 
   // Sluiting en tong
-  sluitingType?: string;
-  inschotpunt?: string;
-  tongpolsterEnabled?: boolean;
-  tongVaststikkenEnabled?: boolean;
+  closureType?: string;
+  entryPoint?: string;
+  tonguePaddingEnabled?: boolean;
+  fixedTongueEnabled?: boolean;
 
   // Haksoort en hoogte
-  haksoortLinks?: string;
-  haksoortRechts?: string;
-  hakhoogteLinks?: string;
-  hakhoogteRechts?: string;
+  heelTypeLeft?: string;
+  heelTypeRight?: string;
+  heelHeightLeft?: string;
+  heelHeightRight?: string;
 
   // Hak aanpassingen (schoring) en ezelsoor
-  hakschoringLinksEnabled?: boolean;
-  hakschoringRechtsEnabled?: boolean;
-  hakschoringLinksType?: string;
-  hakschoringRechtsType?: string;
-  ezelsoorLinksEnabled?: boolean;
-  ezelsoorRechtsEnabled?: boolean;
-  ezelsoorLinksType?: string;
-  ezelsoorRechtsType?: string;
+  heelWedgeLeftEnabled?: boolean;
+  heelWedgeRightEnabled?: boolean;
+  heelWedgeLeftType?: string;
+  heelWedgeRightType?: string;
+  donkeyEarLeftEnabled?: boolean;
+  donkeyEarRightEnabled?: boolean;
+  donkeyEarLeftType?: string;
+  donkeyEarRightType?: string;
 
   // Hakafrondingen
-  hakafrondingLinksEnabled?: boolean;
-  hakafrondingRechtsEnabled?: boolean;
-  hakafrondingLinksHoogte?: string;
-  hakafrondingLinksLengte?: string;
-  hakafrondingRechtsHoogte?: string;
-  hakafrondingRechtsLengte?: string;
+  heelRoundingLeftEnabled?: boolean;
+  heelRoundingRightEnabled?: boolean;
+  heelRoundingLeftHeight?: string;
+  heelRoundingLeftLength?: string;
+  heelRoundingRightHeight?: string;
+  heelRoundingRightLength?: string;
 
   // Loopzool
-  loopzoolType?: string;
+  rockerSoleType?: string;
 
   // New fields for Kleur en Model section
   showColorAndModel?: boolean;
@@ -435,11 +435,10 @@ export interface CheckFoliepasData {
   tonguePaddingMm?: string;
   paddingCollarMm?: string;
 
-  // Sluiting
-  closureType?: string;
-  ringsNr?: string;
+  // Closure details
+  ringsNumber?: string;
   ringsAmount?: string;
-  hooksNr?: string;
+  hooksNumber?: string;
   hooksAmount?: string;
 
   // Rits

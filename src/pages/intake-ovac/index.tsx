@@ -21,7 +21,7 @@ import {
   CORRECTIE_VOORVOET_OPTIES,
   PAARTYPE_OPTIES,
   PELLOTE_OPTIES,
-  STEUNZOOL_TYPE_OPTIES,
+  INSOLE_TYPE_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setClientData, setIntakeOVACData} from '@/domain/store/slices/formData';
@@ -36,48 +36,48 @@ import {
 } from '@/components/ui/select';
 
 const formSchema = z.object({
-  welkPaar: z.string(),
-  medischeIndicatie: z.string().optional(),
+  whichPair: z.string(),
+  medicalIndication: z.string().optional(),
   side: z.enum(['left', 'right', 'both'] as const).optional(),
 
   // Section 1: Steunzolen/Talonette
-  talonetteEnabled: z.boolean().optional(),
-  talonetteVerhogingLinks: z.string().optional(),
-  talonetteVerhogingRechts: z.string().optional(),
+  heelRaiseEnabled: z.boolean().optional(),
+  heelRaiseLeft: z.string().optional(),
+  heelRaiseRight: z.string().optional(),
 
-  steunzoolEnabled: z.boolean().optional(),
-  steunzoolTypeGeneral: z.string().optional(),
-  steunzoolAndersText: z.string().optional(),
-  steunzoolCorrectieMiddenvoet: z.string().optional(),
-  steunzoolCorrectieVoorvoet: z.string().optional(),
-  steunzoolVvPellote: z.string().optional(),
+  insoleEnabled: z.boolean().optional(),
+  insoleTypeGeneral: z.string().optional(),
+  insoleOtherText: z.string().optional(),
+  insoleMidfootCorrection: z.string().optional(),
+  insoleForefootCorrection: z.string().optional(),
+  insoleForefootPad: z.string().optional(),
 
   // Section 2: Supplement (van leest)
   supplementIndividueelEnabled: z.boolean().optional(),
-  supplementIndividueelLinks: z.boolean().optional(),
-  supplementIndividueelRechts: z.boolean().optional(),
+  customInsoleIndividualLeft: z.boolean().optional(),
+  customInsoleIndividualRight: z.boolean().optional(),
 
   // Section 3: Zoolverstijving
-  zoolverstijvingEnabled: z.boolean().optional(),
-  zoolverstijvingLinks: z.boolean().optional(),
-  zoolverstijvingRechts: z.boolean().optional(),
+  soleReinforcementEnabled: z.boolean().optional(),
+  soleReinforcementLeft: z.boolean().optional(),
+  soleReinforcementRight: z.boolean().optional(),
 
   // Section 4: Afwikkelrol (onder schoen)
   afwikkelrolEnabled: z.boolean().optional(),
-  afwikkelrolCmLinks: z.string().optional(),
-  afwikkelrolCmRechts: z.string().optional(),
+  rockerRollCmLeft: z.string().optional(),
+  rockerRollCmRight: z.string().optional(),
 
   // Section 5: Hakzool verhoging
   hakzoolVerhogingEnabled: z.boolean().optional(),
-  hakzoolVerhogingCmLinks: z.string().optional(),
-  hakzoolVerhogingCmRechts: z.string().optional(),
+  heelSoleElevationCmLeft: z.string().optional(),
+  heelSoleElevationCmRight: z.string().optional(),
 
   // Section 6: Nieuwe wreefsluiting
   nieuweWreefsluitingEnabled: z.boolean().optional(),
-  nieuweWreefsluitingLinks: z.boolean().optional(),
-  nieuweWreefsluitingRechts: z.boolean().optional(),
+  newInstepClosureLeft: z.boolean().optional(),
+  newInstepClosureRight: z.boolean().optional(),
 
-  bijzonderheden: z.string().optional(),
+  specialNotes: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -92,48 +92,48 @@ const FormIntakeOVACPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      welkPaar: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
-      medischeIndicatie: '',
+      whichPair: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
+      medicalIndication: '',
       side: 'both',
 
       // Section 1: Steunzolen/Talonette
-      talonetteEnabled: false,
-      talonetteVerhogingLinks: '',
-      talonetteVerhogingRechts: '',
+      heelRaiseEnabled: false,
+      heelRaiseLeft: '',
+      heelRaiseRight: '',
 
-      steunzoolEnabled: false,
-      steunzoolTypeGeneral: '',
-      steunzoolAndersText: '',
-      steunzoolCorrectieMiddenvoet: '',
-      steunzoolCorrectieVoorvoet: '',
-      steunzoolVvPellote: '',
+      insoleEnabled: false,
+      insoleTypeGeneral: '',
+      insoleOtherText: '',
+      insoleMidfootCorrection: '',
+      insoleForefootCorrection: '',
+      insoleForefootPad: '',
 
       // Section 2: Supplement
       supplementIndividueelEnabled: false,
-      supplementIndividueelLinks: false,
-      supplementIndividueelRechts: false,
+      customInsoleIndividualLeft: false,
+      customInsoleIndividualRight: false,
 
       // Section 3: Zoolverstijving
-      zoolverstijvingEnabled: false,
-      zoolverstijvingLinks: false,
-      zoolverstijvingRechts: false,
+      soleReinforcementEnabled: false,
+      soleReinforcementLeft: false,
+      soleReinforcementRight: false,
 
       // Section 4: Afwikkelrol
       afwikkelrolEnabled: false,
-      afwikkelrolCmLinks: '',
-      afwikkelrolCmRechts: '',
+      rockerRollCmLeft: '',
+      rockerRollCmRight: '',
 
       // Section 5: Hakzool verhoging
       hakzoolVerhogingEnabled: false,
-      hakzoolVerhogingCmLinks: '',
-      hakzoolVerhogingCmRechts: '',
+      heelSoleElevationCmLeft: '',
+      heelSoleElevationCmRight: '',
 
       // Section 6: Nieuwe wreefsluiting
       nieuweWreefsluitingEnabled: false,
-      nieuweWreefsluitingLinks: false,
-      nieuweWreefsluitingRechts: false,
+      newInstepClosureLeft: false,
+      newInstepClosureRight: false,
 
-      bijzonderheden: '',
+      specialNotes: '',
     },
   });
 
@@ -149,7 +149,7 @@ const FormIntakeOVACPage = () => {
     form.reset();
   };
 
-  const showSteunzolen = form.watch('steunzoolEnabled');
+  const showSteunzolen = form.watch('insoleEnabled');
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
@@ -158,74 +158,68 @@ const FormIntakeOVACPage = () => {
 
     dispatch(
       setIntakeOVACData({
-        welkPaar: data.welkPaar,
-        medischeIndicatie: data.medischeIndicatie || '',
+        whichPair: data.whichPair,
+        medicalIndication: data.medicalIndication || '',
 
         // Section 1: Steunzolen/Talonette
-        talonetteVerhogingLinks: data.talonetteEnabled
-          ? data.talonetteVerhogingLinks || ''
-          : '',
-        talonetteVerhogingRechts: data.talonetteEnabled
-          ? data.talonetteVerhogingRechts || ''
-          : '',
+        heelRaiseLeft: data.heelRaiseEnabled ? data.heelRaiseLeft || '' : '',
+        heelRaiseRight: data.heelRaiseEnabled ? data.heelRaiseRight || '' : '',
 
-        steunzoolTypeGeneral: data.steunzoolEnabled
-          ? data.steunzoolTypeGeneral || ''
+        insoleTypeGeneral: data.insoleEnabled
+          ? data.insoleTypeGeneral || ''
           : '',
-        steunzoolAndersText: data.steunzoolEnabled
-          ? data.steunzoolAndersText || ''
+        insoleOtherText: data.insoleEnabled ? data.insoleOtherText || '' : '',
+        insoleMidfootCorrection: data.insoleEnabled
+          ? data.insoleMidfootCorrection || ''
           : '',
-        steunzoolCorrectieMiddenvoet: data.steunzoolEnabled
-          ? data.steunzoolCorrectieMiddenvoet || ''
+        insoleForefootCorrection: data.insoleEnabled
+          ? data.insoleForefootCorrection || ''
           : '',
-        steunzoolCorrectieVoorvoet: data.steunzoolEnabled
-          ? data.steunzoolCorrectieVoorvoet || ''
-          : '',
-        steunzoolVvPellote: data.steunzoolEnabled
-          ? data.steunzoolVvPellote || ''
+        insoleForefootPad: data.insoleEnabled
+          ? data.insoleForefootPad || ''
           : '',
 
         // Section 2: Supplement (van leest)
-        supplementIndividueelLinks: data.supplementIndividueelEnabled
-          ? !!data.supplementIndividueelLinks
+        customInsoleIndividualLeft: data.supplementIndividueelEnabled
+          ? !!data.customInsoleIndividualLeft
           : false,
-        supplementIndividueelRechts: data.supplementIndividueelEnabled
-          ? !!data.supplementIndividueelRechts
+        customInsoleIndividualRight: data.supplementIndividueelEnabled
+          ? !!data.customInsoleIndividualRight
           : false,
 
         // Section 3: Zoolverstijving
-        zoolverstijvingLinks: data.zoolverstijvingEnabled
-          ? !!data.zoolverstijvingLinks
+        soleReinforcementLeft: data.soleReinforcementEnabled
+          ? !!data.soleReinforcementLeft
           : false,
-        zoolverstijvingRechts: data.zoolverstijvingEnabled
-          ? !!data.zoolverstijvingRechts
+        soleReinforcementRight: data.soleReinforcementEnabled
+          ? !!data.soleReinforcementRight
           : false,
 
         // Section 4: Afwikkelrol (onder schoen) - dispatch cm values
-        afwikkelrolCmLinks: data.afwikkelrolEnabled
-          ? data.afwikkelrolCmLinks || ''
+        rockerRollCmLeft: data.afwikkelrolEnabled
+          ? data.rockerRollCmLeft || ''
           : '',
-        afwikkelrolCmRechts: data.afwikkelrolEnabled
-          ? data.afwikkelrolCmRechts || ''
+        rockerRollCmRight: data.afwikkelrolEnabled
+          ? data.rockerRollCmRight || ''
           : '',
 
         // Section 5: Hakzool verhoging - dispatch cm values
-        hakzoolVerhogingCmLinks: data.hakzoolVerhogingEnabled
-          ? data.hakzoolVerhogingCmLinks || ''
+        heelSoleElevationCmLeft: data.hakzoolVerhogingEnabled
+          ? data.heelSoleElevationCmLeft || ''
           : '',
-        hakzoolVerhogingCmRechts: data.hakzoolVerhogingEnabled
-          ? data.hakzoolVerhogingCmRechts || ''
+        heelSoleElevationCmRight: data.hakzoolVerhogingEnabled
+          ? data.heelSoleElevationCmRight || ''
           : '',
 
         // Section 6: Nieuwe wreefsluiting
-        nieuweWreefsluitingLinks: data.nieuweWreefsluitingEnabled
-          ? !!data.nieuweWreefsluitingLinks
+        newInstepClosureLeft: data.nieuweWreefsluitingEnabled
+          ? !!data.newInstepClosureLeft
           : false,
-        nieuweWreefsluitingRechts: data.nieuweWreefsluitingEnabled
-          ? !!data.nieuweWreefsluitingRechts
+        newInstepClosureRight: data.nieuweWreefsluitingEnabled
+          ? !!data.newInstepClosureRight
           : false,
 
-        bijzonderheden: data.bijzonderheden || '',
+        specialNotes: data.specialNotes || '',
       }),
     );
 
@@ -258,8 +252,8 @@ const FormIntakeOVACPage = () => {
                   {/* Which Pair (Radio Group) */}
                   <FormItemWrapper label={t('whichPair')}>
                     <RadioGroup
-                      value={form.watch('welkPaar')}
-                      onValueChange={val => form.setValue('welkPaar', val)}
+                      value={form.watch('whichPair')}
+                      onValueChange={val => form.setValue('whichPair', val)}
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
@@ -287,9 +281,9 @@ const FormIntakeOVACPage = () => {
                     <Textarea
                       id="medische-indicatie"
                       placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medischeIndicatie')}
+                      value={form.watch('medicalIndication')}
                       onChange={e =>
-                        form.setValue('medischeIndicatie', e.target.value)
+                        form.setValue('medicalIndication', e.target.value)
                       }
                       rows={4}
                       className="w-2/3"
@@ -339,12 +333,12 @@ const FormIntakeOVACPage = () => {
                 toggleAble={true}
                 toggleLabel={t('addTalonette')}
                 toggleId="talonette-toggle"
-                defaultOpen={form.watch('talonetteEnabled')}
+                defaultOpen={form.watch('heelRaiseEnabled')}
                 onToggleChange={isOpen => {
-                  form.setValue('talonetteEnabled', isOpen);
+                  form.setValue('heelRaiseEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('talonetteVerhogingLinks', '');
-                    form.setValue('talonetteVerhogingRechts', '');
+                    form.setValue('heelRaiseLeft', '');
+                    form.setValue('heelRaiseRight', '');
                   }
                 }}
               >
@@ -356,9 +350,9 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingLinks')}
+                      value={form.watch('heelRaiseLeft')}
                       onChange={e =>
-                        form.setValue('talonetteVerhogingLinks', e.target.value)
+                        form.setValue('heelRaiseLeft', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -370,12 +364,9 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('talonetteVerhogingRechts')}
+                      value={form.watch('heelRaiseRight')}
                       onChange={e =>
-                        form.setValue(
-                          'talonetteVerhogingRechts',
-                          e.target.value,
-                        )
+                        form.setValue('heelRaiseRight', e.target.value)
                       }
                       className="w-2/3"
                     />
@@ -390,16 +381,16 @@ const FormIntakeOVACPage = () => {
                 toggleAble={true}
                 toggleLabel={t('addInsoles')}
                 toggleId="steunzolen-toggle"
-                defaultOpen={form.watch('steunzoolEnabled')}
+                defaultOpen={form.watch('insoleEnabled')}
                 onToggleChange={isOpen => {
-                  form.setValue('steunzoolEnabled', isOpen);
+                  form.setValue('insoleEnabled', isOpen);
                   if (!isOpen) {
                     // Clear steunzolen fields when disabled
-                    form.setValue('steunzoolTypeGeneral', '');
-                    form.setValue('steunzoolAndersText', '');
-                    form.setValue('steunzoolCorrectieMiddenvoet', '');
-                    form.setValue('steunzoolCorrectieVoorvoet', '');
-                    form.setValue('steunzoolVvPellote', '');
+                    form.setValue('insoleTypeGeneral', '');
+                    form.setValue('insoleOtherText', '');
+                    form.setValue('insoleMidfootCorrection', '');
+                    form.setValue('insoleForefootCorrection', '');
+                    form.setValue('insoleForefootPad', '');
                   }
                 }}
               >
@@ -412,16 +403,16 @@ const FormIntakeOVACPage = () => {
                 >
                   <FormItemWrapper className="col-span-2">
                     <Select
-                      value={form.watch('steunzoolTypeGeneral') || undefined}
+                      value={form.watch('insoleTypeGeneral') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolTypeGeneral', val)
+                        form.setValue('insoleTypeGeneral', val)
                       }
                     >
                       <SelectTrigger className="w-2/3 mt-2">
                         <SelectValue placeholder={t('insoleType')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {STEUNZOOL_TYPE_OPTIES.map(option => (
+                        {INSOLE_TYPE_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -430,7 +421,7 @@ const FormIntakeOVACPage = () => {
                     </Select>
                   </FormItemWrapper>
 
-                  {form.watch('steunzoolTypeGeneral') === 'Anders' && (
+                  {form.watch('insoleTypeGeneral') === 'Anders' && (
                     <FormItemWrapper
                       label={t('specifyOther')}
                       className="col-span-2 pt-2"
@@ -438,9 +429,9 @@ const FormIntakeOVACPage = () => {
                       <Textarea
                         id="steunzool-anders"
                         placeholder={t('specifyPlaceholder')}
-                        value={form.watch('steunzoolAndersText')}
+                        value={form.watch('insoleOtherText')}
                         onChange={e =>
-                          form.setValue('steunzoolAndersText', e.target.value)
+                          form.setValue('insoleOtherText', e.target.value)
                         }
                         rows={2}
                         className="w-2/3 resize-none"
@@ -457,11 +448,9 @@ const FormIntakeOVACPage = () => {
                 >
                   <FormItemWrapper label={t('midfootCorrection')}>
                     <Select
-                      value={
-                        form.watch('steunzoolCorrectieMiddenvoet') || undefined
-                      }
+                      value={form.watch('insoleMidfootCorrection') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolCorrectieMiddenvoet', val)
+                        form.setValue('insoleMidfootCorrection', val)
                       }
                     >
                       <SelectTrigger className="">
@@ -480,10 +469,10 @@ const FormIntakeOVACPage = () => {
                   <FormItemWrapper label={t('forefootCorrection')}>
                     <Select
                       value={
-                        form.watch('steunzoolCorrectieVoorvoet') || undefined
+                        form.watch('insoleForefootCorrection') || undefined
                       }
                       onValueChange={val =>
-                        form.setValue('steunzoolCorrectieVoorvoet', val)
+                        form.setValue('insoleForefootCorrection', val)
                       }
                     >
                       <SelectTrigger className="">
@@ -501,9 +490,9 @@ const FormIntakeOVACPage = () => {
 
                   <FormItemWrapper label={t('forefootPad')}>
                     <Select
-                      value={form.watch('steunzoolVvPellote') || undefined}
+                      value={form.watch('insoleForefootPad') || undefined}
                       onValueChange={val =>
-                        form.setValue('steunzoolVvPellote', val)
+                        form.setValue('insoleForefootPad', val)
                       }
                     >
                       <SelectTrigger className="">
@@ -532,8 +521,8 @@ const FormIntakeOVACPage = () => {
                 onToggleChange={isOpen => {
                   form.setValue('supplementIndividueelEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('supplementIndividueelLinks', false);
-                    form.setValue('supplementIndividueelRechts', false);
+                    form.setValue('customInsoleIndividualLeft', false);
+                    form.setValue('customInsoleIndividualRight', false);
                   }
                 }}
               >
@@ -542,10 +531,10 @@ const FormIntakeOVACPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="supplement-links"
-                        checked={!!form.watch('supplementIndividueelLinks')}
+                        checked={!!form.watch('customInsoleIndividualLeft')}
                         onCheckedChange={checked =>
                           form.setValue(
-                            'supplementIndividueelRechts',
+                            'customInsoleIndividualRight',
                             !!checked,
                           )
                         }
@@ -562,10 +551,10 @@ const FormIntakeOVACPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="supplement-rechts"
-                        checked={!!form.watch('supplementIndividueelRechts')}
+                        checked={!!form.watch('customInsoleIndividualRight')}
                         onCheckedChange={checked =>
                           form.setValue(
-                            'supplementIndividueelRechts',
+                            'customInsoleIndividualRight',
                             !!checked,
                           )
                         }
@@ -586,12 +575,12 @@ const FormIntakeOVACPage = () => {
                 toggleAble={true}
                 toggleLabel={t('addSoleStiffening')}
                 toggleId="zoolverstijving-toggle"
-                defaultOpen={form.watch('zoolverstijvingEnabled')}
+                defaultOpen={form.watch('soleReinforcementEnabled')}
                 onToggleChange={isOpen => {
-                  form.setValue('zoolverstijvingEnabled', isOpen);
+                  form.setValue('soleReinforcementEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('zoolverstijvingLinks', false);
-                    form.setValue('zoolverstijvingRechts', false);
+                    form.setValue('soleReinforcementLeft', false);
+                    form.setValue('soleReinforcementRight', false);
                   }
                 }}
               >
@@ -600,9 +589,9 @@ const FormIntakeOVACPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="zoolverstijving-links"
-                        checked={!!form.watch('zoolverstijvingLinks')}
+                        checked={!!form.watch('soleReinforcementLeft')}
                         onCheckedChange={checked =>
-                          form.setValue('zoolverstijvingLinks', !!checked)
+                          form.setValue('soleReinforcementLeft', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -617,9 +606,9 @@ const FormIntakeOVACPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="zoolverstijving-rechts"
-                        checked={!!form.watch('zoolverstijvingRechts')}
+                        checked={!!form.watch('soleReinforcementRight')}
                         onCheckedChange={checked =>
-                          form.setValue('zoolverstijvingRechts', !!checked)
+                          form.setValue('soleReinforcementRight', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -642,8 +631,8 @@ const FormIntakeOVACPage = () => {
                 onToggleChange={isOpen => {
                   form.setValue('afwikkelrolEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('afwikkelrolCmLinks', '');
-                    form.setValue('afwikkelrolCmRechts', '');
+                    form.setValue('rockerRollCmLeft', '');
+                    form.setValue('rockerRollCmRight', '');
                   }
                 }}
               >
@@ -654,9 +643,9 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('afwikkelrolCmLinks') || ''}
+                      value={form.watch('rockerRollCmLeft') || ''}
                       onChange={e =>
-                        form.setValue('afwikkelrolCmLinks', e.target.value)
+                        form.setValue('rockerRollCmLeft', e.target.value)
                       }
                       className="w-full"
                     />
@@ -676,9 +665,9 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('afwikkelrolCmRechts') || ''}
+                      value={form.watch('rockerRollCmRight') || ''}
                       onChange={e =>
-                        form.setValue('afwikkelrolCmRechts', e.target.value)
+                        form.setValue('rockerRollCmRight', e.target.value)
                       }
                       className="w-full"
                     />
@@ -696,8 +685,8 @@ const FormIntakeOVACPage = () => {
                 onToggleChange={isOpen => {
                   form.setValue('hakzoolVerhogingEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('hakzoolVerhogingCmLinks', '');
-                    form.setValue('hakzoolVerhogingCmRechts', '');
+                    form.setValue('heelSoleElevationCmLeft', '');
+                    form.setValue('heelSoleElevationCmRight', '');
                   }
                 }}
               >
@@ -708,9 +697,9 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('hakzoolVerhogingCmLinks') || ''}
+                      value={form.watch('heelSoleElevationCmLeft') || ''}
                       onChange={e =>
-                        form.setValue('hakzoolVerhogingCmLinks', e.target.value)
+                        form.setValue('heelSoleElevationCmLeft', e.target.value)
                       }
                       className="w-full"
                     />
@@ -730,10 +719,10 @@ const FormIntakeOVACPage = () => {
                       type="number"
                       step="0.1"
                       placeholder={t('cmPlaceholder')}
-                      value={form.watch('hakzoolVerhogingCmRechts') || ''}
+                      value={form.watch('heelSoleElevationCmRight') || ''}
                       onChange={e =>
                         form.setValue(
-                          'hakzoolVerhogingCmRechts',
+                          'heelSoleElevationCmRight',
                           e.target.value,
                         )
                       }
@@ -753,8 +742,8 @@ const FormIntakeOVACPage = () => {
                 onToggleChange={isOpen => {
                   form.setValue('nieuweWreefsluitingEnabled', isOpen);
                   if (!isOpen) {
-                    form.setValue('nieuweWreefsluitingLinks', false);
-                    form.setValue('nieuweWreefsluitingRechts', false);
+                    form.setValue('newInstepClosureLeft', false);
+                    form.setValue('newInstepClosureRight', false);
                   }
                 }}
               >
@@ -763,9 +752,9 @@ const FormIntakeOVACPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="wreefsluiting-links"
-                        checked={!!form.watch('nieuweWreefsluitingLinks')}
+                        checked={!!form.watch('newInstepClosureLeft')}
                         onCheckedChange={checked =>
-                          form.setValue('nieuweWreefsluitingLinks', !!checked)
+                          form.setValue('newInstepClosureLeft', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -780,9 +769,9 @@ const FormIntakeOVACPage = () => {
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
                       <Checkbox
                         id="wreefsluiting-rechts"
-                        checked={!!form.watch('nieuweWreefsluitingRechts')}
+                        checked={!!form.watch('newInstepClosureRight')}
                         onCheckedChange={checked =>
-                          form.setValue('nieuweWreefsluitingRechts', !!checked)
+                          form.setValue('newInstepClosureRight', !!checked)
                         }
                       />
                       <div className="grid gap-1.5 font-normal">
@@ -803,9 +792,9 @@ const FormIntakeOVACPage = () => {
                 <CardContent>
                   <Textarea
                     placeholder={t('specialNotesPlaceholder')}
-                    value={form.watch('bijzonderheden')}
+                    value={form.watch('specialNotes')}
                     onChange={e =>
-                      form.setValue('bijzonderheden', e.target.value)
+                      form.setValue('specialNotes', e.target.value)
                     }
                     rows={4}
                     className="resize-none"

@@ -35,7 +35,7 @@ import {
   HAKSCHORING_TYPE_OPTIES,
   EZELSOOR_TYPE_OPTIES,
   LOOPZOOL_OPTIES,
-  Zijde,
+  Side,
   LEESTCORRECTIE_OPTIES,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -69,69 +69,68 @@ const FormCheckFoliepasPage = () => {
     readingCorrectionAfterLiningShoe: z.string().optional(),
 
     // Enclosure (Omsluiting)
-    omsluitingLinks: z.record(z.string(), z.boolean()),
-    omsluitingRechts: z.record(z.string(), z.boolean()),
-    omsluitingLinksMm: z.record(z.string(), z.string()),
-    omsluitingRechtsMm: z.record(z.string(), z.string()),
+    enclosureLeft: z.record(z.string(), z.boolean()),
+    enclosureRight: z.record(z.string(), z.boolean()),
+    enclosureLeftMm: z.record(z.string(), z.string()),
+    enclosureRightMm: z.record(z.string(), z.string()),
 
     // Shaft heights
-    schachthoogteLinks: z.string().optional(),
-    schachthoogteRechts: z.string().optional(),
+    shaftHeightLeft: z.string().optional(),
+    shaftHeightRight: z.string().optional(),
 
     // Leg length difference
     legLengthDifferenceLeft: z.string().optional(),
     legLengthDifferenceRight: z.string().optional(),
 
     // Shaft opening
-    openstandSchacht: z.string().optional(),
+    shaftOpeningWidth: z.string().optional(),
 
     // Supplement schoring
-    supplementschoringLinksEnabled: z.boolean(),
-    supplementschoringRechtsEnabled: z.boolean(),
-    supplementschoringLinksType: z.string().optional(),
-    supplementschoringRechtsType: z.string().optional(),
+    customInsoleShoringLeftEnabled: z.boolean(),
+    customInsoleShoringRightEnabled: z.boolean(),
+    customInsoleShoringLeftType: z.string().optional(),
+    customInsoleShoringRightType: z.string().optional(),
 
     // Sole stiffening
-    zoolverstijvingEnabled: z.boolean(),
-    zoolverstijvingLinks: z.boolean().optional(),
-    zoolverstijvingRechts: z.boolean().optional(),
+    soleReinforcementEnabled: z.boolean(),
+    soleReinforcementLeft: z.boolean().optional(),
+    soleReinforcementRight: z.boolean().optional(),
 
     // Closure
-    sluitingType: z.string().optional(),
-    inschotpunt: z.string().optional(),
+    entryPoint: z.string().optional(),
 
     // Tong padding
-    tongpolsterEnabled: z.boolean(),
-    tongVaststikkenEnabled: z.boolean(),
+    tonguePaddingEnabled: z.boolean(),
+    fixedTongueEnabled: z.boolean(),
 
     // Heel types and heights
-    haksoortLinks: z.string().optional(),
-    haksoortRechts: z.string().optional(),
-    hakhoogteLinks: z.string().optional(),
-    hakhoogteRechts: z.string().optional(),
+    heelTypeLeft: z.string().optional(),
+    heelTypeRight: z.string().optional(),
+    heelHeightLeft: z.string().optional(),
+    heelHeightRight: z.string().optional(),
 
     // Heel shoring
-    hakschoringLinksEnabled: z.boolean(),
-    hakschoringRechtsEnabled: z.boolean(),
-    hakschoringLinksType: z.string().optional(),
-    hakschoringRechtsType: z.string().optional(),
+    heelWedgeLeftEnabled: z.boolean(),
+    heelWedgeRightEnabled: z.boolean(),
+    heelWedgeLeftType: z.string().optional(),
+    heelWedgeRightType: z.string().optional(),
 
     // Ezelsoor
-    ezelsoorLinksEnabled: z.boolean(),
-    ezelsoorRechtsEnabled: z.boolean(),
-    ezelsoorLinksType: z.string().optional(),
-    ezelsoorRechtsType: z.string().optional(),
+    donkeyEarLeftEnabled: z.boolean(),
+    donkeyEarRightEnabled: z.boolean(),
+    donkeyEarLeftType: z.string().optional(),
+    donkeyEarRightType: z.string().optional(),
 
     // Heel rounding
-    hakafrondingLinksEnabled: z.boolean(),
-    hakafrondingRechtsEnabled: z.boolean(),
-    hakafrondingLinksHoogte: z.string().optional(),
-    hakafrondingLinksLengte: z.string().optional(),
-    hakafrondingRechtsHoogte: z.string().optional(),
-    hakafrondingRechtsLengte: z.string().optional(),
+    heelRoundingLeftEnabled: z.boolean(),
+    heelRoundingRightEnabled: z.boolean(),
+    heelRoundingLeftHeight: z.string().optional(),
+    heelRoundingLeftLength: z.string().optional(),
+    heelRoundingRightHeight: z.string().optional(),
+    heelRoundingRightLength: z.string().optional(),
 
     // Outsole type
-    loopzoolType: z.string().optional(),
+    rockerSoleType: z.string().optional(),
 
     // --- Kleur en Model section ---
     showColorAndModel: z.boolean(),
@@ -145,9 +144,9 @@ const FormCheckFoliepasPage = () => {
     paddingCollarMm: z.enum(['no', '5', '10'] as const).optional(),
     // Closure details
     closureType: z.enum(['velcro', 'ringsHooks'] as const).optional(),
-    ringsNr: z.string().optional(),
+    ringsNumber: z.string().optional(),
     ringsAmount: z.string().optional(),
-    hooksNr: z.string().optional(),
+    hooksNumber: z.string().optional(),
     hooksAmount: z.string().optional(),
     // Zipper
     zipperType: z
@@ -220,46 +219,45 @@ const FormCheckFoliepasPage = () => {
       side: 'both',
       readingCorrectionAfterFoilFit: '',
       readingCorrectionAfterLiningShoe: '',
-      omsluitingLinks: {omsluitingLinksMultivorm: true},
-      omsluitingRechts: {omsluitingRechtsMultivorm: true},
-      omsluitingLinksMm: {omsluitingMmLinksMultivorm: '3'},
-      omsluitingRechtsMm: {omsluitingMmRechtsMultivorm: '3'},
-      schachthoogteLinks: '12.5',
-      schachthoogteRechts: '12.5',
+      enclosureLeft: {omsluitingLinksMultivorm: true},
+      enclosureRight: {omsluitingRechtsMultivorm: true},
+      enclosureLeftMm: {omsluitingMmLinksMultivorm: '3'},
+      enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
+      shaftHeightLeft: '12.5',
+      shaftHeightRight: '12.5',
       // Defaults for moved fields
       legLengthDifferenceLeft: '',
       legLengthDifferenceRight: '',
-      openstandSchacht: OPENSTAND_OPTIES[2]?.value || '',
-      supplementschoringLinksEnabled: false,
-      supplementschoringRechtsEnabled: false,
-      supplementschoringLinksType: 'Lateraal',
-      supplementschoringRechtsType: 'Lateraal',
-      zoolverstijvingEnabled: false,
-      zoolverstijvingLinks: false,
-      zoolverstijvingRechts: false,
-      sluitingType: SLUITING_OPTIES[0]?.value || '',
-      inschotpunt: '',
-      tongpolsterEnabled: false,
-      tongVaststikkenEnabled: false,
-      haksoortLinks: HAKSOORT_OPTIES[0]?.value || '',
-      haksoortRechts: HAKSOORT_OPTIES[0]?.value || '',
-      hakhoogteLinks: '2',
-      hakhoogteRechts: '2',
-      hakschoringLinksEnabled: false,
-      hakschoringRechtsEnabled: false,
-      hakschoringLinksType: 'Lateraal',
-      hakschoringRechtsType: 'Lateraal',
-      ezelsoorLinksEnabled: false,
-      ezelsoorRechtsEnabled: false,
-      ezelsoorLinksType: 'Lateraal',
-      ezelsoorRechtsType: 'Lateraal',
-      hakafrondingLinksEnabled: true,
-      hakafrondingRechtsEnabled: true,
-      hakafrondingLinksHoogte: '10',
-      hakafrondingLinksLengte: '50',
-      hakafrondingRechtsHoogte: '10',
-      hakafrondingRechtsLengte: '50',
-      loopzoolType: LOOPZOOL_OPTIES[0]?.value || '',
+      shaftOpeningWidth: OPENSTAND_OPTIES[2]?.value || '',
+      customInsoleShoringLeftEnabled: false,
+      customInsoleShoringRightEnabled: false,
+      customInsoleShoringLeftType: 'Lateraal',
+      customInsoleShoringRightType: 'Lateraal',
+      soleReinforcementEnabled: false,
+      soleReinforcementLeft: false,
+      soleReinforcementRight: false,
+      entryPoint: '',
+      tonguePaddingEnabled: false,
+      fixedTongueEnabled: false,
+      heelTypeLeft: HAKSOORT_OPTIES[0]?.value || '',
+      heelTypeRight: HAKSOORT_OPTIES[0]?.value || '',
+      heelHeightLeft: '2',
+      heelHeightRight: '2',
+      heelWedgeLeftEnabled: false,
+      heelWedgeRightEnabled: false,
+      heelWedgeLeftType: 'Lateraal',
+      heelWedgeRightType: 'Lateraal',
+      donkeyEarLeftEnabled: false,
+      donkeyEarRightEnabled: false,
+      donkeyEarLeftType: 'Lateraal',
+      donkeyEarRightType: 'Lateraal',
+      heelRoundingLeftEnabled: true,
+      heelRoundingRightEnabled: true,
+      heelRoundingLeftHeight: '10',
+      heelRoundingLeftLength: '50',
+      heelRoundingRightHeight: '10',
+      heelRoundingRightLength: '50',
+      rockerSoleType: LOOPZOOL_OPTIES[0]?.value || '',
       // New field defaults
       showColorAndModel: false,
       modelType: 'model',
@@ -268,9 +266,9 @@ const FormCheckFoliepasPage = () => {
       tonguePaddingMm: 'no',
       paddingCollarMm: 'no',
       closureType: 'velcro',
-      ringsNr: '',
+      ringsNumber: '',
       ringsAmount: '',
-      hooksNr: '',
+      hooksNumber: '',
       hooksAmount: '',
       zipperType: 'none',
       zipperMedial: false,
@@ -343,48 +341,47 @@ const FormCheckFoliepasPage = () => {
         readingCorrectionAfterFoilFit: data.readingCorrectionAfterFoilFit || '',
         readingCorrectionAfterLiningShoe:
           data.readingCorrectionAfterLiningShoe || '',
-        omsluitingLinks: data.omsluitingLinks as Record<string, boolean>,
-        omsluitingRechts: data.omsluitingRechts as Record<string, boolean>,
-        omsluitingLinksMm: data.omsluitingLinksMm as Record<string, string>,
-        omsluitingRechtsMm: data.omsluitingRechtsMm as Record<string, string>,
+        enclosureLeft: data.enclosureLeft as Record<string, boolean>,
+        enclosureRight: data.enclosureRight as Record<string, boolean>,
+        enclosureLeftMm: data.enclosureLeftMm as Record<string, string>,
+        enclosureRightMm: data.enclosureRightMm as Record<string, string>,
 
-        schachthoogteLinks: data.schachthoogteLinks || '',
-        schachthoogteRechts: data.schachthoogteRechts || '',
+        shaftHeightLeft: data.shaftHeightLeft || '',
+        shaftHeightRight: data.shaftHeightRight || '',
 
         // Moved fields
         legLengthDifferenceLeft: data.legLengthDifferenceLeft || '',
         legLengthDifferenceRight: data.legLengthDifferenceRight || '',
-        openstandSchacht: data.openstandSchacht || '',
-        supplementschoringLinksEnabled: data.supplementschoringLinksEnabled,
-        supplementschoringRechtsEnabled: data.supplementschoringRechtsEnabled,
-        supplementschoringLinksType: data.supplementschoringLinksType || '',
-        supplementschoringRechtsType: data.supplementschoringRechtsType || '',
-        zoolverstijvingEnabled: data.zoolverstijvingEnabled,
-        zoolverstijvingLinks: data.zoolverstijvingLinks,
-        zoolverstijvingRechts: data.zoolverstijvingRechts,
-        sluitingType: data.sluitingType || '',
-        inschotpunt: data.inschotpunt || '',
-        tongpolsterEnabled: data.tongpolsterEnabled,
-        tongVaststikkenEnabled: data.tongVaststikkenEnabled,
-        haksoortLinks: data.haksoortLinks || '',
-        haksoortRechts: data.haksoortRechts || '',
-        hakhoogteLinks: data.hakhoogteLinks || '',
-        hakhoogteRechts: data.hakhoogteRechts || '',
-        hakschoringLinksEnabled: data.hakschoringLinksEnabled,
-        hakschoringRechtsEnabled: data.hakschoringRechtsEnabled,
-        hakschoringLinksType: data.hakschoringLinksType || '',
-        hakschoringRechtsType: data.hakschoringRechtsType || '',
-        ezelsoorLinksEnabled: data.ezelsoorLinksEnabled,
-        ezelsoorRechtsEnabled: data.ezelsoorRechtsEnabled,
-        ezelsoorLinksType: data.ezelsoorLinksType || '',
-        ezelsoorRechtsType: data.ezelsoorRechtsType || '',
-        hakafrondingLinksEnabled: data.hakafrondingLinksEnabled,
-        hakafrondingRechtsEnabled: data.hakafrondingRechtsEnabled,
-        hakafrondingLinksHoogte: data.hakafrondingLinksHoogte || '',
-        hakafrondingLinksLengte: data.hakafrondingLinksLengte || '',
-        hakafrondingRechtsHoogte: data.hakafrondingRechtsHoogte || '',
-        hakafrondingRechtsLengte: data.hakafrondingRechtsLengte || '',
-        loopzoolType: data.loopzoolType || '',
+        shaftOpeningWidth: data.shaftOpeningWidth || '',
+        customInsoleShoringLeftEnabled: data.customInsoleShoringLeftEnabled,
+        customInsoleShoringRightEnabled: data.customInsoleShoringRightEnabled,
+        customInsoleShoringLeftType: data.customInsoleShoringLeftType || '',
+        customInsoleShoringRightType: data.customInsoleShoringRightType || '',
+        soleReinforcementEnabled: data.soleReinforcementEnabled,
+        soleReinforcementLeft: data.soleReinforcementLeft,
+        soleReinforcementRight: data.soleReinforcementRight,
+        entryPoint: data.entryPoint || '',
+        tonguePaddingEnabled: data.tonguePaddingEnabled,
+        fixedTongueEnabled: data.fixedTongueEnabled,
+        heelTypeLeft: data.heelTypeLeft || '',
+        heelTypeRight: data.heelTypeRight || '',
+        heelHeightLeft: data.heelHeightLeft || '',
+        heelHeightRight: data.heelHeightRight || '',
+        heelWedgeLeftEnabled: data.heelWedgeLeftEnabled,
+        heelWedgeRightEnabled: data.heelWedgeRightEnabled,
+        heelWedgeLeftType: data.heelWedgeLeftType || '',
+        heelWedgeRightType: data.heelWedgeRightType || '',
+        donkeyEarLeftEnabled: data.donkeyEarLeftEnabled,
+        donkeyEarRightEnabled: data.donkeyEarRightEnabled,
+        donkeyEarLeftType: data.donkeyEarLeftType || '',
+        donkeyEarRightType: data.donkeyEarRightType || '',
+        heelRoundingLeftEnabled: data.heelRoundingLeftEnabled,
+        heelRoundingRightEnabled: data.heelRoundingRightEnabled,
+        heelRoundingLeftHeight: data.heelRoundingLeftHeight || '',
+        heelRoundingLeftLength: data.heelRoundingLeftLength || '',
+        heelRoundingRightHeight: data.heelRoundingRightHeight || '',
+        heelRoundingRightLength: data.heelRoundingRightLength || '',
+        rockerSoleType: data.rockerSoleType || '',
         // New fields
         showColorAndModel: data.showColorAndModel,
         modelType: data.modelType || '',
@@ -393,9 +390,9 @@ const FormCheckFoliepasPage = () => {
         tonguePaddingMm: data.tonguePaddingMm || '',
         paddingCollarMm: data.paddingCollarMm || '',
         closureType: data.closureType || '',
-        ringsNr: data.ringsNr || '',
+        ringsNumber: data.ringsNumber || '',
         ringsAmount: data.ringsAmount || '',
-        hooksNr: data.hooksNr || '',
+        hooksNumber: data.hooksNumber || '',
         hooksAmount: data.hooksAmount || '',
         zipperType: data.zipperType || '',
         zipperMedial: data.zipperMedial || false,
@@ -460,7 +457,7 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper>
                     <RadioGroup
                       value={side}
-                      onValueChange={v => form.setValue('side', v as Zijde)}
+                      onValueChange={v => form.setValue('side', v as Side)}
                     >
                       <div className="flex flex-row justify-center gap-6">
                         <div className="flex items-center space-x-2">
@@ -509,7 +506,7 @@ const FormCheckFoliepasPage = () => {
                           form.getValues('readingCorrectionAfterFoilFit') || '';
 
                         // Construct new line: "- Translation: Links: Rechts:"
-                        const textToAdd = `- ` + t(optie.translationKey);
+                        const textToAdd = '- ' + t(optie.translationKey);
 
                         // Append with newline if text exists
                         const newText = currentText
@@ -572,7 +569,7 @@ const FormCheckFoliepasPage = () => {
                           '';
 
                         // Construct new line: "- Translation: Links: Rechts:"
-                        const textToAdd = `- ` + t(optie.translationKey);
+                        const textToAdd = '- ' + t(optie.translationKey);
 
                         // Append with newline if text exists
                         const newText = currentText
@@ -638,9 +635,9 @@ const FormCheckFoliepasPage = () => {
                         id="shaft-left"
                         type="number"
                         placeholder={t('cmPlaceholder')}
-                        value={form.watch('schachthoogteLinks')}
+                        value={form.watch('shaftHeightLeft')}
                         onChange={e =>
-                          form.setValue('schachthoogteLinks', e.target.value)
+                          form.setValue('shaftHeightLeft', e.target.value)
                         }
                         className="w-2/3 text-center"
                       />
@@ -655,9 +652,9 @@ const FormCheckFoliepasPage = () => {
                         id="shaft-right"
                         type="number"
                         placeholder={t('cmPlaceholder')}
-                        value={form.watch('schachthoogteRechts')}
+                        value={form.watch('shaftHeightRight')}
                         onChange={e =>
-                          form.setValue('schachthoogteRechts', e.target.value)
+                          form.setValue('shaftHeightRight', e.target.value)
                         }
                         className="w-2/3 text-center"
                       />
@@ -685,7 +682,7 @@ const FormCheckFoliepasPage = () => {
                             <Switch
                               id={`encl-left-${optie.key}`}
                               checked={
-                                (form.watch('omsluitingLinks')[
+                                (form.watch('enclosureLeft')[
                                   optie.fullKeyLinks
                                 ] as boolean) || false
                               }
@@ -694,8 +691,8 @@ const FormCheckFoliepasPage = () => {
                                   window.navigator.vibrate(10);
                                 }
 
-                                form.setValue('omsluitingLinks', {
-                                  ...form.getValues('omsluitingLinks'),
+                                form.setValue('enclosureLeft', {
+                                  ...form.getValues('enclosureLeft'),
                                   [optie.fullKeyLinks]: !!checked,
                                 });
                                 if (
@@ -703,16 +700,16 @@ const FormCheckFoliepasPage = () => {
                                   optie.needsMm &&
                                   optie.defaultMm
                                 ) {
-                                  form.setValue('omsluitingLinksMm', {
-                                    ...form.getValues('omsluitingLinksMm'),
+                                  form.setValue('enclosureLeftMm', {
+                                    ...form.getValues('enclosureLeftMm'),
                                     [optie.mmKeyLinks]: optie.defaultMm,
                                   });
                                 } else if (!checked) {
                                   const next = {
-                                    ...form.getValues('omsluitingLinksMm'),
+                                    ...form.getValues('enclosureLeftMm'),
                                   };
                                   delete next[optie.mmKeyLinks];
-                                  form.setValue('omsluitingLinksMm', next);
+                                  form.setValue('enclosureLeftMm', next);
                                 }
                               }}
                               className="mr-2"
@@ -721,7 +718,7 @@ const FormCheckFoliepasPage = () => {
                               {optie.label}
                             </span>
                             {optie.needsMm &&
-                              (form.watch('omsluitingLinks')[
+                              (form.watch('enclosureLeft')[
                                 optie.fullKeyLinks
                               ] as boolean) && (
                                 <Input
@@ -734,13 +731,13 @@ const FormCheckFoliepasPage = () => {
                                     optie.key === 'hoge' ? 'cm' : 'mm'
                                   }
                                   value={
-                                    (form.watch('omsluitingLinksMm')[
+                                    (form.watch('enclosureLeftMm')[
                                       optie.mmKeyLinks
                                     ] as string) || ''
                                   }
                                   onChange={e =>
-                                    form.setValue('omsluitingLinksMm', {
-                                      ...form.getValues('omsluitingLinksMm'),
+                                    form.setValue('enclosureLeftMm', {
+                                      ...form.getValues('enclosureLeftMm'),
                                       [optie.mmKeyLinks]: e.target.value,
                                     })
                                   }
@@ -764,7 +761,7 @@ const FormCheckFoliepasPage = () => {
                             <Switch
                               id={`encl-right-${optie.key}`}
                               checked={
-                                (form.watch('omsluitingRechts')[
+                                (form.watch('enclosureRight')[
                                   optie.fullKeyRechts
                                 ] as boolean) || false
                               }
@@ -773,8 +770,8 @@ const FormCheckFoliepasPage = () => {
                                   window.navigator.vibrate(10);
                                 }
 
-                                form.setValue('omsluitingRechts', {
-                                  ...form.getValues('omsluitingRechts'),
+                                form.setValue('enclosureRight', {
+                                  ...form.getValues('enclosureRight'),
                                   [optie.fullKeyRechts]: !!checked,
                                 });
                                 if (
@@ -782,16 +779,16 @@ const FormCheckFoliepasPage = () => {
                                   optie.needsMm &&
                                   optie.defaultMm
                                 ) {
-                                  form.setValue('omsluitingRechtsMm', {
-                                    ...form.getValues('omsluitingRechtsMm'),
+                                  form.setValue('enclosureRightMm', {
+                                    ...form.getValues('enclosureRightMm'),
                                     [optie.mmKeyRechts]: optie.defaultMm,
                                   });
                                 } else if (!checked) {
                                   const next = {
-                                    ...form.getValues('omsluitingRechtsMm'),
+                                    ...form.getValues('enclosureRightMm'),
                                   };
                                   delete next[optie.mmKeyRechts];
-                                  form.setValue('omsluitingRechtsMm', next);
+                                  form.setValue('enclosureRightMm', next);
                                 }
                               }}
                               className="mr-2"
@@ -800,7 +797,7 @@ const FormCheckFoliepasPage = () => {
                               {optie.label}
                             </span>
                             {optie.needsMm &&
-                              (form.watch('omsluitingRechts')[
+                              (form.watch('enclosureRight')[
                                 optie.fullKeyRechts
                               ] as boolean) && (
                                 <Input
@@ -813,13 +810,13 @@ const FormCheckFoliepasPage = () => {
                                     optie.key === 'hoge' ? 'cm' : 'mm'
                                   }
                                   value={
-                                    (form.watch('omsluitingRechtsMm')[
+                                    (form.watch('enclosureRightMm')[
                                       optie.mmKeyRechts
                                     ] as string) || ''
                                   }
                                   onChange={e =>
-                                    form.setValue('omsluitingRechtsMm', {
-                                      ...form.getValues('omsluitingRechtsMm'),
+                                    form.setValue('enclosureRightMm', {
+                                      ...form.getValues('enclosureRightMm'),
                                       [optie.mmKeyRechts]: e.target.value,
                                     })
                                   }
@@ -875,8 +872,8 @@ const FormCheckFoliepasPage = () => {
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
                   <FormItemWrapper label={t('shaftOpening')}>
                     <RadioGroup
-                      value={form.watch('openstandSchacht') || ''}
-                      onValueChange={v => form.setValue('openstandSchacht', v)}
+                      value={form.watch('shaftOpeningWidth') || ''}
+                      onValueChange={v => form.setValue('shaftOpeningWidth', v)}
                       className="justify-center"
                     >
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
@@ -1132,12 +1129,12 @@ const FormCheckFoliepasPage = () => {
                     {closureType === 'ringsHooks' && (
                       <div className="grid grid-cols-2 gap-3 pt-2 w-full">
                         <div className="flex flex-col space-y-2">
-                          <Label htmlFor="rings-nr">{t('ringsNr')}</Label>
+                          <Label htmlFor="rings-nr">{t('ringsNumber')}</Label>
                           <Input
                             id="rings-nr"
-                            value={form.watch('ringsNr') || ''}
+                            value={form.watch('ringsNumber') || ''}
                             onChange={e =>
-                              form.setValue('ringsNr', e.target.value)
+                              form.setValue('ringsNumber', e.target.value)
                             }
                           />
                         </div>
@@ -1155,12 +1152,12 @@ const FormCheckFoliepasPage = () => {
                           />
                         </div>
                         <div className="flex flex-col space-y-2">
-                          <Label htmlFor="hooks-nr">{t('hooksNr')}</Label>
+                          <Label htmlFor="hooks-nr">{t('hooksNumber')}</Label>
                           <Input
                             id="hooks-nr"
-                            value={form.watch('hooksNr') || ''}
+                            value={form.watch('hooksNumber') || ''}
                             onChange={e =>
-                              form.setValue('hooksNr', e.target.value)
+                              form.setValue('hooksNumber', e.target.value)
                             }
                           />
                         </div>
@@ -1583,11 +1580,11 @@ const FormCheckFoliepasPage = () => {
                           defaultHeight = '2.5';
                         }
 
-                        if (!form.watch('hakhoogteLinks')) {
-                          form.setValue('hakhoogteLinks', defaultHeight);
+                        if (!form.watch('heelHeightLeft')) {
+                          form.setValue('heelHeightLeft', defaultHeight);
                         }
-                        if (!form.watch('hakhoogteRechts')) {
-                          form.setValue('hakhoogteRechts', defaultHeight);
+                        if (!form.watch('heelHeightRight')) {
+                          form.setValue('heelHeightRight', defaultHeight);
                         }
                       }}
                     >
@@ -1716,9 +1713,9 @@ const FormCheckFoliepasPage = () => {
                           id="heel-height-left"
                           type="number"
                           step="0.1"
-                          value={form.watch('hakhoogteLinks') || ''}
+                          value={form.watch('heelHeightLeft') || ''}
                           onChange={e =>
-                            form.setValue('hakhoogteLinks', e.target.value)
+                            form.setValue('heelHeightLeft', e.target.value)
                           }
                           className="w-2/3"
                         />
@@ -1729,9 +1726,9 @@ const FormCheckFoliepasPage = () => {
                           id="heel-height-right"
                           type="number"
                           step="0.1"
-                          value={form.watch('hakhoogteRechts') || ''}
+                          value={form.watch('heelHeightRight') || ''}
                           onChange={e =>
-                            form.setValue('hakhoogteRechts', e.target.value)
+                            form.setValue('heelHeightRight', e.target.value)
                           }
                           className="w-2/3"
                         />
@@ -1752,10 +1749,10 @@ const FormCheckFoliepasPage = () => {
                         <Switch
                           id="heel-rounding-left"
                           checked={
-                            form.watch('hakafrondingLinksEnabled') || false
+                            form.watch('heelRoundingLeftEnabled') || false
                           }
                           onCheckedChange={checked =>
-                            form.setValue('hakafrondingLinksEnabled', !!checked)
+                            form.setValue('heelRoundingLeftEnabled', !!checked)
                           }
                         />
                       </div>
@@ -1769,13 +1766,10 @@ const FormCheckFoliepasPage = () => {
                         <Switch
                           id="heel-rounding-right"
                           checked={
-                            form.watch('hakafrondingRechtsEnabled') || false
+                            form.watch('heelRoundingRightEnabled') || false
                           }
                           onCheckedChange={checked =>
-                            form.setValue(
-                              'hakafrondingRechtsEnabled',
-                              !!checked,
-                            )
+                            form.setValue('heelRoundingRightEnabled', !!checked)
                           }
                         />
                       </div>

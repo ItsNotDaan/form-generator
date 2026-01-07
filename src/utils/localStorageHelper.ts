@@ -112,7 +112,7 @@ export function clearAllFormStorage(): void {
       'intakeRebacare',
       'intakeOSB',
       'intakeOVAC',
-      'intakeSteunzolen',
+      'intakeInsoles',
     ];
 
     formKeys.forEach(key => removeFromLocalStorage(key));
