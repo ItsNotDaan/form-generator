@@ -577,7 +577,7 @@ const FormIntakeVLOSPage = () => {
                       <Input
                         id="shaft-left"
                         type="number"
-                        placeholder="cm"
+                        placeholder={t('cmPlaceholder')}
                         value={form.watch('schachthoogteLinks')}
                         onChange={e =>
                           form.setValue('schachthoogteLinks', e.target.value)
@@ -594,7 +594,7 @@ const FormIntakeVLOSPage = () => {
                       <Input
                         id="shaft-right"
                         type="number"
-                        placeholder="cm"
+                        placeholder={t('cmPlaceholder')}
                         value={form.watch('schachthoogteRechts')}
                         onChange={e =>
                           form.setValue('schachthoogteRechts', e.target.value)
@@ -1177,7 +1177,7 @@ const FormIntakeVLOSPage = () => {
                           onChange={e =>
                             form.setValue('hakhoogteLinks', e.target.value)
                           }
-                          placeholder="cm"
+                          placeholder={t('cmPlaceholder')}
                         />
                       </div>
                     </FormItemWrapper>
@@ -1192,7 +1192,7 @@ const FormIntakeVLOSPage = () => {
                           onChange={e =>
                             form.setValue('hakhoogteRechts', e.target.value)
                           }
-                          placeholder="cm"
+                          placeholder={t('cmPlaceholder')}
                         />
                       </div>
                     </FormItemWrapper>

@@ -637,7 +637,7 @@ const FormCheckFoliepasPage = () => {
                       <Input
                         id="shaft-left"
                         type="number"
-                        placeholder="cm"
+                        placeholder={t('cmPlaceholder')}
                         value={form.watch('schachthoogteLinks')}
                         onChange={e =>
                           form.setValue('schachthoogteLinks', e.target.value)
@@ -654,7 +654,7 @@ const FormCheckFoliepasPage = () => {
                       <Input
                         id="shaft-right"
                         type="number"
-                        placeholder="cm"
+                        placeholder={t('cmPlaceholder')}
                         value={form.watch('schachthoogteRechts')}
                         onChange={e =>
                           form.setValue('schachthoogteRechts', e.target.value)
@@ -845,7 +845,7 @@ const FormCheckFoliepasPage = () => {
                     <Input
                       id="leg-length-left"
                       type="number"
-                      placeholder="cm"
+                      placeholder={t('cmPlaceholder')}
                       value={form.watch('legLengthDifferenceLeft')}
                       onChange={e =>
                         form.setValue('legLengthDifferenceLeft', e.target.value)
@@ -858,7 +858,7 @@ const FormCheckFoliepasPage = () => {
                     <Input
                       id="leg-length-right"
                       type="number"
-                      placeholder="cm"
+                      placeholder={t('cmPlaceholder')}
                       value={form.watch('legLengthDifferenceRight')}
                       onChange={e =>
                         form.setValue(

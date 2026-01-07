@@ -476,7 +476,7 @@ const FormIntakeTestPage = () => {
                       <Input
                         id="shaft-left"
                         type="number"
-                        placeholder="cm"
+                        placeholder={t('cmPlaceholder')}
                         value={form.watch('schachthoogteLinks')}
                         onChange={e =>
                           form.setValue('schachthoogteLinks', e.target.value)
@@ -491,7 +491,7 @@ const FormIntakeTestPage = () => {
                       <Input
                         id="shaft-right"
                         type="number"
-                        placeholder="cm"
+                        placeholder={t('cmPlaceholder')}
                         value={form.watch('schachthoogteRechts')}
                         onChange={e =>
                           form.setValue('schachthoogteRechts', e.target.value)
