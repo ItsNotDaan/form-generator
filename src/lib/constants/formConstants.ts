@@ -1,6 +1,14 @@
-// Gecentraliseerde formulier constanten (runtime waarden + afgeleide types)
+// ============================================================================
+// CENTRALIZED FORM CONSTANTS
+// ============================================================================
+// This file organizes all form constants by subject/form for clarity and maintainability.
+// Each form section contains all necessary types and options.
 
-// Behandelaars
+// ============================================================================
+// GLOBAL/SHARED CONSTANTS
+// ============================================================================
+
+/** Behandelaars (Practitioners) */
 export const BEHANDELAARS = [
   {label: 'Johan Bonekamp', value: 'p1'},
   {label: 'Job de Graaff', value: 'p2'},
@@ -11,7 +19,7 @@ export const BEHANDELAARS = [
   {label: 'Norah Schrijver', value: 'p7'},
 ];
 
-// Zorgverzekeraars
+/** Zorgverzekeraars (Insurance Companies) */
 export const ZORGVERZEKERAARS = [
   {label: 'Menzis', value: 'Menzis'},
   {label: 'Achmea', value: 'Achmea'},
@@ -25,7 +33,7 @@ export const ZORGVERZEKERAARS = [
   {label: 'Caresq', value: 'Caresq'},
 ];
 
-// Locaties
+/** Locaties (Locations) */
 export type Locatie = 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | 'Holten' | 'Markelo';
 export const LOCATIE_OPTIES = [
   {label: 'FZ', value: 'FZ'},
@@ -37,7 +45,7 @@ export const LOCATIE_OPTIES = [
   {label: 'Markelo', value: 'Markelo'},
 ];
 
-// Aanhef
+/** Aanhef (Salutation) */
 export type Aanhef = 'Mw.' | 'Dhr.' | 'X.';
 export const AANHEF_OPTIES = [
   {label: 'Mw.', value: 'Mw.'},
@@ -45,7 +53,7 @@ export const AANHEF_OPTIES = [
   {label: 'X.', value: 'X.'},
 ];
 
-// Generieke zijdes gebruikt in intake formulieren
+/** Zijde (Side) - Generic, used across forms */
 export type Zijde = 'both' | 'left' | 'right';
 export const ZIJDE_OPTIES = [
   {label: 'both', value: 'both'},
@@ -53,14 +61,18 @@ export const ZIJDE_OPTIES = [
   {label: 'right', value: 'right'},
 ];
 
-// Generieke ja/nee gebruikt in formulieren
+/** Ja/Nee (Yes/No) */
 export type JaNee = 'ja' | 'nee';
 export const JA_NEE_OPTIES = [
   {label: 'yes', value: 'ja', translationKey: 'yes'},
   {label: 'no', value: 'nee', translationKey: 'no'},
 ];
 
-// Openstand schacht opties (waarden in cm)
+// ============================================================================
+// VLOS FORM CONSTANTS
+// ============================================================================
+
+/** Openstand schacht opties (waarden in cm) */
 export type Openstand = '0.5' | '0.8' | '1' | '1.5' | '2';
 export const OPENSTAND_OPTIES = [
   {label: '0.5', value: '0.5'},
@@ -70,15 +82,7 @@ export const OPENSTAND_OPTIES = [
   {label: '2', value: '2'},
 ];
 
-// Supplement types
-export type SupplementType = 'lateral' | 'medial';
-export const SUPPLEMENT_TYPE_OPTIES = [
-  {value: 'Lateraal', label: 'lateral'},
-  {value: 'Mediaal', label: 'medial'},
-  {value: 'LateraalEnMediaal', label: 'lateralAndMedial'},
-];
-
-// Haksoort opties
+/** Haksoort opties */
 export type Haksoort =
   | 'Sleehak Vlak'
   | 'Opbouwhak'
@@ -97,7 +101,7 @@ export const HAKSOORT_OPTIES = [
   {label: 'Kernbekleding', value: 'Kernbekleding'},
 ];
 
-// Loopzool opties
+/** Loopzool opties */
 export type Loopzool =
   | 'Lavero Soft 6mm'
   | 'Star-o-last 6mm'
@@ -110,14 +114,14 @@ export const LOOPZOOL_OPTIES = [
   {label: 'Autoband profiel 6 mm', value: 'Autoband profiel 6 mm'},
 ];
 
-// Sluiting opties
+/** Sluiting opties */
 export type Sluiting = 'Haken/Ringen' | 'Klittenband';
 export const SLUITING_OPTIES = [
   {label: 'Haken/Ringen', value: 'Haken/Ringen'},
   {label: 'Klittenband', value: 'Klittenband'},
 ];
 
-// Hakschoring types
+/** Hakschoring types */
 export type HakschoringType = 'medial' | 'lateral' | 'LateraalEnMediaal';
 export const HAKSCHORING_TYPE_OPTIES = [
   {label: 'medial', value: 'medial', translationKey: 'medial'},
@@ -129,7 +133,7 @@ export const HAKSCHORING_TYPE_OPTIES = [
   },
 ];
 
-// Ezelsoor types
+/** Ezelsoor types */
 export type EzelsoorType = 'medial' | 'lateral';
 export const EZELSOOR_TYPE_OPTIES = [
   {label: 'medial', value: 'medial', translationKey: 'medial'},
@@ -137,7 +141,7 @@ export const EZELSOOR_TYPE_OPTIES = [
   {value: 'LateraalEnMediaal', label: 'lateralAndMedial'},
 ];
 
-// Omsluiting
+/** Omsluiting (Enclosure) - Used in VLOS */
 export type OmsluitingKey =
   | 'hoge'
   | 'lavero'
@@ -149,11 +153,11 @@ export type OmsluitingOptie = {
   key: OmsluitingKey;
   label: string;
   needsMm: boolean;
-  defaultMm?: string; // standaard wanneer geselecteerd
-  fullKeyLinks: string; // Full key name for left side: omsluitingLinksMultivorm
-  fullKeyRechts: string; // Full key name for right side: omsluitingRechtsMultivorm
-  mmKeyLinks: string; // MM key for left side: omsluitingMmLinksMultivorm
-  mmKeyRechts: string; // MM key for right side: omsluitingMmRechtsMultivorm
+  defaultMm?: string;
+  fullKeyLinks: string;
+  fullKeyRechts: string;
+  mmKeyLinks: string;
+  mmKeyRechts: string;
 };
 
 export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
@@ -207,21 +211,123 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   },
 ];
 
-// Pulman types
+// ============================================================================
+// PULMAN & REBACARE FORM CONSTANTS
+// ============================================================================
+
+/** Pulman types */
 export type PulmanType = 'New Harlem' | 'Harlem Extra';
 export const PULMAN_TYPE_OPTIES = [
   {label: 'New Harlem', value: 'New Harlem'},
   {label: 'Harlem Extra', value: 'Harlem Extra'},
 ];
 
-// Schoenmaten (37-48)
+/** Schoenmaten (37-48) */
 export const SCHOENMATEN = Array.from({length: 12}, (_, i) =>
   (37 + i).toString(),
 );
 export type Schoenmaat = (typeof SCHOENMATEN)[number];
 
-// OSB Formulier Constanten
-// Omschrijving/Paartype
+// ============================================================================
+// OSA FORM CONSTANTS
+// ============================================================================
+
+/** OSA Functieonderzoek - Ziektebeelden (Medical Conditions) */
+export const ZIEKTEBEELDEN_OPTIES = [
+  {key: 'diabetes', label: 'diabetes', translationKey: 'diabetes'},
+  {
+    key: 'polyNeuropathie',
+    label: 'polyNeuropathie',
+    translationKey: 'polyNeuropathie',
+  },
+  {key: 'reuma', label: 'reuma', translationKey: 'reuma'},
+  {key: 'ms', label: 'ms', translationKey: 'ms'},
+  {key: 'hmsn', label: 'hmsn', translationKey: 'hmsn'},
+  {key: 'degeneratie', label: 'degeneratie', translationKey: 'degeneratie'},
+  {key: 'artrose', label: 'artrose', translationKey: 'artrose'},
+];
+
+/** OSA Functieonderzoek - Loopafstand hulpmiddelen (Walking Distance Aids) */
+export const LOOPAFSTAND_OPTIES = [
+  {key: 'steunzolen', label: 'steunzolen', translationKey: 'supportSoles'},
+  {key: 'rollator', label: 'rollator', translationKey: 'rollator'},
+  {key: 'stok', label: 'stok', translationKey: 'cane'},
+  {key: 'elKousen', label: 'elKousen', translationKey: 'compressionStockings'},
+  {key: 'knieBrace', label: 'knieBrace', translationKey: 'kneeBrace'},
+  {key: 'fysio', label: 'fysio', translationKey: 'physiotherapy'},
+  {key: 'pedicure', label: 'pedicure', translationKey: 'pedicure'},
+];
+
+/** OSA Functieonderzoek - Inspectie voeten (Foot Inspection) */
+export const INSPECTIE_VOETEN_OPTIES = [
+  {key: 'oedeem', label: 'oedeem', translationKey: 'edema'},
+  {key: 'wisselend', label: 'wisselend', translationKey: 'variable'},
+  {key: 'structureel', label: 'structureel', translationKey: 'structural'},
+  {
+    key: 'dunneKwetsbareHuid',
+    label: 'dunneKwetsbareHuid',
+    translationKey: 'thinFragileSkin',
+  },
+  {key: 'drogeHuid', label: 'drogeHuid', translationKey: 'drySkin'},
+  {
+    key: 'doorbloedingsstoornis',
+    label: 'doorbloedingsstoornis',
+    translationKey: 'circulationDisorder',
+  },
+  {key: 'halluxValgus', label: 'halluxValgus', translationKey: 'halluxValgus'},
+  {key: 'bunion', label: 'bunion', translationKey: 'bunion'},
+  {
+    key: 'pesPlanoValgus',
+    label: 'pesPlanoValgus',
+    translationKey: 'pesPlanoValgus',
+  },
+  {key: 'pesCavo', label: 'pesCavo', translationKey: 'pesCavo'},
+  {key: 'klauwtenen', label: 'klauwtenen', translationKey: 'clawToes'},
+];
+
+/** OSA Digitaal - Leesthoogte options */
+export const LEESTHOOGTE_OPTIES = [
+  {label: '15cm', value: '15'},
+  {label: '20cm', value: '20'},
+  {label: '25cm', value: '25'},
+];
+
+/** OSA Digitaal - MTP1 diep options */
+export const MTP1_DIEP_OPTIES = [
+  {label: 'Nee', value: 'No'},
+  {label: '4cm', value: '4'},
+  {label: '8cm', value: '8'},
+];
+
+/** Foliepas Leestcorrectie opties */
+export const LEESTCORRECTIE_OPTIES = [
+  {
+    label: 'Openstand (zie Foliepas)',
+    value: 'openstandLastCorrection',
+    translationKey: 'openstandLastCorrection',
+  },
+  {
+    label: 'Schachthoogte',
+    value: 'shaftHeightLastCorrection',
+    translationKey: 'shaftHeightLastCorrection',
+  },
+  {
+    label: 'Achter innemen (zie Foliepas)',
+    value: 'achterInnemenLastCorrection',
+    translationKey: 'rearTakeInLastCorrection',
+  },
+  {
+    label: 'Enkels aanpassen (zie Foliepas)',
+    value: 'ankleAdjustmentLastCorrection',
+    translationKey: 'ankleAdjustmentLastCorrection',
+  },
+];
+
+// ============================================================================
+// OSB FORM CONSTANTS
+// ============================================================================
+
+/** Paartype (Pair Type) - Used in multiple forms */
 export type PaartypeOptie =
   | 'Eerste paar'
   | 'Herhalings paar'
@@ -234,7 +340,7 @@ export const PAARTYPE_OPTIES = [
   {label: 'privatePair', value: 'Privé paar'},
 ];
 
-// Doel opties (GEEN L/R)
+/** Doel opties (Goal options - GEEN L/R) */
 export type DoelOptie =
   | 'Pasvorm'
   | 'Stabiliteit'
@@ -255,7 +361,7 @@ export const DOEL_OPTIES = [
   },
 ];
 
-// Loopfunctie opties
+/** Loopfunctie opties */
 export type LoopfunctieOptie = 'Passief' | 'Actief' | 'Korte transfers';
 export const LOOPFUNCTIE_OPTIES = [
   {label: 'Passief', value: 'Passief', fullKey: 'loopfunctiePassief'},
@@ -267,7 +373,7 @@ export const LOOPFUNCTIE_OPTIES = [
   },
 ];
 
-// Loopfunctie indicatie opties (OSB specific)
+/** Loopfunctie indicatie opties (OSB specific) */
 export type LoopfunctieIndicatieOptie =
   | 'Passief'
   | 'Korte Transfers'
@@ -282,7 +388,7 @@ export const LOOPFUNCTIE_INDICATIE_OPTIES = [
   {label: 'Actief', value: 'Actief', fullKey: 'loopfunctieActief'},
 ];
 
-// Leveranciers
+/** Leveranciers (Suppliers) */
 export type LeverancierOptie = 'Neskrid' | 'Tom' | 'Myfoot' | 'Durea';
 export const LEVERANCIER_OPTIES = [
   {label: 'Neskrid', value: 'Neskrid'},
@@ -291,14 +397,14 @@ export const LEVERANCIER_OPTIES = [
   {label: 'Durea', value: 'Durea'},
 ];
 
-// Basiscode SOS
+/** Basiscode SOS */
 export type BasiscodeOptie = '42' | '40';
 export const BASISCODE_OPTIES = [
   {label: '42', value: '42'},
   {label: '40', value: '40'},
 ];
 
-// Supplement opties met codes (in tabel met L/R)
+/** Supplement opties met codes (in tabel met L/R) */
 export const SUPPLEMENT_OPTIES = [
   {key: 'individueel', label: 'Supplement individueel', code: 43},
   {key: 'afwikkelrol_eenvoudig', label: 'Afwikkelrol eenvoudig', code: 46},
@@ -311,7 +417,7 @@ export const SUPPLEMENT_OPTIES = [
 ] as const;
 export type SupplementOptie = (typeof SUPPLEMENT_OPTIES)[number];
 
-// Hallux valgus mm opties
+/** Hallux valgus mm opties */
 export type HalluxMmOptie = 'Nee' | '3 mm' | '8 mm';
 export const HALLUX_MM_OPTIES = [
   {label: 'Nee', value: 'Nee'},
@@ -319,7 +425,7 @@ export const HALLUX_MM_OPTIES = [
   {label: '8 mm', value: '8 mm'},
 ];
 
-// Verdieping voorvoet mm opties
+/** Verdieping voorvoet mm opties */
 export type VerdiepingMmOptie = 'Nee' | '3 mm' | '5 mm';
 export const VERDIEPING_MM_OPTIES = [
   {label: 'Nee', value: 'Nee'},
@@ -327,7 +433,11 @@ export const VERDIEPING_MM_OPTIES = [
   {label: '5 mm', value: '5 mm'},
 ];
 
-// Steunzool types
+// ============================================================================
+// STEUNZOLEN FORM CONSTANTS
+// ============================================================================
+
+/** Steunzool types */
 export type SteunzoolType =
   | 'Berksteunzool met'
   | 'Berksteunzool zonder'
@@ -360,7 +470,7 @@ export const STEUNZOOL_TYPE_OPTIES = [
   {label: 'Anders', value: 'Anders', fullKey: 'steunzoolTypeAnders'},
 ];
 
-// Correctie middenvoet
+/** Correctie middenvoet */
 export type CorrectieMiddenvoet = 'Nee' | 'Neutraal' | 'Laag' | 'Hoog';
 export const CORRECTIE_MIDDENVOET_OPTIES = [
   {label: 'Nee', value: 'Nee'},
@@ -369,7 +479,7 @@ export const CORRECTIE_MIDDENVOET_OPTIES = [
   {label: 'Hoog', value: 'Hoog'},
 ];
 
-// Correctie voorvoet
+/** Correctie voorvoet */
 export type CorrectieVoorvoet = 'Nee' | 'Neutraal' | 'Pronatie' | 'Supinatie';
 export const CORRECTIE_VOORVOET_OPTIES = [
   {label: 'Nee', value: 'Nee'},
@@ -378,7 +488,7 @@ export const CORRECTIE_VOORVOET_OPTIES = [
   {label: 'Supinatie', value: 'Supinatie'},
 ];
 
-// Pellote opties
+/** Pellote opties */
 export type PelloteOptie = 'Nee' | 'Hoog' | 'Laag';
 export const PELLOTE_OPTIES = [
   {label: 'Nee', value: 'Nee'},
@@ -386,7 +496,23 @@ export const PELLOTE_OPTIES = [
   {label: 'Laag', value: 'Laag'},
 ];
 
-// OVAC Omschrijving items met post nummers
+/** Steunzolen pricing options - numeric values */
+export type SteunzolenPrijs = 175 | 225 | 195;
+export const STEUNZOLEN_PRIJS_OPTIES = [
+  {label: 'priceUpTo15Years', value: 175},
+  {label: 'insolesPrice225', value: 225},
+  {label: 'priceWithin3Months', value: 195},
+];
+
+/** Talonette pricing */
+export type TalonettePrijs = 29;
+export const TALONETTE_PRIJS_OPTIES = [{label: 'priceTalonette', value: 29}];
+
+// ============================================================================
+// OVAC FORM CONSTANTS
+// ============================================================================
+
+/** OVAC Omschrijving items met post nummers */
 export type OvacOmschrijvingItem = {
   key: string;
   label: string;
@@ -417,105 +543,10 @@ export const OVAC_OMSCHRIJVING_ITEMS: OvacOmschrijvingItem[] = [
   {key: 'nieuweWreefsluiting', label: 'Nieuwe wreefsluiting', postNr: '88'},
 ];
 
-// Steunzolen pricing options - numeric values
-export type SteunzolenPrijs = 175 | 225 | 195;
-export const STEUNZOLEN_PRIJS_OPTIES = [
-  {label: 'priceUpTo15Years', value: 175},
-  {label: 'insolesPrice225', value: 225},
-  {label: 'priceWithin3Months', value: 195},
-];
-
-// Talonette pricing
-export type TalonettePrijs = 29;
-export const TALONETTE_PRIJS_OPTIES = [{label: 'priceTalonette', value: 29}];
-
-// OSA Functieonderzoek - Ziektebeelden (Medical Conditions)
-export const ZIEKTEBEELDEN_OPTIES = [
-  {key: 'diabetes', label: 'diabetes', translationKey: 'diabetes'},
-  {
-    key: 'polyNeuropathie',
-    label: 'polyNeuropathie',
-    translationKey: 'polyNeuropathie',
-  },
-  {key: 'reuma', label: 'reuma', translationKey: 'reuma'},
-  {key: 'ms', label: 'ms', translationKey: 'ms'},
-  {key: 'hmsn', label: 'hmsn', translationKey: 'hmsn'},
-  {key: 'degeneratie', label: 'degeneratie', translationKey: 'degeneratie'},
-  {key: 'artrose', label: 'artrose', translationKey: 'artrose'},
-];
-
-// OSA Functieonderzoek - Loopafstand hulpmiddelen (Walking Distance Aids)
-export const LOOPAFSTAND_OPTIES = [
-  {key: 'steunzolen', label: 'steunzolen', translationKey: 'supportSoles'},
-  {key: 'rollator', label: 'rollator', translationKey: 'rollator'},
-  {key: 'stok', label: 'stok', translationKey: 'cane'},
-  {key: 'elKousen', label: 'elKousen', translationKey: 'compressionStockings'},
-  {key: 'knieBrace', label: 'knieBrace', translationKey: 'kneeBrace'},
-  {key: 'fysio', label: 'fysio', translationKey: 'physiotherapy'},
-  {key: 'pedicure', label: 'pedicure', translationKey: 'pedicure'},
-];
-
-// OSA Functieonderzoek - Inspectie voeten (Foot Inspection)
-export const INSPECTIE_VOETEN_OPTIES = [
-  {key: 'oedeem', label: 'oedeem', translationKey: 'edema'},
-  {key: 'wisselend', label: 'wisselend', translationKey: 'variable'},
-  {key: 'structureel', label: 'structureel', translationKey: 'structural'},
-  {
-    key: 'dunneKwetsbareHuid',
-    label: 'dunneKwetsbareHuid',
-    translationKey: 'thinFragileSkin',
-  },
-  {key: 'drogeHuid', label: 'drogeHuid', translationKey: 'drySkin'},
-  {
-    key: 'doorbloedingsstoornis',
-    label: 'doorbloedingsstoornis',
-    translationKey: 'circulationDisorder',
-  },
-  {key: 'halluxValgus', label: 'halluxValgus', translationKey: 'halluxValgus'},
-  {key: 'bunion', label: 'bunion', translationKey: 'bunion'},
-  {
-    key: 'pesPlanoValgus',
-    label: 'pesPlanoValgus',
-    translationKey: 'pesPlanoValgus',
-  },
-  {key: 'pesCavo', label: 'pesCavo', translationKey: 'pesCavo'},
-  {key: 'klauwtenen', label: 'klauwtenen', translationKey: 'clawToes'},
-];
-
-// OSA Digitaal - Leesthoogte options
-export const LEESTHOOGTE_OPTIES = [
-  {label: '15cm', value: '15'},
-  {label: '20cm', value: '20'},
-  {label: '25cm', value: '25'},
-];
-
-// OSA Digitaal - MTP1 diep options
-export const MTP1_DIEP_OPTIES = [
-  {label: 'Nee', value: 'No'},
-  {label: '4cm', value: '4'},
-  {label: '8cm', value: '8'},
-];
-
-//Foliepas Leestcorrectie opties
-export const LEESTCORRECTIE_OPTIES = [
-  {
-    label: 'Openstand (zie Foliepas)',
-    value: 'openstandLastCorrection',
-    translationKey: 'openstandLastCorrection',
-  },
-  {
-    label: 'Schachthoogte',
-    value: 'shaftHeightLastCorrection',
-    translationKey: 'shaftHeightLastCorrection',
-  },
-  {
-    label: 'Achter innemen (zie Foliepas)',
-    value: 'achterInnemenLastCorrection',
-    translationKey: 'rearTakeInLastCorrection',
-  },
-  {
-    label: 'Enkels aanpassen (zie Foliepas)',
-    value: 'ankleAdjustmentLastCorrection',
-    translationKey: 'ankleAdjustmentLastCorrection',
-  },
+/** Supplement types - Used in OVAC */
+export type SupplementType = 'lateral' | 'medial';
+export const SUPPLEMENT_TYPE_OPTIES = [
+  {value: 'Lateraal', label: 'lateral'},
+  {value: 'Mediaal', label: 'medial'},
+  {value: 'LateraalEnMediaal', label: 'lateralAndMedial'},
 ];

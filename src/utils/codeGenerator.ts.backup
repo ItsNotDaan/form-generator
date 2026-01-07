@@ -1,57 +1,28 @@
 /**
- * ==================================================
- * MEDICAL CODE GENERATION SYSTEM
- * ==================================================
+ * Medical Code Generation System for VLOS and OSA intake forms
+ *
  * Generates boolean keys for medical codes for Word document mail merge.
  *
- * This system handles code generation for multiple intake form types:
- * - VLOS (Vormgegeven Laarzen Orthopedische Schoeiing)
- * - OSA (Orthopedische Schoeiing met Aftrap)
- * - OSB (Orthopedische Schoeiing met Bijzondere Zolen)
- * - OVAC (Overige Voorzieningen Aangepaste Voetkleding)
+ * Code definitions:
+ * ---MAIN CODES---
+ * - 1: VLOS eerste paar
+ * - 2: VLOS herhaling/reservepaar
+ * - 3: Laag OSA (<12cm schachthoogte) eerste paar
+ * - 4: Laag OSA (<12cm schachthoogte) herhaling/reservepaar
+ * - 5: Half-hoog OSA (12-18cm schachthoogte) eerste paar
+ * - 6: Half-hoog OSA (12-18cm schachthoogte) herhaling/reservepaar
+ * - 7: Hoog OSA (>18cm schachthoogte) eerste paar
+ * - 8: Hoog OSA (>18cm schachthoogte) herhaling/reservepaar
  *
- * CODE DEFINITIONS BY FORM TYPE:
- * ==================================================
- *
- * --- VLOS & OSA MAIN CODES (1-8) ---
- * - 01: VLOS eerste paar
- * - 02: VLOS herhaling/reservepaar
- * - 03: Laag OSA (<12cm schachthoogte) eerste paar
- * - 04: Laag OSA (<12cm schachthoogte) herhaling/reservepaar
- * - 05: Half-hoog OSA (12-18cm schachthoogte) eerste paar
- * - 06: Half-hoog OSA (12-18cm schachthoogte) herhaling/reservepaar
- * - 07: Hoog OSA (>18cm schachthoogte) eerste paar
- * - 08: Hoog OSA (>18cm schachthoogte) herhaling/reservepaar
- *
- * --- SUB CODES (Per Side: Links/Rechts) ---
- * - 09: Proefschoen (only for high OSA code 07 + code 17)
- * - 10-11: Placeholders (not implemented)
- * - 14: Aanvulling lengte/breedte (placeholder)
- * - 15: Zoolverstijving
- * - 16: Ezelsoor (mediaal/lateraal)
- * - 17: Koker tussen voering (any omsluiting option)
- * - 50: Diverse Amputaties
- *
- * --- OSB MAIN CODE & SUB CODES (42, 43, 46, 47, 57) ---
- * - 42: OSB Cluster (Basis code)
- * - 43: Supplement Individueel
- * - 46: Afwikkelrol Eenvoudig (<1cm)
- * - 47: Afwikkelrol Gecompliceerd (>=1cm)
- * - 57: Zoolverstijving
- *
- * --- OVAC MAIN CODE & SUB CODES (70, 71-78, 84-85, 88) ---
- * - 70: OVAC Cluster (Main code, varies by insurer)
- * - 71: Supplement individueel
- * - 74: Eenvoudige afwikkelrol (<1cm)
- * - 75: Gecompliceerde afwikkelrol (>=1cm)
- * - 76: Hak aanpassing t/m 2cm
- * - 77: Hak zool verhoging t/m 3cm
- * - 78: Hak zool verhoging t/m 7cm
- * - 84: Aangepaste hakken
- * - 85: Zoolverstijving
- * - 88: Nieuwe wreefsluiting
- *
- * ==================================================
+ * --SUB CODES---
+ * - 9: Proefschoen (only for high OSA code 07 + code 17 for Achmea, DSW, ASR) per side
+ * - 10: (placeholder - not implemented)
+ * - 11: (placeholder - not implemented)
+ * - 14: Aanvulling lengte/breedte (placeholder - not implemented)
+ * - 15: Zoolverstijving per side
+ * - 16: Ezelsoor (mediaal/lateraal) per side
+ * - 17: Koker tussen voering (any omsluiting option checked) per side
+ * - 50: Diverse Amputaties per side
  */
 
 import {
@@ -147,13 +118,6 @@ interface IntakeFormData {
 /**
  * Initialize all codes to false
  */
-// ==================================================
-// UTILITY FUNCTIONS
-// ==================================================
-
-/**
- * Initialize all codes to false
- */
 function initializeCodes(): GeneratedCodes {
   return {
     code01: false,
@@ -220,28 +184,7 @@ function initializeCodes(): GeneratedCodes {
 }
 
 /**
- * Check if any omsluiting option is checked for a side
- * If omsluitingRecord is undefined or null, return false
- * Else return true if any value in the record is true
- */
-function hasOmsluiting(
-  omsluitingRecord: Record<string, boolean> | undefined,
-): boolean {
-  return (
-    !!omsluitingRecord &&
-    Object.values(omsluitingRecord).some(value => value === true)
-  );
-}
-
-// ==================================================
-// MAIN CODE GENERATION ENTRY POINT
-// ==================================================
-
-/**
  * Main code generation function
- *
- * Routes to form-specific code generators based on intake type
- * and computes the general basis code for mail merge integration.
  */
 export function generateCodes(
   clientData: ClientData | null,
@@ -389,21 +332,8 @@ export function generateCodes(
   return {codes, warnings, generalBasiscode};
 }
 
-// ==================================================
-// SECTION: VLOS CODE GENERATION
-// ==================================================
 /**
- * Generate codes for VLOS (Vormgegeven Laarzen Orthopedische Schoeiing) intake
- *
- * VLOS Main Codes (1-2):
- * - Code 01: VLOS eerste paar
- * - Code 02: VLOS herhaling/reservepaar
- *
- * VLOS Sub Codes (per side):
- * - Code 15: Zoolverstijving
- * - Code 16: Ezelsoor (mediaal/lateraal)
- * - Code 17: Koker tussen voering (any omsluiting option)
- * - Code 50: Diverse Amputaties
+ * Generate codes for VLOS intake
  */
 function generateVLOSCodes(
   vlos: IntakeVLOSData,
@@ -479,26 +409,8 @@ function generateVLOSCodes(
   }
 }
 
-// ==================================================
-// SECTION: OSA CODE GENERATION
-// ==================================================
 /**
- * Generate codes for OSA (Orthopedische Schoeiing met Aftrap) intake
- *
- * OSA Main Codes (3-8) determined by shaft height (schachthoogte):
- * - Code 03/04: Laag OSA (<12cm schachthoogte)
- * - Code 05/06: Half-hoog OSA (12-18cm schachthoogte)
- * - Code 07/08: Hoog OSA (>18cm schachthoogte)
- *
- * Odd codes (03/05/07) = eerste paar
- * Even codes (04/06/08) = herhaling/reservepaar
- *
- * OSA Sub Codes (per side):
- * - Code 09: Proefschoen (only for high OSA code 07 + code 17, specific insurers)
- * - Code 15: Zoolverstijving
- * - Code 16: Ezelsoor (mediaal/lateraal)
- * - Code 17: Koker tussen voering (any omsluiting option)
- * - Code 50: Diverse Amputaties
+ * Generate codes for OSA intake
  */
 function generateOSACodes(
   osa: IntakeOSAData,
@@ -609,24 +521,39 @@ function generateOSACodes(
   }
 }
 
-// ==================================================
-// SECTION: OSB CODE GENERATION
-// ==================================================
 /**
- * Generate codes for OSB (Orthopedische Schoeiing met Bijzondere Zolen)
+ * Medical Code Generation System for OSB intake forms
  *
- * OSB Main Code:
- * - Code 42: OSB Cluster (basis code when any subcode is present)
+ * OSB Definitions
  *
- * OSB Sub Codes (per side):
- * - Code 43: Supplement Individueel
- * - Code 46: Afwikkelrol Eenvoudig (<1cm)
- * - Code 47: Afwikkelrol Gecompliceerd (>=1cm)
- * - Code 57: Zoolverstijving
+ * ---MAIN CODE---
+ * - 42: OSB Cluster (varies by insurer; some use special handling)
+ * - 40: OSB alternative basis code
+ *
+ * ---SUB CODES---
+ * - 43: Supplement Individueel
+ * - 46: Afwikkelrol Eenvoudig
+ * - 47: Afwikkelrol Gecompliceerd
+ * - 57: Zoolverstijving
+ *
+ * OSB Code Mapping:
+ * - Supplement Individueel -> Code 43
+ * - Afwikkelrol Eenvoudig -> Code 46
+ * - Afwikkelrol Gecompliceerd -> Code 47
+ *    < 1cm = eenvoudig (46), >= 1cm = gecompliceerd (47)
+ * - Zoolverstijving -> Code 57
  *
  * Insurance-specific configurations:
- * - DSW: Code 42 with special note "Administratie zelf opbouwen!"
- * - Others: Code 42 standard
+ * - ASR: OSB Cluster (Hoofdcode: 42)
+ * - Caresq: OSB Cluster (Hoofdcode: 42)
+ * - CZ: OSB Cluster (Hoofdcode: 42)
+ * - DSW: OSB Opbouw (Hoofdcode: 42, met tekst "Administratie zelf opbouwen!")
+ * - Menzis: OSB Cluster (Hoofdcode: 42)
+ * - ONVZ: OSB Cluster (Hoofdcode: 42)
+ * - Salland: OSB Cluster (Hoofdcode: 42)
+ * - VGZ: OSB Cluster (Hoofdcode: 42)
+ * - ZK: OSB Cluster (Hoofdcode: 42)
+ * - Zorg en Zekerheid: OSB Cluster (Hoofdcode: 42)
  */
 function generateOSBCodes(
   osb: IntakeOSBData,
@@ -690,31 +617,46 @@ function generateOSBCodes(
   }
 }
 
-// ==================================================
-// SECTION: OVAC CODE GENERATION
-// ==================================================
 /**
- * Generate codes for OVAC (Overige Voorzieningen Aangepaste Voetkleding)
+ * Medical Code Generation System for OVAC intake forms
  *
- * OVAC Main Code:
- * - Code 70: OVAC Cluster (varies by insurer; side-specific or unified)
+ * OVAC Definitions
  *
- * OVAC Sub Codes (per side):
- * - Code 71: Supplement individueel
- * - Code 74: Eenvoudige afwikkelrol (<1cm)
- * - Code 75: Gecompliceerde afwikkelrol (>=1cm)
- * - Code 76: Hak aanpassing t/m 2cm
- * - Code 77: Hak zool verhoging t/m 3cm
- * - Code 78: Hak zool verhoging t/m 7cm
- * - Code 84: Aangepaste hakken
- * - Code 85: Zoolverstijving
- * - Code 88: Nieuwe wreefsluiting
+ * ---MAIN CODE---
+ * - 70: OVAC Cluster (varies by insurer; some use 70 L, 70 R, or just 70)
+ *
+ * ---SUB CODES---
+ * - 71: Supplement individueel
+ * - 74: Eenvoudige afwikkelrol
+ * - 75: Gecompliceerde afwikkelrol
+ * - 76: Hak aanpassing t/m 2 cm
+ * - 77: Hak zool verhoging t/m 3 cm
+ * - 78: Hak zool verhoging t/m 7 cm
+ * - 84: Aangepaste hakken
+ * - 85: Zoolverstijving
+ * - 88: Nieuwe wreefsluiting
+ *
+ *  OVAC Code Mapping:
+ * - Section 2: Supplement (van leest) -> Code 71
+ * - Section 4a: Eenvoudige afwikkelrol (onder schoen) -> Code 74
+ * - Section 4b: Gecompliceerde afwikkelrol (onder schoen) -> Code 75
+ * - Section 5a: Hakzool verhoging t/m 2cm -> Code 76
+ * - Section 5b: Hakzool verhoging t/m 3cm -> Code 77
+ * - Section 5c: Hakzool verhoging t/m 7cm -> Code 78
+ * - Section 3: Zoolverstijving -> Code 85
+ * - Section 6: Nieuwe wreefsluiting -> Code 88
  *
  * Insurance-specific configurations:
- * - Caresq: No main code 70 (subcodes only)
- * - ASR, Menzis, ONVZ, Salland: Side-specific codes (70 L, 70 R, or unified 70)
- * - CZ, DSW, VGZ, ZK, Zorg en Zekerheid: Single code 70
- * - DSW: Code 70 with special note "Administratie zelf opbouwen!"
+ * - ASR: OVAC Cluster (hoofdcode: 70 L of 70 R of 70 Both)
+ * - Caresq: OVAC Cluster per stuk (Geen hoofdcode, wel subcodes)
+ * - CZ: OVAC Cluster (Hoofdcode: 70)
+ * - DSW: OVAC Opbouw (Hoofdcode: 70, met tekst "Administratie zelf opbouwen!")
+ * - Menzis: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+ * - ONVZ: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+ * - Salland: OVAC Cluster (Hoofdcode: 70 L of 70 R of 70 Both)
+ * - VGZ: OVAC Cluster (Hoofdcode: 70)
+ * - ZK: OVAC Cluster (Hoofdcode: 70)
+ * - Zorg en Zekerheid: OVAC Cluster (Hoofdcode: 70)
  */
 function generateOVACCodes(
   ovac: IntakeOVACData,
@@ -842,4 +784,23 @@ function generateOVACCodes(
       // DSW: main code text handled via generalBasiscode downstream
     }
   }
+}
+
+/**
+ * Check if any omsluiting option is checked for a side
+ * If omsluitingRecord is undefined or null, return false
+ * Else return true if any value in the record is true
+ */
+/**
+ * Check if any omsluiting option is checked for a side
+ * If omsluitingRecord is undefined or null, return false
+ * Else return true if any value in the record is true
+ */
+function hasOmsluiting(
+  omsluitingRecord: Record<string, boolean> | undefined,
+): boolean {
+  return (
+    !!omsluitingRecord &&
+    Object.values(omsluitingRecord).some(value => value === true)
+  );
 }
