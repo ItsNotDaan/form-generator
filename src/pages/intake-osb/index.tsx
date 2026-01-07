@@ -326,16 +326,16 @@ const FormIntakeOSBPage = () => {
                     >
                       <div className="flex gap-6 justify-center">
                         <Label className="flex items-center gap-2 cursor-pointer">
+                          <RadioGroupItem value="both" />
+                          {t('both')}
+                        </Label>
+                        <Label className="flex items-center gap-2 cursor-pointer">
                           <RadioGroupItem value="left" />
                           {t('left')}
                         </Label>
                         <Label className="flex items-center gap-2 cursor-pointer">
                           <RadioGroupItem value="right" />
                           {t('right')}
-                        </Label>
-                        <Label className="flex items-center gap-2 cursor-pointer">
-                          <RadioGroupItem value="both" />
-                          {t('both')}
                         </Label>
                       </div>
                     </RadioGroup>

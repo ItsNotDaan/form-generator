@@ -732,7 +732,7 @@ const FormIntakeOSAPage = () => {
                     </FormItemWrapper>
                   )}
                   {showRechts && (
-                    <FormItemWrapper className="items-center">
+                    <FormItemWrapper className="flex flex-col items-center">
                       <Label htmlFor="mtp1-right">{t('rightCm')}</Label>
                       <Select
                         value={form.watch('mtp1DeepRight')}

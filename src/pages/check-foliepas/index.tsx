@@ -457,40 +457,42 @@ const FormCheckFoliepasPage = () => {
               {/* Side Selection */}
               <FormCard title={t('side')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <RadioGroup
-                    value={side}
-                    onValueChange={v => form.setValue('side', v as Zijde)}
-                  >
-                    <div className="flex flex-row justify-center gap-6">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="both" id="side-both" />
-                        <Label
-                          htmlFor="side-both"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('both')}
-                        </Label>
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={side}
+                      onValueChange={v => form.setValue('side', v as Zijde)}
+                    >
+                      <div className="flex flex-row justify-center gap-6">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="both" id="side-both" />
+                          <Label
+                            htmlFor="side-both"
+                            className="font-normal cursor-pointer"
+                          >
+                            {t('both')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="left" id="side-left" />
+                          <Label
+                            htmlFor="side-left"
+                            className="font-normal cursor-pointer"
+                          >
+                            {t('left')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="right" id="side-right" />
+                          <Label
+                            htmlFor="side-right"
+                            className="font-normal cursor-pointer"
+                          >
+                            {t('right')}
+                          </Label>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="left" id="side-left" />
-                        <Label
-                          htmlFor="side-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('left')}
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="right" id="side-right" />
-                        <Label
-                          htmlFor="side-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('right')}
-                        </Label>
-                      </div>
-                    </div>
-                  </RadioGroup>
+                    </RadioGroup>
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 

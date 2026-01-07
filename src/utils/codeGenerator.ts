@@ -29,6 +29,7 @@ import {
   ClientData,
   IntakeVLOSData,
   IntakeOSAData,
+  IntakeOSBData,
   IntakeOVACData,
 } from '@/components/form/types/formData';
 
@@ -88,6 +89,7 @@ export interface GeneratedCodes {
   code85Rechts: boolean;
   code88Links: boolean;
   code88Rechts: boolean;
+  code42: boolean;
   code70: boolean;
   code70Links: boolean;
   code70Rechts: boolean;
@@ -170,6 +172,7 @@ function initializeCodes(): GeneratedCodes {
     code85Rechts: false,
     code88Links: false,
     code88Rechts: false,
+    code42: false,
     code70: false,
     code70Links: false,
     code70Rechts: false,
@@ -285,12 +288,15 @@ export function generateCodes(
     generalBasiscode = '8';
   }
 
-  // Determine generalBasiscode for OSB (42 or 40)
-  if (intakeData.intakeOSB?.basiscode) {
-    if (intakeData.intakeOSB.basiscode === '42') {
-      generalBasiscode = '42';
-    } else if (intakeData.intakeOSB.basiscode === '40') {
-      generalBasiscode = '40';
+  // Determine generalBasiscode for OSB (always 42, add DSW text)
+  if (intakeType === 'OSB') {
+    if (codes.code42) {
+      const insuranceLower = (insurance || '').toLowerCase();
+      if (insuranceLower === 'dsw') {
+        generalBasiscode = '42 - Administratie zelf opbouwen!';
+      } else {
+        generalBasiscode = '42';
+      }
     }
   }
 
@@ -514,66 +520,101 @@ function generateOSACodes(
     warnings.push('OSA welk paar (paartype) is niet ingevuld');
   }
 }
+
 /**
- * Generate codes for OSB intake
- * Codes: 43 (Supplement Individueel), 46 (Afwikkelrol Eenvoudig), 47 (Afwikkelrol Gecompliceerd), 57 (Zoolverstijving)
- * Per zijde (Links/Rechts)
+ * Medical Code Generation System for OSB intake forms
+ *
+ * OSB Definitions
+ *
+ * ---MAIN CODE---
+ * - 42: OSB Cluster (varies by insurer; some use special handling)
+ * - 40: OSB alternative basis code
+ *
+ * ---SUB CODES---
+ * - 43: Supplement Individueel
+ * - 46: Afwikkelrol Eenvoudig
+ * - 47: Afwikkelrol Gecompliceerd
+ * - 57: Zoolverstijving
+ *
+ * OSB Code Mapping:
+ * - Supplement Individueel -> Code 43
+ * - Afwikkelrol Eenvoudig -> Code 46
+ * - Afwikkelrol Gecompliceerd -> Code 47
+ *    < 1cm = eenvoudig (46), >= 1cm = gecompliceerd (47)
+ * - Zoolverstijving -> Code 57
+ *
+ * Insurance-specific configurations:
+ * - ASR: OSB Cluster (Hoofdcode: 42)
+ * - Caresq: OSB Cluster (Hoofdcode: 42)
+ * - CZ: OSB Cluster (Hoofdcode: 42)
+ * - DSW: OSB Opbouw (Hoofdcode: 42, met tekst "Administratie zelf opbouwen!")
+ * - Menzis: OSB Cluster (Hoofdcode: 42)
+ * - ONVZ: OSB Cluster (Hoofdcode: 42)
+ * - Salland: OSB Cluster (Hoofdcode: 42)
+ * - VGZ: OSB Cluster (Hoofdcode: 42)
+ * - ZK: OSB Cluster (Hoofdcode: 42)
+ * - Zorg en Zekerheid: OSB Cluster (Hoofdcode: 42)
  */
 function generateOSBCodes(
-  osb: any,
+  osb: IntakeOSBData,
   codes: GeneratedCodes,
   warnings: string[],
   insurance: string,
 ): void {
-  // TODO:
-  // ASR: OSB Cluster (Hoofdcode: 42)
-  // Caresq: OSB Cluster (Hoofdcode: 42)
-  // CZ: OSB Cluster (Hoofdcode: 42)
-  // DSW: OSB Opbouw (Hoofdcode: 42, met tekst ("Administratie zelf opbouwen!"))
-  // Menzis: OSB Cluster (Hoofdcode: 42)
-  // ONVZ: OSB Cluster (Hoofdcode: 42)
-  // Salland: OSB Cluster (Hoofdcode: 42)
-  // VGZ: OSB Cluster (Hoofdcode: 42)
-  // ZK: OSB Cluster (Hoofdcode: 42)
-  // Zorg en Zekerheid: OSB Cluster (Hoofdcode: 42)
+  // Align OSB subcode mapping with OVAC structure
+  // Determine which sides have any subcodes
+  let hasAnyLeftCode = false;
+  let hasAnyRightCode = false;
 
   // Supplement Individueel (code 43)
-  if (osb.aanpassingen?.supplementIndividueelLinks) {
+  if (osb.supplementIndividueelLinks) {
     codes.code43Links = true;
+    hasAnyLeftCode = true;
   }
-  if (osb.aanpassingen?.supplementIndividueelRechts) {
+  if (osb.supplementIndividueelRechts) {
     codes.code43Rechts = true;
+    hasAnyRightCode = true;
   }
 
-  // Afwikkelrol Eenvoudig (code 46)
-  if (osb.aanpassingen?.afwikkelrolEenvoudigLinks) {
-    codes.code46Links = true;
+  // Afwikkelrol: Determine code 46 (eenvoudig) or 47 (gecompliceerd) based on cm value
+  // < 1cm = eenvoudig (46), >= 1cm = gecompliceerd (47)
+  if (osb.afwikkelrolCmLinks && osb.afwikkelrolCmLinks.trim() !== '') {
+    const cmValue = parseFloat(osb.afwikkelrolCmLinks);
+    if (!isNaN(cmValue) && cmValue > 0) {
+      if (cmValue < 1) {
+        codes.code46Links = true;
+      } else {
+        codes.code47Links = true;
+      }
+      hasAnyLeftCode = true;
+    }
   }
-  if (osb.aanpassingen?.afwikkelrolEenvoudigRechts) {
-    codes.code46Rechts = true;
-  }
-
-  // Afwikkelrol Gecompliceerd (code 47)
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdLinks) {
-    codes.code47Links = true;
-  }
-  if (osb.aanpassingen?.afwikkelrolGecompliceerdRechts) {
-    codes.code47Rechts = true;
+  if (osb.afwikkelrolCmRechts && osb.afwikkelrolCmRechts.trim() !== '') {
+    const cmValue = parseFloat(osb.afwikkelrolCmRechts);
+    if (!isNaN(cmValue) && cmValue > 0) {
+      if (cmValue < 1) {
+        codes.code46Rechts = true;
+      } else {
+        codes.code47Rechts = true;
+      }
+      hasAnyRightCode = true;
+    }
   }
 
   // Zoolverstijving (code 57)
-  if (osb.aanpassingen?.zoolverstijvingLinks) {
+  if (osb.zoolverstijvingLinks) {
     codes.code57Links = true;
+    hasAnyLeftCode = true;
   }
-  if (osb.aanpassingen?.zoolverstijvingRechts) {
+  if (osb.zoolverstijvingRechts) {
     codes.code57Rechts = true;
+    hasAnyRightCode = true;
   }
 
-  // Note: Hallux Valgus and Verdieping voorvoet do not generate codes in OSB
-  // They are part of the form but don't map to the code generation system
-
-  // Basiscode (optioneel, voor rapportage)
-  // if (osb.basiscode) ...
+  // Main OSB code 42 when any subcode is present
+  if (hasAnyLeftCode || hasAnyRightCode) {
+    codes.code42 = true;
+  }
 }
 
 /**

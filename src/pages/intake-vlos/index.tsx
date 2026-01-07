@@ -614,7 +614,7 @@ const FormIntakeVLOSPage = () => {
                     onValueChange={v => form.setValue('openstandSchacht', v)}
                     className="justify-center"
                   >
-                    <div className="flex flex-wrap center-items gap-4">
+                    <div className="flex flex-wrap justify-center gap-4">
                       {OPENSTAND_OPTIES.map(opt => (
                         <div
                           key={opt.value}

@@ -8,6 +8,8 @@
   "both": "Beide",
   "left": "Links",
   "right": "Rechts",
+  "sideAmputationDescription": "Selecteer de zijde en geef aan of er sprake is van een amputatie",
+  "selectSize": "Selecteer maat",
   "leftCm": "Links (cm)",
   "rightCm": "Rechts (cm)",
   "leftMm": "Links (mm)",
