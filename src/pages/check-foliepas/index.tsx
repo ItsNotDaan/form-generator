@@ -265,7 +265,7 @@ const FormCheckFoliepasPage = () => {
       colorOptions: [''],
       tonguePaddingMm: 'no',
       paddingCollarMm: 'no',
-      closureType: 'velcro',
+      closureType: 'ringsHooks',
       ringsNumber: '',
       ringsAmount: '',
       hooksNumber: '',
@@ -949,6 +949,9 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
 
                   {/* Colors */}
+                  {/* 
+                  TODO: Add the number of the color options dynamically to the left of the input field.
+                  */}
                   <FormItemWrapper label={t('colors')}>
                     <div className="grid gap-3 w-2/3">
                       {colorOptions.map((color, index) => (
@@ -1016,7 +1019,34 @@ const FormCheckFoliepasPage = () => {
                     </Select>
                   </FormItemWrapper>
 
+                  {/* Padding Collar */}
+                  <FormItemWrapper label={t('paddingCollar')}>
+                    <Select
+                      value={form.watch('paddingCollarMm') || ''}
+                      onValueChange={v =>
+                        form.setValue('paddingCollarMm', v as 'no' | '5' | '10')
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('paddingCollar')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="no">{t('no')}</SelectItem>
+                        <SelectItem value="6">{t('mm6')}</SelectItem>
+                        <SelectItem value="10">{t('mm10')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
                   {/* Zipper */}
+                  {/* 
+                   TODO:
+                   Rits Nylon moet worden Rits Functioneel of Rits Decoratief
+                   Als geselecteerd:
+                    1. Input: Kleur. (niet verplicht)
+                    2. Select: Langs Ringbies (standaard), Zie leest.
+                    Dan Mediaal en/of Lateral
+                  */}
                   <FormItemWrapper label={t('zipper')}>
                     <Select
                       value={zipperType || 'none'}
@@ -1074,25 +1104,6 @@ const FormCheckFoliepasPage = () => {
                         </div>
                       </div>
                     )}
-                  </FormItemWrapper>
-
-                  {/* Padding Collar */}
-                  <FormItemWrapper label={t('paddingCollar')}>
-                    <Select
-                      value={form.watch('paddingCollarMm') || ''}
-                      onValueChange={v =>
-                        form.setValue('paddingCollarMm', v as 'no' | '5' | '10')
-                      }
-                    >
-                      <SelectTrigger className="bg-background! w-2/3">
-                        <SelectValue placeholder={t('paddingCollar')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="no">{t('no')}</SelectItem>
-                        <SelectItem value="5">{t('mm5')}</SelectItem>
-                        <SelectItem value="10">{t('mm10')}</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </FormItemWrapper>
                 </FormBlock>
 
@@ -1242,7 +1253,14 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
-                {/* Edge Type */}
+                {/* Edge Type / RandType*/}
+                {/* 
+                   TODO: JOHAN VRAGEN!
+                   1. Hier wil ik een dropdown met standaard randtypes. , CSO, Rubberrand, EVA, etc.
+                   2. Wanneer Rubberrand is geselecteerd zijn de types bvb: 39, 40, 41 enz.
+                   3. Wanneer Rubberrand is geselecteerd, 39 is gekozen, wil ik een select met de kleuren: Donkerbruin, Zwart, Wit, etc.
+                   Deze drie hierboven werken dus door op elkaar. al deze waardes moeten in formData in een soort multiarray kunnen worden gezet/aangepast worden.
+                  */}
                 <FormBlock columns={2} dividers={false} title={t('edgeType')}>
                   <FormItemWrapper label={t('edgeTypeLabel')}>
                     <Input
@@ -1265,6 +1283,14 @@ const FormCheckFoliepasPage = () => {
                 </FormBlock>
 
                 {/* Sole Type */}
+                {/* 
+                   TODO:
+                   Meer zooltypes toevoegen:  
+                    - Gumlite
+                    - (Norah geeft)
+                    - Leather Anti-Slip
+                    - Anders (Hier een inputveld tonen voor omschrijving)
+                  */}
                 <FormBlock columns={3} dividers={false} title={t('soleType')}>
                   <FormItemWrapper label={t('soleType')}>
                     <Select
@@ -1651,6 +1677,15 @@ const FormCheckFoliepasPage = () => {
                         >
                           <div className="flex gap-6">
                             <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="flat" id="wedge-flat" />
+                              <Label
+                                htmlFor="wedge-flat"
+                                className="font-normal cursor-pointer"
+                              >
+                                {t('flat')}
+                              </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="hollow"
                                 id="wedge-hollow"
@@ -1660,15 +1695,6 @@ const FormCheckFoliepasPage = () => {
                                 className="font-normal cursor-pointer"
                               >
                                 {t('hollow')}
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="flat" id="wedge-flat" />
-                              <Label
-                                htmlFor="wedge-flat"
-                                className="font-normal cursor-pointer"
-                              >
-                                {t('flat')}
                               </Label>
                             </div>
                           </div>
