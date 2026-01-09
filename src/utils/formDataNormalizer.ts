@@ -18,7 +18,7 @@ import type {
  * - false/"nee"/"no" -> ""
  * - true/"ja"/"yes" -> "Ja"
  */
-export const normalizeValue = (value: any): any => {
+export const normalizeValue = (value: unknown): string | string[] => {
   if (value === null || value === undefined) {
     return '';
   }
@@ -36,19 +36,22 @@ export const normalizeValue = (value: any): any => {
     return value;
   }
   if (Array.isArray(value)) {
-    return value.map(normalizeValue);
+    return value.map(normalizeValue) as string[];
   }
-  if (typeof value === 'object') {
-    return normalizeObject(value);
+  if (typeof value === 'object' && value !== null) {
+    return JSON.stringify(normalizeObject(value as Record<string, unknown>));
   }
-  return value;
+  return String(value);
 };
 
-export const normalizeObject = (obj: any): any => {
+export const normalizeObject = (obj: Record<string, unknown>): Record<string, string> => {
   if (!obj) return {};
-  const normalized: any = {};
+  const normalized: Record<string, string> = {};
   for (const [key, value] of Object.entries(obj)) {
-    normalized[key] = normalizeValue(value);
+    const normalizedValue = normalizeValue(value);
+    normalized[key] = Array.isArray(normalizedValue) 
+      ? JSON.stringify(normalizedValue) 
+      : normalizedValue;
   }
   return normalized;
 };
@@ -169,7 +172,7 @@ export const normalizeClientData = (
  */
 export const normalizeIntakeVLOSData = (
   data: IntakeVLOSData | null | undefined,
-): Record<string, any> => {
+): Record<string, string> => {
   if (!data) {
     return getEmptyVLOSData();
   }
@@ -431,7 +434,7 @@ const getEmptyVLOSData = (): Record<string, string> => {
  */
 export const normalizeIntakeOSAData = (
   data: IntakeOSAData | null | undefined,
-): Record<string, any> => {
+): Record<string, string> => {
   const vlosData = normalizeIntakeVLOSData(data);
 
   if (!data) {

@@ -39,8 +39,23 @@ const FormResultsPage = () => {
     return null;
   }
 
+  // Type for the complete JSON result
+  interface FormResultJSON {
+    clientData: Record<string, string>;
+    intakeVLOS?: Record<string, string>;
+    intakeOSA?: Record<string, string>;
+    intakePulman?: Record<string, string>;
+    intakeRebacare?: Record<string, string>;
+    intakeOSB?: Record<string, string>;
+    intakeOVAC?: Record<string, string>;
+    intakeInsoles?: Record<string, string>;
+    medicalCodes?: Record<string, string>;
+    codeWarnings?: string[];
+    generatedAt: string;
+  }
+
   // Generate complete JSON with all data and constants
-  const generateCompleteJSON = () => {
+  const generateCompleteJSON = (): FormResultJSON => {
     // Normalize and resolve client data
     const normalizedClientData = normalizeClientData(formData.client);
     const practitionerName =
@@ -48,11 +63,12 @@ const FormResultsPage = () => {
         ?.label || formData.client?.practitionerId || '';
 
     // Build result object with normalized data
-    const result: any = {
+    const result: FormResultJSON = {
       clientData: {
         ...normalizedClientData,
         practitionerName,
       },
+      generatedAt: new Date().toISOString(),
     };
 
     // Normalize and include intake forms with complete field sets
@@ -131,8 +147,6 @@ const FormResultsPage = () => {
         result.codeWarnings = warnings;
       }
     }
-
-    result.generatedAt = new Date().toISOString();
 
     return result;
   };
