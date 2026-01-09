@@ -17,8 +17,11 @@ import type {
  * Helper to normalize boolean/string values for export
  * - false/"nee"/"no" -> ""
  * - true/"ja"/"yes" -> "Ja"
+ * - Arrays are JSON.stringify'd
+ * - Objects are JSON.stringify'd
+ * Always returns a string for consistent API
  */
-export const normalizeValue = (value: unknown): string | string[] => {
+export const normalizeValue = (value: unknown): string => {
   if (value === null || value === undefined) {
     return '';
   }
@@ -36,7 +39,8 @@ export const normalizeValue = (value: unknown): string | string[] => {
     return value;
   }
   if (Array.isArray(value)) {
-    return value.map(normalizeValue) as string[];
+    // Arrays are stringified as JSON for consistent string output
+    return JSON.stringify(value.map(normalizeValue));
   }
   if (typeof value === 'object' && value !== null) {
     return JSON.stringify(normalizeObject(value as Record<string, unknown>));
@@ -48,10 +52,7 @@ export const normalizeObject = (obj: Record<string, unknown>): Record<string, st
   if (!obj) return {};
   const normalized: Record<string, string> = {};
   for (const [key, value] of Object.entries(obj)) {
-    const normalizedValue = normalizeValue(value);
-    normalized[key] = Array.isArray(normalizedValue) 
-      ? JSON.stringify(normalizedValue) 
-      : normalizedValue;
+    normalized[key] = normalizeValue(value);
   }
   return normalized;
 };
