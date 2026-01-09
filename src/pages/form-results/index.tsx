@@ -11,6 +11,16 @@ import {BEHANDELAARS} from '@/lib/constants/formConstants';
 import {generateCodes} from '@/utils/codeGenerator';
 import {clearAllFormStorage} from '@/utils/localStorageHelper';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
+import {
+  normalizeClientData,
+  normalizeIntakeVLOSData,
+  normalizeIntakeOSAData,
+  normalizeIntakePulmanData,
+  normalizeIntakeRebacareData,
+  normalizeIntakeOSBData,
+  normalizeIntakeOVACData,
+  normalizeIntakeInsolesData,
+} from '@/utils/formDataNormalizer';
 
 const FormResultsPage = () => {
   const router = useRouter();
@@ -29,79 +39,45 @@ const FormResultsPage = () => {
     return null;
   }
 
-  // Normalize values: false/"nee" -> "", true/"ja" -> "Ja"
-  // Keep all keys for Word document generation (no exclusion)
-  const normalizeValue = (value: any): any => {
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (typeof value === 'boolean') {
-      return value ? 'Ja' : ''; // false becomes empty string, not excluded
-    }
-    if (typeof value === 'string') {
-      if (value.toLowerCase() === 'yes') {
-        return 'Ja';
-      }
-      if (value.toLowerCase() === 'no') {
-        return '';
-      }
-      return value;
-    }
-    if (Array.isArray(value)) {
-      return value.map(normalizeValue);
-    }
-    if (typeof value === 'object') {
-      return normalizeObject(value);
-    }
-    return value;
-  };
-
-  const normalizeObject = (obj: any): any => {
-    const normalized: any = {};
-    for (const [key, value] of Object.entries(obj)) {
-      normalized[key] = normalizeValue(value);
-    }
-    return normalized;
-  };
-
   // Generate complete JSON with all data and constants
   const generateCompleteJSON = () => {
-    // Resolve practitioner ID to name
-    const resolvedClientData = formData.client
-      ? normalizeObject({
-          ...formData.client,
-          practitionerName:
-            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-              ?.label || formData.client?.practitionerId,
-        })
-      : null;
+    // Normalize and resolve client data
+    const normalizedClientData = normalizeClientData(formData.client);
+    const practitionerName =
+      BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+        ?.label || formData.client?.practitionerId || '';
 
-    // Build result object with only non-null intake forms
+    // Build result object with normalized data
     const result: any = {
-      clientData: resolvedClientData,
+      clientData: {
+        ...normalizedClientData,
+        practitionerName,
+      },
     };
 
-    // Only include intake forms that have data (normalized)
+    // Normalize and include intake forms with complete field sets
     if (formData.intakeVLOS) {
-      result.intakeVLOS = normalizeObject(formData.intakeVLOS);
+      result.intakeVLOS = normalizeIntakeVLOSData(formData.intakeVLOS);
     }
     if (formData.intakeOSA) {
-      result.intakeOSA = normalizeObject(formData.intakeOSA);
+      result.intakeOSA = normalizeIntakeOSAData(formData.intakeOSA);
     }
     if (formData.intakePulman) {
-      result.intakePulman = normalizeObject(formData.intakePulman);
+      result.intakePulman = normalizeIntakePulmanData(formData.intakePulman);
     }
     if (formData.intakeRebacare) {
-      result.intakeRebacare = normalizeObject(formData.intakeRebacare);
+      result.intakeRebacare = normalizeIntakeRebacareData(
+        formData.intakeRebacare,
+      );
     }
     if (formData.intakeOSB) {
-      result.intakeOSB = normalizeObject(formData.intakeOSB);
+      result.intakeOSB = normalizeIntakeOSBData(formData.intakeOSB);
     }
     if (formData.intakeOVAC) {
-      result.intakeOVAC = normalizeObject(formData.intakeOVAC);
+      result.intakeOVAC = normalizeIntakeOVACData(formData.intakeOVAC);
     }
     if (formData.intakeInsoles) {
-      result.intakeInsoles = normalizeObject(formData.intakeInsoles);
+      result.intakeInsoles = normalizeIntakeInsolesData(formData.intakeInsoles);
     }
 
     // Generate medical codes if applicable
@@ -122,8 +98,20 @@ const FormResultsPage = () => {
         },
       );
 
-      // Group normalized codes under medicalCodes object
-      result.medicalCodes = normalizeObject(codes);
+      // Flatten medical codes to simple key-value pairs
+      const flattenedCodes: Record<string, string> = {};
+      for (const [key, value] of Object.entries(codes)) {
+        if (typeof value === 'object' && value !== null) {
+          // Flatten nested code objects
+          for (const [nestedKey, nestedValue] of Object.entries(value)) {
+            flattenedCodes[`${key}_${nestedKey}`] =
+              nestedValue?.toString() || '';
+          }
+        } else {
+          flattenedCodes[key] = value?.toString() || '';
+        }
+      }
+      result.medicalCodes = flattenedCodes;
 
       // Add generalBaseCode to the appropriate intake data
       if (generalBaseCode) {
