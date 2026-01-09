@@ -62,7 +62,7 @@ import {
   IntakeOVACData,
 } from '@/components/form/types/formData';
 
-import {OVAC_OMSCHRIJVING_ITEMS} from '@/lib/constants/formConstants';
+import {OVAC_DESCRIPTION_ITEMS} from '@/lib/constants/formConstants';
 
 export interface GeneratedCodes {
   code01: boolean;
@@ -726,8 +726,8 @@ function generateOVACCodes(
   let hasAnyLeftCode = false;
   let hasAnyRightCode = false;
 
-  // Map OVAC_OMSCHRIJVING_ITEMS to codes (for supplement, zoolverstijving, wreefsluiting, aangepaste hakken)
-  OVAC_OMSCHRIJVING_ITEMS.forEach(item => {
+  // Map OVAC_DESCRIPTION_ITEMS to codes (for supplement, zoolverstijving, wreefsluiting, aangepaste hakken)
+  OVAC_DESCRIPTION_ITEMS.forEach(item => {
     const leftKey = `${item.key}Links` as keyof IntakeOVACData;
     const rightKey = `${item.key}Rechts` as keyof IntakeOVACData;
 

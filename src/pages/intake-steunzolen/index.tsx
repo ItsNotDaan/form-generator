@@ -16,13 +16,13 @@ import {
   setClientData,
 } from '@/domain/store/slices/formData';
 import {
-  PAARTYPE_OPTIES,
+  PAIR_TYPE_OPTIONS,
   INSOLE_TYPE_OPTIONS,
-  CORRECTIE_MIDDENVOET_OPTIES,
-  CORRECTIE_VOORVOET_OPTIES,
-  PELLOTE_OPTIES,
+  MIDFOOT_CORRECTION_OPTIONS,
+  FOREFOOT_CORRECTION_OPTIONS,
+  PELOTTE_OPTIONS,
   INSOLE_PRICE_OPTIONS,
-  TALONETTE_PRIJS_OPTIES,
+  HEEL_RAISE_PRICE_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {ChevronRight} from 'lucide-react';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -103,15 +103,15 @@ const FormIntakeSteunzolenPage = () => {
       heelRaiseEnabled: false,
       heelRaiseLeft: '',
       heelRaiseRight: '',
-      heelRaisePrice: TALONETTE_PRIJS_OPTIES[0]?.value || 0,
+      heelRaisePrice: HEEL_RAISE_PRICE_OPTIONS[0]?.value || 0,
 
       // Steunzool defaults
       insoleEnabled: false,
       insoleTypeGeneral: INSOLE_TYPE_OPTIONS[0]?.value || '',
       insoleOtherText: '',
-      insoleMidfootCorrection: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
-      insoleForefootCorrection: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
-      insoleForefootPad: CORRECTIE_VOORVOET_OPTIES[0]?.value || '',
+      insoleMidfootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
+      insoleForefootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
+      insoleForefootPad: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
       insolePrice: INSOLE_PRICE_OPTIONS[1]?.value || 0,
       insolePriceName: '',
 
@@ -239,7 +239,7 @@ const FormIntakeSteunzolenPage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
@@ -421,7 +421,7 @@ const FormIntakeSteunzolenPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                        {MIDFOOT_CORRECTION_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -443,7 +443,7 @@ const FormIntakeSteunzolenPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                        {FOREFOOT_CORRECTION_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -463,7 +463,7 @@ const FormIntakeSteunzolenPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {PELLOTE_OPTIES.map(option => (
+                        {PELOTTE_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>

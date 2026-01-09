@@ -17,10 +17,10 @@ import {ChevronRight} from 'lucide-react';
 import {Form} from '@/components/ui/form';
 import {Routes} from '@/lib/routes';
 import {
-  CORRECTIE_MIDDENVOET_OPTIES,
-  CORRECTIE_VOORVOET_OPTIES,
-  PAARTYPE_OPTIES,
-  PELLOTE_OPTIES,
+  MIDFOOT_CORRECTION_OPTIONS,
+  FOREFOOT_CORRECTION_OPTIONS,
+  PAIR_TYPE_OPTIONS,
+  PELOTTE_OPTIONS,
   INSOLE_TYPE_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -92,7 +92,7 @@ const FormIntakeOVACPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      whichPair: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
+      whichPair: PAIR_TYPE_OPTIONS[0]?.value || 'Eerste paar',
       medicalIndication: '',
       side: 'both',
 
@@ -257,7 +257,7 @@ const FormIntakeOVACPage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
@@ -457,7 +457,7 @@ const FormIntakeOVACPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                        {MIDFOOT_CORRECTION_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -479,7 +479,7 @@ const FormIntakeOVACPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                        {FOREFOOT_CORRECTION_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -499,7 +499,7 @@ const FormIntakeOVACPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {PELLOTE_OPTIES.map(option => (
+                        {PELOTTE_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>

@@ -7,10 +7,20 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {useAppSelector} from '@/domain/store/hooks';
-import {BEHANDELAARS} from '@/lib/constants/formConstants';
+import {PRACTITIONERS} from '@/lib/constants/formConstants';
 import {generateCodes} from '@/utils/codeGenerator';
 import {clearAllFormStorage} from '@/utils/localStorageHelper';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
+import {
+  normalizeClientData,
+  normalizeIntakeVLOSData,
+  normalizeIntakeOSAData,
+  normalizeIntakePulmanData,
+  normalizeIntakeRebacareData,
+  normalizeIntakeOSBData,
+  normalizeIntakeOVACData,
+  normalizeIntakeInsolesData,
+} from '@/utils/formDataNormalizer';
 
 const FormResultsPage = () => {
   const router = useRouter();
@@ -29,79 +39,61 @@ const FormResultsPage = () => {
     return null;
   }
 
-  // Normalize values: false/"nee" -> "", true/"ja" -> "Ja"
-  // Keep all keys for Word document generation (no exclusion)
-  const normalizeValue = (value: any): any => {
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (typeof value === 'boolean') {
-      return value ? 'Ja' : ''; // false becomes empty string, not excluded
-    }
-    if (typeof value === 'string') {
-      if (value.toLowerCase() === 'yes') {
-        return 'Ja';
-      }
-      if (value.toLowerCase() === 'no') {
-        return '';
-      }
-      return value;
-    }
-    if (Array.isArray(value)) {
-      return value.map(normalizeValue);
-    }
-    if (typeof value === 'object') {
-      return normalizeObject(value);
-    }
-    return value;
-  };
-
-  const normalizeObject = (obj: any): any => {
-    const normalized: any = {};
-    for (const [key, value] of Object.entries(obj)) {
-      normalized[key] = normalizeValue(value);
-    }
-    return normalized;
-  };
+  // Type for the complete JSON result
+  interface FormResultJSON {
+    clientData: Record<string, string>;
+    intakeVLOS?: Record<string, string>;
+    intakeOSA?: Record<string, string>;
+    intakePulman?: Record<string, string>;
+    intakeRebacare?: Record<string, string>;
+    intakeOSB?: Record<string, string>;
+    intakeOVAC?: Record<string, string>;
+    intakeInsoles?: Record<string, string>;
+    medicalCodes?: Record<string, string>;
+    codeWarnings?: string[];
+    generatedAt: string;
+  }
 
   // Generate complete JSON with all data and constants
-  const generateCompleteJSON = () => {
-    // Resolve practitioner ID to name
-    const resolvedClientData = formData.client
-      ? normalizeObject({
-          ...formData.client,
-          practitionerName:
-            BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
-              ?.label || formData.client?.practitionerId,
-        })
-      : null;
+  const generateCompleteJSON = (): FormResultJSON => {
+    // Normalize and resolve client data
+    const normalizedClientData = normalizeClientData(formData.client);
+    const practitionerName =
+      PRACTITIONERS.find(p => p.value === formData.client?.practitionerId)
+        ?.label || formData.client?.practitionerId || '';
 
-    // Build result object with only non-null intake forms
-    const result: any = {
-      clientData: resolvedClientData,
+    // Build result object with normalized data
+    const result: FormResultJSON = {
+      clientData: {
+        ...normalizedClientData,
+        practitionerName,
+      },
+      generatedAt: new Date().toISOString(),
     };
 
-    // Only include intake forms that have data (normalized)
+    // Normalize and include intake forms with complete field sets
     if (formData.intakeVLOS) {
-      result.intakeVLOS = normalizeObject(formData.intakeVLOS);
+      result.intakeVLOS = normalizeIntakeVLOSData(formData.intakeVLOS);
     }
     if (formData.intakeOSA) {
-      result.intakeOSA = normalizeObject(formData.intakeOSA);
+      result.intakeOSA = normalizeIntakeOSAData(formData.intakeOSA);
     }
     if (formData.intakePulman) {
-      result.intakePulman = normalizeObject(formData.intakePulman);
+      result.intakePulman = normalizeIntakePulmanData(formData.intakePulman);
     }
     if (formData.intakeRebacare) {
-      result.intakeRebacare = normalizeObject(formData.intakeRebacare);
+      result.intakeRebacare = normalizeIntakeRebacareData(
+        formData.intakeRebacare,
+      );
     }
     if (formData.intakeOSB) {
-      result.intakeOSB = normalizeObject(formData.intakeOSB);
+      result.intakeOSB = normalizeIntakeOSBData(formData.intakeOSB);
     }
     if (formData.intakeOVAC) {
-      result.intakeOVAC = normalizeObject(formData.intakeOVAC);
+      result.intakeOVAC = normalizeIntakeOVACData(formData.intakeOVAC);
     }
     if (formData.intakeInsoles) {
-      result.intakeInsoles = normalizeObject(formData.intakeInsoles);
+      result.intakeInsoles = normalizeIntakeInsolesData(formData.intakeInsoles);
     }
 
     // Generate medical codes if applicable
@@ -122,8 +114,22 @@ const FormResultsPage = () => {
         },
       );
 
-      // Group normalized codes under medicalCodes object
-      result.medicalCodes = normalizeObject(codes);
+      // Flatten medical codes to simple key-value pairs
+      // Note: Using underscore as separator (e.g., "vlos_code" from nested {vlos: {code: "1"}})
+      // This is safe as code keys don't contain underscores in the current implementation
+      const flattenedCodes: Record<string, string> = {};
+      for (const [key, value] of Object.entries(codes)) {
+        if (typeof value === 'object' && value !== null) {
+          // Flatten nested code objects
+          for (const [nestedKey, nestedValue] of Object.entries(value)) {
+            flattenedCodes[`${key}_${nestedKey}`] =
+              nestedValue?.toString() || '';
+          }
+        } else {
+          flattenedCodes[key] = value?.toString() || '';
+        }
+      }
+      result.medicalCodes = flattenedCodes;
 
       // Add generalBaseCode to the appropriate intake data
       if (generalBaseCode) {
@@ -143,8 +149,6 @@ const FormResultsPage = () => {
         result.codeWarnings = warnings;
       }
     }
-
-    result.generatedAt = new Date().toISOString();
 
     return result;
   };

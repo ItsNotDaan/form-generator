@@ -21,9 +21,9 @@ import {
 } from '@/domain/store/slices/formData';
 import {
   Side,
-  PULMAN_TYPE_OPTIES,
-  SCHOENMATEN,
-  PAARTYPE_OPTIES,
+  PULMAN_TYPE_OPTIONS,
+  SHOE_SIZES,
+  PAIR_TYPE_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
@@ -150,7 +150,7 @@ const FormIntakePulmanPage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
@@ -292,7 +292,7 @@ const FormIntakePulmanPage = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {PULMAN_TYPE_OPTIES.map(option => (
+                              {PULMAN_TYPE_OPTIONS.map(option => (
                                 <SelectItem
                                   key={option.value}
                                   value={option.value}
@@ -325,7 +325,7 @@ const FormIntakePulmanPage = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {SCHOENMATEN.map(size => (
+                              {SHOE_SIZES.map(size => (
                                 <SelectItem key={size} value={size}>
                                   {size}
                                 </SelectItem>
@@ -355,7 +355,7 @@ const FormIntakePulmanPage = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {SCHOENMATEN.map(size => (
+                              {SHOE_SIZES.map(size => (
                                 <SelectItem key={size} value={size}>
                                   {size}
                                 </SelectItem>

@@ -26,23 +26,23 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  OMSLUITING_OPTIES,
+  ENCLOSURE_OPTIONS,
   OmsluitingKey,
   OmsluitingOptie,
-  OPENSTAND_OPTIES,
-  SUPPLEMENT_TYPE_OPTIES,
-  HAKSOORT_OPTIES,
-  LOOPZOOL_OPTIES,
-  SLUITING_OPTIES,
-  HAKSCHORING_TYPE_OPTIES,
-  EZELSOOR_TYPE_OPTIES,
-  JA_NEE_OPTIES,
-  PAARTYPE_OPTIES,
+  SHAFT_OPENING_OPTIONS,
+  SUPPLEMENT_TYPE_OPTIONS,
+  HEEL_TYPE_OPTIONS,
+  WALKING_SOLE_OPTIONS,
+  CLOSURE_OPTIONS,
+  HEEL_WEDGE_TYPE_OPTIONS,
+  DONKEY_EAR_TYPE_OPTIONS,
+  YES_NO_OPTIONS,
+  PAIR_TYPE_OPTIONS,
   PATHOLOGIES_OPTIONS,
-  LOOPAFSTAND_OPTIES,
-  INSPECTIE_VOETEN_OPTIES,
-  LEESTHOOGTE_OPTIES,
-  MTP1_DIEP_OPTIES,
+  WALKING_DISTANCE_AIDS_OPTIONS,
+  FOOT_INSPECTION_OPTIONS,
+  LAST_HEIGHT_OPTIONS,
+  MTP1_DEEP_OPTIONS,
   Side,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -111,7 +111,7 @@ const FormIntakeOSAPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      whichPair: PAARTYPE_OPTIES[0]?.value || '',
+      whichPair: PAIR_TYPE_OPTIONS[0]?.value || '',
       side: 'both',
       medicalIndication: '',
       shaftHeightLeft: '12.5',
@@ -128,9 +128,9 @@ const FormIntakeOSAPage = () => {
       digitalEnabled: false,
       heelLiftLeft: '',
       heelLiftRight: '',
-      lastHeight: LEESTHOOGTE_OPTIES[0]?.value || '',
-      mtp1DeepLeft: MTP1_DIEP_OPTIES[0]?.value || '',
-      mtp1DeepRight: MTP1_DIEP_OPTIES[0]?.value || '',
+      lastHeight: LAST_HEIGHT_OPTIONS[0]?.value || '',
+      mtp1DeepLeft: MTP1_DEEP_OPTIONS[0]?.value || '',
+      mtp1DeepRight: MTP1_DEEP_OPTIONS[0]?.value || '',
       clawToesEnabled: false,
       scannedWithFoil: false,
       digitalInstructions: '',
@@ -267,7 +267,7 @@ const FormIntakeOSAPage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
@@ -431,7 +431,7 @@ const FormIntakeOSAPage = () => {
                   dividers={false}
                   centerTitle={true}
                 >
-                  {LOOPAFSTAND_OPTIES.map(optie => (
+                  {WALKING_DISTANCE_AIDS_OPTIONS.map(optie => (
                     <Label
                       key={optie.key}
                       className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
@@ -496,7 +496,7 @@ const FormIntakeOSAPage = () => {
                   columns={3}
                   dividers={false}
                 >
-                  {INSPECTIE_VOETEN_OPTIES.map(optie => (
+                  {FOOT_INSPECTION_OPTIONS.map(optie => (
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30">
                       <Checkbox
                         id={`foot-inspection-${optie.key}`}
@@ -623,7 +623,7 @@ const FormIntakeOSAPage = () => {
                       onValueChange={v => form.setValue('lastHeight', v)}
                     >
                       <div className="flex flex-wrap gap-3 pt-2 justify-center">
-                        {LEESTHOOGTE_OPTIES.map(opt => (
+                        {LAST_HEIGHT_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -655,7 +655,7 @@ const FormIntakeOSAPage = () => {
                       }
                     >
                       <div className="flex flex-wrap gap-3 pt-2 justify-center">
-                        {JA_NEE_OPTIES.map(opt => (
+                        {YES_NO_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -687,7 +687,7 @@ const FormIntakeOSAPage = () => {
                       }
                     >
                       <div className="flex flex-wrap gap-3 pt-2 justify-center">
-                        {JA_NEE_OPTIES.map(opt => (
+                        {YES_NO_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -727,7 +727,7 @@ const FormIntakeOSAPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {MTP1_DIEP_OPTIES.map(opt => (
+                          {MTP1_DEEP_OPTIONS.map(opt => (
                             <SelectItem key={opt.value} value={opt.value}>
                               {opt.label}
                             </SelectItem>
@@ -747,7 +747,7 @@ const FormIntakeOSAPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {MTP1_DIEP_OPTIES.map(opt => (
+                          {MTP1_DEEP_OPTIONS.map(opt => (
                             <SelectItem key={opt.value} value={opt.value}>
                               {opt.label}
                             </SelectItem>

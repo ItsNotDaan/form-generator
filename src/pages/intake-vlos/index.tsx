@@ -27,22 +27,22 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  OMSLUITING_OPTIES,
+  ENCLOSURE_OPTIONS,
   OmsluitingKey,
   OmsluitingOptie,
-  OPENSTAND_OPTIES,
-  SUPPLEMENT_TYPE_OPTIES,
-  HAKSOORT_OPTIES,
-  LOOPZOOL_OPTIES,
-  SLUITING_OPTIES,
-  HAKSCHORING_TYPE_OPTIES,
-  EZELSOOR_TYPE_OPTIES,
-  JA_NEE_OPTIES,
-  PAARTYPE_OPTIES,
+  SHAFT_OPENING_OPTIONS,
+  SUPPLEMENT_TYPE_OPTIONS,
+  HEEL_TYPE_OPTIONS,
+  WALKING_SOLE_OPTIONS,
+  CLOSURE_OPTIONS,
+  HEEL_WEDGE_TYPE_OPTIONS,
+  DONKEY_EAR_TYPE_OPTIONS,
+  YES_NO_OPTIONS,
+  PAIR_TYPE_OPTIONS,
   Side,
   PATHOLOGIES_OPTIONS,
-  LOOPAFSTAND_OPTIES,
-  INSPECTIE_VOETEN_OPTIES,
+  WALKING_DISTANCE_AIDS_OPTIONS,
+  FOOT_INSPECTION_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeVLOSData, setClientData} from '@/domain/store/slices/formData';
@@ -140,28 +140,28 @@ const FormIntakeVLOSPage = () => {
       enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
       customInsoleShoringLeftEnabled: false,
       customInsoleShoringRightEnabled: false,
-      customInsoleShoringLeftType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      customInsoleShoringRightType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      customInsoleShoringLeftType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
+      customInsoleShoringRightType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
       soleReinforcementEnabled: false,
       soleReinforcementLeft: false,
       soleReinforcementRight: false,
-      closureType: SLUITING_OPTIES[0]?.value || '',
+      closureType: CLOSURE_OPTIONS[0]?.value || '',
       entryPoint: '',
-      shaftOpeningWidth: OPENSTAND_OPTIES[2]?.value || '',
+      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
       tonguePaddingEnabled: false,
       fixedTongueEnabled: false,
-      heelTypeLeft: HAKSOORT_OPTIES[0]?.value || '',
-      heelTypeRight: HAKSOORT_OPTIES[0]?.value || '',
+      heelTypeLeft: HEEL_TYPE_OPTIONS[0]?.value || '',
+      heelTypeRight: HEEL_TYPE_OPTIONS[0]?.value || '',
       heelHeightLeft: '2',
       heelHeightRight: '2',
       heelWedgeLeftEnabled: false,
       heelWedgeRightEnabled: false,
-      heelWedgeLeftType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      heelWedgeRightType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      heelWedgeLeftType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
+      heelWedgeRightType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
       donkeyEarLeftEnabled: false,
       donkeyEarRightEnabled: false,
-      donkeyEarLeftType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
-      donkeyEarRightType: HAKSCHORING_TYPE_OPTIES[0]?.value || '',
+      donkeyEarLeftType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
+      donkeyEarRightType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
       amputationLeftEnabled: false,
       amputationRightEnabled: false,
       heelRoundingLeftEnabled: true,
@@ -170,7 +170,7 @@ const FormIntakeVLOSPage = () => {
       heelRoundingLeftLength: '50',
       heelRoundingRightHeight: '13',
       heelRoundingRightLength: '50',
-      rockerSoleType: LOOPZOOL_OPTIES[0]?.value || '',
+      rockerSoleType: WALKING_SOLE_OPTIONS[0]?.value || '',
       specialNotes: '',
 
       // Functieonderzoek defaults
@@ -269,7 +269,10 @@ const FormIntakeVLOSPage = () => {
 
         // Functieonderzoek fields
         pathologies: data.pathologies as Record<string, boolean>,
-        walkingDistanceAids: data.walkingDistanceAids as Record<string, boolean>,
+        walkingDistanceAids: data.walkingDistanceAids as Record<
+          string,
+          boolean
+        >,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
       }),
@@ -310,7 +313,7 @@ const FormIntakeVLOSPage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
@@ -474,7 +477,7 @@ const FormIntakeVLOSPage = () => {
                   dividers={false}
                   centerTitle={true}
                 >
-                  {LOOPAFSTAND_OPTIES.map(optie => (
+                  {WALKING_DISTANCE_AIDS_OPTIONS.map(optie => (
                     <Label
                       key={optie.key}
                       className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
@@ -539,7 +542,7 @@ const FormIntakeVLOSPage = () => {
                   columns={3}
                   dividers={false}
                 >
-                  {INSPECTIE_VOETEN_OPTIES.map(optie => (
+                  {FOOT_INSPECTION_OPTIONS.map(optie => (
                     <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30">
                       <Checkbox
                         id={`foot-inspection-${optie.key}`}
@@ -615,7 +618,7 @@ const FormIntakeVLOSPage = () => {
                     className="justify-center"
                   >
                     <div className="flex flex-wrap justify-center gap-4">
-                      {OPENSTAND_OPTIES.map(opt => (
+                      {SHAFT_OPENING_OPTIONS.map(opt => (
                         <div
                           key={opt.value}
                           className="flex items-center space-x-2"
@@ -650,7 +653,7 @@ const FormIntakeVLOSPage = () => {
                       <div className="space-y-3 w-full lg:w-3/4">
                         {' '}
                         {/* Full on mobile, 3/4 on desktop */}
-                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                        {ENCLOSURE_OPTIONS.map((optie: OmsluitingOptie) => (
                           <Label
                             key={optie.key}
                             className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
@@ -729,7 +732,7 @@ const FormIntakeVLOSPage = () => {
                   {showRechts && (
                     <FormItemWrapper label={t('right')}>
                       <div className="space-y-3 w-full lg:w-3/4">
-                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                        {ENCLOSURE_OPTIONS.map((optie: OmsluitingOptie) => (
                           <Label
                             key={optie.key}
                             className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
@@ -841,7 +844,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                SUPPLEMENT_TYPE_OPTIES.find(
+                                SUPPLEMENT_TYPE_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('customInsoleShoringLeftType'),
@@ -850,7 +853,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {SUPPLEMENT_TYPE_OPTIES.map(opt => (
+                            {SUPPLEMENT_TYPE_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -893,7 +896,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                SUPPLEMENT_TYPE_OPTIES.find(
+                                SUPPLEMENT_TYPE_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('customInsoleShoringRightType'),
@@ -902,7 +905,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {SUPPLEMENT_TYPE_OPTIES.map(opt => (
+                            {SUPPLEMENT_TYPE_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -948,7 +951,10 @@ const FormIntakeVLOSPage = () => {
                               id="stiff-left"
                               checked={form.watch('soleReinforcementLeft')}
                               onCheckedChange={checked =>
-                                form.setValue('soleReinforcementLeft', !!checked)
+                                form.setValue(
+                                  'soleReinforcementLeft',
+                                  !!checked,
+                                )
                               }
                             />
                             <Label
@@ -1002,7 +1008,7 @@ const FormIntakeVLOSPage = () => {
                       onValueChange={v => form.setValue('closureType', v)}
                     >
                       <div className="flex flex-row gap-4">
-                        {SLUITING_OPTIES.map(opt => (
+                        {CLOSURE_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -1115,15 +1121,14 @@ const FormIntakeVLOSPage = () => {
                         <SelectTrigger>
                           <SelectValue>
                             {t(
-                              HAKSOORT_OPTIES.find(
-                                opt =>
-                                  opt.value === form.watch('heelTypeLeft'),
+                              HEEL_TYPE_OPTIONS.find(
+                                opt => opt.value === form.watch('heelTypeLeft'),
                               )?.label || '',
                             )}
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          {HAKSOORT_OPTIES.map(opt => (
+                          {HEEL_TYPE_OPTIONS.map(opt => (
                             <SelectItem key={opt.value} value={opt.value}>
                               {t(opt.label)}
                             </SelectItem>
@@ -1141,7 +1146,7 @@ const FormIntakeVLOSPage = () => {
                         <SelectTrigger>
                           <SelectValue>
                             {t(
-                              HAKSOORT_OPTIES.find(
+                              HEEL_TYPE_OPTIONS.find(
                                 opt =>
                                   opt.value === form.watch('heelTypeRight'),
                               )?.label || '',
@@ -1149,7 +1154,7 @@ const FormIntakeVLOSPage = () => {
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          {HAKSOORT_OPTIES.map(opt => (
+                          {HEEL_TYPE_OPTIONS.map(opt => (
                             <SelectItem key={opt.value} value={opt.value}>
                               {t(opt.label)}
                             </SelectItem>
@@ -1233,7 +1238,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                HAKSCHORING_TYPE_OPTIES.find(
+                                HEEL_WEDGE_TYPE_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('heelWedgeLeftType'),
@@ -1242,7 +1247,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {HAKSCHORING_TYPE_OPTIES.map(opt => (
+                            {HEEL_WEDGE_TYPE_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -1279,7 +1284,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                HAKSCHORING_TYPE_OPTIES.find(
+                                HEEL_WEDGE_TYPE_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('heelWedgeRightType'),
@@ -1288,7 +1293,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {HAKSCHORING_TYPE_OPTIES.map(opt => (
+                            {HEEL_WEDGE_TYPE_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -1331,7 +1336,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                EZELSOOR_TYPE_OPTIES.find(
+                                DONKEY_EAR_TYPE_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('donkeyEarLeftType'),
@@ -1340,7 +1345,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {EZELSOOR_TYPE_OPTIES.map(opt => (
+                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -1377,7 +1382,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                EZELSOOR_TYPE_OPTIES.find(
+                                DONKEY_EAR_TYPE_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('donkeyEarRightType'),
@@ -1386,7 +1391,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {EZELSOOR_TYPE_OPTIES.map(opt => (
+                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -1563,14 +1568,14 @@ const FormIntakeVLOSPage = () => {
                       <SelectTrigger className="w-2/3">
                         <SelectValue>
                           {t(
-                            LOOPZOOL_OPTIES.find(
+                            WALKING_SOLE_OPTIONS.find(
                               opt => opt.value === form.watch('rockerSoleType'),
                             )?.label || '',
                           )}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {LOOPZOOL_OPTIES.map(opt => (
+                        {WALKING_SOLE_OPTIONS.map(opt => (
                           <SelectItem key={opt.value} value={opt.value}>
                             {t(opt.label)}
                           </SelectItem>
@@ -1586,9 +1591,7 @@ const FormIntakeVLOSPage = () => {
                 <Textarea
                   placeholder={t('specialNotesPlaceholder')}
                   value={form.watch('specialNotes')}
-                  onChange={e =>
-                    form.setValue('specialNotes', e.target.value)
-                  }
+                  onChange={e => form.setValue('specialNotes', e.target.value)}
                   rows={5}
                 />
               </FormCard>
