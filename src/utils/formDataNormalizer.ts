@@ -48,7 +48,9 @@ export const normalizeValue = (value: unknown): string => {
   return String(value);
 };
 
-export const normalizeObject = (obj: Record<string, unknown>): Record<string, string> => {
+export const normalizeObject = (
+  obj: Record<string, unknown>,
+): Record<string, string> => {
   if (!obj) return {};
   const normalized: Record<string, string> = {};
   for (const [key, value] of Object.entries(obj)) {
@@ -284,8 +286,6 @@ export const normalizeIntakeVLOSData = (
     ...walkingDistanceAids,
     painPerception: data.painPerception || '',
     ...footInspection,
-    legLengthDifferenceLeft: data.legLengthDifferenceLeft || '',
-    legLengthDifferenceRight: data.legLengthDifferenceRight || '',
   };
 };
 

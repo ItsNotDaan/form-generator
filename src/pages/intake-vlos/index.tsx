@@ -269,7 +269,10 @@ const FormIntakeVLOSPage = () => {
 
         // Functieonderzoek fields
         pathologies: data.pathologies as Record<string, boolean>,
-        walkingDistanceAids: data.walkingDistanceAids as Record<string, boolean>,
+        walkingDistanceAids: data.walkingDistanceAids as Record<
+          string,
+          boolean
+        >,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
       }),
@@ -948,7 +951,10 @@ const FormIntakeVLOSPage = () => {
                               id="stiff-left"
                               checked={form.watch('soleReinforcementLeft')}
                               onCheckedChange={checked =>
-                                form.setValue('soleReinforcementLeft', !!checked)
+                                form.setValue(
+                                  'soleReinforcementLeft',
+                                  !!checked,
+                                )
                               }
                             />
                             <Label
@@ -1116,8 +1122,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectValue>
                             {t(
                               HEEL_TYPE_OPTIONS.find(
-                                opt =>
-                                  opt.value === form.watch('heelTypeLeft'),
+                                opt => opt.value === form.watch('heelTypeLeft'),
                               )?.label || '',
                             )}
                           </SelectValue>
@@ -1586,9 +1591,7 @@ const FormIntakeVLOSPage = () => {
                 <Textarea
                   placeholder={t('specialNotesPlaceholder')}
                   value={form.watch('specialNotes')}
-                  onChange={e =>
-                    form.setValue('specialNotes', e.target.value)
-                  }
+                  onChange={e => form.setValue('specialNotes', e.target.value)}
                   rows={5}
                 />
               </FormCard>
