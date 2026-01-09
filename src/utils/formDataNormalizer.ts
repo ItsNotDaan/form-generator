@@ -86,9 +86,10 @@ export const normalizeEnclosureData = (
     const rightValue = enclosureRightMm?.[option.mmKeyRechts] || '';
 
     // Map to English names based on the option key
+    // Note: 'hoge' is the HEIGHT of enclosure (cm), others are THICKNESS of materials (mm)
     switch (option.key) {
       case 'hoge':
-        // This is the height of enclosure (cm)
+        // Height of enclosure (cm) - different unit than other enclosure types
         result.enclosureLeftCm = leftEnabled && leftValue ? leftValue : '';
         result.enclosureRightCm = rightEnabled && rightValue ? rightValue : '';
         break;
@@ -105,6 +106,7 @@ export const normalizeEnclosureData = (
         result.plastazoteRightMm = rightEnabled && rightValue ? rightValue : '';
         break;
       case 'orca':
+        // Orca is boolean-only (yes/no checkbox), no measurable value
         result.orcaLeft = leftEnabled ? 'Ja' : '';
         result.orcaRight = rightEnabled ? 'Ja' : '';
         break;

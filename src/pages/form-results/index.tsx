@@ -115,6 +115,8 @@ const FormResultsPage = () => {
       );
 
       // Flatten medical codes to simple key-value pairs
+      // Note: Using underscore as separator (e.g., "vlos_code" from nested {vlos: {code: "1"}})
+      // This is safe as code keys don't contain underscores in the current implementation
       const flattenedCodes: Record<string, string> = {};
       for (const [key, value] of Object.entries(codes)) {
         if (typeof value === 'object' && value !== null) {
