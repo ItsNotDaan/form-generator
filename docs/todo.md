@@ -1,18 +1,10 @@
 ## Translation missing:
 
-- [x] sideAmputationDescription
-- [x] selectSize in intake-pullman
+-[] Check/Sort the formDataNormalizer with the form pages/website content. Example: Which thing comes first in intake-vlos?
 
-## Page/Form changes
+-[] Check final JSON of every page with the form pages/website content.
 
-- [x] in sections/FormCards Digitaal the second box items are not centered.
-- [x] In check foliepas Side Both/LKeft/Right is not centered.
-- [x] In all the pages where side is selected Both should be first followed by left and right.
-- [x] In Openstand schacht (intake-vlos) the items are not centered.
-
-- [x] Structure Formconstants to be structured per subject/form and check if things need to be removed.
-- [x] Restructure form.json in locales for things like duplicates. Restructure it so things are better structured per subject/form.
-- [x] Restructure codeGenerator.js to look more like the OVAC and OSB way. Clear and structured.
+-[] Fix the build issues.
 
 ## For Norah:
 
