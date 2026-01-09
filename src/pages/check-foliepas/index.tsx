@@ -25,18 +25,18 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  OMSLUITING_OPTIES,
+  ENCLOSURE_OPTIONS,
   OmsluitingOptie,
-  OPENSTAND_OPTIES,
-  SUPPLEMENT_TYPE_OPTIES,
-  JA_NEE_OPTIES,
-  SLUITING_OPTIES,
-  HAKSOORT_OPTIES,
-  HAKSCHORING_TYPE_OPTIES,
-  EZELSOOR_TYPE_OPTIES,
-  LOOPZOOL_OPTIES,
+  SHAFT_OPENING_OPTIONS,
+  SUPPLEMENT_TYPE_OPTIONS,
+  YES_NO_OPTIONS,
+  CLOSURE_OPTIONS,
+  HEEL_TYPE_OPTIONS,
+  HEEL_WEDGE_TYPE_OPTIONS,
+  DONKEY_EAR_TYPE_OPTIONS,
+  WALKING_SOLE_OPTIONS,
   Side,
-  LEESTCORRECTIE_OPTIES,
+  LAST_CORRECTION_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
@@ -228,7 +228,7 @@ const FormCheckFoliepasPage = () => {
       // Defaults for moved fields
       legLengthDifferenceLeft: '',
       legLengthDifferenceRight: '',
-      shaftOpeningWidth: OPENSTAND_OPTIES[2]?.value || '',
+      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
       customInsoleShoringLeftEnabled: false,
       customInsoleShoringRightEnabled: false,
       customInsoleShoringLeftType: 'Lateraal',
@@ -239,8 +239,8 @@ const FormCheckFoliepasPage = () => {
       entryPoint: '',
       tonguePaddingEnabled: false,
       fixedTongueEnabled: false,
-      heelTypeLeft: HAKSOORT_OPTIES[0]?.value || '',
-      heelTypeRight: HAKSOORT_OPTIES[0]?.value || '',
+      heelTypeLeft: HEEL_TYPE_OPTIONS[0]?.value || '',
+      heelTypeRight: HEEL_TYPE_OPTIONS[0]?.value || '',
       heelHeightLeft: '2',
       heelHeightRight: '2',
       heelWedgeLeftEnabled: false,
@@ -257,7 +257,7 @@ const FormCheckFoliepasPage = () => {
       heelRoundingLeftLength: '50',
       heelRoundingRightHeight: '10',
       heelRoundingRightLength: '50',
-      rockerSoleType: LOOPZOOL_OPTIES[0]?.value || '',
+      rockerSoleType: WALKING_SOLE_OPTIONS[0]?.value || '',
       // New field defaults
       showColorAndModel: false,
       modelType: 'model',
@@ -497,7 +497,7 @@ const FormCheckFoliepasPage = () => {
               <FormCard title={t('readingCorrectionAfterFoilFit')}>
                 {/* Pressable Labels Section */}
                 <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {LEESTCORRECTIE_OPTIES.map(optie => (
+                  {LAST_CORRECTION_OPTIONS.map(optie => (
                     <Label
                       key={optie.value}
                       onClick={() => {
@@ -559,7 +559,7 @@ const FormCheckFoliepasPage = () => {
               <FormCard title={t('readingCorrectionAfterLiningShoe')}>
                 {/* Pressable Labels Section */}
                 <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {LEESTCORRECTIE_OPTIES.map(optie => (
+                  {LAST_CORRECTION_OPTIONS.map(optie => (
                     <Label
                       key={optie.value}
                       onClick={() => {
@@ -674,7 +674,7 @@ const FormCheckFoliepasPage = () => {
                       <div className="space-y-3 w-full lg:w-3/4">
                         {' '}
                         {/* Full on mobile, 3/4 on desktop */}
-                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                        {ENCLOSURE_OPTIONS.map((optie: OmsluitingOptie) => (
                           <Label
                             key={optie.key}
                             className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
@@ -753,7 +753,7 @@ const FormCheckFoliepasPage = () => {
                   {showRechts && (
                     <FormItemWrapper label={t('right')}>
                       <div className="space-y-3 w-full lg:w-3/4">
-                        {OMSLUITING_OPTIES.map((optie: OmsluitingOptie) => (
+                        {ENCLOSURE_OPTIONS.map((optie: OmsluitingOptie) => (
                           <Label
                             key={optie.key}
                             className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
@@ -877,7 +877,7 @@ const FormCheckFoliepasPage = () => {
                       className="justify-center"
                     >
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
-                        {OPENSTAND_OPTIES.map(opt => (
+                        {SHAFT_OPENING_OPTIONS.map(opt => (
                           <Label
                             key={opt.value}
                             htmlFor={`opening-${opt.value}`}

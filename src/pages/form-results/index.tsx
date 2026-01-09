@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {useAppSelector} from '@/domain/store/hooks';
-import {BEHANDELAARS} from '@/lib/constants/formConstants';
+import {PRACTITIONERS} from '@/lib/constants/formConstants';
 import {generateCodes} from '@/utils/codeGenerator';
 import {clearAllFormStorage} from '@/utils/localStorageHelper';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
@@ -59,7 +59,7 @@ const FormResultsPage = () => {
     // Normalize and resolve client data
     const normalizedClientData = normalizeClientData(formData.client);
     const practitionerName =
-      BEHANDELAARS.find(p => p.value === formData.client?.practitionerId)
+      PRACTITIONERS.find(p => p.value === formData.client?.practitionerId)
         ?.label || formData.client?.practitionerId || '';
 
     // Build result object with normalized data

@@ -19,7 +19,7 @@ import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {Side, PAARTYPE_OPTIES} from '@/lib/constants/formConstants';
+import {Side, PAIR_TYPE_OPTIONS} from '@/lib/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -114,7 +114,7 @@ const FormIntakeRebacarePage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"

@@ -1,7 +1,7 @@
 // Utility to normalize form data and ensure all fields are exported to JSON
 // This ensures Word document placeholders like ${enclosureRightCm} are always replaced
 
-import {OMSLUITING_OPTIES} from '@/lib/constants/formConstants';
+import {ENCLOSURE_OPTIONS} from '@/lib/constants/formConstants';
 import type {
   IntakeVLOSData,
   IntakeOSAData,
@@ -70,7 +70,7 @@ export const normalizeEnclosureData = (
   const result: Record<string, string> = {};
 
   // Process each enclosure option using the export keys from constants
-  for (const option of OMSLUITING_OPTIES) {
+  for (const option of ENCLOSURE_OPTIONS) {
     // Left side
     const leftEnabled = enclosureLeft?.[option.fullKeyLinks] || false;
     const leftValue = enclosureLeftMm?.[option.mmKeyLinks] || '';

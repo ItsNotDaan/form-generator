@@ -8,10 +8,10 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  LOCATIE_OPTIES,
-  AANHEF_OPTIES,
-  BEHANDELAARS,
-  ZORGVERZEKERAARS,
+  LOCATION_OPTIONS,
+  SALUTATION_OPTIONS,
+  PRACTITIONERS,
+  INSURANCE_COMPANIES,
   Location,
   Salutation,
 } from '@/lib/constants/formConstants';
@@ -226,7 +226,7 @@ const FormNewClientPage = () => {
                                 />
                               </SelectTrigger>
                               <SelectContent>
-                                {BEHANDELAARS.map(option => (
+                                {PRACTITIONERS.map(option => (
                                   <SelectItem
                                     key={option.value}
                                     value={option.value}
@@ -298,7 +298,7 @@ const FormNewClientPage = () => {
                                 />
                               </SelectTrigger>
                               <SelectContent>
-                                {LOCATIE_OPTIES.map(option => (
+                                {LOCATION_OPTIONS.map(option => (
                                   <SelectItem
                                     key={option.value}
                                     value={option.value}
@@ -340,7 +340,7 @@ const FormNewClientPage = () => {
                               className="flex gap-4"
                               aria-invalid={!!fieldState?.error}
                             >
-                              {AANHEF_OPTIES.map(option => (
+                              {SALUTATION_OPTIONS.map(option => (
                                 <div
                                   key={option.value}
                                   className="flex items-center space-x-2"
@@ -673,7 +673,7 @@ const FormNewClientPage = () => {
                                 />
                               </SelectTrigger>
                               <SelectContent>
-                                {ZORGVERZEKERAARS.map(option => (
+                                {INSURANCE_COMPANIES.map(option => (
                                   <SelectItem
                                     key={option.value}
                                     value={option.value}

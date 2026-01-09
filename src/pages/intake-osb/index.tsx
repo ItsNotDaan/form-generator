@@ -19,14 +19,14 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  PAARTYPE_OPTIES,
-  DOEL_OPTIES,
-  LOOPFUNCTIE_INDICATIE_OPTIES,
-  LEVERANCIER_OPTIES,
+  PAIR_TYPE_OPTIONS,
+  GOAL_OPTIONS,
+  WALKING_FUNCTION_INDICATION_OPTIONS,
+  SUPPLIER_OPTIONS,
   INSOLE_TYPE_OPTIONS,
-  CORRECTIE_MIDDENVOET_OPTIES,
-  CORRECTIE_VOORVOET_OPTIES,
-  PELLOTE_OPTIES,
+  MIDFOOT_CORRECTION_OPTIONS,
+  FOREFOOT_CORRECTION_OPTIONS,
+  PELOTTE_OPTIONS,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSBData, setClientData} from '@/domain/store/slices/formData';
@@ -102,7 +102,7 @@ const FormIntakeOSBPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
-      whichPair: PAARTYPE_OPTIES[0]?.value || 'Eerste paar',
+      whichPair: PAIR_TYPE_OPTIONS[0]?.value || 'Eerste paar',
       medicalIndication: '',
       side: 'both',
 
@@ -270,7 +270,7 @@ const FormIntakeOSBPage = () => {
                       className="w-2/3"
                     >
                       <div className="flex flex-col gap-3">
-                        {PAARTYPE_OPTIES.map(option => (
+                        {PAIR_TYPE_OPTIONS.map(option => (
                           <Label
                             key={option.value}
                             className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
@@ -349,7 +349,7 @@ const FormIntakeOSBPage = () => {
                   dividers={false}
                   centerTitle={true}
                 >
-                  {DOEL_OPTIES.map(optie => (
+                  {GOAL_OPTIONS.map(optie => (
                     <Label
                       key={optie.fullKey}
                       className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
@@ -390,7 +390,7 @@ const FormIntakeOSBPage = () => {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {LOOPFUNCTIE_INDICATIE_OPTIES.map(opt => (
+                        {WALKING_FUNCTION_INDICATION_OPTIONS.map(opt => (
                           <SelectItem key={opt.value} value={opt.value}>
                             {opt.label}
                           </SelectItem>
@@ -435,7 +435,7 @@ const FormIntakeOSBPage = () => {
                         <SelectValue placeholder={t('supplier')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {LEVERANCIER_OPTIES.map(opt => (
+                        {SUPPLIER_OPTIONS.map(opt => (
                           <SelectItem key={opt.value} value={opt.value}>
                             {opt.label}
                           </SelectItem>
@@ -674,7 +674,7 @@ const FormIntakeOSBPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {CORRECTIE_MIDDENVOET_OPTIES.map(option => (
+                        {MIDFOOT_CORRECTION_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -696,7 +696,7 @@ const FormIntakeOSBPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {CORRECTIE_VOORVOET_OPTIES.map(option => (
+                        {FOREFOOT_CORRECTION_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -716,7 +716,7 @@ const FormIntakeOSBPage = () => {
                         <SelectValue placeholder={t('chooseOption')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {PELLOTE_OPTIES.map(option => (
+                        {PELOTTE_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>

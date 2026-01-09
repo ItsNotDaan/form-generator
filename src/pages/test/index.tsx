@@ -25,13 +25,13 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  PAARTYPE_OPTIES,
+  PAIR_TYPE_OPTIONS,
   PATHOLOGIES_OPTIONS,
-  LOOPAFSTAND_OPTIES,
-  INSPECTIE_VOETEN_OPTIES,
-  LEESTHOOGTE_OPTIES,
-  MTP1_DIEP_OPTIES,
-  JA_NEE_OPTIES,
+  WALKING_DISTANCE_AIDS_OPTIONS,
+  FOOT_INSPECTION_OPTIONS,
+  LAST_HEIGHT_OPTIONS,
+  MTP1_DEEP_OPTIONS,
+  YES_NO_OPTIONS,
   Side,
 } from '@/lib/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -94,7 +94,7 @@ const FormIntakeTestPage = () => {
       digitalEnabled: false,
       heelLiftLeft: '',
       heelLiftRight: '',
-      lastHeight: LEESTHOOGTE_OPTIES[0]?.value || '',
+      lastHeight: LAST_HEIGHT_OPTIONS[0]?.value || '',
       mtp1DeepLeft: 'No',
       mtp1DeepRight: 'No',
       clawToesEnabled: false,
@@ -224,7 +224,7 @@ const FormIntakeTestPage = () => {
                     onValueChange={v => form.setValue('whichPair', v)}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {PAARTYPE_OPTIES.map(option => (
+                      {PAIR_TYPE_OPTIONS.map(option => (
                         <div
                           key={option.value}
                           className="flex items-center space-x-2"
@@ -375,7 +375,7 @@ const FormIntakeTestPage = () => {
                   dividers={false}
                   centerTitle={true}
                 >
-                  {LOOPAFSTAND_OPTIES.map(optie => (
+                  {WALKING_DISTANCE_AIDS_OPTIONS.map(optie => (
                     <div
                       key={optie.key}
                       className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
@@ -440,7 +440,7 @@ const FormIntakeTestPage = () => {
                   columns={3}
                   dividers={false}
                 >
-                  {INSPECTIE_VOETEN_OPTIES.map(optie => (
+                  {FOOT_INSPECTION_OPTIONS.map(optie => (
                     <div
                       key={optie.key}
                       className="flex items-center space-x-2 rounded-md border bg-muted/50 px-3 py-2"
@@ -568,7 +568,7 @@ const FormIntakeTestPage = () => {
                       onValueChange={v => form.setValue('lastHeight', v)}
                     >
                       <div className="flex flex-wrap gap-3 pt-2">
-                        {LEESTHOOGTE_OPTIES.map(opt => (
+                        {LAST_HEIGHT_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -600,7 +600,7 @@ const FormIntakeTestPage = () => {
                       }
                     >
                       <div className="flex flex-wrap gap-3 pt-2">
-                        {JA_NEE_OPTIES.map(opt => (
+                        {YES_NO_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -632,7 +632,7 @@ const FormIntakeTestPage = () => {
                       }
                     >
                       <div className="flex flex-wrap gap-3 pt-2">
-                        {JA_NEE_OPTIES.map(opt => (
+                        {YES_NO_OPTIONS.map(opt => (
                           <div
                             key={opt.value}
                             className="flex items-center space-x-2"
@@ -672,7 +672,7 @@ const FormIntakeTestPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {MTP1_DIEP_OPTIES.map(opt => (
+                          {MTP1_DEEP_OPTIONS.map(opt => (
                             <SelectItem key={opt.value} value={opt.value}>
                               {opt.label}
                             </SelectItem>
@@ -692,7 +692,7 @@ const FormIntakeTestPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {MTP1_DIEP_OPTIES.map(opt => (
+                          {MTP1_DEEP_OPTIONS.map(opt => (
                             <SelectItem key={opt.value} value={opt.value}>
                               {opt.label}
                             </SelectItem>
