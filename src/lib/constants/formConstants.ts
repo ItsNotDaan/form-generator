@@ -152,8 +152,13 @@ export type OmsluitingKey =
 export type OmsluitingOptie = {
   key: OmsluitingKey;
   label: string;
+  translationKey: string; // For UI translation
   needsMm: boolean;
   defaultMm?: string;
+  // Export keys - English flattened names used in JSON export
+  exportKeyLeft: string; // e.g., 'enclosureLeftCm' or 'multivormLeftMm'
+  exportKeyRight: string; // e.g., 'enclosureRightCm' or 'multivormRightMm'
+  // Legacy keys for backward compatibility (UI still uses these)
   fullKeyLinks: string;
   fullKeyRechts: string;
   mmKeyLinks: string;
@@ -164,7 +169,10 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   {
     key: 'hoge',
     label: 'Hoogte van omsluiting (cm)',
+    translationKey: 'enclosureHeight',
     needsMm: true,
+    exportKeyLeft: 'enclosureLeftCm',
+    exportKeyRight: 'enclosureRightCm',
     fullKeyLinks: 'omsluitingLinksHoge',
     fullKeyRechts: 'omsluitingRechtsHoge',
     mmKeyLinks: 'omsluitingMmLinksHoge',
@@ -173,8 +181,11 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   {
     key: 'lavero',
     label: 'Lavero omsluiting (mm)',
+    translationKey: 'laveroEnclosure',
     needsMm: true,
     defaultMm: '4',
+    exportKeyLeft: 'laveroLeftMm',
+    exportKeyRight: 'laveroRightMm',
     fullKeyLinks: 'omsluitingLinksLavero',
     fullKeyRechts: 'omsluitingRechtsLavero',
     mmKeyLinks: 'omsluitingMmLinksLavero',
@@ -183,8 +194,11 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   {
     key: 'multivorm',
     label: 'Multivorm omsluiting (mm)',
+    translationKey: 'multivormEnclosure',
     needsMm: true,
     defaultMm: '3',
+    exportKeyLeft: 'multivormLeftMm',
+    exportKeyRight: 'multivormRightMm',
     fullKeyLinks: 'omsluitingLinksMultivorm',
     fullKeyRechts: 'omsluitingRechtsMultivorm',
     mmKeyLinks: 'omsluitingMmLinksMultivorm',
@@ -193,8 +207,11 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   {
     key: 'plastazote',
     label: 'Plastazote (mm)',
+    translationKey: 'plastazoteEnclosure',
     needsMm: true,
     defaultMm: '3',
+    exportKeyLeft: 'plastazoteLeftMm',
+    exportKeyRight: 'plastazoteRightMm',
     fullKeyLinks: 'omsluitingLinksPlastazote',
     fullKeyRechts: 'omsluitingRechtsPlastazote',
     mmKeyLinks: 'omsluitingMmLinksPlastazote',
@@ -203,7 +220,10 @@ export const OMSLUITING_OPTIES: OmsluitingOptie[] = [
   {
     key: 'orca',
     label: 'Orca omsluiting',
+    translationKey: 'orcaEnclosure',
     needsMm: false,
+    exportKeyLeft: 'orcaLeft',
+    exportKeyRight: 'orcaRight',
     fullKeyLinks: 'omsluitingLinksOrca',
     fullKeyRechts: 'omsluitingRechtsOrca',
     mmKeyLinks: 'omsluitingMmLinksOrca',

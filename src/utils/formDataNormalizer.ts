@@ -59,14 +59,7 @@ export const normalizeObject = (obj: Record<string, unknown>): Record<string, st
 
 /**
  * Flatten and normalize enclosure data from nested structure to flat English keys
- * Converts:
- *   enclosureLeft: { omsluitingLinksHoge: true }
- *   enclosureLeftMm: { omsluitingMmLinksHoge: "14" }
- * To:
- *   enclosureLeftCm: "14"
- *   laveroLeftMm: ""
- *   multivormLeftMm: ""
- *   etc.
+ * Uses the export keys defined in formConstants for consistent mapping
  */
 export const normalizeEnclosureData = (
   enclosureLeft: Record<string, boolean> | undefined,
@@ -76,7 +69,7 @@ export const normalizeEnclosureData = (
 ): Record<string, string> => {
   const result: Record<string, string> = {};
 
-  // Process each enclosure option
+  // Process each enclosure option using the export keys from constants
   for (const option of OMSLUITING_OPTIES) {
     // Left side
     const leftEnabled = enclosureLeft?.[option.fullKeyLinks] || false;
@@ -86,31 +79,17 @@ export const normalizeEnclosureData = (
     const rightEnabled = enclosureRight?.[option.fullKeyRechts] || false;
     const rightValue = enclosureRightMm?.[option.mmKeyRechts] || '';
 
-    // Map to English names based on the option key
-    // Note: 'hoge' is the HEIGHT of enclosure (cm), others are THICKNESS of materials (mm)
-    switch (option.key) {
-      case 'hoge':
-        // Height of enclosure (cm) - different unit than other enclosure types
-        result.enclosureLeftCm = leftEnabled && leftValue ? leftValue : '';
-        result.enclosureRightCm = rightEnabled && rightValue ? rightValue : '';
-        break;
-      case 'lavero':
-        result.laveroLeftMm = leftEnabled && leftValue ? leftValue : '';
-        result.laveroRightMm = rightEnabled && rightValue ? rightValue : '';
-        break;
-      case 'multivorm':
-        result.multivormLeftMm = leftEnabled && leftValue ? leftValue : '';
-        result.multivormRightMm = rightEnabled && rightValue ? rightValue : '';
-        break;
-      case 'plastazote':
-        result.plastazoteLeftMm = leftEnabled && leftValue ? leftValue : '';
-        result.plastazoteRightMm = rightEnabled && rightValue ? rightValue : '';
-        break;
-      case 'orca':
-        // Orca is boolean-only (yes/no checkbox), no measurable value
-        result.orcaLeft = leftEnabled ? 'Ja' : '';
-        result.orcaRight = rightEnabled ? 'Ja' : '';
-        break;
+    // Use the export keys defined in constants for consistent English names
+    // For options with measurements (needsMm), export value if enabled and has value
+    // For boolean-only options (like orca), export "Ja" if enabled
+    if (option.needsMm) {
+      result[option.exportKeyLeft] = leftEnabled && leftValue ? leftValue : '';
+      result[option.exportKeyRight] =
+        rightEnabled && rightValue ? rightValue : '';
+    } else {
+      // Boolean-only (like orca)
+      result[option.exportKeyLeft] = leftEnabled ? 'Ja' : '';
+      result[option.exportKeyRight] = rightEnabled ? 'Ja' : '';
     }
   }
 
