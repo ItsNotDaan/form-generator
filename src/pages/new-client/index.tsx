@@ -258,13 +258,20 @@ const FormNewClientPage = () => {
                               value={
                                 field.value ? new Date(field.value) : undefined
                               }
-                              onChange={selectedDate =>
-                                field.onChange(
-                                  selectedDate
-                                    ? selectedDate.toISOString().split('T')[0]
-                                    : '',
-                                )
-                              }
+                              onChange={selectedDate => {
+                                if (selectedDate) {
+                                  const day = String(
+                                    selectedDate.getDate(),
+                                  ).padStart(2, '0');
+                                  const month = String(
+                                    selectedDate.getMonth() + 1,
+                                  ).padStart(2, '0');
+                                  const year = selectedDate.getFullYear();
+                                  field.onChange(`${day}-${month}-${year}`);
+                                } else {
+                                  field.onChange('');
+                                }
+                              }}
                               placeholder={t('selectDate')}
                               disabled={d => d > new Date()}
                               className="w-full"

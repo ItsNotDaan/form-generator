@@ -29,7 +29,7 @@ import {Routes} from '@/lib/routes';
 import {
   ENCLOSURE_OPTIONS,
   OmsluitingKey,
-  OmsluitingOptie,
+  EnclosureOption,
   SHAFT_OPENING_OPTIONS,
   SUPPLEMENT_TYPE_OPTIONS,
   HEEL_TYPE_OPTIONS,
@@ -653,7 +653,7 @@ const FormIntakeVLOSPage = () => {
                       <div className="space-y-3 w-full lg:w-3/4">
                         {' '}
                         {/* Full on mobile, 3/4 on desktop */}
-                        {ENCLOSURE_OPTIONS.map((optie: OmsluitingOptie) => (
+                        {ENCLOSURE_OPTIONS.map((optie: EnclosureOption) => (
                           <Label
                             key={optie.key}
                             className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
@@ -732,7 +732,7 @@ const FormIntakeVLOSPage = () => {
                   {showRechts && (
                     <FormItemWrapper label={t('right')}>
                       <div className="space-y-3 w-full lg:w-3/4">
-                        {ENCLOSURE_OPTIONS.map((optie: OmsluitingOptie) => (
+                        {ENCLOSURE_OPTIONS.map((optie: EnclosureOption) => (
                           <Label
                             key={optie.key}
                             className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"

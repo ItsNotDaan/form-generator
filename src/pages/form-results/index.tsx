@@ -60,7 +60,9 @@ const FormResultsPage = () => {
     const normalizedClientData = normalizeClientData(formData.client);
     const practitionerName =
       PRACTITIONERS.find(p => p.value === formData.client?.practitionerId)
-        ?.label || formData.client?.practitionerId || '';
+        ?.label ||
+      formData.client?.practitionerId ||
+      '';
 
     // Build result object with normalized data
     const result: FormResultJSON = {

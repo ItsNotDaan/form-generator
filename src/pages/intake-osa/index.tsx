@@ -28,7 +28,7 @@ import {Routes} from '@/lib/routes';
 import {
   ENCLOSURE_OPTIONS,
   OmsluitingKey,
-  OmsluitingOptie,
+  EnclosureOption,
   SHAFT_OPENING_OPTIONS,
   SUPPLEMENT_TYPE_OPTIONS,
   HEEL_TYPE_OPTIONS,

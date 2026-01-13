@@ -34,13 +34,20 @@ export const INSURANCE_COMPANIES = [
 ];
 
 /** Locations */
-export type Location = 'FZ' | 'FM' | 'NN' | 'MMC' | 'AMC' | 'Holten' | 'Markelo';
+export type Location =
+  | 'Flevoziekenhuis'
+  | 'Flevomotion'
+  | 'Nijverheidsweg Noord'
+  | 'Meander MC'
+  | 'Amsterdam MC'
+  | 'Holten'
+  | 'Markelo';
 export const LOCATION_OPTIONS = [
-  {label: 'FZ', value: 'FZ'},
-  {label: 'FM', value: 'FM'},
-  {label: 'NN', value: 'NN'},
-  {label: 'MMC', value: 'MMC'},
-  {label: 'AMC', value: 'AMC'},
+  {label: 'Flevoziekenhuis', value: 'Flevoziekenhuis'},
+  {label: 'Flevomotion', value: 'Flevomotion'},
+  {label: 'Nijverheidsweg Noord', value: 'Nijverheidsweg Noord'},
+  {label: 'Meander MC', value: 'Meander MC'},
+  {label: 'Amsterdam MC', value: 'Amsterdam MC'},
   {label: 'Holten', value: 'Holten'},
   {label: 'Markelo', value: 'Markelo'},
 ];
@@ -149,6 +156,13 @@ export type EnclosureKey =
   | 'plastazote'
   | 'orca';
 
+export type OmsluitingKey =
+  | 'hoge'
+  | 'lavero'
+  | 'multivorm'
+  | 'plastazote'
+  | 'orca';
+
 export type EnclosureOption = {
   key: OmsluitingKey;
   label: string;
@@ -165,7 +179,7 @@ export type EnclosureOption = {
   mmKeyRechts: string;
 };
 
-export const ENCLOSURE_OPTIONS: OmsluitingOptie[] = [
+export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
   {
     key: 'hoge',
     label: 'Hoogte van omsluiting (cm)',
@@ -246,7 +260,7 @@ export const PULMAN_TYPE_OPTIONS = [
 export const SHOE_SIZES = Array.from({length: 12}, (_, i) =>
   (37 + i).toString(),
 );
-export type ShoeSize = (typeof SCHOENMATEN)[number];
+export type ShoeSize = (typeof SHOE_SIZES)[number];
 
 // ============================================================================
 // OSA FORM CONSTANTS
@@ -435,7 +449,7 @@ export const SUPPLEMENT_OPTIONS = [
   },
   {key: 'zoolverstijving', label: 'Zoolverstijving', code: 57},
 ] as const;
-export type SupplementOption = (typeof SUPPLEMENT_OPTIES)[number];
+export type SupplementOption = (typeof SUPPLEMENT_OPTIONS)[number];
 
 /** Hallux valgus mm options */
 export type HalluxMmOption = 'Nee' | '3 mm' | '8 mm';
@@ -539,7 +553,7 @@ export type OvacDescriptionItem = {
   postNr: string;
 };
 
-export const OVAC_DESCRIPTION_ITEMS: OvacOmschrijvingItem[] = [
+export const OVAC_DESCRIPTION_ITEMS: OvacDescriptionItem[] = [
   {key: 'supplementIndividueel', label: 'Supplement individueel', postNr: '71'},
   {key: 'eenvoudigeAfwikkelrol', label: 'Eenvoudige afwikkelrol', postNr: '74'},
   {
