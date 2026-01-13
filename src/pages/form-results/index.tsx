@@ -59,8 +59,24 @@ const FormResultsPage = () => {
     data: Record<string, string>,
   ): Record<string, string> => {
     const translated: Record<string, string> = {};
+
+    // Special translation mappings for common values
+    const translationMappings: Record<string, string> = {
+      left: t('left'),
+      right: t('right'),
+      both: t('both'),
+      Ja: t('yes'),
+      // Add more mappings as needed
+    };
+
     for (const [key, value] of Object.entries(data)) {
       if (value && typeof value === 'string') {
+        // Check if there's a direct mapping
+        if (translationMappings[value]) {
+          translated[key] = translationMappings[value];
+          continue;
+        }
+
         try {
           // Try to translate the value
           const translatedValue = t(value);

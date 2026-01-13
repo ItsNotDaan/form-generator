@@ -99,6 +99,29 @@ export const normalizeEnclosureData = (
 };
 
 /**
+ * Helper to check if a translation is available for a given key
+ * This is a placeholder - actual implementation should be provided by the translation system
+ * @param translationKey - The key to check for translation
+ * @param translationFunction - The translation function (e.g., t from next-translate)
+ * @returns true if translation exists and differs from the key, false otherwise
+ */
+export const checkTranslateAvailable = (
+  translationKey: string,
+  translationFunction?: (key: string) => string,
+): boolean => {
+  if (!translationFunction) {
+    return false;
+  }
+  try {
+    const translated = translationFunction(translationKey);
+    // If translation returns the same value as the key, no translation exists
+    return translated !== translationKey;
+  } catch {
+    return false;
+  }
+};
+
+/**
  * Helper to aggregate all "Ja" values from a record into a comma-separated string
  * Returns empty string if no values are "Ja"
  */
@@ -567,6 +590,8 @@ export const normalizeIntakeOSBData = (
 
     // Goal
     ...goal,
+    // Aggregated goals
+    allGoals: aggregateJaValues(goal),
 
     // Walking function
     walkingFunctionIndication: data.walkingFunctionIndication || '',
@@ -620,6 +645,8 @@ const getEmptyOSBData = (): Record<string, string> => {
     doelStabiliteit: '',
     doelLoopAfstandVergroten: '',
     doelOndersteuningGewelf: '',
+    // Aggregated goals
+    allGoals: '',
 
     // Walking function
     walkingFunctionIndication: '',
@@ -672,29 +699,42 @@ export const normalizeIntakeOVACData = (
     return getEmptyOVACData();
   }
 
+  // Group items for aggregation
+  const leftModifications: Record<string, string> = {
+    customInsoleIndividualLeft: data.customInsoleIndividualLeft ? 'Ja' : '',
+    simpleRockerLeft: data.simpleRockerLeft ? 'Ja' : '',
+    complicatedRockerLeft: data.complicatedRockerLeft ? 'Ja' : '',
+    heelAdjustment2cmLeft: data.heelAdjustment2cmLeft ? 'Ja' : '',
+    heelSoleElevation3cmLeft: data.heelSoleElevation3cmLeft ? 'Ja' : '',
+    heelSoleElevation7cmLeft: data.heelSoleElevation7cmLeft ? 'Ja' : '',
+    adjustedHeelsLeft: data.adjustedHeelsLeft ? 'Ja' : '',
+    soleReinforcementLeft: data.soleReinforcementLeft ? 'Ja' : '',
+    newInstepClosureLeft: data.newInstepClosureLeft ? 'Ja' : '',
+  };
+
+  const rightModifications: Record<string, string> = {
+    customInsoleIndividualRight: data.customInsoleIndividualRight ? 'Ja' : '',
+    simpleRockerRight: data.simpleRockerRight ? 'Ja' : '',
+    complicatedRockerRight: data.complicatedRockerRight ? 'Ja' : '',
+    heelAdjustment2cmRight: data.heelAdjustment2cmRight ? 'Ja' : '',
+    heelSoleElevation3cmRight: data.heelSoleElevation3cmRight ? 'Ja' : '',
+    heelSoleElevation7cmRight: data.heelSoleElevation7cmRight ? 'Ja' : '',
+    adjustedHeelsRight: data.adjustedHeelsRight ? 'Ja' : '',
+    soleReinforcementRight: data.soleReinforcementRight ? 'Ja' : '',
+    newInstepClosureRight: data.newInstepClosureRight ? 'Ja' : '',
+  };
+
   return {
     whichPair: data.whichPair || '',
     medicalIndication: data.medicalIndication || '',
 
     // Omschrijving items (flat structure)
-    customInsoleIndividualLeft: data.customInsoleIndividualLeft ? 'Ja' : '',
-    customInsoleIndividualRight: data.customInsoleIndividualRight ? 'Ja' : '',
-    simpleRockerLeft: data.simpleRockerLeft ? 'Ja' : '',
-    simpleRockerRight: data.simpleRockerRight ? 'Ja' : '',
-    complicatedRockerLeft: data.complicatedRockerLeft ? 'Ja' : '',
-    complicatedRockerRight: data.complicatedRockerRight ? 'Ja' : '',
-    heelAdjustment2cmLeft: data.heelAdjustment2cmLeft ? 'Ja' : '',
-    heelAdjustment2cmRight: data.heelAdjustment2cmRight ? 'Ja' : '',
-    heelSoleElevation3cmLeft: data.heelSoleElevation3cmLeft ? 'Ja' : '',
-    heelSoleElevation3cmRight: data.heelSoleElevation3cmRight ? 'Ja' : '',
-    heelSoleElevation7cmLeft: data.heelSoleElevation7cmLeft ? 'Ja' : '',
-    heelSoleElevation7cmRight: data.heelSoleElevation7cmRight ? 'Ja' : '',
-    adjustedHeelsLeft: data.adjustedHeelsLeft ? 'Ja' : '',
-    adjustedHeelsRight: data.adjustedHeelsRight ? 'Ja' : '',
-    soleReinforcementLeft: data.soleReinforcementLeft ? 'Ja' : '',
-    soleReinforcementRight: data.soleReinforcementRight ? 'Ja' : '',
-    newInstepClosureLeft: data.newInstepClosureLeft ? 'Ja' : '',
-    newInstepClosureRight: data.newInstepClosureRight ? 'Ja' : '',
+    ...leftModifications,
+    ...rightModifications,
+
+    // Aggregated modifications
+    allLeftModifications: aggregateJaValues(leftModifications),
+    allRightModifications: aggregateJaValues(rightModifications),
 
     // Verkorting
     shorteningLeft: data.shorteningLeft ? 'Ja' : '',
@@ -750,6 +790,10 @@ const getEmptyOVACData = (): Record<string, string> => {
     soleReinforcementRight: '',
     newInstepClosureLeft: '',
     newInstepClosureRight: '',
+
+    // Aggregated modifications
+    allLeftModifications: '',
+    allRightModifications: '',
 
     // Verkorting
     shorteningLeft: '',
