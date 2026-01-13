@@ -100,7 +100,12 @@ export const normalizeEnclosureData = (
 
 /**
  * Helper to check if a translation is available for a given key
- * This is a placeholder - actual implementation should be provided by the translation system
+ * This function is exported for use in future enhancements where translation
+ * availability needs to be checked before applying translations.
+ * 
+ * Example use case: Conditionally rendering UI elements based on translation availability
+ * or providing fallback content when translations are missing.
+ * 
  * @param translationKey - The key to check for translation
  * @param translationFunction - The translation function (e.g., t from next-translate)
  * @returns true if translation exists and differs from the key, false otherwise
