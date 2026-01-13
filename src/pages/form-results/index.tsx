@@ -54,10 +54,35 @@ const FormResultsPage = () => {
     generatedAt: string;
   }
 
+  // Helper function to apply translations to normalized data
+  const applyTranslations = (
+    data: Record<string, string>,
+  ): Record<string, string> => {
+    const translated: Record<string, string> = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (value && typeof value === 'string') {
+        try {
+          // Try to translate the value
+          const translatedValue = t(value);
+          // If translation returns the same value, no translation exists
+          translated[key] = translatedValue !== value ? translatedValue : value;
+        } catch {
+          // If translation fails, use original value
+          translated[key] = value;
+        }
+      } else {
+        translated[key] = value;
+      }
+    }
+    return translated;
+  };
+
   // Generate complete JSON with all data and constants
   const generateCompleteJSON = (): FormResultJSON => {
     // Normalize and resolve client data
     const normalizedClientData = normalizeClientData(formData.client);
+
+    // Resolve practitioner name from ID
     const practitionerName =
       PRACTITIONERS.find(p => p.value === formData.client?.practitionerId)
         ?.label ||
@@ -75,27 +100,39 @@ const FormResultsPage = () => {
 
     // Normalize and include intake forms with complete field sets
     if (formData.intakeVLOS) {
-      result.intakeVLOS = normalizeIntakeVLOSData(formData.intakeVLOS);
+      result.intakeVLOS = applyTranslations(
+        normalizeIntakeVLOSData(formData.intakeVLOS),
+      );
     }
     if (formData.intakeOSA) {
-      result.intakeOSA = normalizeIntakeOSAData(formData.intakeOSA);
+      result.intakeOSA = applyTranslations(
+        normalizeIntakeOSAData(formData.intakeOSA),
+      );
     }
     if (formData.intakePulman) {
-      result.intakePulman = normalizeIntakePulmanData(formData.intakePulman);
+      result.intakePulman = applyTranslations(
+        normalizeIntakePulmanData(formData.intakePulman),
+      );
     }
     if (formData.intakeRebacare) {
-      result.intakeRebacare = normalizeIntakeRebacareData(
-        formData.intakeRebacare,
+      result.intakeRebacare = applyTranslations(
+        normalizeIntakeRebacareData(formData.intakeRebacare),
       );
     }
     if (formData.intakeOSB) {
-      result.intakeOSB = normalizeIntakeOSBData(formData.intakeOSB);
+      result.intakeOSB = applyTranslations(
+        normalizeIntakeOSBData(formData.intakeOSB),
+      );
     }
     if (formData.intakeOVAC) {
-      result.intakeOVAC = normalizeIntakeOVACData(formData.intakeOVAC);
+      result.intakeOVAC = applyTranslations(
+        normalizeIntakeOVACData(formData.intakeOVAC),
+      );
     }
     if (formData.intakeInsoles) {
-      result.intakeInsoles = normalizeIntakeInsolesData(formData.intakeInsoles);
+      result.intakeInsoles = applyTranslations(
+        normalizeIntakeInsolesData(formData.intakeInsoles),
+      );
     }
 
     // Generate medical codes if applicable

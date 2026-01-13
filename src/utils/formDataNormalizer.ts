@@ -30,10 +30,10 @@ export const normalizeValue = (value: unknown): string => {
   }
   if (typeof value === 'string') {
     const lower = value.toLowerCase();
-    if (lower === 'yes' || lower === 'ja') {
+    if (lower === 'yes' || lower === 'ja' || lower === 'true') {
       return 'Ja';
     }
-    if (lower === 'no' || lower === 'nee') {
+    if (lower === 'no' || lower === 'nee' || lower === 'false') {
       return '';
     }
     return value;
@@ -97,6 +97,30 @@ export const normalizeEnclosureData = (
 
   return result;
 };
+
+/**
+ * Helper to aggregate all "Ja" values from a record into a comma-separated string
+ * Returns empty string if no values are "Ja"
+ */
+const aggregateJaValues = (record: Record<string, string>): string => {
+  const activeKeys = Object.entries(record)
+    .filter(([_, value]) => value === 'Ja')
+    .map(([key, _]) => key);
+  return activeKeys.join(' + ');
+};
+
+/*
+ * Possible pages that need normalization:
+ * - Client Data
+ * - Check Foliepas
+ * - Intake OSA
+ * - Intake VLOS
+ * - Intake OSB
+ * - Intake Steunzolen
+ * - Intake Pulman
+ * - Intake Rebacare
+ * - Intake OVAC
+ */
 
 /**
  * Normalize client data - ensure all fields are present
@@ -286,6 +310,11 @@ export const normalizeIntakeVLOSData = (
     ...walkingDistanceAids,
     painPerception: data.painPerception || '',
     ...footInspection,
+
+    // Aggregated functieonderzoek fields
+    allPathologies: aggregateJaValues(pathologies),
+    allWalkingDistanceAids: aggregateJaValues(walkingDistanceAids),
+    allFootInspections: aggregateJaValues(footInspection),
   };
 };
 
@@ -404,6 +433,11 @@ const getEmptyVLOSData = (): Record<string, string> => {
     pesPlanoValgus: '',
     pesCavo: '',
     klauwtenen: '',
+
+    // Aggregated functieonderzoek fields
+    allPathologies: '',
+    allWalkingDistanceAids: '',
+    allFootInspections: '',
 
     // Leg length difference
     legLengthDifferenceLeft: '',
