@@ -10,29 +10,30 @@ import {
   IntakeInsolesData,
   CheckFoliepasData,
 } from '@/components/form/types/formData';
+import {emptyFormData} from '@/utils/formDataTemplates.generated';
 
 export interface FormDataState {
-  client: ClientData | null;
-  intakeVLOS: IntakeVLOSData | null;
-  intakeOSA: IntakeOSAData | null;
-  intakePulman: IntakePulmanData | null;
-  intakeRebacare: IntakeRebacareData | null;
-  intakeOSB: IntakeOSBData | null;
-  intakeInsoles: IntakeInsolesData | null;
-  intakeOVAC: IntakeOVACData | null;
-  checkFoliepas: CheckFoliepasData | null;
+  client: ClientData;
+  intakeVLOS: IntakeVLOSData;
+  intakeOSA: IntakeOSAData;
+  intakePulman: IntakePulmanData;
+  intakeRebacare: IntakeRebacareData;
+  intakeOSB: IntakeOSBData;
+  intakeInsoles: IntakeInsolesData;
+  intakeOVAC: IntakeOVACData;
+  checkFoliepas: CheckFoliepasData;
 }
 
 const initialState: FormDataState = {
-  client: null,
-  intakeVLOS: null,
-  intakeOSA: null,
-  intakePulman: null,
-  intakeRebacare: null,
-  intakeOSB: null,
-  intakeInsoles: null,
-  intakeOVAC: null,
-  checkFoliepas: null,
+  client: emptyFormData.client,
+  intakeVLOS: emptyFormData.intakeVLOS,
+  intakeOSA: emptyFormData.intakeOSA,
+  intakePulman: emptyFormData.intakePulman,
+  intakeRebacare: emptyFormData.intakeRebacare,
+  intakeOSB: emptyFormData.intakeOSB,
+  intakeInsoles: emptyFormData.intakeInsoles,
+  intakeOVAC: emptyFormData.intakeOVAC,
+  checkFoliepas: emptyFormData.checkFoliepas,
 };
 
 const formDataSlice = createSlice({
@@ -72,26 +73,49 @@ const formDataSlice = createSlice({
     setCheckFoliepasData: (state, action: PayloadAction<CheckFoliepasData>) => {
       state.checkFoliepas = action.payload;
     },
+    /**
+     * Generic setter that can update any form field
+     * Usage: dispatch(setFormField({formType: 'intakeVLOS', data: {...}}))
+     */
+    setFormField: (
+      state,
+      action: PayloadAction<{
+        formType:
+          | 'client'
+          | 'intakeVLOS'
+          | 'intakeOSA'
+          | 'intakePulman'
+          | 'intakeRebacare'
+          | 'intakeOSB'
+          | 'intakeOVAC'
+          | 'intakeInsoles'
+          | 'checkFoliepas';
+        data: any;
+      }>,
+    ) => {
+      const {formType, data} = action.payload;
+      (state as any)[formType] = data;
+    },
     clearFormData: state => {
-      state.client = null;
-      state.intakeVLOS = null;
-      state.intakeOSA = null;
-      state.intakePulman = null;
-      state.intakeRebacare = null;
-      state.intakeOSB = null;
-      state.intakeInsoles = null;
-      state.intakeOVAC = null;
-      state.checkFoliepas = null;
+      state.client = emptyFormData.client;
+      state.intakeVLOS = emptyFormData.intakeVLOS;
+      state.intakeOSA = emptyFormData.intakeOSA;
+      state.intakePulman = emptyFormData.intakePulman;
+      state.intakeRebacare = emptyFormData.intakeRebacare;
+      state.intakeOSB = emptyFormData.intakeOSB;
+      state.intakeInsoles = emptyFormData.intakeInsoles;
+      state.intakeOVAC = emptyFormData.intakeOVAC;
+      state.checkFoliepas = emptyFormData.checkFoliepas;
     },
     clearIntakeForms: state => {
-      state.intakeVLOS = null;
-      state.intakeOSA = null;
-      state.intakePulman = null;
-      state.intakeRebacare = null;
-      state.intakeOSB = null;
-      state.intakeInsoles = null;
-      state.intakeOVAC = null;
-      state.checkFoliepas = null;
+      state.intakeVLOS = emptyFormData.intakeVLOS;
+      state.intakeOSA = emptyFormData.intakeOSA;
+      state.intakePulman = emptyFormData.intakePulman;
+      state.intakeRebacare = emptyFormData.intakeRebacare;
+      state.intakeOSB = emptyFormData.intakeOSB;
+      state.intakeInsoles = emptyFormData.intakeInsoles;
+      state.intakeOVAC = emptyFormData.intakeOVAC;
+      state.checkFoliepas = emptyFormData.checkFoliepas;
     },
   },
 });
@@ -106,6 +130,7 @@ export const {
   setIntakeOVACData,
   setIntakeSteunzolenData,
   setCheckFoliepasData,
+  setFormField,
   clearFormData,
   clearIntakeForms,
 } = formDataSlice.actions;

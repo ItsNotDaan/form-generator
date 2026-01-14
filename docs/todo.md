@@ -1,10 +1,6 @@
 ## Translation missing:
 
--[] Check/Sort the formDataNormalizer with the form pages/website content. Example: Which thing comes first in intake-vlos?
-
--[] Check final JSON of every page with the form pages/website content.
-
--[] Fix the build issues.
+2. Redo the whole folder structure in this project when talking about constants, scripts and stuff like that. Formdata, formconstant, scrips they all have a totally different place. I would like to make this whole project more cleaned up.
 
 ## For Norah:
 

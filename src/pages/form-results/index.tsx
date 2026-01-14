@@ -19,7 +19,9 @@ import {
   normalizeIntakeRebacareData,
   normalizeIntakeOSBData,
   normalizeIntakeOVACData,
-  normalizeIntakeInsolesData,
+  normalizeIntakeSteunzolenData,
+  normalizeCheckFoliepasData,
+  normalizeValue,
 } from '@/utils/formDataNormalizer';
 
 const FormResultsPage = () => {
@@ -49,6 +51,7 @@ const FormResultsPage = () => {
     intakeOSB?: Record<string, string>;
     intakeOVAC?: Record<string, string>;
     intakeInsoles?: Record<string, string>;
+    checkFoliepas?: Record<string, string>;
     medicalCodes?: Record<string, string>;
     codeWarnings?: string[];
     generatedAt: string;
@@ -60,34 +63,24 @@ const FormResultsPage = () => {
   ): Record<string, string> => {
     const translated: Record<string, string> = {};
 
-    // Special translation mappings for common values
-    const translationMappings: Record<string, string> = {
-      left: t('left'),
-      right: t('right'),
-      both: t('both'),
-      Ja: t('yes'),
-      // Add more mappings as needed
+    const translateIfAvailable = (val: string): string => {
+      const maybe = t(val);
+      return maybe === val ? val : maybe;
     };
 
     for (const [key, value] of Object.entries(data)) {
-      if (value && typeof value === 'string') {
-        // Check if there's a direct mapping
-        if (translationMappings[value]) {
-          translated[key] = translationMappings[value];
-          continue;
-        }
-
-        try {
-          // Try to translate the value
-          const translatedValue = t(value);
-          // If translation returns the same value, no translation exists
-          translated[key] = translatedValue !== value ? translatedValue : value;
-        } catch {
-          // If translation fails, use original value
-          translated[key] = value;
-        }
-      } else {
-        translated[key] = value;
+      // Handle aggregated values (e.g., "hmsn + degeneratie")
+      // These contain field labels separated by " + " that need translation
+      if (key.startsWith('all') && value.includes(' + ')) {
+        const translatedLabels = value
+          .split(' + ')
+          .map(label => translateIfAvailable(label.trim()))
+          .join(' + ');
+        translated[key] = translatedLabels;
+      }
+      // Translate value if a translation exists; otherwise keep as-is
+      else {
+        translated[key] = translateIfAvailable(value);
       }
     }
     return translated;
@@ -114,41 +107,72 @@ const FormResultsPage = () => {
       generatedAt: new Date().toISOString(),
     };
 
-    // Normalize and include intake forms with complete field sets
-    if (formData.intakeVLOS) {
-      result.intakeVLOS = applyTranslations(
-        normalizeIntakeVLOSData(formData.intakeVLOS),
-      );
-    }
-    if (formData.intakeOSA) {
-      result.intakeOSA = applyTranslations(
-        normalizeIntakeOSAData(formData.intakeOSA),
-      );
-    }
-    if (formData.intakePulman) {
-      result.intakePulman = applyTranslations(
-        normalizeIntakePulmanData(formData.intakePulman),
-      );
-    }
-    if (formData.intakeRebacare) {
-      result.intakeRebacare = applyTranslations(
-        normalizeIntakeRebacareData(formData.intakeRebacare),
-      );
-    }
-    if (formData.intakeOSB) {
-      result.intakeOSB = applyTranslations(
-        normalizeIntakeOSBData(formData.intakeOSB),
-      );
-    }
-    if (formData.intakeOVAC) {
-      result.intakeOVAC = applyTranslations(
-        normalizeIntakeOVACData(formData.intakeOVAC),
-      );
-    }
-    if (formData.intakeInsoles) {
-      result.intakeInsoles = applyTranslations(
-        normalizeIntakeInsolesData(formData.intakeInsoles),
-      );
+    // Map of form types to their normalizer functions and normalized data
+    const formNormalizers: Array<{
+      key: keyof Omit<
+        FormResultJSON,
+        'clientData' | 'medicalCodes' | 'codeWarnings' | 'generatedAt'
+      >;
+      intakeType: string;
+      data: any;
+      normalizer: (data: any) => Record<string, string>;
+    }> = [
+      {
+        key: 'intakeVLOS',
+        intakeType: 'VLOS',
+        data: formData.intakeVLOS,
+        normalizer: normalizeIntakeVLOSData,
+      },
+      {
+        key: 'intakeOSA',
+        intakeType: 'OSA',
+        data: formData.intakeOSA,
+        normalizer: normalizeIntakeOSAData,
+      },
+      {
+        key: 'intakePulman',
+        intakeType: 'Pulman',
+        data: formData.intakePulman,
+        normalizer: normalizeIntakePulmanData,
+      },
+      {
+        key: 'intakeRebacare',
+        intakeType: 'Rebacare',
+        data: formData.intakeRebacare,
+        normalizer: normalizeIntakeRebacareData,
+      },
+      {
+        key: 'intakeOSB',
+        intakeType: 'OSB',
+        data: formData.intakeOSB,
+        normalizer: normalizeIntakeOSBData,
+      },
+      {
+        key: 'intakeOVAC',
+        intakeType: 'OVAC',
+        data: formData.intakeOVAC,
+        normalizer: normalizeIntakeOVACData,
+      },
+      {
+        key: 'intakeInsoles',
+        intakeType: 'Steunzolen',
+        data: formData.intakeInsoles,
+        normalizer: normalizeIntakeSteunzolenData,
+      },
+      {
+        key: 'checkFoliepas',
+        intakeType: 'CheckFoliepas',
+        data: formData.checkFoliepas,
+        normalizer: normalizeCheckFoliepasData,
+      },
+    ];
+
+    // Normalize and include only the selected intake form (based on client intakeType)
+    for (const {key, intakeType, data, normalizer} of formNormalizers) {
+      // Only include the form that matches the client's selected intake type
+      if (data && formData.client.intakeType === intakeType) {
+        (result as any)[key] = applyTranslations(normalizer(data));
+      }
     }
 
     // Generate medical codes if applicable
@@ -177,11 +201,10 @@ const FormResultsPage = () => {
         if (typeof value === 'object' && value !== null) {
           // Flatten nested code objects
           for (const [nestedKey, nestedValue] of Object.entries(value)) {
-            flattenedCodes[`${key}_${nestedKey}`] =
-              nestedValue?.toString() || '';
+            flattenedCodes[`${key}_${nestedKey}`] = normalizeValue(nestedValue);
           }
         } else {
-          flattenedCodes[key] = value?.toString() || '';
+          flattenedCodes[key] = normalizeValue(value);
         }
       }
       result.medicalCodes = flattenedCodes;
@@ -369,8 +392,8 @@ const FormResultsPage = () => {
                 defaultOpen
               >
                 <FormItemWrapper
-                  centerItems={false}
-                  centerTitle={false}
+                  // centerItems={false}
+                  // centerTitle={false}
                   label={t('jsonOutput')}
                 >
                   <pre className="p-4 bg-gray-50 rounded-md border border-gray-200 max-h-125 overflow-y-auto text-sm whitespace-pre-wrap wrap-break-word font-mono">

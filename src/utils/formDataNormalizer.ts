@@ -11,6 +11,7 @@ import type {
   IntakeOVACData,
   IntakeInsolesData,
   ClientData,
+  CheckFoliepasData,
 } from '@/components/form/types/formData';
 
 /**
@@ -51,12 +52,46 @@ export const normalizeValue = (value: unknown): string => {
 export const normalizeObject = (
   obj: Record<string, unknown>,
 ): Record<string, string> => {
-  if (!obj) return {};
+  if (!obj) {
+    return {};
+  }
   const normalized: Record<string, string> = {};
   for (const [key, value] of Object.entries(obj)) {
     normalized[key] = normalizeValue(value);
   }
   return normalized;
+};
+
+/**
+ * Generic auto-normalizer that converts any typed object to Record<string, string>
+ * Automatically handles all fields without manual mapping
+ * Skip certain keys that need custom handling (Records, nested objects, etc.)
+ */
+const autoNormalize = (
+  data: unknown,
+  skipKeys: string[] = [],
+): Record<string, string> => {
+  const result: Record<string, string> = {};
+
+  if (!data || typeof data !== 'object') {
+    return result;
+  }
+
+  for (const [key, value] of Object.entries(data)) {
+    // Skip keys that need custom handling
+    if (skipKeys.includes(key)) {
+      continue;
+    }
+
+    // Skip nested objects and Records (they need custom flattening)
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      continue;
+    }
+
+    result[key] = normalizeValue(value);
+  }
+
+  return result;
 };
 
 /**
@@ -102,10 +137,10 @@ export const normalizeEnclosureData = (
  * Helper to check if a translation is available for a given key
  * This function is exported for use in future enhancements where translation
  * availability needs to be checked before applying translations.
- * 
+ *
  * Example use case: Conditionally rendering UI elements based on translation availability
  * or providing fallback content when translations are missing.
- * 
+ *
  * @param translationKey - The key to check for translation
  * @param translationFunction - The translation function (e.g., t from next-translate)
  * @returns true if translation exists and differs from the key, false otherwise
@@ -130,7 +165,7 @@ export const checkTranslateAvailable = (
  * Helper to aggregate all "Ja" values from a record into a comma-separated string
  * Returns empty string if no values are "Ja"
  */
-const aggregateJaValues = (record: Record<string, string>): string => {
+export const aggregateJaValues = (record: Record<string, string>): string => {
   const activeKeys = Object.entries(record)
     .filter(([_, value]) => value === 'Ja')
     .map(([key, _]) => key);
@@ -152,67 +187,24 @@ const aggregateJaValues = (record: Record<string, string>): string => {
 
 /**
  * Normalize client data - ensure all fields are present
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeClientData = (
-  client: ClientData | null | undefined,
+  client: ClientData,
 ): Record<string, string> => {
-  if (!client) {
-    return {
-      practitionerId: '',
-      practitionerName: '',
-      date: '',
-      intakeType: '',
-      location: '',
-      salutation: '',
-      initials: '',
-      clientName: '',
-      birthDate: '',
-      postalCode: '',
-      houseNumber: '',
-      city: '',
-      address: '',
-      phoneOne: '',
-      phoneTwo: '',
-      email: '',
-      medicalIndication: '',
-      insurance: '',
-      specialist: '',
-    };
-  }
-
   return {
-    practitionerId: client.practitionerId || '',
+    ...autoNormalize(client),
     practitionerName: '', // Will be resolved separately
-    date: client.date || '',
-    intakeType: client.intakeType || '',
-    location: client.location || '',
-    salutation: client.salutation || '',
-    initials: client.initials || '',
-    clientName: client.clientName || '',
-    birthDate: client.birthDate || '',
-    postalCode: client.postalCode || '',
-    houseNumber: client.houseNumber || '',
-    city: client.city || '',
-    address: client.address || '',
-    phoneOne: client.phoneOne || '',
-    phoneTwo: client.phoneTwo || '',
-    email: client.email || '',
-    medicalIndication: client.medicalIndication || '',
-    insurance: client.insurance || '',
-    specialist: client.specialist || '',
   };
 };
 
 /**
  * Normalize VLOS intake data - ensure all fields are present with English names
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeIntakeVLOSData = (
-  data: IntakeVLOSData | null | undefined,
+  data: IntakeVLOSData,
 ): Record<string, string> => {
-  if (!data) {
-    return getEmptyVLOSData();
-  }
-
   // Flatten enclosure data
   const enclosureData = normalizeEnclosureData(
     data.enclosureLeft,
@@ -260,85 +252,30 @@ export const normalizeIntakeVLOSData = (
     klauwtenen: data.footInspection?.klauwtenen ? 'Ja' : '',
   };
 
+  // Auto-normalize all basic fields, skip Records that need custom handling
+  const basicFields = autoNormalize(data, [
+    'enclosureLeft',
+    'enclosureRight',
+    'enclosureLeftMm',
+    'enclosureRightMm',
+    'pathologies',
+    'walkingDistanceAids',
+    'footInspection',
+    'shaftHeightLeft',
+    'shaftHeightRight',
+  ]);
+
   return {
-    whichPair: data.whichPair || '',
-    medicalIndication: data.medicalIndication || '',
-    side: data.side || '',
+    ...basicFields,
+    // Add custom field name mappings
     shaftHeightLeftCm: data.shaftHeightLeft || '',
     shaftHeightRightCm: data.shaftHeightRight || '',
-
-    // Enclosure fields (flattened with English names)
+    // Enclosure fields
     ...enclosureData,
-
-    // Supplement shoring
-    customInsoleShoringLeftEnabled: data.customInsoleShoringLeftEnabled
-      ? 'Ja'
-      : '',
-    customInsoleShoringRightEnabled: data.customInsoleShoringRightEnabled
-      ? 'Ja'
-      : '',
-    customInsoleShoringLeftType: data.customInsoleShoringLeftType || '',
-    customInsoleShoringRightType: data.customInsoleShoringRightType || '',
-
-    // Sole reinforcement
-    soleReinforcementEnabled: data.soleReinforcementEnabled ? 'Ja' : '',
-    soleReinforcementLeft: data.soleReinforcementLeft ? 'Ja' : '',
-    soleReinforcementRight: data.soleReinforcementRight ? 'Ja' : '',
-
-    // Closure
-    closureType: data.closureType || '',
-    entryPoint: data.entryPoint || '',
-    shaftOpeningWidth: data.shaftOpeningWidth || '',
-
-    // Tongue
-    tonguePaddingEnabled: data.tonguePaddingEnabled ? 'Ja' : '',
-    fixedTongueEnabled: data.fixedTongueEnabled ? 'Ja' : '',
-
-    // Heel type and height
-    heelTypeLeft: data.heelTypeLeft || '',
-    heelTypeRight: data.heelTypeRight || '',
-    heelHeightLeft: data.heelHeightLeft || '',
-    heelHeightRight: data.heelHeightRight || '',
-
-    // Heel wedge
-    heelWedgeLeftEnabled: data.heelWedgeLeftEnabled ? 'Ja' : '',
-    heelWedgeRightEnabled: data.heelWedgeRightEnabled ? 'Ja' : '',
-    heelWedgeLeftType: data.heelWedgeLeftType || '',
-    heelWedgeRightType: data.heelWedgeRightType || '',
-
-    // Heel rounding
-    heelRoundingLeftEnabled: data.heelRoundingLeftEnabled ? 'Ja' : '',
-    heelRoundingRightEnabled: data.heelRoundingRightEnabled ? 'Ja' : '',
-    heelRoundingLeftHeight: data.heelRoundingLeftHeight || '',
-    heelRoundingLeftLength: data.heelRoundingLeftLength || '',
-    heelRoundingRightHeight: data.heelRoundingRightHeight || '',
-    heelRoundingRightLength: data.heelRoundingRightLength || '',
-
-    // Donkey ear
-    donkeyEarLeftEnabled: data.donkeyEarLeftEnabled ? 'Ja' : '',
-    donkeyEarRightEnabled: data.donkeyEarRightEnabled ? 'Ja' : '',
-    donkeyEarLeftType: data.donkeyEarLeftType || '',
-    donkeyEarRightType: data.donkeyEarRightType || '',
-
-    // Amputation
-    amputationLeftEnabled: data.amputationLeftEnabled ? 'Ja' : '',
-    amputationRightEnabled: data.amputationRightEnabled ? 'Ja' : '',
-
-    // Rocker sole
-    rockerSoleType: data.rockerSoleType || '',
-
-    // General base code (if generated)
-    generalBaseCode: data.generalBaseCode || '',
-
-    // Special notes
-    specialNotes: data.specialNotes || '',
-
     // Functieonderzoek
     ...pathologies,
     ...walkingDistanceAids,
-    painPerception: data.painPerception || '',
     ...footInspection,
-
     // Aggregated functieonderzoek fields
     allPathologies: aggregateJaValues(pathologies),
     allWalkingDistanceAids: aggregateJaValues(walkingDistanceAids),
@@ -347,239 +284,59 @@ export const normalizeIntakeVLOSData = (
 };
 
 /**
- * Get empty VLOS data structure with all fields
- */
-const getEmptyVLOSData = (): Record<string, string> => {
-  return {
-    whichPair: '',
-    medicalIndication: '',
-    side: '',
-    shaftHeightLeftCm: '',
-    shaftHeightRightCm: '',
-
-    // Enclosure fields
-    enclosureLeftCm: '',
-    enclosureRightCm: '',
-    laveroLeftMm: '',
-    laveroRightMm: '',
-    multivormLeftMm: '',
-    multivormRightMm: '',
-    plastazoteLeftMm: '',
-    plastazoteRightMm: '',
-    orcaLeft: '',
-    orcaRight: '',
-
-    // Supplement shoring
-    customInsoleShoringLeftEnabled: '',
-    customInsoleShoringRightEnabled: '',
-    customInsoleShoringLeftType: '',
-    customInsoleShoringRightType: '',
-
-    // Sole reinforcement
-    soleReinforcementEnabled: '',
-    soleReinforcementLeft: '',
-    soleReinforcementRight: '',
-
-    // Closure
-    closureType: '',
-    entryPoint: '',
-    shaftOpeningWidth: '',
-
-    // Tongue
-    tonguePaddingEnabled: '',
-    fixedTongueEnabled: '',
-
-    // Heel type and height
-    heelTypeLeft: '',
-    heelTypeRight: '',
-    heelHeightLeft: '',
-    heelHeightRight: '',
-
-    // Heel wedge
-    heelWedgeLeftEnabled: '',
-    heelWedgeRightEnabled: '',
-    heelWedgeLeftType: '',
-    heelWedgeRightType: '',
-
-    // Heel rounding
-    heelRoundingLeftEnabled: '',
-    heelRoundingRightEnabled: '',
-    heelRoundingLeftHeight: '',
-    heelRoundingLeftLength: '',
-    heelRoundingRightHeight: '',
-    heelRoundingRightLength: '',
-
-    // Donkey ear
-    donkeyEarLeftEnabled: '',
-    donkeyEarRightEnabled: '',
-    donkeyEarLeftType: '',
-    donkeyEarRightType: '',
-
-    // Amputation
-    amputationLeftEnabled: '',
-    amputationRightEnabled: '',
-
-    // Rocker sole
-    rockerSoleType: '',
-
-    // General base code
-    generalBaseCode: '',
-
-    // Special notes
-    specialNotes: '',
-
-    // Functieonderzoek - pathologies
-    diabetes: '',
-    polyNeuropathie: '',
-    reuma: '',
-    ms: '',
-    hmsn: '',
-    degeneratie: '',
-    artrose: '',
-
-    // Walking distance aids
-    steunzolen: '',
-    rollator: '',
-    stok: '',
-    elKousen: '',
-    knieBrace: '',
-    fysio: '',
-    pedicure: '',
-
-    // Pain perception
-    painPerception: '',
-
-    // Foot inspection
-    oedeem: '',
-    wisselend: '',
-    structureel: '',
-    dunneKwetsbareHuid: '',
-    drogeHuid: '',
-    doorbloedingsstoornis: '',
-    halluxValgus: '',
-    bunion: '',
-    pesPlanoValgus: '',
-    pesCavo: '',
-    klauwtenen: '',
-
-    // Aggregated functieonderzoek fields
-    allPathologies: '',
-    allWalkingDistanceAids: '',
-    allFootInspections: '',
-
-    // Leg length difference
-    legLengthDifferenceLeft: '',
-    legLengthDifferenceRight: '',
-  };
-};
-
-/**
  * Normalize OSA intake data (extends VLOS)
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeIntakeOSAData = (
-  data: IntakeOSAData | null | undefined,
+  data: IntakeOSAData,
 ): Record<string, string> => {
   const vlosData = normalizeIntakeVLOSData(data);
-
-  if (!data) {
-    return {
-      ...vlosData,
-      digitalEnabled: '',
-      heelLiftLeft: '',
-      heelLiftRight: '',
-      lastHeight: '',
-      mtp1DeepLeft: '',
-      mtp1DeepRight: '',
-      clawToesEnabled: '',
-      scannedWithFoil: '',
-      digitalInstructions: '',
-    };
-  }
+  const osaSpecific = autoNormalize(data, [
+    // Skip all VLOS fields (already handled)
+    'enclosureLeft',
+    'enclosureRight',
+    'enclosureLeftMm',
+    'enclosureRightMm',
+    'pathologies',
+    'walkingDistanceAids',
+    'footInspection',
+    'shaftHeightLeft',
+    'shaftHeightRight',
+  ]);
 
   return {
     ...vlosData,
-    digitalEnabled: data.digitalEnabled ? 'Ja' : '',
-    heelLiftLeft: data.heelLiftLeft || '',
-    heelLiftRight: data.heelLiftRight || '',
-    lastHeight: data.lastHeight || '',
-    mtp1DeepLeft: data.mtp1DeepLeft || '',
-    mtp1DeepRight: data.mtp1DeepRight || '',
-    clawToesEnabled: data.clawToesEnabled ? 'Ja' : '',
-    scannedWithFoil: data.scannedWithFoil ? 'Ja' : '',
-    digitalInstructions: data.digitalInstructions || '',
+    ...osaSpecific,
   };
 };
 
 /**
  * Normalize Pulman intake data
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeIntakePulmanData = (
-  data: IntakePulmanData | null | undefined,
+  data: IntakePulmanData,
 ): Record<string, string> => {
-  if (!data) {
-    return {
-      whichPair: '',
-      side: '',
-      medicalIndication: '',
-      bandagedFoot: '',
-      pulmanType: '',
-      shoeSize: '',
-      providedSize: '',
-      specialNotes: '',
-    };
-  }
-
-  return {
-    whichPair: data.whichPair || '',
-    side: data.side || '',
-    medicalIndication: data.medicalIndication || '',
-    bandagedFoot: data.bandagedFoot ? 'Ja' : '',
-    pulmanType: data.pulmanType || '',
-    shoeSize: data.shoeSize || '',
-    providedSize: data.providedSize || '',
-    specialNotes: data.specialNotes || '',
-  };
+  return autoNormalize(data);
 };
 
 /**
  * Normalize Rebacare intake data
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeIntakeRebacareData = (
-  data: IntakeRebacareData | null | undefined,
+  data: IntakeRebacareData,
 ): Record<string, string> => {
-  if (!data) {
-    return {
-      whichPair: '',
-      side: '',
-      medicalIndication: '',
-      bandagedFoot: '',
-      shoeSize: '',
-      providedSize: '',
-      specialNotes: '',
-    };
-  }
-
-  return {
-    whichPair: data.whichPair || '',
-    side: data.side || '',
-    medicalIndication: data.medicalIndication || '',
-    bandagedFoot: data.bandagedFoot ? 'Ja' : '',
-    shoeSize: data.shoeSize || '',
-    providedSize: data.providedSize || '',
-    specialNotes: data.specialNotes || '',
-  };
+  return autoNormalize(data);
 };
 
 /**
  * Normalize OSB intake data
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeIntakeOSBData = (
-  data: IntakeOSBData | null | undefined,
+  data: IntakeOSBData,
 ): Record<string, string> => {
-  if (!data) {
-    return getEmptyOSBData();
-  }
-
   // Flatten goal options
   const goal: Record<string, string> = {
     doelPasvorm: data.goal?.doelPasvorm ? 'Ja' : '',
@@ -588,122 +345,30 @@ export const normalizeIntakeOSBData = (
     doelOndersteuningGewelf: data.goal?.doelOndersteuningGewelf ? 'Ja' : '',
   };
 
-  return {
-    whichPair: data.whichPair || '',
-    medicalIndication: data.medicalIndication || '',
-    side: data.side || '',
+  // Auto-normalize basic fields, skip Records
+  const basicFields = autoNormalize(data, ['goal', 'productSpecifications']);
 
+  return {
+    ...basicFields,
     // Goal
     ...goal,
-    // Aggregated goals
     allGoals: aggregateJaValues(goal),
-
-    // Walking function
-    walkingFunctionIndication: data.walkingFunctionIndication || '',
-    walkingFunctionOtherText: data.walkingFunctionOtherText || '',
-
-    // Supplier and product
-    supplierName: data.supplierName || '',
-    orderDate: data.orderDate || '',
+    // Product specifications (flatten nested object)
     productArticleCode: data.productSpecifications?.articleCode || '',
     productLengthSize: data.productSpecifications?.lengthSize || '',
     productWidth: data.productSpecifications?.width || '',
     productColor: data.productSpecifications?.color || '',
     productClosure: data.productSpecifications?.closure || '',
-
-    // Heel raise
-    heelRaiseLeft: data.heelRaiseLeft || '',
-    heelRaiseRight: data.heelRaiseRight || '',
-
-    // Insole
-    insoleTypeGeneral: data.insoleTypeGeneral || '',
-    insoleOtherText: data.insoleOtherText || '',
-    insoleMidfootCorrection: data.insoleMidfootCorrection || '',
-    insoleForefootCorrection: data.insoleForefootCorrection || '',
-    insoleForefootPad: data.insoleForefootPad || '',
-
-    // Supplement
-    customInsoleIndividualLeft: data.customInsoleIndividualLeft ? 'Ja' : '',
-    customInsoleIndividualRight: data.customInsoleIndividualRight ? 'Ja' : '',
-
-    // Sole reinforcement
-    soleReinforcementLeft: data.soleReinforcementLeft ? 'Ja' : '',
-    soleReinforcementRight: data.soleReinforcementRight ? 'Ja' : '',
-
-    // Rocker roll
-    rockerRollCmLeft: data.rockerRollCmLeft || '',
-    rockerRollCmRight: data.rockerRollCmRight || '',
-
-    // Special notes
-    specialNotes: data.specialNotes || '',
-  };
-};
-
-const getEmptyOSBData = (): Record<string, string> => {
-  return {
-    whichPair: '',
-    medicalIndication: '',
-    side: '',
-
-    // Goal
-    doelPasvorm: '',
-    doelStabiliteit: '',
-    doelLoopAfstandVergroten: '',
-    doelOndersteuningGewelf: '',
-    // Aggregated goals
-    allGoals: '',
-
-    // Walking function
-    walkingFunctionIndication: '',
-    walkingFunctionOtherText: '',
-
-    // Supplier and product
-    supplierName: '',
-    orderDate: '',
-    productArticleCode: '',
-    productLengthSize: '',
-    productWidth: '',
-    productColor: '',
-    productClosure: '',
-
-    // Heel raise
-    heelRaiseLeft: '',
-    heelRaiseRight: '',
-
-    // Insole
-    insoleTypeGeneral: '',
-    insoleOtherText: '',
-    insoleMidfootCorrection: '',
-    insoleForefootCorrection: '',
-    insoleForefootPad: '',
-
-    // Supplement
-    customInsoleIndividualLeft: '',
-    customInsoleIndividualRight: '',
-
-    // Sole reinforcement
-    soleReinforcementLeft: '',
-    soleReinforcementRight: '',
-
-    // Rocker roll
-    rockerRollCmLeft: '',
-    rockerRollCmRight: '',
-
-    // Special notes
-    specialNotes: '',
   };
 };
 
 /**
  * Normalize OVAC intake data
+ * Assumes data is always fully populated from Redux store
  */
 export const normalizeIntakeOVACData = (
-  data: IntakeOVACData | null | undefined,
+  data: IntakeOVACData,
 ): Record<string, string> => {
-  if (!data) {
-    return getEmptyOVACData();
-  }
-
   // Group items for aggregation
   const leftModifications: Record<string, string> = {
     customInsoleIndividualLeft: data.customInsoleIndividualLeft ? 'Ja' : '',
@@ -729,148 +394,56 @@ export const normalizeIntakeOVACData = (
     newInstepClosureRight: data.newInstepClosureRight ? 'Ja' : '',
   };
 
+  // Auto-normalize remaining fields
+  const basicFields = autoNormalize(data);
+
   return {
-    whichPair: data.whichPair || '',
-    medicalIndication: data.medicalIndication || '',
-
-    // Omschrijving items (flat structure)
-    ...leftModifications,
-    ...rightModifications,
-
+    ...basicFields,
     // Aggregated modifications
     allLeftModifications: aggregateJaValues(leftModifications),
     allRightModifications: aggregateJaValues(rightModifications),
-
-    // Verkorting
-    shorteningLeft: data.shorteningLeft ? 'Ja' : '',
-    shorteningRight: data.shorteningRight ? 'Ja' : '',
-    forefootCmLeft: data.forefootCmLeft || '',
-    forefootCmRight: data.forefootCmRight || '',
-    heelCmLeft: data.heelCmLeft || '',
-    heelCmRight: data.heelCmRight || '',
-
-    // Measurements
-    rockerRollCmLeft: data.rockerRollCmLeft || '',
-    rockerRollCmRight: data.rockerRollCmRight || '',
-    heelSoleElevationCmLeft: data.heelSoleElevationCmLeft || '',
-    heelSoleElevationCmRight: data.heelSoleElevationCmRight || '',
-
-    // Steunzolen (optional)
-    insoleTypeGeneral: data.insoleTypeGeneral || '',
-    insoleOtherText: data.insoleOtherText || '',
-    insoleMidfootCorrection: data.insoleMidfootCorrection || '',
-    insoleForefootCorrection: data.insoleForefootCorrection || '',
-    insoleForefootPad: data.insoleForefootPad || '',
-    heelRaiseLeft: data.heelRaiseLeft || '',
-    heelRaiseRight: data.heelRaiseRight || '',
-    insolePrice: data.insolePrice?.toString() || '',
-    insolePriceName: data.insolePriceName || '',
-
-    // Special notes
-    specialNotes: data.specialNotes || '',
-  };
-};
-
-const getEmptyOVACData = (): Record<string, string> => {
-  return {
-    whichPair: '',
-    medicalIndication: '',
-
-    // Omschrijving items
-    customInsoleIndividualLeft: '',
-    customInsoleIndividualRight: '',
-    simpleRockerLeft: '',
-    simpleRockerRight: '',
-    complicatedRockerLeft: '',
-    complicatedRockerRight: '',
-    heelAdjustment2cmLeft: '',
-    heelAdjustment2cmRight: '',
-    heelSoleElevation3cmLeft: '',
-    heelSoleElevation3cmRight: '',
-    heelSoleElevation7cmLeft: '',
-    heelSoleElevation7cmRight: '',
-    adjustedHeelsLeft: '',
-    adjustedHeelsRight: '',
-    soleReinforcementLeft: '',
-    soleReinforcementRight: '',
-    newInstepClosureLeft: '',
-    newInstepClosureRight: '',
-
-    // Aggregated modifications
-    allLeftModifications: '',
-    allRightModifications: '',
-
-    // Verkorting
-    shorteningLeft: '',
-    shorteningRight: '',
-    forefootCmLeft: '',
-    forefootCmRight: '',
-    heelCmLeft: '',
-    heelCmRight: '',
-
-    // Measurements
-    rockerRollCmLeft: '',
-    rockerRollCmRight: '',
-    heelSoleElevationCmLeft: '',
-    heelSoleElevationCmRight: '',
-
-    // Steunzolen
-    insoleTypeGeneral: '',
-    insoleOtherText: '',
-    insoleMidfootCorrection: '',
-    insoleForefootCorrection: '',
-    insoleForefootPad: '',
-    heelRaiseLeft: '',
-    heelRaiseRight: '',
-    insolePrice: '',
-    insolePriceName: '',
-
-    // Special notes
-    specialNotes: '',
   };
 };
 
 /**
- * Normalize Insoles intake data
+ * Normalize Steunzolen (Insoles) intake data
+ * Assumes data is always fully populated from Redux store
  */
-export const normalizeIntakeInsolesData = (
-  data: IntakeInsolesData | null | undefined,
+export const normalizeIntakeSteunzolenData = (
+  data: IntakeInsolesData,
 ): Record<string, string> => {
-  if (!data) {
-    return {
-      whichPair: '',
-      medicalIndication: '',
-      shoeSize: '',
-      heelRaiseEnabled: '',
-      heelRaiseLeft: '',
-      heelRaiseRight: '',
-      insoleTypeGeneral: '',
-      insoleOtherText: '',
-      insoleMidfootCorrection: '',
-      insoleForefootCorrection: '',
-      insoleForefootPad: '',
-      insolePrice: '',
-      insolePriceName: '',
-      finalPrice: '',
-      specialNotes: '',
-    };
-  }
+  return autoNormalize(data);
+};
+
+/**
+ * Normalize Check Foliepas data
+ * Assumes data is always fully populated from Redux store
+ */
+export const normalizeCheckFoliepasData = (
+  data: CheckFoliepasData,
+): Record<string, string> => {
+  // Flatten enclosure data
+  const enclosureData = normalizeEnclosureData(
+    data.enclosureLeft,
+    data.enclosureRight,
+    data.enclosureLeftMm,
+    data.enclosureRightMm,
+  );
+
+  // Auto-normalize all basic fields, skip Records
+  const basicFields = autoNormalize(data, [
+    'enclosureLeft',
+    'enclosureRight',
+    'enclosureLeftMm',
+    'enclosureRightMm',
+    'colorOptions',
+  ]);
 
   return {
-    whichPair: data.whichPair || '',
-    medicalIndication: data.medicalIndication || '',
-    shoeSize: data.shoeSize || '',
-    heelRaiseEnabled: data.heelRaiseEnabled ? 'Ja' : '',
-    heelRaiseLeft: data.heelRaiseLeft || '',
-    heelRaiseRight: data.heelRaiseRight || '',
-    insoleTypeGeneral: data.insoleTypeGeneral || '',
-    insoleOtherText: data.insoleOtherText || '',
-    insoleMidfootCorrection: data.insoleMidfootCorrection || '',
-    insoleForefootCorrection: data.insoleForefootCorrection || '',
-    insoleForefootPad: data.insoleForefootPad || '',
-    insolePrice: data.insolePrice?.toString() || '',
-    insolePriceName: data.insolePriceName || '',
-    finalPrice: data.finalPrice?.toString() || '',
-    specialNotes: data.specialNotes || '',
+    ...basicFields,
+    // Enclosure fields
+    ...enclosureData,
+    // Array field
+    colorOptions: data.colorOptions?.join(', ') || '',
   };
 };

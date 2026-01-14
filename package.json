@@ -10,6 +10,10 @@
   "scripts": {
     "dev-localbackend": "env-cmd -e localbackend,local --use-shell 'NEXT_PUBLIC_APP_BUILD_SHA=$(git rev-parse HEAD) next dev'",
     "dev": "env-cmd -e dev,local --use-shell 'NEXT_PUBLIC_APP_BUILD_SHA=$(git rev-parse HEAD) next dev'",
+    "generate:empty-data": "tsx scripts/generate-empty-data.ts",
+    "prebuild:prod": "npm run generate:empty-data",
+    "prebuild:acc": "npm run generate:empty-data",
+    "prebuild:develop": "npm run generate:empty-data",
     "build:prod": "env-cmd -e prod --use-shell 'NEXT_PUBLIC_APP_BUILD_SHA=$(git rev-parse HEAD) next build'",
     "build:acc": "env-cmd -e acc --use-shell 'NEXT_PUBLIC_APP_BUILD_SHA=$(git rev-parse HEAD) next build'",
     "build:develop": "env-cmd -e test --use-shell 'NEXT_PUBLIC_APP_BUILD_SHA=$(git rev-parse HEAD) next build'",
@@ -103,6 +107,7 @@
     "next-translate-plugin": "^2.6.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
 }

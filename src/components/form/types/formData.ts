@@ -48,8 +48,6 @@ export interface IntakeVLOSData {
   walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
-  legLengthDifferenceLeft?: string;
-  legLengthDifferenceRight?: string;
 
   // Description/pair type
   whichPair?: string;

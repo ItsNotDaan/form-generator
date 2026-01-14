@@ -383,6 +383,7 @@ const FormNewClientPage = () => {
                             <Input
                               {...field}
                               placeholder={t('initialsPlaceholder')}
+                              autoComplete="given-name"
                             />
                           </FormControl>
                           <FormMessage />
@@ -402,6 +403,7 @@ const FormNewClientPage = () => {
                             <Input
                               {...field}
                               placeholder={t('lastNamePlaceholder')}
+                              autoComplete="family-name"
                             />
                           </FormControl>
                           <FormMessage />
@@ -424,6 +426,7 @@ const FormNewClientPage = () => {
                               {...field}
                               placeholder={t('selectBirthDate')}
                               maxLength={10}
+                              autoComplete="bday"
                               onChange={e => {
                                 let value = e.target.value.replace(/\D/g, '');
                                 if (value.length > 8) {
@@ -492,6 +495,7 @@ const FormNewClientPage = () => {
                               {...field}
                               id="postcode"
                               placeholder={t('postalCodePlaceholder')}
+                              autoComplete="postal-code"
                               aria-invalid={
                                 !!fieldState.error || !!addressError
                               }
@@ -506,6 +510,8 @@ const FormNewClientPage = () => {
                       )}
                     />
                   </FormItemWrapper>
+
+                  {/* House Number can be 304 but also 29-304 or 89-A*/}
                   <FormItemWrapper
                     label={t('houseNumber')}
                     requiredLabel={true}
@@ -520,6 +526,7 @@ const FormNewClientPage = () => {
                               {...field}
                               id="houseNumber"
                               placeholder={t('houseNumberPlaceholder')}
+                              autoComplete="address-line2"
                               aria-invalid={
                                 !!fieldState.error || !!addressError
                               }
@@ -545,6 +552,7 @@ const FormNewClientPage = () => {
                               {...field}
                               id="street"
                               placeholder={t('autofill')}
+                              autoComplete="address-line1"
                               readOnly
                               tabIndex={-1}
                               className="bg-muted cursor-default pointer-events-none"
@@ -566,6 +574,7 @@ const FormNewClientPage = () => {
                               {...field}
                               id="city"
                               placeholder={t('autofill')}
+                              autoComplete="address-level2"
                               readOnly
                               tabIndex={-1}
                               className="bg-muted cursor-default pointer-events-none"
@@ -602,6 +611,7 @@ const FormNewClientPage = () => {
                             <Input
                               {...field}
                               type="tel"
+                              autoComplete="tel"
                               placeholder={t('phoneOnePlaceholder')}
                             />
                           </FormControl>
@@ -620,6 +630,7 @@ const FormNewClientPage = () => {
                             <Input
                               {...field}
                               type="tel"
+                              autoComplete="tel"
                               placeholder={t('phoneTwoPlaceholder')}
                             />
                           </FormControl>
@@ -642,6 +653,7 @@ const FormNewClientPage = () => {
                             <Input
                               {...field}
                               type="email"
+                              autoComplete="email"
                               placeholder={t('emailPlaceholder')}
                             />
                           </FormControl>

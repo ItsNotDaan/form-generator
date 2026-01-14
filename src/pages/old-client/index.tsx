@@ -374,6 +374,7 @@ const FormOldClientPage = () => {
                             <Input
                               {...field}
                               placeholder={t('initialsPlaceholder')}
+                              autoComplete="given-name"
                             />
                           </FormControl>
                           <FormMessage />
@@ -393,6 +394,7 @@ const FormOldClientPage = () => {
                             <Input
                               {...field}
                               placeholder={t('lastNamePlaceholder')}
+                              autoComplete="family-name"
                             />
                           </FormControl>
                           <FormMessage />
@@ -415,6 +417,7 @@ const FormOldClientPage = () => {
                               {...field}
                               placeholder={t('selectBirthDate')}
                               maxLength={10}
+                              autoComplete="bday"
                               onChange={e => {
                                 let value = e.target.value.replace(/\D/g, '');
                                 if (value.length > 8) {
@@ -457,6 +460,7 @@ const FormOldClientPage = () => {
                               {...field}
                               id="postcode"
                               placeholder={t('postalCodePlaceholder')}
+                              autoComplete="postal-code"
                               aria-invalid={
                                 !!fieldState.error || !!addressError
                               }
@@ -485,6 +489,7 @@ const FormOldClientPage = () => {
                               {...field}
                               id="houseNumber"
                               placeholder={t('houseNumberPlaceholder')}
+                              autoComplete="address-line2"
                               aria-invalid={
                                 !!fieldState.error || !!addressError
                               }
@@ -510,6 +515,7 @@ const FormOldClientPage = () => {
                               {...field}
                               id="street"
                               placeholder={t('autofill')}
+                              autoComplete="address-line1"
                               readOnly
                               tabIndex={-1}
                               className="bg-muted cursor-default pointer-events-none"
@@ -531,6 +537,7 @@ const FormOldClientPage = () => {
                               {...field}
                               id="city"
                               placeholder={t('autofill')}
+                              autoComplete="address-level2"
                               readOnly
                               tabIndex={-1}
                               className="bg-muted cursor-default pointer-events-none"
@@ -605,6 +612,7 @@ const FormOldClientPage = () => {
                         <FormItem className="w-2/3">
                           <FormControl>
                             <Input
+                              autoComplete="email"
                               {...field}
                               type="email"
                               placeholder={t('emailPlaceholder')}
