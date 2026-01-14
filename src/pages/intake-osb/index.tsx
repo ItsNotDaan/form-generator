@@ -27,7 +27,7 @@ import {
   MIDFOOT_CORRECTION_OPTIONS,
   FOREFOOT_CORRECTION_OPTIONS,
   PELOTTE_OPTIONS,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSBData, setClientData} from '@/domain/store/slices/formData';
 

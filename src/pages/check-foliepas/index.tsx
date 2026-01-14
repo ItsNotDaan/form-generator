@@ -37,7 +37,7 @@ import {
   WALKING_SOLE_OPTIONS,
   Side,
   LAST_CORRECTION_OPTIONS,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
   setCheckFoliepasData,

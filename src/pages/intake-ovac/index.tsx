@@ -22,7 +22,7 @@ import {
   PAIR_TYPE_OPTIONS,
   PELOTTE_OPTIONS,
   INSOLE_TYPE_OPTIONS,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setClientData, setIntakeOVACData} from '@/domain/store/slices/formData';
 import {scrollToFirstError} from '@/utils/formHelpers';

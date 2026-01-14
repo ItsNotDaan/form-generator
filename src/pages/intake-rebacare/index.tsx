@@ -19,7 +19,7 @@ import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {Side, PAIR_TYPE_OPTIONS} from '@/lib/constants/formConstants';
+import {Side, PAIR_TYPE_OPTIONS} from '@/domain/form/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';

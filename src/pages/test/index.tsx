@@ -33,7 +33,7 @@ import {
   MTP1_DEEP_OPTIONS,
   YES_NO_OPTIONS,
   Side,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
 

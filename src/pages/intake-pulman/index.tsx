@@ -24,7 +24,7 @@ import {
   PULMAN_TYPE_OPTIONS,
   SHOE_SIZES,
   PAIR_TYPE_OPTIONS,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';

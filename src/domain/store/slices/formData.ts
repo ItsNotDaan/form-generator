@@ -9,8 +9,8 @@ import {
   IntakeOVACData,
   IntakeInsolesData,
   CheckFoliepasData,
-} from '@/components/form/types/formData';
-import {emptyFormData} from '@/utils/formDataTemplates.generated';
+} from '@/domain/form/types/formData';
+import {emptyFormData} from '@/domain/form/types/formDataTemplates.generated';
 
 export interface FormDataState {
   client: ClientData;

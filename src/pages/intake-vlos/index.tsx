@@ -43,7 +43,7 @@ import {
   PATHOLOGIES_OPTIONS,
   WALKING_DISTANCE_AIDS_OPTIONS,
   FOOT_INSPECTION_OPTIONS,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeVLOSData, setClientData} from '@/domain/store/slices/formData';
 

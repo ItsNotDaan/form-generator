@@ -44,7 +44,7 @@ import {
   LAST_HEIGHT_OPTIONS,
   MTP1_DEEP_OPTIONS,
   Side,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
 

@@ -7,8 +7,8 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {useAppSelector} from '@/domain/store/hooks';
-import {PRACTITIONERS} from '@/lib/constants/formConstants';
-import {generateCodes} from '@/utils/codeGenerator';
+import {PRACTITIONERS} from '@/domain/form/constants/formConstants';
+import {generateCodes} from '@/domain/form/generators/codeGenerator';
 import {clearAllFormStorage} from '@/utils/localStorageHelper';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 import {
@@ -22,7 +22,7 @@ import {
   normalizeIntakeSteunzolenData,
   normalizeCheckFoliepasData,
   normalizeValue,
-} from '@/utils/formDataNormalizer';
+} from '@/domain/form/normalizers/formDataNormalizer';
 
 const FormResultsPage = () => {
   const router = useRouter();

@@ -23,7 +23,7 @@ import {
   PELOTTE_OPTIONS,
   INSOLE_PRICE_OPTIONS,
   HEEL_RAISE_PRICE_OPTIONS,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {ChevronRight} from 'lucide-react';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';

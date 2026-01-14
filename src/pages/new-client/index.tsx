@@ -14,7 +14,7 @@ import {
   INSURANCE_COMPANIES,
   Location,
   Salutation,
-} from '@/lib/constants/formConstants';
+} from '@/domain/form/constants/formConstants';
 import {useAppDispatch} from '@/domain/store/hooks';
 import {setClientData} from '@/domain/store/slices/formData';
 import {ChevronRight} from 'lucide-react';
