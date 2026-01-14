@@ -45,4 +45,4 @@ yarn-error.log*
 # Sentry Config File
 .env.sentry-build-plugin
 # Generated files
-src/utils/formDataTemplates.generated.ts
+src/domain/form/types/formDataTemplates.generated.ts

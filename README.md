@@ -26,11 +26,11 @@ Een eenvoudige Next.js app voor intake- en formulierpagina's voor Eemland Schoen
 
 ## Automatische code generatie
 
-- **Single source of truth**: Alle form types zijn gedefinieerd in `src/components/form/types/formData.ts`
+- **Single source of truth**: Alle form types zijn gedefinieerd in `src/domain/form/types/formData.ts`
 - **Automatische sync**: Wanneer je een nieuw veld toevoegt aan een type, worden de empty templates automatisch gegenereerd
 - Het build-time script `scripts/generate-empty-data.ts` gebruikt de TypeScript Compiler API om:
   - Alle interface definities te lezen (inclusief inheritance)
-  - Automatisch empty object templates te genereren in `src/utils/formDataTemplates.generated.ts`
+  - Automatisch empty object templates te genereren in `src/domain/form/types/formDataTemplates.generated.ts`
   - Alle 9 form types te synchroniseren (ClientData, IntakeVLOSData, IntakeOSAData, etc.)
 - **Handmatig uitvoeren**: `npm run generate:empty-data`
 - **Automatisch bij build**: Wordt uitgevoerd bij `npm run build:prod`, `build:acc` en `build:develop`

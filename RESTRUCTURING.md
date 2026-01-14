@@ -114,15 +114,18 @@ For developers:
 
 ## Cleanup Completed
 
-All deprecated re-export files have been removed:
+All deprecated re-export files and the old generated file have been removed:
+
 - ✅ Removed `src/components/form/types/formData.ts`
 - ✅ Removed `src/lib/constants/formConstants.ts`
 - ✅ Removed `src/utils/codeGenerator.ts`
 - ✅ Removed `src/utils/formDataNormalizer.ts`
-- ✅ Removed `src/utils/formDataTemplates.generated.ts`
+- ✅ Removed `src/utils/formDataTemplates.generated.ts` (old location)
 - ✅ Removed empty directories
+- ✅ Updated `.gitignore` to reflect new generated file location
 
 All imports now use the new `src/domain/form/` structure.
+The generated templates file is now properly located at `src/domain/form/types/formDataTemplates.generated.ts`.
 
 ## Next Steps
 
