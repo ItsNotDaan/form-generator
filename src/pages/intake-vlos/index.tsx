@@ -612,31 +612,32 @@ const FormIntakeVLOSPage = () => {
               {/* Shaft Opening */}
               <FormCard title={t('shaftOpening')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <RadioGroup
-                    value={form.watch('shaftOpeningWidth')}
-                    onValueChange={v => form.setValue('shaftOpeningWidth', v)}
-                    className="justify-center"
-                  >
-                    <div className="flex flex-wrap justify-center gap-4">
-                      {SHAFT_OPENING_OPTIONS.map(opt => (
-                        <div
-                          key={opt.value}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            value={opt.value}
-                            id={`opening-${opt.value}`}
-                          />
-                          <Label
-                            htmlFor={`opening-${opt.value}`}
-                            className="font-normal cursor-pointer"
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('shaftOpeningWidth')}
+                      onValueChange={v => form.setValue('shaftOpeningWidth', v)}
+                    >
+                      <div className="flex flex-wrap justify-center gap-4">
+                        {SHAFT_OPENING_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
                           >
-                            {opt.label.replace('.', ',')} cm
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </RadioGroup>
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`opening-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`opening-${opt.value}`}
+                              className="font-normal cursor-pointer"
+                            >
+                              {opt.label.replace('.', ',')} cm
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 
@@ -1064,6 +1065,7 @@ const FormIntakeVLOSPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
+                {/* Insert Point / Inschotpunt */}
                 <FormBlock
                   columns={2}
                   dividers={true}
@@ -1087,7 +1089,7 @@ const FormIntakeVLOSPage = () => {
 
                   <FormItemWrapper>
                     <img
-                      src={getAssetPath('/images/intake-vlos/entryPoint.png')}
+                      src={getAssetPath('/images/intake-vlos/inschotpunt.png')}
                       alt={t('insertPoint')}
                       className="w-1/2 mb-2"
                     />

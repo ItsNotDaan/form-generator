@@ -1,7 +1,14 @@
 // Utility to normalize form data and ensure all fields are exported to JSON
 // This ensures Word document placeholders like ${enclosureRightCm} are always replaced
 
-import {ENCLOSURE_OPTIONS} from '@/domain/form/constants/formConstants';
+import {
+  ENCLOSURE_OPTIONS,
+  BOOLEAN_TRUE_VALUE,
+  BOOLEAN_FALSE_VALUE,
+  YES_VARIANTS,
+  NO_VARIANTS,
+  FIELD_SUFFIX_RULES,
+} from '@/domain/form/constants/formConstants';
 import type {
   IntakeVLOSData,
   IntakeOSAData,
@@ -24,18 +31,18 @@ import type {
  */
 export const normalizeValue = (value: unknown): string => {
   if (value === null || value === undefined) {
-    return '';
+    return BOOLEAN_FALSE_VALUE;
   }
   if (typeof value === 'boolean') {
-    return value ? 'Ja' : '';
+    return value ? BOOLEAN_TRUE_VALUE : BOOLEAN_FALSE_VALUE;
   }
   if (typeof value === 'string') {
     const lower = value.toLowerCase();
-    if (lower === 'yes' || lower === 'ja' || lower === 'true') {
-      return 'Ja';
+    if (YES_VARIANTS.some(variant => lower === variant)) {
+      return BOOLEAN_TRUE_VALUE;
     }
-    if (lower === 'no' || lower === 'nee' || lower === 'false') {
-      return '';
+    if (NO_VARIANTS.some(variant => lower === variant)) {
+      return BOOLEAN_FALSE_VALUE;
     }
     return value;
   }
@@ -63,13 +70,53 @@ export const normalizeObject = (
 };
 
 /**
+ * Apply field suffix rules to a field name
+ * E.g., shaftHeightLeft with rule {shaftHeight: 'Cm'} becomes shaftHeightLeftCm
+ */
+const applyFieldSuffixRules = (fieldName: string): string => {
+  for (const [pattern, suffix] of Object.entries(FIELD_SUFFIX_RULES)) {
+    if (fieldName.includes(pattern)) {
+      // Insert suffix before Left/Right if present, or append to end
+      if (fieldName.endsWith('Left')) {
+        return fieldName.replace('Left', `Left${suffix}`);
+      }
+      if (fieldName.endsWith('Right')) {
+        return fieldName.replace('Right', `Right${suffix}`);
+      }
+      return `${fieldName}${suffix}`;
+    }
+  }
+  return fieldName;
+};
+
+/**
+ * Capitalize first letter of a string
+ */
+const capitalizeFirst = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+/**
+ * Check if a value is a Record<string, boolean>
+ */
+const isRecordOfBooleans = (
+  value: unknown,
+): value is Record<string, boolean> => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
+  return Object.values(value).every(v => typeof v === 'boolean');
+};
+
+/**
  * Generic auto-normalizer that converts any typed object to Record<string, string>
- * Automatically handles all fields without manual mapping
- * Skip certain keys that need custom handling (Records, nested objects, etc.)
+ * Automatically handles all fields, nested objects, and Record<string, boolean> types
+ * No manual mapping or skipKeys needed
  */
 const autoNormalize = (
   data: unknown,
   skipKeys: string[] = [],
+  parentKey: string = '',
 ): Record<string, string> => {
   const result: Record<string, string> = {};
 
@@ -83,12 +130,38 @@ const autoNormalize = (
       continue;
     }
 
-    // Skip nested objects and Records (they need custom flattening)
-    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+    // Handle Record<string, boolean> - normalize each field and create aggregation
+    if (isRecordOfBooleans(value)) {
+      const booleanRecord: Record<string, string> = {};
+      for (const [boolKey, boolValue] of Object.entries(value)) {
+        const normalizedKey = applyFieldSuffixRules(boolKey);
+        booleanRecord[normalizedKey] = boolValue
+          ? BOOLEAN_TRUE_VALUE
+          : BOOLEAN_FALSE_VALUE;
+        result[normalizedKey] = booleanRecord[normalizedKey];
+      }
+      // Create aggregation field with 'all' prefix
+      const aggregationKey = `all${capitalizeFirst(key)}`;
+      result[aggregationKey] = aggregateJaValues(booleanRecord);
       continue;
     }
 
-    result[key] = normalizeValue(value);
+    // Handle nested objects (flatten them with camelCase naming)
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      for (const [nestedKey, nestedValue] of Object.entries(value)) {
+        // Create flattened field name: productSpecifications.articleCode -> productArticleCode
+        const flattenedKey = parentKey
+          ? `${parentKey}${capitalizeFirst(key)}${capitalizeFirst(nestedKey)}`
+          : `${key}${capitalizeFirst(nestedKey)}`;
+        const normalizedKey = applyFieldSuffixRules(flattenedKey);
+        result[normalizedKey] = normalizeValue(nestedValue);
+      }
+      continue;
+    }
+
+    // Handle regular fields
+    const normalizedKey = applyFieldSuffixRules(key);
+    result[normalizedKey] = normalizeValue(value);
   }
 
   return result;
@@ -192,10 +265,7 @@ export const aggregateJaValues = (record: Record<string, string>): string => {
 export const normalizeClientData = (
   client: ClientData,
 ): Record<string, string> => {
-  return {
-    ...autoNormalize(client),
-    practitionerName: '', // Will be resolved separately
-  };
+  return autoNormalize(client);
 };
 
 /**
@@ -205,7 +275,7 @@ export const normalizeClientData = (
 export const normalizeIntakeVLOSData = (
   data: IntakeVLOSData,
 ): Record<string, string> => {
-  // Flatten enclosure data
+  // Flatten enclosure data (special handling due to ENCLOSURE_OPTIONS configuration)
   const enclosureData = normalizeEnclosureData(
     data.enclosureLeft,
     data.enclosureRight,
@@ -213,73 +283,17 @@ export const normalizeIntakeVLOSData = (
     data.enclosureRightMm,
   );
 
-  // Flatten pathologies
-  const pathologies: Record<string, string> = {
-    diabetes: data.pathologies?.diabetes ? 'Ja' : '',
-    polyNeuropathie: data.pathologies?.polyNeuropathie ? 'Ja' : '',
-    reuma: data.pathologies?.reuma ? 'Ja' : '',
-    ms: data.pathologies?.ms ? 'Ja' : '',
-    hmsn: data.pathologies?.hmsn ? 'Ja' : '',
-    degeneratie: data.pathologies?.degeneratie ? 'Ja' : '',
-    artrose: data.pathologies?.artrose ? 'Ja' : '',
-  };
-
-  // Flatten walking distance aids
-  const walkingDistanceAids: Record<string, string> = {
-    steunzolen: data.walkingDistanceAids?.steunzolen ? 'Ja' : '',
-    rollator: data.walkingDistanceAids?.rollator ? 'Ja' : '',
-    stok: data.walkingDistanceAids?.stok ? 'Ja' : '',
-    elKousen: data.walkingDistanceAids?.elKousen ? 'Ja' : '',
-    knieBrace: data.walkingDistanceAids?.knieBrace ? 'Ja' : '',
-    fysio: data.walkingDistanceAids?.fysio ? 'Ja' : '',
-    pedicure: data.walkingDistanceAids?.pedicure ? 'Ja' : '',
-  };
-
-  // Flatten foot inspection
-  const footInspection: Record<string, string> = {
-    oedeem: data.footInspection?.oedeem ? 'Ja' : '',
-    wisselend: data.footInspection?.wisselend ? 'Ja' : '',
-    structureel: data.footInspection?.structureel ? 'Ja' : '',
-    dunneKwetsbareHuid: data.footInspection?.dunneKwetsbareHuid ? 'Ja' : '',
-    drogeHuid: data.footInspection?.drogeHuid ? 'Ja' : '',
-    doorbloedingsstoornis: data.footInspection?.doorbloedingsstoornis
-      ? 'Ja'
-      : '',
-    halluxValgus: data.footInspection?.halluxValgus ? 'Ja' : '',
-    bunion: data.footInspection?.bunion ? 'Ja' : '',
-    pesPlanoValgus: data.footInspection?.pesPlanoValgus ? 'Ja' : '',
-    pesCavo: data.footInspection?.pesCavo ? 'Ja' : '',
-    klauwtenen: data.footInspection?.klauwtenen ? 'Ja' : '',
-  };
-
-  // Auto-normalize all basic fields, skip Records that need custom handling
-  const basicFields = autoNormalize(data, [
+  // Auto-normalize all fields, skip enclosure fields (handled above)
+  const autoFields = autoNormalize(data, [
     'enclosureLeft',
     'enclosureRight',
     'enclosureLeftMm',
     'enclosureRightMm',
-    'pathologies',
-    'walkingDistanceAids',
-    'footInspection',
-    'shaftHeightLeft',
-    'shaftHeightRight',
   ]);
 
   return {
-    ...basicFields,
-    // Add custom field name mappings
-    shaftHeightLeftCm: data.shaftHeightLeft || '',
-    shaftHeightRightCm: data.shaftHeightRight || '',
-    // Enclosure fields
+    ...autoFields,
     ...enclosureData,
-    // Functieonderzoek
-    ...pathologies,
-    ...walkingDistanceAids,
-    ...footInspection,
-    // Aggregated functieonderzoek fields
-    allPathologies: aggregateJaValues(pathologies),
-    allWalkingDistanceAids: aggregateJaValues(walkingDistanceAids),
-    allFootInspections: aggregateJaValues(footInspection),
   };
 };
 
@@ -290,24 +304,8 @@ export const normalizeIntakeVLOSData = (
 export const normalizeIntakeOSAData = (
   data: IntakeOSAData,
 ): Record<string, string> => {
-  const vlosData = normalizeIntakeVLOSData(data);
-  const osaSpecific = autoNormalize(data, [
-    // Skip all VLOS fields (already handled)
-    'enclosureLeft',
-    'enclosureRight',
-    'enclosureLeftMm',
-    'enclosureRightMm',
-    'pathologies',
-    'walkingDistanceAids',
-    'footInspection',
-    'shaftHeightLeft',
-    'shaftHeightRight',
-  ]);
-
-  return {
-    ...vlosData,
-    ...osaSpecific,
-  };
+  // Auto-normalize all fields automatically
+  return autoNormalize(data);
 };
 
 /**
@@ -337,29 +335,8 @@ export const normalizeIntakeRebacareData = (
 export const normalizeIntakeOSBData = (
   data: IntakeOSBData,
 ): Record<string, string> => {
-  // Flatten goal options
-  const goal: Record<string, string> = {
-    doelPasvorm: data.goal?.doelPasvorm ? 'Ja' : '',
-    doelStabiliteit: data.goal?.doelStabiliteit ? 'Ja' : '',
-    doelLoopAfstandVergroten: data.goal?.doelLoopAfstandVergroten ? 'Ja' : '',
-    doelOndersteuningGewelf: data.goal?.doelOndersteuningGewelf ? 'Ja' : '',
-  };
-
-  // Auto-normalize basic fields, skip Records
-  const basicFields = autoNormalize(data, ['goal', 'productSpecifications']);
-
-  return {
-    ...basicFields,
-    // Goal
-    ...goal,
-    allGoals: aggregateJaValues(goal),
-    // Product specifications (flatten nested object)
-    productArticleCode: data.productSpecifications?.articleCode || '',
-    productLengthSize: data.productSpecifications?.lengthSize || '',
-    productWidth: data.productSpecifications?.width || '',
-    productColor: data.productSpecifications?.color || '',
-    productClosure: data.productSpecifications?.closure || '',
-  };
+  // Auto-normalize all fields automatically
+  return autoNormalize(data);
 };
 
 /**
@@ -369,36 +346,25 @@ export const normalizeIntakeOSBData = (
 export const normalizeIntakeOVACData = (
   data: IntakeOVACData,
 ): Record<string, string> => {
-  // Group items for aggregation
-  const leftModifications: Record<string, string> = {
-    customInsoleIndividualLeft: data.customInsoleIndividualLeft ? 'Ja' : '',
-    simpleRockerLeft: data.simpleRockerLeft ? 'Ja' : '',
-    complicatedRockerLeft: data.complicatedRockerLeft ? 'Ja' : '',
-    heelAdjustment2cmLeft: data.heelAdjustment2cmLeft ? 'Ja' : '',
-    heelSoleElevation3cmLeft: data.heelSoleElevation3cmLeft ? 'Ja' : '',
-    heelSoleElevation7cmLeft: data.heelSoleElevation7cmLeft ? 'Ja' : '',
-    adjustedHeelsLeft: data.adjustedHeelsLeft ? 'Ja' : '',
-    soleReinforcementLeft: data.soleReinforcementLeft ? 'Ja' : '',
-    newInstepClosureLeft: data.newInstepClosureLeft ? 'Ja' : '',
-  };
+  // Auto-normalize all fields automatically
+  const normalized = autoNormalize(data);
 
-  const rightModifications: Record<string, string> = {
-    customInsoleIndividualRight: data.customInsoleIndividualRight ? 'Ja' : '',
-    simpleRockerRight: data.simpleRockerRight ? 'Ja' : '',
-    complicatedRockerRight: data.complicatedRockerRight ? 'Ja' : '',
-    heelAdjustment2cmRight: data.heelAdjustment2cmRight ? 'Ja' : '',
-    heelSoleElevation3cmRight: data.heelSoleElevation3cmRight ? 'Ja' : '',
-    heelSoleElevation7cmRight: data.heelSoleElevation7cmRight ? 'Ja' : '',
-    adjustedHeelsRight: data.adjustedHeelsRight ? 'Ja' : '',
-    soleReinforcementRight: data.soleReinforcementRight ? 'Ja' : '',
-    newInstepClosureRight: data.newInstepClosureRight ? 'Ja' : '',
-  };
+  // Create aggregations for Left and Right modifications
+  const leftModifications: Record<string, string> = {};
+  const rightModifications: Record<string, string> = {};
 
-  // Auto-normalize remaining fields
-  const basicFields = autoNormalize(data);
+  // Group boolean fields by Left/Right suffix
+  for (const [key, value] of Object.entries(normalized)) {
+    if (key.endsWith('Left') && value === BOOLEAN_TRUE_VALUE) {
+      leftModifications[key] = value;
+    }
+    if (key.endsWith('Right') && value === BOOLEAN_TRUE_VALUE) {
+      rightModifications[key] = value;
+    }
+  }
 
   return {
-    ...basicFields,
+    ...normalized,
     // Aggregated modifications
     allLeftModifications: aggregateJaValues(leftModifications),
     allRightModifications: aggregateJaValues(rightModifications),
@@ -422,7 +388,7 @@ export const normalizeIntakeSteunzolenData = (
 export const normalizeCheckFoliepasData = (
   data: CheckFoliepasData,
 ): Record<string, string> => {
-  // Flatten enclosure data
+  // Flatten enclosure data (special handling due to ENCLOSURE_OPTIONS configuration)
   const enclosureData = normalizeEnclosureData(
     data.enclosureLeft,
     data.enclosureRight,
@@ -430,20 +396,16 @@ export const normalizeCheckFoliepasData = (
     data.enclosureRightMm,
   );
 
-  // Auto-normalize all basic fields, skip Records
-  const basicFields = autoNormalize(data, [
+  // Auto-normalize all basic fields, skip enclosure fields (handled above)
+  const autoFields = autoNormalize(data, [
     'enclosureLeft',
     'enclosureRight',
     'enclosureLeftMm',
     'enclosureRightMm',
-    'colorOptions',
   ]);
 
   return {
-    ...basicFields,
-    // Enclosure fields
+    ...autoFields,
     ...enclosureData,
-    // Array field
-    colorOptions: data.colorOptions?.join(', ') || '',
   };
 };

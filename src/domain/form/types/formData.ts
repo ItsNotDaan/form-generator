@@ -138,15 +138,45 @@ export interface IntakeVLOSData {
   specialNotes?: string;
 }
 
-// OSA intake data extends VLOS structure with additional fields
-export interface IntakeOSAData extends IntakeVLOSData {
+// OSA intake data with only fields needed for OSA (foliepas handles custom modifications)
+export interface IntakeOSAData {
+  // Description/pair type
+  whichPair?: string;
+  medicalIndication?: string;
+
+  // Side selection (both/left/right)
+  side: Side;
+
+  //Amputation:
+  amputationLeftEnabled: boolean;
+  amputationRightEnabled: boolean;
+
+  // Shaft height in cm (only field needed from orthopedics)
+  shaftHeightLeft?: string;
+  shaftHeightRight?: string;
+
+  // Sole reinforcement
+  soleReinforcementEnabled?: boolean;
+  soleReinforcementLeft?: boolean;
+  soleReinforcementRight?: boolean;
+
+  // Donkey ear (Ezelsoor)
+  donkeyEarLeftEnabled?: boolean;
+  donkeyEarLeftType?: string;
+  donkeyEarRightEnabled?: boolean;
+  donkeyEarRightType?: string;
+
+  // Enclosure (Omsluiting)
+  enclosureLeft?: Record<string, boolean>;
+  enclosureLeftMm?: Record<string, string>;
+  enclosureRight?: Record<string, boolean>;
+  enclosureRightMm?: Record<string, string>;
+
   // Functieonderzoek
   pathologies?: Record<string, boolean>;
   walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
-  legLengthDifferenceLeft?: string;
-  legLengthDifferenceRight?: string;
 
   // Digitaal section
   digitalEnabled?: boolean;
@@ -158,6 +188,9 @@ export interface IntakeOSAData extends IntakeVLOSData {
   clawToesEnabled?: boolean;
   scannedWithFoil?: boolean;
   digitalInstructions?: string;
+
+  // Special notes
+  specialNotes?: string;
 }
 
 export interface IntakePulmanData {

@@ -316,11 +316,11 @@ export function generateCodes(
       }
       break;
 
+    // Pulman, Rebacare, and Steunzolen don't have code generation
     case 'Pulman':
     case 'Rebacare':
     case 'Steunzolen':
-      warnings.push(`Code generatie is niet beschikbaar voor ${intakeType}`);
-      break;
+      return {codes, warnings, generalBaseCode};
 
     default:
       warnings.push(`Onbekend intake type: ${intakeType}`);

@@ -88,6 +88,25 @@ export const YES_NO_OPTIONS = [
 ];
 
 // ============================================================================
+// NORMALIZATION CONSTANTS
+// ============================================================================
+
+/** Boolean to string conversion values */
+export const BOOLEAN_TRUE_VALUE = 'Ja';
+export const BOOLEAN_FALSE_VALUE = '';
+
+/** Yes/No string variants for normalization */
+export const YES_VARIANTS = ['yes', 'ja', 'true'];
+export const NO_VARIANTS = ['no', 'nee', 'false'];
+
+/** Field suffix rules for auto-appending units */
+export const FIELD_SUFFIX_RULES: Record<string, string> = {
+  shaftHeight: 'Cm',
+  enclosure: 'Mm',
+  // Add more patterns as needed
+};
+
+// ============================================================================
 // VLOS FORM CONSTANTS
 // ============================================================================
 

@@ -86,19 +86,93 @@ const FormResultsPage = () => {
     return translated;
   };
 
+  // Configuration mapping for intake form types
+  const INTAKE_FORM_CONFIG = {
+    VLOS: {
+      key: 'intakeVLOS' as const,
+      normalizer: normalizeIntakeVLOSData,
+      data: formData.intakeVLOS,
+    },
+    OSA: {
+      key: 'intakeOSA' as const,
+      normalizer: normalizeIntakeOSAData,
+      data: formData.intakeOSA,
+    },
+    Pulman: {
+      key: 'intakePulman' as const,
+      normalizer: normalizeIntakePulmanData,
+      data: formData.intakePulman,
+    },
+    Rebacare: {
+      key: 'intakeRebacare' as const,
+      normalizer: normalizeIntakeRebacareData,
+      data: formData.intakeRebacare,
+    },
+    OSB: {
+      key: 'intakeOSB' as const,
+      normalizer: normalizeIntakeOSBData,
+      data: formData.intakeOSB,
+    },
+    OVAC: {
+      key: 'intakeOVAC' as const,
+      normalizer: normalizeIntakeOVACData,
+      data: formData.intakeOVAC,
+    },
+    Steunzolen: {
+      key: 'intakeInsoles' as const,
+      normalizer: normalizeIntakeSteunzolenData,
+      data: formData.intakeInsoles,
+    },
+    CheckFoliepas: {
+      key: 'checkFoliepas' as const,
+      normalizer: normalizeCheckFoliepasData,
+      data: formData.checkFoliepas,
+    },
+  };
+
+  const INTAKE_TYPES_WITH_CODES = new Set(['VLOS', 'OSA', 'OSB', 'OVAC']);
+
+  const flattenCodes = (codes: Record<string, any>): Record<string, string> => {
+    const flattened: Record<string, string> = {};
+    for (const [key, value] of Object.entries(codes)) {
+      if (typeof value === 'object' && value !== null) {
+        for (const [nestedKey, nestedValue] of Object.entries(value)) {
+          flattened[`${key}_${nestedKey}`] = normalizeValue(nestedValue);
+        }
+      } else {
+        flattened[key] = normalizeValue(value);
+      }
+    }
+    return flattened;
+  };
+
+  const addGeneralBaseCode = (
+    result: FormResultJSON,
+    generalBaseCode: string,
+  ) => {
+    const CODES_BY_TYPE: Record<string, keyof FormResultJSON> = {
+      intakeVLOS: 'intakeVLOS',
+      intakeOSA: 'intakeOSA',
+      intakeOSB: 'intakeOSB',
+    };
+
+    for (const [dataKey, resultKey] of Object.entries(CODES_BY_TYPE)) {
+      if ((formData as any)[dataKey] && result[resultKey]) {
+        (result[resultKey] as any).generalBaseCode = generalBaseCode;
+      }
+    }
+  };
+
   // Generate complete JSON with all data and constants
   const generateCompleteJSON = (): FormResultJSON => {
-    // Normalize and resolve client data
+    //Generate normalized client data
     const normalizedClientData = normalizeClientData(formData.client);
-
-    // Resolve practitioner name from ID
     const practitionerName =
       PRACTITIONERS.find(p => p.value === formData.client?.practitionerId)
         ?.label ||
       formData.client?.practitionerId ||
       '';
 
-    // Build result object with normalized data
     const result: FormResultJSON = {
       clientData: {
         ...normalizedClientData,
@@ -107,122 +181,38 @@ const FormResultsPage = () => {
       generatedAt: new Date().toISOString(),
     };
 
-    // Map of form types to their normalizer functions and normalized data
-    const formNormalizers: Array<{
-      key: keyof Omit<
-        FormResultJSON,
-        'clientData' | 'medicalCodes' | 'codeWarnings' | 'generatedAt'
-      >;
-      intakeType: string;
-      data: any;
-      normalizer: (data: any) => Record<string, string>;
-    }> = [
-      {
-        key: 'intakeVLOS',
-        intakeType: 'VLOS',
-        data: formData.intakeVLOS,
-        normalizer: normalizeIntakeVLOSData,
-      },
-      {
-        key: 'intakeOSA',
-        intakeType: 'OSA',
-        data: formData.intakeOSA,
-        normalizer: normalizeIntakeOSAData,
-      },
-      {
-        key: 'intakePulman',
-        intakeType: 'Pulman',
-        data: formData.intakePulman,
-        normalizer: normalizeIntakePulmanData,
-      },
-      {
-        key: 'intakeRebacare',
-        intakeType: 'Rebacare',
-        data: formData.intakeRebacare,
-        normalizer: normalizeIntakeRebacareData,
-      },
-      {
-        key: 'intakeOSB',
-        intakeType: 'OSB',
-        data: formData.intakeOSB,
-        normalizer: normalizeIntakeOSBData,
-      },
-      {
-        key: 'intakeOVAC',
-        intakeType: 'OVAC',
-        data: formData.intakeOVAC,
-        normalizer: normalizeIntakeOVACData,
-      },
-      {
-        key: 'intakeInsoles',
-        intakeType: 'Steunzolen',
-        data: formData.intakeInsoles,
-        normalizer: normalizeIntakeSteunzolenData,
-      },
-      {
-        key: 'checkFoliepas',
-        intakeType: 'CheckFoliepas',
-        data: formData.checkFoliepas,
-        normalizer: normalizeCheckFoliepasData,
-      },
-    ];
-
-    // Normalize and include only the selected intake form (based on client intakeType)
-    for (const {key, intakeType, data, normalizer} of formNormalizers) {
-      // Only include the form that matches the client's selected intake type
-      if (data && formData.client.intakeType === intakeType) {
-        (result as any)[key] = applyTranslations(normalizer(data));
-      }
+    // Add the matching intake form data
+    const config =
+      INTAKE_FORM_CONFIG[
+        formData.client.intakeType as keyof typeof INTAKE_FORM_CONFIG
+      ];
+    if (config?.data) {
+      (result as any)[config.key] = applyTranslations(
+        config.normalizer(config.data),
+      );
     }
 
     // Generate medical codes if applicable
-    if (
-      formData.client &&
-      (formData.intakeVLOS || formData.intakeOSA || formData.intakeOSB)
-    ) {
+    if (INTAKE_TYPES_WITH_CODES.has(formData.client.intakeType)) {
       const {codes, warnings, generalBaseCode} = generateCodes(
         formData.client,
         {
-          intakeVLOS: formData.intakeVLOS,
-          intakeOSA: formData.intakeOSA,
-          intakePulman: formData.intakePulman,
-          intakeRebacare: formData.intakeRebacare,
-          intakeOSB: formData.intakeOSB,
-          intakeOVAC: formData.intakeOVAC,
-          intakeInsoles: formData.intakeInsoles,
+          intakeVLOS: formData.intakeVLOS || null,
+          intakeOSA: formData.intakeOSA || null,
+          intakeOSB: formData.intakeOSB || null,
+          intakeOVAC: formData.intakeOVAC || null,
+          intakePulman: null,
+          intakeRebacare: null,
+          intakeInsoles: formData.intakeInsoles || null,
         },
       );
 
-      // Flatten medical codes to simple key-value pairs
-      // Note: Using underscore as separator (e.g., "vlos_code" from nested {vlos: {code: "1"}})
-      // This is safe as code keys don't contain underscores in the current implementation
-      const flattenedCodes: Record<string, string> = {};
-      for (const [key, value] of Object.entries(codes)) {
-        if (typeof value === 'object' && value !== null) {
-          // Flatten nested code objects
-          for (const [nestedKey, nestedValue] of Object.entries(value)) {
-            flattenedCodes[`${key}_${nestedKey}`] = normalizeValue(nestedValue);
-          }
-        } else {
-          flattenedCodes[key] = normalizeValue(value);
-        }
-      }
-      result.medicalCodes = flattenedCodes;
+      result.medicalCodes = flattenCodes(codes);
 
-      // Add generalBaseCode to the appropriate intake data
       if (generalBaseCode) {
-        if (formData.intakeVLOS && result.intakeVLOS) {
-          result.intakeVLOS.generalBaseCode = generalBaseCode;
-        }
-        if (formData.intakeOSA && result.intakeOSA) {
-          result.intakeOSA.generalBaseCode = generalBaseCode;
-        }
-        if (formData.intakeOSB && result.intakeOSB) {
-          result.intakeOSB.generalBaseCode = generalBaseCode;
-        }
+        addGeneralBaseCode(result, generalBaseCode);
       }
 
-      // Add warnings if any
       if (warnings.length > 0) {
         result.codeWarnings = warnings;
       }
