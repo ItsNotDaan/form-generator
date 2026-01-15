@@ -256,7 +256,7 @@ export interface IntakeOSBData {
   // Supplier and Product
   supplierName?: string;
   orderDate?: string;
-  productSpecifications?: {
+  osb?: {
     articleCode?: string;
     lengthSize?: string;
     width?: string;
@@ -284,6 +284,12 @@ export interface IntakeOSBData {
   // Afwikkelrol (onder schoen)
   rockerRollCmLeft?: string;
   rockerRollCmRight?: string;
+
+  // Modules: Hallux valgus & Verdieping voorvoet
+  halluxMmLeft?: string;
+  halluxMmRight?: string;
+  deepeningMmLeft?: string;
+  deepeningMmRight?: string;
 
   // Special notes
   specialNotes?: string;

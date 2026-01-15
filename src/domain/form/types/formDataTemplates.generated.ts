@@ -144,7 +144,6 @@ export const emptyIntakeOSBDataTemplate: IntakeOSBData = {
   walkingFunctionOtherText: '',
   supplierName: '',
   orderDate: '',
-  productSpecifications: undefined,
   heelRaiseLeft: '',
   heelRaiseRight: '',
   insoleTypeGeneral: '',
@@ -158,6 +157,10 @@ export const emptyIntakeOSBDataTemplate: IntakeOSBData = {
   soleReinforcementRight: false,
   rockerRollCmLeft: '',
   rockerRollCmRight: '',
+  halluxMmLeft: '',
+  halluxMmRight: '',
+  deepeningMmLeft: '',
+  deepeningMmRight: '',
   specialNotes: '',
 };
 

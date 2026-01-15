@@ -345,7 +345,7 @@ export function generateCodes(
     generalBaseCode = '8';
   }
 
-  // Determine generalBaseCode for OSB (always 42, add DSW text)
+  // Determine generalBaseCode for OSB (always 42. Insurance DSW needs special note)
   if (intakeType === 'OSB') {
     if (codes.code42) {
       const insuranceLower = (insurance || '').toLowerCase();
@@ -613,7 +613,7 @@ function generateOSACodes(
 // SECTION: OSB CODE GENERATION
 // ==================================================
 /**
- * Generate codes for OSB (Orthopedische Schoeiing met Bijzondere Zolen)
+ * Generate codes for OSB
  *
  * OSB Main Code:
  * - Code 42: OSB Cluster (basis code when any subcode is present)

@@ -1,238 +1,338 @@
-# Check-Foliepas Design Language
+# Form Design Language
 
-Shared patterns taken from the current Check-Foliepas page. Use this as a reference when adjusting or creating new sections.
+Shared patterns and component guidelines for form development. Use this as a reference when adjusting or creating new form sections.
 
 ## Core Principles
-- Keep layouts card-based: `Card` + `CardHeader` + `CardContent`.
-- Use `bg-secondary/2` as the base surface for grouped blocks; add a subtle border and `hover:border-primary!` for interactive emphasis.
-- Prefer balanced grids (`grid grid-cols-1 md:grid-cols-2` or responsive variants) for left/right or multi-option layouts.
-- Use concise labels and keep helper text in `CardDescription`.
-- Switches for boolean toggles (modern slider feel); radios for single-choice enumerations; inputs are minimal with clear placeholders.
 
-## Card Templates
-**Standard card**
+- Keep layouts structured with: `FormCard` (main sections) > `FormBlock` (grid layouts) > `FormItemWrapper` (individual fields).
+- Use `FormCard` with optional toggle/switch for sections that can be enabled/disabled.
+- Use `FormBlock` with configurable columns and dividers for grouping related fields.
+- Use `FormItemWrapper` to wrap form labels and controls.
+- Apply responsive grids that stack on mobile and display in columns on desktop.
+- Use concise labels and keep helper text minimal.
+
+## Component Structure
+
+### FormCard
+
+The top-level section wrapper for grouped content. Supports optional toggle functionality.
+
 ```tsx
-<Card>
-  <CardHeader>
-    <CardTitle>{t('titleKey')}</CardTitle>
-    <CardDescription>{t('subtitleKey')}</CardDescription>
-  </CardHeader>
-  <CardContent className="space-y-6">
-    {/* body */}
-  </CardContent>
-</Card>
+<FormCard
+  title={t('sectionTitle')}
+  description={t('sectionDescription')}
+  toggleAble={true}
+  toggleLabel={t('enableSection')}
+  toggleId="section-toggle"
+  defaultOpen={false}
+  onToggleChange={isOpen => {
+    /* handle toggle */
+  }}
+>
+  {/* FormBlock and FormItemWrapper children */}
+</FormCard>
 ```
 
-**Interactive section block (inside a card)**
+**Props:**
+
+- `title` (string): Main section heading
+- `description` (string, optional): Subtitle/description
+- `toggleAble` (boolean): Whether to show a toggle switch
+- `toggleLabel` (string): Label for the toggle
+- `toggleId` (string): ID for the toggle switch
+- `defaultOpen` (boolean): Default open/closed state
+- `onToggleChange` (function): Callback when toggle state changes
+- `centerTitle` (boolean): Center-align the title
+- `contentClassName` (string): Custom classes for CardContent
+
+### FormBlock
+
+Grid layout container for organizing fields. Supports 1-4 columns with optional dividers.
+
 ```tsx
-<div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-  <Label className="text-base font-semibold">{t('sectionTitle')}</Label>
-  {/* content */}
-</div>
+<FormBlock
+  columns={2}
+  dividers={true}
+  title={t('blockTitle')}
+  centerTitle={true}
+  alignItems="start"
+  hoverEffect={true}
+>
+  <FormItemWrapper label={t('field1')}>
+    <Input />
+  </FormItemWrapper>
+  <FormItemWrapper label={t('field2')}>
+    <Input />
+  </FormItemWrapper>
+</FormBlock>
 ```
 
-**Left/Right column panels (per-column framing, as in Foliepas/OSA L/R fields)**
+**Props:**
+
+- `columns` (1 | 2 | 3 | 4): Number of columns (defaults to 1)
+- `dividers` (boolean): Show dividers between columns
+- `hoverEffect` (boolean): Apply hover border effect
+- `title` (string): Optional block title
+- `subtitle` (string): Optional block subtitle
+- `alignItems` ('start' | 'center' | 'end' | 'stretch'): Vertical alignment
+- `centerTitle` (boolean): Center the title
+- `responsive` (boolean): Use responsive grid
+- `className` (string): Custom wrapper classes
+- `contentClassName` (string): Custom grid classes
+
+### FormItemWrapper
+
+Wraps individual form fields with optional label.
+
 ```tsx
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm">
-    <Label>{t('left')}</Label>
-    {/* controls */}
-  </div>
-  <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm">
-    <Label>{t('right')}</Label>
-    {/* controls */}
-  </div>
-</div>
+<FormItemWrapper label={t('fieldLabel')} requiredLabel={true}>
+  <Input placeholder={t('placeholder')} />
+</FormItemWrapper>
 ```
 
-## Controls & States
-- **Switch for toggles**: `Switch` replaces yes/no radios for simple enable/disable (e.g., color/model toggle, enclosure L/R options).
-- **Radio groups**: use `RadioGroup` with labeled wrappers and tight gaps; grid for multiple options.
-- **Checkboxes**: avoid where Switch better communicates on/off; keep checkboxes for multi-select lists if needed.
-- **Inputs with units**: 
-  - Height of enclosure uses `cm` placeholder.
-  - Other enclosure measurements and similar specs use `mm` placeholders.
-- **Spacing**: add a small top padding (`pt-2`) between section titles/labels and the controls beneath for breathing room.
+**Props:**
+
+- `label` (string): Field label
+- `requiredLabel` (boolean): Show required indicator
+- `children`: Form control element
 
 ## Layout Patterns
-- **Left/Right columns**: `grid grid-cols-1 md:grid-cols-2 gap-4` with individual bordered panels (`rounded-lg border bg-background p-3 shadow-sm`).
-- **Responsive option grids**: for dense choices, use `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2` with labeled radio items (`rounded-md border bg-background px-3 py-2`).
-- **Content padding**: `p-3`–`p-4` on inner blocks; `space-y-3` or `space-y-6` for vertical rhythm.
-- **Avoid double borders**: when a card holds a single simple choice (e.g., Which Pair, Side), don’t wrap the contents in an extra bordered block—let the card body stand alone. Nested `bg-secondary/2` blocks are reserved for grouped/compound sections (e.g., Functieonderzoek, Digital sub-blocks).
-- **Per-column framing**: for L/R data entry (shaft height, heel lift, MTP1, enclosure-style fields), wrap each column in `rounded-lg border bg-background p-3 shadow-sm` inside a responsive grid to visually separate sides.
-- **Digital triple-grid (Leesthoogte / Klauwtenen / Gescand met folie)**: wrap the trio in `grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-2 gap-y-2 lg:gap-x-4 bg-secondary/2 hover:border-primary!`; each column uses `flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background` with centered labels and radio groups.
-- **Digital L/R selects with shadow only**: for MTP1 and similar selects, keep the outer `border bg-secondary/2 hover:border-primary!` wrapper; inner L/R panels use `rounded-lg border bg-background p-3 shadow-sm pt-2` (no hover border on the inner panels).
 
-## Color & Emphasis
-- Base surfaces: `bg-secondary/2` for grouped sections, `bg-background` for nested panels.
-- Hover: `hover:border-primary!` on interactive section wrappers to mirror Kleur/Model styling.
-- Muted accents: `bg-muted/50` for option rows; text-muted for helper hints.
+### Basic Form Structure
 
-## Typography
-- Titles: `CardTitle` (default font weight bold, size set by component).
-- Section labels: `Label` with `text-base font-semibold`.
-- Option labels: `text-sm` with normal weight unless emphasis is needed.
-
-## Example: Enclosure Block
 ```tsx
-<div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-  <div className="flex items-center justify-between">
-    <Label className="text-base font-semibold">{t('enclosure')}</Label>
-    <span className="text-xs text-muted-foreground">{t('left')} / {t('right')}</span>
-  </div>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {/* Left panel */}
-    <div className="space-y-3 rounded-lg border bg-background p-3 shadow-sm">
-      <span className="text-sm font-semibold text-foreground">{t('left')}</span>
-      <div className="space-y-2">
-        {options.map(opt => (
-          <div key={opt.key} className="flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2">
-            <div className="flex items-center space-x-2 flex-1">
-              <Switch /* on/off */ />
-              <Label className="font-normal cursor-pointer text-sm">{opt.label}</Label>
-            </div>
-            {opt.needsMm && (
-              <Input
-                type="number"
-                placeholder={opt.key === 'hoge' ? 'cm' : 'mm'}
-                className="w-20"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-    {/* Right panel mirrors left */}
-  </div>
-</div>
+<FormCard title={t('title')} description={t('description')}>
+  <FormBlock columns={2} dividers={true}>
+    <FormItemWrapper label={t('field1')}>
+      <Input />
+    </FormItemWrapper>
+    <FormItemWrapper label={t('field2')}>
+      <Input />
+    </FormItemWrapper>
+  </FormBlock>
+</FormCard>
 ```
 
-## Example: Toggle Card (Kleur & Model)
+### Single Column Layout
+
 ```tsx
-<Card>
-  <CardHeader className="flex flex-row items-center justify-between">
-    <div>
-      <CardTitle>{t('colorAndModel')}</CardTitle>
-      <CardDescription>{t('colors')}</CardDescription>
-    </div>
-    <div className="flex items-center gap-3">
-      <Label htmlFor="color-model-toggle" className="text-sm text-muted-foreground">
-        {t('colorAndModel')}
-      </Label>
-      <Switch id="color-model-toggle" checked={showColorAndModel} onCheckedChange={setShow} />
-    </div>
-  </CardHeader>
-  {showColorAndModel && (
-    <CardContent className="pt-0 space-y-3">
-      <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-stretch border rounded-lg p-3 bg-secondary/2 hover:border-primary! divide-y-2 divide-primary! lg:divide-x-2 lg:divide-y-0">
-        {/* model selector / colors list */}
-      </div>
-      {/* additional grouped grids follow same pattern */}
-    </CardContent>
-  )}
-</Card>
+<FormCard title={t('title')}>
+  <FormBlock columns={1}>
+    <FormItemWrapper label={t('field')}>
+      <RadioGroup>{/* options */}</RadioGroup>
+    </FormItemWrapper>
+  </FormBlock>
+</FormCard>
 ```
 
-## Example: Digital Toggle Pattern
+### Left/Right Column Panels
+
+For paired fields (left/right measurements), use FormBlock with columns={2}:
+
 ```tsx
-<Card>
-  <CardHeader className="flex flex-row items-center justify-between">
-    <div>
-      <CardTitle>{t('digital')}</CardTitle>
-      <CardDescription>{t('digitalDescription')}</CardDescription>
+<FormCard title={t('measurements')}>
+  <FormBlock columns={2} dividers={true}>
+    <FormItemWrapper label={t('leftCm')}>
+      <Input type="number" placeholder="cm" />
+    </FormItemWrapper>
+    <FormItemWrapper label={t('rightCm')}>
+      <Input type="number" placeholder="cm" />
+    </FormItemWrapper>
+  </FormBlock>
+</FormCard>
+```
+
+### Toggle Card (Enable/Disable Section)
+
+```tsx
+<FormCard
+  title={t('insolesAndTalonette')}
+  description={t('insolesAndTalonetteDescription')}
+  toggleAble={true}
+  toggleLabel={t('addInsolesOrTalonette')}
+  toggleId="insolesToggle"
+  defaultOpen={isEnabled}
+  onToggleChange={isOpen => {
+    form.setValue('insoleEnabled', isOpen);
+    if (!isOpen) {
+      // Clear related fields
+      form.setValue('heelRaiseLeft', '');
+      form.setValue('heelRaiseRight', '');
+    }
+  }}
+>
+  <FormBlock columns={2} dividers={true} title={t('talonetteSection')}>
+    <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
+      <Input type="number" placeholder="cm" />
+    </FormItemWrapper>
+    <FormItemWrapper label={t('insoleHeelRaiseRight')}>
+      <Input type="number" placeholder="cm" />
+    </FormItemWrapper>
+  </FormBlock>
+</FormCard>
+```
+
+### Multi-Column Grid (3+ Columns)
+
+```tsx
+<FormBlock columns={3} dividers={true} title={t('corrections')}>
+  <FormItemWrapper label={t('midfootCorrection')}>
+    <Select>
+      <SelectTrigger />
+    </Select>
+  </FormItemWrapper>
+  <FormItemWrapper label={t('forefootCorrection')}>
+    <Select>
+      <SelectTrigger />
+    </Select>
+  </FormItemWrapper>
+  <FormItemWrapper label={t('forefootPad')}>
+    <Select>
+      <SelectTrigger />
+    </Select>
+  </FormItemWrapper>
+</FormBlock>
+```
+
+### Checkbox/Switch Groups
+
+```tsx
+<FormBlock columns={2} dividers={true}>
+  <FormItemWrapper>
+    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30">
+      <Checkbox checked={value} onCheckedChange={handleChange} />
+      <span className="text-sm">{t('option')}</span>
+    </Label>
+  </FormItemWrapper>
+</FormBlock>
+```
+
+### Radio Group Selection
+
+```tsx
+<FormItemWrapper label={t('whichPair')}>
+  <RadioGroup value={value} onValueChange={setValue}>
+    <div className="flex flex-col gap-3">
+      {options.map(option => (
+        <Label
+          key={option.value}
+          className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30"
+        >
+          <RadioGroupItem value={option.value} />
+          <span className="text-sm">{option.label}</span>
+        </Label>
+      ))}
     </div>
-    <div className="flex items-center gap-3">
-      <Label htmlFor="digital-toggle" className="text-sm text-muted-foreground">
-        {t('digital')}
-      </Label>
-      <Switch id="digital-toggle" checked={digitalEnabled} onCheckedChange={setDigital} />
-    </div>
-  </CardHeader>
-  {digitalEnabled && (
-    <CardContent className="space-y-4">
-      {/* Heel lift with L/R framed panels */}
-      <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-        <Label className="text-base font-semibold">{t('heelLift')}</Label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
-            <Label>{t('left')} (mm)</Label>
-            <Input placeholder="mm" />
-          </div>
-          <div className="space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
-            <Label>{t('right')} (mm)</Label>
-            <Input placeholder="mm" />
-          </div>
-        </div>
-      </div>
+  </RadioGroup>
+</FormItemWrapper>
+```
 
-      {/* Triple grid: reading height, claw toes, scanned with foil */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch border rounded-lg p-2 gap-y-2 lg:gap-x-4 bg-secondary/2 hover:border-primary!">
-        <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
-          <Label className="text-base font-semibold">{t('lastHeight')}</Label>
-          <RadioGroup value="" onValueChange={() => {}}>
-            <div className="flex flex-wrap gap-3">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="opt" id="reading-height-opt" />
-                <Label htmlFor="reading-height-opt" className="font-normal cursor-pointer">
-                  Option
-                </Label>
-              </div>
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
-          <Label className="text-base font-semibold">{t('clawToes')}</Label>
-          <RadioGroup value="" onValueChange={() => {}}>
-            <div className="flex flex-wrap gap-3">
-              {/* yes/no */}
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="flex flex-col space-y-2 p-3 items-center rounded-lg border bg-background">
-          <Label className="text-base font-semibold">{t('scannedWithFoil')}</Label>
-          <RadioGroup value="" onValueChange={() => {}}>
-            <div className="flex flex-wrap gap-3">
-              {/* yes/no */}
-            </div>
-          </RadioGroup>
-        </div>
-      </div>
+### Select/Dropdown Field
 
-      {/* MTP1 L/R selects (shadowed inner panels, no inner hover) */}
-      <div className="space-y-3 rounded-xl border bg-secondary/2 p-4 hover:border-primary!">
-        <Label className="text-base font-semibold">{t('mtp1Deep')}</Label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
-            <Label>{t('left')}</Label>
-            <Select>
-              <SelectTrigger className="w-2/3">
-                <SelectValue />
-              </SelectTrigger>
-            </Select>
-          </div>
-          <div className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-3 shadow-sm pt-2">
-            <Label>{t('right')}</Label>
-            <Select>
-              <SelectTrigger className="w-2/3">
-                <SelectValue />
-              </SelectTrigger>
-            </Select>
-          </div>
-        </div>
-      </div>
+```tsx
+<FormItemWrapper label={t('supplier')}>
+  <Select value={value} onValueChange={handleChange}>
+    <SelectTrigger className="w-2/3">
+      <SelectValue placeholder={t('selectOption')} />
+    </SelectTrigger>
+    <SelectContent>
+      {options.map(opt => (
+        <SelectItem key={opt.value} value={opt.value}>
+          {opt.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</FormItemWrapper>
+```
 
-      {/* Additional digital notes/instructions follow the same outer wrapper pattern */}
-    </CardContent>
-  )}
-</Card>
+### TextArea Field
+
+```tsx
+<FormItemWrapper label={t('medicalIndication')}>
+  <Textarea
+    placeholder={t('placeholder')}
+    value={value}
+    onChange={e => setValue(e.target.value)}
+    rows={4}
+    className="w-2/3"
+  />
+</FormItemWrapper>
+```
+
+### DatePicker Field
+
+```tsx
+<FormItemWrapper label={t('orderDate')}>
+  <DatePicker
+    value={selectedDate}
+    onChange={handleDateChange}
+    placeholder={t('selectDate')}
+    disabled={date => date > new Date()}
+    className="w-2/3"
+  />
+</FormItemWrapper>
+```
+
+## Component Styling
+
+- **FormCard**: Uses Card component with CardHeader and CardContent
+- **FormBlock**: Grid-based layout with `bg-secondary/2` background and optional hover border effect
+- **FormItemWrapper**: Simple wrapper that preserves label positioning
+- **Responsive**: FormBlock uses `lg:grid-cols-{n}` for responsive columns
+- **Spacing**: `space-y-4` for vertical rhythm between FormBlocks
+- **Hover Effects**: `hover:border-primary!` on FormBlock for interactive feedback
+
+## Form State Management
+
+All forms use React Hook Form with Zod schema validation:
+
+```tsx
+const formSchema = z.object({
+  field1: z.string().optional(),
+  field2: z.string().optional(),
+  nested: z.object({
+    subfield: z.string().optional(),
+  }),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+const form = useForm<FormData>({
+  resolver: zodResolver(formSchema),
+  defaultValues: {
+    /* ... */
+  },
+});
+```
+
+## Data Persistence
+
+Forms support automatic persistence to localStorage:
+
+```tsx
+const {clearStorage} = useFormPersistence('formKey', form.watch, form.setValue);
+
+const handleReset = () => {
+  clearStorage();
+  form.reset();
+};
 ```
 
 ## Usage Checklist
-- Use `bg-secondary/2` + `hover:border-primary!` for any grouped interactive block.
-- Skip extra inner borders for single simple cards (e.g., Which Pair, Side); reserve nested blocks for compound sections.
-- Keep grids responsive; default to 1 col on mobile, 2+ on desktop.
-- Apply `space-y-*` for vertical rhythm; avoid ad-hoc margins.
-- Add `pt-2` between headings/labels and their control groups for consistent breathing room.
-- Use `Switch` for binary toggles; `RadioGroup` for exclusive choices; `Input` placeholders should show units (cm/mm) where applicable.
-- Separate major subsections with `Separator` when multiple logical groups share a card.
-- For L/R inputs, add the per-column framed panels (`rounded-lg border bg-background p-3 shadow-sm`) within a responsive grid.
+
+- Use `FormCard` for major sections
+- Use `FormBlock` for grouping related FormItemWrappers
+- Use `FormItemWrapper` to wrap individual form controls with labels
+- Use `toggleAble` on FormCard for optional sections
+- Set `columns` on FormBlock based on layout needs (1-4)
+- Use `dividers={true}` to separate columns visually
+- Set `alignItems="start"` for top-aligned content, `"center"` for centered
+- Add meaningful `description` to FormCard for user guidance
+- Use responsive props for mobile-friendly layouts
+- Keep form controls (`Input`, `Select`, `Textarea`, `RadioGroup`, `Checkbox`, `DatePicker`) as children of FormItemWrapper
+- Set default values that match the schema
+- Clear related fields when toggle states change
+- Use date format DD-MM-YYYY for date inputs and display
+- Add proper validation messages via FormMessage component
+- Use `w-2/3` class on inputs to maintain consistent field widths

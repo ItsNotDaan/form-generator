@@ -113,7 +113,7 @@ const FormIntakeSteunzolenPage = () => {
       insoleForefootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
       insoleForefootPad: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
       insolePrice: INSOLE_PRICE_OPTIONS[1]?.value || 0,
-      insolePriceName: '',
+      insolePriceName: INSOLE_PRICE_OPTIONS[1]?.label || '',
 
       // Calculated final price
       finalPrice: undefined,
@@ -151,6 +151,20 @@ const FormIntakeSteunzolenPage = () => {
   React.useEffect(() => {
     form.setValue('finalPrice', finalPrice);
   }, [finalPrice, form]);
+
+  // Sync insolePriceName whenever insolePrice changes
+  // This ensures the price name is always in sync with the price value
+  React.useEffect(() => {
+    const currentPrice = form.getValues('insolePrice');
+    if (currentPrice) {
+      const selectedOption = INSOLE_PRICE_OPTIONS.find(
+        option => option.value === currentPrice,
+      );
+      if (selectedOption && selectedOption.label) {
+        form.setValue('insolePriceName', selectedOption.label);
+      }
+    }
+  }, [insolePriceValue, form]);
 
   // Debug
   console.log('Debug values:', {
@@ -364,12 +378,17 @@ const FormIntakeSteunzolenPage = () => {
                 {/* ROW 1: Type Selection */}
                 <FormBlock columns={1} dividers={true} alignItems="start">
                   {/* Type Selection */}
-                  <FormItemWrapper label={t('insoleType')}>
+                  <FormItemWrapper label={t('insoleTypeGeneral')}>
                     <Select
                       value={form.watch('insoleTypeGeneral') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleTypeGeneral', val)
-                      }
+                      onValueChange={val => {
+                        form.setValue('insoleTypeGeneral', val);
+
+                        // Clear the insoleOtherText if not selecting Anders
+                        if (val !== 'Anders') {
+                          form.setValue('insoleOtherText', '');
+                        }
+                      }}
                     >
                       <SelectTrigger className="w-fit">
                         <SelectValue placeholder={t('insoleType')} />
@@ -475,7 +494,7 @@ const FormIntakeSteunzolenPage = () => {
 
                 {/* ROW 3: Steunzool type selectie */}
                 <FormBlock columns={1} dividers={true} alignItems="start">
-                  <FormItemWrapper label={t('insoleType')}>
+                  <FormItemWrapper label={t('insolePriceName')}>
                     <Select
                       value={
                         form.watch('insolePrice')
@@ -484,7 +503,15 @@ const FormIntakeSteunzolenPage = () => {
                       }
                       onValueChange={val => {
                         const numVal = val ? parseFloat(val) : undefined;
+                        // Find the corresponding label for this price value
+                        const selectedOption = INSOLE_PRICE_OPTIONS.find(
+                          option => option.value === numVal,
+                        );
                         form.setValue('insolePrice', numVal);
+                        form.setValue(
+                          'insolePriceName',
+                          selectedOption?.label || '',
+                        );
 
                         // Optional: If user manually changes price to something else, should Talonette toggle off?
                         // Logic left to you, currently it stays enabled.

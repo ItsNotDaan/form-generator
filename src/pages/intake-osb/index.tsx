@@ -6,6 +6,7 @@ import {Label} from '@/components/ui/label';
 import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {Switch} from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -24,9 +25,12 @@ import {
   WALKING_FUNCTION_INDICATION_OPTIONS,
   SUPPLIER_OPTIONS,
   INSOLE_TYPE_OPTIONS,
+  INSOLE_PRICE_OPTIONS,
   MIDFOOT_CORRECTION_OPTIONS,
   FOREFOOT_CORRECTION_OPTIONS,
   PELOTTE_OPTIONS,
+  HALLUX_MM_OPTIONS,
+  DEEPENING_MM_OPTIONS,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSBData, setClientData} from '@/domain/store/slices/formData';
@@ -58,13 +62,15 @@ const FormIntakeOSBPage = () => {
     // Supplier and Product
     supplierName: z.string().optional(),
     orderDate: z.string().optional(),
-    productSpecifications: z.object({
-      articleCode: z.string().optional(),
-      lengthSize: z.string().optional(),
-      width: z.string().optional(),
-      color: z.string().optional(),
-      closure: z.string().optional(),
-    }),
+    osb: z
+      .object({
+        articleCode: z.string().optional(),
+        lengthSize: z.string().optional(),
+        width: z.string().optional(),
+        color: z.string().optional(),
+        closure: z.string().optional(),
+      })
+      .optional(),
 
     // Steunzolen/Talonette Section
     heelRaiseEnabled: z.boolean().optional(),
@@ -73,6 +79,8 @@ const FormIntakeOSBPage = () => {
 
     insoleEnabled: z.boolean().optional(),
     insoleTypeGeneral: z.string().optional(),
+    insolePriceName: z.string().optional(),
+    insolePrice: z.number().optional(),
     insoleOtherText: z.string().optional(),
     insoleMidfootCorrection: z.string().optional(),
     insoleForefootCorrection: z.string().optional(),
@@ -88,10 +96,15 @@ const FormIntakeOSBPage = () => {
     soleReinforcementLeft: z.boolean().optional(),
     soleReinforcementRight: z.boolean().optional(),
 
-    // Afwikkelrol (onder schoen)
-    afwikkelrolEnabled: z.boolean().optional(),
+    // Afwikkelrol (onder schoen) - always visible
     rockerRollCmLeft: z.string().optional(),
     rockerRollCmRight: z.string().optional(),
+
+    // Modules: Hallux valgus & Verdieping voorvoet - always visible
+    halluxMmLeft: z.string().optional(),
+    halluxMmRight: z.string().optional(),
+    deepeningMmLeft: z.string().optional(),
+    deepeningMmRight: z.string().optional(),
 
     specialNotes: z.string().optional(),
   });
@@ -113,8 +126,11 @@ const FormIntakeOSBPage = () => {
 
       // Supplier and Product
       supplierName: '',
-      orderDate: new Date().toISOString().split('T')[0],
-      productSpecifications: {
+      orderDate: (() => {
+        const now = new Date();
+        return `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
+      })(),
+      osb: {
         articleCode: '',
         lengthSize: '',
         width: '',
@@ -129,6 +145,8 @@ const FormIntakeOSBPage = () => {
 
       insoleEnabled: false,
       insoleTypeGeneral: '',
+      insolePriceName: INSOLE_PRICE_OPTIONS[1]?.label || '',
+      insolePrice: INSOLE_PRICE_OPTIONS[1]?.value,
       insoleOtherText: '',
       insoleMidfootCorrection: '',
       insoleForefootCorrection: '',
@@ -145,9 +163,14 @@ const FormIntakeOSBPage = () => {
       soleReinforcementRight: false,
 
       // Afwikkelrol (onder schoen)
-      afwikkelrolEnabled: false,
       rockerRollCmLeft: '',
       rockerRollCmRight: '',
+
+      // Modules: Hallux valgus & Verdieping voorvoet
+      halluxMmLeft: 'Nee',
+      halluxMmRight: 'Nee',
+      deepeningMmLeft: 'Nee',
+      deepeningMmRight: 'Nee',
 
       specialNotes: '',
     },
@@ -159,6 +182,20 @@ const FormIntakeOSBPage = () => {
     form.watch,
     form.setValue,
   );
+
+  // Sync insolePriceName whenever insolePrice changes
+  const insolePriceValue = form.watch('insolePrice');
+  React.useEffect(() => {
+    const currentPrice = form.getValues('insolePrice');
+    if (currentPrice) {
+      const selectedOption = INSOLE_PRICE_OPTIONS.find(
+        option => option.value === currentPrice,
+      );
+      if (selectedOption && selectedOption.label) {
+        form.setValue('insolePriceName', selectedOption.label);
+      }
+    }
+  }, [insolePriceValue, form]);
 
   const handleResetDraft = () => {
     clearStorage();
@@ -184,12 +221,12 @@ const FormIntakeOSBPage = () => {
         // Supplier and Product
         supplierName: data.supplierName || '',
         orderDate: data.orderDate || '',
-        productSpecifications: {
-          articleCode: data.productSpecifications?.articleCode || '',
-          lengthSize: data.productSpecifications?.lengthSize || '',
-          width: data.productSpecifications?.width || '',
-          color: data.productSpecifications?.color || '',
-          closure: data.productSpecifications?.closure || '',
+        osb: {
+          articleCode: data.osb?.articleCode || '',
+          lengthSize: data.osb?.lengthSize || '',
+          width: data.osb?.width || '',
+          color: data.osb?.color || '',
+          closure: data.osb?.closure || '',
         },
 
         // Steunzolen/Talonette (conditional based on toggle)
@@ -198,6 +235,8 @@ const FormIntakeOSBPage = () => {
         insoleTypeGeneral: data.insoleEnabled
           ? data.insoleTypeGeneral || ''
           : '',
+        insolePriceName: data.insoleEnabled ? data.insolePriceName || '' : '',
+        insolePrice: data.insoleEnabled ? data.insolePrice : undefined,
         insoleOtherText: data.insoleEnabled ? data.insoleOtherText || '' : '',
         insoleMidfootCorrection: data.insoleEnabled
           ? data.insoleMidfootCorrection || ''
@@ -210,28 +249,22 @@ const FormIntakeOSBPage = () => {
           : '',
 
         // Supplement (conditional based on toggle)
-        customInsoleIndividualLeft: data.supplementIndividueelEnabled
-          ? !!data.customInsoleIndividualLeft
-          : false,
-        customInsoleIndividualRight: data.supplementIndividueelEnabled
-          ? !!data.customInsoleIndividualRight
-          : false,
+        customInsoleIndividualLeft: !!data.customInsoleIndividualLeft,
+        customInsoleIndividualRight: !!data.customInsoleIndividualRight,
 
         // Zoolverstijving (conditional based on toggle)
-        soleReinforcementLeft: data.soleReinforcementEnabled
-          ? !!data.soleReinforcementLeft
-          : false,
-        soleReinforcementRight: data.soleReinforcementEnabled
-          ? !!data.soleReinforcementRight
-          : false,
+        soleReinforcementLeft: !!data.soleReinforcementLeft,
+        soleReinforcementRight: !!data.soleReinforcementRight,
 
-        // Afwikkelrol (conditional based on toggle)
-        rockerRollCmLeft: data.afwikkelrolEnabled
-          ? data.rockerRollCmLeft || ''
-          : '',
-        rockerRollCmRight: data.afwikkelrolEnabled
-          ? data.rockerRollCmRight || ''
-          : '',
+        // Afwikkelrol
+        rockerRollCmLeft: data.rockerRollCmLeft || '',
+        rockerRollCmRight: data.rockerRollCmRight || '',
+
+        // Modules
+        halluxMmLeft: data.halluxMmLeft || 'Nee',
+        halluxMmRight: data.halluxMmRight || 'Nee',
+        deepeningMmLeft: data.deepeningMmLeft || 'Nee',
+        deepeningMmRight: data.deepeningMmRight || 'Nee',
 
         specialNotes: data.specialNotes || '',
       }),
@@ -449,14 +482,22 @@ const FormIntakeOSBPage = () => {
                       value={
                         form.watch('orderDate') &&
                         form.watch('orderDate') !== ''
-                          ? new Date(form.watch('orderDate')!)
+                          ? (() => {
+                              const dateStr = form.watch('orderDate')!;
+                              const [day, month, year] = dateStr.split('-');
+                              return new Date(
+                                Number(year),
+                                Number(month) - 1,
+                                Number(day),
+                              );
+                            })()
                           : undefined
                       }
                       onChange={selectedDate =>
                         form.setValue(
                           'orderDate',
                           selectedDate
-                            ? selectedDate.toISOString().split('T')[0]
+                            ? `${selectedDate.getDate().toString().padStart(2, '0')}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getFullYear()}`
                             : '',
                         )
                       }
@@ -473,12 +514,10 @@ const FormIntakeOSBPage = () => {
                     <Input
                       id="art-code"
                       placeholder={t('articleCode')}
-                      value={
-                        form.watch('productSpecifications')?.articleCode || ''
-                      }
+                      value={form.watch('osb')?.articleCode || ''}
                       onChange={e =>
-                        form.setValue('productSpecifications', {
-                          ...form.getValues('productSpecifications'),
+                        form.setValue('osb', {
+                          ...(form.getValues('osb') || {}),
                           articleCode: e.target.value,
                         })
                       }
@@ -490,10 +529,10 @@ const FormIntakeOSBPage = () => {
                     <Input
                       id="color-osb"
                       placeholder={t('color')}
-                      value={form.watch('productSpecifications')?.color || ''}
+                      value={form.watch('osb')?.color || ''}
                       onChange={e =>
-                        form.setValue('productSpecifications', {
-                          ...form.getValues('productSpecifications'),
+                        form.setValue('osb', {
+                          ...(form.getValues('osb') || {}),
                           color: e.target.value,
                         })
                       }
@@ -507,10 +546,10 @@ const FormIntakeOSBPage = () => {
                     <Input
                       id="width"
                       placeholder={t('width')}
-                      value={form.watch('productSpecifications')?.width || ''}
+                      value={form.watch('osb')?.width || ''}
                       onChange={e =>
-                        form.setValue('productSpecifications', {
-                          ...form.getValues('productSpecifications'),
+                        form.setValue('osb', {
+                          ...(form.getValues('osb') || {}),
                           width: e.target.value,
                         })
                       }
@@ -522,12 +561,10 @@ const FormIntakeOSBPage = () => {
                     <Input
                       id="lengte-maat"
                       placeholder={t('lengthSize')}
-                      value={
-                        form.watch('productSpecifications')?.lengthSize || ''
-                      }
+                      value={form.watch('osb')?.lengthSize || ''}
                       onChange={e =>
-                        form.setValue('productSpecifications', {
-                          ...form.getValues('productSpecifications'),
+                        form.setValue('osb', {
+                          ...(form.getValues('osb') || {}),
                           lengthSize: e.target.value,
                         })
                       }
@@ -539,15 +576,249 @@ const FormIntakeOSBPage = () => {
                     <Input
                       id="closure-osb"
                       placeholder={t('closure')}
-                      value={form.watch('productSpecifications')?.closure || ''}
+                      value={form.watch('osb')?.closure || ''}
                       onChange={e =>
-                        form.setValue('productSpecifications', {
-                          ...form.getValues('productSpecifications'),
+                        form.setValue('osb', {
+                          ...(form.getValues('osb') || {}),
                           closure: e.target.value,
                         })
                       }
                       className="w-2/3"
                     />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Modules */}
+              <FormCard
+                title={t('modules')}
+                toggleAble={true}
+                toggleLabel={t('addModules') || t('modules')}
+                toggleId="modules-toggle"
+                defaultOpen={true}
+                onToggleChange={isOpen => {
+                  if (!isOpen) {
+                    form.setValue('soleReinforcementLeft', false);
+                    form.setValue('soleReinforcementRight', false);
+                    form.setValue('rockerRollCmLeft', '');
+                    form.setValue('rockerRollCmRight', '');
+                    form.setValue('halluxMmLeft', 'Nee');
+                    form.setValue('halluxMmRight', 'Nee');
+                    form.setValue('deepeningMmLeft', 'Nee');
+                    form.setValue('deepeningMmRight', 'Nee');
+                    form.setValue('customInsoleIndividualLeft', false);
+                    form.setValue('customInsoleIndividualRight', false);
+                  }
+                }}
+              >
+                {/* Row 1: Sole Stiffening | Rocker Sole */}
+                <FormBlock columns={2} dividers={true} hoverEffect={true}>
+                  {/* Sole Stiffening - Left/Right Switches */}
+                  <FormItemWrapper>
+                    <FormBlock
+                      columns={2}
+                      dividers={true}
+                      title={t('soleStiffening')}
+                      hoverEffect={false}
+                      className="border-0 bg-transparent"
+                      contentClassName="lg:*:!px-8"
+                    >
+                      <FormItemWrapper label={t('left')}>
+                        <Switch
+                          id="sole-stiffening-left"
+                          checked={!!form.watch('soleReinforcementLeft')}
+                          onCheckedChange={checked =>
+                            form.setValue('soleReinforcementLeft', !!checked)
+                          }
+                        />
+                      </FormItemWrapper>
+
+                      <FormItemWrapper label={t('right')}>
+                        <Switch
+                          id="sole-stiffening-right"
+                          checked={!!form.watch('soleReinforcementRight')}
+                          onCheckedChange={checked =>
+                            form.setValue('soleReinforcementRight', !!checked)
+                          }
+                        />
+                      </FormItemWrapper>
+                    </FormBlock>
+                  </FormItemWrapper>
+
+                  {/* Rocker Sole - Left/Right cm Input */}
+                  <FormItemWrapper>
+                    <FormBlock
+                      columns={2}
+                      dividers={true}
+                      title={t('rockerSole')}
+                      hoverEffect={false}
+                      className="border-0 bg-transparent"
+                    >
+                      <FormItemWrapper label={`${t('left')} (cm)`}>
+                        <Input
+                          id="rocker-left-cm"
+                          type="number"
+                          step="0.1"
+                          placeholder={t('cmPlaceholder')}
+                          value={form.watch('rockerRollCmLeft') || ''}
+                          onChange={e =>
+                            form.setValue('rockerRollCmLeft', e.target.value)
+                          }
+                          className="w-2/3"
+                        />
+                      </FormItemWrapper>
+
+                      <FormItemWrapper label={`${t('right')} (cm)`}>
+                        <Input
+                          id="rocker-right-cm"
+                          type="number"
+                          step="0.1"
+                          placeholder={t('cmPlaceholder')}
+                          value={form.watch('rockerRollCmRight') || ''}
+                          onChange={e =>
+                            form.setValue('rockerRollCmRight', e.target.value)
+                          }
+                          className="w-2/3"
+                        />
+                      </FormItemWrapper>
+                    </FormBlock>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Row 2: Hallux Valgus | Forefoot Deepening */}
+                <FormBlock columns={2} dividers={true} hoverEffect={true}>
+                  {/* Hallux Valgus */}
+                  <FormItemWrapper>
+                    <FormBlock
+                      columns={2}
+                      dividers={true}
+                      title={t('halluxValgus')}
+                      hoverEffect={false}
+                      className="border-0 bg-transparent"
+                      contentClassName="lg:*:!px-8"
+                    >
+                      <FormItemWrapper label={t('left')}>
+                        <Select
+                          value={form.watch('halluxMmLeft') || 'Nee'}
+                          onValueChange={v => form.setValue('halluxMmLeft', v)}
+                        >
+                          <SelectTrigger id="hallux-left">
+                            <SelectValue placeholder={t('halluxMm')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {HALLUX_MM_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItemWrapper>
+
+                      <FormItemWrapper label={t('right')}>
+                        <Select
+                          value={form.watch('halluxMmRight') || 'Nee'}
+                          onValueChange={v => form.setValue('halluxMmRight', v)}
+                        >
+                          <SelectTrigger id="hallux-right">
+                            <SelectValue placeholder={t('halluxMm')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {HALLUX_MM_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItemWrapper>
+                    </FormBlock>
+                  </FormItemWrapper>
+
+                  {/* Forefoot Deepening */}
+                  <FormItemWrapper>
+                    <FormBlock
+                      columns={2}
+                      dividers={true}
+                      title={t('forefootDepressions')}
+                      hoverEffect={false}
+                      className="border-0 bg-transparent"
+                      contentClassName="lg:*:!px-8"
+                    >
+                      <FormItemWrapper label={t('left')}>
+                        <Select
+                          value={form.watch('deepeningMmLeft') || 'Nee'}
+                          onValueChange={v =>
+                            form.setValue('deepeningMmLeft', v)
+                          }
+                        >
+                          <SelectTrigger id="deepening-left">
+                            <SelectValue placeholder={t('deepeningMm')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {DEEPENING_MM_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItemWrapper>
+
+                      <FormItemWrapper label={t('right')}>
+                        <Select
+                          value={form.watch('deepeningMmRight') || 'Nee'}
+                          onValueChange={v =>
+                            form.setValue('deepeningMmRight', v)
+                          }
+                        >
+                          <SelectTrigger id="deepening-right">
+                            <SelectValue placeholder={t('deepeningMm')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {DEEPENING_MM_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItemWrapper>
+                    </FormBlock>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Row 3: Supplement (van leest/schuimdoos) - Centered */}
+                <FormBlock columns={1} alignItems="center">
+                  <FormItemWrapper label={t('supplement')}>
+                    <div className="flex items-center justify-center gap-8">
+                      <div className="flex items-center gap-3">
+                        <Switch
+                          id="supplement-left"
+                          checked={!!form.watch('customInsoleIndividualLeft')}
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'customInsoleIndividualLeft',
+                              !!checked,
+                            )
+                          }
+                        />
+                        <Label htmlFor="supplement-left">{t('left')}</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Switch
+                          id="supplement-right"
+                          checked={!!form.watch('customInsoleIndividualRight')}
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'customInsoleIndividualRight',
+                              !!checked,
+                            )
+                          }
+                        />
+                        <Label htmlFor="supplement-right">{t('right')}</Label>
+                      </div>
+                    </div>
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>
@@ -569,6 +840,8 @@ const FormIntakeOSBPage = () => {
                     form.setValue('heelRaiseLeft', '');
                     form.setValue('heelRaiseRight', '');
                     form.setValue('insoleTypeGeneral', '');
+                    form.setValue('insolePriceName', '');
+                    form.setValue('insolePrice', undefined);
                     form.setValue('insoleOtherText', '');
                     form.setValue('insoleMidfootCorrection', '');
                     form.setValue('insoleForefootCorrection', '');
@@ -615,7 +888,7 @@ const FormIntakeOSBPage = () => {
                 <FormBlock
                   columns={2}
                   dividers={true}
-                  title={t('insoleType')}
+                  title={t('insoleTypeGeneral')}
                   alignItems="start"
                 >
                   <FormItemWrapper className="col-span-2">
@@ -626,7 +899,7 @@ const FormIntakeOSBPage = () => {
                       }
                     >
                       <SelectTrigger className="w-2/3 mt-2">
-                        <SelectValue placeholder={t('insoleType')} />
+                        <SelectValue placeholder={t('insoleTypeGeneral')} />
                       </SelectTrigger>
                       <SelectContent>
                         {INSOLE_TYPE_OPTIONS.map(option => (
@@ -655,6 +928,44 @@ const FormIntakeOSBPage = () => {
                       />
                     </FormItemWrapper>
                   )}
+                </FormBlock>
+
+                {/* Insole Price Name */}
+                <FormBlock columns={1} dividers={true} alignItems="start">
+                  <FormItemWrapper label={t('insolePriceName')}>
+                    <Select
+                      value={
+                        form.watch('insolePrice')
+                          ? String(form.watch('insolePrice'))
+                          : undefined
+                      }
+                      onValueChange={val => {
+                        const numVal = val ? parseFloat(val) : undefined;
+                        const selectedOption = INSOLE_PRICE_OPTIONS.find(
+                          option => option.value === numVal,
+                        );
+                        form.setValue('insolePrice', numVal);
+                        form.setValue(
+                          'insolePriceName',
+                          selectedOption?.label || '',
+                        );
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('chooseOption')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {INSOLE_PRICE_OPTIONS.map(option => (
+                          <SelectItem
+                            key={option.value}
+                            value={String(option.value)}
+                          >
+                            {t(option.label)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
                 </FormBlock>
 
                 {/* Corrections */}
@@ -723,160 +1034,6 @@ const FormIntakeOSBPage = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Supplement (van leest) */}
-              <FormCard
-                title={t('supplement')}
-                description={t('supplementDescription')}
-                toggleAble={true}
-                toggleLabel={t('addSupplement')}
-                toggleId="supplement-toggle"
-                defaultOpen={form.watch('supplementIndividueelEnabled')}
-                onToggleChange={isOpen => {
-                  form.setValue('supplementIndividueelEnabled', isOpen);
-                  if (!isOpen) {
-                    form.setValue('customInsoleIndividualLeft', false);
-                    form.setValue('customInsoleIndividualRight', false);
-                  }
-                }}
-              >
-                <FormBlock columns={2} dividers={true}>
-                  <FormItemWrapper>
-                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
-                      <Checkbox
-                        id="supplement-links"
-                        checked={!!form.watch('customInsoleIndividualLeft')}
-                        onCheckedChange={checked =>
-                          form.setValue('customInsoleIndividualLeft', !!checked)
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t('left')}
-                        </p>
-                      </div>
-                    </Label>
-                  </FormItemWrapper>
-
-                  <FormItemWrapper>
-                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
-                      <Checkbox
-                        id="supplement-rechts"
-                        checked={!!form.watch('customInsoleIndividualRight')}
-                        onCheckedChange={checked =>
-                          form.setValue(
-                            'customInsoleIndividualRight',
-                            !!checked,
-                          )
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t('right')}
-                        </p>
-                      </div>
-                    </Label>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Zoolverstijving */}
-              <FormCard
-                title={t('soleStiffening')}
-                toggleAble={true}
-                toggleLabel={t('addSoleStiffening')}
-                toggleId="zoolverstijving-toggle"
-                defaultOpen={form.watch('soleReinforcementEnabled')}
-                onToggleChange={isOpen => {
-                  form.setValue('soleReinforcementEnabled', isOpen);
-                  if (!isOpen) {
-                    form.setValue('soleReinforcementLeft', false);
-                    form.setValue('soleReinforcementRight', false);
-                  }
-                }}
-              >
-                <FormBlock columns={2} dividers={true}>
-                  <FormItemWrapper>
-                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
-                      <Checkbox
-                        id="zoolverstijving-links"
-                        checked={!!form.watch('soleReinforcementLeft')}
-                        onCheckedChange={checked =>
-                          form.setValue('soleReinforcementLeft', !!checked)
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t('left')}
-                        </p>
-                      </div>
-                    </Label>
-                  </FormItemWrapper>
-
-                  <FormItemWrapper>
-                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors">
-                      <Checkbox
-                        id="zoolverstijving-rechts"
-                        checked={!!form.watch('soleReinforcementRight')}
-                        onCheckedChange={checked =>
-                          form.setValue('soleReinforcementRight', !!checked)
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t('right')}
-                        </p>
-                      </div>
-                    </Label>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Afwikkelrol (onder schoen) */}
-              <FormCard
-                title={t('rockerSole')}
-                toggleAble={true}
-                toggleLabel={t('addRockerSole')}
-                toggleId="afwikkelrol-toggle"
-                defaultOpen={form.watch('afwikkelrolEnabled')}
-                onToggleChange={isOpen => {
-                  form.setValue('afwikkelrolEnabled', isOpen);
-                  if (!isOpen) {
-                    form.setValue('rockerRollCmLeft', '');
-                    form.setValue('rockerRollCmRight', '');
-                  }
-                }}
-              >
-                <FormBlock columns={2} dividers={true}>
-                  <FormItemWrapper label={t('leftCm')}>
-                    <Input
-                      id="afwikkelrol-cm-links"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('rockerRollCmLeft') || ''}
-                      onChange={e =>
-                        form.setValue('rockerRollCmLeft', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-
-                  <FormItemWrapper label={t('rightCm')}>
-                    <Input
-                      id="afwikkelrol-cm-rechts"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('rockerRollCmRight') || ''}
-                      onChange={e =>
-                        form.setValue('rockerRollCmRight', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
                   </FormItemWrapper>
                 </FormBlock>
               </FormCard>

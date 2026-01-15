@@ -518,26 +518,26 @@ export const GOAL_OPTIONS = [
   {
     label: 'Pasvorm',
     value: 'Pasvorm',
-    translationKey: 'doelPasvorm',
-    fullKey: 'doelPasvorm',
+    translationKey: 'goalFit',
+    fullKey: 'goalFit',
   },
   {
     label: 'Stabiliteit',
     value: 'Stabiliteit',
-    translationKey: 'doelStabiliteit',
-    fullKey: 'doelStabiliteit',
+    translationKey: 'goalStability',
+    fullKey: 'goalStability',
   },
   {
     label: 'Loop afstand vergroten',
     value: 'Loop afstand vergroten',
-    translationKey: 'doelLoopAfstandVergroten',
-    fullKey: 'doelLoopAfstandVergroten',
+    translationKey: 'goalIncreaseWalkingDistance',
+    fullKey: 'goalIncreaseWalkingDistance',
   },
   {
     label: 'Ondersteuning gewelf',
     value: 'Ondersteuning gewelf',
-    translationKey: 'doelOndersteuningGewelf',
-    fullKey: 'doelOndersteuningGewelf',
+    translationKey: 'goalArchSupport',
+    fullKey: 'goalArchSupport',
   },
 ];
 
@@ -547,20 +547,20 @@ export const WALKING_FUNCTION_OPTIONS = [
   {
     label: 'Passief',
     value: 'Passief',
-    translationKey: 'loopfunctiePassief',
-    fullKey: 'loopfunctiePassief',
+    translationKey: 'walkingFunctionPassive',
+    fullKey: 'walkingFunctionPassive',
   },
   {
     label: 'Actief',
     value: 'Actief',
-    translationKey: 'loopfunctieActief',
-    fullKey: 'loopfunctieActief',
+    translationKey: 'walkingFunctionActive',
+    fullKey: 'walkingFunctionActive',
   },
   {
     label: 'Korte transfers',
     value: 'Korte transfers',
-    translationKey: 'loopfunctieKorteTransfers',
-    fullKey: 'loopfunctieKorteTransfers',
+    translationKey: 'walkingFunctionShortTransfers',
+    fullKey: 'walkingFunctionShortTransfers',
   },
 ];
 
@@ -573,20 +573,26 @@ export const WALKING_FUNCTION_INDICATION_OPTIONS = [
   {
     label: 'Passief',
     value: 'Passief',
-    translationKey: 'loopfunctiePassief',
-    fullKey: 'loopfunctiePassief',
+    translationKey: 'walkingFunctionPassive',
+    fullKey: 'walkingFunctionPassive',
   },
   {
     label: 'Korte Transfers',
     value: 'Korte Transfers',
-    translationKey: 'loopfunctieKorteTransfers',
-    fullKey: 'loopfunctieKorteTransfers',
+    translationKey: 'walkingFunctionShortTransfers',
+    fullKey: 'walkingFunctionShortTransfers',
   },
   {
     label: 'Actief',
     value: 'Actief',
-    translationKey: 'loopfunctieActief',
-    fullKey: 'loopfunctieActief',
+    translationKey: 'walkingFunctionActive',
+    fullKey: 'walkingFunctionActive',
+  },
+  {
+    label: 'Anders',
+    value: 'Anders',
+    translationKey: 'other',
+    fullKey: 'walkingFunctionOther',
   },
 ];
 
@@ -602,8 +608,8 @@ export const SUPPLIER_OPTIONS = [
 /** Basiscode SOS */
 export type BaseCodeOption = '42' | '40';
 export const BASE_CODE_OPTIONS = [
-  {label: '42', value: '42', translationKey: 'baseCode42'},
-  {label: '40', value: '40', translationKey: 'baseCode40'},
+  {label: '42', value: '42', translationKey: 'basicCode42'},
+  {label: '40', value: '40', translationKey: 'basicCode40'},
 ];
 
 /** Supplement options met codes (in tabel met L/R) */
@@ -651,38 +657,38 @@ export const INSOLE_TYPE_OPTIONS = [
   {
     label: 'Berksteunzool met',
     value: 'Berksteunzool met',
-    translationKey: 'insoleTypeBerksteunzoolMet',
-    fullKey: 'insoleTypeBerksteunzoolMet',
+    translationKey: 'berkInsoleWith',
+    fullKey: 'berkInsoleWith',
   },
   {
     label: 'Berksteunzool zonder',
     value: 'Berksteunzool zonder',
-    translationKey: 'insoleTypeBerksteunzoolZonder',
-    fullKey: 'insoleTypeBerksteunzoolZonder',
+    translationKey: 'berkInsoleWithout',
+    fullKey: 'berkInsoleWithout',
   },
   {
     label: 'Kinderkniksteun',
     value: 'Kinderkniksteun',
-    translationKey: 'insoleTypeKinderkniksteun',
-    fullKey: 'insoleTypeKinderkniksteun',
+    translationKey: 'childArchSupport',
+    fullKey: 'childArchSupport',
   },
   {
     label: 'Ergopad redux heel',
     value: 'Ergopad redux heel',
-    translationKey: 'insoleTypeErgopadReduxHeel',
-    fullKey: 'insoleTypeErgopadReduxHeel',
+    translationKey: 'ergopadReduxHeel',
+    fullKey: 'ergopadReduxHeel',
   },
   {
     label: 'Birco',
     value: 'Birco',
-    translationKey: 'insoleTypeBirco',
-    fullKey: 'insoleTypeBirco',
+    translationKey: 'birco',
+    fullKey: 'birco',
   },
   {
     label: 'Anders',
     value: 'Anders',
-    translationKey: 'insoleTypeAnders',
-    fullKey: 'insoleTypeAnders',
+    translationKey: 'other',
+    fullKey: 'other',
   },
 ];
 

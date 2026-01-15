@@ -75,7 +75,10 @@ const FormNewClientPage = () => {
     shouldFocusError: true,
     defaultValues: {
       practitionerId: '',
-      date: new Date().toISOString().split('T')[0],
+      date: (() => {
+        const now = new Date();
+        return `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
+      })(),
       location: '',
       salutation: '',
       initials: '',
@@ -256,7 +259,17 @@ const FormNewClientPage = () => {
                           <FormControl>
                             <DatePicker
                               value={
-                                field.value ? new Date(field.value) : undefined
+                                field.value
+                                  ? (() => {
+                                      const [day, month, year] =
+                                        field.value.split('-');
+                                      return new Date(
+                                        Number(year),
+                                        Number(month) - 1,
+                                        Number(day),
+                                      );
+                                    })()
+                                  : undefined
                               }
                               onChange={selectedDate => {
                                 if (selectedDate) {
