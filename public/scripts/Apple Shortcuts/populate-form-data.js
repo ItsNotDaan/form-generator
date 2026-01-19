@@ -1,37 +1,33 @@
 /**
- * POPULATION SCRIPT FOR APPLE SHORTCUTS
+ * POPULATION SCRIPT FOR APPLE SHORTCUTS (AI MARKDOWN READY)
  *
- * Purpose: Populate form fields with extracted data from OCR + AI processing
- * This script receives JSON data (from AI extraction) and fills the new-client form fields
- *
- * Input Format: JSON object with field names as keys and extracted values
- * Example: {"clientName": "van Dijk", "initials": "J.P.", "salutation": "Dhr.", ...}
- *
- * Output Format: JSON object with success status and array of failed fields (if any)
- * Example: {"success": true, "failedFields": [], "populatedCount": 15}
- *
- * Usage:
- * 1. Pass extracted JSON data from AI to this script
- * 2. Run via Apple Shortcuts' "Run JavaScript on Webpage" action
- * 3. The script returns status and logs any failed field population attempts
- * 4. Address API will auto-populate street/city when postal code + house number are set
- *
- * Key Features:
- * - Simulates input/change events to trigger React Hook Form validation
- * - Validates select/radio values against allowed options from metadata
- * - Formats dates to DD-MM-YYYY with leading zeros
- * - Skips read-only/auto-fill fields
- * - Returns array of failed fields without stopping execution
- * - Preserves phone number format as received from AI
+ * 👇 ÉÉN PLEK: Vervang AI_TEXT_INPUT met je AI output (```json ... ```)
  */
 
 (function () {
   // ============================================================================
-  // CONFIGURATION & CONSTANTS
+  // 🟢 DATA INPUT: Input the textbox.
   // ============================================================================
 
-  // Validation maps for select/radio fields
-  // Built from field metadata to ensure values are valid
+  const PATIENT_DATA = {
+    salutation: 'Dhr.',
+    initials: 'W.J.',
+    clientName: 'Roskamp',
+    birthDate: '02-06-1936',
+    bsn: '021348157',
+    postalCode: '3781 AD',
+    houseNumber: 'Hoofdstraat 155 j',
+    phoneOne: '+31641242762',
+    insurance: 'CZ',
+    specialist: 'Dr. O.P. Bakker (REV)',
+    medicalIndication:
+      "Diagnose: diabetische voet\nToelichting op diagnose: diabetische voet, Simm's 3, status na neuropatisch ulcus onder hallux links en rechts. divergerende voeten, niet veilig te beschoeien in confectie of OSB\nFuncties en anatomische eigenschappen: sensibiliteitsstoornis, huidafwijking/kwetsbare huid, voetvormafwijking\nDoel schoenvoorziening: ontlasten, ondersteunen, beschermen, adequate pasvorm",
+  };
+
+  // ============================================================================
+  // CONFIGURATION
+  // ============================================================================
+
   const VALIDATION_MAPS = {
     practitionerId: ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7'],
     location: [
@@ -58,7 +54,6 @@
     ],
   };
 
-  // Field configuration with formatting rules
   const FIELD_CONFIG = {
     practitionerId: {type: 'select', validate: true},
     date: {type: 'date', format: 'DD-MM-YYYY', validate: false},
@@ -84,72 +79,44 @@
   // UTILITY FUNCTIONS
   // ============================================================================
 
-  /**
-   * Format date to DD-MM-YYYY with leading zeros
-   * Handles various input formats: "15-3-1975" -> "15-03-1975"
-   */
   function formatDateToDDMMYYYY(dateStr) {
     if (!dateStr) return '';
-
     try {
-      // Remove any extra whitespace
       dateStr = String(dateStr).trim();
-
-      // Split by common separators
       const parts = dateStr.split(/[-\/\s]+/);
-
       if (parts.length >= 3) {
         let day = parts[0];
         let month = parts[1];
         let year = parts[2];
-
-        // Pad day and month with leading zeros
         day = String(day).padStart(2, '0');
         month = String(month).padStart(2, '0');
-
-        // Ensure year is 4 digits
         if (year.length === 2) {
-          // Assume 1900s for years 00-30, 2000s for 31-99
           const yearNum = parseInt(year);
           year = yearNum > 30 ? '19' + year : '20' + year;
         }
-
         return `${day}-${month}-${year}`;
       }
-
       return '';
     } catch (error) {
       return '';
     }
   }
 
-  /**
-   * Validate select/radio value against allowed options
-   */
   function validateSelectValue(fieldName, value) {
     const validOptions = VALIDATION_MAPS[fieldName];
-    if (!validOptions) return true; // No validation map, accept value
-
+    if (!validOptions) return true;
     return validOptions.includes(value);
   }
 
-  /**
-   * Trigger input event to notify React Hook Form of changes
-   */
   function triggerInputEvent(element) {
     const inputEvent = new Event('input', {bubbles: true});
     const changeEvent = new Event('change', {bubbles: true});
-
     element.dispatchEvent(inputEvent);
     element.dispatchEvent(changeEvent);
   }
 
-  /**
-   * Set input field value and trigger events
-   */
   function setInputValue(element, value) {
     if (!element) return false;
-
     try {
       element.value = value;
       triggerInputEvent(element);
@@ -159,35 +126,22 @@
     }
   }
 
-  /**
-   * Set select field value (works with both native and Radix UI Select)
-   */
   function setSelectValue(fieldName, value) {
     try {
-      // Strategy 1: Find the button trigger element directly (Radix UI Select)
-      // The button has data-field-name attribute set via React Context
       const trigger = document.querySelector(
         `button[data-field-name="${fieldName}"]`,
       );
-
       if (trigger) {
-        // Click to open dropdown
         trigger.click();
-
-        // Wait for dropdown to appear and find the option
         setTimeout(() => {
           const option = document.querySelector(
             `[role="option"][data-value="${value}"]`,
           );
-          if (option) {
-            option.click();
-          }
+          if (option) option.click();
         }, 100);
-
         return true;
       }
 
-      // Strategy 2: Try native select element (fallback)
       const nativeSelect = document.querySelector(
         `select[name="${fieldName}"]`,
       );
@@ -203,18 +157,12 @@
     }
   }
 
-  /**
-   * Set radio button value (works with both native and Radix UI RadioGroup)
-   */
   function setRadioValue(fieldName, value) {
     try {
-      // Strategy 1: Try Radix UI RadioGroup (via data-field-name)
       const radioGroup = document.querySelector(
         `[data-field-name="${fieldName}"]`,
       );
-
       if (radioGroup) {
-        // Find the radio item with the specific value
         const radioItem = radioGroup.querySelector(
           `button[role="radio"][value="${value}"]`,
         );
@@ -224,11 +172,9 @@
         }
       }
 
-      // Strategy 2: Try native radio input (fallback)
       const radioButton = document.querySelector(
         `input[type="radio"][name="${fieldName}"][value="${value}"]`,
       );
-
       if (radioButton) {
         radioButton.checked = true;
         triggerInputEvent(radioButton);
@@ -241,18 +187,12 @@
     }
   }
 
-  /**
-   * Set DatePicker value (custom component)
-   */
   function setDatePickerValue(fieldName, value) {
     try {
-      // Find DatePicker by data-field-name
       const datePicker = document.querySelector(
         `[data-field-name="${fieldName}"]`,
       );
-
       if (datePicker) {
-        // Find the input field inside DatePicker
         const input = datePicker.querySelector('input[type="text"]');
         if (input) {
           input.value = value;
@@ -260,19 +200,14 @@
           return true;
         }
       }
-
       return false;
     } catch (error) {
       return false;
     }
   }
 
-  /**
-   * Set textarea value and trigger events
-   */
   function setTextareaValue(element, value) {
     if (!element) return false;
-
     try {
       element.value = value;
       triggerInputEvent(element);
@@ -286,9 +221,6 @@
   // MAIN POPULATION FUNCTION
   // ============================================================================
 
-  /**
-   * Populate form with extracted data
-   */
   function populateForm(extractedData) {
     const result = {
       success: true,
@@ -304,10 +236,8 @@
       return result;
     }
 
-    // Process each field
     for (const [fieldName, fieldValue] of Object.entries(extractedData)) {
       try {
-        // Skip null/undefined/empty values
         if (
           fieldValue === null ||
           fieldValue === undefined ||
@@ -329,7 +259,6 @@
           continue;
         }
 
-        // Skip read-only/auto-fill fields
         if (config.readOnly) {
           result.details[fieldName] = {
             status: 'skipped',
@@ -341,7 +270,6 @@
         let success = false;
         let formattedValue = fieldValue;
 
-        // Format date fields
         if (config.format === 'DD-MM-YYYY') {
           formattedValue = formatDateToDDMMYYYY(fieldValue);
           if (!formattedValue) {
@@ -349,16 +277,14 @@
           }
         }
 
-        // Validate select/radio values
         if (config.validate) {
           if (!validateSelectValue(fieldName, formattedValue)) {
             throw new Error(
-              `Invalid value for ${fieldName}: ${formattedValue}. Expected one of: ${VALIDATION_MAPS[fieldName].join(', ')}`,
+              `Invalid value for ${fieldName}: ${formattedValue}`,
             );
           }
         }
 
-        // Find field element (try both strategies)
         let formElement = document.querySelector(`[name="${fieldName}"]`);
         if (!formElement) {
           formElement = document.querySelector(
@@ -366,18 +292,15 @@
           );
         }
 
-        // Populate based on field type
         if (config.type === 'radio') {
           success = setRadioValue(fieldName, formattedValue);
         } else if (config.type === 'select') {
           success = setSelectValue(fieldName, formattedValue);
         } else if (config.type === 'date' && fieldName === 'date') {
-          // Special handling for DatePicker component (appointment date)
           success = setDatePickerValue(fieldName, formattedValue);
         } else if (config.type === 'textarea') {
           success = setTextareaValue(formElement, formattedValue);
         } else {
-          // Text, email, tel, number, date (birthDate uses Input)
           success = setInputValue(formElement, formattedValue);
         }
 
@@ -397,11 +320,7 @@
           attemptedValue: fieldValue,
           error: error.message,
         });
-
-        result.details[fieldName] = {
-          status: 'failed',
-          error: error.message,
-        };
+        result.details[fieldName] = {status: 'failed', error: error.message};
       }
     }
 
@@ -409,37 +328,17 @@
   }
 
   // ============================================================================
-  // PARSE INPUT AND EXECUTE
+  // EXECUTE
   // ============================================================================
 
   try {
-    // Get input from Apple Shortcuts via arguments[0]
-    let extractedData = arguments[0];
-
-    // Parse if string
-    if (typeof extractedData === 'string') {
-      extractedData = JSON.parse(extractedData);
-    }
-
-    if (!extractedData) {
-      completion(
-        JSON.stringify({
-          success: false,
-          error: 'No data provided',
-        }),
-      );
-      return;
-    }
-
-    const result = populateForm(extractedData);
-    completion(JSON.stringify(result));
+    const result = populateForm(PATIENT_DATA);
+    completion(result);
   } catch (error) {
-    completion(
-      JSON.stringify({
-        success: false,
-        error: error.message,
-        timestamp: new Date().toISOString(),
-      }),
-    );
+    completion({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
   }
 })();

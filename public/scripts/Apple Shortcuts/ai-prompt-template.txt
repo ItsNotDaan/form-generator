@@ -34,11 +34,13 @@ bsn: 9 digits (optional)
 postalCode: Dutch format (e.g., "1234 AB")
   Search: "Postcode:", "Postal code", "Postcode", "Zipcode", "ZIP", "PLZ", "Postcodeplaats", "Woonplaats", "Adres:"
 
-houseNumber: May include letters/dashes
-  Search: "Huisnummer:", "House number", "Huisnr:", "Straatnummer", "Nummer:", "No.", "Nr.", "Address number"
+houseNumber: May include letters/dashes (numbers and letters only, no street name)
+    Search: "Huisnummer:", "House number", "Huisnr:", "Straatnummer", "Nummer:", "No.", "Nr.", "Address number"
+    Pattern: Extract only digits and letters (e.g., "42", "42b", "42 b", "42-B"), exclude street names
 
-address: Street and number
-  Search: "Adres:", "Address", "Straat:", "Street", "Straatnaam", "Strasse", "Rue", "Straat Huisnummer"
+address: Street
+  Search: "Adres:", "Address", "Straat:", "Street", "Straatnaam", "Strasse", "Rue"
+  Pattern: Only extracts the name of the street. Exclude houseNumber
 
 city: City name
   Search: "Stad:", "City", "Plaats:", "Town", "Woonplaats", "Gemeente", "Gemeente:", "Gemeente name", "Locality"
@@ -60,17 +62,11 @@ specialist: Doctor's name
 
 medicalIndication: Structured medical information (optional, extract as much as possible)
   Format as: "Diagnose: [main diagnosis]\nToelichting op diagnose: [detailed explanation]\nAnatomische eigenschappen: [anatomical properties]\nDoel schoenvoorziening: [goal of orthopedic footwear]"
-  
   Search for Diagnose: "Diagnose:", "Diagnosis", "Indicatie:", "Indication", "Klinische diagnose", "Primaire diagnose"
-  
   Search for Toelichting: "Toelichting op diagnose:", "Toelichting:", "Uitgebreide diagnose:", clinical descriptions, full medical context, laterality (links/rechts/bilateraal), status descriptions (e.g., "status na neuropatisch ulcus"), severity indicators (e.g., "Simm's 3")
-  
   Search for Anatomische eigenschappen: "Anatomische eigenschappen:", "Anatomie:", "Bevindingen:", "Afwijkingen:", look for terms like: sensibiliteitsstoornis, huidafwijking, kwetsbare huid, voetvormafwijking, hamertenen, hallux valgus, klauwtenen, mobiliteitsbeperkingen, circulatiestoornissen
-  
   Search for Doel schoenvoorziening: "Doel schoenvoorziening:", "Doel:", "Behandeldoel:", "Indicatie voor:", look for terms like: ontlasten, ondersteunen, beschermen, adequate pasvorm, correctie, stabilisatie, pijnreductie
-  
   Example format: "Diagnose: Hallux valgus bilateraal\nKlinisch beeld: pijn op eerste metatarsokoppelinggewricht bilateraal, beperkte mobiliteit, loop afwijking\nVoetafwijkingen: hallux valgus bilateral 30 graden, relatieve plantaire druk verhoging onder metatarskoppelingen\nDoel: pijnreductie, correctie voethouding, normalisatie drukpatroon"
-  
   Note: If specific sections are not found, extract only the main diagnosis.
 
 date: Today's date (DD-MM-YYYY)
@@ -91,9 +87,12 @@ Return the data that looks like this JSON but then with the OCR data input. SO D
   "bsn": "123456789",
   "postalCode": "1234 AB",
   "houseNumber": "42 b",
+  "address": "Benjaminstraat",
+  "city": "Amsterdam"
   "phoneOne": "+31612345678",
+  "phoneTwo": "+31612345678",
   "email": "patient@example.com",
   "insurance": "VGZ",
   "specialist": "Dr. M. Jansen (POD)",
-  "medicalIndication": "Diagnose: Pes planus acquisitus met overbelastingssyndroom\nKlinisch beeld: pijn ondervoet links, verminderde boogvormige voetstructuur, moeilijkheid bij staan en lopen\nVoetafwijkingen: ingestorte mediale boog links, pronatie van calcaneus, abductie van voorvoet\nDoel: plantaire ondersteuning, voetstructuur stabilisering, pijnverlichtend"
+  "medicalIndication": "Diagnose: Pes planus acquisitus met overbelastingssyndroom\nKlinisch beeld: pijn ondervoet links, verminderde boogvormige voetstructuur, moeilijkheid bij staan en lopen\nVoetafwijkingen: ingestorte mediale boog links, pronatie van calcaneus, abductie van voorvoet\nDoel: plantaire ondersteuning, voetstructuur stabilisering, pijnverlichtend",
 }
