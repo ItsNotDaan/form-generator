@@ -75,7 +75,8 @@ export function DatePicker({
   error = false,
   disabled,
   className = 'w-full',
-}: DatePickerProps) {
+  ...props
+}: DatePickerProps & Record<string, any>) {
   const [open, setOpen] = React.useState(false);
   const [month, setMonth] = React.useState<Date | undefined>(value);
   const [inputValue, setInputValue] = React.useState(formatDate(value));
@@ -86,7 +87,10 @@ export function DatePicker({
   }, [value]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div
+      className="flex flex-col gap-2"
+      data-field-name={props['data-field-name']}
+    >
       {label && <Label className="px-1">{label}</Label>}
       <div className="relative w-full">
         <Input

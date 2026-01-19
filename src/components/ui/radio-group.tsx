@@ -1,17 +1,16 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import { Circle } from 'lucide-react';
+import {Circle} from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import {cn} from '@/lib/utils';
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
->(({ className, ...props }, ref) => {
+>(({className, ...props}, ref) => {
   return (
     <RadioGroupPrimitive.Root
       className={cn(
-
         // Minimum width is w-2/3, but if content is larger, use w-max
         'min-w-3/4',
         'w-max',
@@ -19,7 +18,9 @@ const RadioGroup = React.forwardRef<
         // Other existing classes
         'grid gap-2',
 
-        className)}
+        className,
+      )}
+      data-field-name={props['data-field-name' as keyof typeof props]}
       {...props}
       ref={ref}
     />
@@ -30,10 +31,10 @@ RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(({ className, ...props }, ref) => {
+>(({className, ...props}, ref) => {
   // Always forward aria-invalid as a string and set aria-[invalid=true] for Tailwind
   let ariaInvalid = props['aria-invalid'];
-  let rest = { ...props };
+  let rest = {...props};
   if (ariaInvalid !== undefined) {
     rest['aria-invalid'] = ariaInvalid ? 'true' : undefined;
   }
@@ -63,4 +64,4 @@ const RadioGroupItem = React.forwardRef<
 });
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 
-export { RadioGroup, RadioGroupItem };
+export {RadioGroup, RadioGroupItem};

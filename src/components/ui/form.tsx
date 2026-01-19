@@ -105,7 +105,8 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({...props}, ref) => {
-  const {error, formItemId, formDescriptionId, formMessageId} = useFormField();
+  const {error, formItemId, formDescriptionId, formMessageId, name} =
+    useFormField();
 
   return (
     <Slot
@@ -117,6 +118,7 @@ const FormControl = React.forwardRef<
           : `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
+      data-field-name={name}
       {...props}
     />
   );

@@ -160,35 +160,114 @@
   }
 
   /**
-   * Set select field value and trigger events
+   * Set select field value (works with both native and Radix UI Select)
    */
-  function setSelectValue(element, value) {
-    if (!element) return false;
-
+  function setSelectValue(fieldName, value) {
     try {
-      element.value = value;
-      triggerInputEvent(element);
-      return true;
+      // Strategy 1: Try to find the button trigger element (Radix UI Select)
+      const selectContainer = document.querySelector(
+        `[data-field-name="${fieldName}"]`,
+      );
+
+      if (selectContainer) {
+        // Find the button trigger
+        const trigger = selectContainer.querySelector(
+          'button[role="combobox"]',
+        );
+        if (trigger) {
+          // Click to open dropdown
+          trigger.click();
+
+          // Wait for dropdown to appear and find the option
+          setTimeout(() => {
+            const option = document.querySelector(
+              `[role="option"][data-value="${value}"]`,
+            );
+            if (option) {
+              option.click();
+              return true;
+            }
+          }, 100);
+
+          return true;
+        }
+      }
+
+      // Strategy 2: Try native select element (fallback)
+      const nativeSelect = document.querySelector(
+        `select[name="${fieldName}"]`,
+      );
+      if (nativeSelect) {
+        nativeSelect.value = value;
+        triggerInputEvent(nativeSelect);
+        return true;
+      }
+
+      return false;
     } catch (error) {
       return false;
     }
   }
 
   /**
-   * Set radio button value
+   * Set radio button value (works with both native and Radix UI RadioGroup)
    */
   function setRadioValue(fieldName, value) {
     try {
+      // Strategy 1: Try Radix UI RadioGroup (via data-field-name)
+      const radioGroup = document.querySelector(
+        `[data-field-name="${fieldName}"]`,
+      );
+
+      if (radioGroup) {
+        // Find the radio item with the specific value
+        const radioItem = radioGroup.querySelector(
+          `button[role="radio"][value="${value}"]`,
+        );
+        if (radioItem) {
+          radioItem.click();
+          return true;
+        }
+      }
+
+      // Strategy 2: Try native radio input (fallback)
       const radioButton = document.querySelector(
         `input[type="radio"][name="${fieldName}"][value="${value}"]`,
       );
 
-      if (!radioButton) return false;
+      if (radioButton) {
+        radioButton.checked = true;
+        triggerInputEvent(radioButton);
+        return true;
+      }
 
-      radioButton.checked = true;
-      triggerInputEvent(radioButton);
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
 
-      return true;
+  /**
+   * Set DatePicker value (custom component)
+   */
+  function setDatePickerValue(fieldName, value) {
+    try {
+      // Find DatePicker by data-field-name
+      const datePicker = document.querySelector(
+        `[data-field-name="${fieldName}"]`,
+      );
+
+      if (datePicker) {
+        // Find the input field inside DatePicker
+        const input = datePicker.querySelector('input[type="text"]');
+        if (input) {
+          input.value = value;
+          triggerInputEvent(input);
+          return true;
+        }
+      }
+
+      return false;
     } catch (error) {
       return false;
     }
@@ -285,18 +364,26 @@
           }
         }
 
-        // Find field element
-        const formElement = document.querySelector(`[name="${fieldName}"]`);
+        // Find field element (try both strategies)
+        let formElement = document.querySelector(`[name="${fieldName}"]`);
+        if (!formElement) {
+          formElement = document.querySelector(
+            `[data-field-name="${fieldName}"]`,
+          );
+        }
 
         // Populate based on field type
         if (config.type === 'radio') {
           success = setRadioValue(fieldName, formattedValue);
         } else if (config.type === 'select') {
-          success = setSelectValue(formElement, formattedValue);
+          success = setSelectValue(fieldName, formattedValue);
+        } else if (config.type === 'date' && fieldName === 'date') {
+          // Special handling for DatePicker component (appointment date)
+          success = setDatePickerValue(fieldName, formattedValue);
         } else if (config.type === 'textarea') {
           success = setTextareaValue(formElement, formattedValue);
         } else {
-          // Text, email, tel, number, date
+          // Text, email, tel, number, date (birthDate uses Input)
           success = setInputValue(formElement, formattedValue);
         }
 

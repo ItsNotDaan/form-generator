@@ -308,25 +308,15 @@
 
   /**
    * STRATEGY A (PRIMARY): Find field by name attribute
-   * Used by React Hook Form - most reliable method
+   * Used by React Hook Form Input components - most reliable for text inputs
    * Example: document.querySelector('input[name="clientName"]')
    */
 
   /**
-   * STRATEGY B (ALTERNATIVE FALLBACK):
-   * If form fields are updated to include data-ai-field attributes, use this instead:
-   * Example: document.querySelector('[data-ai-field="clientName"]')
-   *
-   * Implementation in new-client/index.tsx:
-   * <Input
-   *   {...field}
-   *   data-ai-field="clientName"
-   *   data-ai-type="text"
-   *   placeholder={t('lastNamePlaceholder')}
-   * />
-   *
-   * Then modify selectFormElement() to check data attribute:
-   * const formElement = document.querySelector(`[data-ai-field="${field.name}"]`);
+   * STRATEGY B (NEW): Find field by data-field-name attribute
+   * Used for custom components (Select, DatePicker, RadioGroup) via FormControl
+   * Example: document.querySelector('[data-field-name="practitionerId"]')
+   * This attribute is automatically added by FormControl component
    */
 
   // ============================================================================
@@ -337,8 +327,9 @@
    * Extract form field metadata from the DOM
    * Verifies fields exist and returns complete metadata
    *
-   * Currently uses STRATEGY A (name attribute)
-   * If needed, can be modified to use STRATEGY B (data-ai-field attribute)
+   * Uses dual strategy:
+   * 1. Check for name attribute (Input fields)
+   * 2. Check for data-field-name attribute (custom components)
    */
   function extractFormMetadata() {
     const metadata = [];
@@ -346,15 +337,15 @@
 
     for (const field of FORM_FIELDS) {
       try {
-        // STRATEGY A: Find field by name attribute (primary)
-        // This works because React Hook Form registers fields with name attributes
+        // STRATEGY A: Find field by name attribute (Input fields)
         let formElement = document.querySelector(`[name="${field.name}"]`);
 
-        // STRATEGY B FALLBACK (if implemented):
-        // Uncomment to use data-ai-field attribute instead
-        // if (!formElement) {
-        //   formElement = document.querySelector(`[data-ai-field="${field.name}"]`);
-        // }
+        // STRATEGY B: Find field by data-field-name attribute (custom components)
+        if (!formElement) {
+          formElement = document.querySelector(
+            `[data-field-name="${field.name}"]`,
+          );
+        }
 
         if (formElement) {
           // Build metadata object
