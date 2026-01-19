@@ -25,7 +25,7 @@
  * - Preserves phone number format as received from AI
  */
 
-(function (formDataInput) {
+(function () {
   // ============================================================================
   // CONFIGURATION & CONSTANTS
   // ============================================================================
@@ -332,7 +332,8 @@
   // ============================================================================
 
   try {
-    let extractedData = formDataInput;
+    // Get input from Apple Shortcuts via arguments[0]
+    let extractedData = arguments[0];
 
     // Parse if string
     if (typeof extractedData === 'string') {
@@ -340,20 +341,24 @@
     }
 
     if (!extractedData) {
-      return JSON.stringify({
-        success: false,
-        error: 'No data provided',
-      });
+      completion(
+        JSON.stringify({
+          success: false,
+          error: 'No data provided',
+        }),
+      );
+      return;
     }
 
-    // Populate and return result
     const result = populateForm(extractedData);
-    return JSON.stringify(result);
+    completion(JSON.stringify(result));
   } catch (error) {
-    return JSON.stringify({
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
+    completion(
+      JSON.stringify({
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      }),
+    );
   }
-})(arguments[0]);
+})();

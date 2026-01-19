@@ -398,20 +398,19 @@
   }
 
   // ============================================================================
-  // RETURN RESULT
+  // RETURN RESULT (Apple Shortcuts Pattern)
   // ============================================================================
 
   try {
     const result = extractFormMetadata();
-
-    // Return as JSON string for Apple Shortcuts compatibility
-    // Apple Shortcuts can parse this and pass to AI
-    return JSON.stringify(result);
+    completion(JSON.stringify(result));
   } catch (error) {
-    return JSON.stringify({
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
+    completion(
+      JSON.stringify({
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      }),
+    );
   }
 })();
