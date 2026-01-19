@@ -272,6 +272,8 @@ export interface IntakeOSBData {
   insoleMidfootCorrection?: string;
   insoleForefootCorrection?: string;
   insoleForefootPad?: string;
+  insolePrice?: number; // Price numeric value
+  insolePriceName?: string; // Price label name
 
   // Supplement (van leest)
   customInsoleIndividualLeft?: boolean;
