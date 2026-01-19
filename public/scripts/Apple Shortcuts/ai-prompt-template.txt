@@ -58,13 +58,20 @@ insurance: Select from list ["Menzis", "Achmea", "VGZ", "CZ", "Salland", "Zorg e
 specialist: Doctor's name
   Search: "Behandelaar:", "Behandelaar (specialisme):", "Specialist:", "Specialist (specialty):", "Arts:", "Doctor:", "Referring doctor", "Verwijzer", "Dr.", "Drs."
 
-medicalIndication: Medical condition/diagnosis/reason for referral (optional, but extract as much detail as possible)
-  Search: "Diagnose:", "Diagnosis", "Indicatie:", "Indication", "Medical indication", "Toelichting op diagnose:", "Aandoening:", "Condition", "Klinische diagnose"
-  Also: "Klachten:", "Complaints", "Symptomen:", "Symptoms", "Reden van verwijzing:", "Reason for referral", "Verwijsreden:", "Aanvraag voor:", "Request for"
-  Also: "Problematiek:", "Problem", "Anamnese:", "Medical history", "Bevindingen:", "Findings", "Conclusie:", "Conclusion"
-  Context: May appear in main body text, description paragraphs, or clinical notes
-  Extract: Include full medical terminology, bilateral/unilateral indicators, severity, location (e.g., "hallux valgus bilateraal", "diabetes mellitus type 2", "chronische lage rugpijn links")
-  Note: Capture complete descriptions including laterality (links/rechts/bilateraal), chronicity (acuut/chronisch), and anatomical details
+medicalIndication: Structured medical information (optional, extract as much as possible)
+  Format as: "Diagnose: [main diagnosis]\nToelichting op diagnose: [detailed explanation]\nAnatomische eigenschappen: [anatomical properties]\nDoel schoenvoorziening: [goal of orthopedic footwear]"
+  
+  Search for Diagnose: "Diagnose:", "Diagnosis", "Indicatie:", "Indication", "Klinische diagnose", "Primaire diagnose"
+  
+  Search for Toelichting: "Toelichting op diagnose:", "Toelichting:", "Uitgebreide diagnose:", clinical descriptions, full medical context, laterality (links/rechts/bilateraal), status descriptions (e.g., "status na neuropatisch ulcus"), severity indicators (e.g., "Simm's 3")
+  
+  Search for Anatomische eigenschappen: "Anatomische eigenschappen:", "Anatomie:", "Bevindingen:", "Afwijkingen:", look for terms like: sensibiliteitsstoornis, huidafwijking, kwetsbare huid, voetvormafwijking, hamertenen, hallux valgus, klauwtenen, mobiliteitsbeperkingen, circulatiestoornissen
+  
+  Search for Doel schoenvoorziening: "Doel schoenvoorziening:", "Doel:", "Behandeldoel:", "Indicatie voor:", look for terms like: ontlasten, ondersteunen, beschermen, adequate pasvorm, correctie, stabilisatie, pijnreductie
+  
+  Example format: "Diagnose: Hallux valgus bilateraal\nKlinisch beeld: pijn op eerste metatarsokoppelinggewricht bilateraal, beperkte mobiliteit, loop afwijking\nVoetafwijkingen: hallux valgus bilateral 30 graden, relatieve plantaire druk verhoging onder metatarskoppelingen\nDoel: pijnreductie, correctie voethouding, normalisatie drukpatroon"
+  
+  Note: If specific sections are not found, extract only the main diagnosis.
 
 date: Today's date (DD-MM-YYYY)
   Search: "Datum:", "Date:", "Measurement date", "Referral date", "Verwijsdatum", "Afspraakdatum", "Appointment date"
@@ -88,5 +95,5 @@ Return the data that looks like this JSON but then with the OCR data input. SO D
   "email": "patient@example.com",
   "insurance": "VGZ",
   "specialist": "Dr. M. Jansen (POD)",
-  "medicalIndication": "hallux valgus bilateraal"
+  "medicalIndication": "Diagnose: Pes planus acquisitus met overbelastingssyndroom\nKlinisch beeld: pijn ondervoet links, verminderde boogvormige voetstructuur, moeilijkheid bij staan en lopen\nVoetafwijkingen: ingestorte mediale boog links, pronatie van calcaneus, abductie van voorvoet\nDoel: plantaire ondersteuning, voetstructuur stabilisering, pijnverlichtend"
 }
