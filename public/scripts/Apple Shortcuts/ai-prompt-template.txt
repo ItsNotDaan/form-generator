@@ -7,6 +7,9 @@ CRITICAL RULES:
 - Omit optional fields if not found
 - Omit fields that cannot be extracted
 
+The OCR text that you must ONLY use:
+[PASTE_OCR_TEXT_HERE]
+
 FIELD EXTRACTION GUIDE:
 
 salutation: "Dhr." | "Mw." | "X."
@@ -55,8 +58,13 @@ insurance: Select from list ["Menzis", "Achmea", "VGZ", "CZ", "Salland", "Zorg e
 specialist: Doctor's name
   Search: "Behandelaar:", "Behandelaar (specialisme):", "Specialist:", "Specialist (specialty):", "Arts:", "Doctor:", "Referring doctor", "Verwijzer", "Dr.", "Drs."
 
-medicalIndication: Medical condition/diagnosis (optional)
+medicalIndication: Medical condition/diagnosis/reason for referral (optional, but extract as much detail as possible)
   Search: "Diagnose:", "Diagnosis", "Indicatie:", "Indication", "Medical indication", "Toelichting op diagnose:", "Aandoening:", "Condition", "Klinische diagnose"
+  Also: "Klachten:", "Complaints", "Symptomen:", "Symptoms", "Reden van verwijzing:", "Reason for referral", "Verwijsreden:", "Aanvraag voor:", "Request for"
+  Also: "Problematiek:", "Problem", "Anamnese:", "Medical history", "Bevindingen:", "Findings", "Conclusie:", "Conclusion"
+  Context: May appear in main body text, description paragraphs, or clinical notes
+  Extract: Include full medical terminology, bilateral/unilateral indicators, severity, location (e.g., "hallux valgus bilateraal", "diabetes mellitus type 2", "chronische lage rugpijn links")
+  Note: Capture complete descriptions including laterality (links/rechts/bilateraal), chronicity (acuut/chronisch), and anatomical details
 
 date: Today's date (DD-MM-YYYY)
   Search: "Datum:", "Date:", "Measurement date", "Referral date", "Verwijsdatum", "Afspraakdatum", "Appointment date"
@@ -67,11 +75,7 @@ location: ["Flevoziekenhuis", "Flevomotion", "Nijverheidsweg Noord", "Meander MC
 practitionerId: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"]
   Search: "Daan Heetkamp"=p3, "Michel Heetkamp"=p4, practitioner name, doctor name
 
-===== PASTE YOUR OCR TEXT HERE =====
-[OCR_TEXT]
-===== END OF OCR TEXT =====
-
-Return the data that looks like this JSON but then with the OCR data input (only include fields found):
+Return the data that looks like this JSON but then with the OCR data input. SO DON'T COPY OR USE DATA FROM THIS JSON (only include fields found otherwise skip that field):
 {
   "salutation": "Dhr.",
   "initials": "J.P.",
