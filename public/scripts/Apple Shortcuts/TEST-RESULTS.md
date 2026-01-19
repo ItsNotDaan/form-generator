@@ -20,6 +20,7 @@
 **Initial Problem**: 5 fields (practitionerId, date, location, salutation, insurance) could not be found because React custom components (Select, DatePicker, RadioGroup) didn't have `name` attributes in the DOM.
 
 **Solution Implemented**:
+
 1. ✅ Added `data-field-name` attribute to `FormControl` component
 2. ✅ Updated Select, DatePicker, and RadioGroup to forward the attribute
 3. ✅ Updated extraction script to check both `name` and `data-field-name` selectors
@@ -30,12 +31,14 @@
 ### Technical Changes Made
 
 **React Components** (`src/components/ui/`):
+
 - `form.tsx`: Added `data-field-name={name}` to FormControl
 - `select.tsx`: Forwards `data-field-name` to Select root
 - `date-picker.tsx`: Forwards `data-field-name` to DatePicker wrapper
 - `radio-group.tsx`: Forwards `data-field-name` to RadioGroup root
 
 **JavaScript Scripts** (`public/scripts/Apple Shortcuts/`):
+
 - `extract-form-data.js`: Dual selector strategy (name + data-field-name)
 - `populate-form-data.js`: Component-specific population logic:
   - Select: Click trigger button → find option → click
@@ -353,6 +356,7 @@ vs working Input field:
 **Output**: JSON with all field definitions
 
 **Key Features**:
+
 - ✅ **Dual selector strategy**:
   1. Checks `[name="fieldName"]` for Input fields
   2. Checks `[data-field-name="fieldName"]` for custom components
@@ -413,6 +417,7 @@ vs working Input field:
 ```
 
 **Key Features**:
+
 - ✅ **Component-specific population**:
   - **Select**: Clicks trigger button → waits for dropdown → clicks option
   - **RadioGroup**: Finds radio button → clicks it
@@ -937,12 +942,14 @@ This is documented in script comments for future modifications.
 ### 🧪 Testing Required (On iPad)
 
 **Step 1: Test Extraction**
+
 1. Open form page: https://itsnotdaan.github.io/form-generator/new-client/
 2. Run `extract-form-data.js` via Apple Shortcuts
 3. **Expected**: Should find 18/18 fields (not 13/18)
 4. **Verify**: No errors in JSON output
 
 **Step 2: Test Population**
+
 1. Use AI to extract data from sample referral
 2. Run `populate-form-data.js` with extracted JSON
 3. **Expected**: Should populate 16 fields (18 - 2 read-only)
