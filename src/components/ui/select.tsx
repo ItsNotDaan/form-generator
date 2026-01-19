@@ -6,13 +6,21 @@ import {CheckIcon, ChevronDownIcon, ChevronUpIcon} from 'lucide-react';
 
 import {cn} from '@/lib/utils';
 
+// Context to pass data-field-name to SelectTrigger
+const SelectContext = React.createContext<string | undefined>(undefined);
+
 function Select({...props}: React.ComponentProps<typeof SelectPrimitive.Root>) {
+  const dataFieldName = props['data-field-name' as keyof typeof props] as
+    | string
+    | undefined;
+
+  // Extract data-field-name from props to avoid passing it to SelectPrimitive.Root
+  const {['data-field-name']: _, ...restProps} = props as any;
+
   return (
-    <SelectPrimitive.Root
-      data-slot="select"
-      data-field-name={props['data-field-name' as keyof typeof props]}
-      {...props}
-    />
+    <SelectContext.Provider value={dataFieldName}>
+      <SelectPrimitive.Root data-slot="select" {...restProps} />
+    </SelectContext.Provider>
   );
 }
 
@@ -36,6 +44,8 @@ function SelectTrigger({
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
   size?: 'sm' | 'default';
 }) {
+  const dataFieldName = React.useContext(SelectContext);
+
   // Always forward aria-invalid as a string and set aria-[invalid=true] for Tailwind
   let ariaInvalid = props['aria-invalid'];
   let rest = {...props};
@@ -46,6 +56,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       data-size={size}
+      data-field-name={dataFieldName}
       className={cn(
         [
           // Standard border/ring classes

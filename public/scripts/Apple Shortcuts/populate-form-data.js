@@ -164,33 +164,27 @@
    */
   function setSelectValue(fieldName, value) {
     try {
-      // Strategy 1: Try to find the button trigger element (Radix UI Select)
-      const selectContainer = document.querySelector(
-        `[data-field-name="${fieldName}"]`,
+      // Strategy 1: Find the button trigger element directly (Radix UI Select)
+      // The button has data-field-name attribute set via React Context
+      const trigger = document.querySelector(
+        `button[data-field-name="${fieldName}"]`,
       );
 
-      if (selectContainer) {
-        // Find the button trigger
-        const trigger = selectContainer.querySelector(
-          'button[role="combobox"]',
-        );
-        if (trigger) {
-          // Click to open dropdown
-          trigger.click();
+      if (trigger) {
+        // Click to open dropdown
+        trigger.click();
 
-          // Wait for dropdown to appear and find the option
-          setTimeout(() => {
-            const option = document.querySelector(
-              `[role="option"][data-value="${value}"]`,
-            );
-            if (option) {
-              option.click();
-              return true;
-            }
-          }, 100);
+        // Wait for dropdown to appear and find the option
+        setTimeout(() => {
+          const option = document.querySelector(
+            `[role="option"][data-value="${value}"]`,
+          );
+          if (option) {
+            option.click();
+          }
+        }, 100);
 
-          return true;
-        }
+        return true;
       }
 
       // Strategy 2: Try native select element (fallback)

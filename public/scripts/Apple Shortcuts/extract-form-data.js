@@ -330,6 +330,8 @@
    * Uses dual strategy:
    * 1. Check for name attribute (Input fields)
    * 2. Check for data-field-name attribute (custom components)
+   *    - For Select: looks for button[data-field-name]
+   *    - For DatePicker/RadioGroup: looks for container[data-field-name]
    */
   function extractFormMetadata() {
     const metadata = [];
@@ -341,6 +343,8 @@
         let formElement = document.querySelector(`[name="${field.name}"]`);
 
         // STRATEGY B: Find field by data-field-name attribute (custom components)
+        // Select components use button[data-field-name]
+        // DatePicker/RadioGroup use div[data-field-name]
         if (!formElement) {
           formElement = document.querySelector(
             `[data-field-name="${field.name}"]`,
