@@ -1,140 +1,73 @@
-# AI Prompt Template for Doctor's Referral OCR Extraction
-
-## Overview
-This prompt is designed to be used with a local AI model to extract form field data from OCR text of a doctor's referral. The AI will receive:
-1. The form field metadata (from the JavaScript extraction script)
-2. OCR text from a doctor's referral image
-3. Instructions on how to map OCR data to form fields
-
-The AI should output a JSON object with extracted values.
-
----
-
-## Instructions for iPad User
-
-1. **Copy this prompt** into your local AI model on your iPad
-2. **Replace the `[FORM_METADATA]` section** with the output from `extract-form-data.js` (run the extraction script first)
-3. **Replace the `[OCR_TEXT]` section** with the OCR text from your doctor's referral image
-4. **Run the AI** and capture the JSON output
-5. **Copy the JSON output** back to Apple Shortcuts to populate the form
-
----
-
-## Complete Prompt Template
-
-```
-You are an expert data extraction assistant. Your job is to extract patient information from a Dutch doctor's referral (verwijzing) OCR text and map it to specific form fields.
-
-You will receive:
-1. A list of form fields with their properties (name, type, available options)
-2. OCR text from a doctor's referral
-3. Instructions on which fields to fill
-
-Your task: Extract relevant information from the OCR text and return a JSON object where each key is a form field name and each value is the extracted data.
+You are an expert data extraction assistant for Dutch doctor's referrals. Extract patient information from OCR text and map to form fields.
 
 CRITICAL RULES:
-- Return ONLY valid JSON - no additional text, explanations, or markdown
-- For select/radio fields, return ONLY values from the provided options list
-- For dates, always use DD-MM-YYYY format with leading zeros (e.g., "02-06-1936" not "2-6-1936")
-- Return null or omit optional fields if data is not found in the OCR text
-- If a field cannot be found or extracted, omit it from the JSON
-- Be thorough in your search - look for multiple possible field names
+- Return ONLY valid JSON - no extra text
+- For select/radio fields, use ONLY the provided options
+- Dates: DD-MM-YYYY format with leading zeros (e.g., "02-06-1936" not "2-6-1936")
+- Omit optional fields if not found
+- Omit fields that cannot be extracted
 
-AVAILABLE FORM FIELDS:
-[FORM_METADATA]
+FIELD EXTRACTION GUIDE:
 
-OCR TEXT FROM REFERRAL:
-[OCR_TEXT]
+salutation: "Dhr." | "Mw." | "X."
+  Search: "Dhr.", "Dhr ", "Heer", "Mevrouw", "Mw.", "Mw ", "Mr.", "Ms.", "Sir", "Madam"
+  Location: Start of letter, "Geachte..." line, before patient name
 
-EXTRACTION RULES BY FIELD TYPE:
+initials: Patient initials (e.g., "J.P.")
+  Search: single letters with dots "J.P.", "JA", "J A", "J. A.", "J A.", ".J.P", "initials", "voornamen"
+  Pattern: before last name "J.P. van Dijk"
 
-SALUTATION (Must choose one):
-- Look for: "Dhr.", "Mw.", "X." or equivalent Dutch terms (Heer, Mevrouw)
-- Options: ["Mw.", "Dhr.", "X."]
-- Search patterns: At the start of letter, in "Geachte..." line, or "Dhr./Mw. [Name]"
+clientName: Last name
+  Search: "Naam:", "Name:", "Last name", "Achternaam:", "Familienaam:", "Surname", "Family name"
+  Pattern: after initials, in "van Dijk, J.P." format, after "Geachte"
 
-INITIALS (text field):
-- Look for: First initials of patient (typically 1-3 letters followed by periods)
-- Search patterns: "W.J.", "J.A.", "J.P." format - often appears with or before last name
-- Example from referral: "J.P. van Dijk" → initials = "J.P."
+birthDate: DD-MM-YYYY
+  Search: "Geboortedatum:", "Date of birth", "DOB", "Birth date", "Geboorte datum", "Birthdate", "Leeftijd", "Age"
+  Convert: "15-3-1975" → "15-03-1975"
 
-LAST NAME / CLIENT NAME (text field):
-- Look for: Surname or last name of patient
-- Search patterns: 
-  - "Naam:" or "Name:" field
-  - After initials (e.g., "J.P. van Dijk")
-  - "van Dijk, J.P." format (extract "van Dijk")
-  - Pattern: After salutation (Dhr. J.P. van Dijk)
+bsn: 9 digits (optional)
+  Search: "BSN:", "BSN ", "Burgerservicenummer:", "BSN-nummer", "Citizen service number", "Tax number", "Belastingnummer"
 
-BIRTH DATE (date field, DD-MM-YYYY):
-- Look for: "Geboortedatum:", "Date of birth:", "DOB"
-- Search patterns: Dates in DD-MM-YYYY or DD-M-YYYY format
-- Example from referral: "15-3-1975" → "15-03-1975"
-- CRITICAL: Always convert to DD-MM-YYYY with leading zeros
+postalCode: Dutch format (e.g., "1234 AB")
+  Search: "Postcode:", "Postal code", "Postcode", "Zipcode", "ZIP", "PLZ", "Postcodeplaats", "Woonplaats", "Adres:"
 
-BSN (number field, optional):
-- Look for: "BSN:", "Burgerservicenummer:", "Tax number"
-- Format: 9 digits, may contain spaces or hyphens (remove them)
-- This is often optional - OK if not found
+houseNumber: May include letters/dashes
+  Search: "Huisnummer:", "House number", "Huisnr:", "Straatnummer", "Nummer:", "No.", "Nr.", "Address number"
 
-POSTAL CODE & HOUSE NUMBER (text fields):
-- Postal Code: Look for "Postcode:", "Postal code:" - Dutch format (e.g., "1234 AB")
-- House Number: Look for "Huisnummer:", "House number:" - may include letters/dashes (e.g., "42 b", "29-304")
-- Search patterns: Usually in "Adres:" or address section
+address: Street and number
+  Search: "Adres:", "Address", "Straat:", "Street", "Straatnaam", "Strasse", "Rue", "Straat Huisnummer"
 
-CITY (text field):
-- Look for: "Stad:", "City:", "Plaats:" - extract after postal code or in address section
-- Example from referral: "1234 AB Utrecht" → city = "Utrecht"
-- NOTE: This field is read-only and auto-filled - but extract if found for reference
+city: City name
+  Search: "Stad:", "City", "Plaats:", "Town", "Woonplaats", "Gemeente", "Gemeente:", "Gemeente name", "Locality"
 
-STREET/ADDRESS (text field):
-- Look for: "Straat:", "Street:", "Adres:" line
-- Example from referral: "Kerkstraat 42 b"
-- NOTE: This field is read-only and auto-filled by address API - skip if street extraction fails
+phoneOne: Telephone number
+  Search: "Telefoonnummer:", "Telefoon:", "Phone:", "Tel:", "Tel.", "Telephone", "Telefoonnr.", "Contact number", "Mobile", "Mobiel"
 
-PHONE ONE & PHONE TWO (tel fields):
-- Look for: "Telefoonnummer:", "Phone:", "Tel:", "Telephone number"
-- Format: Accept any format (spaces, dashes, etc.) - e.g., "030-123 45 67" or "+31612345678"
-- Typically one main phone number found
-- Second phone is less common - only if multiple numbers present
+phoneTwo: Second phone (optional)
+  Search: "Telefoonnummer 2", "Phone 2", "Tel 2", "Alternatief", "Alternate phone", "Additional", "Second phone", "Tweede telefoon"
 
-EMAIL (email field):
-- Look for: "Email:", "E-mail:", "Mail:", "Emailadres:"
-- Format: Standard email format (user@domain.com)
+email: Standard format
+  Search: "Email:", "E-mail:", "Mail:", "Emailadres:", "E-mailadres", "Email address", "@", "contact@"
 
-INSURANCE (select field):
-- Look for: "Verzekering:", "Insurance:", "Insurance company:" "Verzekeraar:"
-- Search patterns: Health insurance company name
-- Options: ["Menzis", "Achmea", "VGZ", "CZ", "Salland", "Zorg en Zekerheid", "ASR", "DSW", "ONVZ", "Caresq"]
-- The referral often shows insurance company with policy info
-- CRITICAL: Match EXACTLY to one of the options, or look for similar matches
+insurance: Select from list ["Menzis", "Achmea", "VGZ", "CZ", "Salland", "Zorg en Zekerheid", "ASR", "DSW", "ONVZ", "Caresq"]
+  Search: "Verzekering:", "Verzekeraar:", "Insurance:", "Zorgverzekeraar", "Zorg verzekeraar", "Insurance company", "Health insurance", "Ziektekosten"
 
-SPECIALIST (text field):
-- Look for: "Behandelaar (specialisme):", "Specialist:", "Referring doctor:", "Arts:"
-- Format: Doctor's name, often with specialization
-- Example from referral: "Dr. M. Jansen (POD)" or "Dr. J. Smith"
-- Search patterns: Look for names with titles (Dr., drs., etc.)
+specialist: Doctor's name
+  Search: "Behandelaar:", "Behandelaar (specialisme):", "Specialist:", "Specialist (specialty):", "Arts:", "Doctor:", "Referring doctor", "Verwijzer", "Dr.", "Drs."
 
-MEDICAL INDICATION (textarea field, optional):
-- Look for: "Diagnose:", "Diagnosis:", "Indicatie:", "Medical indication:", "Indication:"
-- Format: Multi-line text describing medical condition
-- Search patterns: Look for medical/diagnostic text sections
-- Example from referral: "hallux valgus bilateraal, Simm's 2, status na operatieve correctie rechts..."
+medicalIndication: Medical condition/diagnosis (optional)
+  Search: "Diagnose:", "Diagnosis", "Indicatie:", "Indication", "Medical indication", "Toelichting op diagnose:", "Aandoening:", "Condition", "Klinische diagnose"
 
-MEASUREMENT DATE & LOCATION:
-- Measurement Date: Today's date or referenced date (use today if from OCR scan)
-- Location: Try to match hospital/clinic name to available options ["Flevoziekenhuis", "Flevomotion", "Nijverheidsweg Noord", "Meander MC", "Amsterdam MC", "Holten", "Markelo"]
-- Example: "Medisch Centrum Utrecht" → "Amsterdam MC" (closest match)
+date: Today's date (DD-MM-YYYY)
+  Search: "Datum:", "Date:", "Measurement date", "Referral date", "Verwijsdatum", "Afspraakdatum", "Appointment date"
 
-PRACTITIONER ID:
-- This is typically NOT found in patient referrals
-- Options: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"]
-- If found: "Daan Heetkamp"=p3, "Michel Heetkamp"=p4, etc.
-- Usually OK to leave empty if not found
+location: ["Flevoziekenhuis", "Flevomotion", "Nijverheidsweg Noord", "Meander MC", "Amsterdam MC", "Holten", "Markelo"]
+  Search: "Locatie:", "Location:", "Ziekenhuis:", "Hospital", "Kliniek:", "Clinic", "Behandelplaats", "Center name"
 
-EXPECTED OUTPUT:
-Return a JSON object like this (only include fields where data was found):
+practitionerId: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"]
+  Search: "Daan Heetkamp"=p3, "Michel Heetkamp"=p4, practitioner name, doctor name
 
+RETURN ONLY THIS JSON (include only fields found):
 {
   "salutation": "Dhr.",
   "initials": "J.P.",
@@ -147,96 +80,5 @@ Return a JSON object like this (only include fields where data was found):
   "email": "patient@example.com",
   "insurance": "VGZ",
   "specialist": "Dr. M. Jansen (POD)",
-  "medicalIndication": "hallux valgus bilateraal, Simm's 2, status na operatieve correctie rechts"
+  "medicalIndication": "hallux valgus bilateraal"
 }
-
-BEGIN EXTRACTION:
-```
-
----
-
-## Example: Using the Prompt with Sample OCR
-
-If you have the OCR text from the referral example in the guide, replace `[OCR_TEXT]` with:
-
-```
-MEDISCH CENTRUM UTRECHT
-UMC Utrecht
-"IE
-Dhr. J.P. van Dijk
-Kerkstraat 42 b
-1234 AB UTRECHT
-
-Patiëntgegevens
-Patiëntnummer: 98765432
-Naam: van Dijk, J.P.
-Adres: Kerkstraat 42 b
-Telefoonnummer: +31612345678
-Geboortedatum: 15-3-1975
-BSN: 123456789
-Verzekering: VGZ
-
-Behandelaar (specialisme): Dr. M. Jansen (POD)
-Kenmerk: 150126.8421
-Geachte heer J.P. van Dijk,
-Schoenrecept
-
-Diagnose: hallux valgus
-Toelichting op diagnose: hallux valgus bilateraal, Simm's 2, status na operatieve correctie rechts. Voorvoetproblemen, niet veilig te beschoeien in confectie of OSB
-```
-
----
-
-## Expected Output for Example
-
-The AI should return something like:
-
-```json
-{
-  "salutation": "Dhr.",
-  "initials": "J.P.",
-  "clientName": "van Dijk",
-  "birthDate": "15-03-1975",
-  "bsn": "123456789",
-  "postalCode": "1234 AB",
-  "houseNumber": "42 b",
-  "phoneOne": "+31612345678",
-  "insurance": "VGZ",
-  "specialist": "Dr. M. Jansen (POD)",
-  "medicalIndication": "hallux valgus bilateraal, Simm's 2, status na operatieve correctie rechts. Voorvoetproblemen, niet veilig te beschoeien in confectie of OSB"
-}
-```
-
----
-
-## Workflow Summary
-
-1. ✅ Run `extract-form-data.js` → Get form field metadata JSON
-2. ✅ Copy this prompt and insert the metadata
-3. ✅ Take photo of doctor's referral → Get OCR text
-4. ✅ Insert OCR text into prompt
-5. ✅ Run AI model
-6. ✅ Copy AI output (JSON)
-7. ✅ Use JSON in Apple Shortcuts to populate form via `populate-form-data.js`
-
----
-
-## Troubleshooting
-
-**AI returns invalid JSON:**
-- Check for stray text or markdown formatting
-- Ensure all strings are quoted with double quotes
-- Validate JSON format at: jsonlint.com
-
-**Fields not extracted:**
-- AI might not recognize field names - provide multiple search patterns
-- Some fields might genuinely not be in the referral
-- Review OCR quality - may need better photo
-
-**Wrong date format:**
-- Ensure AI converts all dates to DD-MM-YYYY
-- Add explicit conversion instructions if needed
-
-**Wrong insurance company:**
-- Check exact spelling against options list
-- If unsure, leave empty rather than guessing
