@@ -67,7 +67,11 @@ location: ["Flevoziekenhuis", "Flevomotion", "Nijverheidsweg Noord", "Meander MC
 practitionerId: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"]
   Search: "Daan Heetkamp"=p3, "Michel Heetkamp"=p4, practitioner name, doctor name
 
-RETURN ONLY THIS JSON (include only fields found):
+===== PASTE YOUR OCR TEXT HERE =====
+[OCR_TEXT]
+===== END OF OCR TEXT =====
+
+Return the data that looks like this JSON but then with the OCR data input (only include fields found):
 {
   "salutation": "Dhr.",
   "initials": "J.P.",
