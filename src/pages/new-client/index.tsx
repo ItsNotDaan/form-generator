@@ -391,7 +391,7 @@ const FormNewClientPage = () => {
                       control={form.control}
                       name="initials"
                       render={({field}) => (
-                        <FormItem>
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Input
                               {...field}
@@ -411,7 +411,7 @@ const FormNewClientPage = () => {
                       control={form.control}
                       name="clientName"
                       render={({field}) => (
-                        <FormItem className="w-full">
+                        <FormItem className="w-2/3">
                           <FormControl>
                             <Input
                               {...field}

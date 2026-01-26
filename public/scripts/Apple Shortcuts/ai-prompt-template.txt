@@ -17,9 +17,9 @@ salutation: "Dhr." | "Mw." | "X."
   Search: "Dhr.", "Dhr ", "Heer", "Mevrouw", "Mw.", "Mw ", "Mr.", "Ms.", "Sir", "Madam"
   Location: Start of letter, "Geachte..." line, before patient name
 
-initials: Patient initials (e.g., "J.P." or "J")
-  Search: single or multiple letters with dots "J.P.", "J", "JA", "J A", "J. A.", "J A.", ".J.P", "initials", "voornamen"
-  Pattern: before last name "J.P. van Dijk" or "J van Dijk"
+initials: Patient initials (e.g, "J" or "J.P.")
+  Search: single: "J" or multiple letters with dots  "J.P.", "JA", "J A", "J. A.", "J A.", ".J.P", "initials", "voornamen"
+  Pattern: before last name "J van Dijk", "van Dijk, J" or "J.P. van Dijk" or "van Dijk, J.P."
 
 clientName: Last name
   Search: "Naam:", "Name:", "Last name", "Achternaam:", "Familienaam:", "Surname", "Family name"
@@ -41,10 +41,10 @@ address: Street name only
     Example: "Benjaminstraat 42 b" → "Benjaminstraat"
 
 houseNumber: Digits and letters only
-    Search: "Huisnummer:", "House number", "Huisnr:", "Nr."
-    Rule: Extract ONLY numbers and letters (a-z, A-Z). No street names, no punctuation except hyphens and spaces.
-    Examples: "42" | "42b" | "42 b" | "42-B" | "3-C"
-    Invalid: "Benjaminstraat 42" | "42, Amsterdam"
+  Search: "Huisnummer:", "House number", "Huisnr:", "Nr."
+  Rule: Extract ONLY numbers and letters (a-z, A-Z). No street names, no punctuation except hyphens and spaces.
+  Examples: "42" | "42b" | "42 b" | "42-B" | "3-C" | "Benjaminstraat 42 b" → "42b"
+  Invalid: "Benjaminstraat 42" | "42, Amsterdam"
 
 city: City name
   Search: "Stad:", "City", "Plaats:", "Town", "Woonplaats", "Gemeente", "Gemeente:", "Gemeente name", "Locality"

@@ -20,7 +20,7 @@
     salutation: {type: 'radio'},
     initials: {type: 'text'},
     clientName: {type: 'text'},
-    birthDate: {type: 'date', format: 'DD-MM-YYYY'},
+    birthDate: {type: 'text', format: 'DD-MM-YYYY'},
     bsn: {type: 'number'},
     postalCode: {type: 'text'},
     houseNumber: {type: 'text'},
@@ -53,8 +53,7 @@
         if (year.length === 2) {
             year = parseInt(year) > 30 ? '19' + year : '20' + year;
         }
-        return `${day}-${month}-${year}`;
-      }
+        return `${year}${month}${day}`;     }
       return '';
     } catch (e) { return ''; }
   }
