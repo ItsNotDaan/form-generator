@@ -486,6 +486,8 @@ export interface CheckFoliepasData {
 
   // Rits
   zipperType?: string;
+  zipperColor?: string;
+  zipperPlacement?: string;
   zipperMedial?: boolean;
   zipperLateral?: boolean;
 
@@ -495,14 +497,17 @@ export interface CheckFoliepasData {
   specialExtraLeather?: boolean;
   specialOther?: string;
 
-  // Randtype
-  edgeType?: string;
-  edgeColor?: string;
+  // Randtype - Cascading selection
+  edgeTypeMain?: string; // E.V.A., Lederrand, Rubberrand
+  edgeTypeModel?: string; // Rand 3, 380, 28, etc.
+  edgeTypeColor?: string; // Color name
+  edgeTypeColorCode?: string; // Color code for backend
 
-  // Zooltype
-  soleType?: string;
-  gumliteNumber?: string;
-  gumliteColor?: string;
+  // Zooltype - Cascading selection
+  soleTypeCategory?: string; // Vibram, Onderwerken vrij
+  soleTypeModel?: string; // 1100 profielzool, 2644 gumlitezool, etc.
+  soleTypeColor?: string; // Color name
+  soleTypeOther?: string; // For "Anders" option
 
   // Koolstofverstijving
   carbonStiffeningType?: string;

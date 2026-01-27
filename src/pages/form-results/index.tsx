@@ -192,6 +192,12 @@ const FormResultsPage = () => {
       );
     }
 
+    // Always add CheckFoliepas data (independent of intakeType)
+    // This is a supplementary form that can be filled after any intake type
+    result.checkFoliepas = applyTranslations(
+      normalizeCheckFoliepasData(formData.checkFoliepas),
+    );
+
     // Generate medical codes if applicable
     if (INTAKE_TYPES_WITH_CODES.has(formData.client.intakeType)) {
       const {codes, warnings, generalBaseCode} = generateCodes(

@@ -776,3 +776,334 @@ export const SUPPLEMENT_TYPE_OPTIONS = [
     translationKey: 'lateralAndMedial',
   },
 ];
+
+// ============================================================================
+// Check foliepas - Kleur en Model opties
+// ============================================================================
+
+/** Zoolranden - Structured data for sole edges with types, models, and colors */
+export interface ZoolRandKleur {
+  kleur: string;
+  code?: string;
+}
+
+export interface ZoolRandModel {
+  model: string;
+  gegevens?: {
+    notitie?: string;
+  };
+  kleuren: ZoolRandKleur[];
+}
+
+export interface ZoolRandType {
+  naam: string;
+  modellen: ZoolRandModel[];
+}
+
+export const ZOOL_RANDEN: ZoolRandType[] = [
+  {
+    naam: 'E.V.A.',
+    modellen: [
+      {
+        model: 'Rand 3 met kant',
+        kleuren: [
+          {kleur: 'Zand', code: '05'},
+          {kleur: 'Wit', code: '09'},
+          {kleur: 'Beige', code: '17'},
+          {kleur: 'Beige', code: '19'},
+          {kleur: 'Middelbruin', code: '35'},
+          {kleur: 'Taupe', code: '41'},
+          {kleur: 'Moreno', code: '46'},
+          {kleur: 'Grijs', code: '56'},
+          {kleur: 'Lichtgrijs', code: '60'},
+          {kleur: 'Donkerblauw', code: '78'},
+          {kleur: 'Antraciet', code: '80'},
+          {kleur: 'Zwart', code: '81'},
+        ],
+      },
+      {
+        model: 'Rand 12x11',
+        kleuren: [
+          {kleur: 'Wit', code: '09'},
+          {kleur: 'Beige', code: '17'},
+          {kleur: 'Beige', code: '19'},
+          {kleur: 'Taupe', code: '41'},
+          {kleur: 'Moreno', code: '46'},
+          {kleur: 'Grijs', code: '56'},
+          {kleur: 'Donderblauw', code: '78'},
+          {kleur: 'Antreciet', code: '80'},
+          {kleur: 'Zwart', code: '81'},
+        ],
+      },
+      {
+        model: 'Rand 13',
+        kleuren: [
+          {kleur: 'Moreno met grijze stik'},
+          {kleur: 'Zwart met grijze stik'},
+          {kleur: 'Wit met witte stik'},
+        ],
+      },
+    ],
+  },
+  {
+    naam: 'Lederrand',
+    modellen: [
+      {
+        model: '380',
+        gegevens: {
+          notitie: 'Imitatie flexibel',
+        },
+        kleuren: [
+          {kleur: 'Zwart met zwart stiksel', code: '380'},
+          {kleur: 'Zwart met zwart stiksel gekartelt', code: '381'},
+          {kleur: 'Bruin met bruin stiksel', code: '382'},
+          {kleur: 'Bruin met bruin stiksel gekartelt', code: '383'},
+        ],
+      },
+      {
+        model: '500',
+        kleuren: [
+          {kleur: 'Zwart met wit stiksel', code: '500'},
+          {kleur: 'Bruin met wit stiksel', code: '501'},
+          {kleur: 'Naturel met wit stiksel', code: '502'},
+        ],
+      },
+    ],
+  },
+  {
+    naam: 'Rubberrand',
+    modellen: [
+      {
+        model: '28',
+        gegevens: {
+          notitie: 'Imitatie flexibel',
+        },
+        kleuren: [{kleur: 'Middenbruin'}, {kleur: 'Zwart'}],
+      },
+      {
+        model: '47',
+        gegevens: {
+          notitie: 'Dr. Martens',
+        },
+        kleuren: [{kleur: 'Donkerbruin'}, {kleur: 'Zwart'}],
+      },
+    ],
+  },
+];
+
+/** Onderwerken - Structured data for sole types with categories, models, metadata, and colors */
+export interface OnderwerkKleur {
+  kleur: string;
+  code?: string;
+}
+
+export interface OnderwerkModel {
+  model: string;
+  gegevens?: {
+    notitie?: string;
+    zwaarte?: string;
+    zool_dikte?: string;
+    hak_dikte?: string;
+    dikte?: string;
+  };
+  kleuren: OnderwerkKleur[];
+}
+
+export interface OnderwerkCategorie {
+  naam: string;
+  zolen: OnderwerkModel[];
+}
+
+export const ONDERWERKEN: OnderwerkCategorie[] = [
+  {
+    naam: 'Vibram',
+    zolen: [
+      {
+        model: '1100 profielzool',
+        gegevens: {
+          zwaarte: 'Zwaar',
+          zool_dikte: '12 mm',
+          hak_dikte: '20 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}],
+      },
+      {
+        model: '1220 profielzool',
+        gegevens: {
+          zwaarte: 'Zwaar',
+          zool_dikte: '8 mm',
+          hak_dikte: '8 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}, {kleur: 'Honing'}, {kleur: 'Moreno'}],
+      },
+      {
+        model: '2603 gumlitezool',
+        gegevens: {
+          notitie: 'Dr. Martens',
+          zwaarte: 'Licht',
+          zool_dikte: '12 mm',
+          hak_dikte: '23 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}, {kleur: 'Moreno'}],
+      },
+      {
+        model: '2644 gumlitezool',
+        gegevens: {
+          zwaarte: 'Licht',
+          zool_dikte: '6 mm',
+          hak_dikte: '6 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}, {kleur: 'Moreno'}],
+      },
+      {
+        model: '2655 gumlitezool',
+        gegevens: {
+          zwaarte: 'Licht',
+          zool_dikte: '7 mm',
+          hak_dikte: '10 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}, {kleur: 'Moreno'}],
+      },
+      {
+        model: '4855 Newflex zool',
+        gegevens: {
+          zwaarte: 'Licht',
+          zool_dikte: '6 mm',
+          hak_dikte: '6 mm',
+        },
+        kleuren: [{kleur: 'Honing'}, {kleur: 'Zwart'}, {kleur: 'Moreno'}],
+      },
+      {
+        model: 'Mammoth profielzool',
+        gegevens: {
+          notitie: 'Slijtvast zwaarder',
+          zwaarte: 'Zwaar',
+          zool_dikte: '8 mm',
+          hak_dikte: '8 mm',
+        },
+        kleuren: [{kleur: 'Bruin'}, {kleur: 'Zwart'}, {kleur: 'Honing'}],
+      },
+      {
+        model: 'Flensburg PUR profielzool',
+        gegevens: {
+          notitie: 'Werkschoen (Olie en Benzinebestendig + Antistatisch)',
+          zwaarte: 'Licht',
+          zool_dikte: '8 mm',
+          hak_dikte: '24 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}],
+      },
+      {
+        model: 'Kiel profielzool',
+        gegevens: {
+          notitie: 'Werkschoen (Olie en Zuurbestendig + Antistatisch)',
+          zwaarte: 'Licht',
+          zool_dikte: '6 mm',
+          hak_dikte: '11 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}],
+      },
+      {
+        model: 'Lübeck PUR profielzool',
+        gegevens: {
+          notitie:
+            'Werkschoen (Olie en Benzinebestendig + Antistatisch) - Sleehak & CSO Rand',
+          zwaarte: 'Licht',
+          zool_dikte: '9 mm',
+          hak_dikte: '9 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}],
+      },
+      {
+        model: 'Onderwerk Sportflex',
+        gegevens: {
+          notitie: 'Slijtvast / Sneaker',
+          zwaarte: 'Zwaar',
+          zool_dikte: '5,5 mm',
+          hak_dikte: '5,5 mm',
+        },
+        kleuren: [
+          {kleur: 'Bruin'},
+          {kleur: 'Grijs'},
+          {kleur: 'Rood'},
+          {kleur: 'Zwart'},
+          {kleur: 'Oranje'},
+          {kleur: 'Groen'},
+          {kleur: 'Geel'},
+          {kleur: 'Wit'},
+          {kleur: 'Blauw'},
+        ],
+      },
+      {
+        model: 'Iztok sportzool',
+        gegevens: {
+          notitie: 'Sportief',
+          zwaarte: 'Medium',
+          zool_dikte: '6,5 mm',
+          hak_dikte: '6,5 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}, {kleur: 'Tri-Color'}],
+      },
+    ],
+  },
+  {
+    naam: 'Onderwerken vrij',
+    zolen: [
+      {
+        model: 'Zoolrubber Lavero flex profielen',
+        gegevens: {
+          notitie: 'Sportief',
+          dikte: '4 mm',
+        },
+        kleuren: [
+          {kleur: 'Rood', code: '102'},
+          {kleur: 'Blauw', code: '103'},
+          {kleur: 'Groen', code: '105'},
+          {kleur: 'Roze', code: '106'},
+        ],
+      },
+      {
+        model: 'Vibram 8316 Mandorlo',
+        gegevens: {
+          notitie: 'Extra Zachte E.V.A. - Huisschoen',
+          zwaarte: 'Super licht',
+          dikte: '6 of 8 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}, {kleur: 'Moreno'}],
+      },
+      {
+        model: 'Zoolrubber Astro Star',
+        gegevens: {
+          notitie: 'Nette schoenen - Onder MyFoot',
+          zwaarte: 'Licht',
+          dikte: '4 of 6 mm',
+        },
+        kleuren: [
+          {kleur: 'Zwart', code: '81'},
+          {kleur: 'Wit', code: '09'},
+          {kleur: 'Beige', code: '17'},
+          {kleur: 'Beige', code: '19'},
+          {kleur: 'Taupe', code: '41'},
+          {kleur: 'Donkerbruin', code: '46'},
+          {kleur: 'Donkergrijs', code: '56'},
+          {kleur: 'Rood', code: '89'},
+          {kleur: 'Blauw', code: '352'},
+        ],
+      },
+      {
+        model: 'Zoolrubber PowerGrip',
+        gegevens: {
+          notitie: 'Werkschoen (Olie en Zuurbestendig + Antistatisch)',
+          dikte: '4,7 of 6,5 mm',
+        },
+        kleuren: [{kleur: 'Zwart'}],
+      },
+    ],
+  },
+];
+
+/** Zipper placement options */
+export const ZIPPER_PLACEMENT_OPTIONS = [
+  {label: 'Langs Ringbies', value: 'Langs Ringbies'},
+  {label: 'Zie leest', value: 'Zie leest'},
+];

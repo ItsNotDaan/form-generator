@@ -37,6 +37,9 @@ import {
   WALKING_SOLE_OPTIONS,
   Side,
   LAST_CORRECTION_OPTIONS,
+  ZOOL_RANDEN,
+  ONDERWERKEN,
+  ZIPPER_PLACEMENT_OPTIONS,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
@@ -44,7 +47,7 @@ import {
   setClientData,
 } from '@/domain/store/slices/formData';
 
-import {ChevronRight} from 'lucide-react';
+import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
@@ -152,6 +155,8 @@ const FormCheckFoliepasPage = () => {
     zipperType: z
       .enum(['none', 'functionalNylon', 'decorativeNylon'] as const)
       .optional(),
+    zipperColor: z.string().optional(),
+    zipperPlacement: z.string().optional(),
     zipperMedial: z.boolean().optional(),
     zipperLateral: z.boolean().optional(),
     // Special features
@@ -159,15 +164,16 @@ const FormCheckFoliepasPage = () => {
     specialLaceLoop: z.boolean().optional(),
     specialExtraLeather: z.boolean().optional(),
     specialOther: z.string().optional(),
-    // Edge type and color
-    edgeType: z.string().optional(),
-    edgeColor: z.string().optional(),
-    // Sole type
-    soleType: z
-      .enum(['gumlite', 'leather', 'antiSlip', 'leatherAntiSlip'] as const)
-      .optional(),
-    gumliteNumber: z.string().optional(),
-    gumliteColor: z.string().optional(),
+    // Edge type - Cascading
+    edgeTypeMain: z.string().optional(),
+    edgeTypeModel: z.string().optional(),
+    edgeTypeColor: z.string().optional(),
+    edgeTypeColorCode: z.string().optional(),
+    // Sole type - Cascading
+    soleTypeCategory: z.string().optional(),
+    soleTypeModel: z.string().optional(),
+    soleTypeColor: z.string().optional(),
+    soleTypeOther: z.string().optional(),
     // Carbon stiffening
     carbonStiffeningType: z
       .enum(['none', 'prefab', 'custom'] as const)
@@ -271,17 +277,22 @@ const FormCheckFoliepasPage = () => {
       hooksNumber: '',
       hooksAmount: '',
       zipperType: 'none',
+      zipperColor: '',
+      zipperPlacement: 'Langs Ringbies',
       zipperMedial: false,
       zipperLateral: false,
       specialMedialVelcro: false,
       specialLaceLoop: false,
       specialExtraLeather: false,
       specialOther: '',
-      edgeType: '',
-      edgeColor: '',
-      soleType: 'gumlite',
-      gumliteNumber: '2644',
-      gumliteColor: '',
+      edgeTypeMain: '',
+      edgeTypeModel: '',
+      edgeTypeColor: '',
+      edgeTypeColorCode: '',
+      soleTypeCategory: '',
+      soleTypeModel: '',
+      soleTypeColor: '',
+      soleTypeOther: '',
       carbonStiffeningType: 'none',
       carbonStiffeningLeft: false,
       carbonStiffeningRight: false,
@@ -326,7 +337,6 @@ const FormCheckFoliepasPage = () => {
   const colorOptions = form.watch('colorOptions') || [''];
   const closureType = form.watch('closureType');
   const zipperType = form.watch('zipperType');
-  const soleType = form.watch('soleType');
   const carbonStiffeningType = form.watch('carbonStiffeningType');
   const counterfortType = form.watch('counterfortType');
   const insoleType = form.watch('insoleType');
@@ -395,17 +405,22 @@ const FormCheckFoliepasPage = () => {
         hooksNumber: data.hooksNumber || '',
         hooksAmount: data.hooksAmount || '',
         zipperType: data.zipperType || '',
+        zipperColor: data.zipperColor || '',
+        zipperPlacement: data.zipperPlacement || '',
         zipperMedial: data.zipperMedial || false,
         zipperLateral: data.zipperLateral || false,
         specialMedialVelcro: data.specialMedialVelcro || false,
         specialLaceLoop: data.specialLaceLoop || false,
         specialExtraLeather: data.specialExtraLeather || false,
         specialOther: data.specialOther || '',
-        edgeType: data.edgeType || '',
-        edgeColor: data.edgeColor || '',
-        soleType: data.soleType || '',
-        gumliteNumber: data.gumliteNumber || '',
-        gumliteColor: data.gumliteColor || '',
+        edgeTypeMain: data.edgeTypeMain || '',
+        edgeTypeModel: data.edgeTypeModel || '',
+        edgeTypeColor: data.edgeTypeColor || '',
+        edgeTypeColorCode: data.edgeTypeColorCode || '',
+        soleTypeCategory: data.soleTypeCategory || '',
+        soleTypeModel: data.soleTypeModel || '',
+        soleTypeColor: data.soleTypeColor || '',
+        soleTypeOther: data.soleTypeOther || '',
         carbonStiffeningType: data.carbonStiffeningType || '',
         carbonStiffeningLeft: data.carbonStiffeningLeft || false,
         carbonStiffeningRight: data.carbonStiffeningRight || false,
@@ -949,13 +964,16 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
 
                   {/* Colors */}
-                  {/* 
-                  TODO: Add the number of the color options dynamically to the left of the input field.
-                  */}
                   <FormItemWrapper label={t('colors')}>
                     <div className="grid gap-3 w-2/3">
                       {colorOptions.map((color, index) => (
-                        <div key={index} className="grid grid-cols-[1fr_auto]">
+                        <div
+                          key={index}
+                          className="grid grid-cols-[auto_1fr_auto] gap-2 items-center"
+                        >
+                          <span className="text-sm font-medium text-muted-foreground">
+                            {index + 1}.
+                          </span>
                           <Input
                             placeholder={`${t('colorOption')} ${index + 1}`}
                             value={color}
@@ -1039,14 +1057,6 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
 
                   {/* Zipper */}
-                  {/* 
-                   TODO:
-                   Rits Nylon moet worden Rits Functioneel of Rits Decoratief
-                   Als geselecteerd:
-                    1. Input: Kleur. (niet verplicht)
-                    2. Select: Langs Ringbies (standaard), Zie leest.
-                    Dan Mediaal en/of Lateral
-                  */}
                   <FormItemWrapper label={t('zipper')}>
                     <Select
                       value={zipperType || 'none'}
@@ -1063,44 +1073,90 @@ const FormCheckFoliepasPage = () => {
                       <SelectContent>
                         <SelectItem value="none">{t('noZipper')}</SelectItem>
                         <SelectItem value="functionalNylon">
-                          {t('functionalNylon')}
+                          Rits Functioneel
                         </SelectItem>
                         <SelectItem value="decorativeNylon">
-                          {t('decorativeNylon')}
+                          Rits Decoratief
                         </SelectItem>
                       </SelectContent>
                     </Select>
                     {zipperType && zipperType !== 'none' && (
-                      <div className="grid grid-cols-2 gap-3 pt-4">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="zipper-medial"
-                            checked={form.watch('zipperMedial') || false}
-                            onCheckedChange={checked =>
-                              form.setValue('zipperMedial', !!checked)
-                            }
-                          />
-                          <Label
-                            htmlFor="zipper-medial"
-                            className="font-normal cursor-pointer"
-                          >
-                            {t('medial')}
+                      <div className="space-y-4 pt-4">
+                        {/* Color input (optional) */}
+                        <div className="w-2/3">
+                          <Label htmlFor="zipper-color" className="text-sm">
+                            Kleur (optioneel)
                           </Label>
+                          <Input
+                            id="zipper-color"
+                            placeholder="Kleur"
+                            value={form.watch('zipperColor') || ''}
+                            onChange={e =>
+                              form.setValue('zipperColor', e.target.value)
+                            }
+                            className="mt-2"
+                          />
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="zipper-lateral"
-                            checked={form.watch('zipperLateral') || false}
-                            onCheckedChange={checked =>
-                              form.setValue('zipperLateral', !!checked)
-                            }
-                          />
-                          <Label
-                            htmlFor="zipper-lateral"
-                            className="font-normal cursor-pointer"
-                          >
-                            {t('lateral')}
+                        {/* Placement select */}
+                        <div className="w-2/3">
+                          <Label htmlFor="zipper-placement" className="text-sm">
+                            Plaatsing
                           </Label>
+                          <Select
+                            value={
+                              form.watch('zipperPlacement') || 'Langs Ringbies'
+                            }
+                            onValueChange={v =>
+                              form.setValue('zipperPlacement', v)
+                            }
+                          >
+                            <SelectTrigger className="bg-background! mt-2">
+                              <SelectValue placeholder="Plaatsing" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ZIPPER_PLACEMENT_OPTIONS.map(option => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        {/* Medial/Lateral checkboxes */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="zipper-medial"
+                              checked={form.watch('zipperMedial') || false}
+                              onCheckedChange={checked =>
+                                form.setValue('zipperMedial', !!checked)
+                              }
+                            />
+                            <Label
+                              htmlFor="zipper-medial"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('medial')}
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="zipper-lateral"
+                              checked={form.watch('zipperLateral') || false}
+                              onCheckedChange={checked =>
+                                form.setValue('zipperLateral', !!checked)
+                              }
+                            />
+                            <Label
+                              htmlFor="zipper-lateral"
+                              className="font-normal cursor-pointer"
+                            >
+                              {t('lateral')}
+                            </Label>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -1143,6 +1199,8 @@ const FormCheckFoliepasPage = () => {
                           <Label htmlFor="rings-nr">{t('ringsNumber')}</Label>
                           <Input
                             id="rings-nr"
+                            type="text"
+                            placeholder={t('ringsNumberPlaceholder')}
                             value={form.watch('ringsNumber') || ''}
                             onChange={e =>
                               form.setValue('ringsNumber', e.target.value)
@@ -1155,7 +1213,8 @@ const FormCheckFoliepasPage = () => {
                           </Label>
                           <Input
                             id="rings-amount"
-                            type="number"
+                            type="text"
+                            placeholder={t('ringsAmountPlaceholder')}
                             value={form.watch('ringsAmount') || ''}
                             onChange={e =>
                               form.setValue('ringsAmount', e.target.value)
@@ -1166,6 +1225,8 @@ const FormCheckFoliepasPage = () => {
                           <Label htmlFor="hooks-nr">{t('hooksNumber')}</Label>
                           <Input
                             id="hooks-nr"
+                            type="text"
+                            placeholder={t('hooksNumberPlaceholder')}
                             value={form.watch('hooksNumber') || ''}
                             onChange={e =>
                               form.setValue('hooksNumber', e.target.value)
@@ -1178,7 +1239,8 @@ const FormCheckFoliepasPage = () => {
                           </Label>
                           <Input
                             id="hooks-amount"
-                            type="number"
+                            type="text"
+                            placeholder={t('hooksAmountPlaceholder')}
                             value={form.watch('hooksAmount') || ''}
                             onChange={e =>
                               form.setValue('hooksAmount', e.target.value)
@@ -1253,94 +1315,235 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
-                {/* Edge Type / RandType*/}
-                {/* 
-                   TODO: JOHAN VRAGEN!
-                   1. Hier wil ik een dropdown met standaard randtypes. , CSO, Rubberrand, EVA, etc.
-                   2. Wanneer Rubberrand is geselecteerd zijn de types bvb: 39, 40, 41 enz.
-                   3. Wanneer Rubberrand is geselecteerd, 39 is gekozen, wil ik een select met de kleuren: Donkerbruin, Zwart, Wit, etc.
-                   Deze drie hierboven werken dus door op elkaar. al deze waardes moeten in formData in een soort multiarray kunnen worden gezet/aangepast worden.
-                  */}
-                <FormBlock columns={2} dividers={false} title={t('edgeType')}>
-                  <FormItemWrapper label={t('edgeTypeLabel')}>
-                    <Input
-                      id="edge-type"
-                      value={form.watch('edgeType') || ''}
-                      onChange={e => form.setValue('edgeType', e.target.value)}
-                      placeholder="CSO Rand / 12x11"
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                  <FormItemWrapper label={t('edgeColor')}>
-                    <Input
-                      id="edge-color"
-                      value={form.watch('edgeColor') || ''}
-                      onChange={e => form.setValue('edgeColor', e.target.value)}
-                      placeholder="Zwart"
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* Sole Type */}
-                {/* 
-                   TODO:
-                   Meer zooltypes toevoegen:  
-                    - Gumlite
-                    - (Norah geeft)
-                    - Leather Anti-Slip
-                    - Anders (Hier een inputveld tonen voor omschrijving)
-                  */}
-                <FormBlock columns={3} dividers={false} title={t('soleType')}>
-                  <FormItemWrapper label={t('soleType')}>
+                {/* Edge Type / RandType - Cascading Selection */}
+                <FormBlock columns={3} dividers={false} title="Randtype">
+                  {/* Main Edge Type */}
+                  <FormItemWrapper label="Type">
                     <Select
-                      value={soleType || 'gumlite'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'soleType',
-                          v as 'gumlite' | 'leather' | 'antiSlip',
-                        )
-                      }
+                      value={form.watch('edgeTypeMain') || ''}
+                      onValueChange={v => {
+                        form.setValue('edgeTypeMain', v);
+                        // Reset dependent fields
+                        form.setValue('edgeTypeModel', '');
+                        form.setValue('edgeTypeColor', '');
+                        form.setValue('edgeTypeColorCode', '');
+                      }}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
-                        <SelectValue placeholder={t('soleType')} />
+                        <SelectValue placeholder="Selecteer type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="gumlite">{t('gumlite')}</SelectItem>
-                        <SelectItem value="leatherAntiSlip">
-                          {t('leatherAntiSlip')}
-                        </SelectItem>
+                        {ZOOL_RANDEN.map(type => (
+                          <SelectItem key={type.naam} value={type.naam}>
+                            {type.naam}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItemWrapper>
 
-                  {soleType === 'gumlite' && (
-                    <>
-                      <FormItemWrapper label={t('gumliteNumber')}>
-                        <Input
-                          id="gumlite-number"
-                          value={form.watch('gumliteNumber') || ''}
-                          onChange={e =>
-                            form.setValue('gumliteNumber', e.target.value)
-                          }
-                          placeholder="2644"
-                          className="w-2/3"
-                        />
-                      </FormItemWrapper>
-                      <FormItemWrapper label={t('color')}>
-                        <Input
-                          id="gumlite-color"
-                          value={form.watch('gumliteColor') || ''}
-                          onChange={e =>
-                            form.setValue('gumliteColor', e.target.value)
-                          }
-                          placeholder="Zwart"
-                          className="w-2/3"
-                        />
-                      </FormItemWrapper>
-                    </>
-                  )}
-                  {/* If not gumlite, these columns are empty, or you can add spacers if needed */}
+                  {/* Model Selection */}
+                  <FormItemWrapper label="Model">
+                    <Select
+                      value={form.watch('edgeTypeModel') || ''}
+                      onValueChange={v => {
+                        form.setValue('edgeTypeModel', v);
+                        // Reset color when model changes
+                        form.setValue('edgeTypeColor', '');
+                        form.setValue('edgeTypeColorCode', '');
+                      }}
+                      disabled={!form.watch('edgeTypeMain')}
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder="Selecteer model" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ZOOL_RANDEN.find(
+                          t => t.naam === form.watch('edgeTypeMain'),
+                        )?.modellen.map(model => (
+                          <SelectItem key={model.model} value={model.model}>
+                            {model.model}
+                            {model.gegevens?.notitie &&
+                              ` (${model.gegevens.notitie})`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
+                  {/* Color Selection */}
+                  <FormItemWrapper label="Kleur">
+                    <Select
+                      value={form.watch('edgeTypeColor') || ''}
+                      onValueChange={v => {
+                        form.setValue('edgeTypeColor', v);
+                        // Find and set the color code
+                        const selectedType = ZOOL_RANDEN.find(
+                          t => t.naam === form.watch('edgeTypeMain'),
+                        );
+                        const selectedModel = selectedType?.modellen.find(
+                          m => m.model === form.watch('edgeTypeModel'),
+                        );
+                        const selectedColor = selectedModel?.kleuren.find(
+                          k => k.kleur === v,
+                        );
+                        form.setValue(
+                          'edgeTypeColorCode',
+                          selectedColor?.code || '',
+                        );
+                      }}
+                      disabled={!form.watch('edgeTypeModel')}
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder="Selecteer kleur" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ZOOL_RANDEN.find(
+                          t => t.naam === form.watch('edgeTypeMain'),
+                        )
+                          ?.modellen.find(
+                            m => m.model === form.watch('edgeTypeModel'),
+                          )
+                          ?.kleuren.map(kleur => (
+                            <SelectItem key={kleur.kleur} value={kleur.kleur}>
+                              {kleur.kleur}
+                              {kleur.code && ` (${kleur.code})`}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Sole Type - Cascading Selection */}
+                <FormBlock columns={3} dividers={false} title="Zooltype">
+                  {/* Category Selection */}
+                  <FormItemWrapper label="Categorie">
+                    <Select
+                      value={form.watch('soleTypeCategory') || ''}
+                      onValueChange={v => {
+                        form.setValue('soleTypeCategory', v);
+                        // Reset dependent fields
+                        form.setValue('soleTypeModel', '');
+                        form.setValue('soleTypeColor', '');
+                        form.setValue('soleTypeOther', '');
+                      }}
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder="Selecteer categorie" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ONDERWERKEN.map(c => (
+                          <SelectItem key={c.naam} value={c.naam}>
+                            {c.naam}
+                          </SelectItem>
+                        ))}
+                        <SelectItem value="Anders">Anders</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
+                  {/* Model Selection */}
+                  <FormItemWrapper label="Model">
+                    {form.watch('soleTypeCategory') === 'Anders' ? (
+                      <Input
+                        placeholder="Beschrijving"
+                        value={form.watch('soleTypeOther') || ''}
+                        onChange={e =>
+                          form.setValue('soleTypeOther', e.target.value)
+                        }
+                        className="w-2/3"
+                      />
+                    ) : (
+                      <Select
+                        value={form.watch('soleTypeModel') || ''}
+                        onValueChange={v => {
+                          form.setValue('soleTypeModel', v);
+                          // Reset color when model changes
+                          form.setValue('soleTypeColor', '');
+                        }}
+                        disabled={!form.watch('soleTypeCategory')}
+                      >
+                        <SelectTrigger className="bg-background! w-2/3">
+                          <SelectValue placeholder="Selecteer model" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ONDERWERKEN.find(
+                            c => c.naam === form.watch('soleTypeCategory'),
+                          )?.zolen.map(zool => (
+                            <SelectItem key={zool.model} value={zool.model}>
+                              {zool.model}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </FormItemWrapper>
+
+                  {/* Color Selection */}
+                  <FormItemWrapper label="Kleur">
+                    <Select
+                      value={form.watch('soleTypeColor') || ''}
+                      onValueChange={v => form.setValue('soleTypeColor', v)}
+                      disabled={
+                        !form.watch('soleTypeModel') ||
+                        form.watch('soleTypeCategory') === 'Anders'
+                      }
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder="Selecteer kleur" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ONDERWERKEN.find(
+                          c => c.naam === form.watch('soleTypeCategory'),
+                        )
+                          ?.zolen.find(
+                            z => z.model === form.watch('soleTypeModel'),
+                          )
+                          ?.kleuren.map(kleur => (
+                            <SelectItem key={kleur.kleur} value={kleur.kleur}>
+                              {kleur.kleur}
+                              {kleur.code && ` (${kleur.code})`}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+
+                  {/* This should be filling the whole bottom */}
+                  <div className="col-span-3 items-center justify-center flex mt-2">
+                    {/* Display metadata if available */}
+                    {form.watch('soleTypeModel') &&
+                      (() => {
+                        const selectedCat = ONDERWERKEN.find(
+                          c => c.naam === form.watch('soleTypeCategory'),
+                        );
+                        const selectedZool = selectedCat?.zolen.find(
+                          z => z.model === form.watch('soleTypeModel'),
+                        );
+                        if (selectedZool?.gegevens) {
+                          const gegevens = selectedZool.gegevens;
+                          const infoItems = [
+                            gegevens.notitie && `Notities: ${gegevens.notitie}`,
+                            gegevens.zwaarte && `Gewicht: ${gegevens.zwaarte}`,
+                            gegevens.zool_dikte &&
+                              `Zool: ${gegevens.zool_dikte}`,
+                            gegevens.hak_dikte &&
+                              `Hak dikte: ${gegevens.hak_dikte}`,
+                            gegevens.dikte && `Dikte dikte: ${gegevens.dikte}`,
+                          ].filter(Boolean);
+                          return (
+                            <div className="flex flex-row items-center rounded-md p-2 gap-2 bg-primary/10 w-2/3">
+                              <Info className="h-5 w-5 text-primary" />
+                              <p className="text-sm text-foreground whitespace-pre-wrap">
+                                {infoItems.join('\n')}
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+                  </div>
                 </FormBlock>
 
                 {/* Carbon Stiffening & Toe Options */}
@@ -1591,7 +1794,7 @@ const FormCheckFoliepasPage = () => {
                           v as 'buildUp' | 'wedge' | 'block',
                         );
                         // Set default heights based on heel type
-                        const edgeTypeValue = form.watch('edgeType');
+                        const edgeTypeValue = form.watch('edgeTypeModel');
                         let defaultHeight = '2';
 
                         if (v === 'buildUp') {
@@ -1840,6 +2043,7 @@ const FormCheckFoliepasPage = () => {
                           <Input
                             id="shoring-left-mm"
                             type="number"
+                            placeholder={t('shoringMm')}
                             value={form.watch('shoringLeftMm') || ''}
                             onChange={e =>
                               form.setValue('shoringLeftMm', e.target.value)
@@ -1884,6 +2088,7 @@ const FormCheckFoliepasPage = () => {
                           <Input
                             id="shoring-right-mm"
                             type="number"
+                            placeholder={t('shoringMm')}
                             value={form.watch('shoringRightMm') || ''}
                             onChange={e =>
                               form.setValue('shoringRightMm', e.target.value)
