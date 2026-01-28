@@ -407,142 +407,117 @@ export interface CheckFoliepasData {
   readingCorrectionAfterFoilFit?: string;
   readingCorrectionAfterLiningShoe?: string;
 
-  // Shaft height in cm
+  //------- Foliepas aanmerkingen ---------//
+
+  // Shaft heights
   shaftHeightLeft?: string;
   shaftHeightRight?: string;
 
-  // Beenlengte verschil (functieonderzoek)
+  // Leg length difference
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
 
-  // Enclosure/padding - same structure as VLOS
+  // Shaft opening
+  shaftOpeningWidth?: string;
+
+  //-------- Voeringschoen opties -------//
+  // Enclosure (Omsluiting)
   enclosureLeft?: Record<string, boolean>;
   enclosureRight?: Record<string, boolean>;
   enclosureLeftMm?: Record<string, string>;
   enclosureRightMm?: Record<string, string>;
 
-  // Openstand schacht
-  shaftOpeningWidth?: string;
-
-  // Supplement schoring
-  customInsoleShoringLeftEnabled?: boolean;
-  customInsoleShoringRightEnabled?: boolean;
-  customInsoleShoringLeftType?: string;
-  customInsoleShoringRightType?: string;
-
-  // Zoolverstijving
-  soleReinforcementEnabled?: boolean;
-  soleReinforcementLeft?: boolean;
-  soleReinforcementRight?: boolean;
-
-  // Sluiting en tong
-  closureType?: string;
-  entryPoint?: string;
-  tonguePaddingEnabled?: boolean;
-  fixedTongueEnabled?: boolean;
-
-  // Haksoort en hoogte
-  heelTypeLeft?: string;
-  heelTypeRight?: string;
-  heelHeightLeft?: string;
-  heelHeightRight?: string;
-
-  // Hak aanpassingen (schoring) en ezelsoor
-  heelWedgeLeftEnabled?: boolean;
-  heelWedgeRightEnabled?: boolean;
-  heelWedgeLeftType?: string;
-  heelWedgeRightType?: string;
+  // Donkey ear (Ezelsoor)
   donkeyEarLeftEnabled?: boolean;
   donkeyEarRightEnabled?: boolean;
   donkeyEarLeftType?: string;
   donkeyEarRightType?: string;
 
-  // Hakafrondingen
-  heelRoundingLeftEnabled?: boolean;
-  heelRoundingRightEnabled?: boolean;
-  heelRoundingLeftHeight?: string;
-  heelRoundingLeftLength?: string;
-  heelRoundingRightHeight?: string;
-  heelRoundingRightLength?: string;
+  // Carbon stiffening Lining Shoe (Voeringschoen)
+  carbonStiffeningLiningShoeLeft?: boolean;
+  carbonStiffeningLiningShoeRight?: boolean;
 
-  // Loopzool
-  rockerSoleType?: string;
-
-  // New fields for Kleur en Model section
+  //--------- Kleur en Model opties ---------//
   showColorAndModel?: boolean;
+
+  // Model type
   modelType?: string;
   modelText?: string;
+
+  // Colors
   colorOptions?: string[];
 
-  // Tong polsteren en polsterkraag
+  // Tongue padding
   tonguePaddingMm?: string;
+
+  // Padding collar
   paddingCollarMm?: string;
 
-  // Closure details
-  ringsNumber?: string;
-  ringsAmount?: string;
-  hooksNumber?: string;
-  hooksAmount?: string;
-
-  // Rits
+  // Zipper
   zipperType?: string;
   zipperColor?: string;
   zipperPlacement?: string;
   zipperMedial?: boolean;
   zipperLateral?: boolean;
 
-  // Bijzonderheden
+  // Closure details
+  closureType?: string;
+  ringsNumber?: string;
+  ringsAmount?: string;
+  hooksNumber?: string;
+  hooksAmount?: string;
+
+  // Special features
   specialMedialVelcro?: boolean;
   specialLaceLoop?: boolean;
   specialExtraLeather?: boolean;
   specialOther?: string;
 
-  // Randtype - Cascading selection
-  edgeTypeMain?: string; // E.V.A., Lederrand, Rubberrand
-  edgeTypeModel?: string; // Rand 3, 380, 28, etc.
-  edgeTypeColor?: string; // Color name
-  edgeTypeColorCode?: string; // Color code for backend
+  // Edge type - Cascading selection
+  edgeTypeMain?: string;
+  edgeTypeModel?: string;
+  edgeTypeColor?: string;
+  edgeTypeColorCode?: string;
 
-  // Zooltype - Cascading selection
-  soleTypeCategory?: string; // Vibram, Onderwerken vrij
-  soleTypeModel?: string; // 1100 profielzool, 2644 gumlitezool, etc.
-  soleTypeColor?: string; // Color name
-  soleTypeOther?: string; // For "Anders" option
+  // Sole type - Cascading selection
+  soleTypeCategory?: string;
+  soleTypeModel?: string;
+  soleTypeColor?: string;
+  soleTypeOther?: string;
 
-  // Koolstofverstijving Voeringschoen (Lining Shoe) - comes first
-  carbonStiffeningLiningShoeLeft?: boolean;
-  carbonStiffeningLiningShoeRight?: boolean;
-
-  // Koolstofverstijving Schoen (Shoe)
+  // Carbon Stiffening Shoe
   carbonStiffeningShoeLeft?: boolean;
   carbonStiffeningShoeRight?: boolean;
 
-  // Neusopties
+  // Toe options
   toeOptionsType?: string;
 
-  // Contrefort
+  // Lining options (Voeringsopties)
+  liningType?: string;
+
+  // Counterfort
   counterfortType?: string;
   counterfortOther?: string;
 
-  // Binnenzool
+  // Insole
   insoleType?: string;
   insoleOther?: string;
 
-  // Zoolkantuitpoetsen
+  // Sole edge polish
   soleEdgePolishType?: string;
   soleEdgePolishOther?: string;
 
-  // Maakwijze
+  // Construction method
   constructionMethodType?: string;
   constructionMethodOther?: string;
 
-  // Hakmodel
+  // Heel model
   heelModelType?: string;
   heelBuildUpMaterial?: string;
   heelWedgeType?: string;
   heelBlockCoreCoating?: boolean;
 
-  // Schoring
+  // Shoring
   shoringLeftType?: string;
   shoringLeftMm?: string;
   shoringRightType?: string;

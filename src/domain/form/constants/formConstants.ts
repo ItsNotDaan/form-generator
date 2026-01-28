@@ -781,6 +781,29 @@ export const SUPPLEMENT_TYPE_OPTIONS = [
 // Check foliepas - Kleur en Model opties
 // ============================================================================
 
+// Voeringopties (lining options)
+export type LiningOption =
+  | 'Leather lining'
+  | 'On-steam lining'
+  | 'Diabetic lining';
+export const LINING_OPTIONS = [
+  {
+    label: 'Leather lining',
+    value: 'Leather lining',
+    translationKey: 'leatherLining',
+  },
+  {
+    label: 'On-steam lining',
+    value: 'On-steam lining',
+    translationKey: 'onSteamLining',
+  },
+  {
+    label: 'Diabetic lining',
+    value: 'Diabetic lining',
+    translationKey: 'diabeticLining',
+  },
+];
+
 /** Zoolranden - Structured data for sole edges with types, models, and colors */
 export interface ZoolRandKleur {
   kleur: string;

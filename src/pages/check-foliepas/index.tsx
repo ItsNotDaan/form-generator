@@ -28,18 +28,13 @@ import {
   ENCLOSURE_OPTIONS,
   EnclosureOption,
   SHAFT_OPENING_OPTIONS,
-  SUPPLEMENT_TYPE_OPTIONS,
-  YES_NO_OPTIONS,
-  CLOSURE_OPTIONS,
-  HEEL_TYPE_OPTIONS,
-  HEEL_WEDGE_TYPE_OPTIONS,
   DONKEY_EAR_TYPE_OPTIONS,
-  WALKING_SOLE_OPTIONS,
   Side,
   LAST_CORRECTION_OPTIONS,
   ZOOL_RANDEN,
   ONDERWERKEN,
   ZIPPER_PLACEMENT_OPTIONS,
+  LINING_OPTIONS,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
@@ -64,93 +59,61 @@ const FormCheckFoliepasPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
-    // Side selection
+    // Side Selection
     side: z.enum(['left', 'right', 'both'] as const),
 
-    // Reading corrections
+    // Reading Corrections
     readingCorrectionAfterFoilFit: z.string().optional(),
     readingCorrectionAfterLiningShoe: z.string().optional(),
 
-    // Enclosure (Omsluiting)
+    // Foliepas Aanmerkingen - Shaft Heights
+    shaftHeightLeft: z.string().optional(),
+    shaftHeightRight: z.string().optional(),
+
+    // Foliepas Aanmerkingen - Leg Length Difference
+    legLengthDifferenceLeft: z.string().optional(),
+    legLengthDifferenceRight: z.string().optional(),
+
+    // Foliepas Aanmerkingen - Shaft Opening
+    shaftOpeningWidth: z.string().optional(),
+
+    // Voeringschoen Opties - Enclosure (Omsluiting)
     enclosureLeft: z.record(z.string(), z.boolean()),
     enclosureRight: z.record(z.string(), z.boolean()),
     enclosureLeftMm: z.record(z.string(), z.string()),
     enclosureRightMm: z.record(z.string(), z.string()),
 
-    // Shaft heights
-    shaftHeightLeft: z.string().optional(),
-    shaftHeightRight: z.string().optional(),
-
-    // Leg length difference
-    legLengthDifferenceLeft: z.string().optional(),
-    legLengthDifferenceRight: z.string().optional(),
-
-    // Shaft opening
-    shaftOpeningWidth: z.string().optional(),
-
-    // Supplement schoring
-    customInsoleShoringLeftEnabled: z.boolean(),
-    customInsoleShoringRightEnabled: z.boolean(),
-    customInsoleShoringLeftType: z.string().optional(),
-    customInsoleShoringRightType: z.string().optional(),
-
-    // Sole stiffening
-    soleReinforcementEnabled: z.boolean(),
-    soleReinforcementLeft: z.boolean().optional(),
-    soleReinforcementRight: z.boolean().optional(),
-
-    // Closure
-    entryPoint: z.string().optional(),
-
-    // Tong padding
-    tonguePaddingEnabled: z.boolean(),
-    fixedTongueEnabled: z.boolean(),
-
-    // Heel types and heights
-    heelTypeLeft: z.string().optional(),
-    heelTypeRight: z.string().optional(),
-    heelHeightLeft: z.string().optional(),
-    heelHeightRight: z.string().optional(),
-
-    // Heel shoring
-    heelWedgeLeftEnabled: z.boolean(),
-    heelWedgeRightEnabled: z.boolean(),
-    heelWedgeLeftType: z.string().optional(),
-    heelWedgeRightType: z.string().optional(),
-
-    // Ezelsoor
+    // Voeringschoen Opties - Donkey Ear (Ezelsoor)
     donkeyEarLeftEnabled: z.boolean(),
     donkeyEarRightEnabled: z.boolean(),
     donkeyEarLeftType: z.string().optional(),
     donkeyEarRightType: z.string().optional(),
 
-    // Heel rounding
-    heelRoundingLeftEnabled: z.boolean(),
-    heelRoundingRightEnabled: z.boolean(),
-    heelRoundingLeftHeight: z.string().optional(),
-    heelRoundingLeftLength: z.string().optional(),
-    heelRoundingRightHeight: z.string().optional(),
-    heelRoundingRightLength: z.string().optional(),
+    // Voeringschoen Opties - Carbon Stiffening Lining Shoe
+    carbonStiffeningLiningShoeLeft: z.boolean().optional(),
+    carbonStiffeningLiningShoeRight: z.boolean().optional(),
 
-    // Outsole type
-    rockerSoleType: z.string().optional(),
-
-    // --- Kleur en Model section ---
+    // Kleur en Model Section
     showColorAndModel: z.boolean(),
+
     // Model
     modelType: z.enum(['asPhoto', 'model'] as const).optional(),
     modelText: z.string().optional(),
+
     // Colors
     colorOptions: z.array(z.string()).optional(),
-    // Tongue padding and collar
+
+    // Tongue Padding and Collar (mm)
     tonguePaddingMm: z.enum(['no', '3', '5'] as const).optional(),
     paddingCollarMm: z.enum(['no', '5', '10'] as const).optional(),
-    // Closure details
+
+    // Closure Type
     closureType: z.enum(['velcro', 'ringsHooks'] as const).optional(),
     ringsNumber: z.string().optional(),
     ringsAmount: z.string().optional(),
     hooksNumber: z.string().optional(),
     hooksAmount: z.string().optional(),
+
     // Zipper
     zipperType: z
       .enum(['none', 'functionalNylon', 'decorativeNylon'] as const)
@@ -159,53 +122,64 @@ const FormCheckFoliepasPage = () => {
     zipperPlacement: z.string().optional(),
     zipperMedial: z.boolean().optional(),
     zipperLateral: z.boolean().optional(),
-    // Special features
+
+    // Special Features (Bijzonderheden)
     specialMedialVelcro: z.boolean().optional(),
     specialLaceLoop: z.boolean().optional(),
     specialExtraLeather: z.boolean().optional(),
     specialOther: z.string().optional(),
-    // Edge type - Cascading
+
+    // Edge Type (Randtype)
     edgeTypeMain: z.string().optional(),
     edgeTypeModel: z.string().optional(),
     edgeTypeColor: z.string().optional(),
     edgeTypeColorCode: z.string().optional(),
-    // Sole type - Cascading
+
+    // Sole Type (Zooltype)
     soleTypeCategory: z.string().optional(),
     soleTypeModel: z.string().optional(),
     soleTypeColor: z.string().optional(),
     soleTypeOther: z.string().optional(),
-    // Carbon stiffening Lining Shoe (Voeringschoen)
-    carbonStiffeningLiningShoeLeft: z.boolean().optional(),
-    carbonStiffeningLiningShoeRight: z.boolean().optional(),
-    // Carbon stiffening Shoe (Schoen)
+
+    // Carbon Stiffening Shoe
     carbonStiffeningShoeLeft: z.boolean().optional(),
     carbonStiffeningShoeRight: z.boolean().optional(),
-    // Toe options
+
+    // Toe Options (Neusopties)
     toeOptionsType: z
       .enum(['none', 'carbon', 'rubberCrawl'] as const)
       .optional(),
-    // Counterfort
+
+    // Lining (Voering)
+    liningType: z.string().optional(),
+
+    // Counterfort (Stijfsel)
     counterfortType: z.enum(['formo', 'leather', 'other'] as const).optional(),
     counterfortOther: z.string().optional(),
-    // Insole
+
+    // Insole (Binnenzool)
     insoleType: z.enum(['leather', 'other'] as const).optional(),
     insoleOther: z.string().optional(),
-    // Sole edge polish
+
+    // Sole Edge Polish (Zoolrandafwerking)
     soleEdgePolishType: z
       .enum(['none', 'black', 'brown', 'mahogany', 'ridges', 'other'] as const)
       .optional(),
     soleEdgePolishOther: z.string().optional(),
-    // Construction method
+
+    // Construction Method (Constructie Methode)
     constructionMethodType: z
       .enum(['glued', 'flexible', 'other'] as const)
       .optional(),
     constructionMethodOther: z.string().optional(),
-    // Heel model
+
+    // Heel Model (Hielmodel)
     heelModelType: z.enum(['buildUp', 'wedge', 'block'] as const).optional(),
     heelBuildUpMaterial: z.enum(['poro', 'leather'] as const).optional(),
     heelWedgeType: z.enum(['hollow', 'flat'] as const).optional(),
     heelBlockCoreCoating: z.boolean().optional(),
-    // Shoring
+
+    // Shoring (Schoring)
     shoringLeftType: z
       .enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const)
       .optional(),
@@ -222,94 +196,119 @@ const FormCheckFoliepasPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
+      // Side Selection
       side: 'both',
+
+      // Reading Corrections
       readingCorrectionAfterFoilFit: '',
       readingCorrectionAfterLiningShoe: '',
+
+      // Foliepas Aanmerkingen - Shaft Heights
       shaftHeightLeft: '12.5',
       shaftHeightRight: '12.5',
+
+      // Foliepas Aanmerkingen - Leg Length Difference
+      legLengthDifferenceLeft: '',
+      legLengthDifferenceRight: '',
+
+      // Foliepas Aanmerkingen - Shaft Opening
+      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[3]?.value || '',
+
+      // Voeringschoen Opties - Enclosure (Omsluiting)
       enclosureLeft: {},
       enclosureRight: {},
       enclosureLeftMm: {},
       enclosureRightMm: {},
-      // Defaults for moved fields
-      legLengthDifferenceLeft: '',
-      legLengthDifferenceRight: '',
-      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[3]?.value || '',
-      customInsoleShoringLeftEnabled: false,
-      customInsoleShoringRightEnabled: false,
-      customInsoleShoringLeftType: 'Lateraal',
-      customInsoleShoringRightType: 'Lateraal',
-      soleReinforcementEnabled: false,
-      soleReinforcementLeft: false,
-      soleReinforcementRight: false,
-      entryPoint: '',
-      tonguePaddingEnabled: false,
-      fixedTongueEnabled: false,
-      heelTypeLeft: HEEL_TYPE_OPTIONS[0]?.value || '',
-      heelTypeRight: HEEL_TYPE_OPTIONS[0]?.value || '',
-      heelHeightLeft: '2',
-      heelHeightRight: '2',
-      heelWedgeLeftEnabled: false,
-      heelWedgeRightEnabled: false,
-      heelWedgeLeftType: 'Lateraal',
-      heelWedgeRightType: 'Lateraal',
+
+      // Voeringschoen Opties - Donkey Ear (Ezelsoor)
       donkeyEarLeftEnabled: false,
       donkeyEarRightEnabled: false,
       donkeyEarLeftType: 'Lateraal',
       donkeyEarRightType: 'Lateraal',
-      heelRoundingLeftEnabled: true,
-      heelRoundingRightEnabled: true,
-      heelRoundingLeftHeight: '10',
-      heelRoundingLeftLength: '50',
-      heelRoundingRightHeight: '10',
-      heelRoundingRightLength: '50',
-      rockerSoleType: WALKING_SOLE_OPTIONS[0]?.value || '',
-      // New field defaults
+
+      // Voeringschoen Opties - Carbon Stiffening Lining Shoe
+      carbonStiffeningLiningShoeLeft: false,
+      carbonStiffeningLiningShoeRight: false,
+
+      // Kleur en Model Section
       showColorAndModel: false,
+
+      // Model
       modelType: 'model',
       modelText: '',
+
+      // Colors
       colorOptions: [''],
+
+      // Tongue Padding and Collar (mm)
       tonguePaddingMm: 'no',
       paddingCollarMm: 'no',
+
+      // Closure Type
       closureType: 'ringsHooks',
       ringsNumber: '',
       ringsAmount: '',
       hooksNumber: '',
       hooksAmount: '',
+
+      // Zipper
       zipperType: 'none',
       zipperColor: '',
       zipperPlacement: 'Langs Ringbies',
       zipperMedial: false,
       zipperLateral: false,
+
+      // Special Features (Bijzonderheden)
       specialMedialVelcro: false,
       specialLaceLoop: false,
       specialExtraLeather: false,
       specialOther: '',
+
+      // Edge Type (Randtype)
       edgeTypeMain: '',
       edgeTypeModel: '',
       edgeTypeColor: '',
       edgeTypeColorCode: '',
+
+      // Sole Type (Zooltype)
       soleTypeCategory: '',
       soleTypeModel: '',
       soleTypeColor: '',
       soleTypeOther: '',
-      carbonStiffeningLiningShoeLeft: false,
-      carbonStiffeningLiningShoeRight: false,
+
+      // Carbon Stiffening Shoe
       carbonStiffeningShoeLeft: false,
       carbonStiffeningShoeRight: false,
+
+      // Toe Options (Neusopties)
       toeOptionsType: 'none',
+
+      // Lining (Voering)
+      liningType: LINING_OPTIONS[0]?.value || '',
+
+      // Counterfort (Stijfsel)
       counterfortType: 'formo',
       counterfortOther: '',
+
+      // Insole (Binnenzool)
       insoleType: 'leather',
       insoleOther: '',
+
+      // Sole Edge Polish (Zoolrandafwerking)
       soleEdgePolishType: 'none',
       soleEdgePolishOther: '',
+
+      // Construction Method (Constructie Methode)
       constructionMethodType: 'glued',
       constructionMethodOther: '',
+
+      // Heel Model (Hielmodel)
       heelModelType: 'buildUp',
       heelBuildUpMaterial: 'poro',
       heelWedgeType: 'flat',
       heelBlockCoreCoating: false,
+
+      // Shoring (Schoring)
       shoringLeftType: 'none',
       shoringLeftMm: '',
       shoringRightType: 'none',
@@ -353,99 +352,122 @@ const FormCheckFoliepasPage = () => {
   const onSubmit = (data: FormData) => {
     dispatch(
       setCheckFoliepasData({
+        // Side Selection
         side: data.side,
+
+        // Reading Corrections
         readingCorrectionAfterFoilFit: data.readingCorrectionAfterFoilFit || '',
         readingCorrectionAfterLiningShoe:
           data.readingCorrectionAfterLiningShoe || '',
+
+        // Foliepas Aanmerkingen - Shaft Heights
+        shaftHeightLeft: data.shaftHeightLeft || '',
+        shaftHeightRight: data.shaftHeightRight || '',
+
+        // Foliepas Aanmerkingen - Leg Length Difference
+        legLengthDifferenceLeft: data.legLengthDifferenceLeft || '',
+        legLengthDifferenceRight: data.legLengthDifferenceRight || '',
+
+        // Foliepas Aanmerkingen - Shaft Opening
+        shaftOpeningWidth: data.shaftOpeningWidth || '',
+
+        // Voeringschoen Opties - Enclosure (Omsluiting)
         enclosureLeft: data.enclosureLeft as Record<string, boolean>,
         enclosureRight: data.enclosureRight as Record<string, boolean>,
         enclosureLeftMm: data.enclosureLeftMm as Record<string, string>,
         enclosureRightMm: data.enclosureRightMm as Record<string, string>,
 
-        shaftHeightLeft: data.shaftHeightLeft || '',
-        shaftHeightRight: data.shaftHeightRight || '',
-
-        // Moved fields
-        legLengthDifferenceLeft: data.legLengthDifferenceLeft || '',
-        legLengthDifferenceRight: data.legLengthDifferenceRight || '',
-        shaftOpeningWidth: data.shaftOpeningWidth || '',
-        customInsoleShoringLeftEnabled: data.customInsoleShoringLeftEnabled,
-        customInsoleShoringRightEnabled: data.customInsoleShoringRightEnabled,
-        customInsoleShoringLeftType: data.customInsoleShoringLeftType || '',
-        customInsoleShoringRightType: data.customInsoleShoringRightType || '',
-        soleReinforcementEnabled: data.soleReinforcementEnabled,
-        soleReinforcementLeft: data.soleReinforcementLeft,
-        soleReinforcementRight: data.soleReinforcementRight,
-        entryPoint: data.entryPoint || '',
-        tonguePaddingEnabled: data.tonguePaddingEnabled,
-        fixedTongueEnabled: data.fixedTongueEnabled,
-        heelTypeLeft: data.heelTypeLeft || '',
-        heelTypeRight: data.heelTypeRight || '',
-        heelHeightLeft: data.heelHeightLeft || '',
-        heelHeightRight: data.heelHeightRight || '',
-        heelWedgeLeftEnabled: data.heelWedgeLeftEnabled,
-        heelWedgeRightEnabled: data.heelWedgeRightEnabled,
-        heelWedgeLeftType: data.heelWedgeLeftType || '',
-        heelWedgeRightType: data.heelWedgeRightType || '',
+        // Voeringschoen Opties - Donkey Ear (Ezelsoor)
         donkeyEarLeftEnabled: data.donkeyEarLeftEnabled,
         donkeyEarRightEnabled: data.donkeyEarRightEnabled,
         donkeyEarLeftType: data.donkeyEarLeftType || '',
         donkeyEarRightType: data.donkeyEarRightType || '',
-        heelRoundingLeftEnabled: data.heelRoundingLeftEnabled,
-        heelRoundingRightEnabled: data.heelRoundingRightEnabled,
-        heelRoundingLeftHeight: data.heelRoundingLeftHeight || '',
-        heelRoundingLeftLength: data.heelRoundingLeftLength || '',
-        heelRoundingRightHeight: data.heelRoundingRightHeight || '',
-        heelRoundingRightLength: data.heelRoundingRightLength || '',
-        rockerSoleType: data.rockerSoleType || '',
-        // New fields
+
+        // Voeringschoen Opties - Carbon Stiffening Lining Shoe
+        carbonStiffeningLiningShoeLeft:
+          data.carbonStiffeningLiningShoeLeft || false,
+        carbonStiffeningLiningShoeRight:
+          data.carbonStiffeningLiningShoeRight || false,
+
+        // Kleur en Model Section
         showColorAndModel: data.showColorAndModel,
+
+        // Model
         modelType: data.modelType || '',
         modelText: data.modelText || '',
+
+        // Colors
         colorOptions: data.colorOptions || [],
+
+        // Tongue Padding and Collar (mm)
         tonguePaddingMm: data.tonguePaddingMm || '',
         paddingCollarMm: data.paddingCollarMm || '',
+
+        // Closure Type
         closureType: data.closureType || '',
         ringsNumber: data.ringsNumber || '',
         ringsAmount: data.ringsAmount || '',
         hooksNumber: data.hooksNumber || '',
         hooksAmount: data.hooksAmount || '',
+
+        // Zipper
         zipperType: data.zipperType || '',
         zipperColor: data.zipperColor || '',
         zipperPlacement: data.zipperPlacement || '',
         zipperMedial: data.zipperMedial || false,
         zipperLateral: data.zipperLateral || false,
+
+        // Special Features (Bijzonderheden)
         specialMedialVelcro: data.specialMedialVelcro || false,
         specialLaceLoop: data.specialLaceLoop || false,
         specialExtraLeather: data.specialExtraLeather || false,
         specialOther: data.specialOther || '',
+
+        // Edge Type (Randtype)
         edgeTypeMain: data.edgeTypeMain || '',
         edgeTypeModel: data.edgeTypeModel || '',
         edgeTypeColor: data.edgeTypeColor || '',
         edgeTypeColorCode: data.edgeTypeColorCode || '',
+
+        // Sole Type (Zooltype)
         soleTypeCategory: data.soleTypeCategory || '',
         soleTypeModel: data.soleTypeModel || '',
         soleTypeColor: data.soleTypeColor || '',
         soleTypeOther: data.soleTypeOther || '',
-        carbonStiffeningLiningShoeLeft:
-          data.carbonStiffeningLiningShoeLeft || false,
-        carbonStiffeningLiningShoeRight:
-          data.carbonStiffeningLiningShoeRight || false,
+
+        // Carbon Stiffening Shoe
         carbonStiffeningShoeLeft: data.carbonStiffeningShoeLeft || false,
         carbonStiffeningShoeRight: data.carbonStiffeningShoeRight || false,
+
+        // Toe Options (Neusopties)
         toeOptionsType: data.toeOptionsType || '',
+
+        // Lining (Voering)
+        liningType: data.liningType || '',
+
+        // Counterfort (Stijfsel)
         counterfortType: data.counterfortType || '',
         counterfortOther: data.counterfortOther || '',
+
+        // Insole (Binnenzool)
         insoleType: data.insoleType || '',
         insoleOther: data.insoleOther || '',
+
+        // Sole Edge Polish (Zoolrandafwerking)
         soleEdgePolishType: data.soleEdgePolishType || '',
         soleEdgePolishOther: data.soleEdgePolishOther || '',
+
+        // Construction Method (Constructie Methode)
         constructionMethodType: data.constructionMethodType || '',
         constructionMethodOther: data.constructionMethodOther || '',
+
+        // Heel Model (Hielmodel)
         heelModelType: data.heelModelType || '',
         heelBuildUpMaterial: data.heelBuildUpMaterial || '',
         heelWedgeType: data.heelWedgeType || '',
         heelBlockCoreCoating: data.heelBlockCoreCoating || false,
+
+        // Shoring (Schoring)
         shoringLeftType: data.shoringLeftType || 'none',
         shoringLeftMm: data.shoringLeftMm || '',
         shoringRightType: data.shoringRightType || 'none',
@@ -1267,48 +1289,55 @@ const FormCheckFoliepasPage = () => {
                     </Select>
                     {zipperType && zipperType !== 'none' && (
                       <div className="space-y-4 pt-4">
-                        {/* Color input (optional) */}
-                        <div className="w-2/3">
-                          <Label htmlFor="zipper-color" className="text-sm">
-                            Kleur (optioneel)
-                          </Label>
-                          <Input
-                            id="zipper-color"
-                            placeholder="Kleur"
-                            value={form.watch('zipperColor') || ''}
-                            onChange={e =>
-                              form.setValue('zipperColor', e.target.value)
-                            }
-                            className="mt-2"
-                          />
-                        </div>
-                        {/* Placement select */}
-                        <div className="w-2/3">
-                          <Label htmlFor="zipper-placement" className="text-sm">
-                            Plaatsing
-                          </Label>
-                          <Select
-                            value={
-                              form.watch('zipperPlacement') || 'Langs Ringbies'
-                            }
-                            onValueChange={v =>
-                              form.setValue('zipperPlacement', v)
-                            }
-                          >
-                            <SelectTrigger className="bg-background! mt-2">
-                              <SelectValue placeholder="Plaatsing" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {ZIPPER_PLACEMENT_OPTIONS.map(option => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                        {/* Color and Placement side by side */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                          {/* Color input (optional) */}
+                          <div>
+                            <Label htmlFor="zipper-color" className="text-sm">
+                              Kleur (optioneel)
+                            </Label>
+                            <Input
+                              id="zipper-color"
+                              placeholder="Kleur"
+                              value={form.watch('zipperColor') || ''}
+                              onChange={e =>
+                                form.setValue('zipperColor', e.target.value)
+                              }
+                              className="mt-2"
+                            />
+                          </div>
+                          {/* Placement select */}
+                          <div>
+                            <Label
+                              htmlFor="zipper-placement"
+                              className="text-sm"
+                            >
+                              Plaatsing
+                            </Label>
+                            <Select
+                              value={
+                                form.watch('zipperPlacement') ||
+                                'Langs Ringbies'
+                              }
+                              onValueChange={v =>
+                                form.setValue('zipperPlacement', v)
+                              }
+                            >
+                              <SelectTrigger className="bg-background! mt-2">
+                                <SelectValue placeholder="Plaatsing" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {ZIPPER_PLACEMENT_OPTIONS.map(option => (
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
                         {/* Medial/Lateral checkboxes */}
                         <div className="grid grid-cols-2 gap-3">
@@ -1813,6 +1842,31 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
+                {/* Lining Options / Voeringsoptie */}
+                <FormBlock
+                  title={t('liningOptions')}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <Select
+                      value={form.watch('liningType') || ''}
+                      onValueChange={v => form.setValue('liningType', v)}
+                    >
+                      <SelectTrigger className="bg-background! w-2/3">
+                        <SelectValue placeholder={t('lining')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LINING_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.translationKey)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItemWrapper>
+                </FormBlock>
+
                 {/* Counterfort & Insole */}
                 <FormBlock columns={2} dividers>
                   <FormItemWrapper label={t('counterfort')}>
@@ -1958,37 +2012,17 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
-                {/* Heel Model, Height & Rounding */}
-                <FormBlock columns={3} dividers={true}>
-                  {/* Heel Model */}
+                {/* Heel Model */}
+                <FormBlock columns={1} dividers={false}>
                   <FormItemWrapper label={t('heelModel')}>
                     <Select
                       value={heelModelType || 'buildUp'}
-                      //Check to set default heights based on heel type
-                      onValueChange={v => {
+                      onValueChange={v =>
                         form.setValue(
                           'heelModelType',
                           v as 'buildUp' | 'wedge' | 'block',
-                        );
-                        // Set default heights based on heel type
-                        const edgeTypeValue = form.getValues('edgeTypeMain');
-                        let defaultHeight = '2';
-
-                        if (v === 'buildUp') {
-                          defaultHeight = '2';
-                        } else if (v === 'wedge') {
-                          defaultHeight =
-                            edgeTypeValue === 'CSO Rand' ||
-                            edgeTypeValue?.includes('CSO Rand')
-                              ? '1.5'
-                              : '2';
-                        } else if (v === 'block') {
-                          defaultHeight = '2.5';
-                        }
-
-                        form.setValue('heelHeightLeft', defaultHeight);
-                        form.setValue('heelHeightRight', defaultHeight);
-                      }}
+                        )
+                      }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('heelModel')} />
@@ -2099,83 +2133,6 @@ const FormCheckFoliepasPage = () => {
                         </div>
                       </div>
                     )}
-                  </FormItemWrapper>
-
-                  {/* Heel Heights - Grouped in one FormBlock for title */}
-                  <FormItemWrapper>
-                    <FormBlock
-                      columns={2}
-                      dividers={true}
-                      title={t('heelHeight')}
-                      hoverEffect={false}
-                      className="border-0 bg-transparent"
-                    >
-                      <FormItemWrapper label={`${t('heelHeightLeft')} (cm)`}>
-                        <Input
-                          id="heel-height-left"
-                          type="number"
-                          step="0.1"
-                          value={form.watch('heelHeightLeft') || ''}
-                          onChange={e =>
-                            form.setValue('heelHeightLeft', e.target.value)
-                          }
-                          className="w-2/3"
-                        />
-                      </FormItemWrapper>
-
-                      <FormItemWrapper label={`${t('heelHeightRight')} (cm)`}>
-                        <Input
-                          id="heel-height-right"
-                          type="number"
-                          step="0.1"
-                          value={form.watch('heelHeightRight') || ''}
-                          onChange={e =>
-                            form.setValue('heelHeightRight', e.target.value)
-                          }
-                          className="w-2/3"
-                        />
-                      </FormItemWrapper>
-                    </FormBlock>
-                  </FormItemWrapper>
-
-                  {/* Heel Rounding */}
-                  <FormItemWrapper label={t('heelRounding')}>
-                    <div className="flex items-center! gap-8 pt-2">
-                      <div className="flex items-center gap-2">
-                        <Label
-                          htmlFor="heel-rounding-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('left')}
-                        </Label>
-                        <Switch
-                          id="heel-rounding-left"
-                          checked={
-                            form.watch('heelRoundingLeftEnabled') || false
-                          }
-                          onCheckedChange={checked =>
-                            form.setValue('heelRoundingLeftEnabled', !!checked)
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Label
-                          htmlFor="heel-rounding-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('right')}
-                        </Label>
-                        <Switch
-                          id="heel-rounding-right"
-                          checked={
-                            form.watch('heelRoundingRightEnabled') || false
-                          }
-                          onCheckedChange={checked =>
-                            form.setValue('heelRoundingRightEnabled', !!checked)
-                          }
-                        />
-                      </div>
-                    </div>
                   </FormItemWrapper>
                 </FormBlock>
 
