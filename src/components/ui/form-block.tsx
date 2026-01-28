@@ -237,7 +237,7 @@ export const FormItemWrapper = ({
   <div
     className={cn(
       'flex flex-col gap-2 h-full',
-      centerItems ? 'items-center' : 'items-start',
+      centerItems ? 'items-center justify-center' : 'items-start',
       className,
     )}
   >

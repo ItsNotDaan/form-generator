@@ -174,12 +174,12 @@ const FormCheckFoliepasPage = () => {
     soleTypeModel: z.string().optional(),
     soleTypeColor: z.string().optional(),
     soleTypeOther: z.string().optional(),
-    // Carbon stiffening
-    carbonStiffeningType: z
-      .enum(['none', 'prefab', 'custom'] as const)
-      .optional(),
-    carbonStiffeningLeft: z.boolean().optional(),
-    carbonStiffeningRight: z.boolean().optional(),
+    // Carbon stiffening Lining Shoe (Voeringschoen)
+    carbonStiffeningLiningShoeLeft: z.boolean().optional(),
+    carbonStiffeningLiningShoeRight: z.boolean().optional(),
+    // Carbon stiffening Shoe (Schoen)
+    carbonStiffeningShoeLeft: z.boolean().optional(),
+    carbonStiffeningShoeRight: z.boolean().optional(),
     // Toe options
     toeOptionsType: z
       .enum(['none', 'carbon', 'rubberCrawl'] as const)
@@ -225,16 +225,16 @@ const FormCheckFoliepasPage = () => {
       side: 'both',
       readingCorrectionAfterFoilFit: '',
       readingCorrectionAfterLiningShoe: '',
-      enclosureLeft: {omsluitingLinksMultivorm: true},
-      enclosureRight: {omsluitingRechtsMultivorm: true},
-      enclosureLeftMm: {omsluitingMmLinksMultivorm: '3'},
-      enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
       shaftHeightLeft: '12.5',
       shaftHeightRight: '12.5',
+      enclosureLeft: {},
+      enclosureRight: {},
+      enclosureLeftMm: {},
+      enclosureRightMm: {},
       // Defaults for moved fields
       legLengthDifferenceLeft: '',
       legLengthDifferenceRight: '',
-      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
+      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[3]?.value || '',
       customInsoleShoringLeftEnabled: false,
       customInsoleShoringRightEnabled: false,
       customInsoleShoringLeftType: 'Lateraal',
@@ -293,9 +293,10 @@ const FormCheckFoliepasPage = () => {
       soleTypeModel: '',
       soleTypeColor: '',
       soleTypeOther: '',
-      carbonStiffeningType: 'none',
-      carbonStiffeningLeft: false,
-      carbonStiffeningRight: false,
+      carbonStiffeningLiningShoeLeft: false,
+      carbonStiffeningLiningShoeRight: false,
+      carbonStiffeningShoeLeft: false,
+      carbonStiffeningShoeRight: false,
       toeOptionsType: 'none',
       counterfortType: 'formo',
       counterfortOther: '',
@@ -337,7 +338,12 @@ const FormCheckFoliepasPage = () => {
   const colorOptions = form.watch('colorOptions') || [''];
   const closureType = form.watch('closureType');
   const zipperType = form.watch('zipperType');
-  const carbonStiffeningType = form.watch('carbonStiffeningType');
+  const carbonStiffeningLiningShoeLeft = form.watch(
+    'carbonStiffeningLiningShoeLeft',
+  );
+  const carbonStiffeningLiningShoeRight = form.watch(
+    'carbonStiffeningLiningShoeRight',
+  );
   const counterfortType = form.watch('counterfortType');
   const insoleType = form.watch('insoleType');
   const soleEdgePolishType = form.watch('soleEdgePolishType');
@@ -421,9 +427,12 @@ const FormCheckFoliepasPage = () => {
         soleTypeModel: data.soleTypeModel || '',
         soleTypeColor: data.soleTypeColor || '',
         soleTypeOther: data.soleTypeOther || '',
-        carbonStiffeningType: data.carbonStiffeningType || '',
-        carbonStiffeningLeft: data.carbonStiffeningLeft || false,
-        carbonStiffeningRight: data.carbonStiffeningRight || false,
+        carbonStiffeningLiningShoeLeft:
+          data.carbonStiffeningLiningShoeLeft || false,
+        carbonStiffeningLiningShoeRight:
+          data.carbonStiffeningLiningShoeRight || false,
+        carbonStiffeningShoeLeft: data.carbonStiffeningShoeLeft || false,
+        carbonStiffeningShoeRight: data.carbonStiffeningShoeRight || false,
         toeOptionsType: data.toeOptionsType || '',
         counterfortType: data.counterfortType || '',
         counterfortOther: data.counterfortOther || '',
@@ -633,8 +642,9 @@ const FormCheckFoliepasPage = () => {
               {/* Enclosure + Beenlengte + Openstand */}
               <FormCard
                 title="Foliepas aanmerkingen"
-                description={`${t('shaftHeight')} • ${t('enclosure')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
+                description={`${t('shaftHeight')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
               >
+                {/* Shaft Height (Schacht Hoogte) */}
                 <FormBlock
                   columns={2}
                   dividers={true}
@@ -677,7 +687,84 @@ const FormCheckFoliepasPage = () => {
                   )}
                 </FormBlock>
 
-                {/* Enclosure (Omsluiting)*/}
+                {/* Beenlengte verschil */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('legLengthDifference')}
+                >
+                  <FormItemWrapper label={t('leftCm')}>
+                    <Input
+                      id="leg-length-left"
+                      type="text"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('legLengthDifferenceLeft')}
+                      onChange={e =>
+                        form.setValue('legLengthDifferenceLeft', e.target.value)
+                      }
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+
+                  <FormItemWrapper label={t('rightCm')}>
+                    <Input
+                      id="leg-length-right"
+                      type="text"
+                      placeholder={t('cmPlaceholder')}
+                      value={form.watch('legLengthDifferenceRight')}
+                      onChange={e =>
+                        form.setValue(
+                          'legLengthDifferenceRight',
+                          e.target.value,
+                        )
+                      }
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Openstand schacht */}
+                <FormBlock
+                  title={t('shaftOpening')}
+                  columns={1}
+                  dividers={false}
+                  hoverEffect={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('shaftOpeningWidth') || ''}
+                      onValueChange={v => form.setValue('shaftOpeningWidth', v)}
+                      className="justify-center"
+                    >
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
+                        {SHAFT_OPENING_OPTIONS.map(opt => (
+                          <Label
+                            key={opt.value}
+                            htmlFor={`opening-${opt.value}`}
+                            className="flex justify-center items-center gap-2 rounded-md border bg-background px-3 py-2 cursor-pointer max-w-fit"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`opening-${opt.value}`}
+                            />
+                            <span className="text-sm text-foreground">
+                              {opt.label.replace('.', ',')} cm
+                            </span>
+                          </Label>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Voeringsschoen: Omsluiting, Ezelsoor, Koolstofverstijving */}
+              <FormCard
+                title="Voeringschoen opties"
+                description={`${t('enclosure')} • ${t('donkeyEar')} • ${t('carbonStiffeningLiningShoe')}`}
+              >
+                {/* Enclosure (Omsluiting) */}
                 <FormBlock
                   columns={2}
                   dividers={true}
@@ -846,70 +933,168 @@ const FormCheckFoliepasPage = () => {
                   )}
                 </FormBlock>
 
-                {/* Beenlengte verschil */}
+                {/* Ezelsoor (Donkey Ear) */}
                 <FormBlock
                   columns={2}
                   dividers={true}
                   hoverEffect={false}
-                  title={t('legLengthDifference')}
+                  title={t('donkeyEar')}
                 >
-                  <FormItemWrapper label={t('leftCm')}>
-                    <Input
-                      id="leg-length-left"
-                      type="number"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('legLengthDifferenceLeft')}
-                      onChange={e =>
-                        form.setValue('legLengthDifferenceLeft', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
+                  {/* Ezelsoor Left */}
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <div className="flex items-center space-x-2">
+                        <Label
+                          htmlFor="ezelsoor-links-switch"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('left')}
+                        </Label>
+                        <Switch
+                          id="ezelsoor-links-switch"
+                          checked={form.watch('donkeyEarLeftEnabled') || false}
+                          onCheckedChange={checked =>
+                            form.setValue('donkeyEarLeftEnabled', !!checked)
+                          }
+                        />
+                      </div>
+                      {form.watch('donkeyEarLeftEnabled') && (
+                        <Select
+                          value={form.watch('donkeyEarLeftType')}
+                          onValueChange={v =>
+                            form.setValue('donkeyEarLeftType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                DONKEY_EAR_TYPE_OPTIONS.find(
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('donkeyEarLeftType'),
+                                )?.label || '',
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </FormItemWrapper>
+                  )}
 
-                  <FormItemWrapper label={t('rightCm')}>
-                    <Input
-                      id="leg-length-right"
-                      type="number"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('legLengthDifferenceRight')}
-                      onChange={e =>
-                        form.setValue(
-                          'legLengthDifferenceRight',
-                          e.target.value,
-                        )
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
+                  {/* Ezelsoor Right */}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <div className="flex items-center space-x-2">
+                        <Label
+                          htmlFor="ezelsoor-rechts-switch"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('right')}
+                        </Label>
+                        <Switch
+                          id="ezelsoor-rechts-switch"
+                          checked={form.watch('donkeyEarRightEnabled') || false}
+                          onCheckedChange={checked =>
+                            form.setValue('donkeyEarRightEnabled', !!checked)
+                          }
+                        />
+                      </div>
+
+                      {form.watch('donkeyEarRightEnabled') && (
+                        <Select
+                          value={form.watch('donkeyEarRightType')}
+                          onValueChange={v =>
+                            form.setValue('donkeyEarRightType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                DONKEY_EAR_TYPE_OPTIONS.find(
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('donkeyEarRightType'),
+                                )?.label || '',
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </FormItemWrapper>
+                  )}
                 </FormBlock>
 
-                {/* Openstand schacht */}
-                <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <FormItemWrapper label={t('shaftOpening')}>
-                    <RadioGroup
-                      value={form.watch('shaftOpeningWidth') || ''}
-                      onValueChange={v => form.setValue('shaftOpeningWidth', v)}
-                      className="justify-center"
-                    >
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
-                        {SHAFT_OPENING_OPTIONS.map(opt => (
-                          <Label
-                            key={opt.value}
-                            htmlFor={`opening-${opt.value}`}
-                            className="flex justify-center items-center gap-2 rounded-md border bg-background px-3 py-2 cursor-pointer max-w-fit"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`opening-${opt.value}`}
-                            />
-                            <span className="text-sm text-foreground">
-                              {opt.label.replace('.', ',')} cm
-                            </span>
-                          </Label>
-                        ))}
+                {/* Zoolverstijving Voeringschoen (Carbon Stiffening Lining Shoe) */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('carbonStiffeningLiningShoe')}
+                >
+                  {showLinks && (
+                    <FormItemWrapper>
+                      <div className="flex items-center space-x-2">
+                        <Label
+                          htmlFor="carbon-lining-left"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('left')}
+                        </Label>
+                        <Switch
+                          id="carbon-lining-left"
+                          checked={
+                            form.watch('carbonStiffeningLiningShoeLeft') ||
+                            false
+                          }
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'carbonStiffeningLiningShoeLeft',
+                              !!checked,
+                            )
+                          }
+                        />
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper>
+                      <div className="flex items-center space-x-2">
+                        <Label
+                          htmlFor="carbon-lining-right"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('right')}
+                        </Label>
+                        <Switch
+                          id="carbon-lining-right"
+                          checked={
+                            form.watch('carbonStiffeningLiningShoeRight') ||
+                            false
+                          }
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'carbonStiffeningLiningShoeRight',
+                              !!checked,
+                            )
+                          }
+                        />
+                      </div>
+                    </FormItemWrapper>
+                  )}
                 </FormBlock>
               </FormCard>
 
@@ -1548,67 +1733,58 @@ const FormCheckFoliepasPage = () => {
 
                 {/* Carbon Stiffening & Toe Options */}
                 <FormBlock columns={2} dividers>
-                  <FormItemWrapper label={t('carbonStiffening')}>
-                    <Select
-                      value={carbonStiffeningType || 'none'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'carbonStiffeningType',
-                          v as 'none' | 'prefab' | 'custom',
-                        )
-                      }
-                    >
-                      <SelectTrigger className="bg-background! w-2/3">
-                        <SelectValue placeholder={t('carbonStiffening')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">{t('none')}</SelectItem>
-                        <SelectItem value="prefab">{t('prefab')}</SelectItem>
-                        <SelectItem value="custom">{t('custom')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {carbonStiffeningType &&
-                      carbonStiffeningType !== 'none' && (
-                        <div className="grid grid-cols-2 gap-3 pt-2">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="carbon-left"
-                              checked={
-                                form.watch('carbonStiffeningLeft') || false
-                              }
-                              onCheckedChange={checked =>
-                                form.setValue('carbonStiffeningLeft', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="carbon-left"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('left')}
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="carbon-right"
-                              checked={
-                                form.watch('carbonStiffeningRight') || false
-                              }
-                              onCheckedChange={checked =>
-                                form.setValue(
-                                  'carbonStiffeningRight',
-                                  !!checked,
-                                )
-                              }
-                            />
-                            <Label
-                              htmlFor="carbon-right"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('right')}
-                            </Label>
-                          </div>
-                        </div>
-                      )}
+                  <FormItemWrapper label={t('carbonStiffeningShoe')}>
+                    {/* Show notification if lining shoe carbon stiffening is enabled */}
+                    {(carbonStiffeningLiningShoeLeft ||
+                      carbonStiffeningLiningShoeRight) && (
+                      <div className="flex flex-row items-center rounded-md p-2 gap-2 bg-primary/10 w-2/3 mb-2">
+                        <Info className="h-5 w-5 text-primary" />
+                        <p className="text-sm text-foreground">
+                          {t('carbonStiffeningLiningShoeAlreadyAdded')}
+                        </p>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-8 pt-2">
+                      <div className="flex items-center gap-2">
+                        <Label
+                          htmlFor="carbon-shoe-left"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('left')}
+                        </Label>
+                        <Switch
+                          id="carbon-shoe-left"
+                          checked={
+                            form.watch('carbonStiffeningShoeLeft') || false
+                          }
+                          onCheckedChange={checked =>
+                            form.setValue('carbonStiffeningShoeLeft', !!checked)
+                          }
+                          disabled={carbonStiffeningLiningShoeLeft}
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Label
+                          htmlFor="carbon-shoe-right"
+                          className="font-normal cursor-pointer"
+                        >
+                          {t('right')}
+                        </Label>
+                        <Switch
+                          id="carbon-shoe-right"
+                          checked={
+                            form.watch('carbonStiffeningShoeRight') || false
+                          }
+                          onCheckedChange={checked =>
+                            form.setValue(
+                              'carbonStiffeningShoeRight',
+                              !!checked,
+                            )
+                          }
+                          disabled={carbonStiffeningLiningShoeRight}
+                        />
+                      </div>
+                    </div>
                   </FormItemWrapper>
 
                   <FormItemWrapper label={t('toeOptions')}>
@@ -1788,33 +1964,30 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('heelModel')}>
                     <Select
                       value={heelModelType || 'buildUp'}
+                      //Check to set default heights based on heel type
                       onValueChange={v => {
                         form.setValue(
                           'heelModelType',
                           v as 'buildUp' | 'wedge' | 'block',
                         );
                         // Set default heights based on heel type
-                        const edgeTypeValue = form.watch('edgeTypeModel');
+                        const edgeTypeValue = form.getValues('edgeTypeMain');
                         let defaultHeight = '2';
 
                         if (v === 'buildUp') {
                           defaultHeight = '2';
                         } else if (v === 'wedge') {
                           defaultHeight =
-                            edgeTypeValue === 'CSO' ||
-                            edgeTypeValue?.includes('CSO')
+                            edgeTypeValue === 'CSO Rand' ||
+                            edgeTypeValue?.includes('CSO Rand')
                               ? '1.5'
                               : '2';
                         } else if (v === 'block') {
                           defaultHeight = '2.5';
                         }
 
-                        if (!form.watch('heelHeightLeft')) {
-                          form.setValue('heelHeightLeft', defaultHeight);
-                        }
-                        if (!form.watch('heelHeightRight')) {
-                          form.setValue('heelHeightRight', defaultHeight);
-                        }
+                        form.setValue('heelHeightLeft', defaultHeight);
+                        form.setValue('heelHeightRight', defaultHeight);
                       }}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
@@ -1840,7 +2013,7 @@ const FormCheckFoliepasPage = () => {
                             )
                           }
                         >
-                          <div className="flex gap-6">
+                          <div className="flex gap-6 justify-center">
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value="poro" id="heel-poro" />
                               <Label
@@ -1878,7 +2051,7 @@ const FormCheckFoliepasPage = () => {
                             )
                           }
                         >
-                          <div className="flex gap-6">
+                          <div className="flex gap-6 justify-center">
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value="flat" id="wedge-flat" />
                               <Label
@@ -1967,7 +2140,7 @@ const FormCheckFoliepasPage = () => {
 
                   {/* Heel Rounding */}
                   <FormItemWrapper label={t('heelRounding')}>
-                    <div className="flex items-center gap-8 pt-2">
+                    <div className="flex items-center! gap-8 pt-2">
                       <div className="flex items-center gap-2">
                         <Label
                           htmlFor="heel-rounding-left"

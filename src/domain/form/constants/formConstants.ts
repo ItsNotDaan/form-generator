@@ -889,6 +889,62 @@ export const ZOOL_RANDEN: ZoolRandType[] = [
       },
     ],
   },
+  {
+    naam: 'CSO Rand',
+    modellen: [
+      {
+        model: '40',
+        gegevens: {
+          notitie: 'Standaard',
+        },
+        kleuren: [
+          {kleur: 'Zand', code: '05'},
+          {kleur: 'Wit', code: '09'},
+          {kleur: 'Beige', code: '17'},
+          {kleur: 'Beige', code: '19'},
+          {kleur: 'Middelbruin', code: '35'},
+          {kleur: 'Taupe', code: '41'},
+          {kleur: 'Donkerbruin', code: '46'},
+          {kleur: 'Grijs', code: '56'},
+          {kleur: 'Donkerblauw', code: '78'},
+          {kleur: 'Antraciet', code: '80'},
+          {kleur: 'Zwart', code: '81'},
+        ],
+      },
+      {
+        model: '60',
+        gegevens: {
+          notitie: 'Glad',
+        },
+        kleuren: [
+          {kleur: 'Zand', code: '05'},
+          {kleur: 'Wit', code: '09'},
+          {kleur: 'Beige', code: '17'},
+          {kleur: 'Beige', code: '19'},
+          {kleur: 'Middelbruin', code: '35'},
+          {kleur: 'Taupe', code: '41'},
+          {kleur: 'Donkerbruin', code: '46'},
+          {kleur: 'Grijs', code: '56'},
+          {kleur: 'Donkerblauw', code: '78'},
+          {kleur: 'Antraciet', code: '80'},
+          {kleur: 'Zwart', code: '81'},
+        ],
+      },
+      {
+        model: '70',
+        gegevens: {
+          notitie: 'Glad met streep',
+        },
+        kleuren: [
+          {kleur: 'Donkerblauw (78) - Witte streep'},
+          {kleur: 'Zwart (81) - Witte streep'},
+          {kleur: 'Taupe (41) - Witte streep'},
+          {kleur: 'Beige (19) - Witte streep'},
+          {kleur: 'Wit (09) - Zwarte streep'},
+        ],
+      },
+    ],
+  },
 ];
 
 /** Onderwerken - Structured data for sole types with categories, models, metadata, and colors */
@@ -1047,7 +1103,7 @@ export const ONDERWERKEN: OnderwerkCategorie[] = [
     ],
   },
   {
-    naam: 'Onderwerken vrij',
+    naam: 'Zolenplaat',
     zolen: [
       {
         model: 'Zoolrubber Lavero flex profielen',

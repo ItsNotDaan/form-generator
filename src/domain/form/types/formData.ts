@@ -407,19 +407,19 @@ export interface CheckFoliepasData {
   readingCorrectionAfterFoilFit?: string;
   readingCorrectionAfterLiningShoe?: string;
 
-  // Enclosure/padding - same structure as VLOS
-  enclosureLeft?: Record<string, boolean>;
-  enclosureRight?: Record<string, boolean>;
-  enclosureLeftMm?: Record<string, string>;
-  enclosureRightMm?: Record<string, string>;
+  // Shaft height in cm
+  shaftHeightLeft?: string;
+  shaftHeightRight?: string;
 
   // Beenlengte verschil (functieonderzoek)
   legLengthDifferenceLeft?: string;
   legLengthDifferenceRight?: string;
 
-  // Shaft height in cm
-  shaftHeightLeft?: string;
-  shaftHeightRight?: string;
+  // Enclosure/padding - same structure as VLOS
+  enclosureLeft?: Record<string, boolean>;
+  enclosureRight?: Record<string, boolean>;
+  enclosureLeftMm?: Record<string, string>;
+  enclosureRightMm?: Record<string, string>;
 
   // Openstand schacht
   shaftOpeningWidth?: string;
@@ -509,10 +509,13 @@ export interface CheckFoliepasData {
   soleTypeColor?: string; // Color name
   soleTypeOther?: string; // For "Anders" option
 
-  // Koolstofverstijving
-  carbonStiffeningType?: string;
-  carbonStiffeningLeft?: boolean;
-  carbonStiffeningRight?: boolean;
+  // Koolstofverstijving Voeringschoen (Lining Shoe) - comes first
+  carbonStiffeningLiningShoeLeft?: boolean;
+  carbonStiffeningLiningShoeRight?: boolean;
+
+  // Koolstofverstijving Schoen (Shoe)
+  carbonStiffeningShoeLeft?: boolean;
+  carbonStiffeningShoeRight?: boolean;
 
   // Neusopties
   toeOptionsType?: string;
