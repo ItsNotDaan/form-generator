@@ -10,81 +10,99 @@
 
 /** Practitioners */
 export const PRACTITIONERS = [
-  {label: 'Johan Bonekamp', value: 'p1', translationKey: 'johanBonekamp'},
-  {label: 'Job de Graaff', value: 'p2', translationKey: 'jobDeGraaff'},
-  {label: 'Daan Heetkamp', value: 'p3', translationKey: 'daanHeetkamp'},
-  {label: 'Michel Heetkamp', value: 'p4', translationKey: 'michelHeetkamp'},
-  {label: 'Anne Hummelen', value: 'p5', translationKey: 'anneHummelen'},
-  {label: 'Mia Rietberg', value: 'p6', translationKey: 'miaRietberg'},
-  {label: 'Norah Schrijver', value: 'p7', translationKey: 'norahSchrijver'},
+  {
+    label: 'Johan Bonekamp',
+    value: 'johanBonekamp',
+  },
+  {
+    label: 'Job de Graaff',
+    value: 'jobDeGraaff',
+  },
+  {
+    label: 'Daan Heetkamp',
+    value: 'daanHeetkamp',
+  },
+  {
+    label: 'Michel Heetkamp',
+    value: 'michelHeetkamp',
+  },
+  {
+    label: 'Anne Hummelen',
+    value: 'anneHummelen',
+  },
+  {
+    label: 'Mia Rietberg',
+    value: 'miaRietberg',
+  },
+  {
+    label: 'Norah Schrijver',
+    value: 'norahSchrijver',
+  },
 ];
 
 /** Insurance Companies */
 export const INSURANCE_COMPANIES = [
-  {label: 'Menzis', value: 'Menzis', translationKey: 'menzis'},
-  {label: 'Achmea', value: 'Achmea', translationKey: 'achmea'},
-  {label: 'VGZ', value: 'VGZ', translationKey: 'vgz'},
-  {label: 'CZ', value: 'CZ', translationKey: 'cz'},
-  {label: 'Salland', value: 'Salland', translationKey: 'salland'},
+  {label: 'Menzis', value: 'menzis'},
+  {label: 'Achmea', value: 'achmea'},
+  {label: 'VGZ', value: 'vgz'},
+  {label: 'CZ', value: 'cz'},
+  {label: 'Salland', value: 'salland'},
   {
     label: 'Zorg en Zekerheid',
-    value: 'Zorg en Zekerheid',
-    translationKey: 'zorgEnZekerheid',
+    value: 'zorgEnZekerheid',
   },
-  {label: 'ASR', value: 'ASR', translationKey: 'asr'},
-  {label: 'DSW', value: 'DSW', translationKey: 'dsw'},
-  {label: 'ONVZ', value: 'ONVZ', translationKey: 'onvz'},
-  {label: 'Caresq', value: 'Caresq', translationKey: 'caresq'},
+  {label: 'ASR', value: 'asr'},
+  {label: 'DSW', value: 'dsw'},
+  {label: 'ONVZ', value: 'onvz'},
+  {label: 'Caresq', value: 'caresq'},
 ];
 
 /** Locations */
 export type Location =
-  | 'Flevoziekenhuis'
-  | 'Flevomotion'
-  | 'Nijverheidsweg Noord'
-  | 'Meander MC'
-  | 'Amsterdam MC'
-  | 'Holten'
-  | 'Markelo';
+  | 'flevoziekenhuis'
+  | 'flevomotion'
+  | 'nijverheidswegNoord'
+  | 'meanderMc'
+  | 'amsterdamMc'
+  | 'holten'
+  | 'markelo';
 export const LOCATION_OPTIONS = [
   {
     label: 'Flevoziekenhuis',
-    value: 'Flevoziekenhuis',
-    translationKey: 'flevoziekenhuis',
+    value: 'flevoziekenhuis',
   },
-  {label: 'Flevomotion', value: 'Flevomotion', translationKey: 'flevomotion'},
+  {label: 'Flevomotion', value: 'flevomotion'},
   {
     label: 'Nijverheidsweg Noord',
-    value: 'Nijverheidsweg Noord',
-    translationKey: 'nijverheidswegNoord',
+    value: 'nijverheidswegNoord',
   },
-  {label: 'Meander MC', value: 'Meander MC', translationKey: 'meanderMc'},
-  {label: 'Amsterdam MC', value: 'Amsterdam MC', translationKey: 'amsterdamMc'},
-  {label: 'Holten', value: 'Holten', translationKey: 'holten'},
-  {label: 'Markelo', value: 'Markelo', translationKey: 'markelo'},
+  {label: 'Meander MC', value: 'meanderMc'},
+  {label: 'Amsterdam MC', value: 'amsterdamMc'},
+  {label: 'Holten', value: 'holten'},
+  {label: 'Markelo', value: 'markelo'},
 ];
 
 /** Salutation */
-export type Salutation = 'Mw.' | 'Dhr.' | 'X.';
+export type Salutation = 'mw' | 'dhr' | 'x';
 export const SALUTATION_OPTIONS = [
-  {label: 'Mw.', value: 'Mw.', translationKey: 'mw'},
-  {label: 'Dhr.', value: 'Dhr.', translationKey: 'dhr'},
-  {label: 'X.', value: 'X.', translationKey: 'x'},
+  {label: 'Mw.', value: 'mw'},
+  {label: 'Dhr.', value: 'dhr'},
+  {label: 'X.', value: 'x'},
 ];
 
 /** Side - Generic, used across forms */
 export type Side = 'both' | 'left' | 'right';
 export const SIDE_OPTIONS = [
-  {label: 'both', value: 'both', translationKey: 'both'},
-  {label: 'left', value: 'left', translationKey: 'left'},
-  {label: 'right', value: 'right', translationKey: 'right'},
+  {label: 'both', value: 'both'},
+  {label: 'left', value: 'left'},
+  {label: 'right', value: 'right'},
 ];
 
 /** Yes/No */
-export type YesNo = 'ja' | 'nee';
+export type YesNo = 'yes' | 'no';
 export const YES_NO_OPTIONS = [
-  {label: 'yes', value: 'ja', translationKey: 'yes'},
-  {label: 'no', value: 'nee', translationKey: 'no'},
+  {label: 'yes', value: 'yes'},
+  {label: 'no', value: 'no'},
 ];
 
 // ============================================================================
@@ -113,93 +131,86 @@ export const FIELD_SUFFIX_RULES: Record<string, string> = {
 /** Shaft opening options (waarden in cm) */
 export type ShaftOpening = '0.5' | '0.8' | '1' | '1.5' | '2';
 export const SHAFT_OPENING_OPTIONS = [
-  {label: '0.5', value: '0.5', translationKey: 'shaftOpening05'},
-  {label: '0.8', value: '0.8', translationKey: 'shaftOpening08'},
-  {label: '1', value: '1', translationKey: 'shaftOpening1'},
-  {label: '1.5', value: '1.5', translationKey: 'shaftOpening15'},
-  {label: '2', value: '2', translationKey: 'shaftOpening2'},
+  {label: '0.5', value: '0.5'},
+  {label: '0.8', value: '0.8'},
+  {label: '1', value: '1'},
+  {label: '1.5', value: '1.5'},
+  {label: '2', value: '2'},
 ];
 
 /** Heel type options */
 export type HeelType =
-  | 'Sleehak Vlak'
-  | 'Opbouwhak'
-  | 'Leer/Poro'
-  | 'Uitholling'
-  | 'Vlak'
-  | 'Blokhak'
-  | 'Kernbekleding';
+  | 'sleeHakFlat'
+  | 'builUpHeel'
+  | 'leatherPoro'
+  | 'excavation'
+  | 'flat'
+  | 'blockHeel'
+  | 'coreLining';
 export const HEEL_TYPE_OPTIONS = [
-  {label: 'Sleehak Vlak', value: 'Sleehak Vlak', translationKey: 'sleeHakFlat'},
-  {label: 'Opbouwhak', value: 'Opbouwhak', translationKey: 'builUpHeel'},
-  {label: 'Leer/Poro', value: 'Leer/Poro', translationKey: 'leatherPoro'},
-  {label: 'Uitholling', value: 'Uitholling', translationKey: 'excavation'},
-  {label: 'Vlak', value: 'Vlak', translationKey: 'flat'},
-  {label: 'Blokhak', value: 'Blokhak', translationKey: 'blockHeel'},
+  {label: 'Sleehak Vlak', value: 'sleeHakFlat'},
+  {label: 'Opbouwhak', value: 'builUpHeel'},
+  {label: 'Leer/Poro', value: 'leatherPoro'},
+  {label: 'Uitholling', value: 'excavation'},
+  {label: 'Vlak', value: 'flat'},
+  {label: 'Blokhak', value: 'blockHeel'},
   {
     label: 'Kernbekleding',
-    value: 'Kernbekleding',
-    translationKey: 'coreLining',
+    value: 'coreLining',
   },
 ];
 
 /** Walking sole options */
 export type WalkingSole =
-  | 'Lavero Soft 6mm'
-  | 'Star-o-last 6mm'
-  | 'Astrostar 6mm'
-  | 'Autoband profiel 6mm';
+  | 'laveroSoft6mm'
+  | 'staroLast6mm'
+  | 'astrostar6mm'
+  | 'autobandProfiel6mm';
 export const WALKING_SOLE_OPTIONS = [
   {
     label: 'Lavero Soft 6 mm',
-    value: 'Lavero Soft 6 mm',
-    translationKey: 'laveroSoft6mm',
+    value: 'laveroSoft6mm',
   },
   {
     label: 'Star-o-last 6 mm',
-    value: 'Star-o-last 6 mm',
-    translationKey: 'staroLast6mm',
+    value: 'staroLast6mm',
   },
   {
     label: 'Astrostar 6 mm',
-    value: 'Astrostar 6 mm',
-    translationKey: 'astrostar6mm',
+    value: 'astrostar6mm',
   },
   {
     label: 'Autoband profiel 6 mm',
-    value: 'Autoband profiel 6 mm',
-    translationKey: 'autobandProfiel6mm',
+    value: 'autobandProfiel6mm',
   },
 ];
 
 /** Closure options */
-export type Closure = 'Haken/Ringen' | 'Klittenband';
+export type Closure = 'hooksRings' | 'velcro';
 export const CLOSURE_OPTIONS = [
-  {label: 'Haken/Ringen', value: 'Haken/Ringen', translationKey: 'hooksRings'},
-  {label: 'Klittenband', value: 'Klittenband', translationKey: 'velcro'},
+  {label: 'Haken/Ringen', value: 'hooksRings'},
+  {label: 'Klittenband', value: 'velcro'},
 ];
 
 /** Heel wedge types */
-export type HeelWedgeType = 'medial' | 'lateral' | 'LateraalEnMediaal';
+export type HeelWedgeType = 'medial' | 'lateral' | 'lateralAndMedial';
 export const HEEL_WEDGE_TYPE_OPTIONS = [
-  {label: 'medial', value: 'medial', translationKey: 'medial'},
-  {label: 'lateral', value: 'lateral', translationKey: 'lateral'},
+  {label: 'medial', value: 'medial'},
+  {label: 'lateral', value: 'lateral'},
   {
-    value: 'LateraalEnMediaal',
+    value: 'lateralAndMedial',
     label: 'lateralAndMedial',
-    translationKey: 'lateralAndMedial',
   },
 ];
 
 /** Donkey ear types */
-export type DonkeyEarType = 'medial' | 'lateral';
+export type DonkeyEarType = 'medial' | 'lateral' | 'lateralAndMedial';
 export const DONKEY_EAR_TYPE_OPTIONS = [
-  {label: 'medial', value: 'medial', translationKey: 'medial'},
-  {label: 'lateral', value: 'lateral', translationKey: 'lateral'},
+  {label: 'medial', value: 'medial'},
+  {label: 'lateral', value: 'lateral'},
   {
     label: 'lateralAndMedial',
-    value: 'LateraalEnMediaal',
-    translationKey: 'lateralAndMedial',
+    value: 'lateralAndMedial',
   },
 ];
 
@@ -221,7 +232,6 @@ export type OmsluitingKey =
 export type EnclosureOption = {
   key: OmsluitingKey;
   label: string;
-  translationKey: string; // For UI translation
   needsMm: boolean;
   defaultMm?: string;
   // Export keys - English flattened names used in JSON export
@@ -238,7 +248,6 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
   {
     key: 'hoge',
     label: 'Hoogte van omsluiting (cm)',
-    translationKey: 'enclosureHeight',
     needsMm: true,
     exportKeyLeft: 'enclosureLeftCm',
     exportKeyRight: 'enclosureRightCm',
@@ -250,7 +259,6 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
   {
     key: 'lavero',
     label: 'Lavero omsluiting (mm)',
-    translationKey: 'laveroEnclosure',
     needsMm: true,
     defaultMm: '4',
     exportKeyLeft: 'laveroLeftMm',
@@ -263,7 +271,6 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
   {
     key: 'multivorm',
     label: 'Multivorm omsluiting (mm)',
-    translationKey: 'multivormEnclosure',
     needsMm: true,
     defaultMm: '3',
     exportKeyLeft: 'multivormLeftMm',
@@ -276,7 +283,6 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
   {
     key: 'plastazote',
     label: 'Plastazote (mm)',
-    translationKey: 'plastazoteEnclosure',
     needsMm: true,
     defaultMm: '3',
     exportKeyLeft: 'plastazoteLeftMm',
@@ -289,7 +295,6 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
   {
     key: 'orca',
     label: 'Orca omsluiting',
-    translationKey: 'orcaEnclosure',
     needsMm: false,
     exportKeyLeft: 'orcaLeft',
     exportKeyRight: 'orcaRight',
@@ -305,10 +310,10 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
 // ============================================================================
 
 /** Pulman types */
-export type PulmanType = 'New Harlem' | 'Harlem Extra';
+export type PulmanType = 'newHarlem' | 'harlemExtra';
 export const PULMAN_TYPE_OPTIONS = [
-  {label: 'New Harlem', value: 'New Harlem', translationKey: 'newHarlem'},
-  {label: 'Harlem Extra', value: 'Harlem Extra', translationKey: 'harlemExtra'},
+  {label: 'New Harlem', value: 'newHarlem'},
+  {label: 'Harlem Extra', value: 'harlemExtra'},
 ];
 
 /** Schoenmaten (37-48) */
@@ -326,28 +331,24 @@ export const PATHOLOGIES_OPTIONS = [
   {
     label: 'diabetes',
     value: 'diabetes',
-    translationKey: 'diabetes',
     key: 'diabetes',
   },
   {
     label: 'polyNeuropathie',
     value: 'polyNeuropathie',
-    translationKey: 'polyNeuropathie',
     key: 'polyNeuropathie',
   },
-  {label: 'reuma', value: 'reuma', translationKey: 'reuma', key: 'reuma'},
-  {label: 'ms', value: 'ms', translationKey: 'ms', key: 'ms'},
-  {label: 'hmsn', value: 'hmsn', translationKey: 'hmsn', key: 'hmsn'},
+  {label: 'reuma', value: 'reuma', key: 'reuma'},
+  {label: 'ms', value: 'ms', key: 'ms'},
+  {label: 'hmsn', value: 'hmsn', key: 'hmsn'},
   {
     label: 'degeneratie',
     value: 'degeneratie',
-    translationKey: 'degeneratie',
     key: 'degeneratie',
   },
   {
     label: 'artrose',
     value: 'artrose',
-    translationKey: 'artrose',
     key: 'artrose',
   },
 ];
@@ -356,115 +357,100 @@ export const PATHOLOGIES_OPTIONS = [
 export const WALKING_DISTANCE_AIDS_OPTIONS = [
   {
     label: 'steunzolen',
-    value: 'steunzolen',
-    translationKey: 'supportSoles',
+    value: 'supportSoles',
     key: 'steunzolen',
   },
   {
     label: 'rollator',
     value: 'rollator',
-    translationKey: 'rollator',
     key: 'rollator',
   },
-  {label: 'stok', value: 'stok', translationKey: 'cane', key: 'stok'},
+  {label: 'stok', value: 'cane', key: 'stok'},
   {
     label: 'elKousen',
-    value: 'elKousen',
-    translationKey: 'compressionStockings',
+    value: 'compressionStockings',
     key: 'elKousen',
   },
   {
     label: 'knieBrace',
-    value: 'knieBrace',
-    translationKey: 'kneeBrace',
+    value: 'kneeBrace',
     key: 'knieBrace',
   },
   {
     label: 'fysio',
-    value: 'fysio',
-    translationKey: 'physiotherapy',
+    value: 'physiotherapy',
     key: 'fysio',
   },
   {
     label: 'pedicure',
     value: 'pedicure',
-    translationKey: 'pedicure',
     key: 'pedicure',
   },
 ];
 
 /** OSA Functieonderzoek - Inspectie voeten (Foot Inspection) */
 export const FOOT_INSPECTION_OPTIONS = [
-  {label: 'oedeem', value: 'oedeem', translationKey: 'edema', key: 'oedeem'},
+  {label: 'oedeem', value: 'edema', key: 'oedeem'},
   {
     label: 'wisselend',
-    value: 'wisselend',
-    translationKey: 'variable',
+    value: 'variable',
     key: 'wisselend',
   },
   {
     label: 'structureel',
-    value: 'structureel',
-    translationKey: 'structural',
+    value: 'structural',
     key: 'structureel',
   },
   {
     label: 'dunneKwetsbareHuid',
-    value: 'dunneKwetsbareHuid',
-    translationKey: 'thinFragileSkin',
+    value: 'thinFragileSkin',
     key: 'dunneKwetsbareHuid',
   },
   {
     label: 'drogeHuid',
-    value: 'drogeHuid',
-    translationKey: 'drySkin',
+    value: 'drySkin',
     key: 'drogeHuid',
   },
   {
     label: 'doorbloedingsstoornis',
-    value: 'doorbloedingsstoornis',
-    translationKey: 'circulationDisorder',
+    value: 'circulationDisorder',
     key: 'doorbloedingsstoornis',
   },
   {
     label: 'halluxValgus',
     value: 'halluxValgus',
-    translationKey: 'halluxValgus',
     key: 'halluxValgus',
   },
-  {label: 'bunion', value: 'bunion', translationKey: 'bunion', key: 'bunion'},
+  {label: 'bunion', value: 'bunion', key: 'bunion'},
   {
     label: 'pesPlanoValgus',
     value: 'pesPlanoValgus',
-    translationKey: 'pesPlanoValgus',
     key: 'pesPlanoValgus',
   },
   {
     label: 'pesCavo',
     value: 'pesCavo',
-    translationKey: 'pesCavo',
     key: 'pesCavo',
   },
   {
     label: 'klauwtenen',
-    value: 'klauwtenen',
-    translationKey: 'clawToes',
+    value: 'clawToes',
     key: 'klauwtenen',
   },
 ];
 
 /** OSA Digitaal - Leesthoogte options */
 export const LAST_HEIGHT_OPTIONS = [
-  {label: '15cm', value: '15', translationKey: 'lastHeight15cm'},
-  {label: '20cm', value: '20', translationKey: 'lastHeight20cm'},
-  {label: '25cm', value: '25', translationKey: 'lastHeight25cm'},
+  {label: '15cm', value: 'lastHeight15cm'},
+  {label: '20cm', value: 'lastHeight20cm'},
+  {label: '25cm', value: 'lastHeight25cm'},
 ];
 
 /** OSA Digitaal - MTP1 diep options */
 export const MTP1_DEEP_OPTIONS = [
-  {label: 'Nee', value: 'No', translationKey: 'no'},
-  {label: '4cm', value: '4', translationKey: 'mtp1Deep4cm'},
-  {label: '8cm', value: '8', translationKey: 'mtp1Deep8cm'},
+  {label: 'Nee', value: 'no'},
+  {label: '4cm', value: 'mtp1Deep4cm'},
+  {label: '8cm', value: 'mtp1Deep8cm'},
 ];
 
 /** Foliepas Leestcorrectie opties */
@@ -472,22 +458,18 @@ export const LAST_CORRECTION_OPTIONS = [
   {
     label: 'Openstand (zie Foliepas)',
     value: 'openstandLastCorrection',
-    translationKey: 'openstandLastCorrection',
   },
   {
     label: 'Schachthoogte',
     value: 'shaftHeightLastCorrection',
-    translationKey: 'shaftHeightLastCorrection',
   },
   {
     label: 'Achter innemen (zie Foliepas)',
     value: 'achterInnemenLastCorrection',
-    translationKey: 'rearTakeInLastCorrection',
   },
   {
     label: 'Enkels aanpassen (zie Foliepas)',
     value: 'ankleAdjustmentLastCorrection',
-    translationKey: 'ankleAdjustmentLastCorrection',
   },
 ];
 
@@ -497,119 +479,112 @@ export const LAST_CORRECTION_OPTIONS = [
 
 /** Pair Type - Used in multiple forms */
 export type PairTypeOption =
-  | 'Eerste paar'
-  | 'Herhalings paar'
-  | 'Reserve paar'
-  | 'Privé paar';
+  | 'firstPair'
+  | 'repeatPair'
+  | 'sparePair'
+  | 'privatePair';
 export const PAIR_TYPE_OPTIONS = [
-  {label: 'firstPair', value: 'Eerste paar', translationKey: 'firstPair'},
-  {label: 'repeatPair', value: 'Herhalings paar', translationKey: 'repeatPair'},
-  {label: 'sparePair', value: 'Reserve paar', translationKey: 'sparePair'},
-  {label: 'privatePair', value: 'Privé paar', translationKey: 'privatePair'},
+  {label: 'firstPair', value: 'firstPair'},
+  {label: 'repeatPair', value: 'repeatPair'},
+  {label: 'sparePair', value: 'sparePair'},
+  {label: 'privatePair', value: 'privatePair'},
 ];
 
 /** Goal options - GEEN L/R) */
 export type GoalOption =
-  | 'Pasvorm'
-  | 'Stabiliteit'
-  | 'Loop afstand vergroten'
-  | 'Ondersteuning gewelf';
+  | 'goalFit'
+  | 'goalStability'
+  | 'goalIncreaseWalkingDistance'
+  | 'goalArchSupport';
 export const GOAL_OPTIONS = [
   {
     label: 'Pasvorm',
-    value: 'Pasvorm',
-    translationKey: 'goalFit',
+    value: 'goalFit',
     fullKey: 'goalFit',
   },
   {
     label: 'Stabiliteit',
-    value: 'Stabiliteit',
-    translationKey: 'goalStability',
+    value: 'goalStability',
     fullKey: 'goalStability',
   },
   {
     label: 'Loop afstand vergroten',
-    value: 'Loop afstand vergroten',
-    translationKey: 'goalIncreaseWalkingDistance',
+    value: 'goalIncreaseWalkingDistance',
     fullKey: 'goalIncreaseWalkingDistance',
   },
   {
     label: 'Ondersteuning gewelf',
-    value: 'Ondersteuning gewelf',
-    translationKey: 'goalArchSupport',
+    value: 'goalArchSupport',
     fullKey: 'goalArchSupport',
   },
 ];
 
 /** Walking function options */
-export type WalkingFunctionOption = 'Passief' | 'Actief' | 'Korte transfers';
+export type WalkingFunctionOption =
+  | 'walkingFunctionPassive'
+  | 'walkingFunctionActive'
+  | 'walkingFunctionShortTransfers';
 export const WALKING_FUNCTION_OPTIONS = [
   {
     label: 'Passief',
-    value: 'Passief',
-    translationKey: 'walkingFunctionPassive',
+    value: 'walkingFunctionPassive',
     fullKey: 'walkingFunctionPassive',
   },
   {
     label: 'Actief',
-    value: 'Actief',
-    translationKey: 'walkingFunctionActive',
+    value: 'walkingFunctionActive',
     fullKey: 'walkingFunctionActive',
   },
   {
     label: 'Korte transfers',
-    value: 'Korte transfers',
-    translationKey: 'walkingFunctionShortTransfers',
+    value: 'walkingFunctionShortTransfers',
     fullKey: 'walkingFunctionShortTransfers',
   },
 ];
 
 /** Walking function indication options (OSB specific) */
 export type WalkingFunctionIndicationOption =
-  | 'Passief'
-  | 'Korte Transfers'
-  | 'Actief';
+  | 'walkingFunctionPassive'
+  | 'walkingFunctionShortTransfers'
+  | 'walkingFunctionActive'
+  | 'other';
 export const WALKING_FUNCTION_INDICATION_OPTIONS = [
   {
     label: 'Passief',
-    value: 'Passief',
-    translationKey: 'walkingFunctionPassive',
+    value: 'walkingFunctionPassive',
     fullKey: 'walkingFunctionPassive',
   },
   {
     label: 'Korte Transfers',
-    value: 'Korte Transfers',
-    translationKey: 'walkingFunctionShortTransfers',
+    value: 'walkingFunctionShortTransfers',
     fullKey: 'walkingFunctionShortTransfers',
   },
   {
     label: 'Actief',
-    value: 'Actief',
-    translationKey: 'walkingFunctionActive',
+    value: 'walkingFunctionActive',
     fullKey: 'walkingFunctionActive',
   },
   {
     label: 'Anders',
-    value: 'Anders',
-    translationKey: 'other',
+    value: 'other',
     fullKey: 'walkingFunctionOther',
   },
 ];
 
 /** Suppliers */
-export type SupplierOption = 'Neskrid' | 'Tom' | 'Myfoot' | 'Durea';
+export type SupplierOption = 'neskrid' | 'tom' | 'myfoot' | 'durea';
 export const SUPPLIER_OPTIONS = [
-  {label: 'Neskrid', value: 'Neskrid', translationKey: 'neskrid'},
-  {label: 'Tom', value: 'Tom', translationKey: 'tom'},
-  {label: 'Myfoot', value: 'Myfoot', translationKey: 'myfoot'},
-  {label: 'Durea', value: 'Durea', translationKey: 'durea'},
+  {label: 'Neskrid', value: 'neskrid'},
+  {label: 'Tom', value: 'tom'},
+  {label: 'Myfoot', value: 'myfoot'},
+  {label: 'Durea', value: 'durea'},
 ];
 
 /** Basiscode SOS */
-export type BaseCodeOption = '42' | '40';
+export type BaseCodeOption = 'basicCode42' | 'basicCode40';
 export const BASE_CODE_OPTIONS = [
-  {label: '42', value: '42', translationKey: 'basicCode42'},
-  {label: '40', value: '40', translationKey: 'basicCode40'},
+  {label: '42', value: 'basicCode42'},
+  {label: '40', value: 'basicCode40'},
 ];
 
 /** Supplement options met codes (in tabel met L/R) */
@@ -626,19 +601,19 @@ export const SUPPLEMENT_OPTIONS = [
 export type SupplementOption = (typeof SUPPLEMENT_OPTIONS)[number];
 
 /** Hallux valgus mm options */
-export type HalluxMmOption = 'Nee' | '3 mm' | '8 mm';
+export type HalluxMmOption = 'no' | 'halluxMm3' | 'halluxMm8';
 export const HALLUX_MM_OPTIONS = [
-  {label: 'Nee', value: 'Nee', translationKey: 'no'},
-  {label: '3 mm', value: '3 mm', translationKey: 'halluxMm3'},
-  {label: '8 mm', value: '8 mm', translationKey: 'halluxMm8'},
+  {label: 'Nee', value: 'no'},
+  {label: '3 mm', value: 'halluxMm3'},
+  {label: '8 mm', value: 'halluxMm8'},
 ];
 
 /** Forefoot deepening mm options */
-export type DeepeningMmOption = 'Nee' | '3 mm' | '5 mm';
+export type DeepeningMmOption = 'no' | 'deepeningMm3' | 'deepeningMm5';
 export const DEEPENING_MM_OPTIONS = [
-  {label: 'Nee', value: 'Nee', translationKey: 'no'},
-  {label: '3 mm', value: '3 mm', translationKey: 'deepeningMm3'},
-  {label: '5 mm', value: '5 mm', translationKey: 'deepeningMm5'},
+  {label: 'Nee', value: 'no'},
+  {label: '3 mm', value: 'deepeningMm3'},
+  {label: '5 mm', value: 'deepeningMm5'},
 ];
 
 // ============================================================================
@@ -647,75 +622,69 @@ export const DEEPENING_MM_OPTIONS = [
 
 /** Insole types */
 export type InsoleType =
-  | 'Berksteunzool met'
-  | 'Berksteunzool zonder'
-  | 'Kinderkniksteun'
-  | 'Ergopad redux heel'
-  | 'Birco'
-  | 'Anders';
+  | 'berkInsoleWith'
+  | 'berkInsoleWithout'
+  | 'childArchSupport'
+  | 'ergopadReduxHeel'
+  | 'birco'
+  | 'other';
 export const INSOLE_TYPE_OPTIONS = [
   {
     label: 'Berksteunzool met',
-    value: 'Berksteunzool met',
-    translationKey: 'berkInsoleWith',
+    value: 'berkInsoleWith',
     fullKey: 'berkInsoleWith',
   },
   {
     label: 'Berksteunzool zonder',
-    value: 'Berksteunzool zonder',
-    translationKey: 'berkInsoleWithout',
+    value: 'berkInsoleWithout',
     fullKey: 'berkInsoleWithout',
   },
   {
     label: 'Kinderkniksteun',
-    value: 'Kinderkniksteun',
-    translationKey: 'childArchSupport',
+    value: 'childArchSupport',
     fullKey: 'childArchSupport',
   },
   {
     label: 'Ergopad redux heel',
-    value: 'Ergopad redux heel',
-    translationKey: 'ergopadReduxHeel',
+    value: 'ergopadReduxHeel',
     fullKey: 'ergopadReduxHeel',
   },
   {
     label: 'Birco',
-    value: 'Birco',
-    translationKey: 'birco',
+    value: 'birco',
     fullKey: 'birco',
   },
   {
     label: 'Anders',
-    value: 'Anders',
-    translationKey: 'other',
+    value: 'other',
     fullKey: 'other',
   },
 ];
 
 /** Midfoot correction */
-export type MidfootCorrection = 'Nee' | 'Neutraal' | 'Laag' | 'Hoog';
+export type MidfootCorrection = 'no' | 'neutral' | 'low' | 'high';
 export const MIDFOOT_CORRECTION_OPTIONS = [
-  {label: 'Nee', value: 'Nee', translationKey: 'no'},
-  {label: 'Neutraal', value: 'Neutraal', translationKey: 'neutral'},
-  {label: 'Laag', value: 'Laag', translationKey: 'low'},
-  {label: 'Hoog', value: 'Hoog', translationKey: 'high'},
+  {label: 'Nee', value: 'no'},
+  {label: 'Neutraal', value: 'neutral'},
+  {label: 'Laag', value: 'low'},
+  {label: 'Hoog', value: 'high'},
 ];
 
 /** Forefoot correction */
-export type ForefootCorrection = 'Nee' | 'Neutraal' | 'Pronatie' | 'Supinatie';
+export type ForefootCorrection = 'no' | 'neutral' | 'pronation' | 'supination';
 export const FOREFOOT_CORRECTION_OPTIONS = [
-  {label: 'Nee', value: 'Nee', translationKey: 'no'},
-  {label: 'Neutraal', value: 'Neutraal', translationKey: 'neutral'},
-  {label: 'Pronatie', value: 'Pronatie', translationKey: 'pronation'},
-  {label: 'Supinatie', value: 'Supinatie', translationKey: 'supination'},
+  {label: 'Nee', value: 'no'},
+  {label: 'Neutraal', value: 'neutral'},
+  {label: 'Pronatie', value: 'pronation'},
+  {label: 'Supinatie', value: 'supination'},
 ];
 
 /** Pelotte options */
-export type PelotteOption = 'Nee' | 'Hoog' | 'Laag';
+export type PelotteOption = 'no' | 'high' | 'low';
 export const PELOTTE_OPTIONS = [
-  {label: 'Nee', value: 'Nee', translationKey: 'no'},
-  {label: 'Hoog', value: 'Hoog', translationKey: 'high'},
-  {label: 'Laag', value: 'Laag', translationKey: 'low'},
+  {label: 'Nee', value: 'no'},
+  {label: 'Hoog', value: 'high'},
+  {label: 'Laag', value: 'low'},
 ];
 
 /** Insole pricing options - numeric values */
@@ -768,12 +737,11 @@ export const OVAC_DESCRIPTION_ITEMS: OvacDescriptionItem[] = [
 /** Supplement types - Used in OVAC */
 export type SupplementType = 'lateral' | 'medial';
 export const SUPPLEMENT_TYPE_OPTIONS = [
-  {label: 'lateral', value: 'Lateraal', translationKey: 'lateral'},
-  {label: 'medial', value: 'Mediaal', translationKey: 'medial'},
+  {label: 'lateral', value: 'lateral'},
+  {label: 'medial', value: 'medial'},
   {
     label: 'lateralAndMedial',
-    value: 'LateraalEnMediaal',
-    translationKey: 'lateralAndMedial',
+    value: 'lateralAndMedial',
   },
 ];
 
@@ -782,25 +750,19 @@ export const SUPPLEMENT_TYPE_OPTIONS = [
 // ============================================================================
 
 // Voeringopties (lining options)
-export type LiningOption =
-  | 'Leather lining'
-  | 'On-steam lining'
-  | 'Diabetic lining';
+export type LiningOption = 'leatherLining' | 'onSteamLining' | 'diabeticLining';
 export const LINING_OPTIONS = [
   {
     label: 'Leather lining',
-    value: 'Leather lining',
-    translationKey: 'leatherLining',
+    value: 'leatherLining',
   },
   {
     label: 'On-steam lining',
-    value: 'On-steam lining',
-    translationKey: 'onSteamLining',
+    value: 'onSteamLining',
   },
   {
     label: 'Diabetic lining',
-    value: 'Diabetic lining',
-    translationKey: 'diabeticLining',
+    value: 'diabeticLining',
   },
 ];
 
@@ -1185,4 +1147,144 @@ export const ONDERWERKEN: OnderwerkCategorie[] = [
 export const ZIPPER_PLACEMENT_OPTIONS = [
   {label: 'Langs Ringbies', value: 'Langs Ringbies'},
   {label: 'Zie leest', value: 'Zie leest'},
+];
+
+/** Zoolrand polish types */
+export type SoleEdgePolishType =
+  | 'none'
+  | 'black'
+  | 'brown'
+  | 'mahogany'
+  | 'ridges'
+  | 'other';
+export const SOLE_EDGE_POLISH_TYPE_OPTIONS = [
+  {label: 'none', value: 'none'},
+  {label: 'black', value: 'black'},
+  {label: 'brown', value: 'brown'},
+  {label: 'mahogany', value: 'mahogany'},
+  {label: 'ridges', value: 'ridges'},
+  {label: 'other', value: 'other'},
+];
+
+/** Model type options */
+export type ModelType = 'asPhoto' | 'model';
+export const MODEL_TYPE_OPTIONS = [
+  {label: 'asPhoto', value: 'asPhoto' as const},
+  {label: 'model', value: 'model' as const},
+];
+
+/** Tongue padding options (mm) */
+export type TonguePaddingMm = 'no' | 'mm3' | 'mm5';
+export const TONGUE_PADDING_MM_OPTIONS = [
+  {label: 'no', value: 'no' as const},
+  {label: '3', value: 'mm3' as const},
+  {label: '5', value: 'mm5' as const},
+];
+
+/** Padding collar options (mm) */
+export type PaddingCollarMm = 'no' | 'mm5' | 'mm10';
+export const PADDING_COLLAR_MM_OPTIONS = [
+  {label: 'no', value: 'no' as const},
+  {label: '5', value: 'mm5' as const},
+  {label: '10', value: 'mm10' as const},
+];
+
+/** Closure type options */
+export type ClosureType = 'velcroWithExtraLongRolPassant' | 'ringsAndHooks';
+export const CLOSURE_TYPE_OPTIONS = [
+  {
+    label: 'velcro',
+    value: 'velcroWithExtraLongRolPassant' as const,
+  },
+  {
+    label: 'ringAndHooks',
+    value: 'ringsAndHooks' as const,
+  },
+];
+
+/** Zipper type options */
+export type ZipperType = 'none' | 'functionalNylon' | 'decorativeNylon';
+export const ZIPPER_TYPE_OPTIONS = [
+  {label: 'none', value: 'none' as const},
+  {
+    label: 'functionalNylon',
+    value: 'functionalNylon' as const,
+  },
+  {
+    label: 'decorativeNylon',
+    value: 'decorativeNylon' as const,
+  },
+];
+
+/** Toe type options */
+export type ToeType = 'none' | 'carbonToes' | 'rubberCrawlToes';
+export const TOE_TYPE_OPTIONS = [
+  {label: 'none', value: 'none' as const},
+  {
+    label: 'carbonToes',
+    value: 'carbonToes' as const,
+  },
+  {
+    label: 'rubberCrawlToes',
+    value: 'rubberCrawlToes' as const,
+  },
+];
+
+/** Counterfort type options */
+export type CounterfortType = 'formo' | 'leather' | 'other';
+export const COUNTERFORT_TYPE_OPTIONS = [
+  {label: 'formo', value: 'formo' as const},
+  {label: 'leather', value: 'leather' as const},
+  {label: 'other', value: 'other' as const},
+];
+
+/** Insole type options for CheckFoliepas */
+export type CheckFoliepasInsoleType = 'leather' | 'other';
+export const CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS = [
+  {label: 'leather', value: 'leather' as const},
+  {label: 'other', value: 'other' as const},
+];
+
+/** Construction method type options */
+export type ConstructionMethodType = 'glued' | 'flexible' | 'other';
+export const CONSTRUCTION_METHOD_TYPE_OPTIONS = [
+  {label: 'glued', value: 'glued' as const},
+  {label: 'flexible', value: 'flexible' as const},
+  {label: 'other', value: 'other' as const},
+];
+
+/** Heel model type options */
+export type HeelModelType = 'buildUpHeel' | 'wedgeHeel' | 'blockHeel';
+export const HEEL_MODEL_TYPE_OPTIONS = [
+  {
+    label: 'buildUp',
+    value: 'buildUpHeel' as const,
+  },
+  {
+    label: 'wedge',
+    value: 'wedgeHeel' as const,
+  },
+  {
+    label: 'block',
+    value: 'blockHeel' as const,
+  },
+];
+
+/** Heel buildup material options */
+export type HeelBuildUpMaterial = 'poro' | 'leather';
+export const HEEL_BUILDUP_MATERIAL_OPTIONS = [
+  {label: 'poro', value: 'poro' as const},
+  {label: 'leather', value: 'leather' as const},
+];
+
+/** Shoring type options */
+export type ShoringType = 'lateral' | 'medial' | 'lateralAndMedial' | 'none';
+export const SHORING_TYPE_OPTIONS = [
+  {label: 'lateral', value: 'lateral' as const},
+  {label: 'medial', value: 'medial' as const},
+  {
+    label: 'lateralAndMedial',
+    value: 'lateralAndMedial' as const,
+  },
+  {label: 'none', value: 'none' as const},
 ];

@@ -30,11 +30,26 @@ import {
   SHAFT_OPENING_OPTIONS,
   DONKEY_EAR_TYPE_OPTIONS,
   Side,
+  SIDE_OPTIONS,
   LAST_CORRECTION_OPTIONS,
   ZOOL_RANDEN,
   ONDERWERKEN,
   ZIPPER_PLACEMENT_OPTIONS,
   LINING_OPTIONS,
+  SOLE_EDGE_POLISH_TYPE_OPTIONS,
+  MODEL_TYPE_OPTIONS,
+  TONGUE_PADDING_MM_OPTIONS,
+  PADDING_COLLAR_MM_OPTIONS,
+  CLOSURE_TYPE_OPTIONS,
+  ZIPPER_TYPE_OPTIONS,
+  TOE_TYPE_OPTIONS,
+  COUNTERFORT_TYPE_OPTIONS,
+  CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS,
+  CONSTRUCTION_METHOD_TYPE_OPTIONS,
+  HEEL_MODEL_TYPE_OPTIONS,
+  HEEL_BUILDUP_MATERIAL_OPTIONS,
+  HEEL_WEDGE_TYPE_OPTIONS,
+  SHORING_TYPE_OPTIONS,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
@@ -60,7 +75,7 @@ const FormCheckFoliepasPage = () => {
 
   const formSchema = z.object({
     // Side Selection
-    side: z.enum(['left', 'right', 'both'] as const),
+    side: z.string().optional(),
 
     // Reading Corrections
     readingCorrectionAfterFoilFit: z.string().optional(),
@@ -97,27 +112,25 @@ const FormCheckFoliepasPage = () => {
     showColorAndModel: z.boolean(),
 
     // Model
-    modelType: z.enum(['asPhoto', 'model'] as const).optional(),
+    modelType: z.string().optional(),
     modelText: z.string().optional(),
 
     // Colors
     colorOptions: z.array(z.string()).optional(),
 
     // Tongue Padding and Collar (mm)
-    tonguePaddingMm: z.enum(['no', '3', '5'] as const).optional(),
-    paddingCollarMm: z.enum(['no', '5', '10'] as const).optional(),
+    tonguePaddingMm: z.string().optional(),
+    paddingCollarMm: z.string().optional(),
 
     // Closure Type
-    closureType: z.enum(['velcro', 'ringsHooks'] as const).optional(),
+    closureType: z.string().optional(),
     ringsNumber: z.string().optional(),
     ringsAmount: z.string().optional(),
     hooksNumber: z.string().optional(),
     hooksAmount: z.string().optional(),
 
     // Zipper
-    zipperType: z
-      .enum(['none', 'functionalNylon', 'decorativeNylon'] as const)
-      .optional(),
+    zipperType: z.string().optional(),
     zipperColor: z.string().optional(),
     zipperPlacement: z.string().optional(),
     zipperMedial: z.boolean().optional(),
@@ -136,7 +149,7 @@ const FormCheckFoliepasPage = () => {
     edgeTypeColorCode: z.string().optional(),
 
     // Sole Type (Zooltype)
-    soleTypeCategory: z.string().optional(),
+    soleTypeMain: z.string().optional(),
     soleTypeModel: z.string().optional(),
     soleTypeColor: z.string().optional(),
     soleTypeOther: z.string().optional(),
@@ -146,47 +159,39 @@ const FormCheckFoliepasPage = () => {
     carbonStiffeningShoeRight: z.boolean().optional(),
 
     // Toe Options (Neusopties)
-    toeOptionsType: z
-      .enum(['none', 'carbon', 'rubberCrawl'] as const)
-      .optional(),
+    toeType: z.string().optional(),
 
     // Lining (Voering)
     liningType: z.string().optional(),
 
     // Counterfort (Stijfsel)
-    counterfortType: z.enum(['formo', 'leather', 'other'] as const).optional(),
+    counterfortType: z.string().optional(),
     counterfortOther: z.string().optional(),
 
     // Insole (Binnenzool)
-    insoleType: z.enum(['leather', 'other'] as const).optional(),
+    insoleType: z.string().optional(),
     insoleOther: z.string().optional(),
 
     // Sole Edge Polish (Zoolrandafwerking)
-    soleEdgePolishType: z
-      .enum(['none', 'black', 'brown', 'mahogany', 'ridges', 'other'] as const)
-      .optional(),
+    soleEdgePolishType: z.string().optional(),
     soleEdgePolishOther: z.string().optional(),
 
     // Construction Method (Constructie Methode)
-    constructionMethodType: z
-      .enum(['glued', 'flexible', 'other'] as const)
-      .optional(),
+    constructionMethodType: z.string().optional(),
     constructionMethodOther: z.string().optional(),
 
     // Heel Model (Hielmodel)
-    heelModelType: z.enum(['buildUp', 'wedge', 'block'] as const).optional(),
-    heelBuildUpMaterial: z.enum(['poro', 'leather'] as const).optional(),
-    heelWedgeType: z.enum(['hollow', 'flat'] as const).optional(),
+    heelModelType: z.string().optional(),
+    heelBuildUpMaterial: z.string().optional(),
+    heelWedgeType: z.string().optional(),
     heelBlockCoreCoating: z.boolean().optional(),
+    heelHeightLeft: z.string().optional(),
+    heelHeightRight: z.string().optional(),
 
     // Shoring (Schoring)
-    shoringLeftType: z
-      .enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const)
-      .optional(),
+    shoringLeftType: z.string().optional(),
     shoringLeftMm: z.string().optional(),
-    shoringRightType: z
-      .enum(['lateral', 'medial', 'lateralAndMedial', 'none'] as const)
-      .optional(),
+    shoringRightType: z.string().optional(),
     shoringRightMm: z.string().optional(),
   });
 
@@ -197,7 +202,7 @@ const FormCheckFoliepasPage = () => {
     shouldFocusError: true,
     defaultValues: {
       // Side Selection
-      side: 'both',
+      side: SIDE_OPTIONS[0]?.value || 'both',
 
       // Reading Corrections
       readingCorrectionAfterFoilFit: '',
@@ -223,8 +228,8 @@ const FormCheckFoliepasPage = () => {
       // Voeringschoen Opties - Donkey Ear (Ezelsoor)
       donkeyEarLeftEnabled: false,
       donkeyEarRightEnabled: false,
-      donkeyEarLeftType: 'Lateraal',
-      donkeyEarRightType: 'Lateraal',
+      donkeyEarLeftType: DONKEY_EAR_TYPE_OPTIONS[0]?.value || '',
+      donkeyEarRightType: DONKEY_EAR_TYPE_OPTIONS[0]?.value || '',
 
       // Voeringschoen Opties - Carbon Stiffening Lining Shoe
       carbonStiffeningLiningShoeLeft: false,
@@ -234,27 +239,27 @@ const FormCheckFoliepasPage = () => {
       showColorAndModel: false,
 
       // Model
-      modelType: 'model',
+      modelType: MODEL_TYPE_OPTIONS[1]?.value || 'model',
       modelText: '',
 
       // Colors
       colorOptions: [''],
 
       // Tongue Padding and Collar (mm)
-      tonguePaddingMm: 'no',
-      paddingCollarMm: 'no',
+      tonguePaddingMm: TONGUE_PADDING_MM_OPTIONS[0]?.value || 'no',
+      paddingCollarMm: PADDING_COLLAR_MM_OPTIONS[0]?.value || 'no',
 
       // Closure Type
-      closureType: 'ringsHooks',
+      closureType: CLOSURE_TYPE_OPTIONS[1]?.value || 'ringsAndHooks',
       ringsNumber: '',
       ringsAmount: '',
       hooksNumber: '',
       hooksAmount: '',
 
       // Zipper
-      zipperType: 'none',
+      zipperType: ZIPPER_TYPE_OPTIONS[0]?.value || '',
       zipperColor: '',
-      zipperPlacement: 'Langs Ringbies',
+      zipperPlacement: ZIPPER_PLACEMENT_OPTIONS[0]?.value || '',
       zipperMedial: false,
       zipperLateral: false,
 
@@ -271,7 +276,7 @@ const FormCheckFoliepasPage = () => {
       edgeTypeColorCode: '',
 
       // Sole Type (Zooltype)
-      soleTypeCategory: '',
+      soleTypeMain: '',
       soleTypeModel: '',
       soleTypeColor: '',
       soleTypeOther: '',
@@ -281,37 +286,40 @@ const FormCheckFoliepasPage = () => {
       carbonStiffeningShoeRight: false,
 
       // Toe Options (Neusopties)
-      toeOptionsType: 'none',
+      toeType: TOE_TYPE_OPTIONS[0]?.value || '',
 
       // Lining (Voering)
       liningType: LINING_OPTIONS[0]?.value || '',
 
       // Counterfort (Stijfsel)
-      counterfortType: 'formo',
+      counterfortType: COUNTERFORT_TYPE_OPTIONS[0]?.value || 'formo',
       counterfortOther: '',
 
       // Insole (Binnenzool)
-      insoleType: 'leather',
+      insoleType: CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS[0]?.value || 'leather',
       insoleOther: '',
 
       // Sole Edge Polish (Zoolrandafwerking)
-      soleEdgePolishType: 'none',
+      soleEdgePolishType: SOLE_EDGE_POLISH_TYPE_OPTIONS[0]?.value || 'none',
       soleEdgePolishOther: '',
 
       // Construction Method (Constructie Methode)
-      constructionMethodType: 'glued',
+      constructionMethodType:
+        CONSTRUCTION_METHOD_TYPE_OPTIONS[0]?.value || 'glued',
       constructionMethodOther: '',
 
       // Heel Model (Hielmodel)
-      heelModelType: 'buildUp',
-      heelBuildUpMaterial: 'poro',
-      heelWedgeType: 'flat',
+      heelModelType: HEEL_MODEL_TYPE_OPTIONS[0]?.value || 'buildUpHeel',
+      heelBuildUpMaterial: HEEL_BUILDUP_MATERIAL_OPTIONS[0]?.value || 'poro',
+      heelWedgeType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || 'flat',
       heelBlockCoreCoating: false,
+      heelHeightLeft: '2',
+      heelHeightRight: '2',
 
       // Shoring (Schoring)
-      shoringLeftType: 'none',
+      shoringLeftType: SHORING_TYPE_OPTIONS[3]?.value || 'none',
       shoringLeftMm: '',
-      shoringRightType: 'none',
+      shoringRightType: SHORING_TYPE_OPTIONS[3]?.value || 'none',
       shoringRightMm: '',
     },
   });
@@ -350,10 +358,24 @@ const FormCheckFoliepasPage = () => {
   const heelModelType = form.watch('heelModelType');
 
   const onSubmit = (data: FormData) => {
+    const specialFeaturesList = [
+      data.specialMedialVelcro ? t('medialVelcroTongue') : '',
+      data.specialLaceLoop ? t('laceLoopOnTongue') : '',
+      data.specialExtraLeather ? t('extraLeatherForSupplements') : '',
+      data.specialOther?.trim() ? data.specialOther.trim() : '',
+    ].filter(Boolean);
+    const specialFeatures = specialFeaturesList.join(' \n');
+
+    const colorOptions = (data.colorOptions || [])
+      .map(option => option?.trim())
+      .filter(Boolean)
+      .map((option, index) => `${index + 1}. ${option}`)
+      .join('\n');
+
     dispatch(
       setCheckFoliepasData({
         // Side Selection
-        side: data.side,
+        side: data.side as Side,
 
         // Reading Corrections
         readingCorrectionAfterFoilFit: data.readingCorrectionAfterFoilFit || '',
@@ -397,7 +419,7 @@ const FormCheckFoliepasPage = () => {
         modelText: data.modelText || '',
 
         // Colors
-        colorOptions: data.colorOptions || [],
+        colorOptions,
 
         // Tongue Padding and Collar (mm)
         tonguePaddingMm: data.tonguePaddingMm || '',
@@ -422,6 +444,7 @@ const FormCheckFoliepasPage = () => {
         specialLaceLoop: data.specialLaceLoop || false,
         specialExtraLeather: data.specialExtraLeather || false,
         specialOther: data.specialOther || '',
+        specialFeatures,
 
         // Edge Type (Randtype)
         edgeTypeMain: data.edgeTypeMain || '',
@@ -430,7 +453,7 @@ const FormCheckFoliepasPage = () => {
         edgeTypeColorCode: data.edgeTypeColorCode || '',
 
         // Sole Type (Zooltype)
-        soleTypeCategory: data.soleTypeCategory || '',
+        soleTypeMain: data.soleTypeMain || '',
         soleTypeModel: data.soleTypeModel || '',
         soleTypeColor: data.soleTypeColor || '',
         soleTypeOther: data.soleTypeOther || '',
@@ -440,7 +463,7 @@ const FormCheckFoliepasPage = () => {
         carbonStiffeningShoeRight: data.carbonStiffeningShoeRight || false,
 
         // Toe Options (Neusopties)
-        toeOptionsType: data.toeOptionsType || '',
+        toeType: data.toeType || '',
 
         // Lining (Voering)
         liningType: data.liningType || '',
@@ -466,6 +489,8 @@ const FormCheckFoliepasPage = () => {
         heelBuildUpMaterial: data.heelBuildUpMaterial || '',
         heelWedgeType: data.heelWedgeType || '',
         heelBlockCoreCoating: data.heelBlockCoreCoating || false,
+        heelHeightLeft: data.heelHeightLeft || '',
+        heelHeightRight: data.heelHeightRight || '',
 
         // Shoring (Schoring)
         shoringLeftType: data.shoringLeftType || 'none',
@@ -503,36 +528,26 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper>
                     <RadioGroup
                       value={side}
-                      onValueChange={v => form.setValue('side', v as Side)}
+                      onValueChange={v => form.setValue('side', v)}
                     >
                       <div className="flex flex-row justify-center gap-6">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="both" id="side-both" />
-                          <Label
-                            htmlFor="side-both"
-                            className="font-normal cursor-pointer"
+                        {SIDE_OPTIONS.map(option => (
+                          <div
+                            key={option.value}
+                            className="flex items-center space-x-2"
                           >
-                            {t('both')}
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="left" id="side-left" />
-                          <Label
-                            htmlFor="side-left"
-                            className="font-normal cursor-pointer"
-                          >
-                            {t('left')}
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="right" id="side-right" />
-                          <Label
-                            htmlFor="side-right"
-                            className="font-normal cursor-pointer"
-                          >
-                            {t('right')}
-                          </Label>
-                        </div>
+                            <RadioGroupItem
+                              value={option.value}
+                              id={`side-${option.value}`}
+                            />
+                            <Label
+                              htmlFor={`side-${option.value}`}
+                              className="font-normal cursor-pointer"
+                            >
+                              {t(option.value)}
+                            </Label>
+                          </div>
+                        ))}
                       </div>
                     </RadioGroup>
                   </FormItemWrapper>
@@ -552,7 +567,7 @@ const FormCheckFoliepasPage = () => {
                           form.getValues('readingCorrectionAfterFoilFit') || '';
 
                         // Construct new line: "- Translation: Links: Rechts:"
-                        const textToAdd = '- ' + t(optie.translationKey);
+                        const textToAdd = '- ' + t(optie.value);
 
                         // Append with newline if text exists
                         const newText = currentText
@@ -615,7 +630,7 @@ const FormCheckFoliepasPage = () => {
                           '';
 
                         // Construct new line: "- Translation: Links: Rechts:"
-                        const textToAdd = '- ' + t(optie.translationKey);
+                        const textToAdd = '- ' + t(optie.value);
 
                         // Append with newline if text exists
                         const newText = currentText
@@ -1133,10 +1148,16 @@ const FormCheckFoliepasPage = () => {
               {/* Kleur en Model - Refactored with FormCard, FormBlock, FormItemWrapper */}
               <FormCard
                 title={t('colorAndModel')}
-                description={t('colors')}
+                // description={t('colors')}
                 toggleAble={true}
                 toggleLabel={t('colorAndModel')}
                 defaultOpen={form.watch('showColorAndModel')} // Optional: Sync initial state if needed
+                onToggleChange={isOpen =>
+                  form.setValue('showColorAndModel', isOpen, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  })
+                }
               >
                 {/* Model & Colors */}
                 <FormBlock columns={2} dividers>
@@ -1144,16 +1165,17 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('finalModel')}>
                     <Select
                       value={modelType ?? 'model'}
-                      onValueChange={v =>
-                        form.setValue('modelType', v as 'asPhoto' | 'model')
-                      }
+                      onValueChange={v => form.setValue('modelType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('finalModel')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="asPhoto">{t('asPhoto')}</SelectItem>
-                        <SelectItem value="model">{t('model')}</SelectItem>
+                        {MODEL_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
 
@@ -1229,17 +1251,17 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('tonguePadding')}>
                     <Select
                       value={form.watch('tonguePaddingMm') || ''}
-                      onValueChange={v =>
-                        form.setValue('tonguePaddingMm', v as 'no' | '3' | '5')
-                      }
+                      onValueChange={v => form.setValue('tonguePaddingMm', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('tonguePadding')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="no">{t('no')}</SelectItem>
-                        <SelectItem value="3">{t('mm3')}</SelectItem>
-                        <SelectItem value="5">{t('mm5')}</SelectItem>
+                        {TONGUE_PADDING_MM_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItemWrapper>
@@ -1248,17 +1270,17 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('paddingCollar')}>
                     <Select
                       value={form.watch('paddingCollarMm') || ''}
-                      onValueChange={v =>
-                        form.setValue('paddingCollarMm', v as 'no' | '5' | '10')
-                      }
+                      onValueChange={v => form.setValue('paddingCollarMm', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('paddingCollar')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="no">{t('no')}</SelectItem>
-                        <SelectItem value="6">{t('mm6')}</SelectItem>
-                        <SelectItem value="10">{t('mm10')}</SelectItem>
+                        {PADDING_COLLAR_MM_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItemWrapper>
@@ -1267,24 +1289,19 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('zipper')}>
                     <Select
                       value={zipperType || 'none'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'zipperType',
-                          v as 'none' | 'functionalNylon' | 'decorativeNylon',
-                        )
-                      }
+                      onValueChange={v => form.setValue('zipperType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('zipper')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">{t('noZipper')}</SelectItem>
-                        <SelectItem value="functionalNylon">
-                          Rits Functioneel
-                        </SelectItem>
-                        <SelectItem value="decorativeNylon">
-                          Rits Decoratief
-                        </SelectItem>
+                        {ZIPPER_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.value === 'none'
+                              ? t('noZipper')
+                              : t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {zipperType && zipperType !== 'none' && (
@@ -1294,7 +1311,7 @@ const FormCheckFoliepasPage = () => {
                           {/* Color input (optional) */}
                           <div>
                             <Label htmlFor="zipper-color" className="text-sm">
-                              Kleur (optioneel)
+                              {t('colorOptional')}
                             </Label>
                             <Input
                               id="zipper-color"
@@ -1312,12 +1329,12 @@ const FormCheckFoliepasPage = () => {
                               htmlFor="zipper-placement"
                               className="text-sm"
                             >
-                              Plaatsing
+                              {t('zipperPlacement')}
                             </Label>
                             <Select
                               value={
                                 form.watch('zipperPlacement') ||
-                                'Langs Ringbies'
+                                ZIPPER_PLACEMENT_OPTIONS[0]?.value
                               }
                               onValueChange={v =>
                                 form.setValue('zipperPlacement', v)
@@ -1385,29 +1402,23 @@ const FormCheckFoliepasPage = () => {
                     className="h-full justify-center"
                   >
                     <Select
-                      value={closureType || 'velcro'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'closureType',
-                          v as 'velcro' | 'ringsHooks',
-                        )
-                      }
+                      value={closureType || 'velcroWithExtraLongRolPassant'}
+                      onValueChange={v => form.setValue('closureType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('closure')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="velcro">
-                          {t('velcroWithExtraLongRolPassant')}
-                        </SelectItem>
-                        <SelectItem value="ringsHooks">
-                          {t('ringsAndHooks')}
-                        </SelectItem>
+                        {CLOSURE_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
 
-                    {/* If closureType is 'ringsHooks' */}
-                    {closureType === 'ringsHooks' && (
+                    {/* If closureType is 'ringsAndHooks' */}
+                    {closureType === 'ringsAndHooks' && (
                       <div className="grid grid-cols-2 gap-3 pt-2 w-full">
                         <div className="flex flex-col space-y-2">
                           <Label htmlFor="rings-nr">{t('ringsNumber')}</Label>
@@ -1634,9 +1645,9 @@ const FormCheckFoliepasPage = () => {
                   {/* Category Selection */}
                   <FormItemWrapper label="Categorie">
                     <Select
-                      value={form.watch('soleTypeCategory') || ''}
+                      value={form.watch('soleTypeMain') || ''}
                       onValueChange={v => {
-                        form.setValue('soleTypeCategory', v);
+                        form.setValue('soleTypeMain', v);
                         // Reset dependent fields
                         form.setValue('soleTypeModel', '');
                         form.setValue('soleTypeColor', '');
@@ -1659,7 +1670,7 @@ const FormCheckFoliepasPage = () => {
 
                   {/* Model Selection */}
                   <FormItemWrapper label="Model">
-                    {form.watch('soleTypeCategory') === 'Anders' ? (
+                    {form.watch('soleTypeMain') === 'Anders' ? (
                       <Input
                         placeholder="Beschrijving"
                         value={form.watch('soleTypeOther') || ''}
@@ -1676,14 +1687,14 @@ const FormCheckFoliepasPage = () => {
                           // Reset color when model changes
                           form.setValue('soleTypeColor', '');
                         }}
-                        disabled={!form.watch('soleTypeCategory')}
+                        disabled={!form.watch('soleTypeMain')}
                       >
                         <SelectTrigger className="bg-background! w-2/3">
                           <SelectValue placeholder="Selecteer model" />
                         </SelectTrigger>
                         <SelectContent>
                           {ONDERWERKEN.find(
-                            c => c.naam === form.watch('soleTypeCategory'),
+                            c => c.naam === form.watch('soleTypeMain'),
                           )?.zolen.map(zool => (
                             <SelectItem key={zool.model} value={zool.model}>
                               {zool.model}
@@ -1701,7 +1712,7 @@ const FormCheckFoliepasPage = () => {
                       onValueChange={v => form.setValue('soleTypeColor', v)}
                       disabled={
                         !form.watch('soleTypeModel') ||
-                        form.watch('soleTypeCategory') === 'Anders'
+                        form.watch('soleTypeMain') === 'Anders'
                       }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
@@ -1709,7 +1720,7 @@ const FormCheckFoliepasPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {ONDERWERKEN.find(
-                          c => c.naam === form.watch('soleTypeCategory'),
+                          c => c.naam === form.watch('soleTypeMain'),
                         )
                           ?.zolen.find(
                             z => z.model === form.watch('soleTypeModel'),
@@ -1730,7 +1741,7 @@ const FormCheckFoliepasPage = () => {
                     {form.watch('soleTypeModel') &&
                       (() => {
                         const selectedCat = ONDERWERKEN.find(
-                          c => c.naam === form.watch('soleTypeCategory'),
+                          c => c.naam === form.watch('soleTypeMain'),
                         );
                         const selectedZool = selectedCat?.zolen.find(
                           z => z.model === form.watch('soleTypeModel'),
@@ -1816,27 +1827,20 @@ const FormCheckFoliepasPage = () => {
                     </div>
                   </FormItemWrapper>
 
-                  <FormItemWrapper label={t('toeOptions')}>
+                  <FormItemWrapper label={t('toeType')}>
                     <Select
-                      value={form.watch('toeOptionsType') || 'none'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'toeOptionsType',
-                          v as 'none' | 'carbon' | 'rubberCrawl',
-                        )
-                      }
+                      value={form.watch('toeType') || 'none'}
+                      onValueChange={v => form.setValue('toeType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
-                        <SelectValue placeholder={t('toeOptions')} />
+                        <SelectValue placeholder={t('toeType')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">{t('none')}</SelectItem>
-                        <SelectItem value="carbon">
-                          {t('carbonToes')}
-                        </SelectItem>
-                        <SelectItem value="rubberCrawl">
-                          {t('rubberCrawlToes')}
-                        </SelectItem>
+                        {TOE_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItemWrapper>
@@ -1859,7 +1863,7 @@ const FormCheckFoliepasPage = () => {
                       <SelectContent>
                         {LINING_OPTIONS.map(option => (
                           <SelectItem key={option.value} value={option.value}>
-                            {t(option.translationKey)}
+                            {t(option.value)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -1872,17 +1876,17 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('counterfort')}>
                     <Select
                       value={counterfortType || 'formo'}
-                      onValueChange={v =>
-                        form.setValue('counterfortType', v as 'formo' | 'other')
-                      }
+                      onValueChange={v => form.setValue('counterfortType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('counterfort')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="formo">{t('formo')}</SelectItem>
-                        <SelectItem value="leather">{t('leather')}</SelectItem>
-                        <SelectItem value="other">{t('other')}</SelectItem>
+                        {COUNTERFORT_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {counterfortType === 'other' && (
@@ -1901,16 +1905,17 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('insole')}>
                     <Select
                       value={insoleType || 'leather'}
-                      onValueChange={v =>
-                        form.setValue('insoleType', v as 'leather' | 'other')
-                      }
+                      onValueChange={v => form.setValue('insoleType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('insole')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="leather">{t('leather')}</SelectItem>
-                        <SelectItem value="other">{t('other')}</SelectItem>
+                        {CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {insoleType === 'other' && (
@@ -1933,32 +1938,18 @@ const FormCheckFoliepasPage = () => {
                     <Select
                       value={soleEdgePolishType || 'none'}
                       onValueChange={v =>
-                        form.setValue(
-                          'soleEdgePolishType',
-                          v as
-                            | 'none'
-                            | 'black'
-                            | 'brown'
-                            | 'mahogany'
-                            | 'ridges'
-                            | 'other',
-                        )
+                        form.setValue('soleEdgePolishType', v)
                       }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('soleEdgePolish')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">{t('none')}</SelectItem>
-                        <SelectItem value="black">{t('black')}</SelectItem>
-                        <SelectItem value="brown">{t('brown')}</SelectItem>
-                        <SelectItem value="mahogany">
-                          {t('mahogany')}
-                        </SelectItem>
-                        <SelectItem value="ridges">
-                          {t('soleEdgeRidgesMilling')}
-                        </SelectItem>
-                        <SelectItem value="other">{t('other')}</SelectItem>
+                        {SOLE_EDGE_POLISH_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {soleEdgePolishType === 'other' && (
@@ -1978,21 +1969,18 @@ const FormCheckFoliepasPage = () => {
                     <Select
                       value={constructionMethodType || 'glued'}
                       onValueChange={v =>
-                        form.setValue(
-                          'constructionMethodType',
-                          v as 'glued' | 'flexible' | 'other',
-                        )
+                        form.setValue('constructionMethodType', v)
                       }
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('constructionMethod')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="glued">{t('glued')}</SelectItem>
-                        <SelectItem value="flexible">
-                          {t('flexible')}
-                        </SelectItem>
-                        <SelectItem value="other">{t('other')}</SelectItem>
+                        {CONSTRUCTION_METHOD_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {constructionMethodType === 'other' && (
@@ -2016,35 +2004,47 @@ const FormCheckFoliepasPage = () => {
                 <FormBlock columns={1} dividers={false}>
                   <FormItemWrapper label={t('heelModel')}>
                     <Select
-                      value={heelModelType || 'buildUp'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'heelModelType',
-                          v as 'buildUp' | 'wedge' | 'block',
-                        )
-                      }
+                      value={heelModelType || 'buildUpHeel'}
+                      onValueChange={v => {
+                        form.setValue('heelModelType', v);
+                        // Set default heights based on heel type
+                        const edgeTypeValue = form.watch('edgeTypeModel');
+                        let defaultHeight = '2';
+
+                        if (v === 'buildUpHeel') {
+                          defaultHeight = '2';
+                        } else if (v === 'wedgeHeel') {
+                          defaultHeight =
+                            edgeTypeValue === 'CSO' ||
+                            edgeTypeValue?.includes('CSO')
+                              ? '1.5'
+                              : '2';
+                        } else if (v === 'blockHeel') {
+                          defaultHeight = '2.5';
+                        }
+
+                        form.setValue('heelHeightLeft', defaultHeight);
+                        form.setValue('heelHeightRight', defaultHeight);
+                      }}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('heelModel')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="buildUp">
-                          {t('buildUpHeel')}
-                        </SelectItem>
-                        <SelectItem value="wedge">{t('wedgeHeel')}</SelectItem>
-                        <SelectItem value="block">{t('blockHeel')}</SelectItem>
+                        {HEEL_MODEL_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
 
-                    {heelModelType === 'buildUp' && (
+                    {heelModelType === 'buildUpHeel' && (
                       <div className="mt-2 w-full flex justify-center">
                         <RadioGroup
                           value={form.watch('heelBuildUpMaterial') || 'poro'}
                           onValueChange={v =>
-                            form.setValue(
-                              'heelBuildUpMaterial',
-                              v as 'poro' | 'leather',
-                            )
+                            form.setValue('heelBuildUpMaterial', v)
                           }
                         >
                           <div className="flex gap-6 justify-center">
@@ -2074,16 +2074,11 @@ const FormCheckFoliepasPage = () => {
                       </div>
                     )}
 
-                    {heelModelType === 'wedge' && (
+                    {heelModelType === 'wedgeHeel' && (
                       <div className="mt-2 w-full flex justify-center">
                         <RadioGroup
                           value={form.watch('heelWedgeType') || 'flat'}
-                          onValueChange={v =>
-                            form.setValue(
-                              'heelWedgeType',
-                              v as 'hollow' | 'flat',
-                            )
-                          }
+                          onValueChange={v => form.setValue('heelWedgeType', v)}
                         >
                           <div className="flex gap-6 justify-center">
                             <div className="flex items-center space-x-2">
@@ -2112,7 +2107,7 @@ const FormCheckFoliepasPage = () => {
                       </div>
                     )}
 
-                    {heelModelType === 'block' && (
+                    {heelModelType === 'blockHeel' && (
                       <div className="mt-2 w-full flex justify-center">
                         <div className="flex items-center space-x-2">
                           <Checkbox
@@ -2136,32 +2131,52 @@ const FormCheckFoliepasPage = () => {
                   </FormItemWrapper>
                 </FormBlock>
 
+                {/* Heel Height */}
+                <FormBlock columns={2} dividers>
+                  <FormItemWrapper label={t('heelHeightLeft')}>
+                    <Input
+                      type="number"
+                      step="0.5"
+                      min="0"
+                      value={form.watch('heelHeightLeft') || ''}
+                      onChange={e =>
+                        form.setValue('heelHeightLeft', e.target.value)
+                      }
+                      placeholder={t('heelHeightPlaceholderCm')}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                  <FormItemWrapper label={t('heelHeightRight')}>
+                    <Input
+                      type="number"
+                      step="0.5"
+                      min="0"
+                      value={form.watch('heelHeightRight') || ''}
+                      onChange={e =>
+                        form.setValue('heelHeightRight', e.target.value)
+                      }
+                      placeholder={t('heelHeightPlaceholderCm')}
+                      className="w-2/3"
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+
                 {/* Shoring */}
                 <FormBlock columns={2} dividers>
                   <FormItemWrapper label={t('shoringLeft')}>
                     <Select
                       value={form.watch('shoringLeftType') || 'none'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'shoringLeftType',
-                          v as
-                            | 'lateral'
-                            | 'medial'
-                            | 'lateralAndMedial'
-                            | 'none',
-                        )
-                      }
+                      onValueChange={v => form.setValue('shoringLeftType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('shoringType')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">{t('none')}</SelectItem>
-                        <SelectItem value="lateral">{t('lateral')}</SelectItem>
-                        <SelectItem value="medial">{t('medial')}</SelectItem>
-                        <SelectItem value="lateralAndMedial">
-                          {t('lateralAndMedial')}
-                        </SelectItem>
+                        {SHORING_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {form.watch('shoringLeftType') &&
@@ -2186,27 +2201,17 @@ const FormCheckFoliepasPage = () => {
                   <FormItemWrapper label={t('shoringRight')}>
                     <Select
                       value={form.watch('shoringRightType') || 'none'}
-                      onValueChange={v =>
-                        form.setValue(
-                          'shoringRightType',
-                          v as
-                            | 'lateral'
-                            | 'medial'
-                            | 'lateralAndMedial'
-                            | 'none',
-                        )
-                      }
+                      onValueChange={v => form.setValue('shoringRightType', v)}
                     >
                       <SelectTrigger className="bg-background! w-2/3">
                         <SelectValue placeholder={t('shoringType')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">{t('none')}</SelectItem>
-                        <SelectItem value="lateral">{t('lateral')}</SelectItem>
-                        <SelectItem value="medial">{t('medial')}</SelectItem>
-                        <SelectItem value="lateralAndMedial">
-                          {t('lateralAndMedial')}
-                        </SelectItem>
+                        {SHORING_TYPE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {t(option.value)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {form.watch('shoringRightType') &&

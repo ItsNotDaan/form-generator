@@ -396,16 +396,30 @@ export const normalizeCheckFoliepasData = (
     data.enclosureRightMm,
   );
 
-  // Auto-normalize all basic fields, skip enclosure fields (handled above)
+  // Auto-normalize all basic fields, skip enclosure and special feature fields (handled separately)
   const autoFields = autoNormalize(data, [
     'enclosureLeft',
     'enclosureRight',
     'enclosureLeftMm',
     'enclosureRightMm',
+    'zipperMedial',
+    'zipperLateral',
+    'specialMedialVelcro',
+    'specialLaceLoop',
+    'specialExtraLeather',
+    'specialOther',
   ]);
+
+  const zipperMedLat = [
+    data.zipperLateral ? 'Lateraal' : '',
+    data.zipperMedial ? 'Mediaal' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return {
     ...autoFields,
     ...enclosureData,
+    zipperMedLat,
   };
 };

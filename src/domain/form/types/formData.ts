@@ -445,7 +445,7 @@ export interface CheckFoliepasData {
   modelText?: string;
 
   // Colors
-  colorOptions?: string[];
+  colorOptions?: string;
 
   // Tongue padding
   tonguePaddingMm?: string;
@@ -472,6 +472,7 @@ export interface CheckFoliepasData {
   specialLaceLoop?: boolean;
   specialExtraLeather?: boolean;
   specialOther?: string;
+  specialFeatures?: string;
 
   // Edge type - Cascading selection
   edgeTypeMain?: string;
@@ -480,7 +481,7 @@ export interface CheckFoliepasData {
   edgeTypeColorCode?: string;
 
   // Sole type - Cascading selection
-  soleTypeCategory?: string;
+  soleTypeMain?: string;
   soleTypeModel?: string;
   soleTypeColor?: string;
   soleTypeOther?: string;
@@ -490,7 +491,7 @@ export interface CheckFoliepasData {
   carbonStiffeningShoeRight?: boolean;
 
   // Toe options
-  toeOptionsType?: string;
+  toeType?: string;
 
   // Lining options (Voeringsopties)
   liningType?: string;
@@ -516,6 +517,8 @@ export interface CheckFoliepasData {
   heelBuildUpMaterial?: string;
   heelWedgeType?: string;
   heelBlockCoreCoating?: boolean;
+  heelHeightLeft?: string;
+  heelHeightRight?: string;
 
   // Shoring
   shoringLeftType?: string;

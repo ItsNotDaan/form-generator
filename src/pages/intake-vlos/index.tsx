@@ -463,7 +463,7 @@ const FormIntakeVLOSPage = () => {
                       />
                       <div className="grid gap-1.5 font-normal">
                         <p className="text-sm leading-none font-medium">
-                          {t(optie.translationKey)}
+                          {t(optie.value)}
                         </p>
                       </div>
                     </Label>
@@ -499,7 +499,7 @@ const FormIntakeVLOSPage = () => {
                       />
                       <div className="grid gap-1.5 font-normal">
                         <p className="text-sm leading-none font-medium">
-                          {t(optie.translationKey)}
+                          {t(optie.value)}
                         </p>
                       </div>
                     </Label>
@@ -561,7 +561,7 @@ const FormIntakeVLOSPage = () => {
                       />
                       <div className="grid gap-1.5 font-normal">
                         <p className="text-sm leading-none font-medium">
-                          {t(optie.translationKey)}
+                          {t(optie.value)}
                         </p>
                       </div>
                     </Label>
