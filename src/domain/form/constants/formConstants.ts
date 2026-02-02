@@ -457,7 +457,7 @@ export const MTP1_DEEP_OPTIONS = [
 export const LAST_CORRECTION_OPTIONS = [
   {
     label: 'Openstand (zie Foliepas)',
-    value: 'openstandLastCorrection',
+    value: 'shaftOpeningLastCorrection',
   },
   {
     label: 'Schachthoogte',
@@ -465,7 +465,7 @@ export const LAST_CORRECTION_OPTIONS = [
   },
   {
     label: 'Achter innemen (zie Foliepas)',
-    value: 'achterInnemenLastCorrection',
+    value: 'reduceBackLastCorrection',
   },
   {
     label: 'Enkels aanpassen (zie Foliepas)',
@@ -1278,13 +1278,13 @@ export const HEEL_BUILDUP_MATERIAL_OPTIONS = [
 ];
 
 /** Shoring type options */
-export type ShoringType = 'lateral' | 'medial' | 'lateralAndMedial' | 'none';
+export type ShoringType = 'none' | 'lateral' | 'medial' | 'lateralAndMedial';
 export const SHORING_TYPE_OPTIONS = [
+  {label: 'none', value: 'none' as const},
   {label: 'lateral', value: 'lateral' as const},
   {label: 'medial', value: 'medial' as const},
   {
     label: 'lateralAndMedial',
     value: 'lateralAndMedial' as const,
   },
-  {label: 'none', value: 'none' as const},
 ];

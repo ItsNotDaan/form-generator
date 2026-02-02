@@ -202,7 +202,7 @@ const FormCheckFoliepasPage = () => {
     shouldFocusError: true,
     defaultValues: {
       // Side Selection
-      side: SIDE_OPTIONS[0]?.value || 'both',
+      side: SIDE_OPTIONS[0]?.value || '',
 
       // Reading Corrections
       readingCorrectionAfterFoilFit: '',
@@ -217,7 +217,7 @@ const FormCheckFoliepasPage = () => {
       legLengthDifferenceRight: '',
 
       // Foliepas Aanmerkingen - Shaft Opening
-      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[3]?.value || '',
+      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
 
       // Voeringschoen Opties - Enclosure (Omsluiting)
       enclosureLeft: {},
@@ -239,7 +239,7 @@ const FormCheckFoliepasPage = () => {
       showColorAndModel: false,
 
       // Model
-      modelType: MODEL_TYPE_OPTIONS[1]?.value || 'model',
+      modelType: MODEL_TYPE_OPTIONS[1]?.value || '',
       modelText: '',
 
       // Colors
@@ -250,7 +250,7 @@ const FormCheckFoliepasPage = () => {
       paddingCollarMm: PADDING_COLLAR_MM_OPTIONS[0]?.value || 'no',
 
       // Closure Type
-      closureType: CLOSURE_TYPE_OPTIONS[1]?.value || 'ringsAndHooks',
+      closureType: CLOSURE_TYPE_OPTIONS[1]?.value || '',
       ringsNumber: '',
       ringsAmount: '',
       hooksNumber: '',
@@ -292,34 +292,33 @@ const FormCheckFoliepasPage = () => {
       liningType: LINING_OPTIONS[0]?.value || '',
 
       // Counterfort (Stijfsel)
-      counterfortType: COUNTERFORT_TYPE_OPTIONS[0]?.value || 'formo',
+      counterfortType: COUNTERFORT_TYPE_OPTIONS[0]?.value || '',
       counterfortOther: '',
 
       // Insole (Binnenzool)
-      insoleType: CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS[0]?.value || 'leather',
+      insoleType: CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS[0]?.value || '',
       insoleOther: '',
 
       // Sole Edge Polish (Zoolrandafwerking)
-      soleEdgePolishType: SOLE_EDGE_POLISH_TYPE_OPTIONS[0]?.value || 'none',
+      soleEdgePolishType: SOLE_EDGE_POLISH_TYPE_OPTIONS[0]?.value || '',
       soleEdgePolishOther: '',
 
       // Construction Method (Constructie Methode)
-      constructionMethodType:
-        CONSTRUCTION_METHOD_TYPE_OPTIONS[0]?.value || 'glued',
+      constructionMethodType: CONSTRUCTION_METHOD_TYPE_OPTIONS[0]?.value || '',
       constructionMethodOther: '',
 
       // Heel Model (Hielmodel)
-      heelModelType: HEEL_MODEL_TYPE_OPTIONS[0]?.value || 'buildUpHeel',
-      heelBuildUpMaterial: HEEL_BUILDUP_MATERIAL_OPTIONS[0]?.value || 'poro',
-      heelWedgeType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || 'flat',
+      heelModelType: HEEL_MODEL_TYPE_OPTIONS[0]?.value || '',
+      heelBuildUpMaterial: HEEL_BUILDUP_MATERIAL_OPTIONS[0]?.value || '',
+      heelWedgeType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
       heelBlockCoreCoating: false,
       heelHeightLeft: '2',
       heelHeightRight: '2',
 
       // Shoring (Schoring)
-      shoringLeftType: SHORING_TYPE_OPTIONS[3]?.value || 'none',
+      shoringLeftType: SHORING_TYPE_OPTIONS[0]?.value || '',
       shoringLeftMm: '',
-      shoringRightType: SHORING_TYPE_OPTIONS[3]?.value || 'none',
+      shoringRightType: SHORING_TYPE_OPTIONS[0]?.value || '',
       shoringRightMm: '',
     },
   });
