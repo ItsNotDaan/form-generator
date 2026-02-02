@@ -371,6 +371,91 @@ const FormCheckFoliepasPage = () => {
       .map((option, index) => `${index + 1}. ${option}`)
       .join('\n');
 
+    if (!data.showColorAndModel) {
+      // All of the things in the "Kleur en Model" section are set to default/empty
+      data.modelType = '';
+      data.modelText = '';
+
+      // Clear color options
+      data.colorOptions = [''];
+
+      // Tongue Padding and Collar (mm)
+      data.tonguePaddingMm = 'no';
+      data.paddingCollarMm = 'no';
+
+      // Closure Type
+      data.closureType = '';
+      data.ringsNumber = '';
+      data.ringsAmount = '';
+      data.hooksNumber = '';
+      data.hooksAmount = '';
+
+      // Zipper
+      data.zipperType = '';
+      data.zipperColor = '';
+      data.zipperPlacement = '';
+      data.zipperMedial = false;
+      data.zipperLateral = false;
+
+      // Special Features (Bijzonderheden)
+      data.specialMedialVelcro = false;
+      data.specialLaceLoop = false;
+      data.specialExtraLeather = false;
+      data.specialOther = '';
+
+      // Edge Type (Randtype)
+      data.edgeTypeMain = '';
+      data.edgeTypeModel = '';
+      data.edgeTypeColor = '';
+      data.edgeTypeColorCode = '';
+
+      // Sole Type (Zooltype)
+      data.soleTypeMain = '';
+      data.soleTypeModel = '';
+      data.soleTypeColor = '';
+      data.soleTypeOther = '';
+
+      // Carbon Stiffening Shoe
+      data.carbonStiffeningShoeLeft = false;
+      data.carbonStiffeningShoeRight = false;
+
+      // Toe Options (Neusopties)
+      data.toeType = '';
+
+      // Lining (Voering)
+      data.liningType = '';
+
+      // Counterfort (Stijfsel)
+      data.counterfortType = '';
+      data.counterfortOther = '';
+
+      // Insole (Binnenzool)
+      data.insoleType = '';
+      data.insoleOther = '';
+
+      // Sole Edge Polish (Zoolrandafwerking)
+      data.soleEdgePolishType = '';
+      data.soleEdgePolishOther = '';
+
+      // Construction Method (Constructie Methode)
+      data.constructionMethodType = '';
+      data.constructionMethodOther = '';
+
+      // Heel Model (Hielmodel)
+      data.heelModelType = '';
+      data.heelBuildUpMaterial = '';
+      data.heelWedgeType = '';
+      data.heelBlockCoreCoating = false;
+      data.heelHeightLeft = '';
+      data.heelHeightRight = '';
+
+      // Shoring (Schoring)
+      data.shoringLeftType = '';
+      data.shoringLeftMm = '';
+      data.shoringRightType = '';
+      data.shoringRightMm = '';
+    }
+
     dispatch(
       setCheckFoliepasData({
         // Side Selection
