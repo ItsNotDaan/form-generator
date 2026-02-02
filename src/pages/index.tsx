@@ -30,10 +30,13 @@ const OverviewPage = () => {
         {/* Header Section */}
         <div className="flex flex-col items-center justify-center gap-3">
           <h1 className="text-4xl font-bold text-foreground">{t('forms')}</h1>
-          <p className="text-lg text-muted-foreground">
-            {t('selectOptionToGetStarted')}
-          </p>
         </div>
+
+        {/* Info Card */}
+        <FormCard
+          title={t('gettingStartedTitle')}
+          description={t('gettingStartedDescription')}
+        />
 
         {/* Client Forms Section */}
         <FormCard title={t('clientFormsSection')}>
@@ -59,7 +62,12 @@ const OverviewPage = () => {
         </FormCard>
 
         {/* Intake Forms Section */}
-        <FormCard title={t('intakeForms')}>
+        <FormCard
+          title={t('intakeForms')}
+          toggleAble={true}
+          defaultOpen={false}
+          toggleLabel={t('intakeForms')}
+        >
           <FormBlock columns={3} responsive={true} alignItems="stretch">
             {/* Intake OSA */}
             <FormItemWrapper>
@@ -198,15 +206,6 @@ const OverviewPage = () => {
               </Button>
             </FormItemWrapper>
           </FormBlock>
-        </FormCard>
-
-        {/* Info Card */}
-        <FormCard
-          title={t('gettingStartedTitle')}
-          description={t('gettingStartedDescription')}
-          contentClassName="pt-0"
-        >
-          <div className="hidden" aria-hidden="true" />
         </FormCard>
       </div>
     </BaseLayout>
