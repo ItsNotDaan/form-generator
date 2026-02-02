@@ -200,45 +200,6 @@ const OverviewPage = () => {
           </FormBlock>
         </FormCard>
 
-        {/* Testing pages Section */}
-        <FormCard title={t('testPages')}>
-          <FormBlock columns={3} responsive={true} alignItems="stretch">
-            {/* Form results */}
-            <FormItemWrapper>
-              <Button
-                variant="outline"
-                className="items-center justify-start h-full px-6 py-6 w-full"
-                onClick={() => handleNavigate(Routes.form_results)}
-              >
-                <FileText className="w-4 h-4 mr-2 shrink-0" />
-                <div className="flex flex-col text-left min-w-0 text-wrap">
-                  <div className="font-semibold">{t('formResults')}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {t('formResultsDescription')}
-                  </div>
-                </div>
-              </Button>
-            </FormItemWrapper>
-
-            {/* form-selection */}
-            <FormItemWrapper>
-              <Button
-                variant="outline"
-                className="items-center justify-start h-full px-6 py-6 w-full"
-                onClick={() => handleNavigate(Routes.form_selection)}
-              >
-                <FileText className="w-4 h-4 mr-2 shrink-0" />
-                <div className="flex flex-col text-left min-w-0 text-wrap">
-                  <div className="font-semibold">{t('formSelection')}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {t('formSelectionDescription')}
-                  </div>
-                </div>
-              </Button>
-            </FormItemWrapper>
-          </FormBlock>
-        </FormCard>
-
         {/* Info Card */}
         <FormCard
           title={t('gettingStartedTitle')}

@@ -48,19 +48,19 @@ const FormOldClientPage = () => {
   const dispatch = useAppDispatch();
 
   const formSchema = z.object({
-    practitionerId: z.string().min(1, {message: 'Required'}),
-    date: z.string().min(1, {message: 'Required'}),
-    location: z.string().min(1, {message: 'Required'}),
-    salutation: z.string().min(1, {message: 'Required'}),
-    initials: z.string().min(1, {message: 'Required'}),
+    practitionerId: z.string().optional(),
+    date: z.string().optional(),
+    location: z.string().optional(),
+    salutation: z.string().optional(),
+    initials: z.string().optional(),
     clientName: z.string().min(1, {message: 'Required'}),
-    birthDate: z.string().optional(),
+    birthDate: z.string().min(1, {message: 'Required'}),
     address: z.string().optional(),
     houseNumber: z.string().optional(),
     postalCode: z.string().optional(),
     city: z.string().optional(),
     email: z.string().optional(),
-    insurance: z.string().min(1, {message: 'Required'}),
+    insurance: z.string().optional(),
     phoneOne: z.string().optional(),
     phoneTwo: z.string().optional(),
     specialist: z.string().optional(),
@@ -154,13 +154,13 @@ const FormOldClientPage = () => {
   const onSubmit = (data: FormData) => {
     dispatch(
       setClientData({
-        practitionerId: data.practitionerId,
-        date: data.date,
-        location: data.location as Location,
-        salutation: data.salutation as Salutation,
-        initials: data.initials,
+        practitionerId: data.practitionerId || '',
+        date: data.date || '',
+        location: (data.location as Location) || '',
+        salutation: (data.salutation as Salutation) || '',
+        initials: data.initials || '',
         clientName: data.clientName,
-        birthDate: data.birthDate || '',
+        birthDate: data.birthDate,
         address: data.address || '',
         houseNumber: data.houseNumber || '',
         postalCode: data.postalCode || '',
@@ -168,7 +168,7 @@ const FormOldClientPage = () => {
         phoneOne: data.phoneOne || '',
         phoneTwo: data.phoneTwo || '',
         email: data.email || '',
-        insurance: data.insurance,
+        insurance: data.insurance || '',
         medicalIndication: data.medicalIndication || '',
         specialist: data.specialist || '',
       }),
@@ -206,7 +206,7 @@ const FormOldClientPage = () => {
                   {/* Practitioner */}
                   <FormItemWrapper
                     label={t('practitioner')}
-                    requiredLabel={true}
+                    requiredLabel={false}
                   >
                     <FormField
                       control={form.control}
@@ -247,7 +247,7 @@ const FormOldClientPage = () => {
                   {/* Measurement Date */}
                   <FormItemWrapper
                     label={t('measurementDate')}
-                    requiredLabel={true}
+                    requiredLabel={false}
                   >
                     <FormField
                       control={form.control}
@@ -296,7 +296,7 @@ const FormOldClientPage = () => {
                 </FormBlock>
 
                 <FormBlock>
-                  <FormItemWrapper label={t('location')} requiredLabel={true}>
+                  <FormItemWrapper label={t('location')} requiredLabel={false}>
                     <FormField
                       control={form.control}
                       name="location"
@@ -345,7 +345,10 @@ const FormOldClientPage = () => {
                   // dividers={true}
                 >
                   {/* Salutation */}
-                  <FormItemWrapper label={t('salutation')} requiredLabel={true}>
+                  <FormItemWrapper
+                    label={t('salutation')}
+                    requiredLabel={false}
+                  >
                     <FormField
                       control={form.control}
                       name="salutation"
@@ -384,7 +387,7 @@ const FormOldClientPage = () => {
                   </FormItemWrapper>
 
                   {/* Initials */}
-                  <FormItemWrapper label={t('initials')} requiredLabel={true}>
+                  <FormItemWrapper label={t('initials')} requiredLabel={false}>
                     <FormField
                       control={form.control}
                       name="initials"
@@ -469,7 +472,10 @@ const FormOldClientPage = () => {
                 description={t('addressInformationDescription')}
               >
                 <FormBlock columns={2}>
-                  <FormItemWrapper label={t('postalCode')} requiredLabel={true}>
+                  <FormItemWrapper
+                    label={t('postalCode')}
+                    requiredLabel={false}
+                  >
                     <FormField
                       control={form.control}
                       name="postalCode"
@@ -497,7 +503,7 @@ const FormOldClientPage = () => {
                   </FormItemWrapper>
                   <FormItemWrapper
                     label={t('houseNumber')}
-                    requiredLabel={true}
+                    requiredLabel={false}
                   >
                     <FormField
                       control={form.control}
@@ -524,7 +530,10 @@ const FormOldClientPage = () => {
                       )}
                     />
                   </FormItemWrapper>
-                  <FormItemWrapper label={t('streetName')} requiredLabel={true}>
+                  <FormItemWrapper
+                    label={t('streetName')}
+                    requiredLabel={false}
+                  >
                     <FormField
                       control={form.control}
                       name="address"
@@ -546,7 +555,7 @@ const FormOldClientPage = () => {
                       )}
                     />
                   </FormItemWrapper>
-                  <FormItemWrapper label={t('city')} requiredLabel={true}>
+                  <FormItemWrapper label={t('city')} requiredLabel={false}>
                     <FormField
                       control={form.control}
                       name="city"
@@ -624,7 +633,7 @@ const FormOldClientPage = () => {
 
                 {/* Email */}
                 <FormBlock columns={1}>
-                  <FormItemWrapper label={t('email')} requiredLabel={true}>
+                  <FormItemWrapper label={t('email')} requiredLabel={false}>
                     <FormField
                       control={form.control}
                       name="email"
@@ -653,7 +662,7 @@ const FormOldClientPage = () => {
               >
                 <FormBlock>
                   {/* Insurance */}
-                  <FormItemWrapper label={t('insurance')} requiredLabel={true}>
+                  <FormItemWrapper label={t('insurance')} requiredLabel={false}>
                     <FormField
                       control={form.control}
                       name="insurance"
@@ -693,7 +702,7 @@ const FormOldClientPage = () => {
                   {/* Specialist */}
                   <FormItemWrapper
                     label={t('specialist')}
-                    requiredLabel={true}
+                    requiredLabel={false}
                     className="w-full"
                   >
                     <FormField
