@@ -60,7 +60,7 @@ const FormNewClientPage = () => {
     houseNumber: z.string().min(1, {message: t('required')}),
     postalCode: z.string().min(1, {message: t('required')}),
     city: z.string().min(1, {message: t('required')}),
-    email: z.string().min(1, {message: t('required')}),
+    email: z.string().optional(),
     insurance: z.string().min(1, {message: t('required')}),
     phoneOne: z.string().min(1, {message: t('required')}),
     phoneTwo: z.string().optional(),
