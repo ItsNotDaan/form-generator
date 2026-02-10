@@ -227,7 +227,8 @@ export type OmsluitingKey =
   | 'lavero'
   | 'multivorm'
   | 'plastazote'
-  | 'orca';
+  | 'orca'
+  | 'ercoflex';
 
 export type EnclosureOption = {
   key: OmsluitingKey;
@@ -302,6 +303,17 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
     fullKeyRechts: 'omsluitingRechtsOrca',
     mmKeyLinks: 'omsluitingMmLinksOrca',
     mmKeyRechts: 'omsluitingMmRechtsOrca',
+  },
+  {
+    key: 'ercoflex',
+    label: 'Ercoflex omsluiting',
+    needsMm: false,
+    exportKeyLeft: 'ercoflexLeft',
+    exportKeyRight: 'ercoflexRight',
+    fullKeyLinks: 'omsluitingLinksErcoflex',
+    fullKeyRechts: 'omsluitingRechtsErcoflex',
+    mmKeyLinks: 'omsluitingMmLinksErcoflex',
+    mmKeyRechts: 'omsluitingMmRechtsErcoflex',
   },
 ];
 
