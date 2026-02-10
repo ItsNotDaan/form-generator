@@ -44,7 +44,8 @@ export const normalizeValue = (value: unknown): string => {
     if (NO_VARIANTS.some(variant => lower === variant)) {
       return BOOLEAN_FALSE_VALUE;
     }
-    return value;
+    // Convert escaped newline characters to actual line breaks
+    return value.replace(/\\n/g, '\n');
   }
   if (Array.isArray(value)) {
     // Arrays are stringified as JSON for consistent string output
