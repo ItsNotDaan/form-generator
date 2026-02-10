@@ -156,8 +156,8 @@ const FormIntakeOSAPage = () => {
   const showRechts = side === 'right' || side === 'both';
 
   // Helper functions
-  const boolToString = (value: boolean): string => (value ? 'ja' : 'nee');
-  const stringToBool = (value: string): boolean => value === 'ja';
+  const boolToString = (value: boolean): string => (value ? 'yes' : 'no');
+  const stringToBool = (value: string): boolean => value === 'yes';
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
