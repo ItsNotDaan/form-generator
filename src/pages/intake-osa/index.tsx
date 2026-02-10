@@ -43,6 +43,12 @@ import {
   FOOT_INSPECTION_OPTIONS,
   LAST_HEIGHT_OPTIONS,
   MTP1_DEEP_OPTIONS,
+  WALKING_DISTANCE_OPTIONS,
+  PAIN_DURATION_OPTIONS,
+  TOE_AREA_OPTIONS,
+  MIDFOOT_OPTIONS,
+  ANKLE_JOINT_OPTIONS,
+  KNEES_OPTIONS,
   Side,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -92,6 +98,14 @@ const FormIntakeOSAPage = () => {
     walkingDistanceAids: z.record(z.string(), z.boolean()),
     painPerception: z.string().optional(),
     footInspection: z.record(z.string(), z.boolean()),
+    walkingDistance: z.string().optional(),
+    painDuration: z.string().optional(),
+    muscleStrengthDorsalFlexi: z.number().optional(),
+    muscleStrengthPlantarFlexi: z.number().optional(),
+    toeArea: z.string().optional(),
+    midfoot: z.string().optional(),
+    ankleJoint: z.string().optional(),
+    knees: z.string().optional(),
 
     // Digitaal fields
     digitalEnabled: z.boolean(),
@@ -124,6 +138,14 @@ const FormIntakeOSAPage = () => {
       walkingDistanceAids: {},
       painPerception: '0',
       footInspection: {},
+      walkingDistance: '',
+      painDuration: '',
+      muscleStrengthDorsalFlexi: 3,
+      muscleStrengthPlantarFlexi: 3,
+      toeArea: '',
+      midfoot: '',
+      ankleJoint: '',
+      knees: '',
       // Digitaal defaults
       digitalEnabled: false,
       heelLiftLeft: '1.5',
@@ -182,6 +204,14 @@ const FormIntakeOSAPage = () => {
         >,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
+        walkingDistance: data.walkingDistance || '',
+        painDuration: data.painDuration || '',
+        muscleStrengthDorsalFlexi: data.muscleStrengthDorsalFlexi || 3,
+        muscleStrengthPlantarFlexi: data.muscleStrengthPlantarFlexi || 3,
+        toeArea: data.toeArea || '',
+        midfoot: data.midfoot || '',
+        ankleJoint: data.ankleJoint || '',
+        knees: data.knees || '',
         // Digitaal fields
         digitalEnabled: data.digitalEnabled,
         heelLiftLeft: data.heelLiftLeft || '',
@@ -483,6 +513,263 @@ const FormIntakeOSAPage = () => {
                       </div>
                     </Label>
                   ))}
+                </FormBlock>
+
+                {/* Loopafstand */}
+                <FormBlock
+                  title={t('walkingDistance')}
+                  centerTitle={true}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('walkingDistance')}
+                      onValueChange={v => form.setValue('walkingDistance', v)}
+                    >
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {WALKING_DISTANCE_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`walking-distance-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`walking-distance-${opt.value}`}
+                              className="cursor-pointer"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Tijdsduur pijn */}
+                <FormBlock
+                  title={t('painDuration')}
+                  centerTitle={true}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('painDuration')}
+                      onValueChange={v => form.setValue('painDuration', v)}
+                    >
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {PAIN_DURATION_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`pain-duration-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`pain-duration-${opt.value}`}
+                              className="cursor-pointer"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Spierkracht */}
+                <FormBlock
+                  title={t('muscleStrength')}
+                  centerTitle={true}
+                  columns={2}
+                  dividers={true}
+                >
+                  <FormItemWrapper className="flex flex-col items-center">
+                    <Label className="mb-2">{t('dorsalFlexi')}</Label>
+                    <Input
+                      type="range"
+                      min="1"
+                      max="5"
+                      value={form.watch('muscleStrengthDorsalFlexi')}
+                      onChange={e =>
+                        form.setValue(
+                          'muscleStrengthDorsalFlexi',
+                          parseInt(e.target.value),
+                        )
+                      }
+                      className="w-2/3"
+                    />
+                    <span className="mt-2">
+                      {form.watch('muscleStrengthDorsalFlexi') || 3}
+                    </span>
+                  </FormItemWrapper>
+                  <FormItemWrapper className="flex flex-col items-center">
+                    <Label className="mb-2">{t('plantarFlexi')}</Label>
+                    <Input
+                      type="range"
+                      min="1"
+                      max="5"
+                      value={form.watch('muscleStrengthPlantarFlexi')}
+                      onChange={e =>
+                        form.setValue(
+                          'muscleStrengthPlantarFlexi',
+                          parseInt(e.target.value),
+                        )
+                      }
+                      className="w-2/3"
+                    />
+                    <span className="mt-2">
+                      {form.watch('muscleStrengthPlantarFlexi') || 3}
+                    </span>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Teenpartij */}
+                <FormBlock
+                  title={t('toeArea')}
+                  centerTitle={true}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('toeArea')}
+                      onValueChange={v => form.setValue('toeArea', v)}
+                    >
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {TOE_AREA_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`toe-area-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`toe-area-${opt.value}`}
+                              className="cursor-pointer"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Midvoet */}
+                <FormBlock
+                  title={t('midfoot')}
+                  centerTitle={true}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('midfoot')}
+                      onValueChange={v => form.setValue('midfoot', v)}
+                    >
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {MIDFOOT_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`midfoot-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`midfoot-${opt.value}`}
+                              className="cursor-pointer"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Enkelgewricht */}
+                <FormBlock
+                  title={t('ankleJoint')}
+                  centerTitle={true}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('ankleJoint')}
+                      onValueChange={v => form.setValue('ankleJoint', v)}
+                    >
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {ANKLE_JOINT_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`ankle-joint-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`ankle-joint-${opt.value}`}
+                              className="cursor-pointer"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Knieën */}
+                <FormBlock
+                  title={t('knees')}
+                  centerTitle={true}
+                  columns={1}
+                  dividers={false}
+                >
+                  <FormItemWrapper>
+                    <RadioGroup
+                      value={form.watch('knees')}
+                      onValueChange={v => form.setValue('knees', v)}
+                    >
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {KNEES_OPTIONS.map(opt => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center space-x-2"
+                          >
+                            <RadioGroupItem
+                              value={opt.value}
+                              id={`knees-${opt.value}`}
+                            />
+                            <Label
+                              htmlFor={`knees-${opt.value}`}
+                              className="cursor-pointer"
+                            >
+                              {opt.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormItemWrapper>
                 </FormBlock>
               </FormCard>
 

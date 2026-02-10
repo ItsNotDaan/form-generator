@@ -453,6 +453,49 @@ export const MTP1_DEEP_OPTIONS = [
   {label: '8cm', value: 'mtp1Deep8cm'},
 ];
 
+/** OSA Functieonderzoek - Loopafstand options */
+export const WALKING_DISTANCE_OPTIONS = [
+  {label: '50-100m', value: 'walkingDistance50_100'},
+  {label: '100m-500m', value: 'walkingDistance100_500'},
+  {label: '1km-3km', value: 'walkingDistance1_3km'},
+  {label: '3km-6km', value: 'walkingDistance3_6km'},
+];
+
+/** OSA Functieonderzoek - Tijdsduur pijn options */
+export const PAIN_DURATION_OPTIONS = [
+  {label: 'Pijn in rust', value: 'painAtRest'},
+  {label: 'Pijn bij belasten', value: 'painWhenLoaded'},
+  {label: 'Altijd pijn (ook \'s nachts)', value: 'constantPain'},
+];
+
+/** OSA Functieonderzoek - Teenpartij options */
+export const TOE_AREA_OPTIONS = [
+  {label: 'Extensiebeperking', value: 'extensionLimitation'},
+  {label: 'Flexiebeperking', value: 'flexionLimitation'},
+  {label: 'Hallux limitus', value: 'halluxLimitus'},
+  {label: 'Hallux rigidus', value: 'halluxRigidus'},
+];
+
+/** OSA Functieonderzoek - Midvoet options */
+export const MIDFOOT_OPTIONS = [
+  {label: 'Pronatiebeperking', value: 'pronationLimitation'},
+  {label: 'Supinatiebeperking', value: 'supinationLimitation'},
+];
+
+/** OSA Functieonderzoek - Enkelgewricht options */
+export const ANKLE_JOINT_OPTIONS = [
+  {label: 'Dorsaal flexiebeperking', value: 'dorsalFlexionLimitation'},
+  {label: 'Plantair flexiebeperking', value: 'plantarFlexionLimitation'},
+];
+
+/** OSA Functieonderzoek - Knieën options */
+export const KNEES_OPTIONS = [
+  {label: 'Extensiebeperking', value: 'extensionLimitation'},
+  {label: 'Flexiebeperking', value: 'flexionLimitation'},
+  {label: 'Genu valgum', value: 'genuValgum'},
+  {label: 'Genu varum', value: 'genuVarum'},
+];
+
 /** Foliepas Leestcorrectie opties */
 export const LAST_CORRECTION_OPTIONS = [
   {

@@ -177,6 +177,14 @@ export interface IntakeOSAData {
   walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
+  walkingDistance?: string;
+  painDuration?: string;
+  muscleStrengthDorsalFlexi?: number;
+  muscleStrengthPlantarFlexi?: number;
+  toeArea?: string;
+  midfoot?: string;
+  ankleJoint?: string;
+  knees?: string;
 
   // Digitaal section
   digitalEnabled?: boolean;
