@@ -38,7 +38,7 @@ export interface ClientData {
   // Contact information
   phoneOne: string;
   phoneTwo?: string;
-  email: string;
+  email?: string;
 
   // Medical information
   medicalIndication?: string;

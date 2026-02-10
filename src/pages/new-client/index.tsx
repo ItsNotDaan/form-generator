@@ -169,7 +169,7 @@ const FormNewClientPage = () => {
         city: data.city,
         phoneOne: data.phoneOne || '',
         phoneTwo: data.phoneTwo || '',
-        email: data.email,
+        email: data.email || '',
         insurance: data.insurance,
         medicalIndication: data.medicalIndication || '',
         specialist: data.specialist || '',
