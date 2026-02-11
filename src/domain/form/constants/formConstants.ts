@@ -1204,6 +1204,18 @@ export const ZIPPER_PLACEMENT_OPTIONS = [
   {label: 'Zie leest', value: 'Zie leest'},
 ];
 
+/** Zipper side options (like Schoring) */
+export type ZipperSideType = 'none' | 'lateral' | 'medial' | 'lateralAndMedial';
+export const ZIPPER_SIDE_OPTIONS = [
+  {label: 'none', value: 'none' as const},
+  {label: 'lateral', value: 'lateral' as const},
+  {label: 'medial', value: 'medial' as const},
+  {
+    label: 'lateralAndMedial',
+    value: 'lateralAndMedial' as const,
+  },
+];
+
 /** Zoolrand polish types */
 export type SoleEdgePolishType =
   | 'none'

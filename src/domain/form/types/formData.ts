@@ -465,8 +465,7 @@ export interface CheckFoliepasData {
   zipperType?: string;
   zipperColor?: string;
   zipperPlacement?: string;
-  zipperMedial?: boolean;
-  zipperLateral?: boolean;
+  zipperSide?: string;
 
   // Closure details
   closureType?: string;

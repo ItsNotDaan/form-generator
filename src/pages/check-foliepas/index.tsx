@@ -42,6 +42,7 @@ import {
   PADDING_COLLAR_MM_OPTIONS,
   CLOSURE_TYPE_OPTIONS,
   ZIPPER_TYPE_OPTIONS,
+  ZIPPER_SIDE_OPTIONS,
   TOE_TYPE_OPTIONS,
   COUNTERFORT_TYPE_OPTIONS,
   CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS,
@@ -133,8 +134,7 @@ const FormCheckFoliepasPage = () => {
     zipperType: z.string().optional(),
     zipperColor: z.string().optional(),
     zipperPlacement: z.string().optional(),
-    zipperMedial: z.boolean().optional(),
-    zipperLateral: z.boolean().optional(),
+    zipperSide: z.string().optional(),
 
     // Special Features (Bijzonderheden)
     specialMedialVelcro: z.boolean().optional(),
@@ -260,8 +260,7 @@ const FormCheckFoliepasPage = () => {
       zipperType: ZIPPER_TYPE_OPTIONS[0]?.value || '',
       zipperColor: '',
       zipperPlacement: ZIPPER_PLACEMENT_OPTIONS[0]?.value || '',
-      zipperMedial: false,
-      zipperLateral: false,
+      zipperSide: ZIPPER_SIDE_OPTIONS[0]?.value || '',
 
       // Special Features (Bijzonderheden)
       specialMedialVelcro: false,
@@ -394,8 +393,7 @@ const FormCheckFoliepasPage = () => {
       data.zipperType = '';
       data.zipperColor = '';
       data.zipperPlacement = '';
-      data.zipperMedial = false;
-      data.zipperLateral = false;
+      data.zipperSide = '';
 
       // Special Features (Bijzonderheden)
       data.specialMedialVelcro = false;
@@ -520,8 +518,7 @@ const FormCheckFoliepasPage = () => {
         zipperType: data.zipperType || '',
         zipperColor: data.zipperColor || '',
         zipperPlacement: data.zipperPlacement || '',
-        zipperMedial: data.zipperMedial || false,
-        zipperLateral: data.zipperLateral || false,
+        zipperSide: data.zipperSide || '',
 
         // Special Features (Bijzonderheden)
         specialMedialVelcro: data.specialMedialVelcro || false,
@@ -1440,38 +1437,26 @@ const FormCheckFoliepasPage = () => {
                             </Select>
                           </div>
                         </div>
-                        {/* Medial/Lateral checkboxes */}
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="zipper-medial"
-                              checked={form.watch('zipperMedial') || false}
-                              onCheckedChange={checked =>
-                                form.setValue('zipperMedial', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="zipper-medial"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('medial')}
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="zipper-lateral"
-                              checked={form.watch('zipperLateral') || false}
-                              onCheckedChange={checked =>
-                                form.setValue('zipperLateral', !!checked)
-                              }
-                            />
-                            <Label
-                              htmlFor="zipper-lateral"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('lateral')}
-                            </Label>
-                          </div>
+                        {/* Medial/Lateral Select */}
+                        <div className="pt-2">
+                          <Label htmlFor="zipper-side" className="text-sm mb-2">
+                            {t('zipperPlacement')} (Mediaal/Lateraal)
+                          </Label>
+                          <Select
+                            value={form.watch('zipperSide') || 'none'}
+                            onValueChange={v => form.setValue('zipperSide', v)}
+                          >
+                            <SelectTrigger id="zipper-side" className="bg-background!">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ZIPPER_SIDE_OPTIONS.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {t(option.value)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
                     )}
