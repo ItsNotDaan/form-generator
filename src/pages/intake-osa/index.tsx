@@ -98,14 +98,14 @@ const FormIntakeOSAPage = () => {
     walkingDistanceAids: z.record(z.string(), z.boolean()),
     painPerception: z.string().optional(),
     footInspection: z.record(z.string(), z.boolean()),
-    walkingDistance: z.string().optional(),
-    painDuration: z.string().optional(),
+    walkingDistance: z.record(z.string(), z.boolean()),
+    painDuration: z.record(z.string(), z.boolean()),
     muscleStrengthDorsalFlexi: z.number().optional(),
     muscleStrengthPlantarFlexi: z.number().optional(),
-    toeArea: z.string().optional(),
-    midfoot: z.string().optional(),
-    ankleJoint: z.string().optional(),
-    knees: z.string().optional(),
+    toeArea: z.record(z.string(), z.boolean()),
+    midfoot: z.record(z.string(), z.boolean()),
+    ankleJoint: z.record(z.string(), z.boolean()),
+    knees: z.record(z.string(), z.boolean()),
 
     // Digitaal fields
     digitalEnabled: z.boolean(),
@@ -138,14 +138,14 @@ const FormIntakeOSAPage = () => {
       walkingDistanceAids: {},
       painPerception: '0',
       footInspection: {},
-      walkingDistance: '',
-      painDuration: '',
+      walkingDistance: {},
+      painDuration: {},
       muscleStrengthDorsalFlexi: 3,
       muscleStrengthPlantarFlexi: 3,
-      toeArea: '',
-      midfoot: '',
-      ankleJoint: '',
-      knees: '',
+      toeArea: {},
+      midfoot: {},
+      ankleJoint: {},
+      knees: {},
       // Digitaal defaults
       digitalEnabled: false,
       heelLiftLeft: '1.5',
@@ -204,14 +204,14 @@ const FormIntakeOSAPage = () => {
         >,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
-        walkingDistance: data.walkingDistance || '',
-        painDuration: data.painDuration || '',
+        walkingDistance: data.walkingDistance as Record<string, boolean>,
+        painDuration: data.painDuration as Record<string, boolean>,
         muscleStrengthDorsalFlexi: data.muscleStrengthDorsalFlexi || 3,
         muscleStrengthPlantarFlexi: data.muscleStrengthPlantarFlexi || 3,
-        toeArea: data.toeArea || '',
-        midfoot: data.midfoot || '',
-        ankleJoint: data.ankleJoint || '',
-        knees: data.knees || '',
+        toeArea: data.toeArea as Record<string, boolean>,
+        midfoot: data.midfoot as Record<string, boolean>,
+        ankleJoint: data.ankleJoint as Record<string, boolean>,
+        knees: data.knees as Record<string, boolean>,
         // Digitaal fields
         digitalEnabled: data.digitalEnabled,
         heelLiftLeft: data.heelLiftLeft || '',
@@ -519,70 +519,70 @@ const FormIntakeOSAPage = () => {
                 <FormBlock
                   title={t('walkingDistance')}
                   centerTitle={true}
-                  columns={1}
+                  columns={4}
                   dividers={false}
                 >
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('walkingDistance')}
-                      onValueChange={v => form.setValue('walkingDistance', v)}
+                  {WALKING_DISTANCE_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
-                      <div className="flex flex-wrap gap-3 justify-center">
-                        {WALKING_DISTANCE_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`walking-distance-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`walking-distance-${opt.value}`}
-                              className="cursor-pointer"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
+                      <Checkbox
+                        id={`walking-distance-${optie.key}`}
+                        checked={
+                          (form.watch('walkingDistance')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('walkingDistance', {
+                            ...form.getValues('walkingDistance'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </Label>
+                  ))}
                 </FormBlock>
 
                 {/* Tijdsduur pijn */}
                 <FormBlock
                   title={t('painDuration')}
                   centerTitle={true}
-                  columns={1}
+                  columns={3}
                   dividers={false}
                 >
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('painDuration')}
-                      onValueChange={v => form.setValue('painDuration', v)}
+                  {PAIN_DURATION_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
-                      <div className="flex flex-wrap gap-3 justify-center">
-                        {PAIN_DURATION_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`pain-duration-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`pain-duration-${opt.value}`}
-                              className="cursor-pointer"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
+                      <Checkbox
+                        id={`pain-duration-${optie.key}`}
+                        checked={
+                          (form.watch('painDuration')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('painDuration', {
+                            ...form.getValues('painDuration'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </Label>
+                  ))}
                 </FormBlock>
 
                 {/* Spierkracht */}
@@ -592,41 +592,49 @@ const FormIntakeOSAPage = () => {
                   columns={2}
                   dividers={true}
                 >
-                  <FormItemWrapper className="flex flex-col items-center">
-                    <Label className="mb-2">{t('dorsalFlexi')}</Label>
-                    <Input
-                      type="range"
-                      min="1"
-                      max="5"
-                      value={form.watch('muscleStrengthDorsalFlexi')}
-                      onChange={e =>
-                        form.setValue(
-                          'muscleStrengthDorsalFlexi',
-                          parseInt(e.target.value),
-                        )
-                      }
-                      className="w-2/3"
-                    />
-                    <span className="mt-2">
+                  <FormItemWrapper className="flex flex-col items-center space-y-2">
+                    <Label className="text-base font-semibold">{t('dorsalFlexi')}</Label>
+                    <div className="flex items-center gap-2 w-full">
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('littleStrength')}</span>
+                      <Input
+                        type="range"
+                        min="1"
+                        max="5"
+                        value={form.watch('muscleStrengthDorsalFlexi')}
+                        onChange={e =>
+                          form.setValue(
+                            'muscleStrengthDorsalFlexi',
+                            parseInt(e.target.value),
+                          )
+                        }
+                        className="flex-1"
+                      />
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('muchStrength')}</span>
+                    </div>
+                    <span className="text-lg font-semibold">
                       {form.watch('muscleStrengthDorsalFlexi') || 3}
                     </span>
                   </FormItemWrapper>
-                  <FormItemWrapper className="flex flex-col items-center">
-                    <Label className="mb-2">{t('plantarFlexi')}</Label>
-                    <Input
-                      type="range"
-                      min="1"
-                      max="5"
-                      value={form.watch('muscleStrengthPlantarFlexi')}
-                      onChange={e =>
-                        form.setValue(
-                          'muscleStrengthPlantarFlexi',
-                          parseInt(e.target.value),
-                        )
-                      }
-                      className="w-2/3"
-                    />
-                    <span className="mt-2">
+                  <FormItemWrapper className="flex flex-col items-center space-y-2">
+                    <Label className="text-base font-semibold">{t('plantarFlexi')}</Label>
+                    <div className="flex items-center gap-2 w-full">
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('littleStrength')}</span>
+                      <Input
+                        type="range"
+                        min="1"
+                        max="5"
+                        value={form.watch('muscleStrengthPlantarFlexi')}
+                        onChange={e =>
+                          form.setValue(
+                            'muscleStrengthPlantarFlexi',
+                            parseInt(e.target.value),
+                          )
+                        }
+                        className="flex-1"
+                      />
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('muchStrength')}</span>
+                    </div>
+                    <span className="text-lg font-semibold">
                       {form.watch('muscleStrengthPlantarFlexi') || 3}
                     </span>
                   </FormItemWrapper>
@@ -636,140 +644,140 @@ const FormIntakeOSAPage = () => {
                 <FormBlock
                   title={t('toeArea')}
                   centerTitle={true}
-                  columns={1}
+                  columns={4}
                   dividers={false}
                 >
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('toeArea')}
-                      onValueChange={v => form.setValue('toeArea', v)}
+                  {TOE_AREA_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
-                      <div className="flex flex-wrap gap-3 justify-center">
-                        {TOE_AREA_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`toe-area-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`toe-area-${opt.value}`}
-                              className="cursor-pointer"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
+                      <Checkbox
+                        id={`toe-area-${optie.key}`}
+                        checked={
+                          (form.watch('toeArea')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('toeArea', {
+                            ...form.getValues('toeArea'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </Label>
+                  ))}
                 </FormBlock>
 
                 {/* Midvoet */}
                 <FormBlock
                   title={t('midfoot')}
                   centerTitle={true}
-                  columns={1}
+                  columns={2}
                   dividers={false}
                 >
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('midfoot')}
-                      onValueChange={v => form.setValue('midfoot', v)}
+                  {MIDFOOT_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
-                      <div className="flex flex-wrap gap-3 justify-center">
-                        {MIDFOOT_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`midfoot-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`midfoot-${opt.value}`}
-                              className="cursor-pointer"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
+                      <Checkbox
+                        id={`midfoot-${optie.key}`}
+                        checked={
+                          (form.watch('midfoot')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('midfoot', {
+                            ...form.getValues('midfoot'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </Label>
+                  ))}
                 </FormBlock>
 
                 {/* Enkelgewricht */}
                 <FormBlock
                   title={t('ankleJoint')}
                   centerTitle={true}
-                  columns={1}
+                  columns={2}
                   dividers={false}
                 >
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('ankleJoint')}
-                      onValueChange={v => form.setValue('ankleJoint', v)}
+                  {ANKLE_JOINT_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
-                      <div className="flex flex-wrap gap-3 justify-center">
-                        {ANKLE_JOINT_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`ankle-joint-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`ankle-joint-${opt.value}`}
-                              className="cursor-pointer"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
+                      <Checkbox
+                        id={`ankle-joint-${optie.key}`}
+                        checked={
+                          (form.watch('ankleJoint')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('ankleJoint', {
+                            ...form.getValues('ankleJoint'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </Label>
+                  ))}
                 </FormBlock>
 
                 {/* Knieën */}
                 <FormBlock
                   title={t('knees')}
                   centerTitle={true}
-                  columns={1}
+                  columns={4}
                   dividers={false}
                 >
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('knees')}
-                      onValueChange={v => form.setValue('knees', v)}
+                  {KNEES_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
                     >
-                      <div className="flex flex-wrap gap-3 justify-center">
-                        {KNEES_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`knees-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`knees-${opt.value}`}
-                              className="cursor-pointer"
-                            >
-                              {opt.label}
-                            </Label>
-                          </div>
-                        ))}
+                      <Checkbox
+                        id={`knees-${optie.key}`}
+                        checked={
+                          (form.watch('knees')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('knees', {
+                            ...form.getValues('knees'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
                       </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+                    </Label>
+                  ))}
                 </FormBlock>
               </FormCard>
 
@@ -968,7 +976,7 @@ const FormIntakeOSAPage = () => {
                 >
                   {showLinks && (
                     <FormItemWrapper className="flex flex-col items-center">
-                      <Label htmlFor="mtp1-left">{t('leftCm')}</Label>
+                      <Label htmlFor="mtp1-left">{t('leftMm')}</Label>
                       <Select
                         value={form.watch('mtp1DeepLeft')}
                         onValueChange={v => form.setValue('mtp1DeepLeft', v)}
@@ -988,7 +996,7 @@ const FormIntakeOSAPage = () => {
                   )}
                   {showRechts && (
                     <FormItemWrapper className="flex flex-col items-center">
-                      <Label htmlFor="mtp1-right">{t('rightCm')}</Label>
+                      <Label htmlFor="mtp1-right">{t('rightMm')}</Label>
                       <Select
                         value={form.watch('mtp1DeepRight')}
                         onValueChange={v => form.setValue('mtp1DeepRight', v)}

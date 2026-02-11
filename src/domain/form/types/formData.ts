@@ -177,22 +177,22 @@ export interface IntakeOSAData {
   walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
-  walkingDistance?: string;
-  painDuration?: string;
+  walkingDistance?: Record<string, boolean>;
+  painDuration?: Record<string, boolean>;
   muscleStrengthDorsalFlexi?: number;
   muscleStrengthPlantarFlexi?: number;
-  toeArea?: string;
-  midfoot?: string;
-  ankleJoint?: string;
-  knees?: string;
+  toeArea?: Record<string, boolean>;
+  midfoot?: Record<string, boolean>;
+  ankleJoint?: Record<string, boolean>;
+  knees?: Record<string, boolean>;
 
   // Digitaal section
   digitalEnabled?: boolean;
   heelLiftLeft?: string;
   heelLiftRight?: string;
   lastHeight?: string; // 15, 20, or 25 cm
-  mtp1DeepLeft?: string; // 4 or 8 cm
-  mtp1DeepRight?: string; // 4 or 8 cm
+  mtp1DeepLeft?: string; // 40 or 80 mm
+  mtp1DeepRight?: string; // 40 or 80 mm
   clawToesEnabled?: boolean;
   scannedWithFoil?: boolean;
   digitalInstructions?: string;

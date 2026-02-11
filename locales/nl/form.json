@@ -400,6 +400,8 @@
   "muscleStrength": "Spierkracht",
   "dorsalFlexi": "Dorsaal flexi",
   "plantarFlexi": "Plantair flexi",
+  "littleStrength": "Weinig kracht",
+  "muchStrength": "Veel kracht",
   "toeArea": "Teenpartij",
   "extensionLimitation": "Extensiebeperking",
   "flexionLimitation": "Flexiebeperking",
