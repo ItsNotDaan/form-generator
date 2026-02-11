@@ -810,6 +810,107 @@ const FormIntakeVLOSPage = () => {
                     </FormItemWrapper>
                   )}
                 </FormBlock>
+
+                {/* Donkey Ear (Ezelsoor) - Added to Omsluiting section */}
+                <FormBlock
+                  columns={2}
+                  dividers={true}
+                  hoverEffect={false}
+                  title={t('donkeyEar')}
+                >
+                  {showLinks && (
+                    <FormItemWrapper label={t('left')}>
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="ezelsoor-links-switch"
+                          checked={donkeyEarLeftEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('donkeyEarLeftEnabled', !!checked)
+                          }
+                        />
+                        <Label
+                          htmlFor="ezelsoor-links-switch"
+                          className="font-normal cursor-pointer"
+                        >
+                          {donkeyEarLeftEnabled ? t('yes') : t('no')}
+                        </Label>
+                      </div>
+                      {donkeyEarLeftEnabled && (
+                        <Select
+                          value={form.watch('donkeyEarLeftType')}
+                          onValueChange={v =>
+                            form.setValue('donkeyEarLeftType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                DONKEY_EAR_TYPE_OPTIONS.find(
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('donkeyEarLeftType'),
+                                )?.label || '',
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </FormItemWrapper>
+                  )}
+                  {showRechts && (
+                    <FormItemWrapper label={t('right')}>
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="ezelsoor-rechts-switch"
+                          checked={donkeyEarRightEnabled}
+                          onCheckedChange={checked =>
+                            form.setValue('donkeyEarRightEnabled', !!checked)
+                          }
+                        />
+                        <Label
+                          htmlFor="ezelsoor-rechts-switch"
+                          className="font-normal cursor-pointer"
+                        >
+                          {donkeyEarRightEnabled ? t('yes') : t('no')}
+                        </Label>
+                      </div>
+                      {donkeyEarRightEnabled && (
+                        <Select
+                          value={form.watch('donkeyEarRightType')}
+                          onValueChange={v =>
+                            form.setValue('donkeyEarRightType', v)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue>
+                              {t(
+                                DONKEY_EAR_TYPE_OPTIONS.find(
+                                  opt =>
+                                    opt.value ===
+                                    form.watch('donkeyEarRightType'),
+                                )?.label || '',
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {t(opt.label)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </FormItemWrapper>
+                  )}
+                </FormBlock>
               </FormCard>
 
               {/* Supplement Support */}
@@ -1307,105 +1408,6 @@ const FormIntakeVLOSPage = () => {
                   )}
                 </FormBlock>
               </FormCard>
-
-              {/* Donkey Ear */}
-              <FormCard title={t('donkeyEar')}>
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  {showLinks && (
-                    <FormItemWrapper label={t('left')}>
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="ezelsoor-links-switch"
-                          checked={donkeyEarLeftEnabled}
-                          onCheckedChange={checked =>
-                            form.setValue('donkeyEarLeftEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="ezelsoor-links-switch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {donkeyEarLeftEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {donkeyEarLeftEnabled && (
-                        <Select
-                          value={form.watch('donkeyEarLeftType')}
-                          onValueChange={v =>
-                            form.setValue('donkeyEarLeftType', v)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue>
-                              {t(
-                                DONKEY_EAR_TYPE_OPTIONS.find(
-                                  opt =>
-                                    opt.value ===
-                                    form.watch('donkeyEarLeftType'),
-                                )?.label || '',
-                              )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {t(opt.label)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper label={t('right')}>
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="ezelsoor-rechts-switch"
-                          checked={donkeyEarRightEnabled}
-                          onCheckedChange={checked =>
-                            form.setValue('donkeyEarRightEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="ezelsoor-rechts-switch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {donkeyEarRightEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {donkeyEarRightEnabled && (
-                        <Select
-                          value={form.watch('donkeyEarRightType')}
-                          onValueChange={v =>
-                            form.setValue('donkeyEarRightType', v)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue>
-                              {t(
-                                DONKEY_EAR_TYPE_OPTIONS.find(
-                                  opt =>
-                                    opt.value ===
-                                    form.watch('donkeyEarRightType'),
-                                )?.label || '',
-                              )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {t(opt.label)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-              </FormCard>
-
               {/* Heel Rounding */}
               <FormCard title={t('heelRounding')}>
                 <FormBlock

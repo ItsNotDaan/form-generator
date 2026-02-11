@@ -343,7 +343,7 @@ const FormIntakeOSAPage = () => {
                   <FormItemWrapper label={t('amputation')}>
                     <div className="flex gap-6">
                       <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <Switch
                           id="amp-left"
                           checked={form.watch('amputationLeftEnabled')}
                           onCheckedChange={checked =>
@@ -358,7 +358,7 @@ const FormIntakeOSAPage = () => {
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <Switch
                           id="amp-right"
                           checked={form.watch('amputationRightEnabled')}
                           onCheckedChange={checked =>
