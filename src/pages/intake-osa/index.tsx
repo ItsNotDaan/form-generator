@@ -43,6 +43,12 @@ import {
   FOOT_INSPECTION_OPTIONS,
   LAST_HEIGHT_OPTIONS,
   MTP1_DEEP_OPTIONS,
+  WALKING_DISTANCE_OPTIONS,
+  PAIN_DURATION_OPTIONS,
+  TOE_AREA_OPTIONS,
+  MIDFOOT_OPTIONS,
+  ANKLE_JOINT_OPTIONS,
+  KNEES_OPTIONS,
   Side,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
@@ -92,6 +98,14 @@ const FormIntakeOSAPage = () => {
     walkingDistanceAids: z.record(z.string(), z.boolean()),
     painPerception: z.string().optional(),
     footInspection: z.record(z.string(), z.boolean()),
+    walkingDistance: z.record(z.string(), z.boolean()),
+    painDuration: z.record(z.string(), z.boolean()),
+    muscleStrengthDorsalFlexi: z.number().optional(),
+    muscleStrengthPlantarFlexi: z.number().optional(),
+    toeArea: z.record(z.string(), z.boolean()),
+    midfoot: z.record(z.string(), z.boolean()),
+    ankleJoint: z.record(z.string(), z.boolean()),
+    knees: z.record(z.string(), z.boolean()),
 
     // Digitaal fields
     digitalEnabled: z.boolean(),
@@ -124,6 +138,14 @@ const FormIntakeOSAPage = () => {
       walkingDistanceAids: {},
       painPerception: '0',
       footInspection: {},
+      walkingDistance: {},
+      painDuration: {},
+      muscleStrengthDorsalFlexi: 3,
+      muscleStrengthPlantarFlexi: 3,
+      toeArea: {},
+      midfoot: {},
+      ankleJoint: {},
+      knees: {},
       // Digitaal defaults
       digitalEnabled: false,
       heelLiftLeft: '1.5',
@@ -156,8 +178,8 @@ const FormIntakeOSAPage = () => {
   const showRechts = side === 'right' || side === 'both';
 
   // Helper functions
-  const boolToString = (value: boolean): string => (value ? 'ja' : 'nee');
-  const stringToBool = (value: string): boolean => value === 'ja';
+  const boolToString = (value: boolean): string => (value ? 'yes' : 'no');
+  const stringToBool = (value: string): boolean => value === 'yes';
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
@@ -182,6 +204,14 @@ const FormIntakeOSAPage = () => {
         >,
         painPerception: data.painPerception || '',
         footInspection: data.footInspection as Record<string, boolean>,
+        walkingDistance: data.walkingDistance as Record<string, boolean>,
+        painDuration: data.painDuration as Record<string, boolean>,
+        muscleStrengthDorsalFlexi: data.muscleStrengthDorsalFlexi || 3,
+        muscleStrengthPlantarFlexi: data.muscleStrengthPlantarFlexi || 3,
+        toeArea: data.toeArea as Record<string, boolean>,
+        midfoot: data.midfoot as Record<string, boolean>,
+        ankleJoint: data.ankleJoint as Record<string, boolean>,
+        knees: data.knees as Record<string, boolean>,
         // Digitaal fields
         digitalEnabled: data.digitalEnabled,
         heelLiftLeft: data.heelLiftLeft || '',
@@ -313,7 +343,7 @@ const FormIntakeOSAPage = () => {
                   <FormItemWrapper label={t('amputation')}>
                     <div className="flex gap-6">
                       <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <Switch
                           id="amp-left"
                           checked={form.watch('amputationLeftEnabled')}
                           onCheckedChange={checked =>
@@ -328,7 +358,7 @@ const FormIntakeOSAPage = () => {
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <Switch
                           id="amp-right"
                           checked={form.watch('amputationRightEnabled')}
                           onCheckedChange={checked =>
@@ -479,6 +509,271 @@ const FormIntakeOSAPage = () => {
                       <div className="grid gap-1.5 font-normal">
                         <p className="text-sm leading-none font-medium">
                           {t(optie.value)}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Loopafstand */}
+                <FormBlock
+                  title={t('walkingDistance')}
+                  centerTitle={true}
+                  columns={4}
+                  dividers={false}
+                >
+                  {WALKING_DISTANCE_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`walking-distance-${optie.key}`}
+                        checked={
+                          (form.watch('walkingDistance')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('walkingDistance', {
+                            ...form.getValues('walkingDistance'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Tijdsduur pijn */}
+                <FormBlock
+                  title={t('painDuration')}
+                  centerTitle={true}
+                  columns={3}
+                  dividers={false}
+                >
+                  {PAIN_DURATION_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`pain-duration-${optie.key}`}
+                        checked={
+                          (form.watch('painDuration')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('painDuration', {
+                            ...form.getValues('painDuration'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Spierkracht */}
+                <FormBlock
+                  title={t('muscleStrength')}
+                  centerTitle={true}
+                  columns={2}
+                  dividers={true}
+                >
+                  <FormItemWrapper className="flex flex-col items-center space-y-2">
+                    <Label className="text-base font-semibold">{t('dorsalFlexi')}</Label>
+                    <div className="flex items-center gap-2 w-full">
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('littleStrength')}</span>
+                      <Input
+                        type="range"
+                        min="1"
+                        max="5"
+                        value={form.watch('muscleStrengthDorsalFlexi')}
+                        onChange={e =>
+                          form.setValue(
+                            'muscleStrengthDorsalFlexi',
+                            parseInt(e.target.value),
+                          )
+                        }
+                        className="flex-1"
+                      />
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('muchStrength')}</span>
+                    </div>
+                    <span className="text-lg font-semibold">
+                      {form.watch('muscleStrengthDorsalFlexi') || 3}
+                    </span>
+                  </FormItemWrapper>
+                  <FormItemWrapper className="flex flex-col items-center space-y-2">
+                    <Label className="text-base font-semibold">{t('plantarFlexi')}</Label>
+                    <div className="flex items-center gap-2 w-full">
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('littleStrength')}</span>
+                      <Input
+                        type="range"
+                        min="1"
+                        max="5"
+                        value={form.watch('muscleStrengthPlantarFlexi')}
+                        onChange={e =>
+                          form.setValue(
+                            'muscleStrengthPlantarFlexi',
+                            parseInt(e.target.value),
+                          )
+                        }
+                        className="flex-1"
+                      />
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('muchStrength')}</span>
+                    </div>
+                    <span className="text-lg font-semibold">
+                      {form.watch('muscleStrengthPlantarFlexi') || 3}
+                    </span>
+                  </FormItemWrapper>
+                </FormBlock>
+
+                {/* Teenpartij */}
+                <FormBlock
+                  title={t('toeArea')}
+                  centerTitle={true}
+                  columns={4}
+                  dividers={false}
+                >
+                  {TOE_AREA_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`toe-area-${optie.key}`}
+                        checked={
+                          (form.watch('toeArea')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('toeArea', {
+                            ...form.getValues('toeArea'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Midvoet */}
+                <FormBlock
+                  title={t('midfoot')}
+                  centerTitle={true}
+                  columns={2}
+                  dividers={false}
+                >
+                  {MIDFOOT_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`midfoot-${optie.key}`}
+                        checked={
+                          (form.watch('midfoot')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('midfoot', {
+                            ...form.getValues('midfoot'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Enkelgewricht */}
+                <FormBlock
+                  title={t('ankleJoint')}
+                  centerTitle={true}
+                  columns={2}
+                  dividers={false}
+                >
+                  {ANKLE_JOINT_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`ankle-joint-${optie.key}`}
+                        checked={
+                          (form.watch('ankleJoint')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('ankleJoint', {
+                            ...form.getValues('ankleJoint'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </FormBlock>
+
+                {/* Knieën */}
+                <FormBlock
+                  title={t('knees')}
+                  centerTitle={true}
+                  columns={4}
+                  dividers={false}
+                >
+                  {KNEES_OPTIONS.map(optie => (
+                    <Label
+                      key={optie.key}
+                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
+                    >
+                      <Checkbox
+                        id={`knees-${optie.key}`}
+                        checked={
+                          (form.watch('knees')[
+                            optie.key
+                          ] as boolean) || false
+                        }
+                        onCheckedChange={checked =>
+                          form.setValue('knees', {
+                            ...form.getValues('knees'),
+                            [optie.key]: !!checked,
+                          })
+                        }
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          {optie.label}
                         </p>
                       </div>
                     </Label>
@@ -681,7 +976,7 @@ const FormIntakeOSAPage = () => {
                 >
                   {showLinks && (
                     <FormItemWrapper className="flex flex-col items-center">
-                      <Label htmlFor="mtp1-left">{t('leftCm')}</Label>
+                      <Label htmlFor="mtp1-left">{t('leftMm')}</Label>
                       <Select
                         value={form.watch('mtp1DeepLeft')}
                         onValueChange={v => form.setValue('mtp1DeepLeft', v)}
@@ -701,7 +996,7 @@ const FormIntakeOSAPage = () => {
                   )}
                   {showRechts && (
                     <FormItemWrapper className="flex flex-col items-center">
-                      <Label htmlFor="mtp1-right">{t('rightCm')}</Label>
+                      <Label htmlFor="mtp1-right">{t('rightMm')}</Label>
                       <Select
                         value={form.watch('mtp1DeepRight')}
                         onValueChange={v => form.setValue('mtp1DeepRight', v)}

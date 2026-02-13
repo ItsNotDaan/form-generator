@@ -227,13 +227,16 @@ export type OmsluitingKey =
   | 'lavero'
   | 'multivorm'
   | 'plastazote'
-  | 'orca';
+  | 'orca'
+  | 'ercoflex'
+  | 'donkeyEar';
 
 export type EnclosureOption = {
   key: OmsluitingKey;
   label: string;
   needsMm: boolean;
   defaultMm?: string;
+  needsTypeSelect?: boolean; // For donkey ear type selection
   // Export keys - English flattened names used in JSON export
   exportKeyLeft: string; // e.g., 'enclosureLeftCm' or 'multivormLeftMm'
   exportKeyRight: string; // e.g., 'enclosureRightCm' or 'multivormRightMm'
@@ -302,6 +305,29 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
     fullKeyRechts: 'omsluitingRechtsOrca',
     mmKeyLinks: 'omsluitingMmLinksOrca',
     mmKeyRechts: 'omsluitingMmRechtsOrca',
+  },
+  {
+    key: 'ercoflex',
+    label: 'Ercoflex omsluiting',
+    needsMm: false,
+    exportKeyLeft: 'ercoflexLeft',
+    exportKeyRight: 'ercoflexRight',
+    fullKeyLinks: 'omsluitingLinksErcoflex',
+    fullKeyRechts: 'omsluitingRechtsErcoflex',
+    mmKeyLinks: 'omsluitingMmLinksErcoflex',
+    mmKeyRechts: 'omsluitingMmRechtsErcoflex',
+  },
+  {
+    key: 'donkeyEar',
+    label: 'Ezelsoor',
+    needsMm: false,
+    needsTypeSelect: true,
+    exportKeyLeft: 'donkeyEarLeft',
+    exportKeyRight: 'donkeyEarRight',
+    fullKeyLinks: 'omsluitingLinksDonkeyEar',
+    fullKeyRechts: 'omsluitingRechtsDonkeyEar',
+    mmKeyLinks: 'omsluitingMmLinksDonkeyEar',
+    mmKeyRechts: 'omsluitingMmRechtsDonkeyEar',
   },
 ];
 
@@ -449,8 +475,51 @@ export const LAST_HEIGHT_OPTIONS = [
 /** OSA Digitaal - MTP1 diep options */
 export const MTP1_DEEP_OPTIONS = [
   {label: 'Nee', value: 'no'},
-  {label: '4cm', value: 'mtp1Deep4cm'},
-  {label: '8cm', value: 'mtp1Deep8cm'},
+  {label: '40mm', value: 'mtp1Deep40mm'},
+  {label: '80mm', value: 'mtp1Deep80mm'},
+];
+
+/** OSA Functieonderzoek - Loopafstand options */
+export const WALKING_DISTANCE_OPTIONS = [
+  {label: '50-100m', value: 'walkingDistance50_100', key: 'walkingDistance50_100'},
+  {label: '100m-500m', value: 'walkingDistance100_500', key: 'walkingDistance100_500'},
+  {label: '1km-3km', value: 'walkingDistance1_3km', key: 'walkingDistance1_3km'},
+  {label: '3km-6km', value: 'walkingDistance3_6km', key: 'walkingDistance3_6km'},
+];
+
+/** OSA Functieonderzoek - Tijdsduur pijn options */
+export const PAIN_DURATION_OPTIONS = [
+  {label: 'Pijn in rust', value: 'painAtRest', key: 'painAtRest'},
+  {label: 'Pijn bij belasten', value: 'painWhenLoaded', key: 'painWhenLoaded'},
+  {label: 'Altijd pijn (ook \'s nachts)', value: 'constantPain', key: 'constantPain'},
+];
+
+/** OSA Functieonderzoek - Teenpartij options */
+export const TOE_AREA_OPTIONS = [
+  {label: 'Extensiebeperking', value: 'extensionLimitation', key: 'extensionLimitation'},
+  {label: 'Flexiebeperking', value: 'flexionLimitation', key: 'flexionLimitation'},
+  {label: 'Hallux limitus', value: 'halluxLimitus', key: 'halluxLimitus'},
+  {label: 'Hallux rigidus', value: 'halluxRigidus', key: 'halluxRigidus'},
+];
+
+/** OSA Functieonderzoek - Midvoet options */
+export const MIDFOOT_OPTIONS = [
+  {label: 'Pronatiebeperking', value: 'pronationLimitation', key: 'pronationLimitation'},
+  {label: 'Supinatiebeperking', value: 'supinationLimitation', key: 'supinationLimitation'},
+];
+
+/** OSA Functieonderzoek - Enkelgewricht options */
+export const ANKLE_JOINT_OPTIONS = [
+  {label: 'Dorsaal flexiebeperking', value: 'dorsalFlexionLimitation', key: 'dorsalFlexionLimitation'},
+  {label: 'Plantair flexiebeperking', value: 'plantarFlexionLimitation', key: 'plantarFlexionLimitation'},
+];
+
+/** OSA Functieonderzoek - Knieën options */
+export const KNEES_OPTIONS = [
+  {label: 'Extensiebeperking', value: 'extensionLimitation', key: 'extensionLimitation'},
+  {label: 'Flexiebeperking', value: 'flexionLimitation', key: 'flexionLimitation'},
+  {label: 'Genu valgum', value: 'genuValgum', key: 'genuValgum'},
+  {label: 'Genu varum', value: 'genuVarum', key: 'genuVarum'},
 ];
 
 /** Foliepas Leestcorrectie opties */
@@ -1147,6 +1216,18 @@ export const ONDERWERKEN: OnderwerkCategorie[] = [
 export const ZIPPER_PLACEMENT_OPTIONS = [
   {label: 'Langs Ringbies', value: 'Langs Ringbies'},
   {label: 'Zie leest', value: 'Zie leest'},
+];
+
+/** Zipper side options (like Schoring) */
+export type ZipperSideType = 'none' | 'lateral' | 'medial' | 'lateralAndMedial';
+export const ZIPPER_SIDE_OPTIONS = [
+  {label: 'none', value: 'none' as const},
+  {label: 'lateral', value: 'lateral' as const},
+  {label: 'medial', value: 'medial' as const},
+  {
+    label: 'lateralAndMedial',
+    value: 'lateralAndMedial' as const,
+  },
 ];
 
 /** Zoolrand polish types */

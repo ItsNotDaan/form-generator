@@ -662,34 +662,40 @@ const FormIntakeVLOSPage = () => {
                             <Switch
                               id={`encl-left-${optie.key}`}
                               checked={
-                                (form.watch('enclosureLeft')[
-                                  optie.fullKeyLinks
-                                ] as boolean) || false
+                                optie.key === 'donkeyEar'
+                                  ? donkeyEarLeftEnabled
+                                  : ((form.watch('enclosureLeft')[
+                                      optie.fullKeyLinks
+                                    ] as boolean) || false)
                               }
                               onCheckedChange={checked => {
                                 if (window.navigator?.vibrate) {
                                   window.navigator.vibrate(10);
                                 }
 
-                                form.setValue('enclosureLeft', {
-                                  ...form.getValues('enclosureLeft'),
-                                  [optie.fullKeyLinks]: !!checked,
-                                });
-                                if (
-                                  checked &&
-                                  optie.needsMm &&
-                                  optie.defaultMm
-                                ) {
-                                  form.setValue('enclosureLeftMm', {
-                                    ...form.getValues('enclosureLeftMm'),
-                                    [optie.mmKeyLinks]: optie.defaultMm,
+                                if (optie.key === 'donkeyEar') {
+                                  form.setValue('donkeyEarLeftEnabled', !!checked);
+                                } else {
+                                  form.setValue('enclosureLeft', {
+                                    ...form.getValues('enclosureLeft'),
+                                    [optie.fullKeyLinks]: !!checked,
                                   });
-                                } else if (!checked) {
-                                  const next = {
-                                    ...form.getValues('enclosureLeftMm'),
-                                  };
-                                  delete next[optie.mmKeyLinks];
-                                  form.setValue('enclosureLeftMm', next);
+                                  if (
+                                    checked &&
+                                    optie.needsMm &&
+                                    optie.defaultMm
+                                  ) {
+                                    form.setValue('enclosureLeftMm', {
+                                      ...form.getValues('enclosureLeftMm'),
+                                      [optie.mmKeyLinks]: optie.defaultMm,
+                                    });
+                                  } else if (!checked) {
+                                    const next = {
+                                      ...form.getValues('enclosureLeftMm'),
+                                    };
+                                    delete next[optie.mmKeyLinks];
+                                    form.setValue('enclosureLeftMm', next);
+                                  }
                                 }
                               }}
                               className="mr-2"
@@ -725,6 +731,34 @@ const FormIntakeVLOSPage = () => {
                                   autoComplete="off"
                                 />
                               )}
+                            {optie.needsTypeSelect &&
+                              donkeyEarLeftEnabled && (
+                                <Select
+                                  value={form.watch('donkeyEarLeftType')}
+                                  onValueChange={v =>
+                                    form.setValue('donkeyEarLeftType', v)
+                                  }
+                                >
+                                  <SelectTrigger className="w-full sm:w-40 h-12 sm:h-auto text-base sm:text-sm">
+                                    <SelectValue>
+                                      {t(
+                                        DONKEY_EAR_TYPE_OPTIONS.find(
+                                          opt =>
+                                            opt.value ===
+                                            form.watch('donkeyEarLeftType'),
+                                        )?.label || '',
+                                      )}
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
+                                      <SelectItem key={opt.value} value={opt.value}>
+                                        {t(opt.label)}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              )}
                           </Label>
                         ))}
                       </div>
@@ -741,34 +775,40 @@ const FormIntakeVLOSPage = () => {
                             <Switch
                               id={`encl-right-${optie.key}`}
                               checked={
-                                (form.watch('enclosureRight')[
-                                  optie.fullKeyRechts
-                                ] as boolean) || false
+                                optie.key === 'donkeyEar'
+                                  ? donkeyEarRightEnabled
+                                  : ((form.watch('enclosureRight')[
+                                      optie.fullKeyRechts
+                                    ] as boolean) || false)
                               }
                               onCheckedChange={checked => {
                                 if (window.navigator?.vibrate) {
                                   window.navigator.vibrate(10);
                                 }
 
-                                form.setValue('enclosureRight', {
-                                  ...form.getValues('enclosureRight'),
-                                  [optie.fullKeyRechts]: !!checked,
-                                });
-                                if (
-                                  checked &&
-                                  optie.needsMm &&
-                                  optie.defaultMm
-                                ) {
-                                  form.setValue('enclosureRightMm', {
-                                    ...form.getValues('enclosureRightMm'),
-                                    [optie.mmKeyRechts]: optie.defaultMm,
+                                if (optie.key === 'donkeyEar') {
+                                  form.setValue('donkeyEarRightEnabled', !!checked);
+                                } else {
+                                  form.setValue('enclosureRight', {
+                                    ...form.getValues('enclosureRight'),
+                                    [optie.fullKeyRechts]: !!checked,
                                   });
-                                } else if (!checked) {
-                                  const next = {
-                                    ...form.getValues('enclosureRightMm'),
-                                  };
-                                  delete next[optie.mmKeyRechts];
-                                  form.setValue('enclosureRightMm', next);
+                                  if (
+                                    checked &&
+                                    optie.needsMm &&
+                                    optie.defaultMm
+                                  ) {
+                                    form.setValue('enclosureRightMm', {
+                                      ...form.getValues('enclosureRightMm'),
+                                      [optie.mmKeyRechts]: optie.defaultMm,
+                                    });
+                                  } else if (!checked) {
+                                    const next = {
+                                      ...form.getValues('enclosureRightMm'),
+                                    };
+                                    delete next[optie.mmKeyRechts];
+                                    form.setValue('enclosureRightMm', next);
+                                  }
                                 }
                               }}
                               className="mr-2"
@@ -803,6 +843,34 @@ const FormIntakeVLOSPage = () => {
                                   className="w-full sm:w-20 h-12 sm:h-auto text-base sm:text-sm"
                                   autoComplete="off"
                                 />
+                              )}
+                            {optie.needsTypeSelect &&
+                              donkeyEarRightEnabled && (
+                                <Select
+                                  value={form.watch('donkeyEarRightType')}
+                                  onValueChange={v =>
+                                    form.setValue('donkeyEarRightType', v)
+                                  }
+                                >
+                                  <SelectTrigger className="w-full sm:w-40 h-12 sm:h-auto text-base sm:text-sm">
+                                    <SelectValue>
+                                      {t(
+                                        DONKEY_EAR_TYPE_OPTIONS.find(
+                                          opt =>
+                                            opt.value ===
+                                            form.watch('donkeyEarRightType'),
+                                        )?.label || '',
+                                      )}
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
+                                      <SelectItem key={opt.value} value={opt.value}>
+                                        {t(opt.label)}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                               )}
                           </Label>
                         ))}
@@ -1307,105 +1375,6 @@ const FormIntakeVLOSPage = () => {
                   )}
                 </FormBlock>
               </FormCard>
-
-              {/* Donkey Ear */}
-              <FormCard title={t('donkeyEar')}>
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  {showLinks && (
-                    <FormItemWrapper label={t('left')}>
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="ezelsoor-links-switch"
-                          checked={donkeyEarLeftEnabled}
-                          onCheckedChange={checked =>
-                            form.setValue('donkeyEarLeftEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="ezelsoor-links-switch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {donkeyEarLeftEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {donkeyEarLeftEnabled && (
-                        <Select
-                          value={form.watch('donkeyEarLeftType')}
-                          onValueChange={v =>
-                            form.setValue('donkeyEarLeftType', v)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue>
-                              {t(
-                                DONKEY_EAR_TYPE_OPTIONS.find(
-                                  opt =>
-                                    opt.value ===
-                                    form.watch('donkeyEarLeftType'),
-                                )?.label || '',
-                              )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {t(opt.label)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper label={t('right')}>
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="ezelsoor-rechts-switch"
-                          checked={donkeyEarRightEnabled}
-                          onCheckedChange={checked =>
-                            form.setValue('donkeyEarRightEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="ezelsoor-rechts-switch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {donkeyEarRightEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {donkeyEarRightEnabled && (
-                        <Select
-                          value={form.watch('donkeyEarRightType')}
-                          onValueChange={v =>
-                            form.setValue('donkeyEarRightType', v)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue>
-                              {t(
-                                DONKEY_EAR_TYPE_OPTIONS.find(
-                                  opt =>
-                                    opt.value ===
-                                    form.watch('donkeyEarRightType'),
-                                )?.label || '',
-                              )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {t(opt.label)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-              </FormCard>
-
               {/* Heel Rounding */}
               <FormCard title={t('heelRounding')}>
                 <FormBlock

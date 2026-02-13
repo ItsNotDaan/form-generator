@@ -16,7 +16,7 @@
 ## Fase 3 - Functionele fixes (Digitaal formulier)
 
 - [ ] **Klauwtenen/Folie scannen**: Issue oplossen waarbij "gescand met folie" en "Klauwtenen" niet correct werkt
-- [ ] **MTP diepteeenheden**: MTP dieptemeting wijzigen van mm naar cm
+- [x] **MTP diepteeenheden**: MTP dieptemeting gebruikt al cm (geen wijziging nodig)
 
 ## Fase 4 - Nieuwe velden en uitbreidingen (Functieonderzoek)
 
