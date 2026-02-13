@@ -1438,7 +1438,7 @@ const FormCheckFoliepasPage = () => {
                           </div>
                         </div>
                         {/* Medial/Lateral Select */}
-                        <div className="pt-2">
+                        <div className="pt-2 flex flex-col items-center">
                           <Label htmlFor="zipper-side" className="text-sm mb-2">
                             {t('zipperPlacement')} (Mediaal/Lateraal)
                           </Label>
@@ -1446,7 +1446,7 @@ const FormCheckFoliepasPage = () => {
                             value={form.watch('zipperSide') || 'none'}
                             onValueChange={v => form.setValue('zipperSide', v)}
                           >
-                            <SelectTrigger id="zipper-side" className="bg-background!">
+                            <SelectTrigger id="zipper-side" className="bg-background! w-2/3">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
