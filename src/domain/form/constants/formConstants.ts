@@ -228,13 +228,15 @@ export type OmsluitingKey =
   | 'multivorm'
   | 'plastazote'
   | 'orca'
-  | 'ercoflex';
+  | 'ercoflex'
+  | 'donkeyEar';
 
 export type EnclosureOption = {
   key: OmsluitingKey;
   label: string;
   needsMm: boolean;
   defaultMm?: string;
+  needsTypeSelect?: boolean; // For donkey ear type selection
   // Export keys - English flattened names used in JSON export
   exportKeyLeft: string; // e.g., 'enclosureLeftCm' or 'multivormLeftMm'
   exportKeyRight: string; // e.g., 'enclosureRightCm' or 'multivormRightMm'
@@ -314,6 +316,18 @@ export const ENCLOSURE_OPTIONS: EnclosureOption[] = [
     fullKeyRechts: 'omsluitingRechtsErcoflex',
     mmKeyLinks: 'omsluitingMmLinksErcoflex',
     mmKeyRechts: 'omsluitingMmRechtsErcoflex',
+  },
+  {
+    key: 'donkeyEar',
+    label: 'Ezelsoor',
+    needsMm: false,
+    needsTypeSelect: true,
+    exportKeyLeft: 'donkeyEarLeft',
+    exportKeyRight: 'donkeyEarRight',
+    fullKeyLinks: 'omsluitingLinksDonkeyEar',
+    fullKeyRechts: 'omsluitingRechtsDonkeyEar',
+    mmKeyLinks: 'omsluitingMmLinksDonkeyEar',
+    mmKeyRechts: 'omsluitingMmRechtsDonkeyEar',
   },
 ];
 
