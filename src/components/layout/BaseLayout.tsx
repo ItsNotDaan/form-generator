@@ -10,7 +10,6 @@ export const BaseLayout = memo(
   ({
     children,
     title,
-    showBackButton,
     onBackButtonClicked,
     currentStep,
     parentClassName = '',
@@ -19,7 +18,6 @@ export const BaseLayout = memo(
       <div className="flex flex-col w-full min-h-screen h-full bg-background pt-16">
         <PageHeader
           title={title}
-          showBackButton={showBackButton}
           onBackButtonClicked={onBackButtonClicked}
           currentStep={currentStep}
         />

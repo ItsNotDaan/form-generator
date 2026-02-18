@@ -7,8 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {useAppSelector, useAppDispatch} from '@/domain/store/hooks';
-import {clearFormData, clearIntakeForms} from '@/domain/store/slices/formData';
-import {clearAllFormStorage} from '@/utils/localStorageHelper';
+import {clearIntakeForms} from '@/domain/store/slices/formData';
 
 const FormSelectionPage = () => {
   const router = useRouter();
@@ -21,18 +20,8 @@ const FormSelectionPage = () => {
     dispatch(clearIntakeForms());
   }, [dispatch]);
 
-  const handleBackToMain = () => {
-    dispatch(clearFormData());
-    clearAllFormStorage();
-    void router.push(Routes.overview);
-  };
-
   return (
-    <BaseLayout
-      title={t('selectIntakeForm')}
-      showBackButton
-      onBackButtonClicked={handleBackToMain}
-    >
+    <BaseLayout title={t('selectIntakeForm')}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
