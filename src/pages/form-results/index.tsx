@@ -30,6 +30,7 @@ const FormResultsPage = () => {
   const {t} = useTranslation('form');
   const formData = useAppSelector(state => state.formData);
   const [copied, setCopied] = useState(false);
+  const [copiedAndRedirected, setCopiedAndRedirected] = useState(false);
 
   // If no client data exists, redirect to new client page
   React.useEffect(() => {
@@ -251,6 +252,23 @@ const FormResultsPage = () => {
       });
   };
 
+  const handleCopyJSONAndRedirect = () => {
+    navigator.clipboard
+      .writeText(jsonString)
+      .then(() => {
+        setCopiedAndRedirected(true);
+        setTimeout(() => setCopiedAndRedirected(false), 2000);
+
+        // Redirect to google.com in a new tab after a small delay to show the feedback
+        setTimeout(() => {
+          window.open('https://app.proculgroep.nl/client', '_blank');
+        }, 700);
+      })
+      .catch(() => {
+        // Handle clipboard error silently
+      });
+  };
+
   const renderFieldValue = (label: string, value: any) => {
     if (value === null || value === undefined || value === '') {
       return null;
@@ -334,7 +352,7 @@ const FormResultsPage = () => {
               </div>
             )}
 
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-2">
               <Button
                 onClick={handleCopyJSON}
                 className="flex items-center gap-2"
@@ -348,6 +366,25 @@ const FormResultsPage = () => {
                   <>
                     <Copy className="w-4 h-4" />
                     {t('copyJson')}
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={handleCopyJSONAndRedirect}
+                className="flex items-center gap-2"
+              >
+                {/* This state is set by the handleCopyJSONAndRedirect function */}
+                {copiedAndRedirected ? (
+                  <>
+                    {/* Shows a checkmark with the text: Copied! */}
+                    <Check className="w-4 h-4" />
+                    {t('copiedAndRedirected')}
+                  </>
+                ) : (
+                  <>
+                    {/* Shows a copy icon with the text: Copy & Open */}
+                    <Copy className="w-4 h-4" />
+                    {t('copyAndRedirect')}
                   </>
                 )}
               </Button>

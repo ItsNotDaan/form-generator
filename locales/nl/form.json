@@ -563,5 +563,13 @@
   "deepeningMm": "Verdieping (mm)",
   "pelotte": "Pellote",
   "heelRaisePrice": "Talonette prijs",
-  "ovacDescription": "OVAC omschrijving"
+  "ovacDescription": "OVAC omschrijving",
+
+  "_comment_resultsPages": "=== SECTION: RESULTS PAGE TEXTS ===",
+  "resultsPageTitle": "Formulier Resultaten",
+  "resultsPageDescription": "Hieronder vindt u een overzicht van alle ingevoerde gegevens en de gegenereerde JSON. Gebruik de knoppen om de JSON te kopiëren of terug te keren naar het overzicht.",
+  "copiedAndRedirected": "Gekopieerd en doorverwezen.",
+  "copyAndRedirect": "Kopieer en ga naar Procul.",
+
+  "_FINAL": "=== FINAL ==="
 }
