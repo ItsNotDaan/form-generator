@@ -156,6 +156,7 @@ const FormOldClientPage = () => {
       setClientData({
         practitionerId: data.practitionerId || '',
         date: data.date || '',
+        clientType: 'oldClient',
         location: (data.location as Location) || '',
         salutation: (data.salutation as Salutation) || '',
         initials: data.initials || '',

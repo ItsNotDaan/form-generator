@@ -348,6 +348,7 @@
   "goToField": "Naar {{fieldLabel}}",
   "newClient": "Nieuwe cliënt",
   "newClientDescription": "Vul de gegevens in om een nieuwe cliënt aan te maken.",
+  "oldClient": "Bestaande cliënt",
   "requiredFieldsTitle": "Vul de verplichte velden in",
   "existingClient": "Bestaande cliënt",
   "existingClientDescription": "Werk de gegevens van een bestaande cliënt bij.",

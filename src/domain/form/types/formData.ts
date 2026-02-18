@@ -10,6 +10,9 @@ export interface ClientData {
   practitionerId?: string;
   date: string;
 
+  // Client type
+  clientType?: 'newClient' | 'oldClient';
+
   // Intake form type
   intakeType?:
     | 'VLOS'

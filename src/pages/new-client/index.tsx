@@ -158,6 +158,7 @@ const FormNewClientPage = () => {
       setClientData({
         practitionerId: data.practitionerId,
         date: data.date,
+        clientType: 'newClient',
         location: data.location as Location,
         salutation: data.salutation as Salutation,
         initials: data.initials,
