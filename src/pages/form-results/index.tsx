@@ -176,10 +176,10 @@ const FormResultsPage = () => {
       '';
 
     const result: FormResultJSON = {
-      clientData: {
+      clientData: applyTranslations({
         ...normalizedClientData,
         practitionerName,
-      },
+      }),
       generatedAt: new Date().toISOString(),
     };
 
