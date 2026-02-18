@@ -162,7 +162,6 @@ const FormNewClientPage = () => {
         salutation: data.salutation as Salutation,
       }),
     );
-    clearStorage();
     void router.push(Routes.form_selection);
   };
 

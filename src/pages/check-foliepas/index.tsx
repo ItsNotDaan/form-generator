@@ -159,7 +159,7 @@ const FormCheckFoliepasPage = () => {
   }, scrollToFirstError);
 
   return (
-    <BaseLayout title={t('checkFoliepas')} currentStep={2}>
+    <BaseLayout title={t('checkFoliepas')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-3 mb-12">

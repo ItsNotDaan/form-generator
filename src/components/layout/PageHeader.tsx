@@ -7,6 +7,7 @@ import {getAssetPath} from '@/utils/assetPath';
 import {Link} from './Link';
 import {ThemeToggle} from '@/components/ui/theme-toggle';
 import {Button} from '../ui/button';
+import {loadStepRoute, saveStepRoute} from '@/utils/localStorageHelper';
 
 export interface PageHeaderProps {
   title?: string;
@@ -24,7 +25,14 @@ const StepIndicator = memo<StepIndicatorProps>(
     const {t} = useTranslation('common');
     const router = useRouter();
 
-    const stepLabels = ['Client', 'Form', 'Results'];
+    const [stepRoutes, setStepRoutes] = React.useState<Array<string | null>>([
+      null,
+      null,
+      null,
+      null,
+    ]);
+
+    const stepLabels = ['Client', 'Form Selection', 'Form', 'Results'];
 
     const handleBackClick = () => {
       if (onBackButtonClicked) {
@@ -32,6 +40,25 @@ const StepIndicator = memo<StepIndicatorProps>(
       } else {
         router.back();
       }
+    };
+
+    React.useEffect(() => {
+      if (!currentStep) return;
+
+      saveStepRoute(currentStep, router.asPath);
+      setStepRoutes([
+        loadStepRoute(1),
+        loadStepRoute(2),
+        loadStepRoute(3),
+        loadStepRoute(4),
+      ]);
+    }, [currentStep, router.asPath]);
+
+    const handleStepClick = (stepIndex: number) => {
+      const route = stepRoutes[stepIndex];
+      const stepNumber = stepIndex + 1;
+      if (!route || stepNumber === currentStep) return;
+      void router.push(route);
     };
 
     return (
@@ -51,17 +78,27 @@ const StepIndicator = memo<StepIndicatorProps>(
         <div className="items-center hidden gap-2 md:flex">
           {stepLabels.map((label, index) => {
             const stepNumber = index + 1;
-            const isComplete = stepNumber < currentStep;
+            const hasRoute = !!stepRoutes[index];
             const isCurrent = stepNumber === currentStep;
+            const canNavigate = hasRoute && !isCurrent;
 
             return (
               <React.Fragment key={stepNumber}>
-                <div className="flex items-center gap-2">
+                <div
+                  className={`flex items-center gap-2 ${
+                    canNavigate
+                      ? 'cursor-pointer'
+                      : !hasRoute
+                        ? 'cursor-not-allowed opacity-60'
+                        : ''
+                  }`}
+                  onClick={() => handleStepClick(index)}
+                >
                   <div
                     className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-all ${
                       isCurrent
                         ? 'bg-navbar-foreground text-navbar ring-2 ring-navbar-foreground ring-offset-2 ring-offset-navbar'
-                        : isComplete
+                        : hasRoute
                           ? 'bg-navbar-foreground/30 text-navbar-foreground'
                           : 'bg-navbar-border text-navbar-foreground/50'
                     }`}
@@ -69,10 +106,10 @@ const StepIndicator = memo<StepIndicatorProps>(
                     {stepNumber}
                   </div>
                   <span
-                    className={`text-sm font-medium hidden lg:inline ${
+                    className={`text-sm font-medium hidden lg:inline whitespace-nowrap ${
                       isCurrent
                         ? 'text-navbar-foreground'
-                        : isComplete
+                        : hasRoute
                           ? 'text-navbar-foreground/80'
                           : 'text-navbar-foreground/50'
                     }`}
@@ -83,7 +120,7 @@ const StepIndicator = memo<StepIndicatorProps>(
                 {index < stepLabels.length - 1 && (
                   <div
                     className={`h-0.5 w-12 ${
-                      isComplete
+                      hasRoute && stepRoutes[index + 1]
                         ? 'bg-navbar-foreground/50'
                         : 'bg-navbar-foreground/20'
                     }`}

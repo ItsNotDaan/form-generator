@@ -5,6 +5,7 @@
 
 const TTL_DAYS = 7;
 const STORAGE_KEY_PREFIX = 'form_autosave_';
+const STEP_ROUTE_KEY_PREFIX = 'step_route_';
 
 interface StoredData<T> {
   data: T;
@@ -22,7 +23,7 @@ export function saveToLocalStorage<T>(key: string, data: T): void {
     };
     localStorage.setItem(
       `${STORAGE_KEY_PREFIX}${key}`,
-      JSON.stringify(storageData)
+      JSON.stringify(storageData),
     );
   } catch (error) {
     console.error('Error saving to localStorage:', error);
@@ -82,7 +83,8 @@ export function cleanupExpiredStorage(): void {
 
       try {
         const storageData: StoredData<any> = JSON.parse(item);
-        const expiryTime = storageData.timestamp + TTL_DAYS * 24 * 60 * 60 * 1000;
+        const expiryTime =
+          storageData.timestamp + TTL_DAYS * 24 * 60 * 60 * 1000;
 
         if (now > expiryTime) {
           keysToRemove.push(key);
@@ -105,6 +107,8 @@ export function cleanupExpiredStorage(): void {
 export function clearAllFormStorage(): void {
   try {
     const formKeys = [
+      'newClient',
+      'oldClient',
       'checkFoliepas',
       'intakeVLOS',
       'intakeOSA',
@@ -113,10 +117,23 @@ export function clearAllFormStorage(): void {
       'intakeOSB',
       'intakeOVAC',
       'intakeInsoles',
+      'shoeDesign',
     ];
 
     formKeys.forEach(key => removeFromLocalStorage(key));
   } catch (error) {
     console.error('Error clearing all form storage:', error);
   }
+}
+
+export function saveStepRoute(step: number, route: string): void {
+  saveToLocalStorage(`${STEP_ROUTE_KEY_PREFIX}${step}`, route);
+}
+
+export function loadStepRoute(step: number): string | null {
+  return loadFromLocalStorage<string>(`${STEP_ROUTE_KEY_PREFIX}${step}`);
+}
+
+export function clearStepRoute(step: number): void {
+  removeFromLocalStorage(`${STEP_ROUTE_KEY_PREFIX}${step}`);
 }

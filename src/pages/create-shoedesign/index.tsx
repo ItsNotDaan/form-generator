@@ -277,7 +277,7 @@ const FormCreateShoeDesignPage = () => {
   return (
     <BaseLayout
       title={t('createShoeDesign')}
-      currentStep={2}
+      currentStep={3}
       onBackButtonClicked={() => router.back()}
     >
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">

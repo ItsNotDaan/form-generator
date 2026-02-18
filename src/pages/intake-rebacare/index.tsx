@@ -86,7 +86,7 @@ const FormIntakeRebacarePage = () => {
   };
 
   return (
-    <BaseLayout title={t('intakeRebacare')} currentStep={2}>
+    <BaseLayout title={t('intakeRebacare')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col items-center justify-center gap-3 mb-12">
           <h1 className="text-4xl font-bold text-foreground">

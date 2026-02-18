@@ -5,21 +5,44 @@ import {NavigationCard} from '@/components/ui/navigation-card';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
-import {clearAllFormStorage} from '@/utils/localStorageHelper';
+import {
+  clearStepRoute,
+  removeFromLocalStorage,
+  clearAllFormStorage,
+} from '@/utils/localStorageHelper';
 import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {clearFormData} from '@/domain/store/slices/formData';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 
 const OverviewPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
-  const dispatch = useAppDispatch();
+  const storageKeyByRoute: Record<string, string> = {
+    [Routes.form_new_client]: 'newClient',
+    [Routes.form_old_client]: 'oldClient',
+    [Routes.form_intake_osa]: 'intakeOSA',
+    [Routes.form_check_foliepas]: 'checkFoliepas',
+    [Routes.form_create_shoedesign]: 'shoeDesign',
+    [Routes.form_intake_vlos]: 'intakeVLOS',
+    [Routes.form_intake_osb]: 'intakeOSB',
+    [Routes.form_intake_steunzolen]: 'intakeInsoles',
+    [Routes.form_intake_pulman]: 'intakePulman',
+    [Routes.form_intake_rebacare]: 'intakeRebacare',
+    [Routes.form_intake_ovac]: 'intakeOVAC',
+  };
 
-  const handleNavigate = (route: string, clearStorage: boolean = false) => {
-    if (clearStorage) {
-      dispatch(clearFormData());
+  const handleNavigate = (route: string, resetSteps: boolean = false) => {
+    if (resetSteps) {
+      // Starting a new client workflow - clear all data
       clearAllFormStorage();
+      clearStepRoute(2);
+      clearStepRoute(3);
+      clearStepRoute(4);
+    } else {
+      // Direct navigate to form - clear only that form's data
+      const storageKey = storageKeyByRoute[route];
+      if (storageKey) {
+        removeFromLocalStorage(storageKey);
+      }
     }
     void router.push(route);
   };
@@ -109,7 +132,7 @@ const OverviewPage = () => {
               <Button
                 variant="outline"
                 className="items-center justify-start h-full px-6 py-6 w-full"
-                onClick={() => void router.push(Routes.form_create_shoedesign)}
+                onClick={() => handleNavigate(Routes.form_create_shoedesign)}
               >
                 <FileText className="w-4 h-4 mr-2 shrink-0" />
 

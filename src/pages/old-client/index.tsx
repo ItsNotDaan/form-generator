@@ -173,7 +173,6 @@ const FormOldClientPage = () => {
         specialist: data.specialist || '',
       }),
     );
-    clearStorage();
     void router.push(Routes.form_selection);
   };
 

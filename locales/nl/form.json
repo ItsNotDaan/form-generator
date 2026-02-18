@@ -332,6 +332,8 @@
   "selectIntakeFormDescription": "Kies welk intakeformulier u wilt invullen voor deze cliënt.",
   "clientInfo": "Cliënt",
   "availableIntakeForms": "Beschikbare Intakeformulieren",
+  "continueWithLastForm": "Ga verder met laatst gebruikte formulier",
+  "continueForm": "Ga verder",
   "osaDescription": "Vul de gegevens in voor de OSA intake.",
   "vlosDescription": "Vul de gegevens in voor de VLOS intake.",
   "_comment_form_results": "=== SECTION: FORM RESULTS PAGE ===",
