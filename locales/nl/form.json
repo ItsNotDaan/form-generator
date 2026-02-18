@@ -449,6 +449,7 @@
   "ankleAdjustmentLastCorrection": "Enkels aanpassen (zie Foliepas): Links:             Rechts:",
   "readingCorrectionAfterFoilFit": "Leestcorrectie na foliepas",
   "readingCorrectionAfterLiningShoe": "Leestcorrectie na voeringschoen",
+  "createShoeDesign?": "Kleur en model maken?",
 
   "_comment_shoeDesign": "=== SECTION: ShoeDesign NAMES  ===",
   "createShoeDesign": "Kleur en Model",

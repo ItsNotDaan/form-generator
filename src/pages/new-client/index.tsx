@@ -156,24 +156,10 @@ const FormNewClientPage = () => {
   const onSubmit = (data: FormData) => {
     dispatch(
       setClientData({
-        practitionerId: data.practitionerId,
-        date: data.date,
+        ...data,
         clientType: 'newClient',
         location: data.location as Location,
         salutation: data.salutation as Salutation,
-        initials: data.initials,
-        clientName: data.clientName,
-        birthDate: data.birthDate,
-        address: data.address,
-        houseNumber: data.houseNumber,
-        postalCode: data.postalCode,
-        city: data.city,
-        phoneOne: data.phoneOne || '',
-        phoneTwo: data.phoneTwo || '',
-        email: data.email || '',
-        insurance: data.insurance,
-        medicalIndication: data.medicalIndication || '',
-        specialist: data.specialist || '',
       }),
     );
     clearStorage();

@@ -154,14 +154,13 @@ const FormOldClientPage = () => {
   const onSubmit = (data: FormData) => {
     dispatch(
       setClientData({
+        ...data,
+        clientType: 'oldClient',
         practitionerId: data.practitionerId || '',
         date: data.date || '',
-        clientType: 'oldClient',
         location: (data.location as Location) || '',
         salutation: (data.salutation as Salutation) || '',
         initials: data.initials || '',
-        clientName: data.clientName,
-        birthDate: data.birthDate,
         address: data.address || '',
         houseNumber: data.houseNumber || '',
         postalCode: data.postalCode || '',

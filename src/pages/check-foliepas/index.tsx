@@ -24,24 +24,6 @@ import {
   Side,
   SIDE_OPTIONS,
   LAST_CORRECTION_OPTIONS,
-  ZOOL_RANDEN,
-  ONDERWERKEN,
-  ZIPPER_PLACEMENT_OPTIONS,
-  LINING_OPTIONS,
-  SOLE_EDGE_POLISH_TYPE_OPTIONS,
-  MODEL_TYPE_OPTIONS,
-  TONGUE_PADDING_MM_OPTIONS,
-  TONGUE_TYPE_OPTIONS,
-  PADDING_COLLAR_MM_OPTIONS,
-  CLOSURE_TYPE_OPTIONS,
-  ZIPPER_TYPE_OPTIONS,
-  TOE_TYPE_OPTIONS,
-  COUNTERFORT_TYPE_OPTIONS,
-  CHECK_FOLIEPAS_INSOLE_TYPE_OPTIONS,
-  CONSTRUCTION_METHOD_TYPE_OPTIONS,
-  HEEL_MODEL_TYPE_OPTIONS,
-  HEEL_BUILDUP_MATERIAL_OPTIONS,
-  SHORING_TYPE_OPTIONS,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {
@@ -99,84 +81,6 @@ const FormCheckFoliepasPage = () => {
     // Voeringschoen Opties - Carbon Stiffening Lining Shoe
     carbonStiffeningLiningShoeLeft: z.boolean().optional(),
     carbonStiffeningLiningShoeRight: z.boolean().optional(),
-
-    // Tongue Padding and Collar (mm)
-    tonguePaddingMm: z.string().optional(),
-    tongueType: z.string().optional(),
-    paddingCollarMm: z.string().optional(),
-
-    // Closure Type
-    closureType: z.string().optional(),
-    ringsNumber: z.string().optional(),
-    ringsAmount: z.string().optional(),
-    hooksNumber: z.string().optional(),
-    hooksAmount: z.string().optional(),
-
-    // Zipper
-    zipperType: z.string().optional(),
-    zipperColor: z.string().optional(),
-    zipperPlacement: z.string().optional(),
-    zipperSide: z.string().optional(),
-
-    // Special Features (Bijzonderheden)
-    specialVelcroTongue: z.string().optional(),
-    specialLaceLoop: z.boolean().optional(),
-    specialExtraLeather: z.boolean().optional(),
-    specialOther: z.string().optional(),
-
-    // Edge Type (Randtype)
-    edgeTypeMain: z.string().optional(),
-    edgeTypeModel: z.string().optional(),
-    edgeTypeColor: z.string().optional(),
-    edgeTypeColorCode: z.string().optional(),
-
-    // Sole Type (Zooltype)
-    soleTypeMain: z.string().optional(),
-    soleTypeModel: z.string().optional(),
-    soleTypeColor: z.string().optional(),
-    soleTypeOther: z.string().optional(),
-
-    // Carbon Stiffening Shoe
-    carbonStiffeningShoeLeft: z.boolean().optional(),
-    carbonStiffeningShoeRight: z.boolean().optional(),
-
-    // Toe Options (Neusopties)
-    toeType: z.string().optional(),
-
-    // Lining (Voering)
-    liningType: z.string().optional(),
-
-    // Counterfort (Stijfsel)
-    counterfortType: z.string().optional(),
-    counterfortOther: z.string().optional(),
-
-    // Insole (Binnenzool)
-    insoleType: z.string().optional(),
-    insoleOther: z.string().optional(),
-
-    // Sole Edge Polish (Zoolrandafwerking)
-    soleEdgePolishType: z.string().optional(),
-    soleEdgePolishOther: z.string().optional(),
-
-    // Construction Method (Constructie Methode)
-    constructionMethodType: z.string().optional(),
-    constructionMethodOther: z.string().optional(),
-
-    // Heel Model (Hielmodel)
-    heelModelType: z.string().optional(),
-    heelBuildUpMaterial: z.string().optional(),
-    heelWedgeType: z.string().optional(),
-    heelBlockCoreCoating: z.boolean().optional(),
-    heelHeightLeft: z.string().optional(),
-    heelHeightRight: z.string().optional(),
-    heelRoundingLeftEnabled: z.boolean().optional(),
-    heelRoundingRightEnabled: z.boolean().optional(),
-
-    // Shoring (Schoring)
-    shoringLeftType: z.string().optional(),
-    shoringLeftMm: z.string().optional(),
-    shoringRightType: z.string().optional(),
-    shoringRightMm: z.string().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
@@ -237,156 +141,22 @@ const FormCheckFoliepasPage = () => {
   const showRechts = side === 'right' || side === 'both';
 
   // Watch for conditional visibility
-
-  const closureType = form.watch('closureType');
-  const zipperType = form.watch('zipperType');
   const carbonStiffeningLiningShoeLeft = form.watch(
     'carbonStiffeningLiningShoeLeft',
   );
   const carbonStiffeningLiningShoeRight = form.watch(
     'carbonStiffeningLiningShoeRight',
   );
-  const counterfortType = form.watch('counterfortType');
-  const insoleType = form.watch('insoleType');
-  const soleEdgePolishType = form.watch('soleEdgePolishType');
-  const constructionMethodType = form.watch('constructionMethodType');
-  const heelModelType = form.watch('heelModelType');
 
   const onSubmit = (data: FormData) => {
-    const specialFeaturesList = [
-      data.specialVelcroTongue && data.specialVelcroTongue !== 'none'
-        ? `${t('specialVelcroTongue')}: ${t(data.specialVelcroTongue)}`
-        : '',
-      data.specialLaceLoop ? t('laceLoopOnTongue') : '',
-      data.specialExtraLeather ? t('specialExtraLeather') : '',
-      data.specialOther?.trim() ? data.specialOther.trim() : '',
-    ].filter(Boolean);
-    const specialFeatures = specialFeaturesList.join(' \n');
-
-    // Color and model section is now in create-shoedesign form
-
-    dispatch(
-      setCheckFoliepasData({
-        // Side Selection
-        side: data.side as Side,
-
-        // Reading Corrections
-        readingCorrectionAfterFoilFit: data.readingCorrectionAfterFoilFit || '',
-        readingCorrectionAfterLiningShoe:
-          data.readingCorrectionAfterLiningShoe || '',
-
-        // Foliepas Aanmerkingen - Shaft Heights
-        shaftHeightLeft: data.shaftHeightLeft || '',
-        shaftHeightRight: data.shaftHeightRight || '',
-
-        // Foliepas Aanmerkingen - Leg Length Difference
-        legLengthDifferenceLeft: data.legLengthDifferenceLeft || '',
-        legLengthDifferenceRight: data.legLengthDifferenceRight || '',
-
-        // Foliepas Aanmerkingen - Shaft Opening
-        shaftOpeningWidth: data.shaftOpeningWidth || '',
-
-        // Voeringschoen Opties - Enclosure (Omsluiting)
-        enclosureLeft: data.enclosureLeft as Record<string, boolean>,
-        enclosureRight: data.enclosureRight as Record<string, boolean>,
-        enclosureLeftMm: data.enclosureLeftMm as Record<string, string>,
-        enclosureRightMm: data.enclosureRightMm as Record<string, string>,
-
-        // Voeringschoen Opties - Donkey Ear (Ezelsoor)
-        donkeyEarLeftEnabled: data.donkeyEarLeftEnabled,
-        donkeyEarRightEnabled: data.donkeyEarRightEnabled,
-        donkeyEarLeftType: data.donkeyEarLeftType || '',
-        donkeyEarRightType: data.donkeyEarRightType || '',
-
-        // Voeringschoen Opties - Carbon Stiffening Lining Shoe
-        carbonStiffeningLiningShoeLeft:
-          data.carbonStiffeningLiningShoeLeft || false,
-        carbonStiffeningLiningShoeRight:
-          data.carbonStiffeningLiningShoeRight || false,
-
-        // Tongue Padding and Collar (mm)
-        tonguePaddingMm: data.tonguePaddingMm || '',
-        tongueType: data.tongueType || '',
-        paddingCollarMm: data.paddingCollarMm || '',
-
-        // Closure Type
-        closureType: data.closureType || '',
-        ringsNumber: data.ringsNumber || '',
-        ringsAmount: data.ringsAmount || '',
-        hooksNumber: data.hooksNumber || '',
-        hooksAmount: data.hooksAmount || '',
-
-        // Zipper
-        zipperType: data.zipperType || '',
-        zipperColor: data.zipperColor || '',
-        zipperPlacement: data.zipperPlacement || '',
-        zipperSide: data.zipperSide || '',
-
-        // Special Features (Bijzonderheden)
-        specialVelcroTongue: data.specialVelcroTongue || 'none',
-        specialLaceLoop: data.specialLaceLoop || false,
-        specialExtraLeather: data.specialExtraLeather || false,
-        specialOther: data.specialOther || '',
-        specialFeatures,
-
-        // Edge Type (Randtype)
-        edgeTypeMain: data.edgeTypeMain || '',
-        edgeTypeModel: data.edgeTypeModel || '',
-        edgeTypeColor: data.edgeTypeColor || '',
-        edgeTypeColorCode: data.edgeTypeColorCode || '',
-
-        // Sole Type (Zooltype)
-        soleTypeMain: data.soleTypeMain || '',
-        soleTypeModel: data.soleTypeModel || '',
-        soleTypeColor: data.soleTypeColor || '',
-        soleTypeOther: data.soleTypeOther || '',
-
-        // Carbon Stiffening Shoe
-        carbonStiffeningShoeLeft: data.carbonStiffeningShoeLeft || false,
-        carbonStiffeningShoeRight: data.carbonStiffeningShoeRight || false,
-
-        // Toe Options (Neusopties)
-        toeType: data.toeType || '',
-
-        // Lining (Voering)
-        liningType: data.liningType || '',
-
-        // Counterfort (Stijfsel)
-        counterfortType: data.counterfortType || '',
-        counterfortOther: data.counterfortOther || '',
-
-        // Insole (Binnenzool)
-        insoleType: data.insoleType || '',
-        insoleOther: data.insoleOther || '',
-
-        // Sole Edge Polish (Zoolrandafwerking)
-        soleEdgePolishType: data.soleEdgePolishType || '',
-        soleEdgePolishOther: data.soleEdgePolishOther || '',
-
-        // Construction Method (Constructie Methode)
-        constructionMethodType: data.constructionMethodType || '',
-        constructionMethodOther: data.constructionMethodOther || '',
-
-        // Heel Model (Hielmodel)
-        heelModelType: data.heelModelType || '',
-        heelBuildUpMaterial: data.heelBuildUpMaterial || '',
-        heelWedgeType: data.heelWedgeType || '',
-        heelBlockCoreCoating: data.heelBlockCoreCoating || false,
-        heelHeightLeft: data.heelHeightLeft || '',
-        heelHeightRight: data.heelHeightRight || '',
-        heelRoundingLeftEnabled: data.heelRoundingLeftEnabled || false,
-        heelRoundingRightEnabled: data.heelRoundingRightEnabled || false,
-
-        // Shoring (Schoring)
-        shoringLeftType: data.shoringLeftType || 'none',
-        shoringLeftMm: data.shoringLeftMm || '',
-        shoringRightType: data.shoringRightType || 'none',
-        shoringRightMm: data.shoringRightMm || '',
-      }),
-    );
-
+    dispatch(setCheckFoliepasData({...data, side: data.side as Side}));
     void router.push(Routes.form_results);
   };
+
+  const handleCreateShoeDesign = form.handleSubmit(data => {
+    dispatch(setCheckFoliepasData({...data, side: data.side as Side}));
+    void router.push(Routes.form_create_shoedesign);
+  }, scrollToFirstError);
 
   return (
     <BaseLayout title={t('checkFoliepas')} currentStep={2}>
@@ -1000,8 +770,24 @@ const FormCheckFoliepasPage = () => {
                 </FormBlock>
               </FormCard>
 
+              <FormCard
+                title={t('createShoeDesign?')}
+                contentClassName="justify-center items-center text-center"
+              >
+                <Button
+                  type="button"
+                  size="lg"
+                  className="items-center w-2/3"
+                  onClick={handleCreateShoeDesign}
+                >
+                  <span className="mr-2">{t('createShoeDesign')}</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </FormCard>
+
               {/* Submit Section */}
               <FormFooter>
+                {/* Reset inputs in page button */}
                 <Button
                   type="button"
                   variant="outline"
@@ -1009,6 +795,8 @@ const FormCheckFoliepasPage = () => {
                 >
                   {t('reset')}
                 </Button>
+
+                {/* Cancel button */}
                 <Button
                   type="button"
                   variant="outline"
@@ -1016,6 +804,8 @@ const FormCheckFoliepasPage = () => {
                 >
                   {t('cancel')}
                 </Button>
+
+                {/* Save and continue button */}
                 <Button type="submit" size="lg" className="min-w-50">
                   <span className="mr-2">{t('saveAndContinue')}</span>
                   <ChevronRight className="h-4 w-4" />

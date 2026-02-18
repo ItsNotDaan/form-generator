@@ -248,7 +248,18 @@ const FormCreateShoeDesignPage = () => {
   };
 
   const onSubmit = (data: FormData) => {
-    dispatch(setShoeDesignData(data));
+    const specialFeaturesList = [
+      data.specialVelcroTongue && data.specialVelcroTongue !== 'none'
+        ? `${t('specialVelcroTongue')}: ${t(data.specialVelcroTongue)}`
+        : '',
+      data.specialLaceLoop ? t('laceLoopOnTongue') : '',
+      data.specialExtraLeather ? t('specialExtraLeather') : '',
+      data.specialOther?.trim() ? data.specialOther.trim() : '',
+    ].filter(Boolean);
+    const specialFeatures = specialFeaturesList.join('\n');
+
+    dispatch(setShoeDesignData({...data, specialFeatures}));
+
     void router.push(Routes.form_results);
   };
 
