@@ -865,10 +865,6 @@ export const LINING_OPTIONS = [
     value: 'leatherLining',
   },
   {
-    label: 'On-steam lining',
-    value: 'onSteamLining',
-  },
-  {
     label: 'Diabetic lining',
     value: 'diabeticLining',
   },
