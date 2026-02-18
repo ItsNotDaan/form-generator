@@ -18,4 +18,5 @@ export const Routes = {
   form_intake_ovac: '/intake-ovac',
   form_intake_steunzolen: '/intake-steunzolen',
   form_check_foliepas: '/check-foliepas',
+  form_create_shoedesign: '/create-shoedesign',
 };

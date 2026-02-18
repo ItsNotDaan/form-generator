@@ -29,6 +29,7 @@ const TARGET_TYPES = [
   'IntakeOVACData',
   'IntakeInsolesData',
   'CheckFoliepasData',
+  'ShoeDesignData',
 ];
 
 interface TypeInfo {
@@ -239,6 +240,7 @@ export const emptyFormData = {
   intakeOVAC: emptyIntakeOVACDataTemplate,
   intakeInsoles: emptyIntakeInsolesDataTemplate,
   checkFoliepas: emptyCheckFoliepasDataTemplate,
+  shoeDesign: emptyShoeDesignDataTemplate,
 };
 `;
 

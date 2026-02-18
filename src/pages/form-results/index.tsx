@@ -21,6 +21,7 @@ import {
   normalizeIntakeOVACData,
   normalizeIntakeSteunzolenData,
   normalizeCheckFoliepasData,
+  normalizeShoeDesignData,
   normalizeValue,
 } from '@/domain/form/normalizers/formDataNormalizer';
 
@@ -52,6 +53,7 @@ const FormResultsPage = () => {
     intakeOVAC?: Record<string, string>;
     intakeInsoles?: Record<string, string>;
     checkFoliepas?: Record<string, string>;
+    shoeDesign?: Record<string, string>;
     medicalCodes?: Record<string, string>;
     codeWarnings?: string[];
     generatedAt: string;
@@ -196,6 +198,12 @@ const FormResultsPage = () => {
     // This is a supplementary form that can be filled after any intake type
     result.checkFoliepas = applyTranslations(
       normalizeCheckFoliepasData(formData.checkFoliepas),
+    );
+
+    // Always add ShoeDesign data (independent of intakeType)
+    // This is a supplementary form that can be filled after any intake type
+    result.shoeDesign = applyTranslations(
+      normalizeShoeDesignData(formData.shoeDesign),
     );
 
     // Generate medical codes if applicable
@@ -377,6 +385,10 @@ const FormResultsPage = () => {
                   renderSection(t('intakeOvac'), formData.intakeOVAC)}
                 {formData.intakeInsoles &&
                   renderSection(t('intakeInsoles'), formData.intakeInsoles)}
+                {formData.checkFoliepas &&
+                  renderSection(t('checkFoliepas'), formData.checkFoliepas)}
+                {formData.shoeDesign &&
+                  renderSection(t('createShoeDesign'), formData.shoeDesign)}
               </FormCard>
 
               {/* De volledige JSON output */}

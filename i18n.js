@@ -51,5 +51,6 @@ module.exports = {
     '/intake-ovac': ['form'],
     '/intake-steunzolen': ['form'],
     '/check-foliepas': ['form'],
+    '/create-shoedesign': ['form'],
   },
 };

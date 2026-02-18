@@ -57,6 +57,26 @@ export const INSURANCE_COMPANIES = [
   {label: 'Caresq', value: 'caresq'},
 ];
 
+/** Medial/Lateral Options - Global constant used across multiple form fields */
+export type MedialLateralType =
+  | 'none'
+  | 'medial'
+  | 'lateral'
+  | 'lateralAndMedial';
+export const MEDIAL_LATERAL_OPTIONS = [
+  {label: 'none', value: 'none' as const},
+  {label: 'medial', value: 'medial' as const},
+  {label: 'lateral', value: 'lateral' as const},
+  {
+    label: 'lateralAndMedial',
+    value: 'lateralAndMedial' as const,
+  },
+];
+
+/** Medial/Lateral Options without 'none' - for fields that require a selection */
+export const MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE =
+  MEDIAL_LATERAL_OPTIONS.filter(opt => opt.value !== 'none');
+
 /** Locations */
 export type Location =
   | 'flevoziekenhuis'
@@ -186,32 +206,10 @@ export const WALKING_SOLE_OPTIONS = [
 ];
 
 /** Closure options */
-export type Closure = 'hooksRings' | 'velcro';
+export type Closure = 'hooksRings' | 'velcroClosure';
 export const CLOSURE_OPTIONS = [
   {label: 'Haken/Ringen', value: 'hooksRings'},
-  {label: 'Klittenband', value: 'velcro'},
-];
-
-/** Heel wedge types */
-export type HeelWedgeType = 'medial' | 'lateral' | 'lateralAndMedial';
-export const HEEL_WEDGE_TYPE_OPTIONS = [
-  {label: 'medial', value: 'medial'},
-  {label: 'lateral', value: 'lateral'},
-  {
-    value: 'lateralAndMedial',
-    label: 'lateralAndMedial',
-  },
-];
-
-/** Donkey ear types */
-export type DonkeyEarType = 'medial' | 'lateral' | 'lateralAndMedial';
-export const DONKEY_EAR_TYPE_OPTIONS = [
-  {label: 'medial', value: 'medial'},
-  {label: 'lateral', value: 'lateral'},
-  {
-    label: 'lateralAndMedial',
-    value: 'lateralAndMedial',
-  },
+  {label: 'Klittenband', value: 'velcroClosure'},
 ];
 
 /** Enclosure - Used in VLOS */
@@ -481,43 +479,95 @@ export const MTP1_DEEP_OPTIONS = [
 
 /** OSA Functieonderzoek - Loopafstand options */
 export const WALKING_DISTANCE_OPTIONS = [
-  {label: '50-100m', value: 'walkingDistance50_100', key: 'walkingDistance50_100'},
-  {label: '100m-500m', value: 'walkingDistance100_500', key: 'walkingDistance100_500'},
-  {label: '1km-3km', value: 'walkingDistance1_3km', key: 'walkingDistance1_3km'},
-  {label: '3km-6km', value: 'walkingDistance3_6km', key: 'walkingDistance3_6km'},
+  {
+    label: '50-100m',
+    value: 'walkingDistance50_100',
+    key: 'walkingDistance50_100',
+  },
+  {
+    label: '100m-500m',
+    value: 'walkingDistance100_500',
+    key: 'walkingDistance100_500',
+  },
+  {
+    label: '1km-3km',
+    value: 'walkingDistance1_3km',
+    key: 'walkingDistance1_3km',
+  },
+  {
+    label: '3km-6km',
+    value: 'walkingDistance3_6km',
+    key: 'walkingDistance3_6km',
+  },
 ];
 
 /** OSA Functieonderzoek - Tijdsduur pijn options */
 export const PAIN_DURATION_OPTIONS = [
   {label: 'Pijn in rust', value: 'painAtRest', key: 'painAtRest'},
   {label: 'Pijn bij belasten', value: 'painWhenLoaded', key: 'painWhenLoaded'},
-  {label: 'Altijd pijn (ook \'s nachts)', value: 'constantPain', key: 'constantPain'},
+  {
+    label: "Altijd pijn (ook 's nachts)",
+    value: 'constantPain',
+    key: 'constantPain',
+  },
 ];
 
 /** OSA Functieonderzoek - Teenpartij options */
 export const TOE_AREA_OPTIONS = [
-  {label: 'Extensiebeperking', value: 'extensionLimitation', key: 'extensionLimitation'},
-  {label: 'Flexiebeperking', value: 'flexionLimitation', key: 'flexionLimitation'},
+  {
+    label: 'Extensiebeperking',
+    value: 'extensionLimitation',
+    key: 'extensionLimitation',
+  },
+  {
+    label: 'Flexiebeperking',
+    value: 'flexionLimitation',
+    key: 'flexionLimitation',
+  },
   {label: 'Hallux limitus', value: 'halluxLimitus', key: 'halluxLimitus'},
   {label: 'Hallux rigidus', value: 'halluxRigidus', key: 'halluxRigidus'},
 ];
 
 /** OSA Functieonderzoek - Midvoet options */
 export const MIDFOOT_OPTIONS = [
-  {label: 'Pronatiebeperking', value: 'pronationLimitation', key: 'pronationLimitation'},
-  {label: 'Supinatiebeperking', value: 'supinationLimitation', key: 'supinationLimitation'},
+  {
+    label: 'Pronatiebeperking',
+    value: 'pronationLimitation',
+    key: 'pronationLimitation',
+  },
+  {
+    label: 'Supinatiebeperking',
+    value: 'supinationLimitation',
+    key: 'supinationLimitation',
+  },
 ];
 
 /** OSA Functieonderzoek - Enkelgewricht options */
 export const ANKLE_JOINT_OPTIONS = [
-  {label: 'Dorsaal flexiebeperking', value: 'dorsalFlexionLimitation', key: 'dorsalFlexionLimitation'},
-  {label: 'Plantair flexiebeperking', value: 'plantarFlexionLimitation', key: 'plantarFlexionLimitation'},
+  {
+    label: 'Dorsaal flexiebeperking',
+    value: 'dorsalFlexionLimitation',
+    key: 'dorsalFlexionLimitation',
+  },
+  {
+    label: 'Plantair flexiebeperking',
+    value: 'plantarFlexionLimitation',
+    key: 'plantarFlexionLimitation',
+  },
 ];
 
 /** OSA Functieonderzoek - Knieën options */
 export const KNEES_OPTIONS = [
-  {label: 'Extensiebeperking', value: 'extensionLimitation', key: 'extensionLimitation'},
-  {label: 'Flexiebeperking', value: 'flexionLimitation', key: 'flexionLimitation'},
+  {
+    label: 'Extensiebeperking',
+    value: 'extensionLimitation',
+    key: 'extensionLimitation',
+  },
+  {
+    label: 'Flexiebeperking',
+    value: 'flexionLimitation',
+    key: 'flexionLimitation',
+  },
   {label: 'Genu valgum', value: 'genuValgum', key: 'genuValgum'},
   {label: 'Genu varum', value: 'genuVarum', key: 'genuVarum'},
 ];
@@ -801,17 +851,6 @@ export const OVAC_DESCRIPTION_ITEMS: OvacDescriptionItem[] = [
   {key: 'aangepastehakken', label: 'Aangepaste hakken', postNr: '84'},
   {key: 'zoolverstijving', label: 'Zoolverstijving', postNr: '85'},
   {key: 'nieuweWreefsluiting', label: 'Nieuwe wreefsluiting', postNr: '88'},
-];
-
-/** Supplement types - Used in OVAC */
-export type SupplementType = 'lateral' | 'medial';
-export const SUPPLEMENT_TYPE_OPTIONS = [
-  {label: 'lateral', value: 'lateral'},
-  {label: 'medial', value: 'medial'},
-  {
-    label: 'lateralAndMedial',
-    value: 'lateralAndMedial',
-  },
 ];
 
 // ============================================================================
@@ -1218,18 +1257,6 @@ export const ZIPPER_PLACEMENT_OPTIONS = [
   {label: 'Zie leest', value: 'Zie leest'},
 ];
 
-/** Zipper side options (like Schoring) */
-export type ZipperSideType = 'none' | 'lateral' | 'medial' | 'lateralAndMedial';
-export const ZIPPER_SIDE_OPTIONS = [
-  {label: 'none', value: 'none' as const},
-  {label: 'lateral', value: 'lateral' as const},
-  {label: 'medial', value: 'medial' as const},
-  {
-    label: 'lateralAndMedial',
-    value: 'lateralAndMedial' as const,
-  },
-];
-
 /** Zoolrand polish types */
 export type SoleEdgePolishType =
   | 'none'
@@ -1262,6 +1289,13 @@ export const TONGUE_PADDING_MM_OPTIONS = [
   {label: '5', value: 'mm5' as const},
 ];
 
+/** Tongue Type options **/
+export type TongueType = 'standard' | 'watertongue';
+export const TONGUE_TYPE_OPTIONS = [
+  {label: 'standard', value: 'standard' as const},
+  {label: 'watertongue', value: 'watertongue' as const},
+];
+
 /** Padding collar options (mm) */
 export type PaddingCollarMm = 'no' | 'mm5' | 'mm10';
 export const PADDING_COLLAR_MM_OPTIONS = [
@@ -1271,15 +1305,32 @@ export const PADDING_COLLAR_MM_OPTIONS = [
 ];
 
 /** Closure type options */
-export type ClosureType = 'velcroWithExtraLongRolPassant' | 'ringsAndHooks';
+export type ClosureType =
+  | 'ringsAndHooksClosure'
+  | 'velcroClosure'
+  | 'velcroExtraLongClosure'
+  | 'oneHandClosure'
+  | 'boaClosure';
 export const CLOSURE_TYPE_OPTIONS = [
   {
-    label: 'velcro',
-    value: 'velcroWithExtraLongRolPassant' as const,
+    label: 'ringAndHooksClosure',
+    value: 'ringsAndHooksClosure' as const,
   },
   {
-    label: 'ringAndHooks',
-    value: 'ringsAndHooks' as const,
+    label: 'velcroClosure',
+    value: 'velcroClosure' as const,
+  },
+  {
+    label: 'velcroExtraLongClosure',
+    value: 'velcroExtraLongClosure' as const,
+  },
+  {
+    label: 'oneHandClosure',
+    value: 'oneHandClosure' as const,
+  },
+  {
+    label: 'boaClosure',
+    value: 'boaClosure' as const,
   },
 ];
 
@@ -1297,10 +1348,10 @@ export const ZIPPER_TYPE_OPTIONS = [
   },
 ];
 
-/** Toe type options */
-export type ToeType = 'none' | 'carbonToes' | 'rubberCrawlToes';
+/** Toe type options / Neusmodellen */
+export type ToeType = 'standard' | 'carbonToes' | 'rubberCrawlToes';
 export const TOE_TYPE_OPTIONS = [
-  {label: 'none', value: 'none' as const},
+  {label: 'standard', value: 'standard' as const},
   {
     label: 'carbonToes',
     value: 'carbonToes' as const,

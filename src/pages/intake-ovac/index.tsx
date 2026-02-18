@@ -404,9 +404,12 @@ const FormIntakeOVACPage = () => {
                   <FormItemWrapper className="col-span-2">
                     <Select
                       value={form.watch('insoleTypeGeneral') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleTypeGeneral', val)
-                      }
+                      onValueChange={val => {
+                        form.setValue('insoleTypeGeneral', val);
+                        if (val !== 'Anders') {
+                          form.setValue('insoleOtherText', '');
+                        }
+                      }}
                     >
                       <SelectTrigger className="w-2/3 mt-2">
                         <SelectValue placeholder={t('insoleType')} />

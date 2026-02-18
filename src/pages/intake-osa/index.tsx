@@ -21,21 +21,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  ENCLOSURE_OPTIONS,
-  OmsluitingKey,
-  EnclosureOption,
-  SHAFT_OPENING_OPTIONS,
-  SUPPLEMENT_TYPE_OPTIONS,
-  HEEL_TYPE_OPTIONS,
-  WALKING_SOLE_OPTIONS,
-  CLOSURE_OPTIONS,
-  HEEL_WEDGE_TYPE_OPTIONS,
-  DONKEY_EAR_TYPE_OPTIONS,
   YES_NO_OPTIONS,
   PAIR_TYPE_OPTIONS,
   PATHOLOGIES_OPTIONS,
@@ -68,12 +57,6 @@ import {
 } from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
 const FormIntakeOSAPage = () => {
@@ -565,9 +548,8 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`pain-duration-${optie.key}`}
                         checked={
-                          (form.watch('painDuration')[
-                            optie.key
-                          ] as boolean) || false
+                          (form.watch('painDuration')[optie.key] as boolean) ||
+                          false
                         }
                         onCheckedChange={checked =>
                           form.setValue('painDuration', {
@@ -593,9 +575,13 @@ const FormIntakeOSAPage = () => {
                   dividers={true}
                 >
                   <FormItemWrapper className="flex flex-col items-center space-y-2">
-                    <Label className="text-base font-semibold">{t('dorsalFlexi')}</Label>
+                    <Label className="text-base font-semibold">
+                      {t('dorsalFlexi')}
+                    </Label>
                     <div className="flex items-center gap-2 w-full">
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('littleStrength')}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {t('littleStrength')}
+                      </span>
                       <Input
                         type="range"
                         min="1"
@@ -609,16 +595,22 @@ const FormIntakeOSAPage = () => {
                         }
                         className="flex-1"
                       />
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('muchStrength')}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {t('muchStrength')}
+                      </span>
                     </div>
                     <span className="text-lg font-semibold">
                       {form.watch('muscleStrengthDorsalFlexi') || 3}
                     </span>
                   </FormItemWrapper>
                   <FormItemWrapper className="flex flex-col items-center space-y-2">
-                    <Label className="text-base font-semibold">{t('plantarFlexi')}</Label>
+                    <Label className="text-base font-semibold">
+                      {t('plantarFlexi')}
+                    </Label>
                     <div className="flex items-center gap-2 w-full">
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('littleStrength')}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {t('littleStrength')}
+                      </span>
                       <Input
                         type="range"
                         min="1"
@@ -632,7 +624,9 @@ const FormIntakeOSAPage = () => {
                         }
                         className="flex-1"
                       />
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">{t('muchStrength')}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {t('muchStrength')}
+                      </span>
                     </div>
                     <span className="text-lg font-semibold">
                       {form.watch('muscleStrengthPlantarFlexi') || 3}
@@ -655,9 +649,7 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`toe-area-${optie.key}`}
                         checked={
-                          (form.watch('toeArea')[
-                            optie.key
-                          ] as boolean) || false
+                          (form.watch('toeArea')[optie.key] as boolean) || false
                         }
                         onCheckedChange={checked =>
                           form.setValue('toeArea', {
@@ -690,9 +682,7 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`midfoot-${optie.key}`}
                         checked={
-                          (form.watch('midfoot')[
-                            optie.key
-                          ] as boolean) || false
+                          (form.watch('midfoot')[optie.key] as boolean) || false
                         }
                         onCheckedChange={checked =>
                           form.setValue('midfoot', {
@@ -725,9 +715,8 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`ankle-joint-${optie.key}`}
                         checked={
-                          (form.watch('ankleJoint')[
-                            optie.key
-                          ] as boolean) || false
+                          (form.watch('ankleJoint')[optie.key] as boolean) ||
+                          false
                         }
                         onCheckedChange={checked =>
                           form.setValue('ankleJoint', {
@@ -760,9 +749,7 @@ const FormIntakeOSAPage = () => {
                       <Checkbox
                         id={`knees-${optie.key}`}
                         checked={
-                          (form.watch('knees')[
-                            optie.key
-                          ] as boolean) || false
+                          (form.watch('knees')[optie.key] as boolean) || false
                         }
                         onCheckedChange={checked =>
                           form.setValue('knees', {
@@ -825,6 +812,19 @@ const FormIntakeOSAPage = () => {
                 toggleLabel={t('digital')}
                 toggleId="digital-toggle"
                 defaultOpen={digitalEnabled}
+                onToggleChange={isOpen => {
+                  form.setValue('digitalEnabled', isOpen);
+                  if (!isOpen) {
+                    form.setValue('heelLiftLeft', '');
+                    form.setValue('heelLiftRight', '');
+                    form.setValue('lastHeight', '');
+                    form.setValue('mtp1DeepLeft', '');
+                    form.setValue('mtp1DeepRight', '');
+                    form.setValue('clawToesEnabled', false);
+                    form.setValue('scannedWithFoil', false);
+                    form.setValue('digitalInstructions', '');
+                  }
+                }}
                 contentClassName="space-y-4"
               >
                 {/* Hielheffing L/R */}

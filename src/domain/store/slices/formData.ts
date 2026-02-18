@@ -9,6 +9,7 @@ import {
   IntakeOVACData,
   IntakeInsolesData,
   CheckFoliepasData,
+  ShoeDesignData,
 } from '@/domain/form/types/formData';
 import {emptyFormData} from '@/domain/form/types/formDataTemplates.generated';
 
@@ -22,6 +23,7 @@ export interface FormDataState {
   intakeInsoles: IntakeInsolesData;
   intakeOVAC: IntakeOVACData;
   checkFoliepas: CheckFoliepasData;
+  shoeDesign: ShoeDesignData;
 }
 
 const initialState: FormDataState = {
@@ -34,6 +36,7 @@ const initialState: FormDataState = {
   intakeInsoles: emptyFormData.intakeInsoles,
   intakeOVAC: emptyFormData.intakeOVAC,
   checkFoliepas: emptyFormData.checkFoliepas,
+  shoeDesign: emptyFormData.shoeDesign,
 };
 
 const formDataSlice = createSlice({
@@ -73,6 +76,9 @@ const formDataSlice = createSlice({
     setCheckFoliepasData: (state, action: PayloadAction<CheckFoliepasData>) => {
       state.checkFoliepas = action.payload;
     },
+    setShoeDesignData: (state, action: PayloadAction<ShoeDesignData>) => {
+      state.shoeDesign = action.payload;
+    },
     /**
      * Generic setter that can update any form field
      * Usage: dispatch(setFormField({formType: 'intakeVLOS', data: {...}}))
@@ -89,7 +95,8 @@ const formDataSlice = createSlice({
           | 'intakeOSB'
           | 'intakeOVAC'
           | 'intakeInsoles'
-          | 'checkFoliepas';
+          | 'checkFoliepas'
+          | 'shoeDesign';
         data: any;
       }>,
     ) => {
@@ -106,6 +113,7 @@ const formDataSlice = createSlice({
       state.intakeInsoles = emptyFormData.intakeInsoles;
       state.intakeOVAC = emptyFormData.intakeOVAC;
       state.checkFoliepas = emptyFormData.checkFoliepas;
+      state.shoeDesign = emptyFormData.shoeDesign;
     },
     clearIntakeForms: state => {
       state.intakeVLOS = emptyFormData.intakeVLOS;
@@ -116,6 +124,7 @@ const formDataSlice = createSlice({
       state.intakeInsoles = emptyFormData.intakeInsoles;
       state.intakeOVAC = emptyFormData.intakeOVAC;
       state.checkFoliepas = emptyFormData.checkFoliepas;
+      state.shoeDesign = emptyFormData.shoeDesign;
     },
   },
 });
@@ -130,6 +139,7 @@ export const {
   setIntakeOVACData,
   setIntakeSteunzolenData,
   setCheckFoliepasData,
+  setShoeDesignData,
   setFormField,
   clearFormData,
   clearIntakeForms,

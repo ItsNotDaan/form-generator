@@ -82,7 +82,7 @@ export interface IntakeVLOSData {
   soleReinforcementRight?: boolean;
 
   // Closure type
-  closureType?: string; // hooks/rings or velcro
+  closureType?: string;
 
   // Entry point in cm
   entryPoint?: string;
@@ -92,6 +92,9 @@ export interface IntakeVLOSData {
 
   // Tongue padding
   tonguePaddingEnabled: boolean;
+
+  // Tongue type
+  tongueType?: string; // Standard/Watertongue
 
   // Fixed tongue
   fixedTongueEnabled: boolean;
@@ -453,10 +456,13 @@ export interface CheckFoliepasData {
   modelText?: string;
 
   // Colors
-  colorOptions?: string;
+  colorOptions?: string[];
 
   // Tongue padding
   tonguePaddingMm?: string;
+
+  // Tongue type
+  tongueType?: string;
 
   // Padding collar
   paddingCollarMm?: string;
@@ -475,7 +481,7 @@ export interface CheckFoliepasData {
   hooksAmount?: string;
 
   // Special features
-  specialMedialVelcro?: boolean;
+  specialVelcroTongue?: string;
   specialLaceLoop?: boolean;
   specialExtraLeather?: boolean;
   specialOther?: string;
@@ -526,6 +532,101 @@ export interface CheckFoliepasData {
   heelBlockCoreCoating?: boolean;
   heelHeightLeft?: string;
   heelHeightRight?: string;
+  heelRoundingLeftEnabled?: boolean;
+  heelRoundingRightEnabled?: boolean;
+
+  // Shoring
+  shoringLeftType?: string;
+  shoringLeftMm?: string;
+  shoringRightType?: string;
+  shoringRightMm?: string;
+}
+
+// Kleur en Model (Shoe Design) Data
+export interface ShoeDesignData {
+  // Model type
+  modelType?: string;
+  modelText?: string;
+
+  // Colors
+  colorOptions?: string[];
+
+  // Tongue padding
+  tonguePaddingMm?: string;
+
+  // Tongue type
+  tongueType?: string;
+
+  // Padding collar
+  paddingCollarMm?: string;
+
+  // Zipper
+  zipperType?: string;
+  zipperColor?: string;
+  zipperPlacement?: string;
+  zipperSide?: string;
+
+  // Closure details
+  closureType?: string;
+  ringsNumber?: string;
+  ringsAmount?: string;
+  hooksNumber?: string;
+  hooksAmount?: string;
+
+  // Special features
+  specialVelcroTongue?: string;
+  specialLaceLoop?: boolean;
+  specialExtraLeather?: boolean;
+  specialOther?: string;
+  specialFeatures?: string;
+
+  // Edge type - Cascading selection
+  edgeTypeMain?: string;
+  edgeTypeModel?: string;
+  edgeTypeColor?: string;
+  edgeTypeColorCode?: string;
+
+  // Sole type - Cascading selection
+  soleTypeMain?: string;
+  soleTypeModel?: string;
+  soleTypeColor?: string;
+  soleTypeOther?: string;
+
+  // Carbon Stiffening Shoe
+  carbonStiffeningShoeLeft?: boolean;
+  carbonStiffeningShoeRight?: boolean;
+
+  // Toe options
+  toeType?: string;
+
+  // Lining options (Voeringsopties)
+  liningType?: string;
+
+  // Counterfort
+  counterfortType?: string;
+  counterfortOther?: string;
+
+  // Insole
+  insoleType?: string;
+  insoleOther?: string;
+
+  // Sole edge polish
+  soleEdgePolishType?: string;
+  soleEdgePolishOther?: string;
+
+  // Construction method
+  constructionMethodType?: string;
+  constructionMethodOther?: string;
+
+  // Heel model
+  heelModelType?: string;
+  heelBuildUpMaterial?: string;
+  heelWedgeType?: string;
+  heelBlockCoreCoating?: boolean;
+  heelHeightLeft?: string;
+  heelHeightRight?: string;
+  heelRoundingLeftEnabled?: boolean;
+  heelRoundingRightEnabled?: boolean;
 
   // Shoring
   shoringLeftType?: string;

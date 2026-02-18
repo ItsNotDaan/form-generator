@@ -19,6 +19,7 @@ import type {
   IntakeInsolesData,
   ClientData,
   CheckFoliepasData,
+  ShoeDesignData,
 } from '@/domain/form/types/formData';
 
 /**
@@ -403,24 +404,25 @@ export const normalizeCheckFoliepasData = (
     'enclosureRight',
     'enclosureLeftMm',
     'enclosureRightMm',
-    'zipperMedial',
-    'zipperLateral',
-    'specialMedialVelcro',
+    'specialVelcroTongue',
     'specialLaceLoop',
     'specialExtraLeather',
     'specialOther',
   ]);
 
-  const zipperMedLat = [
-    data.zipperLateral ? 'Lateraal' : '',
-    data.zipperMedial ? 'Mediaal' : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   return {
     ...autoFields,
     ...enclosureData,
-    zipperMedLat,
+  };
+};
+
+export const normalizeShoeDesignData = (
+  data: ShoeDesignData,
+): Record<string, string> => {
+  // Auto-normalize all fields for shoe design
+  const autoFields = autoNormalize(data, []);
+
+  return {
+    ...autoFields,
   };
 };

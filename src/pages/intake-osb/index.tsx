@@ -413,9 +413,12 @@ const FormIntakeOSBPage = () => {
                   <FormItemWrapper>
                     <Select
                       value={form.watch('walkingFunctionIndication') || ''}
-                      onValueChange={v =>
-                        form.setValue('walkingFunctionIndication', v)
-                      }
+                      onValueChange={v => {
+                        form.setValue('walkingFunctionIndication', v);
+                        if (v !== 'Anders') {
+                          form.setValue('walkingFunctionOtherText', '');
+                        }
+                      }}
                     >
                       <SelectTrigger className="w-2/3">
                         <SelectValue
@@ -894,9 +897,12 @@ const FormIntakeOSBPage = () => {
                   <FormItemWrapper className="col-span-2">
                     <Select
                       value={form.watch('insoleTypeGeneral') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleTypeGeneral', val)
-                      }
+                      onValueChange={val => {
+                        form.setValue('insoleTypeGeneral', val);
+                        if (val !== 'Anders') {
+                          form.setValue('insoleOtherText', '');
+                        }
+                      }}
                     >
                       <SelectTrigger className="w-2/3 mt-2">
                         <SelectValue placeholder={t('insoleTypeGeneral')} />

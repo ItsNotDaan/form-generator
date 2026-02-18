@@ -6,13 +6,6 @@ import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {
@@ -22,24 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {Separator} from '@/components/ui/separator';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
   ENCLOSURE_OPTIONS,
-  OmsluitingKey,
   EnclosureOption,
   SHAFT_OPENING_OPTIONS,
-  SUPPLEMENT_TYPE_OPTIONS,
+  MEDIAL_LATERAL_OPTIONS,
   HEEL_TYPE_OPTIONS,
   WALKING_SOLE_OPTIONS,
   CLOSURE_OPTIONS,
-  HEEL_WEDGE_TYPE_OPTIONS,
-  DONKEY_EAR_TYPE_OPTIONS,
-  YES_NO_OPTIONS,
   PAIR_TYPE_OPTIONS,
-  Side,
   PATHOLOGIES_OPTIONS,
   WALKING_DISTANCE_AIDS_OPTIONS,
   FOOT_INSPECTION_OPTIONS,
@@ -140,8 +127,8 @@ const FormIntakeVLOSPage = () => {
       enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
       customInsoleShoringLeftEnabled: false,
       customInsoleShoringRightEnabled: false,
-      customInsoleShoringLeftType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
-      customInsoleShoringRightType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
+      customInsoleShoringLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+      customInsoleShoringRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
       soleReinforcementEnabled: false,
       soleReinforcementLeft: false,
       soleReinforcementRight: false,
@@ -156,12 +143,12 @@ const FormIntakeVLOSPage = () => {
       heelHeightRight: '2',
       heelWedgeLeftEnabled: false,
       heelWedgeRightEnabled: false,
-      heelWedgeLeftType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
-      heelWedgeRightType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
+      heelWedgeLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+      heelWedgeRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
       donkeyEarLeftEnabled: false,
       donkeyEarRightEnabled: false,
-      donkeyEarLeftType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
-      donkeyEarRightType: HEEL_WEDGE_TYPE_OPTIONS[0]?.value || '',
+      donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+      donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
       amputationLeftEnabled: false,
       amputationRightEnabled: false,
       heelRoundingLeftEnabled: true,
@@ -664,9 +651,9 @@ const FormIntakeVLOSPage = () => {
                               checked={
                                 optie.key === 'donkeyEar'
                                   ? donkeyEarLeftEnabled
-                                  : ((form.watch('enclosureLeft')[
+                                  : (form.watch('enclosureLeft')[
                                       optie.fullKeyLinks
-                                    ] as boolean) || false)
+                                    ] as boolean) || false
                               }
                               onCheckedChange={checked => {
                                 if (window.navigator?.vibrate) {
@@ -674,7 +661,13 @@ const FormIntakeVLOSPage = () => {
                                 }
 
                                 if (optie.key === 'donkeyEar') {
-                                  form.setValue('donkeyEarLeftEnabled', !!checked);
+                                  form.setValue(
+                                    'donkeyEarLeftEnabled',
+                                    !!checked,
+                                  );
+                                  if (!checked) {
+                                    form.setValue('donkeyEarLeftType', '');
+                                  }
                                 } else {
                                   form.setValue('enclosureLeft', {
                                     ...form.getValues('enclosureLeft'),
@@ -731,34 +724,36 @@ const FormIntakeVLOSPage = () => {
                                   autoComplete="off"
                                 />
                               )}
-                            {optie.needsTypeSelect &&
-                              donkeyEarLeftEnabled && (
-                                <Select
-                                  value={form.watch('donkeyEarLeftType')}
-                                  onValueChange={v =>
-                                    form.setValue('donkeyEarLeftType', v)
-                                  }
-                                >
-                                  <SelectTrigger className="w-full sm:w-40 h-12 sm:h-auto text-base sm:text-sm">
-                                    <SelectValue>
-                                      {t(
-                                        DONKEY_EAR_TYPE_OPTIONS.find(
-                                          opt =>
-                                            opt.value ===
-                                            form.watch('donkeyEarLeftType'),
-                                        )?.label || '',
-                                      )}
-                                    </SelectValue>
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
-                                      <SelectItem key={opt.value} value={opt.value}>
-                                        {t(opt.label)}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              )}
+                            {optie.needsTypeSelect && donkeyEarLeftEnabled && (
+                              <Select
+                                value={form.watch('donkeyEarLeftType')}
+                                onValueChange={v =>
+                                  form.setValue('donkeyEarLeftType', v)
+                                }
+                              >
+                                <SelectTrigger className="w-full sm:w-40 h-12 sm:h-auto text-base sm:text-sm">
+                                  <SelectValue>
+                                    {t(
+                                      MEDIAL_LATERAL_OPTIONS.find(
+                                        opt =>
+                                          opt.value ===
+                                          form.watch('donkeyEarLeftType'),
+                                      )?.label || '',
+                                    )}
+                                  </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {MEDIAL_LATERAL_OPTIONS.map(opt => (
+                                    <SelectItem
+                                      key={opt.value}
+                                      value={opt.value}
+                                    >
+                                      {t(opt.label)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
                           </Label>
                         ))}
                       </div>
@@ -777,9 +772,9 @@ const FormIntakeVLOSPage = () => {
                               checked={
                                 optie.key === 'donkeyEar'
                                   ? donkeyEarRightEnabled
-                                  : ((form.watch('enclosureRight')[
+                                  : (form.watch('enclosureRight')[
                                       optie.fullKeyRechts
-                                    ] as boolean) || false)
+                                    ] as boolean) || false
                               }
                               onCheckedChange={checked => {
                                 if (window.navigator?.vibrate) {
@@ -787,7 +782,13 @@ const FormIntakeVLOSPage = () => {
                                 }
 
                                 if (optie.key === 'donkeyEar') {
-                                  form.setValue('donkeyEarRightEnabled', !!checked);
+                                  form.setValue(
+                                    'donkeyEarRightEnabled',
+                                    !!checked,
+                                  );
+                                  if (!checked) {
+                                    form.setValue('donkeyEarRightType', '');
+                                  }
                                 } else {
                                   form.setValue('enclosureRight', {
                                     ...form.getValues('enclosureRight'),
@@ -844,34 +845,36 @@ const FormIntakeVLOSPage = () => {
                                   autoComplete="off"
                                 />
                               )}
-                            {optie.needsTypeSelect &&
-                              donkeyEarRightEnabled && (
-                                <Select
-                                  value={form.watch('donkeyEarRightType')}
-                                  onValueChange={v =>
-                                    form.setValue('donkeyEarRightType', v)
-                                  }
-                                >
-                                  <SelectTrigger className="w-full sm:w-40 h-12 sm:h-auto text-base sm:text-sm">
-                                    <SelectValue>
-                                      {t(
-                                        DONKEY_EAR_TYPE_OPTIONS.find(
-                                          opt =>
-                                            opt.value ===
-                                            form.watch('donkeyEarRightType'),
-                                        )?.label || '',
-                                      )}
-                                    </SelectValue>
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {DONKEY_EAR_TYPE_OPTIONS.map(opt => (
-                                      <SelectItem key={opt.value} value={opt.value}>
-                                        {t(opt.label)}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              )}
+                            {optie.needsTypeSelect && donkeyEarRightEnabled && (
+                              <Select
+                                value={form.watch('donkeyEarRightType')}
+                                onValueChange={v =>
+                                  form.setValue('donkeyEarRightType', v)
+                                }
+                              >
+                                <SelectTrigger className="w-full sm:w-40 h-12 sm:h-auto text-base sm:text-sm">
+                                  <SelectValue>
+                                    {t(
+                                      MEDIAL_LATERAL_OPTIONS.find(
+                                        opt =>
+                                          opt.value ===
+                                          form.watch('donkeyEarRightType'),
+                                      )?.label || '',
+                                    )}
+                                  </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {MEDIAL_LATERAL_OPTIONS.map(opt => (
+                                    <SelectItem
+                                      key={opt.value}
+                                      value={opt.value}
+                                    >
+                                      {t(opt.label)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
                           </Label>
                         ))}
                       </div>
@@ -889,12 +892,15 @@ const FormIntakeVLOSPage = () => {
                         <Switch
                           id="supplementschoring-links-switch"
                           checked={customInsoleShoringLeftEnabled}
-                          onCheckedChange={checked =>
+                          onCheckedChange={checked => {
                             form.setValue(
                               'customInsoleShoringLeftEnabled',
                               !!checked,
-                            )
-                          }
+                            );
+                            if (!checked) {
+                              form.setValue('customInsoleShoringLeftType', '');
+                            }
+                          }}
                         />
                         <Label
                           htmlFor="supplementschoring-links-switch"
@@ -913,7 +919,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                SUPPLEMENT_TYPE_OPTIONS.find(
+                                MEDIAL_LATERAL_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('customInsoleShoringLeftType'),
@@ -922,7 +928,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {SUPPLEMENT_TYPE_OPTIONS.map(opt => (
+                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -941,12 +947,15 @@ const FormIntakeVLOSPage = () => {
                         <Switch
                           id="supplementschoring-rechts-switch"
                           checked={customInsoleShoringRightEnabled}
-                          onCheckedChange={checked =>
+                          onCheckedChange={checked => {
                             form.setValue(
                               'customInsoleShoringRightEnabled',
                               !!checked,
-                            )
-                          }
+                            );
+                            if (!checked) {
+                              form.setValue('customInsoleShoringRightType', '');
+                            }
+                          }}
                         />
                         <Label
                           htmlFor="supplementschoring-rechts-switch"
@@ -965,7 +974,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                SUPPLEMENT_TYPE_OPTIONS.find(
+                                MEDIAL_LATERAL_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('customInsoleShoringRightType'),
@@ -974,7 +983,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {SUPPLEMENT_TYPE_OPTIONS.map(opt => (
+                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -998,9 +1007,13 @@ const FormIntakeVLOSPage = () => {
                       <Switch
                         id="zoolverstijving-switch"
                         checked={soleReinforcementEnabled}
-                        onCheckedChange={checked =>
-                          form.setValue('soleReinforcementEnabled', !!checked)
-                        }
+                        onCheckedChange={checked => {
+                          form.setValue('soleReinforcementEnabled', !!checked);
+                          if (!checked) {
+                            form.setValue('soleReinforcementLeft', false);
+                            form.setValue('soleReinforcementRight', false);
+                          }
+                        }}
                       />
                       <Label
                         htmlFor="zoolverstijving-switch"
@@ -1287,9 +1300,12 @@ const FormIntakeVLOSPage = () => {
                         <Switch
                           id="hakschoring-links-switch"
                           checked={heelWedgeLeftEnabled}
-                          onCheckedChange={checked =>
-                            form.setValue('heelWedgeLeftEnabled', !!checked)
-                          }
+                          onCheckedChange={checked => {
+                            form.setValue('heelWedgeLeftEnabled', !!checked);
+                            if (!checked) {
+                              form.setValue('heelWedgeLeftType', '');
+                            }
+                          }}
                         />
                         <Label
                           htmlFor="hakschoring-links-switch"
@@ -1308,7 +1324,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                HEEL_WEDGE_TYPE_OPTIONS.find(
+                                MEDIAL_LATERAL_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('heelWedgeLeftType'),
@@ -1317,7 +1333,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {HEEL_WEDGE_TYPE_OPTIONS.map(opt => (
+                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -1333,9 +1349,12 @@ const FormIntakeVLOSPage = () => {
                         <Switch
                           id="hakschoring-rechts-switch"
                           checked={heelWedgeRightEnabled}
-                          onCheckedChange={checked =>
-                            form.setValue('heelWedgeRightEnabled', !!checked)
-                          }
+                          onCheckedChange={checked => {
+                            form.setValue('heelWedgeRightEnabled', !!checked);
+                            if (!checked) {
+                              form.setValue('heelWedgeRightType', '');
+                            }
+                          }}
                         />
                         <Label
                           htmlFor="hakschoring-rechts-switch"
@@ -1354,7 +1373,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                HEEL_WEDGE_TYPE_OPTIONS.find(
+                                MEDIAL_LATERAL_OPTIONS.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('heelWedgeRightType'),
@@ -1363,7 +1382,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {HEEL_WEDGE_TYPE_OPTIONS.map(opt => (
+                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -1390,12 +1409,16 @@ const FormIntakeVLOSPage = () => {
                           <Switch
                             id="round-left"
                             checked={form.watch('heelRoundingLeftEnabled')}
-                            onCheckedChange={checked =>
+                            onCheckedChange={checked => {
                               form.setValue(
                                 'heelRoundingLeftEnabled',
                                 !!checked,
-                              )
-                            }
+                              );
+                              if (!checked) {
+                                form.setValue('heelRoundingLeftHeight', '');
+                                form.setValue('heelRoundingLeftLength', '');
+                              }
+                            }}
                           />
                           <Label
                             htmlFor="round-left"
@@ -1466,12 +1489,16 @@ const FormIntakeVLOSPage = () => {
                           <Switch
                             id="round-right"
                             checked={form.watch('heelRoundingRightEnabled')}
-                            onCheckedChange={checked =>
+                            onCheckedChange={checked => {
                               form.setValue(
                                 'heelRoundingRightEnabled',
                                 !!checked,
-                              )
-                            }
+                              );
+                              if (!checked) {
+                                form.setValue('heelRoundingRightHeight', '');
+                                form.setValue('heelRoundingRightLength', '');
+                              }
+                            }}
                           />
                           <Label
                             htmlFor="round-right"
