@@ -420,9 +420,20 @@ export const normalizeShoeDesignData = (
   data: ShoeDesignData,
 ): Record<string, string> => {
   // Auto-normalize all fields for shoe design
-  const autoFields = autoNormalize(data, []);
+  const autoFields = autoNormalize(data, ['colorOptions']);
 
-  return {
+  // Format colorOptions as a numbered list
+  let normalizedData: Record<string, string> = {
     ...autoFields,
   };
+
+  if (data.colorOptions && Array.isArray(data.colorOptions)) {
+    const colorList = data.colorOptions
+      .filter(color => color && color.trim())
+      .map((color, index) => `${index + 1}. ${color}`)
+      .join('\n');
+    normalizedData.colorOptions = colorList;
+  }
+
+  return normalizedData;
 };
