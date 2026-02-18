@@ -104,6 +104,24 @@ const OverviewPage = () => {
               </Button>
             </FormItemWrapper>
 
+            {/* Create Shoe Design */}
+            <FormItemWrapper>
+              <Button
+                variant="outline"
+                className="items-center justify-start h-full px-6 py-6 w-full"
+                onClick={() => void router.push(Routes.form_create_shoedesign)}
+              >
+                <FileText className="w-4 h-4 mr-2 shrink-0" />
+
+                <div className="flex flex-col text-left min-w-0 text-wrap">
+                  <div className="font-semibold">{t('createShoeDesign')}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('createShoeDesignDescription')}
+                  </div>
+                </div>
+              </Button>
+            </FormItemWrapper>
+
             {/* Intake VLOS */}
             <FormItemWrapper>
               <Button

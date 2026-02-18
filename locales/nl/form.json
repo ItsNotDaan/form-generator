@@ -65,6 +65,7 @@
   "priceDetails": "Prijsdetails",
   "gettingStartedTitle": "Aan de slag",
   "gettingStartedDescription": "Kies of u een profiel voor een nieuwe cliënt aanmaakt of doorgaat met een bestaande. Nadat de cliëntinformatie compleet is, kunt u het juiste intakeformulier selecteren.",
+
   "_comment_client": "=== SECTION: CLIËNT GEGEVENS (CLIENT DATA - SHARED) ===",
   "practitionerAndDate": "Behandelaar en Datum",
   "appointmentInformation": "Afspraakgegevens",
@@ -190,6 +191,7 @@
   "mm": "mm",
   "heel": "Hiel",
   "supplementSupport": "Supplement schoring",
+
   "_comment_pulman": "=== SECTION: PULMAN/REBACARE FORMULIEREN ===",
   "pulmanDescription": "Vul de gegevens in voor de Pulman intake.",
   "medicalIndication": "Medische Indicatie",
@@ -316,12 +318,14 @@
   "insolePrice": "Prijs",
   "insolePriceName": "Prijsnaam",
   "insolesDescription": "Vul de gegevens in voor de steunzolen intake.",
+
   "_comment_steunzolen_prijs": "=== SUBSECTION: STEUNZOLEN PRICING ===",
   "insolesPriceLabel": "Prijs",
   "priceUpTo15Years": "Tot 15 jaar (€175)",
   "insolesPrice225": "Steunzolen (€225)",
   "priceWithin3Months": "Binnen 3 maanden nieuw (€195)",
   "priceTalonette": "Talonette (€29)",
+
   "_comment_form_selection": "=== SECTION: FORM SELECTION PAGE ===",
   "selectIntakeForm": "Selecteer Intakeformulier",
   "clientDataSaved": "Cliëntgegevens opgeslagen",
@@ -360,6 +364,7 @@
   "helpSideSelectionDescription": "Kies Links, Rechts of Beide wanneer van toepassing (bijv. OSB/OVAC).",
   "helpSaveAndResults": "Opslaan en resultaten",
   "helpSaveAndResultsDescription": "Gebruik ‘Opslaan en doorgaan’ om tussentijds op te slaan. Bekijk daarna het overzicht op de Resultatenpagina.",
+
   "_comment_validation": "=== SECTION: VALIDATION MESSAGES ===",
   "fillRequiredFields": "Vul de volgende verplichte velden in:",
   "insoleTypeOrOther": "Selecteer minimaal één steunzool type of vul Anders in",
@@ -434,6 +439,7 @@
   "scannedWithFoil": "Gescand met folie?",
   "instructions": "Digitaal Instructies",
   "instructionsPlaceholder": "Voer instructies in...",
+
   "_comment_check_foliepas": "=== SECTION: OSA FORMULIER - CHECK FOLIEPAS (FITTING CONTROL) ===",
   "checkFoliepas": "Foliepas/Voeringschoen",
   "checkFoliepasDescription": "Leescorrectie metingen na foliepas en voeringschoen",
@@ -443,6 +449,10 @@
   "ankleAdjustmentLastCorrection": "Enkels aanpassen (zie Foliepas): Links:             Rechts:",
   "readingCorrectionAfterFoilFit": "Leestcorrectie na foliepas",
   "readingCorrectionAfterLiningShoe": "Leestcorrectie na voeringschoen",
+
+  "_comment_shoeDesign": "=== SECTION: ShoeDesign NAMES  ===",
+  "createShoeDesign": "Kleur en Model",
+  "createShoeDesignDescription": "Formulier voor het ontwerpen van een OSA.",
   "colorAndModel": "Kleur en Model",
   "finalModel": "Model",
   "asPhoto": "Als foto",
@@ -532,6 +542,7 @@
   "shoringRight": "Schoring rechts",
   "shoringType": "Schoring type",
   "shoringMm": "Schoring (mm)",
+
   "_comment_constants": "=== SECTION: CONSTANT NAMES (for formConstants.ts) ===",
   "enclosureHeight": "Hoogte van omsluiting",
   "laveroEnclosure": "Lavero omsluiting",
