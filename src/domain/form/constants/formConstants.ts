@@ -1386,7 +1386,7 @@ export const CONSTRUCTION_METHOD_TYPE_OPTIONS = [
 ];
 
 /** Heel model type options */
-export type HeelModelType = 'buildUpHeel' | 'wedgeHeel' | 'blockHeel';
+export type HeelModelType = 'buildUpHeel' | 'wedgeHeel' | 'blockHeel'; //Opbouw, sleehak, blokhak
 export const HEEL_MODEL_TYPE_OPTIONS = [
   {
     label: 'buildUp',

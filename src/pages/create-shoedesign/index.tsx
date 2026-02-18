@@ -147,6 +147,13 @@ const FormCreateShoeDesignPage = () => {
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
+      // Model
+      modelType: 'model',
+      modelText: '',
+
+      // Colors
+      colorOptions: [],
+
       // Tongue Padding and Collar (mm)
       tonguePaddingMm: TONGUE_PADDING_MM_OPTIONS[0]?.value || 'no',
       tongueType: TONGUE_TYPE_OPTIONS[0]?.value || '',
