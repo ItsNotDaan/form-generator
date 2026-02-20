@@ -22,8 +22,8 @@ export interface FormDataState {
   intakeOSB: IntakeOSBData;
   intakeInsoles: IntakeInsolesData;
   intakeOVAC: IntakeOVACData;
-  checkFoliepas: CheckFoliepasData;
-  shoeDesign: ShoeDesignData;
+  checkFoliepas: CheckFoliepasData | null;
+  shoeDesign: ShoeDesignData | null;
 }
 
 const initialState: FormDataState = {
@@ -35,8 +35,8 @@ const initialState: FormDataState = {
   intakeOSB: emptyFormData.intakeOSB,
   intakeInsoles: emptyFormData.intakeInsoles,
   intakeOVAC: emptyFormData.intakeOVAC,
-  checkFoliepas: emptyFormData.checkFoliepas,
-  shoeDesign: emptyFormData.shoeDesign,
+  checkFoliepas: null,
+  shoeDesign: null,
 };
 
 const formDataSlice = createSlice({
@@ -112,8 +112,8 @@ const formDataSlice = createSlice({
       state.intakeOSB = emptyFormData.intakeOSB;
       state.intakeInsoles = emptyFormData.intakeInsoles;
       state.intakeOVAC = emptyFormData.intakeOVAC;
-      state.checkFoliepas = emptyFormData.checkFoliepas;
-      state.shoeDesign = emptyFormData.shoeDesign;
+      state.checkFoliepas = null;
+      state.shoeDesign = null;
     },
     clearIntakeForms: state => {
       state.intakeVLOS = emptyFormData.intakeVLOS;
@@ -123,8 +123,8 @@ const formDataSlice = createSlice({
       state.intakeOSB = emptyFormData.intakeOSB;
       state.intakeInsoles = emptyFormData.intakeInsoles;
       state.intakeOVAC = emptyFormData.intakeOVAC;
-      state.checkFoliepas = emptyFormData.checkFoliepas;
-      state.shoeDesign = emptyFormData.shoeDesign;
+      state.checkFoliepas = null;
+      state.shoeDesign = null;
     },
   },
 });

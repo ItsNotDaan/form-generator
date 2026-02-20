@@ -126,12 +126,7 @@ const FormResultsPage = () => {
       normalizer: normalizeIntakeSteunzolenData,
       data: formData.intakeInsoles,
     },
-    CheckFoliepas: {
-      key: 'checkFoliepas' as const,
-      normalizer: normalizeCheckFoliepasData,
-      data: formData.checkFoliepas,
-    },
-  };
+  }; 
 
   const INTAKE_TYPES_WITH_CODES = new Set(['VLOS', 'OSA', 'OSB', 'OVAC']);
 
@@ -195,17 +190,19 @@ const FormResultsPage = () => {
       );
     }
 
-    // Always add CheckFoliepas data (independent of intakeType)
-    // This is a supplementary form that can be filled after any intake type
-    result.checkFoliepas = applyTranslations(
-      normalizeCheckFoliepasData(formData.checkFoliepas),
-    );
+    // Only add CheckFoliepas data when it has been actively submitted
+    if (formData.checkFoliepas) {
+      result.checkFoliepas = applyTranslations(
+        normalizeCheckFoliepasData(formData.checkFoliepas),
+      );
+    }
 
-    // Always add ShoeDesign data (independent of intakeType)
-    // This is a supplementary form that can be filled after any intake type
-    result.shoeDesign = applyTranslations(
-      normalizeShoeDesignData(formData.shoeDesign),
-    );
+    // Only add ShoeDesign data when it has been actively submitted
+    if (formData.shoeDesign) {
+      result.shoeDesign = applyTranslations(
+        normalizeShoeDesignData(formData.shoeDesign),
+      );
+    }
 
     // Generate medical codes if applicable
     if (INTAKE_TYPES_WITH_CODES.has(formData.client.intakeType)) {
