@@ -178,6 +178,58 @@ Available form controls for use within FormItemWrapper:
 | `DatePicker` | Date selection                | `<DatePicker value={d} onChange={setD} />`        |
 | `Switch`     | Boolean toggle (switch style) | `<Switch checked={v} onCheckedChange={setV} />`   |
 
+### Switch vs Checkbox Usage Rules
+
+**When to use Switch:**
+
+- Use `Switch` for **1-2 boolean options** that enable/disable features or sections
+- Switches provide clearer visual feedback for important on/off states
+- Ideal for toggleable sections in `FormCard` (e.g., `toggleAble` prop)
+
+**When to use Checkbox:**
+
+- Use `Checkbox` when there are **more than 2 options** in a group
+- Suitable for multi-select scenarios where users pick multiple items from a list
+- Use for less prominent boolean states within forms
+
+**Examples:**
+
+```tsx
+// ✅ CORRECT: Use Switch for 1-2 options
+<FormCard
+  toggleAble={true}
+  toggleLabel="Enable insole modifications"
+  onToggleChange={setInsoleEnabled}
+>
+  {/* Section content */}
+</FormCard>
+
+// ✅ CORRECT: Use Switch for standalone boolean
+<FormItemWrapper label="Apply discount">
+  <Switch checked={discountEnabled} onCheckedChange={setDiscountEnabled} />
+</FormItemWrapper>
+
+// ✅ CORRECT: Use Checkboxes for 3+ options
+<FormBlock>
+  <FormItemWrapper label="Select goals">
+    <div className="space-y-2">
+      <Label className="flex items-center gap-2">
+        <Checkbox checked={goal1} onCheckedChange={setGoal1} />
+        Improve stability
+      </Label>
+      <Label className="flex items-center gap-2">
+        <Checkbox checked={goal2} onCheckedChange={setGoal2} />
+        Reduce pain
+      </Label>
+      <Label className="flex items-center gap-2">
+        <Checkbox checked={goal3} onCheckedChange={setGoal3} />
+        Correct posture
+      </Label>
+    </div>
+  </FormItemWrapper>
+</FormBlock>
+```
+
 ## Design System
 
 ### Tailwind Configuration
@@ -578,6 +630,169 @@ export {Button} from './button';
 - **CSS Classes**: kebab-case (e.g., `form-card`, `input-field`, `grid-column`)
 - **IDs**: kebab-case (e.g., `insole-toggle`, `client-section`)
 
+### Comment Conventions
+
+#### Comment Styles
+
+Use different comment styles based on purpose and context:
+
+**1. Section Dividers**
+
+Use divider comments to separate major sections in form files:
+
+```typescript
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
+const formSchema = z.object({
+  // Schema definition
+});
+
+// ---------------------------------------------------------------------------
+// FORM SETUP
+// ---------------------------------------------------------------------------
+const form = useForm<FormData>({
+  // Form configuration
+});
+
+// ---------------------------------------------------------------------------
+// HELPER FUNCTIONS
+// ---------------------------------------------------------------------------
+const calculatePrice = () => {
+  // Implementation
+};
+```
+
+**2. Inline Section Comments**
+
+Use single-line comments to label groups of related fields or logic blocks:
+
+```typescript
+const formSchema = z.object({
+  // Basic info
+  whichPair: z.string(),
+  medicalIndication: z.string().optional(),
+
+  // Talonette fields
+  heelRaiseEnabled: z.boolean().optional(),
+  heelRaiseLeft: z.string().optional(),
+  heelRaiseRight: z.string().optional(),
+
+  // Steunzool fields
+  insoleEnabled: z.boolean().optional(),
+  insoleTypeGeneral: z.string().optional(),
+});
+```
+
+**3. Explanatory Comments**
+
+Use descriptive comments to explain complex logic or non-obvious behavior:
+
+```typescript
+// Auto-trigger address lookup when both postal code and house number are entered
+React.useEffect(() => {
+  if (hasAutoLookupRef.current) {
+    return;
+  }
+
+  if (!postalCode || !houseNumber) {
+    return;
+  }
+
+  handleHouseNumberBlur();
+}, [postalCode, houseNumber, handleHouseNumberBlur]);
+
+// Sync insolePriceName whenever insolePrice changes
+// This ensures the price name is always in sync with the price value
+useEffect(() => {
+  const priceOption = INSOLE_PRICE_OPTIONS.find(
+    opt => opt.value === insolePrice,
+  );
+  form.setValue('insolePriceName', priceOption?.label || '');
+}, [insolePrice, form]);
+```
+
+**4. JSDoc Comments**
+
+Use JSDoc for component and function documentation:
+
+```typescript
+/**
+ * MyComponent provides... (JSDoc description)
+ *
+ * @example
+ * <MyComponent title="Label" onChange={handleChange} />
+ */
+export const MyComponent: React.FC<MyComponentProps> = (props) => {
+  return <div>{/* Implementation */}</div>;
+};
+
+/**
+ * Utility function description
+ * @param input - Input parameter description
+ * @returns Return value description
+ */
+export const myUtil = (input: string): string => {
+  return input;
+};
+```
+
+**5. Temporary/Development Comments**
+
+Use clear markers for temporary comments that need attention:
+
+```typescript
+// TODO: Implement validation for this field
+// FIXME: This breaks when value is negative
+// NOTE: Keep this disabled until API is ready
+// HACK: Workaround for issue #123
+```
+
+#### Comment Guidelines
+
+- **Be concise**: Comments should be brief and to the point
+- **Explain why, not what**: Focus on intent and reasoning, not obvious code behavior
+- **Keep updated**: Update comments when code changes
+- **Avoid redundant comments**: Don't comment obvious code
+- **Use proper grammar**: Start with capital letters, use proper punctuation
+- **Group related comments**: Use section dividers for major sections
+- **Comment complex logic**: Always explain non-trivial algorithms or business rules
+
+**Good Examples:**
+
+```typescript
+// ✅ Explains intent
+// Clear the insoleOtherText if not selecting "Anders"
+if (value !== 'anders') {
+  form.setValue('insoleOtherText', '');
+}
+
+// ✅ Documents non-obvious behavior
+// Ref to track if auto-lookup has already been triggered to prevent multiple lookups on re-renders
+const hasAutoLookupRef = React.useRef(false);
+
+// ✅ Groups related fields
+// Measurement fields (left/right in cm)
+```
+
+**Bad Examples:**
+
+```typescript
+// ❌ States the obvious
+// Set x to 5
+const x = 5;
+
+// ❌ Outdated comment
+// This validates email addresses (code was changed to validate phone numbers)
+const validateInput = (phone: string) => {
+  /* ... */
+};
+
+// ❌ Too verbose
+// This function takes a string parameter and returns a string value after processing it through multiple transformation steps including trimming whitespace and converting to lowercase
+const cleanString = (str: string) => str.trim().toLowerCase();
+```
+
 ## Internationalization (i18n)
 
 ### Translation Files
@@ -954,6 +1169,9 @@ When implementing a new form:
 - [ ] Run `npm run generate:empty-data` to create templates
 - [ ] Create page in `src/pages/{form-name}/index.tsx`
 - [ ] Use `FormCard` > `FormBlock` > `FormItemWrapper` hierarchy
+- [ ] Use `Switch` for 1-2 boolean options, `Checkbox` for 3+ options
+- [ ] Add section divider comments for major code sections
+- [ ] Add explanatory comments for complex logic
 - [ ] Define Zod schema for validation
 - [ ] Add i18n keys to `locales/*/form.json`
 - [ ] Use Redux to store form state

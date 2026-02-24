@@ -2,7 +2,7 @@
   "name": "web-nextjs-template",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://bramheetkamp.github.io/form-generator",
+  "homepage": "http://itsnotdaan.github.io/form-generator",
   "engines": {
     "node": ">=22.0.0 <23",
     "npm": ">=10.0.0 <12"
