@@ -47,33 +47,50 @@ const FormNewClientPage = () => {
   const {t} = useTranslation('form');
   const dispatch = useAppDispatch();
 
+  // ---------------------------------------------------------------------------
+  // SCHEMA DEFINITION
+  // ---------------------------------------------------------------------------
   const formSchema = z.object({
+    // Appointment information
     practitionerId: z.string().min(1, {message: t('required')}),
     date: z.string().min(1, {message: t('required')}),
     location: z.string().min(1, {message: t('required')}),
-    salutation: z.string().min(1, {message: t('required')}),
-    initials: z.string().min(1, {message: t('required')}),
-    clientName: z.string().min(1, {message: t('required')}),
+
+    // Personal information
+    salutation: z.string().optional(),
+    initials: z.string().optional(),
+    clientName: z.string().optional(),
     birthDate: z.string().min(1, {message: t('required')}),
     bsn: z.string().optional(),
+
+    // Address information
     address: z.string().min(1, {message: t('required')}),
     houseNumber: z.string().min(1, {message: t('required')}),
     postalCode: z.string().min(1, {message: t('required')}),
     city: z.string().min(1, {message: t('required')}),
+
+    // Optional information
     email: z.string().optional(),
-    insurance: z.string().min(1, {message: t('required')}),
-    phoneOne: z.string().min(1, {message: t('required')}),
+    insurance: z.string().optional(),
+    phoneOne: z.string().optional(),
     phoneTwo: z.string().optional(),
+
+    // Medical information
     specialist: z.string().min(1, {message: t('required')}),
     medicalIndication: z.string().optional(),
+
+    // Other variables
+    optionalEnabled: z.boolean().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
 
+  // form: beheert de staat van het formulier, inclusief de waarden van de velden, validatie status en foutmeldingen. Het maakt gebruik van react-hook-form voor eenvoudige integratie met React componenten en zod voor schema validatie.
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
     defaultValues: {
+      // Appointment information
       practitionerId: '',
       date: (() => {
         const now = new Date();
@@ -81,20 +98,31 @@ const FormNewClientPage = () => {
       })(),
       location: '',
       salutation: '',
+
+      // Personal information
       initials: '',
       clientName: '',
       birthDate: '',
       bsn: '',
+
+      // Address information
       address: '',
       houseNumber: '',
       postalCode: '',
       city: '',
+
+      // Optional information
       email: '',
       insurance: '',
       phoneOne: '',
       phoneTwo: '',
+
+      // Medical information
       specialist: '',
       medicalIndication: '',
+
+      //Other variables:
+      optionalEnabled: false, // This variable controls whether the optional information section is shown or not. It is persisted in local storage to maintain state across page refreshes.
     },
   });
 
@@ -105,6 +133,7 @@ const FormNewClientPage = () => {
     form.setValue,
   );
 
+  // Handles the reset button click, which clears the persisted form state and resets the form to its default values.
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -153,6 +182,8 @@ const FormNewClientPage = () => {
       form.setValue('city', '', {shouldValidate: true});
     }
   }, [city]);
+
+  // Handles form submission, dispatches the form data to the Redux store and navigates to the form selection page.
   const onSubmit = (data: FormData) => {
     dispatch(
       setClientData({
@@ -183,581 +214,846 @@ const FormNewClientPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
+              {/* This is the required information section */}
               <FormCard
-                title={t('appointmentInformation')}
-                description={t('appointmentInformationDescription')}
+                title={t('requiredInformation')}
+                description={t('requiredInformationDescription')}
+                className="border-primary! border-2 text-primary!"
               >
-                <FormBlock
-                  columns={2}
-                  // dividers={true}
+                {/* Personal Information */}
+                <FormCard
+                  title={t('personalInformation')}
+                  description={t('personalInformationDescription')}
                 >
-                  {/* Practitioner */}
-                  <FormItemWrapper
-                    label={t('practitioner')}
-                    requiredLabel={true}
+                  <FormBlock
+                    columns={3}
+                    // dividers={true}
                   >
-                    <FormField
-                      control={form.control}
-                      name="practitionerId"
-                      render={({field, fieldState}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Select
-                              value={field.value}
-                              onValueChange={field.onChange}
-                            >
-                              <SelectTrigger
-                                className="w-full"
-                                aria-invalid={!!fieldState.error}
+                    {/* Salutation */}
+                    <FormItemWrapper
+                      label={t('salutation')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="salutation"
+                        render={({field, fieldState}) => (
+                          <FormItem>
+                            <FormControl>
+                              <RadioGroup
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                className="flex gap-4"
+                                aria-invalid={!!fieldState?.error}
                               >
-                                <SelectValue
-                                  placeholder={t('selectPractitioner')}
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {PRACTITIONERS.map(option => (
-                                  <SelectItem
+                                {SALUTATION_OPTIONS.map(option => (
+                                  <div
                                     key={option.value}
-                                    value={option.value}
+                                    className="flex items-center space-x-2"
                                   >
-                                    {option.label}
-                                  </SelectItem>
+                                    <RadioGroupItem
+                                      value={option.value}
+                                      id={`salutation-${option.value}`}
+                                    />
+                                    <Label
+                                      htmlFor={`salutation-${option.value}`}
+                                      className="font-normal cursor-pointer"
+                                    >
+                                      {option.label}
+                                    </Label>
+                                  </div>
                                 ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
+                              </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
 
-                  {/* Measurement Date */}
-                  <FormItemWrapper
-                    label={t('measurementDate')}
-                    requiredLabel={true}
-                  >
-                    <FormField
-                      control={form.control}
-                      name="date"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <DatePicker
-                              value={
-                                field.value
-                                  ? (() => {
-                                      const [day, month, year] =
-                                        field.value.split('-');
-                                      return new Date(
-                                        Number(year),
-                                        Number(month) - 1,
-                                        Number(day),
-                                      );
-                                    })()
-                                  : undefined
-                              }
-                              onChange={selectedDate => {
-                                if (selectedDate) {
-                                  const day = String(
-                                    selectedDate.getDate(),
-                                  ).padStart(2, '0');
-                                  const month = String(
-                                    selectedDate.getMonth() + 1,
-                                  ).padStart(2, '0');
-                                  const year = selectedDate.getFullYear();
-                                  field.onChange(`${day}-${month}-${year}`);
-                                } else {
-                                  field.onChange('');
-                                }
-                              }}
-                              placeholder={t('selectDate')}
-                              disabled={d => d > new Date()}
-                              className="w-full"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
+                    {/* Last Name */}
+                    <FormItemWrapper label={t('lastName')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="clientName"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('lastNamePlaceholder')}
+                                autoComplete="family-name"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
 
-                <FormBlock>
-                  <FormItemWrapper label={t('location')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="location"
-                      render={({field, fieldState}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Select
-                              value={field.value}
-                              onValueChange={field.onChange}
-                            >
-                              <SelectTrigger
-                                className="w-full"
-                                aria-invalid={!!fieldState.error}
-                              >
-                                <SelectValue
-                                  placeholder={t('selectLocation')}
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {LOCATION_OPTIONS.map(option => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+                    {/* Birth Date */}
+                    <FormItemWrapper
+                      label={t('birthDate')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="birthDate"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('selectBirthDate')}
+                                maxLength={10}
+                                autoComplete="bday"
+                                onChange={e => {
+                                  let value = e.target.value.replace(/\D/g, '');
+                                  if (value.length > 8) {
+                                    value = value.slice(0, 8);
+                                  }
+                                  let formatted = value;
+                                  if (value.length > 4) {
+                                    formatted = `${value.slice(0, 2)}-${value.slice(2, 4)}-${value.slice(4)}`;
+                                  } else if (value.length > 2) {
+                                    formatted = `${value.slice(0, 2)}-${value.slice(2)}`;
+                                  }
+                                  field.onChange(formatted);
+                                }}
+                                value={field.value}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                </FormCard>
 
-              {/* Personal Information */}
-              <FormCard
-                title={t('personalInformation')}
-                description={t('personalInformationDescription')}
-              >
-                <FormBlock
-                  columns={3}
-                  // dividers={true}
+                {/* Appointment Information */}
+                <FormCard
+                  title={t('appointmentInformation')}
+                  description={t('appointmentInformationDescription')}
                 >
-                  {/* Salutation */}
-                  <FormItemWrapper label={t('salutation')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="salutation"
-                      render={({field, fieldState}) => (
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroup
-                              value={field.value}
-                              onValueChange={field.onChange}
-                              className="flex gap-4"
-                              aria-invalid={!!fieldState?.error}
-                            >
-                              {SALUTATION_OPTIONS.map(option => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center space-x-2"
+                  <FormBlock columns={2}>
+                    {/* Practitioner */}
+                    <FormItemWrapper
+                      label={t('practitioner')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="practitionerId"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger
+                                  className="w-full"
+                                  aria-invalid={!!fieldState.error}
                                 >
-                                  <RadioGroupItem
-                                    value={option.value}
-                                    id={`salutation-${option.value}`}
+                                  <SelectValue
+                                    placeholder={t('selectPractitioner')}
                                   />
-                                  <Label
-                                    htmlFor={`salutation-${option.value}`}
-                                    className="font-normal cursor-pointer"
-                                  >
-                                    {option.label}
-                                  </Label>
-                                </div>
-                              ))}
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {PRACTITIONERS.map(option => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
 
-                  {/* Initials */}
-                  <FormItemWrapper label={t('initials')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="initials"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t('initialsPlaceholder')}
-                              autoComplete="given-name"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-
-                  {/* Last Name */}
-                  <FormItemWrapper label={t('lastName')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="clientName"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t('lastNamePlaceholder')}
-                              autoComplete="family-name"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-
-                <FormBlock columns={2}>
-                  {/* Birth Date */}
-                  <FormItemWrapper label={t('birthDate')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="birthDate"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t('selectBirthDate')}
-                              maxLength={10}
-                              autoComplete="bday"
-                              onChange={e => {
-                                let value = e.target.value.replace(/\D/g, '');
-                                if (value.length > 8) {
-                                  value = value.slice(0, 8);
+                    {/* Measurement Date */}
+                    <FormItemWrapper
+                      label={t('measurementDate')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="date"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <DatePicker
+                                value={
+                                  field.value
+                                    ? (() => {
+                                        const [day, month, year] =
+                                          field.value.split('-');
+                                        return new Date(
+                                          Number(year),
+                                          Number(month) - 1,
+                                          Number(day),
+                                        );
+                                      })()
+                                    : undefined
                                 }
-                                let formatted = value;
-                                if (value.length > 4) {
-                                  formatted = `${value.slice(0, 2)}-${value.slice(2, 4)}-${value.slice(4)}`;
-                                } else if (value.length > 2) {
-                                  formatted = `${value.slice(0, 2)}-${value.slice(2)}`;
-                                }
-                                field.onChange(formatted);
-                              }}
-                              value={field.value}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-
-                  {/* BSN Niet verplicht  */}
-                  <FormItemWrapper label={t('bsn')} requiredLabel={false}>
-                    <FormField
-                      control={form.control}
-                      name="bsn"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t('bsnPlaceholder')}
-                              type="text"
-                              maxLength={9}
-                              onChange={e => {
-                                const value = e.target.value.replace(/\D/g, '');
-                                field.onChange(value);
-                              }}
-                              value={field.value}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Address Information */}
-
-              <FormCard
-                title={t('addressInformation')}
-                description={t('addressInformationDescription')}
-              >
-                <FormBlock columns={2}>
-                  <FormItemWrapper label={t('postalCode')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="postalCode"
-                      render={({field, fieldState}) => (
-                        <FormItem className="w-3/4">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              id="postcode"
-                              placeholder={t('postalCodePlaceholder')}
-                              autoComplete="postal-code"
-                              aria-invalid={
-                                !!fieldState.error || !!addressError
-                              }
-                              onBlur={e => {
-                                field.onBlur();
-                                handlePostcodeBlur();
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-
-                  {/* House Number can be 304 but also 29-304 or 89-A*/}
-                  <FormItemWrapper
-                    label={t('houseNumber')}
-                    requiredLabel={true}
-                  >
-                    <FormField
-                      control={form.control}
-                      name="houseNumber"
-                      render={({field, fieldState}) => (
-                        <FormItem className="w-3/4">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              id="houseNumber"
-                              placeholder={t('houseNumberPlaceholder')}
-                              autoComplete="address-line2"
-                              aria-invalid={
-                                !!fieldState.error || !!addressError
-                              }
-                              onBlur={e => {
-                                field.onBlur();
-                                handleHouseNumberBlur();
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                  <FormItemWrapper label={t('streetName')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="address"
-                      render={({field}) => (
-                        <FormItem className="w-3/4">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              id="street"
-                              placeholder={t('autofill')}
-                              autoComplete="address-line1"
-                              readOnly
-                              tabIndex={-1}
-                              className="bg-muted cursor-default pointer-events-none"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                  <FormItemWrapper label={t('city')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({field}) => (
-                        <FormItem className="w-3/4">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              id="city"
-                              placeholder={t('autofill')}
-                              autoComplete="address-level2"
-                              readOnly
-                              tabIndex={-1}
-                              className="bg-muted cursor-default pointer-events-none"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-                {/* Address lookup error and loading state */}
-                {(addressError || addressLoading) && (
-                  <div className="text-sm text-destructive mt-2 min-h-[1.5em]">
-                    {addressLoading ? t('addressLoadingMessage') : addressError}
-                  </div>
-                )}
-              </FormCard>
-
-              {/* Contact Information */}
-              <FormCard
-                title={t('contactInformation')}
-                description={t('contactInformationDescription')}
-              >
-                {/* Phone Numbers */}
-                <FormBlock columns={2}>
-                  <FormItemWrapper label={t('phoneOne')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="phoneOne"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="tel"
-                              autoComplete="tel"
-                              placeholder={t('phoneOnePlaceholder')}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                  <FormItemWrapper label={t('phoneTwo')} requiredLabel={false}>
-                    <FormField
-                      control={form.control}
-                      name="phoneTwo"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="tel"
-                              autoComplete="tel"
-                              placeholder={t('phoneTwoPlaceholder')}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* Email */}
-                <FormBlock columns={1}>
-                  <FormItemWrapper label={t('email')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({field}) => (
-                        <FormItem className="w-2/3">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="email"
-                              autoComplete="email"
-                              placeholder={t('emailPlaceholder')}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Insurance and Medical Information */}
-              <FormCard
-                title={t('insuranceAndMedical')}
-                description={t('insuranceAndMedicalDescription')}
-              >
-                <FormBlock>
-                  {/* Insurance */}
-                  <FormItemWrapper label={t('insurance')} requiredLabel={true}>
-                    <FormField
-                      control={form.control}
-                      name="insurance"
-                      render={({field, fieldState}) => (
-                        <FormItem className="w-full">
-                          <FormControl>
-                            <Select
-                              value={field.value}
-                              onValueChange={field.onChange}
-                            >
-                              <SelectTrigger
+                                onChange={selectedDate => {
+                                  if (selectedDate) {
+                                    const day = String(
+                                      selectedDate.getDate(),
+                                    ).padStart(2, '0');
+                                    const month = String(
+                                      selectedDate.getMonth() + 1,
+                                    ).padStart(2, '0');
+                                    const year = selectedDate.getFullYear();
+                                    field.onChange(`${day}-${month}-${year}`);
+                                  } else {
+                                    field.onChange('');
+                                  }
+                                }}
+                                placeholder={t('selectDate')}
+                                disabled={d => d > new Date()}
                                 className="w-full"
-                                aria-invalid={!!fieldState.error}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+
+                  <FormBlock>
+                    <FormItemWrapper label={t('location')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
                               >
-                                <SelectValue
-                                  placeholder={t('selectInsurance')}
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {INSURANCE_COMPANIES.map(option => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
+                                <SelectTrigger
+                                  className="w-full"
+                                  aria-invalid={!!fieldState.error}
+                                >
+                                  <SelectValue
+                                    placeholder={t('selectLocation')}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {LOCATION_OPTIONS.map(option => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                </FormCard>
 
-                  {/* Specialist */}
-                  <FormItemWrapper
-                    label={t('specialist')}
-                    requiredLabel={true}
-                    className="w-full"
-                  >
-                    <FormField
-                      control={form.control}
-                      name="specialist"
-                      render={({field}) => (
-                        <FormItem className="w-full">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t('specialistPlaceholder')}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
+                {/* Address Information */}
+                <FormCard
+                  title={t('addressInformation')}
+                  description={t('addressInformationDescription')}
+                >
+                  <FormBlock columns={2}>
+                    <FormItemWrapper
+                      label={t('postalCode')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="postalCode"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-3/4">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                id="postcode"
+                                placeholder={t('postalCodePlaceholder')}
+                                autoComplete="postal-code"
+                                aria-invalid={
+                                  !!fieldState.error || !!addressError
+                                }
+                                onBlur={e => {
+                                  field.onBlur();
+                                  handlePostcodeBlur();
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
 
-                  {/* Medical Indication */}
-                  <FormItemWrapper
-                    label={t('medicalIndication')}
-                    requiredLabel={false}
-                    className="w-full"
-                  >
-                    <FormField
-                      control={form.control}
-                      name="medicalIndication"
-                      render={({field}) => (
-                        <FormItem className="w-full">
-                          <FormControl>
-                            <Textarea
-                              {...field}
-                              placeholder={t('medicalIndicationPlaceholder')}
-                              rows={4}
-                              className="resize-none"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
+                    {/* House Number can be 304 but also 29-304 or 89-A*/}
+                    <FormItemWrapper
+                      label={t('houseNumber')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="houseNumber"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-3/4">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                id="houseNumber"
+                                placeholder={t('houseNumberPlaceholder')}
+                                autoComplete="address-line2"
+                                aria-invalid={
+                                  !!fieldState.error || !!addressError
+                                }
+                                onBlur={e => {
+                                  field.onBlur();
+                                  handleHouseNumberBlur();
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                    <FormItemWrapper
+                      label={t('streetName')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="address"
+                        render={({field}) => (
+                          <FormItem className="w-3/4">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                id="street"
+                                placeholder={t('autofill')}
+                                autoComplete="address-line1"
+                                readOnly
+                                tabIndex={-1}
+                                className="bg-muted cursor-default pointer-events-none"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                    <FormItemWrapper label={t('city')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({field}) => (
+                          <FormItem className="w-3/4">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                id="city"
+                                placeholder={t('autofill')}
+                                autoComplete="address-level2"
+                                readOnly
+                                tabIndex={-1}
+                                className="bg-muted cursor-default pointer-events-none"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                  {/* Address lookup error and loading state */}
+                  {(addressError || addressLoading) && (
+                    <div className="text-sm text-destructive mt-2 min-h-[1.5em]">
+                      {addressLoading
+                        ? t('addressLoadingMessage')
+                        : addressError}
+                    </div>
+                  )}
+                </FormCard>
               </FormCard>
 
+              {/* This is the optional information section. */}
+              <FormCard
+                title={t('optionalInformation')}
+                description={t('optionalInformationDescription')}
+                toggleAble={true}
+                toggleLabel={t('showOptionalInformation')}
+                toggleId="steunzolen-toggle"
+                defaultOpen={form.watch('optionalEnabled')}
+                onToggleChange={isOpen => {
+                  form.setValue('optionalEnabled', isOpen, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
+                }}
+              >
+                {/* Appointment information section of the company */}
+                <FormCard
+                  title={t('appointmentInformation')}
+                  description={t('appointmentInformationDescription')}
+                >
+                  <FormBlock columns={2}>
+                    {/* Practitioner */}
+                    <FormItemWrapper
+                      label={t('practitioner')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="practitionerId"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled
+                              >
+                                <SelectTrigger
+                                  className="w-full bg-muted cursor-not-allowed"
+                                  aria-invalid={!!fieldState.error}
+                                >
+                                  <SelectValue
+                                    placeholder={t('selectPractitioner')}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {PRACTITIONERS.map(option => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+
+                    {/* Measurement Date */}
+                    <FormItemWrapper
+                      label={t('measurementDate')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="date"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('selectDate')}
+                                readOnly
+                                disabled
+                                className="bg-muted cursor-not-allowed"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+
+                  <FormBlock>
+                    <FormItemWrapper label={t('location')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled
+                              >
+                                <SelectTrigger
+                                  className="w-full bg-muted cursor-not-allowed"
+                                  aria-invalid={!!fieldState.error}
+                                >
+                                  <SelectValue
+                                    placeholder={t('selectLocation')}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {LOCATION_OPTIONS.map(option => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                </FormCard>
+
+                {/* Personal Information of the client*/}
+                <FormCard
+                  title={t('personalInformation')}
+                  description={t('personalInformationDescription')}
+                >
+                  <FormBlock
+                    columns={3}
+                    // dividers={true}
+                  >
+                    {/* Salutation */}
+                    <FormItemWrapper
+                      label={t('salutation')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="salutation"
+                        render={({field, fieldState}) => (
+                          <FormItem>
+                            <FormControl>
+                              <RadioGroup
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                className="flex gap-4"
+                                aria-invalid={!!fieldState?.error}
+                                disabled
+                              >
+                                {SALUTATION_OPTIONS.map(option => (
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center space-x-2"
+                                  >
+                                    <RadioGroupItem
+                                      value={option.value}
+                                      id={`salutation-duplicate-${option.value}`}
+                                      disabled
+                                      className="cursor-not-allowed"
+                                    />
+                                    <Label
+                                      htmlFor={`salutation-duplicate-${option.value}`}
+                                      className="font-normal cursor-not-allowed opacity-60"
+                                    >
+                                      {option.label}
+                                    </Label>
+                                  </div>
+                                ))}
+                              </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+
+                    {/* Initials */}
+                    <FormItemWrapper label={t('initials')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="initials"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('initialsPlaceholder')}
+                                autoComplete="given-name"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+
+                    {/* Last Name */}
+                    <FormItemWrapper label={t('lastName')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="clientName"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('lastNamePlaceholder')}
+                                autoComplete="family-name"
+                                readOnly
+                                disabled
+                                className="bg-muted cursor-not-allowed"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+
+                  <FormBlock columns={2}>
+                    {/* Birth Date */}
+                    <FormItemWrapper
+                      label={t('birthDate')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="birthDate"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('selectBirthDate')}
+                                maxLength={10}
+                                autoComplete="bday"
+                                readOnly
+                                disabled
+                                className="bg-muted cursor-not-allowed"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+
+                    {/* BSN Niet verplicht  */}
+                    <FormItemWrapper label={t('bsn')} requiredLabel={false}>
+                      <FormField
+                        control={form.control}
+                        name="bsn"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('bsnPlaceholder')}
+                                type="text"
+                                maxLength={9}
+                                onChange={e => {
+                                  const value = e.target.value.replace(
+                                    /\D/g,
+                                    '',
+                                  );
+                                  field.onChange(value);
+                                }}
+                                value={field.value}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                </FormCard>
+
+                {/* Contact Information */}
+                <FormCard
+                  title={t('contactInformation')}
+                  description={t('contactInformationDescription')}
+                >
+                  {/* Phone Numbers */}
+                  <FormBlock columns={2}>
+                    <FormItemWrapper label={t('phoneOne')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="phoneOne"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                type="tel"
+                                autoComplete="tel"
+                                placeholder={t('phoneOnePlaceholder')}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                    <FormItemWrapper
+                      label={t('phoneTwo')}
+                      requiredLabel={false}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="phoneTwo"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                type="tel"
+                                autoComplete="tel"
+                                placeholder={t('phoneTwoPlaceholder')}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+
+                  {/* Email */}
+                  <FormBlock columns={1}>
+                    <FormItemWrapper label={t('email')} requiredLabel={true}>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({field}) => (
+                          <FormItem className="w-2/3">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                type="email"
+                                autoComplete="email"
+                                placeholder={t('emailPlaceholder')}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                </FormCard>
+
+                {/* Insurance and Medical Information */}
+                <FormCard
+                  title={t('insuranceAndMedical')}
+                  description={t('insuranceAndMedicalDescription')}
+                >
+                  <FormBlock>
+                    {/* Insurance */}
+                    <FormItemWrapper
+                      label={t('insurance')}
+                      requiredLabel={true}
+                    >
+                      <FormField
+                        control={form.control}
+                        name="insurance"
+                        render={({field, fieldState}) => (
+                          <FormItem className="w-full">
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger
+                                  className="w-full"
+                                  aria-invalid={!!fieldState.error}
+                                >
+                                  <SelectValue
+                                    placeholder={t('selectInsurance')}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {INSURANCE_COMPANIES.map(option => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+
+                    {/* Specialist */}
+                    <FormItemWrapper
+                      label={t('specialist')}
+                      requiredLabel={true}
+                      className="w-full"
+                    >
+                      <FormField
+                        control={form.control}
+                        name="specialist"
+                        render={({field}) => (
+                          <FormItem className="w-full">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={t('specialistPlaceholder')}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+
+                    {/* Medical Indication */}
+                    <FormItemWrapper
+                      label={t('medicalIndication')}
+                      requiredLabel={false}
+                      className="w-full"
+                    >
+                      <FormField
+                        control={form.control}
+                        name="medicalIndication"
+                        render={({field}) => (
+                          <FormItem className="w-full">
+                            <FormControl>
+                              <Textarea
+                                {...field}
+                                placeholder={t('medicalIndicationPlaceholder')}
+                                rows={4}
+                                className="resize-none"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </FormItemWrapper>
+                  </FormBlock>
+                </FormCard>
+              </FormCard>
+
+              {/* This is the footer of the form */}
               <FormFooter>
                 <Button
                   type="button"

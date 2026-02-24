@@ -136,6 +136,12 @@
   "continueToVlosIntake": "Doorgaan naar VLOS intake",
   "saveAndSelectForm": "Opslaan en formulier selecteren",
   "continueToFormSelection": "Doorgaan naar Formulier Selectie",
+  "requiredInformation": "Verplichte Informatie",
+  "requiredInformationDescription": "Vul alle verplichte velden in om door te gaan",
+  "optionalInformation": "Optionele Informatie",
+  "optionalInformationDescription": "Aanvullende informatie die optioneel kan worden ingevuld",
+  "showOptionalInformation": "Optionele informatie weergeven",
+
   "_comment_vlos": "=== SECTION: VLOS FORMULIER ===",
   "shaftHeight": "Schachthoogte",
   "shaftHeightCm": "Schachthoogte (cm)",

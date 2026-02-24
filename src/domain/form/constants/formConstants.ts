@@ -1059,6 +1059,203 @@ export interface OnderwerkCategorie {
   zolen: OnderwerkModel[];
 }
 
+//Kleurstaal voor shoedesign. Twee merken. Myfoot en Maasleder
+// Merk: Myfoot
+// Soort: Mouse
+// kleuren: [{kleur: 'Bianco', code: 'M101'}, {kleur: 'Room', code: 'M223'}]
+//
+export type OsaKleur = {
+  merk: string;
+  soorten: Array<{
+    soort: string;
+    kleuren: Array<{kleur: string; code: string}>;
+  }>;
+};
+
+// export const KLEUREN_STAAL: OsaKleur[] = [
+//   {
+//     merk: 'Maasleder',
+//     soorten: [
+//       {
+//         soort: 'Mouse', //(Glad kalfsleder, soepel met zijdeglans 1.0-1.1 mm)
+//         kleuren: [
+//           {kleur: 'Bianco', code: 'M101'},
+//           {kleur: 'Room', code: 'M223'},
+//           {kleur: 'Porcelan', code: 'M124'},
+//           {kleur: 'Perla', code: 'M126'},
+//           {kleur: 'Sand', code: 'M210'},
+//           {kleur: 'Beige', code: 'M106'},
+//           {kleur: 'Taupe', code: 'M128'},
+//           {kleur: 'Talpa', code: 'M127'},
+//           {kleur: 'Fango', code: 'M222'},
+//           {kleur: 'Brandy', code: 'M132'},
+//           {kleur: 'Noce', code: 'M167'},
+//           {kleur: 'Robusta', code: 'M103'},
+//           {kleur: 'T.moro', code: 'M114'},
+//           {kleur: 'North sea', code: 'M219'},
+//           {kleur: 'Night', code: 'M208'},
+//           {kleur: 'Tulip', code: 'M198'},
+//           {kleur: 'Shiraz', code: 'M207'},
+//           {kleur: 'Rino', code: 'M117'},
+//           {kleur: 'Cenero', code: 'M143'},
+//           {kleur: 'Umbra', code: 'M136'},
+//           {kleur: 'Nero', code: 'M121'},
+//         ],
+//       },
+//       {
+//         soort: 'Lumiere & Lipstick', //(Soepel kalfsleder 0.9-1.1 mm)
+//         kleuren: [
+//           {kleur: 'Lipstick silver', code: 'M411'},
+//           {kleur: 'Lumiere pearl', code: 'M415'},
+//           {kleur: 'Lumiere light gold', code: 'M417'},
+//           {kleur: 'Lumiere champagne', code: 'M423'},
+//           {kleur: 'Lumiere lapis', code: 'M419'},
+//           {kleur: 'Lumiere antracite', code: 'M420'},
+//         ],
+//       },
+//       {
+//         soort: 'Metallico', //(geprent leder 1.1-1.3 mm)
+//         kleuren: [
+//           {kleur: 'Marmo', code: 'M712'},
+//           {kleur: 'Gris', code: 'M711'},
+//           {kleur: 'Azul', code: 'M710'},
+//     ],
+//       },
+//       {
+//         soort: 'Fantasy', //(trendy)
+//         kleuren: [
+//           {kleur: 'Sabor beige', code: 'M741'},
+//           {kleur: 'Sabor taupe', code: 'M742'},
+//           {kleur: 'Sabor blue', code: 'M740'},
+//           {kleur: 'Paris silver', code: 'M761'},
+//           {kleur: 'Paris gold', code: 'M760'},
+//           {kleur: 'Lilly bronze', code: 'M775'},
+//           {kleur: 'Grace mocha', code: 'M730'},
+//           {kleur: 'Grace notte', code: 'M731'},
+//           {kleur: 'Grace nero', code: 'M732'},
+//           {kleur: 'Doshi silver', code: 'M781'},
+//           {kleur: 'Doshi beige', code: 'M780'},
+//           {kleur: 'Doshi antracite', code: 'M782'},
+//           {kleur: 'Kengo jordan', code: 'M771'},
+//           {kleur: 'Kengo zebra', code: 'M770'},
+//           {kleur: 'Camelia nero', code: 'M640'},
+//           {kleur: 'Dundee nero', code: 'M613'},
+//     ],
+//       },
+//       {
+//         soort: 'Vanessa', //(Zachte kalf splitsuede 0.8-1.1 mm)
+//         kleuren: [
+//           {kleur: 'Talpa', code: 'M319'},
+//           {kleur: 'Ebano', code: 'M318'},
+//           {kleur: 'Brandy', code: 'M320'},
+//           {kleur: 'Marine', code: 'M315'},
+//           {kleur: 'Vino', code: 'M314'},
+//           {kleur: 'Fumo', code: 'M312'},
+//           {kleur: 'Nero', code: 'M316'},
+//     ],
+//       },
+//       {
+//         soort: 'Diacalf', //(Dunne, superzachte gewalkte kalfsnappa 0.8-1.0 mm)
+//         kleuren: [
+//           {kleur: 'Coffee', code: 'M231'},
+//           {kleur: 'Nero', code: 'M232'},
+//     ],
+//       },
+//       {
+//         soort: 'Puresoft', //(Zachte kalfsnappa met subtiele glans 1.0-1.3 mm)
+//         kleuren: [
+//           {kleur: 'Bianco', code: 'M509'},
+//           {kleur: 'Beige', code: 'M510'},
+//           {kleur: 'Ocre', code: 'M589'},
+//           {kleur: 'Brique', code: 'M588'},
+//           {kleur: 'Lavander', code: 'M590'},
+//           {kleur: 'Opal', code: 'M519'},
+//           {kleur: 'Taupe', code: 'M512'},
+//           {kleur: 'Pyrit', code: 'M528'},
+//           {kleur: 'Smog', code: 'M511'},
+//           {kleur: 'Brandy', code: 'M514'},
+//           {kleur: 'Praline', code: 'M527'},
+//           {kleur: 'Coffee', code: 'M585'},
+//           {kleur: 'Denim', code: 'M591'},
+//           {kleur: 'Notte', code: 'M518'},
+//           {kleur: 'Koala', code: 'M584'},
+//           {kleur: 'Ferro', code: 'M587'},
+//           {kleur: 'Cardinale', code: 'M508'},
+//           {kleur: 'Olive', code: 'M513'},
+//           {kleur: 'Onyx', code: 'M516'},
+//     ],
+//       },
+//       {
+//         soort: 'Velvet', //(Soepele Kalfsnubuck 0.9-1.1 mm)
+//         kleuren: [
+//           {kleur: 'Powder', code: 'M474'},
+//           {kleur: 'Nougat', code: 'M438'},
+//           {kleur: 'Steppe', code: 'M440'},
+//           {kleur: 'Mocca', code: 'M439'},
+//           {kleur: 'Robusta', code: 'M473'},
+//           {kleur: 'Camus', code: 'M451'},
+//           {kleur: 'Marine', code: 'M443'},
+//           {kleur: 'Tulip', code: 'M454'},
+//           {kleur: 'Capri', code: 'M456'},
+//           {kleur: 'Rino', code: 'M448'},
+//           {kleur: 'Nero', code: 'M445'},
+//     ],
+//       },
+//       {
+//         soort: 'Cracked', //(Kalfsnubuck 0.9-1.1 mm)
+//         kleuren: [
+//         {kleur: 'Powder', code: 'M393'},
+//         {kleur: 'Nougat', code: 'M394'},
+//         {kleur: 'Steppe', code: 'M391'},
+//         {kleur: 'Rino', code: 'M392'},
+//         {kleur: 'Marine', code: 'M390'},
+//     ],
+//       },
+//       {
+//         soort: 'Coins', //(Kalfsnubuck 0.9-1.1 mm)
+//         kleuren: [
+//           {kleur: 'Pearl', code: 'M323'},
+//           {kleur: 'Rino', code: 'M327'},
+//           {kleur: 'Nero', code: 'M325'},
+//           {kleur: 'Robusta', code: 'M326'},
+//           {kleur: 'Barolo', code: 'M324'},
+//           {kleur: 'Marine', code: 'M322'},
+//         ],
+//       },
+//       {
+//         soort: 'Patent', //(Kalfsleeren met lakfinish 0.9-1.1 mm)
+//         kleuren: [
+//           {kleur: 'C.oyster barolo', code: 'M577'},
+//           {kleur: 'C.oyster notte', code: 'M576'},
+//           {kleur: 'Souplesse nero', code: 'M144'},
+//           {kleur: 'Bombay nero', code: 'M157'},
+//           {kleur: 'Viper nero', code: 'M950'},
+//         ],
+//       },
+//       {
+//         soort: 'Saffiano', //(Geprint kalfsleder 0.9-1.1 mm)
+//         kleuren: [
+//           {kleur: 'Bianco', code: 'M601'},
+//           {kleur: 'Beige', code: 'M602'},
+//           {kleur: 'Ocre', code: 'M603'},
+
+//     ],
+
+//         ],
+//   {
+//     merk: 'MyFoot',
+//     soorten: [
+//       {
+//         soort: '',
+//         kleuren: [
+//           {kleur: '', code: 'ML-01'},
+//           {kleur: 'Bruin', code: 'ML-02'},
+//         ],
+//       },
+//     ],
+//   },
+// ];
+
 export const ONDERWERKEN: OnderwerkCategorie[] = [
   {
     naam: 'Vibram',

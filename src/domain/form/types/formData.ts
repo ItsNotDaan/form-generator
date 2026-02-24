@@ -7,7 +7,7 @@ import type {
 
 export interface ClientData {
   // Practitioner and date
-  practitionerId?: string;
+  practitionerId: string;
   date: string;
 
   // Client type
@@ -24,12 +24,12 @@ export interface ClientData {
     | 'Steunzolen';
 
   // Location
-  location?: Location;
+  location: Location;
 
   // Personal information
   salutation?: Salutation;
-  initials: string;
-  clientName: string;
+  initials?: string;
+  clientName?: string;
   birthDate: string;
 
   // Address information
@@ -39,14 +39,17 @@ export interface ClientData {
   address: string;
 
   // Contact information
-  phoneOne: string;
+  phoneOne?: string;
   phoneTwo?: string;
   email?: string;
 
   // Medical information
   medicalIndication?: string;
-  insurance: string;
+  insurance?: string;
   specialist?: string;
+
+  // Optional information
+  optionalEnabled?: boolean;
 }
 
 export interface IntakeVLOSData {

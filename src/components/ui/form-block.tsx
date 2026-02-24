@@ -28,8 +28,11 @@ interface FormCardProps {
   // Center title option
   centerTitle?: boolean;
 
-  // Content class
+  // Content class name voor de CardContent (optioneel)
   contentClassName?: string;
+
+  //className voor de hele card (optioneel)
+  className?: string;
 }
 
 export const FormCard: React.FC<FormCardProps> = ({
@@ -43,6 +46,7 @@ export const FormCard: React.FC<FormCardProps> = ({
   onToggleChange,
   centerTitle,
   contentClassName,
+  className,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -63,7 +67,7 @@ export const FormCard: React.FC<FormCardProps> = ({
     centerTitle !== undefined ? centerTitle : !toggleAble;
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader
         className={cn(
           'flex flex-row items-center justify-between',
