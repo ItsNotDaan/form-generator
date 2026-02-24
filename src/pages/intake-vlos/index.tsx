@@ -50,6 +50,9 @@ import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {Switch} from '@/components/ui/switch';
 
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 const FormIntakeVLOSPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
@@ -57,10 +60,12 @@ const FormIntakeVLOSPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
+    // Basic info
     whichPair: z.string(),
     medicalIndication: z.string().optional(),
     side: z.enum(['left', 'right', 'both'] as const),
 
+    // Enclosure/shaft fields
     shaftHeightLeft: z.string().optional(),
     shaftHeightRight: z.string().optional(),
     enclosureLeft: z.record(z.string(), z.boolean()),
@@ -71,36 +76,53 @@ const FormIntakeVLOSPage = () => {
     customInsoleShoringRightEnabled: z.boolean(),
     customInsoleShoringLeftType: z.string().optional(),
     customInsoleShoringRightType: z.string().optional(),
+
+    // Sole reinforcement
     soleReinforcementEnabled: z.boolean(),
     soleReinforcementLeft: z.boolean().optional(),
     soleReinforcementRight: z.boolean().optional(),
+
+    // Closure/entry
     closureType: z.string().optional(),
     entryPoint: z.string().optional(),
     shaftOpeningWidth: z.string().optional(),
     tonguePaddingEnabled: z.boolean(),
     fixedTongueEnabled: z.boolean(),
+
+    // Heel type
     heelTypeLeft: z.string().optional(),
     heelTypeRight: z.string().optional(),
     heelHeightLeft: z.string().optional(),
     heelHeightRight: z.string().optional(),
+
+    // Heel wedge
     heelWedgeLeftEnabled: z.boolean(),
     heelWedgeRightEnabled: z.boolean(),
     heelWedgeLeftType: z.string().optional(),
     heelWedgeRightType: z.string().optional(),
+
+    // Donkey ear
     donkeyEarLeftEnabled: z.boolean(),
     donkeyEarRightEnabled: z.boolean(),
     donkeyEarLeftType: z.string().optional(),
     donkeyEarRightType: z.string().optional(),
+
+    // Amputation
     amputationLeftEnabled: z.boolean(),
     amputationRightEnabled: z.boolean(),
+
+    // Heel rounding
     heelRoundingLeftEnabled: z.boolean(),
     heelRoundingRightEnabled: z.boolean(),
     heelRoundingLeftHeight: z.string().optional(),
     heelRoundingLeftLength: z.string().optional(),
     heelRoundingRightHeight: z.string().optional(),
     heelRoundingRightLength: z.string().optional(),
+
+    // Rocker sole
     rockerSoleType: z.string().optional(),
 
+    // Notes
     specialNotes: z.string().optional(),
 
     // Functieonderzoek fields
@@ -112,6 +134,9 @@ const FormIntakeVLOSPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -174,6 +199,9 @@ const FormIntakeVLOSPage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -270,6 +298,9 @@ const FormIntakeVLOSPage = () => {
     void router.push(Routes.form_results);
   };
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('intakeVlos')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
