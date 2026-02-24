@@ -60,6 +60,10 @@ const FormResultsPage = () => {
     generatedAt: string;
   }
 
+  // ---------------------------------------------------------------------------
+  // HELPER FUNCTIONS
+  // ---------------------------------------------------------------------------
+
   // Helper function to apply translations to normalized data
   const applyTranslations = (
     data: Record<string, string>,
@@ -88,6 +92,10 @@ const FormResultsPage = () => {
     }
     return translated;
   };
+
+  // ---------------------------------------------------------------------------
+  // FORM CONFIGURATION
+  // ---------------------------------------------------------------------------
 
   // Configuration mapping for intake form types
   const INTAKE_FORM_CONFIG = {
@@ -160,6 +168,10 @@ const FormResultsPage = () => {
       }
     }
   };
+
+  // ---------------------------------------------------------------------------
+  // JSON GENERATION
+  // ---------------------------------------------------------------------------
 
   // Generate complete JSON with all data and constants
   const generateCompleteJSON = (): FormResultJSON => {
@@ -237,6 +249,10 @@ const FormResultsPage = () => {
   const jsonString = JSON.stringify(jsonData, null, 2);
   const codeWarnings = jsonData.codeWarnings as string[] | undefined;
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
+
   const handleCopyJSON = () => {
     navigator.clipboard
       .writeText(jsonString)
@@ -265,6 +281,10 @@ const FormResultsPage = () => {
         // Handle clipboard error silently
       });
   };
+
+  // ---------------------------------------------------------------------------
+  // RENDER HELPERS
+  // ---------------------------------------------------------------------------
 
   const renderFieldValue = (label: string, value: any) => {
     if (value === null || value === undefined || value === '') {
@@ -308,6 +328,10 @@ const FormResultsPage = () => {
       </div>
     );
   };
+
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <BaseLayout title={t('formResults')} currentStep={4}>
