@@ -35,7 +35,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 const formSchema = z.object({
+  // Basic info
   whichPair: z.string(),
   medicalIndication: z.string().optional(),
   side: z.enum(['left', 'right', 'both'] as const).optional(),
@@ -88,6 +92,9 @@ const FormIntakeOVACPage = () => {
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -144,6 +151,9 @@ const FormIntakeOVACPage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -228,6 +238,9 @@ const FormIntakeOVACPage = () => {
     void router.push(Routes.form_results);
   };
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('intakeOvac')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
