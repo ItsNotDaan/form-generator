@@ -107,6 +107,8 @@
   "cityPlaceholder": "Amsterdam",
   "autofill": "Dit veld wordt automatisch ingevuld",
   "invalidPostcodeMessage": "Ongeldig postcodeformat",
+  "invalidEmailMessage": "Ongeldig emailadres",
+  "invalidPhoneMessage": "Ongeldig telefoonnummer",
   "addressNotFoundMessage": "Adres niet gevonden",
   "errorFetchingAddressMessage": "Fout bij ophalen adres",
   "loadingMessage": "Adres laden...",

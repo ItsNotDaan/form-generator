@@ -19,7 +19,7 @@ import {useAppDispatch} from '@/domain/store/hooks';
 import {setClientData} from '@/domain/store/slices/formData';
 import {ChevronRight} from 'lucide-react';
 import {DatePicker} from '@/components/ui/date-picker';
-import {useForm} from 'react-hook-form';
+import {useForm, useWatch} from 'react-hook-form';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
@@ -42,15 +42,54 @@ import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {useDutchAddressLookup} from '@/components/ui/dutch-address-input';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
-const FormNewClientPage = () => {
-  const router = useRouter();
-  const {t} = useTranslation('form');
-  const dispatch = useAppDispatch();
+const phoneRegex = /^\+?[0-9\s-]{7,15}$/;
+const postalCodeRegex = /^\d{4}\s?[A-Za-z]{2}$/;
 
-  // ---------------------------------------------------------------------------
-  // SCHEMA DEFINITION
-  // ---------------------------------------------------------------------------
-  const formSchema = z.object({
+const formatFormDate = (date: Date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+};
+
+const parseFormDate = (value: string): Date | undefined => {
+  if (!value) {
+    return undefined;
+  }
+
+  const [day, month, year] = value.split('-');
+  if (!day || !month || !year) {
+    return undefined;
+  }
+
+  const parsed = new Date(Number(year), Number(month) - 1, Number(day));
+  if (Number.isNaN(parsed.getTime())) {
+    return undefined;
+  }
+
+  return parsed;
+};
+
+const formatBirthDateInput = (rawValue: string) => {
+  let value = rawValue.replace(/\D/g, '');
+  if (value.length > 8) {
+    value = value.slice(0, 8);
+  }
+
+  if (value.length > 4) {
+    return `${value.slice(0, 2)}-${value.slice(2, 4)}-${value.slice(4)}`;
+  }
+
+  if (value.length > 2) {
+    return `${value.slice(0, 2)}-${value.slice(2)}`;
+  }
+
+  return value;
+};
+
+const createFormSchema = (t: (key: string) => string) =>
+  z.object({
     // Appointment information
     practitionerId: z.string().min(1, {message: t('required')}),
     date: z.string().min(1, {message: t('required')}),
@@ -66,64 +105,92 @@ const FormNewClientPage = () => {
     // Address information
     address: z.string().min(1, {message: t('required')}),
     houseNumber: z.string().min(1, {message: t('required')}),
-    postalCode: z.string().min(1, {message: t('required')}),
+    postalCode: z
+      .string()
+      .trim()
+      .min(1, {message: t('required')})
+      .regex(postalCodeRegex, {message: t('invalidPostcodeMessage')}),
     city: z.string().min(1, {message: t('required')}),
 
     // Optional information
-    email: z.string().optional(),
+    email: z
+      .string()
+      .trim()
+      .optional()
+      .refine(value => !value || z.string().email().safeParse(value).success, {
+        message: t('invalidEmailMessage'),
+      }),
     insurance: z.string().optional(),
-    phoneOne: z.string().optional(),
-    phoneTwo: z.string().optional(),
+    phoneOne: z
+      .string()
+      .trim()
+      .optional()
+      .refine(value => !value || phoneRegex.test(value), {
+        message: t('invalidPhoneMessage'),
+      }),
+    phoneTwo: z
+      .string()
+      .trim()
+      .optional()
+      .refine(value => !value || phoneRegex.test(value), {
+        message: t('invalidPhoneMessage'),
+      }),
 
     // Medical information
-    specialist: z.string().min(1, {message: t('required')}),
+    specialist: z.string().optional(),
     medicalIndication: z.string().optional(),
 
     // Other variables
     optionalEnabled: z.boolean().optional(),
   });
 
-  type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<ReturnType<typeof createFormSchema>>;
+
+const getDefaultFormValues = (): FormData => ({
+  // Appointment information
+  practitionerId: '',
+  date: formatFormDate(new Date()),
+  location: '',
+  salutation: '',
+
+  // Personal information
+  initials: '',
+  clientName: '',
+  birthDate: '',
+  bsn: '',
+
+  // Address information
+  address: '',
+  houseNumber: '',
+  postalCode: '',
+  city: '',
+
+  // Optional information
+  email: '',
+  insurance: '',
+  phoneOne: '',
+  phoneTwo: '',
+
+  // Medical information
+  specialist: '',
+  medicalIndication: '',
+
+  // Other variables
+  optionalEnabled: false,
+});
+
+const FormNewClientPage = () => {
+  const router = useRouter();
+  const {t} = useTranslation('form');
+  const dispatch = useAppDispatch();
+
+  const formSchema = React.useMemo(() => createFormSchema(t), [t]);
 
   // form: beheert de staat van het formulier, inclusief de waarden van de velden, validatie status en foutmeldingen. Het maakt gebruik van react-hook-form voor eenvoudige integratie met React componenten en zod voor schema validatie.
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      // Appointment information
-      practitionerId: '',
-      date: (() => {
-        const now = new Date();
-        return `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
-      })(),
-      location: '',
-      salutation: '',
-
-      // Personal information
-      initials: '',
-      clientName: '',
-      birthDate: '',
-      bsn: '',
-
-      // Address information
-      address: '',
-      houseNumber: '',
-      postalCode: '',
-      city: '',
-
-      // Optional information
-      email: '',
-      insurance: '',
-      phoneOne: '',
-      phoneTwo: '',
-
-      // Medical information
-      specialist: '',
-      medicalIndication: '',
-
-      //Other variables:
-      optionalEnabled: false, // This variable controls whether the optional information section is shown or not. It is persisted in local storage to maintain state across page refreshes.
-    },
+    defaultValues: getDefaultFormValues(),
   });
 
   // Persist New Client form state across refreshes
@@ -139,8 +206,20 @@ const FormNewClientPage = () => {
     form.reset();
   };
 
-  // Persist New Client form state across refreshes
-  useFormPersistence('newClient', form.watch, form.setValue);
+  const optionalEnabled = useWatch({
+    control: form.control,
+    name: 'optionalEnabled',
+  });
+
+  const postalCode = useWatch({
+    control: form.control,
+    name: 'postalCode',
+  });
+
+  const houseNumber = useWatch({
+    control: form.control,
+    name: 'houseNumber',
+  });
 
   // Address lookup logic using the custom hook
   const {
@@ -151,8 +230,8 @@ const FormNewClientPage = () => {
     handlePostcodeBlur,
     handleHouseNumberBlur,
   } = useDutchAddressLookup({
-    postcode: form.watch('postalCode'),
-    houseNumber: form.watch('houseNumber'),
+    postcode: postalCode,
+    houseNumber,
     t,
   });
 
@@ -232,7 +311,7 @@ const FormNewClientPage = () => {
                     {/* Salutation */}
                     <FormItemWrapper
                       label={t('salutation')}
-                      requiredLabel={true}
+                      requiredLabel={false}
                     >
                       <FormField
                         control={form.control}
@@ -272,7 +351,10 @@ const FormNewClientPage = () => {
                     </FormItemWrapper>
 
                     {/* Last Name */}
-                    <FormItemWrapper label={t('lastName')} requiredLabel={true}>
+                    <FormItemWrapper
+                      label={t('lastName')}
+                      requiredLabel={false}
+                    >
                       <FormField
                         control={form.control}
                         name="clientName"
@@ -308,17 +390,9 @@ const FormNewClientPage = () => {
                                 maxLength={10}
                                 autoComplete="bday"
                                 onChange={e => {
-                                  let value = e.target.value.replace(/\D/g, '');
-                                  if (value.length > 8) {
-                                    value = value.slice(0, 8);
-                                  }
-                                  let formatted = value;
-                                  if (value.length > 4) {
-                                    formatted = `${value.slice(0, 2)}-${value.slice(2, 4)}-${value.slice(4)}`;
-                                  } else if (value.length > 2) {
-                                    formatted = `${value.slice(0, 2)}-${value.slice(2)}`;
-                                  }
-                                  field.onChange(formatted);
+                                  field.onChange(
+                                    formatBirthDateInput(e.target.value),
+                                  );
                                 }}
                                 value={field.value}
                               />
@@ -390,32 +464,13 @@ const FormNewClientPage = () => {
                           <FormItem className="w-2/3">
                             <FormControl>
                               <DatePicker
-                                value={
-                                  field.value
-                                    ? (() => {
-                                        const [day, month, year] =
-                                          field.value.split('-');
-                                        return new Date(
-                                          Number(year),
-                                          Number(month) - 1,
-                                          Number(day),
-                                        );
-                                      })()
-                                    : undefined
-                                }
+                                value={parseFormDate(field.value)}
                                 onChange={selectedDate => {
-                                  if (selectedDate) {
-                                    const day = String(
-                                      selectedDate.getDate(),
-                                    ).padStart(2, '0');
-                                    const month = String(
-                                      selectedDate.getMonth() + 1,
-                                    ).padStart(2, '0');
-                                    const year = selectedDate.getFullYear();
-                                    field.onChange(`${day}-${month}-${year}`);
-                                  } else {
-                                    field.onChange('');
-                                  }
+                                  field.onChange(
+                                    selectedDate
+                                      ? formatFormDate(selectedDate)
+                                      : '',
+                                  );
                                 }}
                                 placeholder={t('selectDate')}
                                 disabled={d => d > new Date()}
@@ -601,7 +656,7 @@ const FormNewClientPage = () => {
                 toggleAble={true}
                 toggleLabel={t('showOptionalInformation')}
                 toggleId="steunzolen-toggle"
-                defaultOpen={form.watch('optionalEnabled')}
+                defaultOpen={optionalEnabled}
                 onToggleChange={isOpen => {
                   form.setValue('optionalEnabled', isOpen, {
                     shouldValidate: true,
@@ -736,7 +791,7 @@ const FormNewClientPage = () => {
                     {/* Salutation */}
                     <FormItemWrapper
                       label={t('salutation')}
-                      requiredLabel={true}
+                      requiredLabel={false}
                     >
                       <FormField
                         control={form.control}
@@ -779,7 +834,10 @@ const FormNewClientPage = () => {
                     </FormItemWrapper>
 
                     {/* Initials */}
-                    <FormItemWrapper label={t('initials')} requiredLabel={true}>
+                    <FormItemWrapper
+                      label={t('initials')}
+                      requiredLabel={false}
+                    >
                       <FormField
                         control={form.control}
                         name="initials"
@@ -799,7 +857,10 @@ const FormNewClientPage = () => {
                     </FormItemWrapper>
 
                     {/* Last Name */}
-                    <FormItemWrapper label={t('lastName')} requiredLabel={true}>
+                    <FormItemWrapper
+                      label={t('lastName')}
+                      requiredLabel={false}
+                    >
                       <FormField
                         control={form.control}
                         name="clientName"
@@ -888,7 +949,10 @@ const FormNewClientPage = () => {
                 >
                   {/* Phone Numbers */}
                   <FormBlock columns={2}>
-                    <FormItemWrapper label={t('phoneOne')} requiredLabel={true}>
+                    <FormItemWrapper
+                      label={t('phoneOne')}
+                      requiredLabel={false}
+                    >
                       <FormField
                         control={form.control}
                         name="phoneOne"
@@ -933,7 +997,7 @@ const FormNewClientPage = () => {
 
                   {/* Email */}
                   <FormBlock columns={1}>
-                    <FormItemWrapper label={t('email')} requiredLabel={true}>
+                    <FormItemWrapper label={t('email')} requiredLabel={false}>
                       <FormField
                         control={form.control}
                         name="email"
@@ -964,7 +1028,7 @@ const FormNewClientPage = () => {
                     {/* Insurance */}
                     <FormItemWrapper
                       label={t('insurance')}
-                      requiredLabel={true}
+                      requiredLabel={false}
                     >
                       <FormField
                         control={form.control}
