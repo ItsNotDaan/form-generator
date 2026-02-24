@@ -61,13 +61,13 @@ export function useDutchAddressLookup({
 
   const handlePostcodeBlur = () => {
     if (postcode && houseNumber) {
-      getAddress(postcode, houseNumber);
+      void getAddress(postcode, houseNumber);
     }
   };
   const handleHouseNumberBlur = () => {
     if (postcode && houseNumber) {
       const normalizedNumber = houseNumber.replace(/-/g, ' ');
-      getAddress(postcode, normalizedNumber);
+      void getAddress(postcode, normalizedNumber);
     }
   };
 
