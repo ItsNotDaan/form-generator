@@ -24,7 +24,7 @@ export interface ClientData {
     | 'Steunzolen';
 
   // Location
-  location: Location;
+  location?: Location;
 
   // Personal information
   salutation?: Salutation;

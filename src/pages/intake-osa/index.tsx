@@ -59,6 +59,9 @@ import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 const FormIntakeOSAPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
@@ -66,9 +69,11 @@ const FormIntakeOSAPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
+    // Basic info
     whichPair: z.string(),
     medicalIndication: z.string().optional(),
 
+    // General fields
     side: z.enum(['left', 'right', 'both'] as const),
     shaftHeightLeft: z.string().optional(),
     shaftHeightRight: z.string().optional(),
@@ -104,6 +109,9 @@ const FormIntakeOSAPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -148,6 +156,9 @@ const FormIntakeOSAPage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -213,6 +224,9 @@ const FormIntakeOSAPage = () => {
     void router.push(Routes.form_results);
   };
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('intakeOsa')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">

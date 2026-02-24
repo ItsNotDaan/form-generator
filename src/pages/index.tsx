@@ -16,6 +16,11 @@ import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 const OverviewPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
+
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
+
   const storageKeyByRoute: Record<string, string> = {
     [Routes.form_new_client]: 'newClient',
     [Routes.form_old_client]: 'oldClient',
@@ -29,6 +34,10 @@ const OverviewPage = () => {
     [Routes.form_intake_rebacare]: 'intakeRebacare',
     [Routes.form_intake_ovac]: 'intakeOVAC',
   };
+
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
 
   const handleNavigate = (route: string, resetSteps: boolean = false) => {
     if (resetSteps) {
@@ -46,6 +55,10 @@ const OverviewPage = () => {
     }
     void router.push(route);
   };
+
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <BaseLayout title={t('title')}>

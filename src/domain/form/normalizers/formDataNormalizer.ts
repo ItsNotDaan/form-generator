@@ -423,7 +423,7 @@ export const normalizeShoeDesignData = (
   const autoFields = autoNormalize(data, ['colorOptions']);
 
   // Format colorOptions as a numbered list
-  let normalizedData: Record<string, string> = {
+  const normalizedData: Record<string, string> = {
     ...autoFields,
   };
 

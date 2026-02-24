@@ -48,6 +48,9 @@ import {Textarea} from '@/components/ui/textarea';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 const FormCreateShoeDesignPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
@@ -143,6 +146,9 @@ const FormCreateShoeDesignPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -249,6 +255,9 @@ const FormCreateShoeDesignPage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     form.reset();
     clearStorage();
@@ -281,6 +290,9 @@ const FormCreateShoeDesignPage = () => {
     return null;
   }
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout
       title={t('createShoeDesign')}
