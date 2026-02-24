@@ -316,7 +316,7 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Talonette Section 
+                  Talonette Section
                  ========================================================== */}
               <FormCard
                 title={t('talonetteSection')}
@@ -365,7 +365,7 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Steunzolen Section 
+                  Steunzolen Section
                  ========================================================== */}
               <FormCard
                 title={t('insolesSection')}
@@ -542,7 +542,7 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Price Section 
+                  Price Section
                  ========================================================== */}
               <FormCard title={t('priceDetails')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import {useState, useCallback} from 'react';
 
 export interface UseDutchAddressLookupProps {
   postcode: string;
@@ -6,8 +6,11 @@ export interface UseDutchAddressLookupProps {
   t?: (key: string) => string;
 }
 
-
-export function useDutchAddressLookup({ postcode, houseNumber, t }: UseDutchAddressLookupProps) {
+export function useDutchAddressLookup({
+  postcode,
+  houseNumber,
+  t,
+}: UseDutchAddressLookupProps) {
   const translate = t || ((key: string) => key);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -16,7 +19,9 @@ export function useDutchAddressLookup({ postcode, houseNumber, t }: UseDutchAddr
 
   const getAddress = useCallback(
     async (pc: string, num: string) => {
-      if (!pc || !num) return;
+      if (!pc || !num) {
+        return;
+      }
       const cleanPc = pc.replace(/\s/g, '').toUpperCase();
       if (cleanPc.length < 4 || !/^\d{4}[A-Z]{2}$/.test(cleanPc)) {
         setError(translate('invalidPostcodeMessage'));
@@ -66,5 +71,12 @@ export function useDutchAddressLookup({ postcode, houseNumber, t }: UseDutchAddr
     }
   };
 
-  return { loading, error, street, city, handlePostcodeBlur, handleHouseNumberBlur };
+  return {
+    loading,
+    error,
+    street,
+    city,
+    handlePostcodeBlur,
+    handleHouseNumberBlur,
+  };
 }

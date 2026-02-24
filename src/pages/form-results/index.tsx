@@ -134,7 +134,7 @@ const FormResultsPage = () => {
       normalizer: normalizeIntakeSteunzolenData,
       data: formData.intakeInsoles,
     },
-  }; 
+  };
 
   const INTAKE_TYPES_WITH_CODES = new Set(['VLOS', 'OSA', 'OSB', 'OVAC']);
 
