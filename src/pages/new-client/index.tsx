@@ -211,15 +211,19 @@ const FormNewClientPage = () => {
     name: 'optionalEnabled',
   });
 
+  //Needs to be watched for the auto-lookup.
   const postalCode = useWatch({
     control: form.control,
     name: 'postalCode',
   });
-
+  //Needs to be watched for the auto-lookup.
   const houseNumber = useWatch({
     control: form.control,
     name: 'houseNumber',
   });
+
+  // Ref to track if auto-lookup has already been triggered to prevent multiple lookups on re-renders
+  const hasAutoLookupRef = React.useRef(false);
 
   // Address lookup logic using the custom hook
   const {
@@ -235,6 +239,26 @@ const FormNewClientPage = () => {
     t,
   });
 
+  // Auto-trigger address lookup when both postal code and house number are entered.
+  React.useEffect(() => {
+    if (hasAutoLookupRef.current) {
+      return;
+    }
+
+    if (!postalCode || !houseNumber) {
+      return;
+    }
+
+    const hasPersistedAddress =
+      !!form.getValues('address') || !!form.getValues('city');
+
+    hasAutoLookupRef.current = true;
+
+    if (!hasPersistedAddress) {
+      handleHouseNumberBlur();
+    }
+  }, [postalCode, houseNumber, handleHouseNumberBlur, form]);
+
   // Auto-fill street and city when they change
   React.useEffect(() => {
     if (street) {
@@ -243,24 +267,26 @@ const FormNewClientPage = () => {
     // Only clear if street is empty and user has entered both fields
     if (
       !street &&
-      form.getValues('postalCode') &&
-      form.getValues('houseNumber')
+      postalCode &&
+      houseNumber &&
+      (addressError || !form.getValues('address'))
     ) {
       form.setValue('address', '', {shouldValidate: true});
     }
-  }, [street]);
+  }, [street, addressError, postalCode, houseNumber, form]);
   React.useEffect(() => {
     if (city) {
       form.setValue('city', city, {shouldValidate: true});
     }
     if (
       !city &&
-      form.getValues('postalCode') &&
-      form.getValues('houseNumber')
+      postalCode &&
+      houseNumber &&
+      (addressError || !form.getValues('city'))
     ) {
       form.setValue('city', '', {shouldValidate: true});
     }
-  }, [city]);
+  }, [city, addressError, postalCode, houseNumber, form]);
 
   // Handles form submission, dispatches the form data to the Redux store and navigates to the form selection page.
   const onSubmit = (data: FormData) => {
