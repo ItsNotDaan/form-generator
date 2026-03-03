@@ -39,7 +39,9 @@
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   function formatDateToDDMMYYYY(dateStr) {
-    if (!dateStr) return '';
+    if (!dateStr) {
+      return '';
+    }
     try {
       dateStr = String(dateStr).trim();
       const parts = dateStr.split(/[-\/\s]+/);
@@ -67,7 +69,9 @@
   }
 
   function setInputValue(element, value) {
-    if (!element) return false;
+    if (!element) {
+      return false;
+    }
     element.value = value;
     triggerInputEvent(element);
     return true;
@@ -175,13 +179,19 @@
     const result = {success: true, populatedCount: 0, details: {}};
 
     for (const [fieldName, fieldValue] of Object.entries(data)) {
-      if (!fieldValue) continue;
+      if (!fieldValue) {
+        continue;
+      }
 
       const config = FIELD_CONFIG[fieldName];
-      if (!config) continue;
+      if (!config) {
+        continue;
+      }
 
       let val = String(fieldValue);
-      if (config.format === 'DD-MM-YYYY') val = formatDateToDDMMYYYY(val);
+      if (config.format === 'DD-MM-YYYY') {
+        val = formatDateToDDMMYYYY(val);
+      }
 
       let success = false;
 
@@ -194,13 +204,15 @@
         success = setDatePickerValue(fieldName, val);
       } else {
         // Text inputs / Textareas
-        let el = document.querySelector(
+        const el = document.querySelector(
           `[name="${fieldName}"], [data-field-name="${fieldName}"]`,
         );
         success = setInputValue(el, val);
       }
 
-      if (success) result.populatedCount++;
+      if (success) {
+        result.populatedCount++;
+      }
       result.details[fieldName] = success ? 'ok' : 'failed';
     }
     return result;

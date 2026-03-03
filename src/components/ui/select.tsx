@@ -47,8 +47,8 @@ function SelectTrigger({
   const dataFieldName = React.useContext(SelectContext);
 
   // Always forward aria-invalid as a string and set aria-[invalid=true] for Tailwind
-  let ariaInvalid = props['aria-invalid'];
-  let rest = {...props};
+  const ariaInvalid = props['aria-invalid'];
+  const rest = {...props};
   if (ariaInvalid !== undefined) {
     rest['aria-invalid'] = ariaInvalid ? 'true' : undefined;
   }

@@ -129,6 +129,9 @@ const FormIntakeSteunzolenPage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -224,6 +227,9 @@ const FormIntakeSteunzolenPage = () => {
     void router.push(Routes.form_results);
   };
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('intakeInsoles')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -310,7 +316,7 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Talonette Section 
+                  Talonette Section
                  ========================================================== */}
               <FormCard
                 title={t('talonetteSection')}
@@ -359,7 +365,7 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Steunzolen Section 
+                  Steunzolen Section
                  ========================================================== */}
               <FormCard
                 title={t('insolesSection')}
@@ -536,7 +542,7 @@ const FormIntakeSteunzolenPage = () => {
               </FormCard>
 
               {/* ==========================================================
-                  Price Section 
+                  Price Section
                  ========================================================== */}
               <FormCard title={t('priceDetails')}>
                 <FormBlock columns={1} dividers={false} hoverEffect={false}>

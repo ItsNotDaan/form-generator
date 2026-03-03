@@ -43,6 +43,9 @@ import {Form} from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 const FormIntakeOSBPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
@@ -50,6 +53,7 @@ const FormIntakeOSBPage = () => {
   const clientData = useAppSelector(state => state.formData.client);
 
   const formSchema = z.object({
+    // Basic info
     whichPair: z.string(),
     medicalIndication: z.string().optional(),
     side: z.enum(['left', 'right', 'both'] as const).optional(),
@@ -111,6 +115,9 @@ const FormIntakeOSBPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -197,6 +204,9 @@ const FormIntakeOSBPage = () => {
     }
   }, [insolePriceValue, form]);
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -275,6 +285,9 @@ const FormIntakeOSBPage = () => {
     void router.push(Routes.form_results);
   };
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('intakeOsb')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">

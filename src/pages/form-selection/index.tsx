@@ -21,6 +21,10 @@ const FormSelectionPage = () => {
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
+
   // Clear all intake forms when entering form selection
   React.useEffect(() => {
     dispatch(clearIntakeForms());
@@ -37,6 +41,10 @@ const FormSelectionPage = () => {
     [Routes.form_intake_rebacare]: 'intakeRebacare',
     [Routes.form_intake_ovac]: 'intakeOVAC',
   };
+
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
 
   const handleFormSelection = (route: string) => {
     const storageKey = storageKeyByRoute[route];
@@ -55,6 +63,10 @@ const FormSelectionPage = () => {
     setLastFormRoute(step3Route);
   }, []);
 
+  // ---------------------------------------------------------------------------
+  // HELPER FUNCTIONS
+  // ---------------------------------------------------------------------------
+
   const getFormNameFromRoute = (route: string): string => {
     // Extract pathname if route contains query params, then remove trailing slash
     const pathname = route.split('?')[0].replace(/\/$/, '');
@@ -72,6 +84,10 @@ const FormSelectionPage = () => {
     };
     return formNames[pathname] || pathname;
   };
+
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <BaseLayout title={t('selectIntakeForm')} currentStep={2}>

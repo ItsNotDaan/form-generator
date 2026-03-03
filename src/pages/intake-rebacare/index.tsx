@@ -43,16 +43,25 @@ const FormIntakeRebacarePage = () => {
   const dispatch = useAppDispatch();
   const clientData = useAppSelector(state => state.formData.client);
 
+  // ---------------------------------------------------------------------------
+  // SCHEMA DEFINITION
+  // ---------------------------------------------------------------------------
   const formSchema = z.object({
+    // Basic info
     whichPair: z.string(),
     side: z.enum(['left', 'right', 'both'] as const),
     medicalIndication: z.string().optional(),
+    // Bandaged foot toggle
     bandagedFoot: z.boolean(),
+    // Special notes
     specialNotes: z.string().optional(),
   });
 
   type FormData = z.infer<typeof formSchema>;
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -71,6 +80,9 @@ const FormIntakeRebacarePage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -85,6 +97,9 @@ const FormIntakeRebacarePage = () => {
     void router.push(Routes.form_results);
   };
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('intakeRebacare')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">

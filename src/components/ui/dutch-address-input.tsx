@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import {useState, useCallback} from 'react';
 
 export interface UseDutchAddressLookupProps {
   postcode: string;
@@ -6,8 +6,11 @@ export interface UseDutchAddressLookupProps {
   t?: (key: string) => string;
 }
 
-
-export function useDutchAddressLookup({ postcode, houseNumber, t }: UseDutchAddressLookupProps) {
+export function useDutchAddressLookup({
+  postcode,
+  houseNumber,
+  t,
+}: UseDutchAddressLookupProps) {
   const translate = t || ((key: string) => key);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -16,7 +19,9 @@ export function useDutchAddressLookup({ postcode, houseNumber, t }: UseDutchAddr
 
   const getAddress = useCallback(
     async (pc: string, num: string) => {
-      if (!pc || !num) return;
+      if (!pc || !num) {
+        return;
+      }
       const cleanPc = pc.replace(/\s/g, '').toUpperCase();
       if (cleanPc.length < 4 || !/^\d{4}[A-Z]{2}$/.test(cleanPc)) {
         setError(translate('invalidPostcodeMessage'));
@@ -56,15 +61,22 @@ export function useDutchAddressLookup({ postcode, houseNumber, t }: UseDutchAddr
 
   const handlePostcodeBlur = () => {
     if (postcode && houseNumber) {
-      getAddress(postcode, houseNumber);
+      void getAddress(postcode, houseNumber);
     }
   };
   const handleHouseNumberBlur = () => {
     if (postcode && houseNumber) {
       const normalizedNumber = houseNumber.replace(/-/g, ' ');
-      getAddress(postcode, normalizedNumber);
+      void getAddress(postcode, normalizedNumber);
     }
   };
 
-  return { loading, error, street, city, handlePostcodeBlur, handleHouseNumberBlur };
+  return {
+    loading,
+    error,
+    street,
+    city,
+    handlePostcodeBlur,
+    handleHouseNumberBlur,
+  };
 }

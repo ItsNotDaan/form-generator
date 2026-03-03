@@ -37,7 +37,9 @@ export function saveToLocalStorage<T>(key: string, data: T): void {
 export function loadFromLocalStorage<T>(key: string): T | null {
   try {
     const item = localStorage.getItem(`${STORAGE_KEY_PREFIX}${key}`);
-    if (!item) return null;
+    if (!item) {
+      return null;
+    }
 
     const storageData: StoredData<T> = JSON.parse(item);
     const now = Date.now();
@@ -76,10 +78,14 @@ export function cleanupExpiredStorage(): void {
 
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (!key || !key.startsWith(STORAGE_KEY_PREFIX)) continue;
+      if (!key || !key.startsWith(STORAGE_KEY_PREFIX)) {
+        continue;
+      }
 
       const item = localStorage.getItem(key);
-      if (!item) continue;
+      if (!item) {
+        continue;
+      }
 
       try {
         const storageData: StoredData<any> = JSON.parse(item);

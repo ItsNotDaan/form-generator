@@ -41,6 +41,9 @@ import {Textarea} from '@/components/ui/textarea';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 const FormCheckFoliepasPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
@@ -85,6 +88,9 @@ const FormCheckFoliepasPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  // ---------------------------------------------------------------------------
+  // FORM SETUP
+  // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
@@ -131,6 +137,9 @@ const FormCheckFoliepasPage = () => {
     form.setValue,
   );
 
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
     form.reset();
@@ -158,6 +167,9 @@ const FormCheckFoliepasPage = () => {
     void router.push(Routes.form_create_shoedesign);
   }, scrollToFirstError);
 
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
   return (
     <BaseLayout title={t('checkFoliepas')} currentStep={3}>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">

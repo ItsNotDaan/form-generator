@@ -45,6 +45,10 @@ import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 const phoneRegex = /^\+?[0-9\s-]{7,15}$/;
 const postalCodeRegex = /^\d{4}\s?[A-Za-z]{2}$/;
 
+// ---------------------------------------------------------------------------
+// HELPER FUNCTIONS
+// ---------------------------------------------------------------------------
+
 const formatFormDate = (date: Date) => {
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -87,6 +91,10 @@ const formatBirthDateInput = (rawValue: string) => {
 
   return value;
 };
+
+// ---------------------------------------------------------------------------
+// SCHEMA DEFINITION
+// ---------------------------------------------------------------------------
 
 const createFormSchema = (t: (key: string) => string) =>
   z.object({
@@ -179,6 +187,10 @@ const getDefaultFormValues = (): FormData => ({
   optionalEnabled: false,
 });
 
+// ---------------------------------------------------------------------------
+// FORM SETUP
+// ---------------------------------------------------------------------------
+
 const FormNewClientPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
@@ -199,6 +211,10 @@ const FormNewClientPage = () => {
     form.watch,
     form.setValue,
   );
+
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
 
   // Handles the reset button click, which clears the persisted form state and resets the form to its default values.
   const handleResetDraft = () => {
@@ -300,6 +316,10 @@ const FormNewClientPage = () => {
     );
     void router.push(Routes.form_selection);
   };
+
+  // ---------------------------------------------------------------------------
+  // PAGE RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <BaseLayout title={t('newClient')} currentStep={1}>

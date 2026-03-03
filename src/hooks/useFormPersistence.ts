@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { UseFormWatch, FieldValues } from 'react-hook-form';
+import {useEffect, useRef, useCallback} from 'react';
+import {UseFormWatch, FieldValues} from 'react-hook-form';
 import {
   saveToLocalStorage,
   loadFromLocalStorage,
@@ -18,17 +18,22 @@ const DEBOUNCE_MS = 500;
 export function useFormPersistence<T extends FieldValues>(
   formKey: string,
   watch: UseFormWatch<T>,
-  setValue?: (name: any, value: any, options?: any) => void
+  setValue?: (name: any, value: any, options?: any) => void,
 ) {
   const debounceTimer = useRef<NodeJS.Timeout>();
 
   const loadSavedData = useCallback(() => {
-    if (!setValue) return null;
-    
+    if (!setValue) {
+      return null;
+    }
+
     const savedData = loadFromLocalStorage<T>(formKey);
     if (savedData) {
       Object.entries(savedData).forEach(([key, value]) => {
-        setValue(key as any, value, { shouldValidate: false, shouldDirty: false });
+        setValue(key as any, value, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
       });
     }
     return savedData;
@@ -43,7 +48,7 @@ export function useFormPersistence<T extends FieldValues>(
   }, [loadSavedData]);
 
   useEffect(() => {
-    const subscription = watch((formData) => {
+    const subscription = watch(formData => {
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
       }
@@ -61,5 +66,5 @@ export function useFormPersistence<T extends FieldValues>(
     };
   }, [watch, formKey]);
 
-  return { clearStorage, loadSavedData };
+  return {clearStorage, loadSavedData};
 }

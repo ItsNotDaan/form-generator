@@ -43,7 +43,9 @@ const StepIndicator = memo<StepIndicatorProps>(
     };
 
     React.useEffect(() => {
-      if (!currentStep) return;
+      if (!currentStep) {
+        return;
+      }
 
       saveStepRoute(currentStep, router.asPath);
       setStepRoutes([
@@ -57,7 +59,9 @@ const StepIndicator = memo<StepIndicatorProps>(
     const handleStepClick = (stepIndex: number) => {
       const route = stepRoutes[stepIndex];
       const stepNumber = stepIndex + 1;
-      if (!route || stepNumber === currentStep) return;
+      if (!route || stepNumber === currentStep) {
+        return;
+      }
       void router.push(route);
     };
 
