@@ -6,7 +6,10 @@ import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {BaseLayout, FormFooter, FormSection} from '@/components/layout';
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import {
+  PairAndIndicationBlock,
+  SpecialNotesBlock,
+} from '@/components/forms/blocks';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Textarea} from '@/components/ui/textarea';
@@ -259,51 +262,8 @@ const FormIntakeOVACPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Section 0: Description and which pair */}
-              <FormCard title={t('description')} description={t('whichPair')}>
-                <FormBlock columns={2} dividers={true} alignItems="start">
-                  {/* Which Pair (Radio Group) */}
-                  <FormItemWrapper label={t('whichPair')}>
-                    <RadioGroup
-                      value={form.watch('whichPair')}
-                      onValueChange={val => form.setValue('whichPair', val)}
-                      className="w-2/3"
-                    >
-                      <div className="flex flex-col gap-3">
-                        {PAIR_TYPE_OPTIONS.map(option => (
-                          <Label
-                            key={option.value}
-                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
-                            htmlFor={`ov-${option.value}`}
-                          >
-                            <RadioGroupItem
-                              id={`ov-${option.value}`}
-                              value={option.value}
-                            />
-                            <span className="text-sm text-foreground">
-                              {t(option.label)}
-                            </span>
-                          </Label>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-
-                  {/* Medical Indication (Textarea) */}
-                  <FormItemWrapper label={t('medicalIndication')}>
-                    <Textarea
-                      id="medische-indicatie"
-                      placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medicalIndication')}
-                      onChange={e =>
-                        form.setValue('medicalIndication', e.target.value)
-                      }
-                      rows={4}
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              {/* PairAndIndicationBlock */}
+              <PairAndIndicationBlock form={form} t={t} />
 
               {/* Section 0.2: Left/Right/Both selector */}
               <FormCard
@@ -800,23 +760,8 @@ const FormIntakeOVACPage = () => {
                 </FormBlock>
               </FormCard>
 
-              {/* Bijzonderheden */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('specialNotes')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    placeholder={t('specialNotesPlaceholder')}
-                    value={form.watch('specialNotes')}
-                    onChange={e =>
-                      form.setValue('specialNotes', e.target.value)
-                    }
-                    rows={4}
-                    className="resize-none"
-                  />
-                </CardContent>
-              </Card>
+              {/* SpecialNotesBlock */}
+              <SpecialNotesBlock form={form} t={t} />
 
               <FormFooter>
                 <Button

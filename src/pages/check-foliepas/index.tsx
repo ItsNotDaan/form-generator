@@ -4,21 +4,11 @@ import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Checkbox} from '@/components/ui/checkbox';
-import {Switch} from '@/components/ui/switch';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  ENCLOSURE_OPTIONS,
-  EnclosureOption,
   SHAFT_OPENING_OPTIONS,
   MEDIAL_LATERAL_OPTIONS,
   Side,
@@ -40,6 +30,11 @@ import {scrollToFirstError} from '@/utils/formHelpers';
 import {Textarea} from '@/components/ui/textarea';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
+import {
+  EnclosureBlock,
+  ShaftHeightBlock,
+  SideSelectionBlock,
+} from '@/components/forms/blocks';
 
 // ---------------------------------------------------------------------------
 // SCHEMA DEFINITION
@@ -149,14 +144,6 @@ const FormCheckFoliepasPage = () => {
   const showLinks = side === 'left' || side === 'both';
   const showRechts = side === 'right' || side === 'both';
 
-  // Watch for conditional visibility
-  const carbonStiffeningLiningShoeLeft = form.watch(
-    'carbonStiffeningLiningShoeLeft',
-  );
-  const carbonStiffeningLiningShoeRight = form.watch(
-    'carbonStiffeningLiningShoeRight',
-  );
-
   const onSubmit = (data: FormData) => {
     dispatch(setCheckFoliepasData({...data, side: data.side as Side}));
     void router.push(Routes.form_results);
@@ -189,37 +176,8 @@ const FormCheckFoliepasPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Side Selection */}
-              <FormCard title={t('side')}>
-                <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={side}
-                      onValueChange={v => form.setValue('side', v)}
-                    >
-                      <div className="flex flex-row justify-center gap-6">
-                        {SIDE_OPTIONS.map(option => (
-                          <div
-                            key={option.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={option.value}
-                              id={`side-${option.value}`}
-                            />
-                            <Label
-                              htmlFor={`side-${option.value}`}
-                              className="font-normal cursor-pointer"
-                            >
-                              {t(option.value)}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              {/* SideSelectionBlock */}
+              <SideSelectionBlock form={form} t={t} includeAmputation={false} />
 
               {/* Reading Corrections after Foil Fit */}
               <FormCard title={t('readingCorrectionAfterFoilFit')}>
@@ -349,47 +307,13 @@ const FormCheckFoliepasPage = () => {
                 description={`${t('shaftHeight')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
               >
                 {/* Shaft Height (Schacht Hoogte) */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  hoverEffect={false}
-                  title={t('shaftHeightCm')}
-                >
-                  {showLinks && (
-                    <FormItemWrapper
-                      label={t('leftCm')}
-                      className="items-center"
-                    >
-                      <Input
-                        id="shaft-left"
-                        type="number"
-                        placeholder={t('cmPlaceholder')}
-                        value={form.watch('shaftHeightLeft')}
-                        onChange={e =>
-                          form.setValue('shaftHeightLeft', e.target.value)
-                        }
-                        className="w-2/3 text-center"
-                      />
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper
-                      className="items-center"
-                      label={t('rightCm')}
-                    >
-                      <Input
-                        id="shaft-right"
-                        type="number"
-                        placeholder={t('cmPlaceholder')}
-                        value={form.watch('shaftHeightRight')}
-                        onChange={e =>
-                          form.setValue('shaftHeightRight', e.target.value)
-                        }
-                        className="w-2/3 text-center"
-                      />
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
+                <ShaftHeightBlock
+                  form={form}
+                  t={t}
+                  showLeft={showLinks}
+                  showRight={showRechts}
+                  embeddedMode={true}
+                />
 
                 {/* Beenlengte verschil */}
                 <FormBlock
@@ -464,323 +388,14 @@ const FormCheckFoliepasPage = () => {
               </FormCard>
 
               {/* Voeringsschoen: Omsluiting, Ezelsoor, Koolstofverstijving */}
-              <FormCard
-                title="Voeringschoen opties"
-                description={`${t('enclosure')} • ${t('donkeyEar')} • ${t('carbonStiffeningLiningShoe')}`}
-              >
-                {/* Enclosure (Omsluiting) */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  hoverEffect={false}
-                  title={t('enclosure')}
-                >
-                  {showLinks && (
-                    <FormItemWrapper label={t('left')}>
-                      <div className="space-y-3 w-full lg:w-3/4">
-                        {' '}
-                        {/* Full on mobile, 3/4 on desktop */}
-                        {ENCLOSURE_OPTIONS.map((optie: EnclosureOption) => (
-                          <Label
-                            key={optie.key}
-                            className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
-                          >
-                            <Switch
-                              id={`encl-left-${optie.key}`}
-                              checked={
-                                optie.key === 'donkeyEar'
-                                  ? form.watch('donkeyEarLeftEnabled') || false
-                                  : (form.watch('enclosureLeft')[
-                                      optie.fullKeyLinks
-                                    ] as boolean) || false
-                              }
-                              onCheckedChange={checked => {
-                                if (window.navigator?.vibrate) {
-                                  window.navigator.vibrate(10);
-                                }
-
-                                if (optie.key === 'donkeyEar') {
-                                  form.setValue(
-                                    'donkeyEarLeftEnabled',
-                                    !!checked,
-                                  );
-                                } else {
-                                  form.setValue('enclosureLeft', {
-                                    ...form.getValues('enclosureLeft'),
-                                    [optie.fullKeyLinks]: !!checked,
-                                  });
-                                  if (
-                                    checked &&
-                                    optie.needsMm &&
-                                    optie.defaultMm
-                                  ) {
-                                    form.setValue('enclosureLeftMm', {
-                                      ...form.getValues('enclosureLeftMm'),
-                                      [optie.mmKeyLinks]: optie.defaultMm,
-                                    });
-                                  } else if (!checked) {
-                                    const next = {
-                                      ...form.getValues('enclosureLeftMm'),
-                                    };
-                                    delete next[optie.mmKeyLinks];
-                                    form.setValue('enclosureLeftMm', next);
-                                  }
-                                }
-                              }}
-                              className="mr-2"
-                            />
-                            <span className="font-normal text-base sm:text-sm leading-tight flex-1">
-                              {optie.label}
-                            </span>
-                            {optie.needsMm &&
-                              (form.watch('enclosureLeft')[
-                                optie.fullKeyLinks
-                              ] as boolean) && (
-                                <Input
-                                  type="number"
-                                  inputMode={
-                                    optie.key === 'hoge' ? 'decimal' : 'numeric'
-                                  }
-                                  pattern="[0-9]*"
-                                  placeholder={
-                                    optie.key === 'hoge' ? 'cm' : 'mm'
-                                  }
-                                  value={
-                                    (form.watch('enclosureLeftMm')[
-                                      optie.mmKeyLinks
-                                    ] as string) || ''
-                                  }
-                                  onChange={e =>
-                                    form.setValue('enclosureLeftMm', {
-                                      ...form.getValues('enclosureLeftMm'),
-                                      [optie.mmKeyLinks]: e.target.value,
-                                    })
-                                  }
-                                  className="w-full sm:w-20 h-12 sm:h-auto text-base sm:text-sm"
-                                  autoComplete="off"
-                                />
-                              )}
-                            {optie.needsTypeSelect &&
-                              (form.watch('donkeyEarLeftEnabled') || false) && (
-                                <div className="shrink-0">
-                                  <Select
-                                    value={form.watch('donkeyEarLeftType')}
-                                    onValueChange={v =>
-                                      form.setValue('donkeyEarLeftType', v)
-                                    }
-                                  >
-                                    <SelectTrigger className="w-full h-12 sm:h-auto text-base sm:text-sm">
-                                      <SelectValue>
-                                        {t(
-                                          MEDIAL_LATERAL_OPTIONS.find(
-                                            opt =>
-                                              opt.value ===
-                                              form.watch('donkeyEarLeftType'),
-                                          )?.label || '',
-                                        )}
-                                      </SelectValue>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {MEDIAL_LATERAL_OPTIONS.map(opt => (
-                                        <SelectItem
-                                          key={opt.value}
-                                          value={opt.value}
-                                        >
-                                          {t(opt.label)}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              )}
-                          </Label>
-                        ))}
-                      </div>
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper label={t('right')}>
-                      <div className="space-y-3 w-full lg:w-3/4">
-                        {ENCLOSURE_OPTIONS.map((optie: EnclosureOption) => (
-                          <Label
-                            key={optie.key}
-                            className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border bg-background p-3 sm:p-2 cursor-pointer transition-colors hover:bg-accent/30 has-aria-checked:bg-accent/50"
-                          >
-                            <Switch
-                              id={`encl-right-${optie.key}`}
-                              checked={
-                                optie.key === 'donkeyEar'
-                                  ? form.watch('donkeyEarRightEnabled') || false
-                                  : (form.watch('enclosureRight')[
-                                      optie.fullKeyRechts
-                                    ] as boolean) || false
-                              }
-                              onCheckedChange={checked => {
-                                if (window.navigator?.vibrate) {
-                                  window.navigator.vibrate(10);
-                                }
-
-                                if (optie.key === 'donkeyEar') {
-                                  form.setValue(
-                                    'donkeyEarRightEnabled',
-                                    !!checked,
-                                  );
-                                } else {
-                                  form.setValue('enclosureRight', {
-                                    ...form.getValues('enclosureRight'),
-                                    [optie.fullKeyRechts]: !!checked,
-                                  });
-                                  if (
-                                    checked &&
-                                    optie.needsMm &&
-                                    optie.defaultMm
-                                  ) {
-                                    form.setValue('enclosureRightMm', {
-                                      ...form.getValues('enclosureRightMm'),
-                                      [optie.mmKeyRechts]: optie.defaultMm,
-                                    });
-                                  } else if (!checked) {
-                                    const next = {
-                                      ...form.getValues('enclosureRightMm'),
-                                    };
-                                    delete next[optie.mmKeyRechts];
-                                    form.setValue('enclosureRightMm', next);
-                                  }
-                                }
-                              }}
-                              className="mr-2"
-                            />
-                            <span className="font-normal text-base sm:text-sm leading-tight flex-1">
-                              {optie.label}
-                            </span>
-                            {optie.needsMm &&
-                              (form.watch('enclosureRight')[
-                                optie.fullKeyRechts
-                              ] as boolean) && (
-                                <Input
-                                  type="number"
-                                  inputMode={
-                                    optie.key === 'hoge' ? 'decimal' : 'numeric'
-                                  }
-                                  pattern="[0-9]*"
-                                  placeholder={
-                                    optie.key === 'hoge' ? 'cm' : 'mm'
-                                  }
-                                  value={
-                                    (form.watch('enclosureRightMm')[
-                                      optie.mmKeyRechts
-                                    ] as string) || ''
-                                  }
-                                  onChange={e =>
-                                    form.setValue('enclosureRightMm', {
-                                      ...form.getValues('enclosureRightMm'),
-                                      [optie.mmKeyRechts]: e.target.value,
-                                    })
-                                  }
-                                  className="w-full sm:w-20 h-12 sm:h-auto text-base sm:text-sm"
-                                  autoComplete="off"
-                                />
-                              )}
-                            {optie.needsTypeSelect &&
-                              (form.watch('donkeyEarRightEnabled') ||
-                                false) && (
-                                <div className="shrink-0">
-                                  <Select
-                                    value={form.watch('donkeyEarRightType')}
-                                    onValueChange={v =>
-                                      form.setValue('donkeyEarRightType', v)
-                                    }
-                                  >
-                                    <SelectTrigger className="w-full h-12 sm:h-auto text-base sm:text-sm">
-                                      <SelectValue>
-                                        {t(
-                                          MEDIAL_LATERAL_OPTIONS.find(
-                                            opt =>
-                                              opt.value ===
-                                              form.watch('donkeyEarRightType'),
-                                          )?.label || '',
-                                        )}
-                                      </SelectValue>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {MEDIAL_LATERAL_OPTIONS.map(opt => (
-                                        <SelectItem
-                                          key={opt.value}
-                                          value={opt.value}
-                                        >
-                                          {t(opt.label)}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              )}
-                          </Label>
-                        ))}
-                      </div>
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-
-                {/* Zoolverstijving Voeringschoen (Carbon Stiffening Lining Shoe) */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  hoverEffect={false}
-                  title={t('carbonStiffeningLiningShoe')}
-                >
-                  {showLinks && (
-                    <FormItemWrapper>
-                      <div className="flex items-center space-x-2">
-                        <Label
-                          htmlFor="carbon-lining-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('left')}
-                        </Label>
-                        <Switch
-                          id="carbon-lining-left"
-                          checked={
-                            form.watch('carbonStiffeningLiningShoeLeft') ||
-                            false
-                          }
-                          onCheckedChange={checked =>
-                            form.setValue(
-                              'carbonStiffeningLiningShoeLeft',
-                              !!checked,
-                            )
-                          }
-                        />
-                      </div>
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper>
-                      <div className="flex items-center space-x-2">
-                        <Label
-                          htmlFor="carbon-lining-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('right')}
-                        </Label>
-                        <Switch
-                          id="carbon-lining-right"
-                          checked={
-                            form.watch('carbonStiffeningLiningShoeRight') ||
-                            false
-                          }
-                          onCheckedChange={checked =>
-                            form.setValue(
-                              'carbonStiffeningLiningShoeRight',
-                              !!checked,
-                            )
-                          }
-                        />
-                      </div>
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-              </FormCard>
+              <EnclosureBlock
+                form={form}
+                t={t}
+                showLeft={showLinks}
+                showRight={showRechts}
+                includeCarbonStiffening={true}
+                mode="foliepas"
+              />
 
               <FormCard
                 title={t('createShoeDesign?')}

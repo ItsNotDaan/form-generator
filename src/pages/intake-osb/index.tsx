@@ -21,8 +21,6 @@ import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
   PAIR_TYPE_OPTIONS,
-  GOAL_OPTIONS,
-  WALKING_FUNCTION_INDICATION_OPTIONS,
   SUPPLIER_OPTIONS,
   INSOLE_TYPE_OPTIONS,
   INSOLE_PRICE_OPTIONS,
@@ -42,6 +40,13 @@ import {z} from 'zod';
 import {Form} from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {
+  FunctieonderzoekBlock,
+  InsoleAndTalonetteBlock,
+  PairAndIndicationBlock,
+  SideSelectionBlock,
+  SpecialNotesBlock,
+} from '@/components/forms/blocks';
 
 // ---------------------------------------------------------------------------
 // SCHEMA DEFINITION
@@ -58,10 +63,24 @@ const FormIntakeOSBPage = () => {
     medicalIndication: z.string().optional(),
     side: z.enum(['left', 'right', 'both'] as const).optional(),
 
-    // Functieonderzoek
+    // Functieonderzoek (OSB-specific)
     goal: z.record(z.string(), z.boolean()),
     walkingFunctionIndication: z.string().optional(),
     walkingFunctionOtherText: z.string().optional(),
+
+    // FunctieonderzoekBlock required fields
+    pathologies: z.record(z.string(), z.boolean()),
+    walkingDistanceAids: z.record(z.string(), z.boolean()),
+    painPerception: z.string().optional(),
+    footInspection: z.record(z.string(), z.boolean()),
+    walkingDistance: z.record(z.string(), z.boolean()),
+    painDuration: z.record(z.string(), z.boolean()),
+    muscleStrengthDorsalFlexi: z.number().optional(),
+    muscleStrengthPlantarFlexi: z.number().optional(),
+    toeArea: z.record(z.string(), z.boolean()),
+    midfoot: z.record(z.string(), z.boolean()),
+    ankleJoint: z.record(z.string(), z.boolean()),
+    knees: z.record(z.string(), z.boolean()),
 
     // Supplier and Product
     supplierName: z.string().optional(),
@@ -126,10 +145,24 @@ const FormIntakeOSBPage = () => {
       medicalIndication: '',
       side: 'both',
 
-      // Functieonderzoek
+      // Functieonderzoek (OSB-specific)
       goal: {},
       walkingFunctionIndication: '',
       walkingFunctionOtherText: '',
+
+      // FunctieonderzoekBlock required defaults
+      pathologies: {},
+      walkingDistanceAids: {},
+      painPerception: '0',
+      footInspection: {},
+      walkingDistance: {},
+      painDuration: {},
+      muscleStrengthDorsalFlexi: 3,
+      muscleStrengthPlantarFlexi: 3,
+      toeArea: {},
+      midfoot: {},
+      ankleJoint: {},
+      knees: {},
 
       // Supplier and Product
       supplierName: '',
@@ -174,10 +207,10 @@ const FormIntakeOSBPage = () => {
       rockerRollCmRight: '',
 
       // Modules: Hallux valgus & Verdieping voorvoet
-      halluxMmLeft: 'Nee',
-      halluxMmRight: 'Nee',
-      deepeningMmLeft: 'Nee',
-      deepeningMmRight: 'Nee',
+      halluxMmLeft: HALLUX_MM_OPTIONS[0]?.value,
+      halluxMmRight: HALLUX_MM_OPTIONS[0]?.value,
+      deepeningMmLeft: DEEPENING_MM_OPTIONS[0]?.value,
+      deepeningMmRight: DEEPENING_MM_OPTIONS[0]?.value,
 
       specialNotes: '',
     },
@@ -271,10 +304,11 @@ const FormIntakeOSBPage = () => {
         rockerRollCmRight: data.rockerRollCmRight || '',
 
         // Modules
-        halluxMmLeft: data.halluxMmLeft || 'Nee',
-        halluxMmRight: data.halluxMmRight || 'Nee',
-        deepeningMmLeft: data.deepeningMmLeft || 'Nee',
-        deepeningMmRight: data.deepeningMmRight || 'Nee',
+        halluxMmLeft: data.halluxMmLeft || HALLUX_MM_OPTIONS[0]?.value,
+        halluxMmRight: data.halluxMmRight || HALLUX_MM_OPTIONS[0]?.value,
+        deepeningMmLeft: data.deepeningMmLeft || DEEPENING_MM_OPTIONS[0]?.value,
+        deepeningMmRight:
+          data.deepeningMmRight || DEEPENING_MM_OPTIONS[0]?.value,
 
         specialNotes: data.specialNotes || '',
       }),
@@ -305,171 +339,14 @@ const FormIntakeOSBPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Section 0.1: Description and which pair */}
-              <FormCard title={t('description')} description={t('whichPair')}>
-                <FormBlock columns={2} dividers={true} alignItems="start">
-                  {/* Which Pair (Radio Group) */}
-                  <FormItemWrapper label={t('whichPair')}>
-                    <RadioGroup
-                      value={form.watch('whichPair')}
-                      onValueChange={val => form.setValue('whichPair', val)}
-                      className="w-2/3"
-                    >
-                      <div className="flex flex-col gap-3">
-                        {PAIR_TYPE_OPTIONS.map(option => (
-                          <Label
-                            key={option.value}
-                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
-                            htmlFor={`osb-${option.value}`}
-                          >
-                            <RadioGroupItem
-                              id={`osb-${option.value}`}
-                              value={option.value}
-                            />
-                            <span className="text-sm text-foreground">
-                              {t(option.label)}
-                            </span>
-                          </Label>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
+              {/* PairAndIndicationBlock */}
+              <PairAndIndicationBlock form={form} t={t} />
 
-                  {/* Medical Indication (Textarea) */}
-                  <FormItemWrapper label={t('medicalIndication')}>
-                    <Textarea
-                      id="medische-indicatie"
-                      placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medicalIndication')}
-                      onChange={e =>
-                        form.setValue('medicalIndication', e.target.value)
-                      }
-                      rows={4}
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              {/* SideSelectionBlock */}
+              <SideSelectionBlock form={form} t={t} includeAmputation={false} />
 
-              {/* Section 0.2: Left/Right/Both selector */}
-              <FormCard
-                title={t('side')}
-                description={t('chooseSideDescription')}
-              >
-                <FormBlock columns={1} alignItems="center">
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('side') || 'both'}
-                      onValueChange={val =>
-                        form.setValue('side', val as 'left' | 'right' | 'both')
-                      }
-                    >
-                      <div className="flex gap-6 justify-center">
-                        <Label className="flex items-center gap-2 cursor-pointer">
-                          <RadioGroupItem value="both" />
-                          {t('both')}
-                        </Label>
-                        <Label className="flex items-center gap-2 cursor-pointer">
-                          <RadioGroupItem value="left" />
-                          {t('left')}
-                        </Label>
-                        <Label className="flex items-center gap-2 cursor-pointer">
-                          <RadioGroupItem value="right" />
-                          {t('right')}
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Functieonderzoek */}
-              <FormCard
-                title={t('functionalResearch')}
-                description={t('functionalResearchDescription')}
-              >
-                {/* Doel (Goals) */}
-                <FormBlock
-                  title={t('goals')}
-                  columns={4}
-                  dividers={false}
-                  centerTitle={true}
-                >
-                  {GOAL_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.fullKey}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`goal-${optie.fullKey}`}
-                        checked={
-                          (form.watch('goal')[optie.fullKey] as boolean) ||
-                          false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('goal', {
-                            ...form.getValues('goal'),
-                            [optie.fullKey]: !!checked,
-                          })
-                        }
-                        className=""
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none">{optie.label}</p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Loopfunctie */}
-                <FormBlock title={t('walkingFunction')} centerTitle={true}>
-                  <FormItemWrapper>
-                    <Select
-                      value={form.watch('walkingFunctionIndication') || ''}
-                      onValueChange={v => {
-                        form.setValue('walkingFunctionIndication', v);
-                        if (v !== 'Anders') {
-                          form.setValue('walkingFunctionOtherText', '');
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="w-2/3">
-                        <SelectValue
-                          placeholder={t('walkingFunctionIndication')}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {WALKING_FUNCTION_INDICATION_OPTIONS.map(opt => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* Conditional "Anders" textarea */}
-                {form.watch('walkingFunctionIndication') === 'Anders' && (
-                  <FormBlock centerTitle={false}>
-                    <FormItemWrapper label={t('otherWalkingFunction')}>
-                      <Textarea
-                        id="loopfunctie-anders"
-                        placeholder={t('otherWalkingFunctionPlaceholder')}
-                        value={form.watch('walkingFunctionOtherText')}
-                        onChange={e =>
-                          form.setValue(
-                            'walkingFunctionOtherText',
-                            e.target.value,
-                          )
-                        }
-                        rows={2}
-                        className="w-2/3 resize-none"
-                      />
-                    </FormItemWrapper>
-                  </FormBlock>
-                )}
-              </FormCard>
+              {/* FunctieonderzoekBlock */}
+              <FunctieonderzoekBlock form={form} t={t} />
 
               {/* Product Specifications */}
               <FormCard title={t('productSpecifications')}>
@@ -618,10 +495,10 @@ const FormIntakeOSBPage = () => {
                     form.setValue('soleReinforcementRight', false);
                     form.setValue('rockerRollCmLeft', '');
                     form.setValue('rockerRollCmRight', '');
-                    form.setValue('halluxMmLeft', 'Nee');
-                    form.setValue('halluxMmRight', 'Nee');
-                    form.setValue('deepeningMmLeft', 'Nee');
-                    form.setValue('deepeningMmRight', 'Nee');
+                    form.setValue('halluxMmLeft', 'no');
+                    form.setValue('halluxMmRight', 'no');
+                    form.setValue('deepeningMmLeft', 'no');
+                    form.setValue('deepeningMmRight', 'no');
                     form.setValue('customInsoleIndividualLeft', false);
                     form.setValue('customInsoleIndividualRight', false);
                   }
@@ -715,7 +592,7 @@ const FormIntakeOSBPage = () => {
                     >
                       <FormItemWrapper label={t('left')}>
                         <Select
-                          value={form.watch('halluxMmLeft') || 'Nee'}
+                          value={form.watch('halluxMmLeft') || 'no'}
                           onValueChange={v => form.setValue('halluxMmLeft', v)}
                         >
                           <SelectTrigger id="hallux-left">
@@ -733,7 +610,7 @@ const FormIntakeOSBPage = () => {
 
                       <FormItemWrapper label={t('right')}>
                         <Select
-                          value={form.watch('halluxMmRight') || 'Nee'}
+                          value={form.watch('halluxMmRight') || 'no'}
                           onValueChange={v => form.setValue('halluxMmRight', v)}
                         >
                           <SelectTrigger id="hallux-right">
@@ -763,7 +640,7 @@ const FormIntakeOSBPage = () => {
                     >
                       <FormItemWrapper label={t('left')}>
                         <Select
-                          value={form.watch('deepeningMmLeft') || 'Nee'}
+                          value={form.watch('deepeningMmLeft') || 'no'}
                           onValueChange={v =>
                             form.setValue('deepeningMmLeft', v)
                           }
@@ -783,7 +660,7 @@ const FormIntakeOSBPage = () => {
 
                       <FormItemWrapper label={t('right')}>
                         <Select
-                          value={form.watch('deepeningMmRight') || 'Nee'}
+                          value={form.watch('deepeningMmRight') || 'no'}
                           onValueChange={v =>
                             form.setValue('deepeningMmRight', v)
                           }
@@ -840,232 +717,16 @@ const FormIntakeOSBPage = () => {
               </FormCard>
 
               {/* Steunzolen/Talonette Section (Combined) */}
-              <FormCard
-                title={t('insolesAndTalonette')}
-                description={t('insolesAndTalonetteDescription')}
-                toggleAble={true}
-                toggleLabel={t('addInsolesOrTalonette')}
-                toggleId="steunzolen-talonette-toggle"
-                defaultOpen={
-                  form.watch('insoleEnabled') || form.watch('heelRaiseEnabled')
-                }
-                onToggleChange={isOpen => {
-                  form.setValue('insoleEnabled', isOpen);
-                  form.setValue('heelRaiseEnabled', isOpen);
-                  if (!isOpen) {
-                    form.setValue('heelRaiseLeft', '');
-                    form.setValue('heelRaiseRight', '');
-                    form.setValue('insoleTypeGeneral', '');
-                    form.setValue('insolePriceName', '');
-                    form.setValue('insolePrice', undefined);
-                    form.setValue('insoleOtherText', '');
-                    form.setValue('insoleMidfootCorrection', '');
-                    form.setValue('insoleForefootCorrection', '');
-                    form.setValue('insoleForefootPad', '');
-                  }
-                }}
-              >
-                {/* Talonette Heel Raise */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  title={t('talonetteSection')}
-                >
-                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
-                    <Input
-                      id="hak-verhoging-links"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('heelRaiseLeft')}
-                      onChange={e =>
-                        form.setValue('heelRaiseLeft', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
+              <InsoleAndTalonetteBlock
+                form={form}
+                t={t}
+                mode="combined"
+                resetFieldsOnToggleOff={true}
+                includePriceSelector={true}
+              />
 
-                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
-                    <Input
-                      id="hak-verhoging-rechts"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('heelRaiseRight')}
-                      onChange={e =>
-                        form.setValue('heelRaiseRight', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* Steunzool Type Selection */}
-                <FormBlock
-                  columns={2}
-                  dividers={true}
-                  title={t('insoleTypeGeneral')}
-                  alignItems="start"
-                >
-                  <FormItemWrapper className="col-span-2">
-                    <Select
-                      value={form.watch('insoleTypeGeneral') || undefined}
-                      onValueChange={val => {
-                        form.setValue('insoleTypeGeneral', val);
-                        if (val !== 'Anders') {
-                          form.setValue('insoleOtherText', '');
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="w-2/3 mt-2">
-                        <SelectValue placeholder={t('insoleTypeGeneral')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {INSOLE_TYPE_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-
-                  {form.watch('insoleTypeGeneral') === 'Anders' && (
-                    <FormItemWrapper
-                      label={t('specifyOther')}
-                      className="col-span-2 pt-2"
-                    >
-                      <Textarea
-                        id="steunzool-anders"
-                        placeholder={t('specifyPlaceholder')}
-                        value={form.watch('insoleOtherText')}
-                        onChange={e =>
-                          form.setValue('insoleOtherText', e.target.value)
-                        }
-                        rows={2}
-                        className="w-2/3 resize-none"
-                      />
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-
-                {/* Insole Price Name */}
-                <FormBlock columns={1} dividers={true} alignItems="start">
-                  <FormItemWrapper label={t('insolePriceName')}>
-                    <Select
-                      value={
-                        form.watch('insolePrice')
-                          ? String(form.watch('insolePrice'))
-                          : undefined
-                      }
-                      onValueChange={val => {
-                        const numVal = val ? parseFloat(val) : undefined;
-                        const selectedOption = INSOLE_PRICE_OPTIONS.find(
-                          option => option.value === numVal,
-                        );
-                        form.setValue('insolePrice', numVal);
-                        form.setValue(
-                          'insolePriceName',
-                          selectedOption?.label || '',
-                        );
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {INSOLE_PRICE_OPTIONS.map(option => (
-                          <SelectItem
-                            key={option.value}
-                            value={String(option.value)}
-                          >
-                            {t(option.label)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* Corrections */}
-                <FormBlock
-                  columns={3}
-                  dividers={true}
-                  title={t('insoleCorrections')}
-                >
-                  <FormItemWrapper label={t('midfootCorrection')}>
-                    <Select
-                      value={form.watch('insoleMidfootCorrection') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleMidfootCorrection', val)
-                      }
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {MIDFOOT_CORRECTION_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-
-                  <FormItemWrapper label={t('forefootCorrection')}>
-                    <Select
-                      value={
-                        form.watch('insoleForefootCorrection') || undefined
-                      }
-                      onValueChange={val =>
-                        form.setValue('insoleForefootCorrection', val)
-                      }
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FOREFOOT_CORRECTION_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-
-                  <FormItemWrapper label={t('forefootPad')}>
-                    <Select
-                      value={form.watch('insoleForefootPad') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleForefootPad', val)
-                      }
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PELOTTE_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* Special Notes */}
-              <FormCard title={t('specialNotes')}>
-                <Textarea
-                  placeholder={t('specialNotesPlaceholder')}
-                  value={form.watch('specialNotes')}
-                  onChange={e => form.setValue('specialNotes', e.target.value)}
-                  rows={5}
-                />
-              </FormCard>
+              {/* SpecialNotesBlock */}
+              <SpecialNotesBlock form={form} t={t} />
 
               {/* Submit Section */}
               <FormFooter>

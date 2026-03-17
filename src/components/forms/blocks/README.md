@@ -2,12 +2,20 @@
 
 Reusable form section components for complex multi-field sections.
 
+Always use: /home/dhlinux/Eemland/Website/form-generator/.github/prompts/extract-form-block.prompt.md
+
 ## Directory Structure
 
 ```
 src/components/forms/blocks/
 ├── index.ts                      # Barrel export
-├── FunctieonderzoekBlock.tsx     # Example: Functional research section
+├── ShaftHeightBlock.tsx          # Shaft height fields (standalone/embedded)
+├── EnclosureBlock.tsx            # Enclosure + donkey ear (+ optional carbon)
+├── InsoleAndTalonetteBlock.tsx   # Split/combined insole + talonette section
+├── PairAndIndicationBlock.tsx    # Pair selection + medical indication
+├── FunctieonderzoekBlock.tsx     # Functional research section
+├── SideSelectionBlock.tsx        # Side selection + optional amputation
+├── SpecialNotesBlock.tsx         # Special notes textarea
 └── README.md                     # This file
 ```
 
@@ -118,6 +126,31 @@ import {MyNewBlock} from '@/components/forms/blocks';
 
 ## Best Practices
 
+### Import and Extraction Rules
+
+When extracting page code into a block component, always apply these rules:
+
+1. Read this README before creating or modifying a block.
+2. Verify all required imports from the original page section and keep only what the block needs.
+3. Always keep the original extracted page code at the bottom of the block file as commented reference code (mandatory for every extraction/update pass).
+4. Check the original page for `FormField`-based wiring and other page-only concerns (routing, submit navigation, section-local handlers).
+5. Rebuild the section in a block file under `src/components/forms/blocks/` and keep behavior equivalent.
+6. Add concise section comments for complex logic and major render groups.
+7. Use logic variables for conditional UI and behavior (prefer `includeX`, `showX`, `hasX`).
+8. Prefer `Switch` for 1-2 boolean options and use `Checkbox` for 3+ multi-select options.
+9. Use `FormField` only when truly needed (for example complex controlled inputs, `FormMessage` validation rendering, or explicit `FormControl` wiring).
+
+### Extraction Checklist
+
+Before finishing a block extraction:
+
+- Confirm block props include `form` and `t`.
+- Confirm field names still match the source page schema/defaultValues.
+- Confirm optional behavior is controlled via explicit flags (example: `includeAmputation`).
+- Confirm `src/components/forms/blocks/index.ts` exports the block.
+- Confirm source page imports are updated to use the block.
+- Confirm original code snapshot exists at the bottom of the block file (commented).
+
 ### Props Pattern
 
 Always include these base props:
@@ -193,7 +226,7 @@ The following sections from existing forms are good candidates for extraction in
 
 ### High Priority (3+ Forms)
 
-- [ ] **DescriptionBlock** - Form description and pair selection
+- [x] **PairAndIndicationBlock** - Pair selection and medical indication
   - **Forms**: intake-vlos, intake-osa, intake-osb, intake-steunzolen (4 forms)
   - **Fields**: whichPair (radio), medicalIndication (textarea)
   - **Complexity**: 1 FormBlock, ~44 lines
@@ -201,76 +234,78 @@ The following sections from existing forms are good candidates for extraction in
   - **Suggested Parameters**:
 
     ```typescript
-
-    <!-- TODO: pairOptions is not needed, i think?  -->
-    interface DescriptionBlockProps {
+    interface PairAndIndicationBlockProps {
       form: UseFormReturn<any>;
       t: (key: string) => string;
-      includeWhichPair?: boolean; // Show pair selection
-      includeMedicalIndication?: boolean; // Show medical indication
-      pairOptions?: Array<{value: string; label: string}>;
-      layoutColumns?: 1 | 2 | 3;
-      textareaRows?: number;
     }
     ```
 
-- [ ] **SideSelectionBlock** - Side selection (left/right/both) with optional amputation
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-osa/index.tsx
+    Section name: {/_ Paartype & indicatie _/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/PairAndIndicationBlock.tsx
+
+- [x] **SideSelectionBlock** - Side selection (left/right/both) with optional amputation
   - **Forms**: All 5 forms (different variants)
   - **Fields**: side, optional: amputationLeft, amputationRight
   - **Complexity**: 1 FormBlock, 30-80 lines
   - **Variations**:
     - Simple: only side selection (osb, check-foliepas)
     - Complex: side + amputation toggles (vlos, osa)
+
   - **Suggested Parameters**:
+
     ```typescript
     interface SideSelectionBlockProps {
       form: UseFormReturn<any>;
       t: (key: string) => string;
-      mode?: 'simple' | 'withAmputation'; // Controls amputation visibility
-      amputationControlType?: 'switch' | 'checkbox';
-      includeBothOption?: boolean;
-      sideFieldName?: string;
-      amputationLeftFieldName?: string;
-      amputationRightFieldName?: string;
+      includeAmputation?: boolean; // Show amputation toggles
     }
     ```
 
-- [ ] **SpecialNotesBlock** - Special notes textarea
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-osa/index.tsx
+    Section name: {/_ Side & Amputation _/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/SideSelectionBlock.tsx
+
+- [x] **SpecialNotesBlock** - Special notes textarea
   - **Forms**: intake-vlos, intake-osb, intake-steunzolen (3 forms)
   - **Fields**: specialNotes
   - **Complexity**: Very low, 0-1 FormBlock, 8-21 lines
-  - **Variations**: Direct Textarea vs FormField wrapper
+  - **Variations**: Direct Textarea
   - **Suggested Parameters**:
+
     ```typescript
     interface SpecialNotesBlockProps {
       form: UseFormReturn<any>;
       t: (key: string) => string;
-      useFormFieldWrapper?: boolean;
-      rows?: number;
-      placeholderKey?: string;
-      fieldName?: string;
     }
     ```
 
-- [ ] **FunctionalResearchBlock** ✅ - Already implemented!
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-osa/index.tsx
+    Section name: {/_ Special Notes _/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/SpecialNotesBlock.tsx
+
+- [x] **FunctieonderzoekBlock**
   - **Forms**: intake-vlos, intake-osa (full), intake-osb (compact variant)
   - **Complexity**: Full variant: 11 FormBlocks, ~406 lines; Compact: 3 FormBlocks, ~86 lines
   - **Variations**:
     - Full: pathologies, walking aids, pain, foot inspection, muscle strength, joints
     - Compact: goals, walking function only
-  - **Suggested Enhancement**:
+  - **Current Parameters**:
+
     ```typescript
     interface FunctieonderzoekBlockProps {
       form: UseFormReturn<any>;
       t: (key: string) => string;
-      variant?: 'fullClinical' | 'compactGoals'; // NEW
-      includeSubsections?: string[]; // NEW
     }
     ```
 
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-osa/index.tsx
+    Section name: {/_ Functieonderzoek_/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/FunctieonderzoekBlock.tsx
+
 ### Medium Priority (2 Forms)
 
-- [ ] **ShaftHeightBlock** - Schachthoogte (shaft height)
+- [x] **ShaftHeightBlock** - Schachthoogte (shaft height)
   - **Forms**: intake-vlos, intake-osa, check-foliepas (embedded)
   - **Fields**: shaftHeightLeft, shaftHeightRight
   - **Complexity**: 34-38 lines standalone; 118 lines embedded
@@ -285,10 +320,6 @@ The following sections from existing forms are good candidates for extraction in
       showLeft?: boolean;
       showRight?: boolean;
       embeddedMode?: boolean; // If true, returns FormBlock only
-      includeLegLengthDifference?: boolean; // For foliepas mode
-      includeShaftOpening?: boolean; // For foliepas mode
-      cardTitle?: string; // Override card title
-      cardDescription?: string; // Override card description
     }
     ```
   - **Usage Example**:
@@ -298,18 +329,14 @@ The following sections from existing forms are good candidates for extraction in
     <ShaftHeightBlock form={form} t={t} showLeft={showLinks} showRight={showRechts} />
 
     // Embedded in foliepas
-    <ShaftHeightBlock
-      form={form}
-      t={t}
-      embeddedMode={true}
-      includeLegLengthDifference={true}
-      includeShaftOpening={true}
-      cardTitle="Foliepas aanmerkingen"
-      cardDescription={`${t('shaftHeight')} • ${t('legLengthDifference')} • ${t('shaftOpening')}`}
-    />
+    <ShaftHeightBlock form={form} t={t} embeddedMode={true} />
     ```
 
-- [ ] **EnclosureBlock** - Omsluiting (enclosure) configuration
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-osa/index.tsx
+    Section name: {/_ Schachthoogte _/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/ShaftHeightBlock.tsx
+
+- [x] **EnclosureBlock** - Omsluiting (enclosure) configuration
   - **Forms**: intake-vlos, check-foliepas (as "Voeringschoen opties")
   - **Fields**: enclosureLeft/Right, enclosureLeftMm/RightMm, donkeyEarLeft/Right
   - **Complexity**: 253 lines (vlos), 317 lines (foliepas with carbon stiffening)
@@ -317,6 +344,7 @@ The following sections from existing forms are good candidates for extraction in
     - Basic enclosure + donkey ear (vlos)
     - Adds carbon stiffening lining shoe option (foliepas)
   - **Suggested Parameters**:
+
     ```typescript
     interface EnclosureBlockProps {
       form: UseFormReturn<any>;
@@ -324,16 +352,14 @@ The following sections from existing forms are good candidates for extraction in
       showLeft?: boolean;
       showRight?: boolean;
       includeCarbonStiffening?: boolean; // For foliepas mode
-      leftEnabledField?: string;
-      rightEnabledField?: string;
-      donkeyEarLeftTypeField?: string;
-      donkeyEarRightTypeField?: string;
-      cardTitleKey?: string; // Override card title
-      cardDescriptionKey?: string; // Override card description
     }
     ```
 
-- [ ] **InsoleAndTalonetteBlock** - Steunzool/Insole & Talonette configuration
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-vlos/index.tsx
+    Section name: {/_ Omsluiting _/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/EnclosureBlock.tsx
+
+- [x] **InsoleAndTalonetteBlock** - Steunzool/Insole & Talonette configuration
   - **Forms**: intake-steunzolen (split), intake-osb (combined)
   - **Fields**: heelRaiseEnabled, heelRaiseLeft/Right, insoleEnabled, insoleType, etc.
   - **Complexity**: 218 lines total (steunzolen split), 216 lines (osb combined)
@@ -342,6 +368,7 @@ The following sections from existing forms are good candidates for extraction in
     - Combined into 1 toggleable card (osb)
     - OSB includes price selector and synchronized toggle
   - **Suggested Parameters**:
+
     ```typescript
     interface InsoleAndTalonetteBlockProps {
       form: UseFormReturn<any>;
@@ -351,11 +378,14 @@ The following sections from existing forms are good candidates for extraction in
       enableInsoleToggle?: boolean;
       resetFieldsOnToggleOff?: boolean; // Clear fields when toggled off
       includePriceSelector?: boolean; // For OSB mode
-      includeCorrections?: boolean; // For OSB corrections fields
       showLeft?: boolean;
       showRight?: boolean;
     }
     ```
+
+    Page path: /home/dhlinux/Eemland/Website/form-generator/src/pages/intake-steunzolen/index.tsx
+    Section name: {/_ Steunzool & Talonette _/}
+    Target path: /home/dhlinux/Eemland/Website/form-generator/src/components/forms/blocks/InsoleAndTalonetteBlock.tsx
 
 ### Low Priority (1 Form but Complex)
 
@@ -569,7 +599,7 @@ export const ShaftHeightBlock: React.FC<ShaftHeightBlockProps> = ({
 
 **Priority Order:**
 
-1. Extract high-frequency blocks first (DescriptionBlock, SideSelectionBlock, SpecialNotesBlock)
+1. Extract high-frequency blocks first (PairAndIndicationBlock, SideSelectionBlock, SpecialNotesBlock)
 2. Extract medium-complexity blocks (ShaftHeightBlock, EnclosureBlock)
 3. Extract complex single-form blocks last (HeelConfigurationBlock, DigitalBlock)
 

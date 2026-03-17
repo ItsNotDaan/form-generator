@@ -4,7 +4,6 @@ import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Textarea} from '@/components/ui/textarea';
-import {Switch} from '@/components/ui/switch'; // Added Switch
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import useTranslation from 'next-translate/useTranslation';
@@ -16,7 +15,6 @@ import {
   setClientData,
 } from '@/domain/store/slices/formData';
 import {
-  PAIR_TYPE_OPTIONS,
   INSOLE_TYPE_OPTIONS,
   MIDFOOT_CORRECTION_OPTIONS,
   FOREFOOT_CORRECTION_OPTIONS,
@@ -34,18 +32,15 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  InsoleAndTalonetteBlock,
+  PairAndIndicationBlock,
+  SpecialNotesBlock,
+} from '@/components/forms/blocks';
 
 // ---------------------------------------------------------------------------
 // SCHEMA DEFINITION
@@ -137,7 +132,6 @@ const FormIntakeSteunzolenPage = () => {
     form.reset();
   };
 
-  const insoleTypeGeneral = form.watch('insoleTypeGeneral');
   const heelRaiseEnabled = form.watch('heelRaiseEnabled');
   const insoleEnabled = form.watch('insoleEnabled');
   const heelRaisePriceValue = form.watch('heelRaisePrice');
@@ -248,51 +242,8 @@ const FormIntakeSteunzolenPage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Paartype & indicatie */}
-              <FormCard title={t('description')} description={t('whichPair')}>
-                <FormBlock columns={2} dividers={true} alignItems="start">
-                  {/* Which Pair (Radio Group) */}
-                  <FormItemWrapper label={t('whichPair')}>
-                    <RadioGroup
-                      value={form.watch('whichPair')}
-                      onValueChange={val => form.setValue('whichPair', val)}
-                      className="w-2/3"
-                    >
-                      <div className="flex flex-col gap-3">
-                        {PAIR_TYPE_OPTIONS.map(option => (
-                          <Label
-                            key={option.value}
-                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
-                            htmlFor={`ov-${option.value}`}
-                          >
-                            <RadioGroupItem
-                              id={`ov-${option.value}`}
-                              value={option.value}
-                            />
-                            <span className="text-sm text-foreground">
-                              {t(option.label)}
-                            </span>
-                          </Label>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-
-                  {/* Medical Indication (Textarea) */}
-                  <FormItemWrapper label={t('medicalIndication')}>
-                    <Textarea
-                      id="medische-indicatie"
-                      placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medicalIndication')}
-                      onChange={e =>
-                        form.setValue('medicalIndication', e.target.value)
-                      }
-                      rows={4}
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              {/* PairAndIndicationBlock */}
+              <PairAndIndicationBlock form={form} t={t} />
 
               {/* Shoe Size */}
               <FormCard title={t('shoeSize')}>
@@ -315,231 +266,8 @@ const FormIntakeSteunzolenPage = () => {
                 </FormBlock>
               </FormCard>
 
-              {/* ==========================================================
-                  Talonette Section
-                 ========================================================== */}
-              <FormCard
-                title={t('talonetteSection')}
-                description={t('talonetteDescription')}
-                toggleAble={true}
-                toggleLabel={t('enableTalonette')}
-                toggleId="talonette-toggle"
-                defaultOpen={form.watch('heelRaiseEnabled')}
-                onToggleChange={isOpen => {
-                  form.setValue('heelRaiseEnabled', isOpen, {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  });
-                }}
-              >
-                {/* Heel Raise */}
-                <FormBlock columns={2} dividers={true}>
-                  <FormItemWrapper label={t('insoleHeelRaiseLeft')}>
-                    <Input
-                      id="hak-verhoging-links"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('heelRaiseLeft')}
-                      onChange={e =>
-                        form.setValue('heelRaiseLeft', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-
-                  <FormItemWrapper label={t('insoleHeelRaiseRight')}>
-                    <Input
-                      id="hak-verhoging-rechts"
-                      type="number"
-                      step="0.1"
-                      placeholder={t('cmPlaceholder')}
-                      value={form.watch('heelRaiseRight')}
-                      onChange={e =>
-                        form.setValue('heelRaiseRight', e.target.value)
-                      }
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
-
-              {/* ==========================================================
-                  Steunzolen Section
-                 ========================================================== */}
-              <FormCard
-                title={t('insolesSection')}
-                description={t('insolesDescription')}
-                toggleAble={true}
-                toggleLabel={t('enableInsoles')}
-                toggleId="steunzolen-toggle"
-                defaultOpen={form.watch('insoleEnabled')}
-                onToggleChange={isOpen => {
-                  form.setValue('insoleEnabled', isOpen, {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  });
-                }}
-              >
-                {/* ROW 1: Type Selection */}
-                <FormBlock columns={1} dividers={true} alignItems="start">
-                  {/* Type Selection */}
-                  <FormItemWrapper label={t('insoleTypeGeneral')}>
-                    <Select
-                      value={form.watch('insoleTypeGeneral') || undefined}
-                      onValueChange={val => {
-                        form.setValue('insoleTypeGeneral', val);
-
-                        // Clear the insoleOtherText if not selecting Anders
-                        if (val !== 'Anders') {
-                          form.setValue('insoleOtherText', '');
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="w-fit">
-                        <SelectValue placeholder={t('insoleType')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {INSOLE_TYPE_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-
-                  {/* Conditional "Other" Textarea (Spans full width if visible) */}
-                  {insoleTypeGeneral === 'Anders' && (
-                    <FormItemWrapper
-                      label={t('specifyOther')}
-                      className="col-span-2 pt-2"
-                    >
-                      <Textarea
-                        id="steunzool-anders"
-                        placeholder={t('specifyPlaceholder')}
-                        value={form.watch('insoleOtherText')}
-                        onChange={e =>
-                          form.setValue('insoleOtherText', e.target.value)
-                        }
-                        rows={2}
-                        className="w-2/3 resize-none"
-                      />
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-
-                {/* ROW 2: Corrections */}
-                <FormBlock
-                  columns={3}
-                  dividers={true}
-                  title={t('insoleCorrections')}
-                >
-                  <FormItemWrapper label={t('midfootCorrection')}>
-                    <Select
-                      value={form.watch('insoleMidfootCorrection') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleMidfootCorrection', val)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {MIDFOOT_CORRECTION_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-
-                  <FormItemWrapper label={t('forefootCorrection')}>
-                    <Select
-                      value={
-                        form.watch('insoleForefootCorrection') || undefined
-                      }
-                      onValueChange={val =>
-                        form.setValue('insoleForefootCorrection', val)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FOREFOOT_CORRECTION_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-
-                  <FormItemWrapper label={t('forefootPad')}>
-                    <Select
-                      value={form.watch('insoleForefootPad') || undefined}
-                      onValueChange={val =>
-                        form.setValue('insoleForefootPad', val)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PELOTTE_OPTIONS.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* ROW 3: Steunzool type selectie */}
-                <FormBlock columns={1} dividers={true} alignItems="start">
-                  <FormItemWrapper label={t('insolePriceName')}>
-                    <Select
-                      value={
-                        form.watch('insolePrice')
-                          ? String(form.watch('insolePrice'))
-                          : undefined
-                      }
-                      onValueChange={val => {
-                        const numVal = val ? parseFloat(val) : undefined;
-                        // Find the corresponding label for this price value
-                        const selectedOption = INSOLE_PRICE_OPTIONS.find(
-                          option => option.value === numVal,
-                        );
-                        form.setValue('insolePrice', numVal);
-                        form.setValue(
-                          'insolePriceName',
-                          selectedOption?.label || '',
-                        );
-
-                        // Optional: If user manually changes price to something else, should Talonette toggle off?
-                        // Logic left to you, currently it stays enabled.
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('chooseOption')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {INSOLE_PRICE_OPTIONS.map(option => (
-                          <SelectItem
-                            key={option.value}
-                            value={String(option.value)}
-                          >
-                            {t(option.label)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              {/* Talonette + Steunzolen */}
+              <InsoleAndTalonetteBlock form={form} t={t} mode="split" />
 
               {/* ==========================================================
                   Price Section
@@ -565,28 +293,8 @@ const FormIntakeSteunzolenPage = () => {
                 </FormBlock>
               </FormCard>
 
-              {/* Special Notes */}
-              <FormCard title={t('specialNotes')}>
-                <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <FormField
-                    control={form.control}
-                    name="specialNotes"
-                    render={({field}) => (
-                      <FormItem>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t('specialNotesPlaceholder')}
-                            rows={5}
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </FormBlock>
-              </FormCard>
+              {/* SpecialNotesBlock */}
+              <SpecialNotesBlock form={form} t={t} />
 
               {/* Submit Section */}
               <FormFooter>

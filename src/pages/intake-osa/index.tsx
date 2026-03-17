@@ -6,13 +6,6 @@ import {Label} from '@/components/ui/label';
 import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
 import {Switch} from '@/components/ui/switch';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {
   Select,
@@ -27,37 +20,28 @@ import {Routes} from '@/lib/routes';
 import {
   YES_NO_OPTIONS,
   PAIR_TYPE_OPTIONS,
-  PATHOLOGIES_OPTIONS,
-  WALKING_DISTANCE_AIDS_OPTIONS,
-  FOOT_INSPECTION_OPTIONS,
   LAST_HEIGHT_OPTIONS,
   MTP1_DEEP_OPTIONS,
-  WALKING_DISTANCE_OPTIONS,
-  PAIN_DURATION_OPTIONS,
-  TOE_AREA_OPTIONS,
-  MIDFOOT_OPTIONS,
-  ANKLE_JOINT_OPTIONS,
-  KNEES_OPTIONS,
   Side,
 } from '@/domain/form/constants/formConstants';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
 
 import {ChevronRight} from 'lucide-react';
-import {useForm, Controller} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import {Form} from '@/components/ui/form';
 import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
+import {
+  FunctieonderzoekBlock,
+  PairAndIndicationBlock,
+  ShaftHeightBlock,
+  SideSelectionBlock,
+  SpecialNotesBlock,
+} from '@/components/forms/blocks';
 
 // ---------------------------------------------------------------------------
 // SCHEMA DEFINITION
@@ -247,576 +231,27 @@ const FormIntakeOSAPage = () => {
               className="space-y-4"
             >
               {/* Paartype & indicatie */}
-              <FormCard title={t('description')} description={t('whichPair')}>
-                <FormBlock columns={2} dividers={true} alignItems="start">
-                  {/* Which Pair (Radio Group) */}
-                  <FormItemWrapper label={t('whichPair')}>
-                    <RadioGroup
-                      value={form.watch('whichPair')}
-                      onValueChange={val => form.setValue('whichPair', val)}
-                      className="w-2/3"
-                    >
-                      <div className="flex flex-col gap-3">
-                        {PAIR_TYPE_OPTIONS.map(option => (
-                          <Label
-                            key={option.value}
-                            className="flex items-center gap-3 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
-                            htmlFor={`ov-${option.value}`}
-                          >
-                            <RadioGroupItem
-                              id={`ov-${option.value}`}
-                              value={option.value}
-                            />
-                            <span className="text-sm text-foreground">
-                              {t(option.label)}
-                            </span>
-                          </Label>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-
-                  {/* Medical Indication (Textarea) */}
-                  <FormItemWrapper label={t('medicalIndication')}>
-                    <Textarea
-                      id="medische-indicatie"
-                      placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medicalIndication')}
-                      onChange={e =>
-                        form.setValue('medicalIndication', e.target.value)
-                      }
-                      rows={4}
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              <PairAndIndicationBlock form={form} t={t} />
 
               {/* Side & Amputation */}
-              <FormCard
-                title={t('side') + ' & ' + t('amputation')}
-                description={t('sideAmputationDescription')}
-              >
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  {/* Side Selection */}
-                  <FormItemWrapper label={t('side')}>
-                    <FormField
-                      control={form.control}
-                      name="side"
-                      render={({field}) => (
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <div className="flex flex-wrap gap-6">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="both" id="side-both" />
-                                  <Label htmlFor="side-both">{t('both')}</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="left" id="side-left" />
-                                  <Label htmlFor="side-left">{t('left')}</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem
-                                    value="right"
-                                    id="side-right"
-                                  />
-                                  <Label htmlFor="side-right">
-                                    {t('right')}
-                                  </Label>
-                                </div>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-
-                  {/* Amputation */}
-                  <FormItemWrapper label={t('amputation')}>
-                    <div className="flex gap-6">
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="amp-left"
-                          checked={form.watch('amputationLeftEnabled')}
-                          onCheckedChange={checked =>
-                            form.setValue('amputationLeftEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="amp-left"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('left')}
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="amp-right"
-                          checked={form.watch('amputationRightEnabled')}
-                          onCheckedChange={checked =>
-                            form.setValue('amputationRightEnabled', !!checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="amp-right"
-                          className="font-normal cursor-pointer"
-                        >
-                          {t('right')}
-                        </Label>
-                      </div>
-                    </div>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              <SideSelectionBlock
+                form={form}
+                t={t}
+                includeAmputation={true}
+                amputationLeftField="amputationLeftEnabled"
+                amputationRightField="amputationRightEnabled"
+              />
 
               {/* Functieonderzoek*/}
-              <FormCard
-                title={t('functionalResearch')}
-                description={t('functionalResearchDescription')}
-              >
-                {/* Ziektebeelden */}
-                <FormBlock
-                  title={t('medicalConditions')}
-                  columns={3}
-                  dividers={false}
-                  centerTitle={true}
-                >
-                  {PATHOLOGIES_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`ziektebeeld-${optie.key}`}
-                        checked={
-                          (form.watch('pathologies')[optie.key] as boolean) ||
-                          false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('pathologies', {
-                            ...form.getValues('pathologies'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                        className=""
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t(optie.value)}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Loopafstand hulpmiddelen */}
-                <FormBlock
-                  title={t('walkingDistanceAids')}
-                  columns={3}
-                  dividers={false}
-                  centerTitle={true}
-                >
-                  {WALKING_DISTANCE_AIDS_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`loopafstand-${optie.key}`}
-                        checked={
-                          (form.watch('walkingDistanceAids')[
-                            optie.key
-                          ] as boolean) || false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('walkingDistanceAids', {
-                            ...form.getValues('walkingDistanceAids'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                        className=""
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t(optie.value)}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Pijnbeleving */}
-                <FormBlock title={t('painPerception')} centerTitle={true}>
-                  <div className="space-y-2 pt-2">
-                    <div className="grid grid-cols-6 gap-4 items-center">
-                      <div className="text-sm leading-none font-medium text-center">
-                        {t('noPain')} (0)
-                      </div>
-                      <Input
-                        id="pain-perception"
-                        type="range"
-                        min="0"
-                        max="10"
-                        step="1"
-                        value={form.watch('painPerception') || '0'}
-                        onChange={e =>
-                          form.setValue('painPerception', e.target.value)
-                        }
-                        className="col-span-4 accent-primary"
-                      />
-                      <div className="text-sm leading-none font-medium text-center">
-                        {t('maximumPain')} (10)
-                      </div>
-                    </div>
-                    <div className="text-center text-2xl font-bold">
-                      {form.watch('painPerception') || '0'}
-                    </div>
-                  </div>
-                </FormBlock>
-
-                {/* Inspectie voeten */}
-                <FormBlock
-                  title={t('footInspection')}
-                  centerTitle={true}
-                  columns={3}
-                  dividers={false}
-                >
-                  {FOOT_INSPECTION_OPTIONS.map(optie => (
-                    <Label className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30">
-                      <Checkbox
-                        id={`foot-inspection-${optie.key}`}
-                        checked={
-                          (form.watch('footInspection')[
-                            optie.key
-                          ] as boolean) || false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('footInspection', {
-                            ...form.getValues('footInspection'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                        className=""
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {t(optie.value)}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Loopafstand */}
-                <FormBlock
-                  title={t('walkingDistance')}
-                  centerTitle={true}
-                  columns={4}
-                  dividers={false}
-                >
-                  {WALKING_DISTANCE_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`walking-distance-${optie.key}`}
-                        checked={
-                          (form.watch('walkingDistance')[
-                            optie.key
-                          ] as boolean) || false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('walkingDistance', {
-                            ...form.getValues('walkingDistance'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {optie.label}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Tijdsduur pijn */}
-                <FormBlock
-                  title={t('painDuration')}
-                  centerTitle={true}
-                  columns={3}
-                  dividers={false}
-                >
-                  {PAIN_DURATION_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`pain-duration-${optie.key}`}
-                        checked={
-                          (form.watch('painDuration')[optie.key] as boolean) ||
-                          false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('painDuration', {
-                            ...form.getValues('painDuration'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {optie.label}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Spierkracht */}
-                <FormBlock
-                  title={t('muscleStrength')}
-                  centerTitle={true}
-                  columns={2}
-                  dividers={true}
-                >
-                  <FormItemWrapper className="flex flex-col items-center space-y-2">
-                    <Label className="text-base font-semibold">
-                      {t('dorsalFlexi')}
-                    </Label>
-                    <div className="flex items-center gap-2 w-full">
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {t('littleStrength')}
-                      </span>
-                      <Input
-                        type="range"
-                        min="1"
-                        max="5"
-                        value={form.watch('muscleStrengthDorsalFlexi')}
-                        onChange={e =>
-                          form.setValue(
-                            'muscleStrengthDorsalFlexi',
-                            parseInt(e.target.value),
-                          )
-                        }
-                        className="flex-1"
-                      />
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {t('muchStrength')}
-                      </span>
-                    </div>
-                    <span className="text-lg font-semibold">
-                      {form.watch('muscleStrengthDorsalFlexi') || 3}
-                    </span>
-                  </FormItemWrapper>
-                  <FormItemWrapper className="flex flex-col items-center space-y-2">
-                    <Label className="text-base font-semibold">
-                      {t('plantarFlexi')}
-                    </Label>
-                    <div className="flex items-center gap-2 w-full">
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {t('littleStrength')}
-                      </span>
-                      <Input
-                        type="range"
-                        min="1"
-                        max="5"
-                        value={form.watch('muscleStrengthPlantarFlexi')}
-                        onChange={e =>
-                          form.setValue(
-                            'muscleStrengthPlantarFlexi',
-                            parseInt(e.target.value),
-                          )
-                        }
-                        className="flex-1"
-                      />
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {t('muchStrength')}
-                      </span>
-                    </div>
-                    <span className="text-lg font-semibold">
-                      {form.watch('muscleStrengthPlantarFlexi') || 3}
-                    </span>
-                  </FormItemWrapper>
-                </FormBlock>
-
-                {/* Teenpartij */}
-                <FormBlock
-                  title={t('toeArea')}
-                  centerTitle={true}
-                  columns={4}
-                  dividers={false}
-                >
-                  {TOE_AREA_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`toe-area-${optie.key}`}
-                        checked={
-                          (form.watch('toeArea')[optie.key] as boolean) || false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('toeArea', {
-                            ...form.getValues('toeArea'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {optie.label}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Midvoet */}
-                <FormBlock
-                  title={t('midfoot')}
-                  centerTitle={true}
-                  columns={2}
-                  dividers={false}
-                >
-                  {MIDFOOT_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`midfoot-${optie.key}`}
-                        checked={
-                          (form.watch('midfoot')[optie.key] as boolean) || false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('midfoot', {
-                            ...form.getValues('midfoot'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {optie.label}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Enkelgewricht */}
-                <FormBlock
-                  title={t('ankleJoint')}
-                  centerTitle={true}
-                  columns={2}
-                  dividers={false}
-                >
-                  {ANKLE_JOINT_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`ankle-joint-${optie.key}`}
-                        checked={
-                          (form.watch('ankleJoint')[optie.key] as boolean) ||
-                          false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('ankleJoint', {
-                            ...form.getValues('ankleJoint'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {optie.label}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-
-                {/* Knieën */}
-                <FormBlock
-                  title={t('knees')}
-                  centerTitle={true}
-                  columns={4}
-                  dividers={false}
-                >
-                  {KNEES_OPTIONS.map(optie => (
-                    <Label
-                      key={optie.key}
-                      className="flex items-center space-x-2 rounded-md border bg-foreground/5 px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors has-aria-checked:bg-accent/30"
-                    >
-                      <Checkbox
-                        id={`knees-${optie.key}`}
-                        checked={
-                          (form.watch('knees')[optie.key] as boolean) || false
-                        }
-                        onCheckedChange={checked =>
-                          form.setValue('knees', {
-                            ...form.getValues('knees'),
-                            [optie.key]: !!checked,
-                          })
-                        }
-                      />
-                      <div className="grid gap-1.5 font-normal">
-                        <p className="text-sm leading-none font-medium">
-                          {optie.label}
-                        </p>
-                      </div>
-                    </Label>
-                  ))}
-                </FormBlock>
-              </FormCard>
+              <FunctieonderzoekBlock form={form} t={t} />
 
               {/* Shaft Height*/}
-              <FormCard title={t('shaftHeight')}>
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  {showLinks && (
-                    <FormItemWrapper className="items-center">
-                      <Label htmlFor="shaft-left">{t('leftCm')}</Label>
-                      <Input
-                        id="shaft-left"
-                        type="number"
-                        placeholder={t('cmPlaceholder')}
-                        value={form.watch('shaftHeightLeft')}
-                        onChange={e =>
-                          form.setValue('shaftHeightLeft', e.target.value)
-                        }
-                        className="w-2/3 text-center"
-                      />
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper className="items-center">
-                      <Label htmlFor="shaft-right">{t('rightCm')}</Label>
-                      <Input
-                        id="shaft-right"
-                        type="number"
-                        placeholder={t('cmPlaceholder')}
-                        value={form.watch('shaftHeightRight')}
-                        onChange={e =>
-                          form.setValue('shaftHeightRight', e.target.value)
-                        }
-                        className="w-2/3 text-center"
-                      />
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-              </FormCard>
+              <ShaftHeightBlock
+                form={form}
+                t={t}
+                showLeft={showLinks}
+                showRight={showRechts}
+              />
 
               {/* DIGITAAL SECTION */}
               <FormCard
@@ -1051,22 +486,7 @@ const FormIntakeOSAPage = () => {
               </FormCard>
 
               {/* Special Notes */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('specialNotes')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    placeholder={t('specialNotesPlaceholder')}
-                    value={form.watch('specialNotes')}
-                    onChange={e =>
-                      form.setValue('specialNotes', e.target.value)
-                    }
-                    rows={5}
-                    className="resize-none"
-                  />
-                </CardContent>
-              </Card>
+              <SpecialNotesBlock form={form} t={t} />
 
               {/* Submit Section */}
               <FormFooter>

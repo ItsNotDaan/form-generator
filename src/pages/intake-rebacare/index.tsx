@@ -1,7 +1,6 @@
 import React from 'react';
 import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
 import {Button} from '@/components/ui/button';
-import {Textarea} from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -19,7 +18,7 @@ import {
   setIntakeRebacareData,
   setClientData,
 } from '@/domain/store/slices/formData';
-import {Side, PAIR_TYPE_OPTIONS} from '@/domain/form/constants/formConstants';
+import {Side} from '@/domain/form/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -36,6 +35,10 @@ import {scrollToFirstError} from '@/utils/formHelpers';
 import {useFormPersistence} from '@/hooks/useFormPersistence';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 import {Switch} from '@/components/ui/switch';
+import {
+  PairAndIndicationBlock,
+  SpecialNotesBlock,
+} from '@/components/forms/blocks';
 
 const FormIntakeRebacarePage = () => {
   const router = useRouter();
@@ -118,51 +121,8 @@ const FormIntakeRebacarePage = () => {
               onSubmit={form.handleSubmit(onSubmit, scrollToFirstError)}
               className="space-y-6"
             >
-              {/* Paartype & indicatie */}
-              <FormCard title={t('description')} description={t('whichPair')}>
-                <FormBlock columns={2} dividers={true} alignItems="start">
-                  {/* Which Pair (Radio Group) */}
-                  <FormItemWrapper label={t('whichPair')}>
-                    <RadioGroup
-                      value={form.watch('whichPair')}
-                      onValueChange={val => form.setValue('whichPair', val)}
-                      className="w-2/3"
-                    >
-                      <div className="flex flex-col gap-3">
-                        {PAIR_TYPE_OPTIONS.map(option => (
-                          <Label
-                            key={option.value}
-                            className="flex items-center gap-3 rounded-md border bg-background px-3 py-2 cursor-pointer hover:bg-accent/30 transition-colors"
-                            htmlFor={`ov-${option.value}`}
-                          >
-                            <RadioGroupItem
-                              id={`ov-${option.value}`}
-                              value={option.value}
-                            />
-                            <span className="text-sm text-foreground">
-                              {t(option.label)}
-                            </span>
-                          </Label>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-
-                  {/* Medical Indication (Textarea) */}
-                  <FormItemWrapper label={t('medicalIndication')}>
-                    <Textarea
-                      id="medische-indicatie"
-                      placeholder={t('medicalIndicationPlaceholder')}
-                      value={form.watch('medicalIndication')}
-                      onChange={e =>
-                        form.setValue('medicalIndication', e.target.value)
-                      }
-                      rows={4}
-                      className="w-2/3"
-                    />
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              {/* PairAndIndicationBlock */}
+              <PairAndIndicationBlock form={form} t={t} />
 
               {/* Side & Bandaged */}
               <FormCard title={t('side') + ' & ' + t('bandaged')}>
@@ -237,26 +197,8 @@ const FormIntakeRebacarePage = () => {
                 </FormBlock>
               </FormCard>
 
-              {/* Special Notes */}
-              <FormCard title={t('specialNotes')}>
-                <FormField
-                  control={form.control}
-                  name="specialNotes"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormControl>
-                        <Textarea
-                          placeholder={t('specialNotesPlaceholder')}
-                          rows={5}
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </FormCard>
+              {/* SpecialNotesBlock */}
+              <SpecialNotesBlock form={form} t={t} />
 
               <FormFooter>
                 <Button
