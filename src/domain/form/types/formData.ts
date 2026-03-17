@@ -58,6 +58,14 @@ export interface IntakeVLOSData {
   walkingDistanceAids?: Record<string, boolean>;
   painPerception?: string;
   footInspection?: Record<string, boolean>;
+  walkingDistance?: Record<string, boolean>;
+  painDuration?: Record<string, boolean>;
+  muscleStrengthDorsalFlexi?: number;
+  muscleStrengthPlantarFlexi?: number;
+  toeArea?: Record<string, boolean>;
+  midfoot?: Record<string, boolean>;
+  ankleJoint?: Record<string, boolean>;
+  knees?: Record<string, boolean>;
 
   // Description/pair type
   whichPair?: string;
