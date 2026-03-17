@@ -1,0 +1,1 @@
+export {FunctieonderzoekBlock} from './FunctieonderzoekBlock';
