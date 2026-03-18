@@ -13,9 +13,11 @@ src/components/forms/blocks/
 ├── EnclosureBlock.tsx            # Enclosure + donkey ear (+ optional carbon)
 ├── InsoleAndTalonetteBlock.tsx   # Split/combined insole + talonette section
 ├── PairAndIndicationBlock.tsx    # Pair selection + medical indication
+├── ShaftOpeningWidthBlock.tsx    # VLOS shaft opening width radio section
 ├── FunctieonderzoekBlock.tsx     # Functional research section
 ├── SideSelectionBlock.tsx        # Side selection + optional amputation
 ├── SpecialNotesBlock.tsx         # Special notes textarea
+├── SupplementSupportBlock.tsx    # VLOS supplement support per side
 └── README.md                     # This file
 ```
 

@@ -39,8 +39,10 @@ import {
   FunctieonderzoekBlock,
   PairAndIndicationBlock,
   ShaftHeightBlock,
+  ShaftOpeningWidthBlock,
   SideSelectionBlock,
   SpecialNotesBlock,
+  SupplementSupportBlock,
 } from '@/components/forms/blocks';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeVLOSData, setClientData} from '@/domain/store/slices/formData';
@@ -236,12 +238,6 @@ const FormIntakeVLOSPage = () => {
 
   const side = form.watch('side');
   const soleReinforcementEnabled = form.watch('soleReinforcementEnabled');
-  const customInsoleShoringLeftEnabled = form.watch(
-    'customInsoleShoringLeftEnabled',
-  );
-  const customInsoleShoringRightEnabled = form.watch(
-    'customInsoleShoringRightEnabled',
-  );
   const heelWedgeLeftEnabled = form.watch('heelWedgeLeftEnabled');
   const heelWedgeRightEnabled = form.watch('heelWedgeRightEnabled');
   const heelRoundingLeftEnabled = form.watch('heelRoundingLeftEnabled');
@@ -369,36 +365,7 @@ const FormIntakeVLOSPage = () => {
               />
 
               {/* Shaft Opening */}
-              <FormCard title={t('shaftOpening')}>
-                <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <FormItemWrapper>
-                    <RadioGroup
-                      value={form.watch('shaftOpeningWidth')}
-                      onValueChange={v => form.setValue('shaftOpeningWidth', v)}
-                    >
-                      <div className="flex flex-wrap justify-center gap-4">
-                        {SHAFT_OPENING_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`opening-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`opening-${opt.value}`}
-                              className="font-normal cursor-pointer"
-                            >
-                              {opt.label.replace('.', ',')} cm
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
+              <ShaftOpeningWidthBlock form={form} t={t} />
 
               {/* Enclosure (Omsluiting)*/}
               <EnclosureBlock
@@ -410,117 +377,12 @@ const FormIntakeVLOSPage = () => {
               />
 
               {/* Supplement Support */}
-              <FormCard title={t('supplementSupport')}>
-                <FormBlock columns={2} dividers={true} hoverEffect={false}>
-                  {showLinks && (
-                    <FormItemWrapper label={t('left')} className="items-center">
-                      <div className="flex items-center p-3 space-x-2">
-                        <Switch
-                          id="supplementschoring-links-switch"
-                          checked={customInsoleShoringLeftEnabled}
-                          onCheckedChange={checked => {
-                            form.setValue(
-                              'customInsoleShoringLeftEnabled',
-                              !!checked,
-                            );
-                            if (!checked) {
-                              form.setValue('customInsoleShoringLeftType', '');
-                            }
-                          }}
-                        />
-                        <Label
-                          htmlFor="supplementschoring-links-switch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {customInsoleShoringLeftEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {customInsoleShoringLeftEnabled && (
-                        <Select
-                          value={form.watch('customInsoleShoringLeftType')}
-                          onValueChange={v =>
-                            form.setValue('customInsoleShoringLeftType', v)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue>
-                              {t(
-                                MEDIAL_LATERAL_OPTIONS.find(
-                                  opt =>
-                                    opt.value ===
-                                    form.watch('customInsoleShoringLeftType'),
-                                )?.label || '',
-                              )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {t(opt.label)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                  {showRechts && (
-                    <FormItemWrapper
-                      label={t('right')}
-                      className="items-center"
-                    >
-                      <div className="flex items-center p-3 space-x-2">
-                        <Switch
-                          id="supplementschoring-rechts-switch"
-                          checked={customInsoleShoringRightEnabled}
-                          onCheckedChange={checked => {
-                            form.setValue(
-                              'customInsoleShoringRightEnabled',
-                              !!checked,
-                            );
-                            if (!checked) {
-                              form.setValue('customInsoleShoringRightType', '');
-                            }
-                          }}
-                        />
-                        <Label
-                          htmlFor="supplementschoring-rechts-switch"
-                          className="font-normal cursor-pointer"
-                        >
-                          {customInsoleShoringRightEnabled ? t('yes') : t('no')}
-                        </Label>
-                      </div>
-                      {customInsoleShoringRightEnabled && (
-                        <Select
-                          value={form.watch('customInsoleShoringRightType')}
-                          onValueChange={v =>
-                            form.setValue('customInsoleShoringRightType', v)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue>
-                              {t(
-                                MEDIAL_LATERAL_OPTIONS.find(
-                                  opt =>
-                                    opt.value ===
-                                    form.watch('customInsoleShoringRightType'),
-                                )?.label || '',
-                              )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {t(opt.label)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-              </FormCard>
+              <SupplementSupportBlock
+                form={form}
+                t={t}
+                showLeft={showLinks}
+                showRight={showRechts}
+              />
 
               {/* Sole Stiffening */}
               <FormCard title={t('soleStiffening')}>
