@@ -155,71 +155,73 @@ const FormIntakeVLOSPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  const defaultFormValues: FormData = {
+    whichPair: 'Eerste paar',
+    medicalIndication: '',
+    side: 'both',
+    shaftHeightLeft: '14',
+    shaftHeightRight: '14',
+    enclosureLeft: {omsluitingLinksMultivorm: true},
+    enclosureRight: {omsluitingRechtsMultivorm: true},
+    enclosureLeftMm: {omsluitingMmLinksMultivorm: '3'},
+    enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
+    customInsoleShoringLeftEnabled: false,
+    customInsoleShoringRightEnabled: false,
+    customInsoleShoringLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    customInsoleShoringRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    soleReinforcementEnabled: false,
+    soleReinforcementLeft: false,
+    soleReinforcementRight: false,
+    closureType: CLOSURE_OPTIONS[0]?.value || '',
+    entryPoint: '',
+    shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
+    tonguePaddingEnabled: false,
+    fixedTongueEnabled: false,
+    heelTypeLeft: HEEL_TYPE_OPTIONS[0]?.value || '',
+    heelTypeRight: HEEL_TYPE_OPTIONS[0]?.value || '',
+    heelHeightLeft: '2',
+    heelHeightRight: '2',
+    heelWedgeLeftEnabled: false,
+    heelWedgeRightEnabled: false,
+    heelWedgeLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    heelWedgeRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    donkeyEarLeftEnabled: false,
+    donkeyEarRightEnabled: false,
+    donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    amputationLeftEnabled: false,
+    amputationRightEnabled: false,
+    heelRoundingLeftEnabled: true,
+    heelRoundingRightEnabled: true,
+    heelRoundingLeftHeight: '13',
+    heelRoundingLeftLength: '50',
+    heelRoundingRightHeight: '13',
+    heelRoundingRightLength: '50',
+    rockerSoleType: WALKING_SOLE_OPTIONS[0]?.value || '',
+    specialNotes: '',
+
+    // Functieonderzoek defaults
+    pathologies: {},
+    walkingDistanceAids: {},
+    painPerception: '0',
+    footInspection: {},
+    walkingDistance: {},
+    painDuration: {},
+    muscleStrengthDorsalFlexi: 3,
+    muscleStrengthPlantarFlexi: 3,
+    toeArea: {},
+    midfoot: {},
+    ankleJoint: {},
+    knees: {},
+  };
+
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      whichPair: 'Eerste paar',
-      medicalIndication: '',
-      side: 'both',
-      shaftHeightLeft: '14',
-      shaftHeightRight: '14',
-      enclosureLeft: {omsluitingLinksMultivorm: true},
-      enclosureRight: {omsluitingRechtsMultivorm: true},
-      enclosureLeftMm: {omsluitingMmLinksMultivorm: '3'},
-      enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
-      customInsoleShoringLeftEnabled: false,
-      customInsoleShoringRightEnabled: false,
-      customInsoleShoringLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      customInsoleShoringRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      soleReinforcementEnabled: false,
-      soleReinforcementLeft: false,
-      soleReinforcementRight: false,
-      closureType: CLOSURE_OPTIONS[0]?.value || '',
-      entryPoint: '',
-      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
-      tonguePaddingEnabled: false,
-      fixedTongueEnabled: false,
-      heelTypeLeft: HEEL_TYPE_OPTIONS[0]?.value || '',
-      heelTypeRight: HEEL_TYPE_OPTIONS[0]?.value || '',
-      heelHeightLeft: '2',
-      heelHeightRight: '2',
-      heelWedgeLeftEnabled: false,
-      heelWedgeRightEnabled: false,
-      heelWedgeLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      heelWedgeRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      donkeyEarLeftEnabled: false,
-      donkeyEarRightEnabled: false,
-      donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      amputationLeftEnabled: false,
-      amputationRightEnabled: false,
-      heelRoundingLeftEnabled: true,
-      heelRoundingRightEnabled: true,
-      heelRoundingLeftHeight: '13',
-      heelRoundingLeftLength: '50',
-      heelRoundingRightHeight: '13',
-      heelRoundingRightLength: '50',
-      rockerSoleType: WALKING_SOLE_OPTIONS[0]?.value || '',
-      specialNotes: '',
-
-      // Functieonderzoek defaults
-      pathologies: {},
-      walkingDistanceAids: {},
-      painPerception: '0',
-      footInspection: {},
-      walkingDistance: {},
-      painDuration: {},
-      muscleStrengthDorsalFlexi: 3,
-      muscleStrengthPlantarFlexi: 3,
-      toeArea: {},
-      midfoot: {},
-      ankleJoint: {},
-      knees: {},
-    },
+    defaultValues: defaultFormValues,
   });
 
   const {clearStorage} = useFormPersistence(
@@ -233,7 +235,7 @@ const FormIntakeVLOSPage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const side = form.watch('side');

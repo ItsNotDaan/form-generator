@@ -134,86 +134,88 @@ const FormIntakeOSBPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  const defaultFormValues: FormData = {
+    whichPair: PAIR_TYPE_OPTIONS[0]?.value || 'Eerste paar',
+    medicalIndication: '',
+    side: 'both',
+
+    // Functieonderzoek (OSB-specific)
+    goal: {},
+    walkingFunctionIndication: '',
+    walkingFunctionOtherText: '',
+
+    // FunctieonderzoekBlock required defaults
+    pathologies: {},
+    walkingDistanceAids: {},
+    painPerception: '0',
+    footInspection: {},
+    walkingDistance: {},
+    painDuration: {},
+    muscleStrengthDorsalFlexi: 3,
+    muscleStrengthPlantarFlexi: 3,
+    toeArea: {},
+    midfoot: {},
+    ankleJoint: {},
+    knees: {},
+
+    // Supplier and Product
+    supplierName: '',
+    orderDate: (() => {
+      const now = new Date();
+      return `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
+    })(),
+    osb: {
+      articleCode: '',
+      lengthSize: '',
+      width: '',
+      color: '',
+      closure: '',
+    },
+
+    // Steunzolen/Talonette Section
+    heelRaiseEnabled: false,
+    heelRaiseLeft: '',
+    heelRaiseRight: '',
+
+    insoleEnabled: false,
+    insoleTypeGeneral: '',
+    insolePriceName: INSOLE_PRICE_OPTIONS[1]?.label || '',
+    insolePrice: INSOLE_PRICE_OPTIONS[1]?.value,
+    insoleOtherText: '',
+    insoleMidfootCorrection: '',
+    insoleForefootCorrection: '',
+    insoleForefootPad: '',
+
+    // Supplement (van leest)
+    supplementIndividueelEnabled: false,
+    customInsoleIndividualLeft: false,
+    customInsoleIndividualRight: false,
+
+    // Zoolverstijving
+    soleReinforcementEnabled: false,
+    soleReinforcementLeft: false,
+    soleReinforcementRight: false,
+
+    // Afwikkelrol (onder schoen)
+    rockerRollCmLeft: '',
+    rockerRollCmRight: '',
+
+    // Modules: Hallux valgus & Verdieping voorvoet
+    halluxMmLeft: HALLUX_MM_OPTIONS[0]?.value,
+    halluxMmRight: HALLUX_MM_OPTIONS[0]?.value,
+    deepeningMmLeft: DEEPENING_MM_OPTIONS[0]?.value,
+    deepeningMmRight: DEEPENING_MM_OPTIONS[0]?.value,
+
+    specialNotes: '',
+  };
+
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      whichPair: PAIR_TYPE_OPTIONS[0]?.value || 'Eerste paar',
-      medicalIndication: '',
-      side: 'both',
-
-      // Functieonderzoek (OSB-specific)
-      goal: {},
-      walkingFunctionIndication: '',
-      walkingFunctionOtherText: '',
-
-      // FunctieonderzoekBlock required defaults
-      pathologies: {},
-      walkingDistanceAids: {},
-      painPerception: '0',
-      footInspection: {},
-      walkingDistance: {},
-      painDuration: {},
-      muscleStrengthDorsalFlexi: 3,
-      muscleStrengthPlantarFlexi: 3,
-      toeArea: {},
-      midfoot: {},
-      ankleJoint: {},
-      knees: {},
-
-      // Supplier and Product
-      supplierName: '',
-      orderDate: (() => {
-        const now = new Date();
-        return `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
-      })(),
-      osb: {
-        articleCode: '',
-        lengthSize: '',
-        width: '',
-        color: '',
-        closure: '',
-      },
-
-      // Steunzolen/Talonette Section
-      heelRaiseEnabled: false,
-      heelRaiseLeft: '',
-      heelRaiseRight: '',
-
-      insoleEnabled: false,
-      insoleTypeGeneral: '',
-      insolePriceName: INSOLE_PRICE_OPTIONS[1]?.label || '',
-      insolePrice: INSOLE_PRICE_OPTIONS[1]?.value,
-      insoleOtherText: '',
-      insoleMidfootCorrection: '',
-      insoleForefootCorrection: '',
-      insoleForefootPad: '',
-
-      // Supplement (van leest)
-      supplementIndividueelEnabled: false,
-      customInsoleIndividualLeft: false,
-      customInsoleIndividualRight: false,
-
-      // Zoolverstijving
-      soleReinforcementEnabled: false,
-      soleReinforcementLeft: false,
-      soleReinforcementRight: false,
-
-      // Afwikkelrol (onder schoen)
-      rockerRollCmLeft: '',
-      rockerRollCmRight: '',
-
-      // Modules: Hallux valgus & Verdieping voorvoet
-      halluxMmLeft: HALLUX_MM_OPTIONS[0]?.value,
-      halluxMmRight: HALLUX_MM_OPTIONS[0]?.value,
-      deepeningMmLeft: DEEPENING_MM_OPTIONS[0]?.value,
-      deepeningMmRight: DEEPENING_MM_OPTIONS[0]?.value,
-
-      specialNotes: '',
-    },
+    defaultValues: defaultFormValues,
   });
 
   // Persist form state to localStorage (survives refresh)
@@ -242,7 +244,7 @@ const FormIntakeOSBPage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const onSubmit = (data: FormData) => {

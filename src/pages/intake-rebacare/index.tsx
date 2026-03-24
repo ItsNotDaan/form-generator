@@ -62,19 +62,21 @@ const FormIntakeRebacarePage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  const defaultFormValues: FormData = {
+    whichPair: 'Eerste paar',
+    side: 'both',
+    medicalIndication: '',
+    bandagedFoot: false,
+    specialNotes: '',
+  };
+
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      whichPair: 'Eerste paar',
-      side: 'both',
-      medicalIndication: '',
-      bandagedFoot: false,
-      specialNotes: '',
-    },
+    defaultValues: defaultFormValues,
   });
 
   const {clearStorage} = useFormPersistence(
@@ -88,7 +90,7 @@ const FormIntakeRebacarePage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const onSubmit = (data: FormData) => {

@@ -197,12 +197,13 @@ const FormNewClientPage = () => {
   const dispatch = useAppDispatch();
 
   const formSchema = React.useMemo(() => createFormSchema(t), [t]);
+  const defaultFormValues = React.useMemo(() => getDefaultFormValues(), []);
 
   // form: beheert de staat van het formulier, inclusief de waarden van de velden, validatie status en foutmeldingen. Het maakt gebruik van react-hook-form voor eenvoudige integratie met React componenten en zod voor schema validatie.
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: getDefaultFormValues(),
+    defaultValues: defaultFormValues,
   });
 
   // Persist New Client form state across refreshes
@@ -219,7 +220,7 @@ const FormNewClientPage = () => {
   // Handles the reset button click, which clears the persisted form state and resets the form to its default values.
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const optionalEnabled = useWatch({

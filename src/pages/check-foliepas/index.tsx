@@ -83,47 +83,49 @@ const FormCheckFoliepasPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  const defaultFormValues: FormData = {
+    // Side Selection
+    side: SIDE_OPTIONS[0]?.value || '',
+
+    // Reading Corrections
+    readingCorrectionAfterFoilFit: '',
+    readingCorrectionAfterLiningShoe: '',
+
+    // Foliepas Aanmerkingen - Shaft Heights
+    shaftHeightLeft: '12.5',
+    shaftHeightRight: '12.5',
+
+    // Foliepas Aanmerkingen - Leg Length Difference
+    legLengthDifferenceLeft: '',
+    legLengthDifferenceRight: '',
+
+    // Foliepas Aanmerkingen - Shaft Opening
+    shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
+
+    // Voeringschoen Opties - Enclosure (Omsluiting)
+    enclosureLeft: {},
+    enclosureRight: {},
+    enclosureLeftMm: {},
+    enclosureRightMm: {},
+
+    // Voeringschoen Opties - Donkey Ear (Ezelsoor)
+    donkeyEarLeftEnabled: false,
+    donkeyEarRightEnabled: false,
+    donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+
+    // Voeringschoen Opties - Carbon Stiffening Lining Shoe
+    carbonStiffeningLiningShoeLeft: false,
+    carbonStiffeningLiningShoeRight: false,
+  };
+
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      // Side Selection
-      side: SIDE_OPTIONS[0]?.value || '',
-
-      // Reading Corrections
-      readingCorrectionAfterFoilFit: '',
-      readingCorrectionAfterLiningShoe: '',
-
-      // Foliepas Aanmerkingen - Shaft Heights
-      shaftHeightLeft: '12.5',
-      shaftHeightRight: '12.5',
-
-      // Foliepas Aanmerkingen - Leg Length Difference
-      legLengthDifferenceLeft: '',
-      legLengthDifferenceRight: '',
-
-      // Foliepas Aanmerkingen - Shaft Opening
-      shaftOpeningWidth: SHAFT_OPENING_OPTIONS[2]?.value || '',
-
-      // Voeringschoen Opties - Enclosure (Omsluiting)
-      enclosureLeft: {},
-      enclosureRight: {},
-      enclosureLeftMm: {},
-      enclosureRightMm: {},
-
-      // Voeringschoen Opties - Donkey Ear (Ezelsoor)
-      donkeyEarLeftEnabled: false,
-      donkeyEarRightEnabled: false,
-      donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-
-      // Voeringschoen Opties - Carbon Stiffening Lining Shoe
-      carbonStiffeningLiningShoeLeft: false,
-      carbonStiffeningLiningShoeRight: false,
-    },
+    defaultValues: defaultFormValues,
   });
 
   const {clearStorage} = useFormPersistence(
@@ -137,7 +139,7 @@ const FormCheckFoliepasPage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const side = form.watch('side');
@@ -177,7 +179,7 @@ const FormCheckFoliepasPage = () => {
               className="space-y-6"
             >
               {/* SideSelectionBlock */}
-              <SideSelectionBlock form={form} t={t} includeAmputation={false} />
+              <SideSelectionBlock form={form} t={t} includeAmputation={true} />
 
               {/* Reading Corrections after Foil Fit */}
               <FormCard title={t('readingCorrectionAfterFoilFit')}>

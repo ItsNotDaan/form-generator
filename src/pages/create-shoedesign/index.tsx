@@ -146,97 +146,99 @@ const FormCreateShoeDesignPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  const defaultFormValues: FormData = {
+    // Model
+    modelType: 'model',
+    modelText: '',
+
+    // Colors
+    colorOptions: [],
+
+    // Tongue Padding and Collar (mm)
+    tonguePaddingMm: TONGUE_PADDING_MM_OPTIONS[0]?.value || 'no',
+    tongueType: TONGUE_TYPE_OPTIONS[0]?.value || '',
+    paddingCollarMm: PADDING_COLLAR_MM_OPTIONS[0]?.value || 'no',
+
+    // Closure Type
+    closureType: CLOSURE_TYPE_OPTIONS[0]?.value || '',
+    ringsNumber: '',
+    ringsAmount: '',
+    hooksNumber: '',
+    hooksAmount: '',
+
+    // Zipper
+    zipperType: ZIPPER_TYPE_OPTIONS[0]?.value || '',
+    zipperColor: '',
+    zipperPlacement: ZIPPER_PLACEMENT_OPTIONS[0]?.value || '',
+    zipperSide: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+
+    // Special Features (Bijzonderheden)
+    specialVelcroTongue: 'none',
+    specialLaceLoop: false,
+    specialExtraLeather: false,
+    specialOther: '',
+
+    // Edge Type (Randtype)
+    edgeTypeMain: '',
+    edgeTypeModel: '',
+    edgeTypeColor: '',
+    edgeTypeColorCode: '',
+
+    // Sole Type (Zooltype)
+    soleTypeMain: '',
+    soleTypeModel: '',
+    soleTypeColor: '',
+    soleTypeOther: '',
+
+    // Carbon Stiffening Shoe
+    carbonStiffeningShoeLeft: false,
+    carbonStiffeningShoeRight: false,
+
+    // Toe Options (Neusopties)
+    toeType: TOE_TYPE_OPTIONS[0]?.value || '',
+
+    // Lining (Voering)
+    liningType: LINING_OPTIONS[0]?.value || '',
+
+    // Counterfort (Stijfsel)
+    counterfortType: COUNTERFORT_TYPE_OPTIONS[0]?.value || '',
+    counterfortOther: '',
+
+    // Insole (Binnenzool)
+    insoleType: LINING_OPTIONS[0]?.value || '',
+
+    // Sole Edge Polish (Zoolrandafwerking)
+    soleEdgePolishType: SOLE_EDGE_POLISH_TYPE_OPTIONS[0]?.value || '',
+    soleEdgePolishOther: '',
+
+    // Construction Method (Constructie Methode)
+    constructionMethodType: CONSTRUCTION_METHOD_TYPE_OPTIONS[0]?.value || '',
+    constructionMethodOther: '',
+
+    // Heel Model (Hielmodel)
+    heelModelType: HEEL_MODEL_TYPE_OPTIONS[0]?.value || '',
+    heelBuildUpMaterial: HEEL_BUILDUP_MATERIAL_OPTIONS[0]?.value || '',
+    heelWedgeType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    heelBlockCoreCoating: false,
+    heelHeightLeft: '2',
+    heelHeightRight: '2',
+    heelRoundingLeftEnabled: false,
+    heelRoundingRightEnabled: false,
+
+    // Shoring (Schoring)
+    shoringLeftType: SHORING_TYPE_OPTIONS[0]?.value || '',
+    shoringLeftMm: '',
+    shoringRightType: SHORING_TYPE_OPTIONS[0]?.value || '',
+    shoringRightMm: '',
+  };
+
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      // Model
-      modelType: 'model',
-      modelText: '',
-
-      // Colors
-      colorOptions: [],
-
-      // Tongue Padding and Collar (mm)
-      tonguePaddingMm: TONGUE_PADDING_MM_OPTIONS[0]?.value || 'no',
-      tongueType: TONGUE_TYPE_OPTIONS[0]?.value || '',
-      paddingCollarMm: PADDING_COLLAR_MM_OPTIONS[0]?.value || 'no',
-
-      // Closure Type
-      closureType: CLOSURE_TYPE_OPTIONS[0]?.value || '',
-      ringsNumber: '',
-      ringsAmount: '',
-      hooksNumber: '',
-      hooksAmount: '',
-
-      // Zipper
-      zipperType: ZIPPER_TYPE_OPTIONS[0]?.value || '',
-      zipperColor: '',
-      zipperPlacement: ZIPPER_PLACEMENT_OPTIONS[0]?.value || '',
-      zipperSide: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-
-      // Special Features (Bijzonderheden)
-      specialVelcroTongue: 'none',
-      specialLaceLoop: false,
-      specialExtraLeather: false,
-      specialOther: '',
-
-      // Edge Type (Randtype)
-      edgeTypeMain: '',
-      edgeTypeModel: '',
-      edgeTypeColor: '',
-      edgeTypeColorCode: '',
-
-      // Sole Type (Zooltype)
-      soleTypeMain: '',
-      soleTypeModel: '',
-      soleTypeColor: '',
-      soleTypeOther: '',
-
-      // Carbon Stiffening Shoe
-      carbonStiffeningShoeLeft: false,
-      carbonStiffeningShoeRight: false,
-
-      // Toe Options (Neusopties)
-      toeType: TOE_TYPE_OPTIONS[0]?.value || '',
-
-      // Lining (Voering)
-      liningType: LINING_OPTIONS[0]?.value || '',
-
-      // Counterfort (Stijfsel)
-      counterfortType: COUNTERFORT_TYPE_OPTIONS[0]?.value || '',
-      counterfortOther: '',
-
-      // Insole (Binnenzool)
-      insoleType: LINING_OPTIONS[0]?.value || '',
-
-      // Sole Edge Polish (Zoolrandafwerking)
-      soleEdgePolishType: SOLE_EDGE_POLISH_TYPE_OPTIONS[0]?.value || '',
-      soleEdgePolishOther: '',
-
-      // Construction Method (Constructie Methode)
-      constructionMethodType: CONSTRUCTION_METHOD_TYPE_OPTIONS[0]?.value || '',
-      constructionMethodOther: '',
-
-      // Heel Model (Hielmodel)
-      heelModelType: HEEL_MODEL_TYPE_OPTIONS[0]?.value || '',
-      heelBuildUpMaterial: HEEL_BUILDUP_MATERIAL_OPTIONS[0]?.value || '',
-      heelWedgeType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-      heelBlockCoreCoating: false,
-      heelHeightLeft: '2',
-      heelHeightRight: '2',
-      heelRoundingLeftEnabled: false,
-      heelRoundingRightEnabled: false,
-
-      // Shoring (Schoring)
-      shoringLeftType: SHORING_TYPE_OPTIONS[0]?.value || '',
-      shoringLeftMm: '',
-      shoringRightType: SHORING_TYPE_OPTIONS[0]?.value || '',
-      shoringRightMm: '',
-    },
+    defaultValues: defaultFormValues,
   });
 
   const modelType = form.watch('modelType');
@@ -259,8 +261,8 @@ const FormCreateShoeDesignPage = () => {
   // EVENT HANDLERS
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
-    form.reset();
     clearStorage();
+    form.reset(defaultFormValues);
   };
 
   const onSubmit = (data: FormData) => {

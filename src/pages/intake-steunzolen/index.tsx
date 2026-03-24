@@ -85,37 +85,39 @@ const FormIntakeSteunzolenPage = () => {
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
+  const defaultFormValues: FormData = {
+    // Basic info
+    whichPair: 'Eerste paar',
+    medicalIndication: '',
+    shoeSize: '',
+
+    // Talonette state
+    heelRaiseEnabled: false,
+    heelRaiseLeft: '',
+    heelRaiseRight: '',
+    heelRaisePrice: HEEL_RAISE_PRICE_OPTIONS[0]?.value || 0,
+
+    // Steunzool defaults
+    insoleEnabled: false,
+    insoleTypeGeneral: INSOLE_TYPE_OPTIONS[0]?.value || '',
+    insoleOtherText: '',
+    insoleMidfootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
+    insoleForefootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
+    insoleForefootPad: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
+    insolePrice: INSOLE_PRICE_OPTIONS[1]?.value || 0,
+    insolePriceName: INSOLE_PRICE_OPTIONS[1]?.label || '',
+
+    // Calculated final price
+    finalPrice: undefined,
+
+    // Special notes
+    specialNotes: '',
+  };
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      // Basic info
-      whichPair: 'Eerste paar',
-      medicalIndication: '',
-      shoeSize: '',
-
-      // Talonette state
-      heelRaiseEnabled: false,
-      heelRaiseLeft: '',
-      heelRaiseRight: '',
-      heelRaisePrice: HEEL_RAISE_PRICE_OPTIONS[0]?.value || 0,
-
-      // Steunzool defaults
-      insoleEnabled: false,
-      insoleTypeGeneral: INSOLE_TYPE_OPTIONS[0]?.value || '',
-      insoleOtherText: '',
-      insoleMidfootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
-      insoleForefootCorrection: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
-      insoleForefootPad: FOREFOOT_CORRECTION_OPTIONS[0]?.value || '',
-      insolePrice: INSOLE_PRICE_OPTIONS[1]?.value || 0,
-      insolePriceName: INSOLE_PRICE_OPTIONS[1]?.label || '',
-
-      // Calculated final price
-      finalPrice: undefined,
-
-      // Special notes
-      specialNotes: '',
-    },
+    defaultValues: defaultFormValues,
   });
 
   const {clearStorage} = useFormPersistence(
@@ -129,7 +131,7 @@ const FormIntakeSteunzolenPage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const heelRaiseEnabled = form.watch('heelRaiseEnabled');

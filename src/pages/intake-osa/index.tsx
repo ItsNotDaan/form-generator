@@ -18,7 +18,6 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
-  YES_NO_OPTIONS,
   PAIR_TYPE_OPTIONS,
   LAST_HEIGHT_OPTIONS,
   MTP1_DEEP_OPTIONS,
@@ -93,45 +92,49 @@ const FormIntakeOSAPage = () => {
 
   type FormData = z.infer<typeof formSchema>;
 
+  const defaultFormValues: FormData = {
+    whichPair: PAIR_TYPE_OPTIONS[0]?.value || '',
+    side: 'both',
+    medicalIndication: '',
+    shaftHeightLeft: '12.5',
+    shaftHeightRight: '12.5',
+    amputationLeftEnabled: false,
+    amputationRightEnabled: false,
+    specialNotes: '',
+
+    // Functieonderzoek defaults
+    pathologies: {},
+    walkingDistanceAids: {},
+    painPerception: '0',
+    footInspection: {},
+    walkingDistance: {},
+    painDuration: {},
+    muscleStrengthDorsalFlexi: 3,
+    muscleStrengthPlantarFlexi: 3,
+    toeArea: {},
+    midfoot: {},
+    ankleJoint: {},
+    knees: {},
+
+    // Digitaal defaults
+    digitalEnabled: false,
+    heelLiftLeft: '1.5',
+    heelLiftRight: '1.5',
+    lastHeight: LAST_HEIGHT_OPTIONS[0]?.value || '',
+    mtp1DeepLeft: MTP1_DEEP_OPTIONS[0]?.value || '',
+    mtp1DeepRight: MTP1_DEEP_OPTIONS[0]?.value || '',
+    clawToesEnabled: false,
+    scannedWithFoil: true,
+    digitalInstructions: '',
+  };
+
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      whichPair: PAIR_TYPE_OPTIONS[0]?.value || '',
-      side: 'both',
-      medicalIndication: '',
-      shaftHeightLeft: '12.5',
-      shaftHeightRight: '12.5',
-      amputationLeftEnabled: false,
-      amputationRightEnabled: false,
-      specialNotes: '',
-      // Functieonderzoek defaults
-      pathologies: {},
-      walkingDistanceAids: {},
-      painPerception: '0',
-      footInspection: {},
-      walkingDistance: {},
-      painDuration: {},
-      muscleStrengthDorsalFlexi: 3,
-      muscleStrengthPlantarFlexi: 3,
-      toeArea: {},
-      midfoot: {},
-      ankleJoint: {},
-      knees: {},
-      // Digitaal defaults
-      digitalEnabled: false,
-      heelLiftLeft: '1.5',
-      heelLiftRight: '1.5',
-      lastHeight: LAST_HEIGHT_OPTIONS[0]?.value || '',
-      mtp1DeepLeft: MTP1_DEEP_OPTIONS[0]?.value || '',
-      mtp1DeepRight: MTP1_DEEP_OPTIONS[0]?.value || '',
-      clawToesEnabled: false,
-      scannedWithFoil: false,
-      digitalInstructions: '',
-    },
+    defaultValues: defaultFormValues,
   });
 
   const {clearStorage} = useFormPersistence(
@@ -145,7 +148,7 @@ const FormIntakeOSAPage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const side = form.watch('side');
@@ -154,10 +157,6 @@ const FormIntakeOSAPage = () => {
 
   const showLinks = side === 'left' || side === 'both';
   const showRechts = side === 'right' || side === 'both';
-
-  // Helper functions
-  const boolToString = (value: boolean): string => (value ? 'yes' : 'no');
-  const stringToBool = (value: string): boolean => value === 'yes';
 
   const onSubmit = (data: FormData) => {
     if (clientData) {
@@ -270,7 +269,7 @@ const FormIntakeOSAPage = () => {
                     form.setValue('mtp1DeepLeft', '');
                     form.setValue('mtp1DeepRight', '');
                     form.setValue('clawToesEnabled', false);
-                    form.setValue('scannedWithFoil', false);
+                    form.setValue('scannedWithFoil', true);
                     form.setValue('digitalInstructions', '');
                   }
                 }}
@@ -355,64 +354,48 @@ const FormIntakeOSAPage = () => {
                     <Label className="text-base font-semibold">
                       {t('clawToes')}
                     </Label>
-                    <RadioGroup
-                      value={boolToString(form.watch('clawToesEnabled'))}
-                      onValueChange={v =>
-                        form.setValue('clawToesEnabled', stringToBool(v))
-                      }
-                    >
-                      <div className="flex flex-wrap gap-3 pt-2 justify-center">
-                        {YES_NO_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`claw-toes-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`claw-toes-${opt.value}`}
-                              className="font-normal cursor-pointer"
-                            >
-                              {t(opt.label)}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
+                    <div className="flex items-center gap-3 pt-2 justify-center">
+                      <Switch
+                        id="claw-toes-switch"
+                        checked={form.watch('clawToesEnabled')}
+                        onCheckedChange={checked =>
+                          form.setValue('clawToesEnabled', checked, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          })
+                        }
+                      />
+                      <Label
+                        htmlFor="claw-toes-switch"
+                        className="font-normal cursor-pointer"
+                      >
+                        {form.watch('clawToesEnabled') ? t('yes') : t('no')}
+                      </Label>
+                    </div>
                   </FormItemWrapper>
 
                   <FormItemWrapper className="flex flex-col items-center">
                     <Label className="text-base font-semibold">
                       {t('scannedWithFoil')}
                     </Label>
-                    <RadioGroup
-                      value={boolToString(form.watch('scannedWithFoil'))}
-                      onValueChange={v =>
-                        form.setValue('scannedWithFoil', stringToBool(v))
-                      }
-                    >
-                      <div className="flex flex-wrap gap-3 pt-2 justify-center">
-                        {YES_NO_OPTIONS.map(opt => (
-                          <div
-                            key={opt.value}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={opt.value}
-                              id={`scanned-foil-${opt.value}`}
-                            />
-                            <Label
-                              htmlFor={`scanned-foil-${opt.value}`}
-                              className="font-normal cursor-pointer"
-                            >
-                              {t(opt.label)}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
+                    <div className="flex items-center gap-3 pt-2 justify-center">
+                      <Switch
+                        id="scanned-foil-switch"
+                        checked={form.watch('scannedWithFoil')}
+                        onCheckedChange={checked =>
+                          form.setValue('scannedWithFoil', checked, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          })
+                        }
+                      />
+                      <Label
+                        htmlFor="scanned-foil-switch"
+                        className="font-normal cursor-pointer"
+                      >
+                        {form.watch('scannedWithFoil') ? t('yes') : t('no')}
+                      </Label>
+                    </div>
                   </FormItemWrapper>
                 </FormBlock>
 

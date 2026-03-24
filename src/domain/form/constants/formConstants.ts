@@ -473,8 +473,8 @@ export const LAST_HEIGHT_OPTIONS = [
 /** OSA Digitaal - MTP1 diep options */
 export const MTP1_DEEP_OPTIONS = [
   {label: 'Nee', value: 'no'},
-  {label: '40mm', value: 'mtp1Deep40mm'},
-  {label: '80mm', value: 'mtp1Deep80mm'},
+  {label: '4mm', value: 'mtp1Deep4mm'},
+  {label: '8mm', value: 'mtp1Deep8mm'},
 ];
 
 /** OSA Functieonderzoek - Loopafstand options */

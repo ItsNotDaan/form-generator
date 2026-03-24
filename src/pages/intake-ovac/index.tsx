@@ -85,53 +85,55 @@ const FormIntakeOVACPage = () => {
   // ---------------------------------------------------------------------------
   // FORM SETUP
   // ---------------------------------------------------------------------------
+  const defaultFormValues: FormData = {
+    whichPair: PAIR_TYPE_OPTIONS[0]?.value || 'Eerste paar',
+    medicalIndication: '',
+    side: 'both',
+
+    // Section 1: Steunzolen/Talonette
+    heelRaiseEnabled: false,
+    heelRaiseLeft: '',
+    heelRaiseRight: '',
+
+    insoleEnabled: false,
+    insoleTypeGeneral: '',
+    insoleOtherText: '',
+    insoleMidfootCorrection: '',
+    insoleForefootCorrection: '',
+    insoleForefootPad: '',
+
+    // Section 2: Supplement
+    supplementIndividueelEnabled: false,
+    customInsoleIndividualLeft: false,
+    customInsoleIndividualRight: false,
+
+    // Section 3: Zoolverstijving
+    soleReinforcementEnabled: false,
+    soleReinforcementLeft: false,
+    soleReinforcementRight: false,
+
+    // Section 4: Afwikkelrol
+    afwikkelrolEnabled: false,
+    rockerRollCmLeft: '',
+    rockerRollCmRight: '',
+
+    // Section 5: Hakzool verhoging
+    hakzoolVerhogingEnabled: false,
+    heelSoleElevationCmLeft: '',
+    heelSoleElevationCmRight: '',
+
+    // Section 6: Nieuwe wreefsluiting
+    nieuweWreefsluitingEnabled: false,
+    newInstepClosureLeft: false,
+    newInstepClosureRight: false,
+
+    specialNotes: '',
+  };
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldFocusError: true,
-    defaultValues: {
-      whichPair: PAIR_TYPE_OPTIONS[0]?.value || 'Eerste paar',
-      medicalIndication: '',
-      side: 'both',
-
-      // Section 1: Steunzolen/Talonette
-      heelRaiseEnabled: false,
-      heelRaiseLeft: '',
-      heelRaiseRight: '',
-
-      insoleEnabled: false,
-      insoleTypeGeneral: '',
-      insoleOtherText: '',
-      insoleMidfootCorrection: '',
-      insoleForefootCorrection: '',
-      insoleForefootPad: '',
-
-      // Section 2: Supplement
-      supplementIndividueelEnabled: false,
-      customInsoleIndividualLeft: false,
-      customInsoleIndividualRight: false,
-
-      // Section 3: Zoolverstijving
-      soleReinforcementEnabled: false,
-      soleReinforcementLeft: false,
-      soleReinforcementRight: false,
-
-      // Section 4: Afwikkelrol
-      afwikkelrolEnabled: false,
-      rockerRollCmLeft: '',
-      rockerRollCmRight: '',
-
-      // Section 5: Hakzool verhoging
-      hakzoolVerhogingEnabled: false,
-      heelSoleElevationCmLeft: '',
-      heelSoleElevationCmRight: '',
-
-      // Section 6: Nieuwe wreefsluiting
-      nieuweWreefsluitingEnabled: false,
-      newInstepClosureLeft: false,
-      newInstepClosureRight: false,
-
-      specialNotes: '',
-    },
+    defaultValues: defaultFormValues,
   });
 
   // Persist OVAC form state across refreshes
@@ -146,7 +148,7 @@ const FormIntakeOVACPage = () => {
   // ---------------------------------------------------------------------------
   const handleResetDraft = () => {
     clearStorage();
-    form.reset();
+    form.reset(defaultFormValues);
   };
 
   const onSubmit = (data: FormData) => {
