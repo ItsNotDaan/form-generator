@@ -83,7 +83,7 @@ const FormIntakePulmanPage = () => {
     side: 'both',
     medicalIndication: '',
     bandagedFoot: false,
-    pulmanType: '',
+    pulmanType: PULMAN_TYPE_OPTIONS[0].value,
     shoeSize: '',
     providedSize: '',
     specialNotes: '',
@@ -118,7 +118,7 @@ const FormIntakePulmanPage = () => {
 
   useEffect(() => {
     if (bandagedFoot) {
-      form.setValue('pulmanType', 'Harlem Extra');
+      form.setValue('pulmanType', PULMAN_TYPE_OPTIONS[1].value);
       // Only auto-set providedSize if bandagedFoot is checked, shoeSize is selected, and providedSize is empty
       if (shoeSize && !providedSize) {
         // Try to parse shoeSize as a number and add 2
@@ -163,8 +163,8 @@ const FormIntakePulmanPage = () => {
               {/* PairAndIndicationBlock */}
               <PairAndIndicationBlock form={form} t={t} />
 
-              {/* Side & Bandaged */}
-              <FormCard title={t('side') + ' & ' + t('bandaged')}>
+              {/* Side & Shoe Size */}
+              <FormCard title={t('side') + ' & ' + t('shoeSize')}>
                 <FormBlock columns={2} dividers={true}>
                   <FormItemWrapper>
                     <Label>{t('side')}</Label>
@@ -204,6 +204,49 @@ const FormIntakePulmanPage = () => {
                       )}
                     />
                   </FormItemWrapper>
+
+                  <FormItemWrapper label={t('shoeSize')}>
+                    <FormField
+                      control={form.control}
+                      name="shoeSize"
+                      render={({field}) => (
+                        <FormItem>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('selectSize')} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {SHOE_SIZES.map(size => (
+                                <SelectItem key={size} value={size}>
+                                  {size}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </FormItemWrapper>
+                </FormBlock>
+              </FormCard>
+
+              {/* Bandaged, Type Pulman & Given Size */}
+              <FormCard
+                title={
+                  t('bandaged') +
+                  ' & ' +
+                  t('pulmanType') +
+                  ' & ' +
+                  t('providedShoeSize')
+                }
+              >
+                <FormBlock columns={3} dividers={true}>
                   <FormItemWrapper>
                     <FormLabel>{t('bandaged')}</FormLabel>
                     <FormField
@@ -227,7 +270,7 @@ const FormIntakePulmanPage = () => {
                             </div>
                           </FormControl>
                           {bandagedFoot && (
-                            <div className="flex flex-row items-center rounded-md p-3 gap-2 bg-primary/10 w-2/3">
+                            <div className="flex flex-row items-center rounded-md p-3 gap-2 bg-primary/10 w-full">
                               <Info className="h-20 w-20 mt-0.5 text-primary" />
                               <p className="text-sm text-foreground">
                                 {t('bandagedInformationPulman')}
@@ -239,21 +282,7 @@ const FormIntakePulmanPage = () => {
                       )}
                     />
                   </FormItemWrapper>
-                </FormBlock>
-              </FormCard>
 
-              {/* Type Pulman & Shoe Sizes */}
-              <FormCard
-                title={
-                  t('pulmanType') +
-                  ' & ' +
-                  t('shoeSize') +
-                  ' & ' +
-                  t('providedShoeSize')
-                }
-              >
-                <FormBlock columns={3} dividers={true}>
-                  {/* Left column: Type Pulman (disabled if bandaged) */}
                   <FormItemWrapper label={t('pulmanType')}>
                     <FormField
                       control={form.control}
@@ -286,37 +315,6 @@ const FormIntakePulmanPage = () => {
                     />
                   </FormItemWrapper>
 
-                  {/* Middle column: Current Shoe Size */}
-                  <FormItemWrapper label={t('shoeSize')}>
-                    <FormField
-                      control={form.control}
-                      name="shoeSize"
-                      render={({field}) => (
-                        <FormItem>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder={t('selectSize')} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {SHOE_SIZES.map(size => (
-                                <SelectItem key={size} value={size}>
-                                  {size}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </FormItemWrapper>
-
-                  {/* Right column: Issued Size */}
                   <FormItemWrapper label={t('providedShoeSize')}>
                     <FormField
                       control={form.control}
