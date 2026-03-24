@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {Switch} from '@/components/ui/switch';
-import {MEDIAL_LATERAL_OPTIONS} from '@/domain/form/constants/formConstants';
+import {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE} from '@/domain/form/constants/formConstants';
 
 // ---------------------------------------------------------------------------
 // PROPS
@@ -87,7 +87,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
                 <SelectTrigger>
                   <SelectValue>
                     {t(
-                      MEDIAL_LATERAL_OPTIONS.find(
+                      MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.find(
                         opt =>
                           opt.value ===
                           form.watch('customInsoleShoringLeftType'),
@@ -96,7 +96,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {MEDIAL_LATERAL_OPTIONS.map(opt => (
+                  {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.map(opt => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {t(opt.label)}
                     </SelectItem>
@@ -136,7 +136,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
                 <SelectTrigger>
                   <SelectValue>
                     {t(
-                      MEDIAL_LATERAL_OPTIONS.find(
+                      MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.find(
                         opt =>
                           opt.value ===
                           form.watch('customInsoleShoringRightType'),
@@ -145,7 +145,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {MEDIAL_LATERAL_OPTIONS.map(opt => (
+                  {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.map(opt => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {t(opt.label)}
                     </SelectItem>
@@ -200,7 +200,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
 //             <SelectTrigger>
 //               <SelectValue>
 //                 {t(
-//                   MEDIAL_LATERAL_OPTIONS.find(
+//                   MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.find(
 //                     opt =>
 //                       opt.value ===
 //                       form.watch('customInsoleShoringLeftType'),
@@ -209,7 +209,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
 //               </SelectValue>
 //             </SelectTrigger>
 //             <SelectContent>
-//               {MEDIAL_LATERAL_OPTIONS.map(opt => (
+//               {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.map(opt => (
 //                 <SelectItem key={opt.value} value={opt.value}>
 //                   {t(opt.label)}
 //                 </SelectItem>
@@ -255,7 +255,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
 //             <SelectTrigger>
 //               <SelectValue>
 //                 {t(
-//                   MEDIAL_LATERAL_OPTIONS.find(
+//                   MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.find(
 //                     opt =>
 //                       opt.value ===
 //                       form.watch('customInsoleShoringRightType'),
@@ -264,7 +264,7 @@ export const SupplementSupportBlock: React.FC<SupplementSupportBlockProps> = ({
 //               </SelectValue>
 //             </SelectTrigger>
 //             <SelectContent>
-//               {MEDIAL_LATERAL_OPTIONS.map(opt => (
+//               {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.map(opt => (
 //                 <SelectItem key={opt.value} value={opt.value}>
 //                   {t(opt.label)}
 //                 </SelectItem>

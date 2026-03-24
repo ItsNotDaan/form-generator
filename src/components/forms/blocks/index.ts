@@ -7,3 +7,4 @@ export {SideSelectionBlock} from './SideSelectionBlock';
 export {SpecialNotesBlock} from './SpecialNotesBlock';
 export {ShaftOpeningWidthBlock} from './ShaftOpeningWidthBlock';
 export {SupplementSupportBlock} from './SupplementSupportBlock';
+export {SoleStiffeningBlock} from './SoleStiffeningBlock';

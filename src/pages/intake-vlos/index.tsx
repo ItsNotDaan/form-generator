@@ -20,7 +20,7 @@ import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
   SHAFT_OPENING_OPTIONS,
-  MEDIAL_LATERAL_OPTIONS,
+  MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE,
   HEEL_TYPE_OPTIONS,
   WALKING_SOLE_OPTIONS,
   CLOSURE_OPTIONS,
@@ -43,6 +43,7 @@ import {
   SideSelectionBlock,
   SpecialNotesBlock,
   SupplementSupportBlock,
+  SoleStiffeningBlock,
 } from '@/components/forms/blocks';
 import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
 import {setIntakeVLOSData, setClientData} from '@/domain/store/slices/formData';
@@ -167,8 +168,10 @@ const FormIntakeVLOSPage = () => {
     enclosureRightMm: {omsluitingMmRechtsMultivorm: '3'},
     customInsoleShoringLeftEnabled: false,
     customInsoleShoringRightEnabled: false,
-    customInsoleShoringLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-    customInsoleShoringRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    customInsoleShoringLeftType:
+      MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
+    customInsoleShoringRightType:
+      MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
     soleReinforcementEnabled: false,
     soleReinforcementLeft: false,
     soleReinforcementRight: false,
@@ -183,12 +186,12 @@ const FormIntakeVLOSPage = () => {
     heelHeightRight: '2',
     heelWedgeLeftEnabled: false,
     heelWedgeRightEnabled: false,
-    heelWedgeLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-    heelWedgeRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    heelWedgeLeftType: MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
+    heelWedgeRightType: MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
     donkeyEarLeftEnabled: false,
     donkeyEarRightEnabled: false,
-    donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-    donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
+    donkeyEarRightType: MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
     amputationLeftEnabled: false,
     amputationRightEnabled: false,
     heelRoundingLeftEnabled: true,
@@ -239,7 +242,6 @@ const FormIntakeVLOSPage = () => {
   };
 
   const side = form.watch('side');
-  const soleReinforcementEnabled = form.watch('soleReinforcementEnabled');
   const heelWedgeLeftEnabled = form.watch('heelWedgeLeftEnabled');
   const heelWedgeRightEnabled = form.watch('heelWedgeRightEnabled');
   const heelRoundingLeftEnabled = form.watch('heelRoundingLeftEnabled');
@@ -387,81 +389,12 @@ const FormIntakeVLOSPage = () => {
               />
 
               {/* Sole Stiffening */}
-              <FormCard title={t('soleStiffening')}>
-                <FormBlock columns={1} dividers={false} hoverEffect={false}>
-                  <FormItemWrapper
-                    className="items-center"
-                    label={t('soleStiffening')}
-                  >
-                    <div className="flex items-center p-3 space-x-2">
-                      <Switch
-                        id="zoolverstijving-switch"
-                        checked={soleReinforcementEnabled}
-                        onCheckedChange={checked => {
-                          form.setValue('soleReinforcementEnabled', !!checked);
-                          if (!checked) {
-                            form.setValue('soleReinforcementLeft', false);
-                            form.setValue('soleReinforcementRight', false);
-                          }
-                        }}
-                      />
-                      <Label
-                        htmlFor="zoolverstijving-switch"
-                        className="font-normal cursor-pointer"
-                      >
-                        {soleReinforcementEnabled ? t('yes') : t('no')}
-                      </Label>
-                    </div>
-                  </FormItemWrapper>
-
-                  {soleReinforcementEnabled && (
-                    <FormItemWrapper label={t('side')}>
-                      <div className="flex gap-6 pt-2">
-                        {showLinks && (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="stiff-left"
-                              checked={form.watch('soleReinforcementLeft')}
-                              onCheckedChange={checked =>
-                                form.setValue(
-                                  'soleReinforcementLeft',
-                                  !!checked,
-                                )
-                              }
-                            />
-                            <Label
-                              htmlFor="stiff-left"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('left')}
-                            </Label>
-                          </div>
-                        )}
-                        {showRechts && (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="stiff-right"
-                              checked={form.watch('soleReinforcementRight')}
-                              onCheckedChange={checked =>
-                                form.setValue(
-                                  'soleReinforcementRight',
-                                  !!checked,
-                                )
-                              }
-                            />
-                            <Label
-                              htmlFor="stiff-right"
-                              className="font-normal cursor-pointer"
-                            >
-                              {t('right')}
-                            </Label>
-                          </div>
-                        )}
-                      </div>
-                    </FormItemWrapper>
-                  )}
-                </FormBlock>
-              </FormCard>
+              <SoleStiffeningBlock
+                form={form}
+                t={t}
+                showLeft={showLinks}
+                showRight={showRechts}
+              />
 
               {/* Closure Type, Insert Point, Tongue Padding, Tongue Stitching */}
               <FormCard
@@ -714,7 +647,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                MEDIAL_LATERAL_OPTIONS.find(
+                                MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('heelWedgeLeftType'),
@@ -723,7 +656,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
+                            {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>
@@ -763,7 +696,7 @@ const FormIntakeVLOSPage = () => {
                           <SelectTrigger>
                             <SelectValue>
                               {t(
-                                MEDIAL_LATERAL_OPTIONS.find(
+                                MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.find(
                                   opt =>
                                     opt.value ===
                                     form.watch('heelWedgeRightType'),
@@ -772,7 +705,7 @@ const FormIntakeVLOSPage = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {MEDIAL_LATERAL_OPTIONS.map(opt => (
+                            {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE.map(opt => (
                               <SelectItem key={opt.value} value={opt.value}>
                                 {t(opt.label)}
                               </SelectItem>

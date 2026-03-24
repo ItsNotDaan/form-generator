@@ -10,7 +10,7 @@ import {useRouter} from 'next/router';
 import {Routes} from '@/lib/routes';
 import {
   SHAFT_OPENING_OPTIONS,
-  MEDIAL_LATERAL_OPTIONS,
+  MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE,
   Side,
   SIDE_OPTIONS,
   LAST_CORRECTION_OPTIONS,
@@ -111,8 +111,8 @@ const FormCheckFoliepasPage = () => {
     // Voeringschoen Opties - Donkey Ear (Ezelsoor)
     donkeyEarLeftEnabled: false,
     donkeyEarRightEnabled: false,
-    donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
-    donkeyEarRightType: MEDIAL_LATERAL_OPTIONS[0]?.value || '',
+    donkeyEarLeftType: MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
+    donkeyEarRightType: MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE[0]?.value || '',
 
     // Voeringschoen Opties - Carbon Stiffening Lining Shoe
     carbonStiffeningLiningShoeLeft: false,
