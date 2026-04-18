@@ -200,6 +200,14 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
       }
     }
 
+    // Persist client data to the correct autosave localStorage key so the
+    // client form page pre-populates via useFormPersistence on mount.
+    if (clientData.clientType === 'newClient') {
+      saveToLocalStorage('newClient', clientData);
+    } else if (clientData.clientType === 'oldClient') {
+      saveToLocalStorage('oldClient', clientData);
+    }
+
     dispatch(importFormData(toImport));
 
     // Save step routes so the step indicator is lit up and the "continue" popup
