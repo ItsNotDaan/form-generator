@@ -15,7 +15,7 @@ import {
   ENCLOSURE_OPTIONS,
   EnclosureOption,
   MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 
 type FormSide = 'Left' | 'Right';
 

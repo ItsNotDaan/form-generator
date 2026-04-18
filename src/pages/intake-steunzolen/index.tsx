@@ -8,12 +8,12 @@ import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {Routes} from '@/backend/utils/routes';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
 import {
   setIntakeSteunzolenData,
   setClientData,
-} from '@/domain/store/slices/formData';
+} from '@/backend/store/slices/formData';
 import {
   INSOLE_TYPE_OPTIONS,
   MIDFOOT_CORRECTION_OPTIONS,
@@ -21,7 +21,7 @@ import {
   PELOTTE_OPTIONS,
   INSOLE_PRICE_OPTIONS,
   HEEL_RAISE_PRICE_OPTIONS,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 import {ChevronRight} from 'lucide-react';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -34,8 +34,8 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import {scrollToFirstError} from '@/utils/formHelpers';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {
   InsoleAndTalonetteBlock,
   PairAndIndicationBlock,

@@ -14,7 +14,7 @@ import {
   MIDFOOT_OPTIONS,
   ANKLE_JOINT_OPTIONS,
   KNEES_OPTIONS,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 
 interface FunctieonderzoekBlockProps {
   form: UseFormReturn<any>;

@@ -1,23 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Upload, X, CheckCircle2, AlertTriangle, ClipboardPaste} from 'lucide-react';
+import {
+  Upload,
+  X,
+  CheckCircle2,
+  AlertTriangle,
+  ClipboardPaste,
+} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
 import {Label} from '@/components/ui/label';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {importFormData, clearFormData} from '@/domain/store/slices/formData';
-import {Routes} from '@/lib/routes';
-import type {FormRawData, FormStoreKey} from '@/domain/form/types/importExport';
-import type {FormDataState} from '@/domain/store/slices/formData';
-import {FORM_REGISTRY, INTAKE_FORM_BY_TYPE} from '@/domain/form/registry';
+import {useAppDispatch} from '@/backend/store/hooks';
+import {importFormData, clearFormData} from '@/backend/store/slices/formData';
+import {Routes} from '@/backend/utils/routes';
+import type {FormRawData, FormStoreKey} from '@/backend/types/importExport';
+import type {FormDataState} from '@/backend/store/slices/formData';
+import {FORM_REGISTRY, INTAKE_FORM_BY_TYPE} from '@/backend/registry';
 import {
   saveToLocalStorage,
   clearAllFormStorage,
   saveStepRoute,
   clearStepRoute,
-} from '@/utils/localStorageHelper';
+} from '@/backend/utils/localStorageHelper';
 
 // ---------------------------------------------------------------------------
 // TYPES
@@ -325,7 +331,10 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
                   <ClipboardPaste className="w-4 h-4 mr-2" />
                   {t('importPasteAndAnalyze')}
                 </Button>
-                <Button onClick={() => handleAnalyze()} disabled={!jsonInput.trim()}>
+                <Button
+                  onClick={() => handleAnalyze()}
+                  disabled={!jsonInput.trim()}
+                >
                   {t('importAnalyze')}
                 </Button>
               </div>

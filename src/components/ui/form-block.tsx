@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 import {Switch} from '@/components/ui/switch';
 import {Label} from '@/components/ui/label';
-import {cn} from '@/lib/utils';
+import {cn} from '@/backend/utils/utils';
 
 // ============================================================================
 // FormCard - De wrapper om hele secties (zoals "Digitaal")

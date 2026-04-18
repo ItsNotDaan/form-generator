@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {Switch} from '@/components/ui/switch';
-import {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE} from '@/domain/form/constants/formConstants';
+import {MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE} from '@/backend/constants/formConstants';
 
 // ---------------------------------------------------------------------------
 // PROPS

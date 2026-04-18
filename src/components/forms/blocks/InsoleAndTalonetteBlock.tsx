@@ -16,7 +16,7 @@ import {
   MIDFOOT_CORRECTION_OPTIONS,
   FOREFOOT_CORRECTION_OPTIONS,
   PELOTTE_OPTIONS,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 
 interface InsoleAndTalonetteBlockProps {
   form: UseFormReturn<any>;

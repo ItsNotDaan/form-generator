@@ -6,7 +6,7 @@ import {Textarea} from '@/components/ui/textarea';
 import {Label} from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
+import {Routes} from '@/backend/utils/routes';
 import {
   LOCATION_OPTIONS,
   SALUTATION_OPTIONS,
@@ -14,13 +14,13 @@ import {
   INSURANCE_COMPANIES,
   Location,
   Salutation,
-} from '@/domain/form/constants/formConstants';
-import {useAppDispatch} from '@/domain/store/hooks';
-import {setClientData} from '@/domain/store/slices/formData';
+} from '@/backend/constants/formConstants';
+import {useAppDispatch} from '@/backend/store/hooks';
+import {setClientData} from '@/backend/store/slices/formData';
 import {ChevronRight} from 'lucide-react';
 import {DatePicker} from '@/components/ui/date-picker';
 import {useForm, useWatch} from 'react-hook-form';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {
@@ -37,7 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {useDutchAddressLookup} from '@/components/ui/dutch-address-input';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';

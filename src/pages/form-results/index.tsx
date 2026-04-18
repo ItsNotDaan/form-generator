@@ -5,22 +5,22 @@ import {Separator} from '@/components/ui/separator';
 import {CheckCircle2, AlertTriangle, Copy, Check} from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppSelector} from '@/domain/store/hooks';
-import {PRACTITIONERS} from '@/domain/form/constants/formConstants';
-import {generateCodes} from '@/domain/form/generators/codeGenerator';
-import {clearAllFormStorage} from '@/utils/localStorageHelper';
+import {Routes} from '@/backend/utils/routes';
+import {useAppSelector} from '@/backend/store/hooks';
+import {PRACTITIONERS} from '@/backend/constants/formConstants';
+import {generateCodes} from '@/backend/generators/codeGenerator';
+import {clearAllFormStorage} from '@/backend/utils/localStorageHelper';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 import {
   normalizeClientData,
   normalizeValue,
-} from '@/domain/form/normalizers/formDataNormalizer';
-import type {FormRawData} from '@/domain/form/types/importExport';
+} from '@/backend/normalizers/formDataNormalizer';
+import type {FormRawData} from '@/backend/types/importExport';
 import {
   FORM_REGISTRY,
   INTAKE_FORM_BY_TYPE,
   INTAKE_TYPES_WITH_CODES,
-} from '@/domain/form/registry';
+} from '@/backend/registry';
 
 const FormResultsPage = () => {
   const router = useRouter();

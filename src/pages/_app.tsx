@@ -6,14 +6,14 @@ import {Asap} from 'next/font/google';
 import {Provider} from 'react-redux';
 import React from 'react';
 // import {css, Global} from '@emotion/react';
-import {wrapper} from '@/domain/store/store';
+import {wrapper} from '@/backend/store/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import appWithI18n from 'next-translate/appWithI18n';
 import i18nConfig from '../../i18n';
 import {ThemeProvider} from '@/components/theme-provider';
 import {useEffect} from 'react';
-import {cleanupExpiredStorage} from '@/utils/localStorageHelper';
+import {cleanupExpiredStorage} from '@/backend/utils/localStorageHelper';
 
 // Use Next Font for automatic font optimization
 // https://nextjs.org/docs/basic-features/font-optimization

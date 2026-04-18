@@ -10,8 +10,8 @@ import {
   IntakeInsolesData,
   CheckFoliepasData,
   ShoeDesignData,
-} from '@/domain/form/types/formData';
-import {emptyFormData} from '@/domain/form/types/formDataTemplates.generated';
+} from '@/backend/types/formData';
+import {emptyFormData} from '@/backend/types/formDataTemplates.generated';
 
 export interface FormDataState {
   client: ClientData;

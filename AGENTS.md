@@ -18,16 +18,18 @@ The Form Generator is a Next.js application for building and managing intake and
 
 ## Architecture Overview
 
-### Domain-Driven Design
+### Backend-Driven Design
 
-The project follows a domain-driven architecture with all form-related functionality consolidated under `src/domain/form/`:
+The project follows a backend-oriented architecture with all logic consolidated under `src/backend/`:
 
 ```
-src/domain/form/
+src/backend/
 ├── index.ts                              # Barrel export
+├── registry.ts                           # Central form registry (single source of truth)
 ├── types/
 │   ├── index.ts
 │   ├── formData.ts                      # All form type definitions (single source of truth)
+│   ├── importExport.ts                  # Import/export type definitions
 │   └── formDataTemplates.generated.ts   # Auto-generated empty templates
 ├── constants/
 │   ├── index.ts
@@ -35,34 +37,54 @@ src/domain/form/
 ├── normalizers/
 │   ├── index.ts
 │   └── formDataNormalizer.ts           # Data transformation utilities
-└── generators/
-    ├── index.ts
-    └── codeGenerator.ts                # Medical code generation logic
+├── generators/
+│   ├── index.ts
+│   └── codeGenerator.ts                # Medical code generation logic
+├── store/                               # Redux state management
+│   ├── hooks.ts
+│   ├── store.ts
+│   └── slices/
+│       ├── formData.ts
+│       └── overview.ts
+├── hooks/                               # Custom React hooks
+│   └── useFormPersistence.ts
+└── utils/                               # Helpers, routes, and utilities
+    ├── assetPath.ts
+    ├── formHelpers.ts
+    ├── localStorageHelper.ts
+    ├── routes.ts
+    ├── string.ts
+    └── utils.ts
 ```
 
 **Import Pattern:**
 
 ```typescript
 // Prefer barrel exports for clean imports
-import {ClientData, IntakeVLOSData} from '@/domain/form';
-import {normalizeFormData} from '@/domain/form/normalizers';
-import {FORM_OPTIONS} from '@/domain/form/constants';
+import {ClientData, IntakeVLOSData} from '@/backend';
+import {normalizeFormData} from '@/backend/normalizers';
+import {FORM_OPTIONS} from '@/backend/constants';
+import {Routes} from '@/backend/utils/routes';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
 ```
 
 ### Project Structure
 
 ```
 src/
-├── components/          # UI components and layout wrappers
+├── components/          # UI components and layout wrappers (no logic)
 │   ├── layout/         # Layout components (FormSection, BaseLayout, PageHeader)
 │   ├── ui/             # Form UI components (Input, Select, Checkbox, etc.)
 │   └── icons/          # SVG icon components
-├── pages/              # Next.js routes (one form per page)
-├── domain/             # Business logic and data models
-├── store/              # Redux state management
-├── hooks/              # Custom React hooks
-├── utils/              # Utility functions
-└── lib/                # Library utilities and constants
+├── backend/            # All logic, organized by function
+│   ├── constants/      # Static values, enums, config
+│   ├── generators/     # Code/data generation logic
+│   ├── normalizers/    # Data transformation and normalization
+│   ├── types/          # All TypeScript types and interfaces
+│   ├── store/          # State management (Redux)
+│   ├── hooks/          # All custom React hooks
+│   └── utils/          # All helpers, routes, and utilities
+└── pages/              # Route-level views only, no logic
 ```
 
 ## Component Architecture
@@ -371,7 +393,7 @@ const onSubmit = (data: FormData) => {
 Redux stores form data with auto-persistence to localStorage:
 
 ```typescript
-// src/domain/store/slices/formData.ts
+// src/backend/store/slices/formData.ts
 const initialState: FormState = {
   clientData: getFormDataTemplate('ClientData'),
   intakeVLOS: getFormDataTemplate('IntakeVLOSData'),
@@ -382,8 +404,8 @@ const initialState: FormState = {
 **Using Redux Form Data:**
 
 ```typescript
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setFormData, clearFormData} from '@/domain/store/slices/formData';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
+import {setFormData, clearFormData} from '@/backend/store/slices/formData';
 
 export const MyForm = () => {
   const dispatch = useAppDispatch();
@@ -404,7 +426,7 @@ export const MyForm = () => {
 Enable automatic persistence with `useFormPersistence` hook:
 
 ```typescript
-import { useFormPersistence } from '@/hooks/useFormPersistence';
+import { useFormPersistence } from '@/backend/hooks/useFormPersistence';
 
 export const MyForm = () => {
   const form = useForm<FormData>({ /* config */ });
@@ -425,10 +447,10 @@ export const MyForm = () => {
 
 ### Single Source of Truth
 
-All form types are defined in **one location**: [src/domain/form/types/formData.ts](src/domain/form/types/formData.ts)
+All form types are defined in **one location**: [src/backend/types/formData.ts](src/backend/types/formData.ts)
 
 ```typescript
-// src/domain/form/types/formData.ts
+// src/backend/types/formData.ts
 export interface ClientData {
   firstName: string;
   lastName: string;
@@ -463,7 +485,7 @@ npm run build:acc     # Runs prebuild:acc script
 npm run build:develop # Runs prebuild:develop script
 ```
 
-This generates [src/domain/form/types/formDataTemplates.generated.ts](src/domain/form/types/formDataTemplates.generated.ts):
+This generates [src/backend/types/formDataTemplates.generated.ts](src/backend/types/formDataTemplates.generated.ts):
 
 ```typescript
 export const formDataTemplates = {
@@ -496,7 +518,7 @@ export const formDataTemplates = {
 
 **Process:**
 
-1. Edit [src/domain/form/types/formData.ts](src/domain/form/types/formData.ts)
+1. Edit [src/backend/types/formData.ts](src/backend/types/formData.ts)
 2. Add new field to interface:
    ```typescript
    export interface IntakeVLOSData extends ClientData {
@@ -514,7 +536,7 @@ export const formDataTemplates = {
 Use `formDataNormalizer` to clean and prepare form data for export/JSON output:
 
 ```typescript
-import {normalizeFormData} from '@/domain/form/normalizers';
+import {normalizeFormData} from '@/backend/normalizers';
 
 const rawFormData = {
   firstName: 'John',
@@ -580,7 +602,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
 **Type Definition Files:**
 
 ```typescript
-// src/domain/form/types/myTypes.ts
+// src/backend/types/myTypes.ts
 export interface MyType {
   id: string;
   name: string;
@@ -597,7 +619,7 @@ export const myTypeGuard = (value: unknown): value is MyType => {
 **Utility Files:**
 
 ```typescript
-// src/utils/my-util.ts
+// src/backend/utils/my-util.ts
 /**
  * Utility function description
  * @param input - Input parameter description
@@ -906,7 +928,7 @@ npm run start:develop
 - Use `getAssetPath()` for URLs with base path:
 
   ```typescript
-  import { getAssetPath } from '@/utils/assetPath';
+  import { getAssetPath } from '@/backend/utils/assetPath';
 
   <img src={getAssetPath('/images/logo.png')} alt="Logo" />
   ```
@@ -1165,7 +1187,7 @@ You can add custom registries for:
 
 When implementing a new form:
 
-- [ ] Define all types in `src/domain/form/types/formData.ts`
+- [ ] Define all types in `src/backend/types/formData.ts`
 - [ ] Run `npm run generate:empty-data` to create templates
 - [ ] Create page in `src/pages/{form-name}/index.tsx`
 - [ ] Use `FormCard` > `FormBlock` > `FormItemWrapper` hierarchy
@@ -1187,5 +1209,5 @@ For architecture questions or pattern clarification, refer to:
 
 1. Existing form pages in `src/pages/intake-*/`
 2. Component examples in [website-design-language.md](docs/website-design-language.md)
-3. Type definitions in `src/domain/form/types/`
-4. State management in `src/domain/store/`
+3. Type definitions in `src/backend/types/`
+4. State management in `src/backend/store/`

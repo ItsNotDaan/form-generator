@@ -14,8 +14,8 @@
  * derive their form lists automatically from this registry.
  */
 
-import type {FormStoreKey} from '@/domain/form/types/importExport';
-import {Routes} from '@/lib/routes';
+import type {FormStoreKey} from '@/backend/types/importExport';
+import {Routes} from '@/backend/utils/routes';
 import {
   normalizeIntakeVLOSData,
   normalizeIntakeOSAData,
@@ -26,7 +26,7 @@ import {
   normalizeIntakeSteunzolenData,
   normalizeCheckFoliepasData,
   normalizeShoeDesignData,
-} from '@/domain/form/normalizers/formDataNormalizer';
+} from '@/backend/normalizers/formDataNormalizer';
 
 // ---------------------------------------------------------------------------
 // TYPES

@@ -3,7 +3,7 @@ import {UseFormReturn} from 'react-hook-form';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {Label} from '@/components/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {SHAFT_OPENING_OPTIONS} from '@/domain/form/constants/formConstants';
+import {SHAFT_OPENING_OPTIONS} from '@/backend/constants/formConstants';
 
 // ---------------------------------------------------------------------------
 // PROPS

@@ -12,17 +12,17 @@ import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {Label} from '@/components/ui/label';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+import {Routes} from '@/backend/utils/routes';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
 import {
   setIntakePulmanData,
   setClientData,
-} from '@/domain/store/slices/formData';
+} from '@/backend/store/slices/formData';
 import {
   Side,
   PULMAN_TYPE_OPTIONS,
   SHOE_SIZES,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -42,8 +42,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {scrollToFirstError} from '@/utils/formHelpers';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {Switch} from '@/components/ui/switch';
 import {

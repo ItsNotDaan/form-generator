@@ -2,12 +2,12 @@ import React, {memo} from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
 import {ArrowLeft} from 'lucide-react';
-import {Routes} from '@/lib/routes';
-import {getAssetPath} from '@/utils/assetPath';
+import {Routes} from '@/backend/utils/routes';
+import {getAssetPath} from '@/backend/utils/assetPath';
 import {Link} from './Link';
 import {ThemeToggle} from '@/components/ui/theme-toggle';
 import {Button} from '../ui/button';
-import {loadStepRoute, saveStepRoute} from '@/utils/localStorageHelper';
+import {loadStepRoute, saveStepRoute} from '@/backend/utils/localStorageHelper';
 
 export interface PageHeaderProps {
   title?: string;

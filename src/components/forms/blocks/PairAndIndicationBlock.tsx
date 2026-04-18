@@ -4,7 +4,7 @@ import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {Label} from '@/components/ui/label';
 import {Textarea} from '@/components/ui/textarea';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {PAIR_TYPE_OPTIONS} from '@/domain/form/constants/formConstants';
+import {PAIR_TYPE_OPTIONS} from '@/backend/constants/formConstants';
 
 interface PairAndIndicationBlockProps {
   form: UseFormReturn<any>;

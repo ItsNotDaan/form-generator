@@ -1,7 +1,7 @@
 import React from 'react';
 import {Label} from './label';
 import {RadioGroup, RadioGroupItem} from './radio-group';
-import {cn} from '@/lib/utils';
+import {cn} from '@/backend/utils/utils';
 
 interface RadioOption {
   value: string;

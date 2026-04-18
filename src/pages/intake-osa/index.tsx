@@ -16,23 +16,23 @@ import {
 } from '@/components/ui/select';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
+import {Routes} from '@/backend/utils/routes';
 import {
   PAIR_TYPE_OPTIONS,
   LAST_HEIGHT_OPTIONS,
   MTP1_DEEP_OPTIONS,
   Side,
-} from '@/domain/form/constants/formConstants';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setIntakeOSAData, setClientData} from '@/domain/store/slices/formData';
+} from '@/backend/constants/formConstants';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
+import {setIntakeOSAData, setClientData} from '@/backend/store/slices/formData';
 
 import {ChevronRight} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {Form} from '@/components/ui/form';
-import {scrollToFirstError} from '@/utils/formHelpers';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {
   FunctieonderzoekBlock,

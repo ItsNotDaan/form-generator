@@ -4,7 +4,7 @@ import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {Label} from '@/components/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {Switch} from '@/components/ui/switch';
-import {SIDE_OPTIONS} from '@/domain/form/constants/formConstants';
+import {SIDE_OPTIONS} from '@/backend/constants/formConstants';
 
 interface SideSelectionBlockProps {
   form: UseFormReturn<any>;
