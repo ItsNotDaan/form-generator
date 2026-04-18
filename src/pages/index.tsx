@@ -4,16 +4,16 @@ import {Button} from '@/components/ui/button';
 import {NavigationCard} from '@/components/ui/navigation-card';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
+import {Routes} from '@/backend/utils/routes';
 import {
   clearStepRoute,
   removeFromLocalStorage,
   clearAllFormStorage,
-} from '@/utils/localStorageHelper';
+} from '@/backend/utils/localStorageHelper';
 import {UserPlus, Users, FileText, Upload} from 'lucide-react';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 import {ImportDialog} from '@/components/forms/ImportDialog';
-import {FORM_REGISTRY} from '@/domain/form/registry';
+import {FORM_REGISTRY} from '@/backend/registry';
 
 const OverviewPage = () => {
   const router = useRouter();

@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import {CheckIcon, ChevronDownIcon, ChevronUpIcon} from 'lucide-react';
 
-import {cn} from '@/lib/utils';
+import {cn} from '@/backend/utils/utils';
 
 // Context to pass data-field-name to SelectTrigger
 const SelectContext = React.createContext<string | undefined>(undefined);

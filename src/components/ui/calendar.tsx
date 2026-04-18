@@ -9,7 +9,7 @@ import {
 } from 'react-day-picker';
 import nl from 'date-fns/locale/nl';
 
-import {cn} from '@/lib/utils';
+import {cn} from '@/backend/utils/utils';
 import {Button, buttonVariants} from '@/components/ui/button';
 
 function Calendar({

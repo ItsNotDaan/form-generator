@@ -7,28 +7,28 @@ import {Checkbox} from '@/components/ui/checkbox';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
+import {Routes} from '@/backend/utils/routes';
 import {
   SHAFT_OPENING_OPTIONS,
   MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE,
   Side,
   SIDE_OPTIONS,
   LAST_CORRECTION_OPTIONS,
-} from '@/domain/form/constants/formConstants';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
+} from '@/backend/constants/formConstants';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
 import {
   setCheckFoliepasData,
   setClientData,
-} from '@/domain/store/slices/formData';
+} from '@/backend/store/slices/formData';
 
 import {ChevronRight, Info} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {Form} from '@/components/ui/form';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
 import {Textarea} from '@/components/ui/textarea';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 import {
   EnclosureBlock,

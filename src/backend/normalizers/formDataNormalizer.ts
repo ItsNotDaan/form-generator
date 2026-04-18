@@ -8,7 +8,7 @@ import {
   YES_VARIANTS,
   NO_VARIANTS,
   FIELD_SUFFIX_RULES,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 import type {
   IntakeVLOSData,
   IntakeOSAData,
@@ -20,7 +20,7 @@ import type {
   ClientData,
   CheckFoliepasData,
   ShoeDesignData,
-} from '@/domain/form/types/formData';
+} from '@/backend/types/formData';
 
 /**
  * Helper to normalize boolean/string values for export

@@ -2,7 +2,7 @@ import React from 'react';
 import {useRouter} from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import {useForm} from 'react-hook-form';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {BaseLayout, FormFooter, FormSection} from '@/components/layout';
@@ -18,11 +18,14 @@ import {Label} from '@/components/ui/label';
 import {Checkbox} from '@/components/ui/checkbox';
 import {ChevronRight} from 'lucide-react';
 import {Form} from '@/components/ui/form';
-import {Routes} from '@/lib/routes';
-import {PAIR_TYPE_OPTIONS} from '@/domain/form/constants/formConstants';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setClientData, setIntakeOVACData} from '@/domain/store/slices/formData';
-import {scrollToFirstError} from '@/utils/formHelpers';
+import {Routes} from '@/backend/utils/routes';
+import {PAIR_TYPE_OPTIONS} from '@/backend/constants/formConstants';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
+import {
+  setClientData,
+  setIntakeOVACData,
+} from '@/backend/store/slices/formData';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
 import {FormCard, FormBlock, FormItemWrapper} from '@/components/ui/form-block';
 
 // ---------------------------------------------------------------------------

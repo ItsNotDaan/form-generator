@@ -3,7 +3,7 @@ import type {
   Location,
   Salutation,
   Side,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 
 export interface ClientData {
   // Practitioner and date

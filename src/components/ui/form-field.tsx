@@ -1,7 +1,7 @@
 import React from 'react';
 import {Label} from './label';
 import {Input} from './input';
-import {cn} from '@/lib/utils';
+import {cn} from '@/backend/utils/utils';
 
 interface FormFieldProps {
   id: string;

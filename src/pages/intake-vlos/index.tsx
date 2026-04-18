@@ -1,5 +1,5 @@
 import React from 'react';
-import {getAssetPath} from '@/utils/assetPath';
+import {getAssetPath} from '@/backend/utils/assetPath';
 import {BaseLayout, FormSection, FormFooter} from '@/components/layout';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Routes} from '@/lib/routes';
+import {Routes} from '@/backend/utils/routes';
 import {
   SHAFT_OPENING_OPTIONS,
   MEDIAL_LATERAL_OPTIONS_WITHOUT_NONE,
@@ -33,7 +33,7 @@ import {
   KNEES_OPTIONS,
   MIDFOOT_OPTIONS,
   TOE_AREA_OPTIONS,
-} from '@/domain/form/constants/formConstants';
+} from '@/backend/constants/formConstants';
 import {
   EnclosureBlock,
   FunctieonderzoekBlock,
@@ -45,8 +45,11 @@ import {
   SupplementSupportBlock,
   SoleStiffeningBlock,
 } from '@/components/forms/blocks';
-import {useAppDispatch, useAppSelector} from '@/domain/store/hooks';
-import {setIntakeVLOSData, setClientData} from '@/domain/store/slices/formData';
+import {useAppDispatch, useAppSelector} from '@/backend/store/hooks';
+import {
+  setIntakeVLOSData,
+  setClientData,
+} from '@/backend/store/slices/formData';
 
 import {ChevronRight} from 'lucide-react';
 import {useForm, Controller} from 'react-hook-form';
@@ -60,8 +63,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {scrollToFirstError} from '@/utils/formHelpers';
-import {useFormPersistence} from '@/hooks/useFormPersistence';
+import {scrollToFirstError} from '@/backend/utils/formHelpers';
+import {useFormPersistence} from '@/backend/hooks/useFormPersistence';
 import {Switch} from '@/components/ui/switch';
 
 // ---------------------------------------------------------------------------

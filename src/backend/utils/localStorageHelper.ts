@@ -3,7 +3,7 @@
  * Automatically cleans up expired data
  */
 
-import {FORM_STORAGE_KEYS} from '@/domain/form/registry';
+import {FORM_STORAGE_KEYS} from '@/backend/registry';
 
 const TTL_DAYS = 7;
 const STORAGE_KEY_PREFIX = 'form_autosave_';

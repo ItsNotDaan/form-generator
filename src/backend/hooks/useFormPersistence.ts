@@ -4,7 +4,7 @@ import {
   saveToLocalStorage,
   loadFromLocalStorage,
   removeFromLocalStorage,
-} from '@/utils/localStorageHelper';
+} from '@/backend/utils/localStorageHelper';
 
 const DEBOUNCE_MS = 500;
 

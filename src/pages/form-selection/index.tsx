@@ -5,15 +5,15 @@ import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 import {Info, FileText, CheckCircle2} from 'lucide-react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {useAppSelector, useAppDispatch} from '@/domain/store/hooks';
-import {clearIntakeForms} from '@/domain/store/slices/formData';
+import {useAppSelector, useAppDispatch} from '@/backend/store/hooks';
+import {clearIntakeForms} from '@/backend/store/slices/formData';
 import {
   clearStepRoute,
   removeFromLocalStorage,
   saveStepRoute,
   loadStepRoute,
-} from '@/utils/localStorageHelper';
-import {FORM_REGISTRY, FORM_BY_ROUTE} from '@/domain/form/registry';
+} from '@/backend/utils/localStorageHelper';
+import {FORM_REGISTRY, FORM_BY_ROUTE} from '@/backend/registry';
 
 const FormSelectionPage = () => {
   const router = useRouter();
