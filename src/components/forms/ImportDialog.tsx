@@ -79,9 +79,9 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
   };
 
   const getAvailableForms = (data: FormRawData): ImportableFormKey[] => {
-    return FORM_REGISTRY.filter(
-      f => (data as Record<string, unknown>)[f.storeKey] !== undefined,
-    ).map(f => f.storeKey as ImportableFormKey);
+    return FORM_REGISTRY.filter(f => data[f.storeKey] !== undefined).map(
+      f => f.storeKey as ImportableFormKey,
+    );
   };
 
   // ---------------------------------------------------------------------------
