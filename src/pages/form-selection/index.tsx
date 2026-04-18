@@ -25,11 +25,6 @@ const FormSelectionPage = () => {
   // FORM SETUP
   // ---------------------------------------------------------------------------
 
-  // Clear all intake forms when entering form selection
-  React.useEffect(() => {
-    dispatch(clearIntakeForms());
-  }, [dispatch]);
-
   // Derived from registry: route → localStorage key
   const storageKeyByRoute: Record<string, string> = React.useMemo(
     () => Object.fromEntries(FORM_REGISTRY.map(f => [f.route, f.storageKey])),
@@ -41,6 +36,10 @@ const FormSelectionPage = () => {
   // ---------------------------------------------------------------------------
 
   const handleFormSelection = (route: string) => {
+    // Clear all previously-imported / previously-filled intake data so the new
+    // form starts blank (only fires when the user explicitly picks a NEW form).
+    dispatch(clearIntakeForms());
+
     const storageKey = storageKeyByRoute[route];
     if (storageKey) {
       removeFromLocalStorage(storageKey);

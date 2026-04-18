@@ -15,6 +15,8 @@ import {FORM_REGISTRY, INTAKE_FORM_BY_TYPE} from '@/domain/form/registry';
 import {
   saveToLocalStorage,
   clearAllFormStorage,
+  saveStepRoute,
+  clearStepRoute,
 } from '@/utils/localStorageHelper';
 
 // ---------------------------------------------------------------------------
@@ -118,9 +120,15 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
       return;
     }
 
-    // Issue 5: Reset all form data and autosave before loading import data
+    // Issue 5: Reset all form data and autosave before loading import data.
+    // Also clear all step routes so stale routes from a previous session
+    // (e.g. an earlier OSA form) cannot show up in the step indicator or popup.
     dispatch(clearFormData());
     clearAllFormStorage();
+    clearStepRoute(1);
+    clearStepRoute(2);
+    clearStepRoute(3);
+    clearStepRoute(4);
 
     const validRawData = raw as FormRawData;
     setRawData(validRawData);
@@ -182,9 +190,24 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
     }
 
     dispatch(importFormData(toImport));
+
+    // Save step routes so the step indicator is lit up and the "continue" popup
+    // appears in form-selection with the correct form name.
+    // Step 2 = form-selection (the page we're about to navigate to)
+    saveStepRoute(2, Routes.form_selection);
+
+    // Step 3 = the imported intake form route (if one was selected)
+    if (clientData.intakeType) {
+      const intakeEntry = INTAKE_FORM_BY_TYPE[clientData.intakeType];
+      if (intakeEntry) {
+        saveStepRoute(3, intakeEntry.route);
+        clearStepRoute(4);
+      }
+    }
+
     setStep('success');
 
-    // Issues 2 & 3: always redirect to form-selection so the user can pick/continue a form
+    // Always redirect to form-selection so the user can pick/continue a form
     setTimeout(() => {
       handleClose();
       void router.push(Routes.form_selection);
