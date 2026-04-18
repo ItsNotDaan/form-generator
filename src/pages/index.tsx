@@ -10,12 +10,14 @@ import {
   removeFromLocalStorage,
   clearAllFormStorage,
 } from '@/utils/localStorageHelper';
-import {UserPlus, Users, FileText, ClipboardList} from 'lucide-react';
+import {UserPlus, Users, FileText, Upload} from 'lucide-react';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
+import {ImportDialog} from '@/components/forms/ImportDialog';
 
 const OverviewPage = () => {
   const router = useRouter();
   const {t} = useTranslation('form');
+  const [importDialogOpen, setImportDialogOpen] = React.useState(false);
 
   // ---------------------------------------------------------------------------
   // FORM SETUP
@@ -94,6 +96,18 @@ const OverviewPage = () => {
               buttonIcon={Users}
               onClick={() => handleNavigate(Routes.form_old_client, true)}
             />
+          </div>
+
+          {/* Import button */}
+          <div className="flex justify-end mt-4">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={() => setImportDialogOpen(true)}
+            >
+              <Upload className="w-4 h-4" />
+              {t('importButton')}
+            </Button>
           </div>
         </FormCard>
 
@@ -262,6 +276,12 @@ const OverviewPage = () => {
           </FormBlock>
         </FormCard>
       </div>
+
+      {/* Import dialog */}
+      <ImportDialog
+        isOpen={importDialogOpen}
+        onClose={() => setImportDialogOpen(false)}
+      />
     </BaseLayout>
   );
 };

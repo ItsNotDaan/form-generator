@@ -57,6 +57,19 @@ const FormResultsPage = () => {
     shoeDesign?: Record<string, string>;
     medicalCodes?: Record<string, string>;
     codeWarnings?: string[];
+    /** Raw form data for re-importing into the form generator */
+    _rawData: {
+      client: typeof formData.client;
+      intakeVLOS?: typeof formData.intakeVLOS;
+      intakeOSA?: typeof formData.intakeOSA;
+      intakePulman?: typeof formData.intakePulman;
+      intakeRebacare?: typeof formData.intakeRebacare;
+      intakeOSB?: typeof formData.intakeOSB;
+      intakeOVAC?: typeof formData.intakeOVAC;
+      intakeInsoles?: typeof formData.intakeInsoles;
+      checkFoliepas?: typeof formData.checkFoliepas;
+      shoeDesign?: typeof formData.shoeDesign;
+    };
     generatedAt: string;
   }
 
@@ -183,11 +196,17 @@ const FormResultsPage = () => {
       formData.client?.practitionerId ||
       '';
 
+    // Build the raw data section for re-import support
+    const rawData: FormResultJSON['_rawData'] = {
+      client: formData.client,
+    };
+
     const result: FormResultJSON = {
       clientData: applyTranslations({
         ...normalizedClientData,
         practitionerName,
       }),
+      _rawData: rawData,
       generatedAt: new Date().toISOString(),
     };
 
@@ -200,6 +219,8 @@ const FormResultsPage = () => {
       (result as any)[config.key] = applyTranslations(
         config.normalizer(config.data),
       );
+      // Also add raw intake data for re-import
+      (rawData as any)[config.key] = config.data;
     }
 
     // Only add CheckFoliepas data when it has been actively submitted
@@ -207,6 +228,7 @@ const FormResultsPage = () => {
       result.checkFoliepas = applyTranslations(
         normalizeCheckFoliepasData(formData.checkFoliepas),
       );
+      rawData.checkFoliepas = formData.checkFoliepas;
     }
 
     // Only add ShoeDesign data when it has been actively submitted
@@ -214,6 +236,7 @@ const FormResultsPage = () => {
       result.shoeDesign = applyTranslations(
         normalizeShoeDesignData(formData.shoeDesign),
       );
+      rawData.shoeDesign = formData.shoeDesign;
     }
 
     // Generate medical codes if applicable
