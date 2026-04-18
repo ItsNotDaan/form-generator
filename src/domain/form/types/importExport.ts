@@ -29,6 +29,12 @@ export interface FormRawData {
 }
 
 /**
+ * All Redux store keys for optional form data (everything except 'client').
+ * Automatically derived from FormRawData so it stays in sync when forms are added/removed.
+ */
+export type FormStoreKey = Exclude<keyof FormRawData, 'client'>;
+
+/**
  * The complete JSON export structure.
  * Contains both normalized/translated data (for external apps) and raw data (for re-import).
  */

@@ -13,18 +13,14 @@ import {clearAllFormStorage} from '@/utils/localStorageHelper';
 import {FormBlock, FormCard, FormItemWrapper} from '@/components/ui/form-block';
 import {
   normalizeClientData,
-  normalizeIntakeVLOSData,
-  normalizeIntakeOSAData,
-  normalizeIntakePulmanData,
-  normalizeIntakeRebacareData,
-  normalizeIntakeOSBData,
-  normalizeIntakeOVACData,
-  normalizeIntakeSteunzolenData,
-  normalizeCheckFoliepasData,
-  normalizeShoeDesignData,
   normalizeValue,
 } from '@/domain/form/normalizers/formDataNormalizer';
 import type {FormRawData} from '@/domain/form/types/importExport';
+import {
+  FORM_REGISTRY,
+  INTAKE_FORM_BY_TYPE,
+  INTAKE_TYPES_WITH_CODES,
+} from '@/domain/form/registry';
 
 const FormResultsPage = () => {
   const router = useRouter();
@@ -100,47 +96,6 @@ const FormResultsPage = () => {
   // FORM CONFIGURATION
   // ---------------------------------------------------------------------------
 
-  // Configuration mapping for intake form types
-  const INTAKE_FORM_CONFIG = {
-    VLOS: {
-      key: 'intakeVLOS' as const,
-      normalizer: normalizeIntakeVLOSData,
-      data: formData.intakeVLOS,
-    },
-    OSA: {
-      key: 'intakeOSA' as const,
-      normalizer: normalizeIntakeOSAData,
-      data: formData.intakeOSA,
-    },
-    Pulman: {
-      key: 'intakePulman' as const,
-      normalizer: normalizeIntakePulmanData,
-      data: formData.intakePulman,
-    },
-    Rebacare: {
-      key: 'intakeRebacare' as const,
-      normalizer: normalizeIntakeRebacareData,
-      data: formData.intakeRebacare,
-    },
-    OSB: {
-      key: 'intakeOSB' as const,
-      normalizer: normalizeIntakeOSBData,
-      data: formData.intakeOSB,
-    },
-    OVAC: {
-      key: 'intakeOVAC' as const,
-      normalizer: normalizeIntakeOVACData,
-      data: formData.intakeOVAC,
-    },
-    Steunzolen: {
-      key: 'intakeInsoles' as const,
-      normalizer: normalizeIntakeSteunzolenData,
-      data: formData.intakeInsoles,
-    },
-  };
-
-  const INTAKE_TYPES_WITH_CODES = new Set(['VLOS', 'OSA', 'OSB', 'OVAC']);
-
   const flattenCodes = (codes: Record<string, any>): Record<string, string> => {
     const flattened: Record<string, string> = {};
     for (const [key, value] of Object.entries(codes)) {
@@ -159,15 +114,13 @@ const FormResultsPage = () => {
     result: FormResultJSON,
     generalBaseCode: string,
   ) => {
-    const CODES_BY_TYPE: Record<string, keyof FormResultJSON> = {
-      intakeVLOS: 'intakeVLOS',
-      intakeOSA: 'intakeOSA',
-      intakeOSB: 'intakeOSB',
-    };
-
-    for (const [dataKey, resultKey] of Object.entries(CODES_BY_TYPE)) {
-      if ((formData as any)[dataKey] && result[resultKey]) {
-        (result[resultKey] as any).generalBaseCode = generalBaseCode;
+    // Derived from registry: only forms with hasGeneralBaseCode flag receive the base code
+    const formsWithBaseCode = FORM_REGISTRY.filter(f => f.hasGeneralBaseCode);
+    for (const entry of formsWithBaseCode) {
+      const storeValue = (formData as any)[entry.storeKey];
+      const resultValue = (result as any)[entry.storeKey];
+      if (storeValue && resultValue) {
+        resultValue.generalBaseCode = generalBaseCode;
       }
     }
   };
@@ -200,32 +153,29 @@ const FormResultsPage = () => {
       generatedAt: new Date().toISOString(),
     };
 
-    // Add the matching intake form data
-    const config =
-      INTAKE_FORM_CONFIG[
-        formData.client.intakeType as keyof typeof INTAKE_FORM_CONFIG
-      ];
-    if (config?.data) {
-      (result as unknown as Record<string, unknown>)[config.key] =
-        applyTranslations(config.normalizer(config.data));
-      // Also add raw intake data for re-import
-      (rawData as unknown as Record<string, unknown>)[config.key] = config.data;
+    // Add the matching intake form data (derived from the central registry)
+    const intakeEntry = INTAKE_FORM_BY_TYPE[formData.client.intakeType ?? ''];
+    if (intakeEntry) {
+      const intakeData = (formData as any)[intakeEntry.storeKey];
+      if (intakeData) {
+        (result as unknown as Record<string, unknown>)[intakeEntry.storeKey] =
+          applyTranslations(intakeEntry.normalizer(intakeData));
+        // Also add raw intake data for re-import
+        (rawData as unknown as Record<string, unknown>)[intakeEntry.storeKey] =
+          intakeData;
+      }
     }
 
-    // Only add CheckFoliepas data when it has been actively submitted
-    if (formData.checkFoliepas) {
-      result.checkFoliepas = applyTranslations(
-        normalizeCheckFoliepasData(formData.checkFoliepas),
-      );
-      rawData.checkFoliepas = formData.checkFoliepas;
-    }
-
-    // Only add ShoeDesign data when it has been actively submitted
-    if (formData.shoeDesign) {
-      result.shoeDesign = applyTranslations(
-        normalizeShoeDesignData(formData.shoeDesign),
-      );
-      rawData.shoeDesign = formData.shoeDesign;
+    // Add supplementary forms (checkFoliepas, shoeDesign, …) when actively submitted.
+    // Derived from registry: any form without an intakeTypeKey (i.e. not an intake form)
+    // that has a non-null value in the Redux store is included.
+    for (const entry of FORM_REGISTRY.filter(f => !f.intakeTypeKey)) {
+      const data = (formData as any)[entry.storeKey];
+      if (data) {
+        (result as unknown as Record<string, unknown>)[entry.storeKey] =
+          applyTranslations(entry.normalizer(data));
+        (rawData as unknown as Record<string, unknown>)[entry.storeKey] = data;
+      }
     }
 
     // Generate medical codes if applicable
@@ -441,24 +391,11 @@ const FormResultsPage = () => {
               >
                 {renderSection(t('clientData'), formData.client)}
 
-                {formData.intakeVLOS &&
-                  renderSection(t('intakeVlos'), formData.intakeVLOS)}
-                {formData.intakeOSA &&
-                  renderSection(t('intakeOsa'), formData.intakeOSA)}
-                {formData.intakePulman &&
-                  renderSection(t('intakePulman'), formData.intakePulman)}
-                {formData.intakeRebacare &&
-                  renderSection(t('intakeRebacare'), formData.intakeRebacare)}
-                {formData.intakeOSB &&
-                  renderSection(t('intakeOsb'), formData.intakeOSB)}
-                {formData.intakeOVAC &&
-                  renderSection(t('intakeOvac'), formData.intakeOVAC)}
-                {formData.intakeInsoles &&
-                  renderSection(t('intakeInsoles'), formData.intakeInsoles)}
-                {formData.checkFoliepas &&
-                  renderSection(t('checkFoliepas'), formData.checkFoliepas)}
-                {formData.shoeDesign &&
-                  renderSection(t('createShoeDesign'), formData.shoeDesign)}
+                {/* Derived from registry: render a section for every form that has data */}
+                {FORM_REGISTRY.map(entry => {
+                  const data = (formData as any)[entry.storeKey];
+                  return data ? renderSection(t(entry.labelKey), data) : null;
+                })}
               </FormCard>
 
               {/* De volledige JSON output */}

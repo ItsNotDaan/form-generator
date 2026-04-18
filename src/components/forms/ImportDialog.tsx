@@ -9,36 +9,15 @@ import {Label} from '@/components/ui/label';
 import {useAppDispatch} from '@/domain/store/hooks';
 import {importFormData} from '@/domain/store/slices/formData';
 import {Routes} from '@/lib/routes';
-import type {FormRawData} from '@/domain/form/types/importExport';
+import type {FormRawData, FormStoreKey} from '@/domain/form/types/importExport';
 import type {FormDataState} from '@/domain/store/slices/formData';
+import {FORM_REGISTRY} from '@/domain/form/registry';
 
 // ---------------------------------------------------------------------------
 // TYPES
 // ---------------------------------------------------------------------------
 
-type ImportableFormKey = Exclude<keyof FormRawData, 'client'>;
-
-interface FormOption {
-  key: ImportableFormKey;
-  labelKey: string;
-}
-
-// ---------------------------------------------------------------------------
-// CONSTANTS
-// ---------------------------------------------------------------------------
-
-/** All optional form types that can appear in the raw data */
-const IMPORTABLE_FORMS: FormOption[] = [
-  {key: 'intakeVLOS', labelKey: 'importFormIntakeVLOS'},
-  {key: 'intakeOSA', labelKey: 'importFormIntakeOSA'},
-  {key: 'intakePulman', labelKey: 'importFormIntakePulman'},
-  {key: 'intakeRebacare', labelKey: 'importFormIntakeRebacare'},
-  {key: 'intakeOSB', labelKey: 'importFormIntakeOSB'},
-  {key: 'intakeOVAC', labelKey: 'importFormIntakeOVAC'},
-  {key: 'intakeInsoles', labelKey: 'importFormIntakeInsoles'},
-  {key: 'checkFoliepas', labelKey: 'importFormCheckFoliepas'},
-  {key: 'shoeDesign', labelKey: 'importFormShoeDesign'},
-];
+type ImportableFormKey = FormStoreKey;
 
 // ---------------------------------------------------------------------------
 // COMPONENT
@@ -100,9 +79,9 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
   };
 
   const getAvailableForms = (data: FormRawData): ImportableFormKey[] => {
-    return IMPORTABLE_FORMS.filter(f => data[f.key] !== undefined).map(
-      f => f.key,
-    );
+    return FORM_REGISTRY.filter(
+      f => (data as Record<string, unknown>)[f.storeKey] !== undefined,
+    ).map(f => f.storeKey as ImportableFormKey);
   };
 
   // ---------------------------------------------------------------------------
@@ -289,25 +268,29 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
                   </div>
                 </div>
 
-                {/* Optional forms */}
+                {/* Optional forms – derived from registry */}
                 {availableForms.length === 0 && (
                   <p className="text-sm text-muted-foreground italic">
                     {t('importNoFormsAvailable')}
                   </p>
                 )}
-                {IMPORTABLE_FORMS.filter(f =>
-                  availableForms.includes(f.key),
-                ).map(form => (
+                {FORM_REGISTRY.filter(entry =>
+                  availableForms.includes(entry.storeKey as ImportableFormKey),
+                ).map(entry => (
                   <label
-                    key={form.key}
+                    key={entry.storeKey}
                     className="flex items-center gap-3 p-3 rounded-md border cursor-pointer hover:bg-accent/30 transition-colors"
                   >
                     <Checkbox
-                      checked={selectedForms.has(form.key)}
-                      onCheckedChange={() => toggleForm(form.key)}
+                      checked={selectedForms.has(
+                        entry.storeKey as ImportableFormKey,
+                      )}
+                      onCheckedChange={() =>
+                        toggleForm(entry.storeKey as ImportableFormKey)
+                      }
                     />
                     <span className="text-sm font-medium">
-                      {t(form.labelKey)}
+                      {t(entry.labelKey)}
                     </span>
                   </label>
                 ))}

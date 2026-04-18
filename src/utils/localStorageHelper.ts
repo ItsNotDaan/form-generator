@@ -3,6 +3,8 @@
  * Automatically cleans up expired data
  */
 
+import {FORM_STORAGE_KEYS} from '@/domain/form/registry';
+
 const TTL_DAYS = 7;
 const STORAGE_KEY_PREFIX = 'form_autosave_';
 const STEP_ROUTE_KEY_PREFIX = 'step_route_';
@@ -107,26 +109,16 @@ export function cleanupExpiredStorage(): void {
 }
 
 /**
- * Clear all form autosave entries from localStorage
- * Used when starting a new workflow or finishing completely
+ * Clear all form autosave entries from localStorage.
+ * Covers client-side forms plus all registered form types.
+ * Used when starting a new workflow or finishing completely.
  */
 export function clearAllFormStorage(): void {
   try {
-    const formKeys = [
-      'newClient',
-      'oldClient',
-      'checkFoliepas',
-      'intakeVLOS',
-      'intakeOSA',
-      'intakePulman',
-      'intakeRebacare',
-      'intakeOSB',
-      'intakeOVAC',
-      'intakeInsoles',
-      'shoeDesign',
-    ];
-
-    formKeys.forEach(key => removeFromLocalStorage(key));
+    // Client forms (not in the form registry)
+    const clientFormKeys = ['newClient', 'oldClient'];
+    const allKeys = [...clientFormKeys, ...FORM_STORAGE_KEYS];
+    allKeys.forEach(key => removeFromLocalStorage(key));
   } catch (error) {
     console.error('Error clearing all form storage:', error);
   }

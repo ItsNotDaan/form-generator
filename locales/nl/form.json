@@ -611,15 +611,6 @@
   "importNoFormsSelected": "Selecteer minimaal één formulier om te importeren.",
   "importNoFormsAvailable": "Geen aanvullende formulieren gevonden in de JSON.",
   "importFormClient": "Cliëntgegevens",
-  "importFormIntakeVLOS": "Intake VLOS",
-  "importFormIntakeOSA": "Intake OSA",
-  "importFormIntakePulman": "Intake Pulman",
-  "importFormIntakeRebacare": "Intake Rebacare",
-  "importFormIntakeOSB": "Intake OSB (SOS)",
-  "importFormIntakeOVAC": "Intake OVAC",
-  "importFormIntakeInsoles": "Intake Steunzolen",
-  "importFormCheckFoliepas": "Check Foliepas",
-  "importFormShoeDesign": "Kleur en Model",
   "importFormAlwaysSelected": "Altijd geselecteerd",
 
   "_FINAL": "=== FINAL ==="
