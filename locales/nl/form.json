@@ -609,6 +609,7 @@
   "importError": "Ongeldige JSON. Controleer of de JSON correct is en probeer opnieuw.",
   "importNoRawData": "Geen importeerbare gegevens gevonden. Zorg dat de JSON is geëxporteerd vanuit dit systeem.",
   "importNoFormsSelected": "Selecteer minimaal één formulier om te importeren.",
+  "importNoFormsAvailable": "Geen aanvullende formulieren gevonden in de JSON.",
   "importFormClient": "Cliëntgegevens",
   "importFormIntakeVLOS": "Intake VLOS",
   "importFormIntakeOSA": "Intake OSA",

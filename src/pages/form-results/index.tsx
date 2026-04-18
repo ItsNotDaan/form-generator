@@ -24,6 +24,7 @@ import {
   normalizeShoeDesignData,
   normalizeValue,
 } from '@/domain/form/normalizers/formDataNormalizer';
+import type {FormRawData} from '@/domain/form/types/importExport';
 
 const FormResultsPage = () => {
   const router = useRouter();
@@ -58,18 +59,7 @@ const FormResultsPage = () => {
     medicalCodes?: Record<string, string>;
     codeWarnings?: string[];
     /** Raw form data for re-importing into the form generator */
-    _rawData: {
-      client: typeof formData.client;
-      intakeVLOS?: typeof formData.intakeVLOS;
-      intakeOSA?: typeof formData.intakeOSA;
-      intakePulman?: typeof formData.intakePulman;
-      intakeRebacare?: typeof formData.intakeRebacare;
-      intakeOSB?: typeof formData.intakeOSB;
-      intakeOVAC?: typeof formData.intakeOVAC;
-      intakeInsoles?: typeof formData.intakeInsoles;
-      checkFoliepas?: typeof formData.checkFoliepas;
-      shoeDesign?: typeof formData.shoeDesign;
-    };
+    _rawData: FormRawData;
     generatedAt: string;
   }
 
@@ -216,11 +206,10 @@ const FormResultsPage = () => {
         formData.client.intakeType as keyof typeof INTAKE_FORM_CONFIG
       ];
     if (config?.data) {
-      (result as any)[config.key] = applyTranslations(
-        config.normalizer(config.data),
-      );
+      (result as unknown as Record<string, unknown>)[config.key] =
+        applyTranslations(config.normalizer(config.data));
       // Also add raw intake data for re-import
-      (rawData as any)[config.key] = config.data;
+      (rawData as unknown as Record<string, unknown>)[config.key] = config.data;
     }
 
     // Only add CheckFoliepas data when it has been actively submitted

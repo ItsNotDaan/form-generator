@@ -292,7 +292,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
                 {/* Optional forms */}
                 {availableForms.length === 0 && (
                   <p className="text-sm text-muted-foreground italic">
-                    {t('importNoFormsSelected')}
+                    {t('importNoFormsAvailable')}
                   </p>
                 )}
                 {IMPORTABLE_FORMS.filter(f =>

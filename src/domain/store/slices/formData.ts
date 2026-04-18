@@ -39,6 +39,23 @@ const initialState: FormDataState = {
   shoeDesign: null,
 };
 
+/**
+ * Shared helper that resets all form data to empty initial values.
+ * Used by clearFormData and importFormData to avoid duplication.
+ */
+const resetAllFormData = (state: FormDataState) => {
+  state.client = emptyFormData.client;
+  state.intakeVLOS = emptyFormData.intakeVLOS;
+  state.intakeOSA = emptyFormData.intakeOSA;
+  state.intakePulman = emptyFormData.intakePulman;
+  state.intakeRebacare = emptyFormData.intakeRebacare;
+  state.intakeOSB = emptyFormData.intakeOSB;
+  state.intakeInsoles = emptyFormData.intakeInsoles;
+  state.intakeOVAC = emptyFormData.intakeOVAC;
+  state.checkFoliepas = null;
+  state.shoeDesign = null;
+};
+
 const formDataSlice = createSlice({
   name: 'formData',
   initialState,
@@ -104,16 +121,7 @@ const formDataSlice = createSlice({
       (state as any)[formType] = data;
     },
     clearFormData: state => {
-      state.client = emptyFormData.client;
-      state.intakeVLOS = emptyFormData.intakeVLOS;
-      state.intakeOSA = emptyFormData.intakeOSA;
-      state.intakePulman = emptyFormData.intakePulman;
-      state.intakeRebacare = emptyFormData.intakeRebacare;
-      state.intakeOSB = emptyFormData.intakeOSB;
-      state.intakeInsoles = emptyFormData.intakeInsoles;
-      state.intakeOVAC = emptyFormData.intakeOVAC;
-      state.checkFoliepas = null;
-      state.shoeDesign = null;
+      resetAllFormData(state);
     },
     clearIntakeForms: state => {
       state.intakeVLOS = emptyFormData.intakeVLOS;
@@ -131,17 +139,8 @@ const formDataSlice = createSlice({
      * Clears all existing form data first, then restores only the provided forms.
      */
     importFormData: (state, action: PayloadAction<Partial<FormDataState>>) => {
-      // Reset to empty state first
-      state.client = emptyFormData.client;
-      state.intakeVLOS = emptyFormData.intakeVLOS;
-      state.intakeOSA = emptyFormData.intakeOSA;
-      state.intakePulman = emptyFormData.intakePulman;
-      state.intakeRebacare = emptyFormData.intakeRebacare;
-      state.intakeOSB = emptyFormData.intakeOSB;
-      state.intakeInsoles = emptyFormData.intakeInsoles;
-      state.intakeOVAC = emptyFormData.intakeOVAC;
-      state.checkFoliepas = null;
-      state.shoeDesign = null;
+      // Reset to empty state first (reuses shared logic from clearFormData)
+      resetAllFormData(state);
 
       // Restore only the provided (selected) forms
       const data = action.payload;
