@@ -601,6 +601,7 @@
   "importJsonLabel": "JSON invoer",
   "importJsonPlaceholder": "Plak hier de geëxporteerde JSON...",
   "importAnalyze": "Analyseer JSON",
+  "importPasteAndAnalyze": "Plakken en analyseren",
   "importSelectForms": "Selecteer formulieren om te importeren",
   "importSelectFormsDescription": "Kies welke formulieren u wilt herstellen. De cliëntgegevens worden altijd geïmporteerd.",
   "importConfirm": "Importeer geselecteerde",

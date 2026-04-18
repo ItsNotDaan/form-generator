@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router';
-import {Upload, X, CheckCircle2, AlertTriangle} from 'lucide-react';
+import {Upload, X, CheckCircle2, AlertTriangle, ClipboardPaste} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
@@ -94,12 +94,13 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
   // EVENT HANDLERS
   // ---------------------------------------------------------------------------
 
-  const handleAnalyze = () => {
+  const handleAnalyze = (textOverride?: string) => {
     setParseError('');
 
+    const text = textOverride !== undefined ? textOverride : jsonInput;
     let parsed: unknown;
     try {
-      parsed = JSON.parse(jsonInput.trim());
+      parsed = JSON.parse(text.trim());
     } catch {
       setParseError(t('importError'));
       return;
@@ -138,6 +139,16 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
     setSelectedForms(new Set(available));
 
     setStep('select');
+  };
+
+  const handlePasteAndAnalyze = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      setJsonInput(text);
+      handleAnalyze(text);
+    } catch {
+      setParseError(t('importError'));
+    }
   };
 
   const toggleForm = (key: ImportableFormKey) => {
@@ -193,6 +204,14 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
 
     // Save step routes so the step indicator is lit up and the "continue" popup
     // appears in form-selection with the correct form name.
+
+    // Step 1 = the client form page (new or existing client)
+    if (clientData.clientType === 'newClient') {
+      saveStepRoute(1, Routes.form_new_client);
+    } else if (clientData.clientType === 'oldClient') {
+      saveStepRoute(1, Routes.form_old_client);
+    }
+
     // Step 2 = form-selection (the page we're about to navigate to)
     saveStepRoute(2, Routes.form_selection);
 
@@ -291,7 +310,14 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
                 <Button variant="outline" onClick={handleClose}>
                   {t('cancel')}
                 </Button>
-                <Button onClick={handleAnalyze} disabled={!jsonInput.trim()}>
+                <Button
+                  variant="outline"
+                  onClick={() => void handlePasteAndAnalyze()}
+                >
+                  <ClipboardPaste className="w-4 h-4 mr-2" />
+                  {t('importPasteAndAnalyze')}
+                </Button>
+                <Button onClick={() => handleAnalyze()} disabled={!jsonInput.trim()}>
                   {t('importAnalyze')}
                 </Button>
               </div>
