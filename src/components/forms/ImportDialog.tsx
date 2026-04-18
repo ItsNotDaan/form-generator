@@ -7,11 +7,15 @@ import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
 import {Label} from '@/components/ui/label';
 import {useAppDispatch} from '@/domain/store/hooks';
-import {importFormData} from '@/domain/store/slices/formData';
+import {importFormData, clearFormData} from '@/domain/store/slices/formData';
 import {Routes} from '@/lib/routes';
 import type {FormRawData, FormStoreKey} from '@/domain/form/types/importExport';
 import type {FormDataState} from '@/domain/store/slices/formData';
-import {FORM_REGISTRY} from '@/domain/form/registry';
+import {FORM_REGISTRY, INTAKE_FORM_BY_TYPE} from '@/domain/form/registry';
+import {
+  saveToLocalStorage,
+  clearAllFormStorage,
+} from '@/utils/localStorageHelper';
 
 // ---------------------------------------------------------------------------
 // TYPES
@@ -114,6 +118,10 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
       return;
     }
 
+    // Issue 5: Reset all form data and autosave before loading import data
+    dispatch(clearFormData());
+    clearAllFormStorage();
+
     const validRawData = raw as FormRawData;
     setRawData(validRawData);
 
@@ -141,25 +149,45 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
       return;
     }
 
-    // Build the partial state to import – always include client data
+    // Build the client data – potentially strip intakeType if the intake form was deselected
+    const clientData = {...rawData.client};
+    if (clientData.intakeType) {
+      const intakeEntry = INTAKE_FORM_BY_TYPE[clientData.intakeType];
+      if (
+        intakeEntry &&
+        !selectedForms.has(intakeEntry.storeKey as ImportableFormKey)
+      ) {
+        // Issue 1: user deselected this intake form – remove intakeType so it
+        // doesn't appear in the JSON output on the results page
+        delete (clientData as Partial<typeof clientData>).intakeType;
+      }
+    }
+
+    // Build the partial state to import – always include (possibly modified) client data
     const toImport: Partial<FormDataState> = {
-      client: rawData.client,
+      client: clientData,
     };
 
     for (const key of Array.from(selectedForms)) {
       const value = rawData[key as keyof FormRawData];
       if (value !== undefined) {
         (toImport as Record<string, unknown>)[key] = value;
+
+        // Issue 4: persist to form_autosave_* so form pages load the data via useFormPersistence
+        const entry = FORM_REGISTRY.find(f => f.storeKey === key);
+        if (entry) {
+          saveToLocalStorage(entry.storageKey, value);
+        }
       }
     }
 
     dispatch(importFormData(toImport));
     setStep('success');
 
-    // Redirect to results after a short delay to show the success state
+    // Issues 2 & 3: always redirect to form-selection so the user can pick/continue a form
     setTimeout(() => {
       handleClose();
-      void router.push(Routes.form_results);
+      void router.push(Routes.form_selection);
     }, 1200);
   };
 
