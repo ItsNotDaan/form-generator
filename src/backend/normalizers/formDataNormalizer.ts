@@ -1,6 +1,7 @@
 // Utility to normalize form data and ensure all fields are exported to JSON
 // This ensures Word document placeholders like ${enclosureRightCm} are always replaced
 
+import {capitalizeFirstLetter} from '@/backend/utils/string';
 import {
   ENCLOSURE_OPTIONS,
   BOOLEAN_TRUE_VALUE,
@@ -92,13 +93,6 @@ const applyFieldSuffixRules = (fieldName: string): string => {
 };
 
 /**
- * Capitalize first letter of a string
- */
-const capitalizeFirst = (str: string): string => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-/**
  * Check if a value is a Record<string, boolean>
  */
 const isRecordOfBooleans = (
@@ -143,7 +137,7 @@ const autoNormalize = (
         result[normalizedKey] = booleanRecord[normalizedKey];
       }
       // Create aggregation field with 'all' prefix
-      const aggregationKey = `all${capitalizeFirst(key)}`;
+      const aggregationKey = `all${capitalizeFirstLetter(key)}`;
       result[aggregationKey] = aggregateJaValues(booleanRecord);
       continue;
     }
@@ -153,8 +147,8 @@ const autoNormalize = (
       for (const [nestedKey, nestedValue] of Object.entries(value)) {
         // Create flattened field name: productSpecifications.articleCode -> productArticleCode
         const flattenedKey = parentKey
-          ? `${parentKey}${capitalizeFirst(key)}${capitalizeFirst(nestedKey)}`
-          : `${key}${capitalizeFirst(nestedKey)}`;
+          ? `${parentKey}${capitalizeFirstLetter(key)}${capitalizeFirstLetter(nestedKey)}`
+          : `${key}${capitalizeFirstLetter(nestedKey)}`;
         const normalizedKey = applyFieldSuffixRules(flattenedKey);
         result[normalizedKey] = normalizeValue(nestedValue);
       }

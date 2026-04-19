@@ -12,6 +12,7 @@ import {
   ShoeDesignData,
 } from '@/backend/types/formData';
 import {emptyFormData} from '@/backend/types/formDataTemplates.generated';
+import {FORM_REGISTRY, INTAKE_FORMS, SUPPLEMENTARY_FORMS} from '@/backend/registry';
 
 export interface FormDataState {
   client: ClientData;
@@ -124,15 +125,15 @@ const formDataSlice = createSlice({
       resetAllFormData(state);
     },
     clearIntakeForms: state => {
-      state.intakeVLOS = emptyFormData.intakeVLOS;
-      state.intakeOSA = emptyFormData.intakeOSA;
-      state.intakePulman = emptyFormData.intakePulman;
-      state.intakeRebacare = emptyFormData.intakeRebacare;
-      state.intakeOSB = emptyFormData.intakeOSB;
-      state.intakeInsoles = emptyFormData.intakeInsoles;
-      state.intakeOVAC = emptyFormData.intakeOVAC;
-      state.checkFoliepas = null;
-      state.shoeDesign = null;
+      // Reset all intake forms to empty templates, derived from registry
+      for (const entry of INTAKE_FORMS) {
+        const key = entry.storeKey as keyof typeof emptyFormData;
+        (state as any)[entry.storeKey] = emptyFormData[key];
+      }
+      // Set supplementary forms to null, derived from registry
+      for (const entry of SUPPLEMENTARY_FORMS) {
+        (state as any)[entry.storeKey] = null;
+      }
     },
     /**
      * Import selected form data from a parsed JSON export.
@@ -147,32 +148,12 @@ const formDataSlice = createSlice({
       if (data.client !== undefined) {
         state.client = data.client;
       }
-      if (data.intakeVLOS !== undefined) {
-        state.intakeVLOS = data.intakeVLOS;
-      }
-      if (data.intakeOSA !== undefined) {
-        state.intakeOSA = data.intakeOSA;
-      }
-      if (data.intakePulman !== undefined) {
-        state.intakePulman = data.intakePulman;
-      }
-      if (data.intakeRebacare !== undefined) {
-        state.intakeRebacare = data.intakeRebacare;
-      }
-      if (data.intakeOSB !== undefined) {
-        state.intakeOSB = data.intakeOSB;
-      }
-      if (data.intakeOVAC !== undefined) {
-        state.intakeOVAC = data.intakeOVAC;
-      }
-      if (data.intakeInsoles !== undefined) {
-        state.intakeInsoles = data.intakeInsoles;
-      }
-      if (data.checkFoliepas !== undefined) {
-        state.checkFoliepas = data.checkFoliepas;
-      }
-      if (data.shoeDesign !== undefined) {
-        state.shoeDesign = data.shoeDesign;
+      // Restore registered form data using registry to avoid hardcoding each form
+      for (const entry of FORM_REGISTRY) {
+        const key = entry.storeKey as keyof Partial<FormDataState>;
+        if (data[key] !== undefined) {
+          (state as any)[entry.storeKey] = data[key];
+        }
       }
     },
   },

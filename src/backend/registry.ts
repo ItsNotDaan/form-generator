@@ -5,7 +5,7 @@
  *
  * When adding a new form to the system:
  * 1. Add a new entry to FORM_REGISTRY below.
- * 2. Add the form's TypeScript types to src/domain/form/types/formData.ts
+ * 2. Add the form's TypeScript types to src/backend/types/formData.ts
  * 3. Run `npm run generate:empty-data` to update the templates.
  * 4. Add a Redux action to src/domain/store/slices/formData.ts.
  * 5. Create the form page under src/pages/.
